@@ -2,10 +2,12 @@
 _*/
 bower_components/
 build/
-lib/
 dist/
 ext/
+lib/
 node_modules/
+static/
+/test/results/
 **.egg-info/
 .DS_Store
 .idea
@@ -18,5 +20,3 @@ node_modules/
 **log
 *.js
 *.css
-/qiprofile/static/
-/test/results/

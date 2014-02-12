@@ -1,0 +1,13 @@
+{% extends 'qiprofile/base.html' %}
+
+{% block billboard %}Patients{% endblock %}
+{% block content %}
+  {% for coll, sbjs in collection_subjects %}
+    <h3>{{ coll.name }}</h3>
+    <ul class="offset">
+      {% for sbj in sbjs %}
+        <li><a href="{% url 'qiprofile:subject:index' coll.name.lower sbj.number %}?id={{ sbj.pk }}">{{ sbj.number }}</a></li>
+      {% endfor %}
+    </ul>
+  {% endfor %}
+{% endblock %}

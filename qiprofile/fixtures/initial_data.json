@@ -1,0 +1,23 @@
+[
+{
+  "pk": "52f51ba4004d823294e6c8c1",
+  "model": "qiprofile.project", 
+  "fields": {
+    "name": "QIN"
+  }
+},
+{
+  "pk": "52f51bbd004d823294e6c8c2",
+  "model": "qiprofile.collection", 
+  "fields": {
+    "name": "Breast"
+  }
+},
+{
+  "pk": "52f51bd2004d823294e6c8c3", 
+  "model": "qiprofile.collection", 
+  "fields": {
+    "name": "Sarcoma"
+  }
+}
+]

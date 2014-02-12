@@ -1,0 +1,7 @@
+{% extends 'qiprofile/base.html' %}
+
+{% block billboard %}
+  {{ collection_name.capitalize }} Patient 
+  <a href="{% url 'qiprofile:subject:index' collection_name subject_number %}">{{ subject_number }}</a>
+  MR Session {{ session.number }}
+{% endblock %}

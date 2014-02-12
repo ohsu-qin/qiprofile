@@ -30,9 +30,9 @@ INSTALLED_APPS = (
     # 'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest-framework,'
     'multiselectfield',
     'djangotoolbox',
-    'djangular',
     'qiprofile',
     # Uncomment the next line to enable manage.py test utilities.
     'django_jasmine',
@@ -71,6 +71,18 @@ DATABASES = dict(
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = ['ohsu.edu']
 
+REST_FRAMEWORK = {
+    # Use hyperlinked styles by default.
+    # Only used if the `serializer_class` attribute is not set on a view.
+    'DEFAULT_MODEL_SERIALIZER_CLASS':
+        'rest_framework.serializers.HyperlinkedModelSerializer',
+
+    # Use Django's standard `django.contrib.auth` permissions,
+    # or allow read-only access for unauthenticated users.
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
+    ]
+}
 # If django.contrib.sites is enabled in the INSTALLED_APPS, then
 # make the site before running the initial syncdb 
 # (cf. http://stackoverflow.com/questions/8819456/django-mongodb-engine-error-when-running-tellsiteid/9780984#9780984) 

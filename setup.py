@@ -1,5 +1,5 @@
 import glob
-from setuptools import (setup, find_packages)
+from setuptools import (setup)
 
 from qiprofile import __version__
 
@@ -14,8 +14,8 @@ setup(
     version = __version__,
     author = 'OHSU Knight Cancer Institute',
     author_email = 'loneyf@ohsu.edu',
-    packages = find_packages(),
-    data_files=[('config', glob.glob('conf/*.cfg'))],
+    packages = ['qiprofile'],
+    package_dir = dict(qiprofile='api')
     scripts = glob.glob('bin/*'),
     url = 'http://quip4.ohsu.edu/8080/qiprofile',
     description = 'qiprofile displays QIN images and clinical data.',

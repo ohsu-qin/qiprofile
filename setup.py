@@ -1,9 +1,10 @@
 import glob
-from setuptools import (setup)
+from setuptools import (setup, find_packages)
 
 from qiprofile import __version__
 
-requires = ['django', 'django-rest-framework']
+requires = ['bson', 'django', 'djangorestframework', 'djangotoolbox',
+            'mongodb-engine', 'multiselectfield']
 
 def readme():
     with open("README.rst") as f:
@@ -14,8 +15,7 @@ setup(
     version = __version__,
     author = 'OHSU Knight Cancer Institute',
     author_email = 'loneyf@ohsu.edu',
-    packages = ['qiprofile'],
-    package_dir = dict(qiprofile='api')
+    packages = find_packages(),
     scripts = glob.glob('bin/*'),
     url = 'http://quip4.ohsu.edu/8080/qiprofile',
     description = 'qiprofile displays QIN images and clinical data.',

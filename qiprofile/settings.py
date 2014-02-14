@@ -27,21 +27,21 @@ INSTALLED_APPS = (
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     # Uncomment the line below and set the SITE_ID to enable multiple sites.
-    # 'django.contrib.sites',
+    #'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest-framework,'
-    'multiselectfield',
-    'djangotoolbox',
+    'rest_framework',
     'qiprofile',
     # Uncomment the next line to enable manage.py test utilities.
-    'django_jasmine',
+    #'django_jasmine',
     # Uncomment the next line to enable manage.py development utilities.
     #'django_extensions',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
-    # 'django.contrib.admindocs',
+    #'django.contrib.admindocs',
+    # The djangotoolbox NoSQL adapter overrides the standard admin.
+    'djangotoolbox',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -58,13 +58,8 @@ MIDDLEWARE_CLASSES = (
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 DATABASES = dict(
-   default=dict(ENGINE='django_mongodb_engine', NAME='qiprofile'),
-   # TODO - remove the obsolete postgres db setting below
-   # postgres=dict(ENGINE='django.db.backends.postgresql_psycopg2',
-   #              HOST='quip4',
-   #              NAME='qiprofile',
-   #              USER='qiprofile',
-   #              PASSWORD='Amo3ba')
+   default=dict(ENGINE='django_mongodb_engine', NAME='qiprofile',
+                HOST='localhost', USER='loneyf', PASSWORD='3nigma')
 )
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
@@ -77,12 +72,17 @@ REST_FRAMEWORK = {
     'DEFAULT_MODEL_SERIALIZER_CLASS':
         'rest_framework.serializers.HyperlinkedModelSerializer',
 
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    'DEFAULT_PERMISSION_CLASSES': [
-        'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
-    ]
+    # The REST authentication permission.
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    
+    # The query filters.
+    'DEFAULT_FILTER_BACKENDS': (
+        'rest_framework.filters.DjangoFilterBackend',
+    ),
 }
+
 # If django.contrib.sites is enabled in the INSTALLED_APPS, then
 # make the site before running the initial syncdb 
 # (cf. http://stackoverflow.com/questions/8819456/django-mongodb-engine-error-when-running-tellsiteid/9780984#9780984) 
@@ -130,7 +130,6 @@ STATIC_URL = '/static/'
 
 # Additional locations of static files.
 STATICFILES_DIRS = (
-    PROJECT_PATH + '/assets',
 )
 
 # List of finder classes that know how to find static files in

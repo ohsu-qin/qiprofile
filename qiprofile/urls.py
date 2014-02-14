@@ -23,14 +23,14 @@ from .routers import router
 
 urlpatterns = patterns('',
     # The qiprofile URLs.
-    url(r'^qiprofile/', include(router.urls), namespace='qiprofile'),
+    url(r'', include(router.urls, namespace='qiprofile')),
     # The test URLs.
     url(r'^test/', include('django_jasmine.urls', namespace='test')),
-    # Default django auth views with custom templates.
-    url(r'^login/$', 'django.contrib.auth.views.login', {'template_name': 'login.html'}),
-    url(r'^logout/$', 'django.contrib.auth.views.logout', {'template_name': 'logout.html'}),
+    # Django REST authorization.
+    url(r'^api-auth/',
+        include('rest_framework.urls', namespace='rest_framework')),
     # Uncomment the admin/doc line below to enable admin documentation.
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     # Uncomment the admin line below to enable the admin page.
-    # url(r'^admin/', include(admin.site.urls)),)
+    # url(r'^admin/', include(admin.site.urls)),
 )

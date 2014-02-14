@@ -1,8 +1,18 @@
 """
-The Imaging Profile data model. This model requires the ``djangotoolbox``
-Mongodb database embedded field types. The model can be converted to
-a relational database back-end by replacing the embedded fields with
-foreign keys.
+The Imaging Profile Mongodb data model.
+
+This model can be normalized to a relational database back-end as
+follows:
+
+* Create the Project and Collection classes with a *name* field.
+
+* Reference the Project and Collection from Subject.
+
+* Pull SubjectDetail into Subject.
+
+* Replace the embedded fields with foreign keys.
+
+* Replace the list fields with one-to-many relationships.
 """
 
 from __future__ import unicode_literals
@@ -13,33 +23,15 @@ from multiselectfield import MultiSelectField
 from . import (choices, validators)
 
 
-class Project(models.Model):
-    """The QIN XNAT project."""
-
-    name = models.CharField(max_length=200, default='QIN')
-
-    def __str__(self):
-        return self.name
-
-
-class Collection(models.Model):
-    """The QIN AIRC collection."""
-
-    name = models.CharField(max_length=200)
-
-    def __str__(self):
-        return self.name
-
-
 class Subject(models.Model):
     """
     The QIN patient.
     """
 
-    project = models.ForeignKey(Project)
-    collection = models.ForeignKey(Collection)
+    project = models.CharField(max_length=200, default='QIN')
+    collection = models.CharField(max_length=200)
     number = models.SmallIntegerField()
-    detail = models.ForeignKey('SubjectDetail')
+    detail = models.ForeignKey('SubjectDetail', null=True, blank=True)
 
     def __str__(self):
         return "%s %s Subject %d" % (self.project, self.collection, self.number)

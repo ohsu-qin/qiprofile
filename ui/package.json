@@ -1,0 +1,23 @@
+{
+  "name": "qiprofile",
+  "version": "1.1.1",
+  "description": "The Imaging Profile Javascript package",
+  "author": "Fred Loney <loneyf@ohsu.edu>",
+  "repository" : {
+    "type" : "git",
+    "url" : "git@quip1:qiprofile"
+  },
+  "devDependencies": {
+    "coffee-script": "~1.7",
+    "grunt": "0.4.2",
+    "grunt-cli": "0.1.13",
+    "grunt-contrib-clean": "0.4.1",
+    "grunt-contrib-copy": "0.5.0",
+    "grunt-contrib-coffee": "0.10.0",
+    "grunt-contrib-jade": "0.10.0",
+    "grunt-contrib-watch": "0.5.3",
+    "grunt-sass": "0.10.0",
+    "grunt-yui-compressor": "0.3.0",
+    "load-grunt-tasks": "0.3.0"
+  }
+}

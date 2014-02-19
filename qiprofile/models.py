@@ -10,16 +10,16 @@ follows:
 
 * Pull SubjectDetail into Subject.
 
-* Replace the embedded fields with foreign keys.
+* Replace each embedded field with a foreign key.
 
-* Replace the list fields with one-to-many relationships.
+* Replace each list field with a one-to-many relationship or
+  MultiSelectField.
 """
 
 from __future__ import unicode_literals
 from django.utils.encoding import python_2_unicode_compatible
 from django.db import models
 from djangotoolbox.fields import (ListField, EmbeddedModelField)
-from multiselectfield import MultiSelectField
 from . import (choices, validators)
 
 
@@ -34,7 +34,8 @@ class Subject(models.Model):
     detail = models.ForeignKey('SubjectDetail', null=True, blank=True)
 
     def __str__(self):
-        return "%s %s Subject %d" % (self.project, self.collection, self.number)
+        return ("%s %s Subject %d" %
+                (self.project, self.collection, self.number))
 
 
 class SubjectDetail(models.Model):
@@ -44,12 +45,15 @@ class SubjectDetail(models.Model):
     """
 
     birth_date = models.DateTimeField(null=True)
-    race = MultiSelectField(null=True, choices=choices.RACE_CHOICES)
+    race = ListField(
+        models.CharField(max_length=choices.max_length(choices.RACE_CHOICES),
+                         choices=choices.RACE_CHOICES),
+        blank=True)
     ethnicity = models.CharField(
         max_length=choices.max_length(choices.ETHNICITY_CHOICES),
         choices=choices.ETHNICITY_CHOICES, null=True, blank=True)
-    sessions = ListField(EmbeddedModelField('Session'))
-    outcomes = ListField(EmbeddedModelField('Outcome'))
+    sessions = ListField(EmbeddedModelField('Session'), blank=True)
+    encounters = ListField(EmbeddedModelField('Encounter'), blank=True)
 
 
 class Session(models.Model):
@@ -57,7 +61,8 @@ class Session(models.Model):
 
     number = models.IntegerField()
     acquisition_date = models.DateTimeField()
-    reg_images = ListField(models.CharField(max_length=255))
+    reg_images = ListField(models.FilePathField(max_length=255))
+    bolus_arrival_index = models.SmallIntegerField()
     modeling = ListField(EmbeddedModelField('Modeling'))
 
     def __str__(self):
@@ -76,6 +81,69 @@ class Modeling(models.Model):
 
     def __str__(self):
         return "%s modeling" % session
+
+
+## Patient encounter. ##
+
+class Encounter(models.Model):
+    """The QIN patient clinical encounter, e.g. biopsy."""
+    
+    TYPE_CHOICES = [(v, v) for v in ('Biopsy', 'Surgery', 'Other')]
+    
+    encounter_type = models.CharField(
+        max_length=choices.max_length(TYPE_CHOICES),
+        choices=TYPE_CHOICES)
+    
+    date = models.DateTimeField()
+    
+    outcomes = ListField(EmbeddedModelField('Outcome'))
+
+
+## Clinical outcomes. ##
+
+class Outcome(models.Model):
+    """The QIN patient clinical outcome."""
+
+    class Meta:
+        abstract = True
+
+
+class Pathology(Outcome):
+    """The patient pathology summary."""
+
+    class Meta:
+        abstract = True
+
+    tnm = EmbeddedModelField('TNM')
+
+
+class BreastPathology(Pathology):
+    """The QIN breast patient pathology summary."""
+
+    HER2_NEU_IHC_CHOICES = choices.range_choices(0, 4)
+
+    KI_67_VALIDATORS = validators.range_validators(0, 101)
+
+    grade = EmbeddedModelField('NottinghamGrade')
+    estrogen = EmbeddedModelField('HormoneReceptorStatus')
+    progestrogen = EmbeddedModelField('HormoneReceptorStatus')
+    her2_neu_ihc = models.SmallIntegerField(choices=HER2_NEU_IHC_CHOICES)
+    her2_neu_fish = models.SmallIntegerField(choices=choices.POS_NEG_CHOICES)
+    ki_67 = models.SmallIntegerField(validators=KI_67_VALIDATORS)
+
+
+class SarcomaPathology(Pathology):
+    """The QIN sarcoma patient pathology summary."""
+
+    HISTOLOGY_CHOICES = [
+        (v, v) for v in ('Fibrosarcoma', 'Leiomyosarcoma', 'Liposarcoma',
+                         'MFH', 'MPNT', 'Synovial', 'Other')
+    ]
+
+    site = models.CharField(max_length=200)
+    histology = models.CharField(
+        max_length=choices.max_length(HISTOLOGY_CHOICES),
+        choices=HISTOLOGY_CHOICES)
 
 
 ## Clinical metrics ##
@@ -115,66 +183,3 @@ class HormoneReceptorStatus(models.Model):
     positive = models.BooleanField(choices=choices.POS_NEG_CHOICES)
     quick_score = models.SmallIntegerField(choices=SCORE_CHOICES)
     intensity = models.SmallIntegerField(validators=INTENSITY_VALIDATORS)
-
-
-## Patient encounter. ##
-
-class Encounter(models.Model):
-    """The QIN patient clinical encounter, e.g. biopsy."""
-    
-    TYPE_CHOICES = choices.default_choices('Biopsy', 'Surgery', 'Other')
-    
-    encounter_type = models.CharField(
-        max_length=choices.max_length(TYPE_CHOICES),
-        choices=TYPE_CHOICES)
-    
-    date = models.DateTimeField()
-    
-    outcomes = ListField(EmbeddedModelField('Outcome'))
-
-
-## Clinical outcomes. ##
-
-class Outcome(models.Model):
-    """The QIN patient clinical outcome."""
-
-    class Meta:
-        abstract = True
-
-
-class Pathology(Outcome):
-    """The patient pathology summary."""
-
-    class Meta:
-        abstract = True
-
-    tnm = TNM()
-
-
-class BreastPathology(Pathology):
-    """The QIN breast patient pathology summary."""
-
-    HER2_NEU_IHC_CHOICES = choices.range_choices(0, 4)
-
-    KI_67_VALIDATORS = validators.range_validators(0, 101)
-
-    grade = NottinghamGrade()
-    estrogen = HormoneReceptorStatus()
-    progestrogen = HormoneReceptorStatus()
-    her2_neu_ihc = models.SmallIntegerField(choices=HER2_NEU_IHC_CHOICES)
-    her2_neu_fish = models.SmallIntegerField(choices=choices.POS_NEG_CHOICES)
-    ki_67 = models.SmallIntegerField(validators=KI_67_VALIDATORS)
-
-
-class SarcomaPathology(Pathology):
-    """The QIN sarcoma patient pathology summary."""
-
-    HISTOLOGY_CHOICES = choices.default_choices(
-        'Fibrosarcoma', 'Leiomyosarcoma', 'Liposarcoma', 'MFH', 'MPNT',
-        'Synovial', 'Other')
-
-    site = models.CharField(max_length=200)
-    histology = models.CharField(
-        max_length=choices.max_length(HISTOLOGY_CHOICES),
-        choices=HISTOLOGY_CHOICES)
-

@@ -1,12 +1,8 @@
 **~
 _*/
 bower_components/
-build/
-dist/
-ext/
 lib/
 node_modules/
-static/
 /test/results/
 **.egg-info/
 .DS_Store

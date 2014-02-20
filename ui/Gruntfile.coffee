@@ -3,7 +3,7 @@ module.exports = (grunt) ->
     pkg: grunt.file.readJSON('package.json')
     
     clean:
-      build: ['public/*/', 'include/*', 'assets/stylesheets/*', 'assets/javascripts/*']
+      build: ['public/*/']
       dist: ['public/stylesheets/*', 'public/javascripts/*'
              '!public/*/<%= pkg.name %>.min.*']
 
@@ -12,20 +12,20 @@ module.exports = (grunt) ->
         expand: true
         flatten: true
         cwd: 'bower_components/'
-        src: ['bootstrap/dist/stylesheets/bootstrap.css', 'bootstrap/dist/stylesheets/bootstrap-theme.css']
-        dest: 'assets/stylesheets'
+        src: ['bootstrap/dist/css/bootstrap.min.css', 'bootstrap/dist/css/bootstrap-theme.min.css']
+        dest: 'public/stylesheets'
       fonts:
         expand: true
         flatten: true
         cwd: 'bower_components'
         src: ['bootstrap/dist/fonts/glyphicons*.eot']
-        dest: 'assets/fonts/'
+        dest: 'public/fonts/'
       js:
         expand: true
         flatten: true
         cwd: 'bower_components'
-        src: ['angular/angular.js', 'bootstrap/dist/javascripts/bootstrap.js']
-        dest: 'assets/javascripts/'
+        src: ['angular/angular.min.js', 'bootstrap/dist/javascripts/bootstrap.min.js']
+        dest: 'public/javascripts/'
       assets:
         expand: true
         cwd: 'assets/'
@@ -33,12 +33,18 @@ module.exports = (grunt) ->
         dest: 'public/'
 
     coffee:
-      files:
+      javascripts:
         expand: true
         flatten: true
         ext: '.js'
         src: ['src/javascripts/*.coffee']
-        dest: 'assets/javascripts/'
+        dest: 'public/javascripts/'
+      routes:
+        expand: true
+        flatten: true
+        ext: '.js'
+        src: ['src/routes/*.coffee']
+        dest: 'routes/'
 
     jade:
       options:
@@ -48,7 +54,7 @@ module.exports = (grunt) ->
         flatten: true
         ext: '.html'
         src: ['src/partials/*.jade']
-        dest: 'public/'
+        dest: 'public/partials/'
 
     sass:
       options:
@@ -60,31 +66,35 @@ module.exports = (grunt) ->
         src: ['src/stylesheets/*.scss']
         dest: 'public/stylesheets/'
 
+    min:
+      options:
+        'nomunge': true
+        'line-break': 80
+      files:
+        src: ['public/javascripts/*.js',
+              '!public/javascripts/<%= pkg.name %>.min.js']
+        dest: 'public/javascripts/<%= pkg.name %>.min.js'
+
     cssmin:
       options:
         'nomunge': true
         'line-break': 80
       files:
-        src: ['assets/stylesheets/*.css']
-        dest: 'public/<%= pkg.name %>.min.css'
-
-    jsmin:
-      options:
-        'nomunge': true
-        'line-break': 80
-      files:
-        src: ['assets/javascripts/*.js']
-        dest: 'public/<%= pkg.name %>.min.js'
+        src: ['public/stylesheets/*.css',
+              '!public/stylesheets/<%= pkg.name %>.min.css']
+        dest: 'public/stylesheets/<%= pkg.name %>.min.css'
 
     watch:
       files: ['src/**']
       tasks: ['coffee', 'jade', 'sass']
   )
-  
+
   require('load-grunt-tasks')(grunt)
 
   grunt.registerTask('default', ['build'])
 
   grunt.registerTask('build', ['copy', 'coffee', 'jade', 'sass'])
 
-  grunt.registerTask('release', ['clean:build', 'build', 'yuicompressor', 'clean:dist'])
+  grunt.registerTask('all', ['copy', 'coffee', 'jade', 'sass'])
+
+  grunt.registerTask('release', ['clean:build', 'build', 'min', 'cssmin', 'clean:dist'])

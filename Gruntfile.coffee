@@ -13,8 +13,8 @@ module.exports = (grunt) ->
         flatten: true
         cwd: 'bower_components/'
         src: [
-          'bootstrap/dist/css/bootstrap.css',
-          'bootstrap/dist/css/bootstrap-theme.css'
+          '*bootstrap/dist/css/bootstrap.css',
+          '*bootstrap/dist/css/bootstrap-theme.css'
         ]
         dest: 'vendor/stylesheets'
       fonts:
@@ -29,7 +29,7 @@ module.exports = (grunt) ->
         cwd: 'bower_components'
         src: [
           'angular/angular.js',
-          '*bootstrap/dist/javascripts/bootstrap.js'
+          '*bootstrap/dist/js/bootstrap.js'
         ]
         dest: 'vendor/javascripts/'
       lib:
@@ -46,7 +46,7 @@ module.exports = (grunt) ->
       vendor:
         expand: true
         cwd: 'vendor/'
-        src: ['**']
+        src: ['**', '!lib/**']
         dest: 'public/'
 
     coffee:

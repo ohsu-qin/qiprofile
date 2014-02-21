@@ -1,5 +1,14 @@
 # This Angular module defines the app routes.
-angular.module('qiprofile', ['qiprofileServices', 'djangoRESTResources']).config(
+angular.module('qiprofile', [
+  'qiprofileServices'
+  'djangoRESTResources'
+  'ngRoute'
+  'qiprofile.filters'
+  'qiprofile.services'
+  'qiprofile.directives'
+  'qiprofile.controllers'
+]).
+config(
   '$routeProvider',
   ($routeProvider) -> $routeProvider.
 		when('/qiprofile'

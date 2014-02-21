@@ -2,7 +2,8 @@
 Overview
 ********
 
-The application structure is adapted from the following examples:
+The application structure is initialized from the Yeoman_ ``angular`` generator
+and adapted from the following examples:
 
 * https://github.com/angular/angular-seed
 
@@ -14,8 +15,9 @@ The application structure is adapted from the following examples:
 ************
 Dependencies
 ************
-TODO
-
+The library dependencies are managed by Bower_ using the ``bower.json`` list.
+This library list specifies the last known working version configuration.
+In order to update the list,
 
 *****
 Setup
@@ -24,17 +26,17 @@ Setup
 1. Clone the ``qiprofile`` Git project as described in the Installation
    section.
 
-2. Download npm_ and Bower_.
+2. Install npm_ and Grunt_.
 
 3. Run the following in a console from the ``qiprofile`` directory::
 
-       npm install -g grunt
-       npm install
        bower install
 
-These commands install the necessary `Node.js`_ packages [#xtk_fork]_.
+This command installs the necessary `Node.js`_ packages [#xtk_fork]_.
 
-4. Run the Grunt_ script:
+4. Run the following Grunt_ script::
+
+       grunt
 
 .. rubric:: Footnotes
 
@@ -57,3 +59,5 @@ These commands install the necessary `Node.js`_ packages [#xtk_fork]_.
 .. _XTK: http://www.goXTK.com
 
 .. _XTK Bower Fork: https://www.github.com/FredLoney/get
+
+-- _Yeoman: http://www.yeoman.io/

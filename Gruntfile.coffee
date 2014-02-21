@@ -3,7 +3,7 @@ module.exports = (grunt) ->
     pkg: grunt.file.readJSON('package.json')
     
     clean:
-      build: ['public/*/']
+      build: ['public/**', 'vendor/**']
       dist: ['public/stylesheets/*', 'public/javascripts/*'
              '!public/*/<%= pkg.name %>.min.*']
 
@@ -12,24 +12,41 @@ module.exports = (grunt) ->
         expand: true
         flatten: true
         cwd: 'bower_components/'
-        src: ['bootstrap/dist/css/bootstrap.min.css', 'bootstrap/dist/css/bootstrap-theme.min.css']
-        dest: 'public/stylesheets'
+        src: [
+          'bootstrap/dist/css/bootstrap.css',
+          'bootstrap/dist/css/bootstrap-theme.css'
+        ]
+        dest: 'vendor/assets/stylesheets'
       fonts:
         expand: true
         flatten: true
         cwd: 'bower_components'
-        src: ['bootstrap/dist/fonts/glyphicons*.eot']
-        dest: 'public/fonts/'
+        src: ['*bootstrap/dist/fonts/glyphicons*.eot']
+        dest: 'vendor/assets/fonts/'
       js:
         expand: true
         flatten: true
         cwd: 'bower_components'
-        src: ['angular/angular.min.js', 'bootstrap/dist/javascripts/bootstrap.min.js']
-        dest: 'public/javascripts/'
-      assets:
+        src: [
+          'angular/angular.js',
+          '*bootstrap/dist/javascripts/bootstrap.js'
+        ]
+        dest: 'vendor/assets/javascripts/'
+      lib:
+        expand: true
+        flatten: true
+        cwd: 'bower_components/'
+        src: ['*bootstrap/lib/**']
+        dest: 'vendor/lib/'
+      app_assets:
         expand: true
         cwd: 'assets/'
-        src: ['**/*']
+        src: ['media/**', '**/*.js', '**/*.css', '**/*.html']
+        dest: 'public/'
+      vendor_assets:
+        expand: true
+        cwd: 'vendor/assets/'
+        src: ['**']
         dest: 'public/'
 
     coffee:
@@ -37,13 +54,13 @@ module.exports = (grunt) ->
         expand: true
         flatten: true
         ext: '.js'
-        src: ['src/javascripts/*.coffee']
+        src: ['assets/javascripts/*.coffee']
         dest: 'public/javascripts/'
       routes:
         expand: true
         flatten: true
         ext: '.js'
-        src: ['src/routes/*.coffee']
+        src: ['assets/routes/*.coffee']
         dest: 'routes/'
 
     jade:
@@ -53,7 +70,7 @@ module.exports = (grunt) ->
         expand: true
         flatten: true
         ext: '.html'
-        src: ['src/partials/*.jade']
+        src: ['assets/partials/*.jade']
         dest: 'public/partials/'
 
     sass:
@@ -63,7 +80,7 @@ module.exports = (grunt) ->
         expand: true
         flatten: true
         ext: '.css'
-        src: ['src/stylesheets/*.scss']
+        src: ['assets/stylesheets/*.scss']
         dest: 'public/stylesheets/'
 
     min:
@@ -85,7 +102,7 @@ module.exports = (grunt) ->
         dest: 'public/stylesheets/<%= pkg.name %>.min.css'
 
     watch:
-      files: ['src/**']
+      files: ['assets/**']
       tasks: ['coffee', 'jade', 'sass']
   )
 

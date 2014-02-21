@@ -5,8 +5,8 @@ dist/
 lib/
 node_modules/
 public/
-/test/results/
-**.egg-info/
+vendor/
+test/results/
 .DS_Store
 .idea
 .loadpath

@@ -4,7 +4,7 @@ module.exports = (grunt) ->
     
     clean:
       build: ['public/**', 'vendor/**']
-      dist: ['public/stylesheets/*', 'public/javascripts/*'
+      dist: ['public/stylesheets/**', 'public/javascripts/**'
              '!public/*/<%= pkg.name %>.min.*']
 
     copy:
@@ -16,13 +16,13 @@ module.exports = (grunt) ->
           'bootstrap/dist/css/bootstrap.css',
           'bootstrap/dist/css/bootstrap-theme.css'
         ]
-        dest: 'vendor/assets/stylesheets'
+        dest: 'vendor/stylesheets'
       fonts:
         expand: true
         flatten: true
         cwd: 'bower_components'
         src: ['*bootstrap/dist/fonts/glyphicons*.eot']
-        dest: 'vendor/assets/fonts/'
+        dest: 'vendor/fonts/'
       js:
         expand: true
         flatten: true
@@ -31,37 +31,31 @@ module.exports = (grunt) ->
           'angular/angular.js',
           '*bootstrap/dist/javascripts/bootstrap.js'
         ]
-        dest: 'vendor/assets/javascripts/'
+        dest: 'vendor/javascripts/'
       lib:
         expand: true
         flatten: true
         cwd: 'bower_components/'
         src: ['*bootstrap/lib/**']
         dest: 'vendor/lib/'
-      app_assets:
+      app:
         expand: true
-        cwd: 'assets/'
+        cwd: 'app/'
         src: ['media/**', '**/*.js', '**/*.css', '**/*.html']
         dest: 'public/'
-      vendor_assets:
+      vendor:
         expand: true
-        cwd: 'vendor/assets/'
+        cwd: 'vendor/'
         src: ['**']
         dest: 'public/'
 
     coffee:
       javascripts:
         expand: true
-        flatten: true
+        cwd: 'app/'
         ext: '.js'
-        src: ['assets/javascripts/*.coffee']
-        dest: 'public/javascripts/'
-      routes:
-        expand: true
-        flatten: true
-        ext: '.js'
-        src: ['assets/routes/*.coffee']
-        dest: 'routes/'
+        src: ['javascripts/**/*.coffee']
+        dest: 'public/'
 
     jade:
       options:
@@ -70,17 +64,17 @@ module.exports = (grunt) ->
         expand: true
         flatten: true
         ext: '.html'
-        src: ['assets/partials/*.jade']
+        src: ['app/partials/*.jade']
         dest: 'public/partials/'
 
     sass:
       options:
-        includePaths: ['include/stylesheets']
+        includePaths: ['vendor/lib']
       files:
         expand: true
         flatten: true
         ext: '.css'
-        src: ['assets/stylesheets/*.scss']
+        src: ['app/stylesheets/*.scss']
         dest: 'public/stylesheets/'
 
     min:
@@ -88,7 +82,7 @@ module.exports = (grunt) ->
         'nomunge': true
         'line-break': 80
       files:
-        src: ['public/javascripts/*.js',
+        src: ['public/javascripts/**/*.js',
               '!public/javascripts/<%= pkg.name %>.min.js']
         dest: 'public/javascripts/<%= pkg.name %>.min.js'
 
@@ -102,7 +96,7 @@ module.exports = (grunt) ->
         dest: 'public/stylesheets/<%= pkg.name %>.min.css'
 
     watch:
-      files: ['assets/**']
+      files: ['app/**']
       tasks: ['coffee', 'jade', 'sass']
   )
 

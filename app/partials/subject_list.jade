@@ -1,0 +1,15 @@
+extends ../layout/partial
+
+block billboard
+  | Patients
+
+block content
+  .div(ng-repeat='coll in collections')
+    h3 {{ coll }}
+    ul.qi-main-list(ng-repeat="sbj in subjects | filter: {collection: coll} | orderBy:'number'")
+      li
+        a(ng-href="/qiprofile/{{ coll.toLowerCase() }}/subject/{{ sbj.number }}?detail_id={{ sbj.detail }}")
+          | Patient {{ sbj.number }}
+
+block help-text
+  .qi-help-text(ng-include="'/partials/help/subject_list.html'")

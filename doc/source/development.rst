@@ -2,14 +2,29 @@
 Overview
 ********
 
-The application structure is initialized from the Yeoman_ ``angular`` generator
-and adapted from the following examples:
+The ``qiprofile`` module implements the Imaging Profile UI web application.
+The 
 
-* https://github.com/angular/angular-seed
 
-* http://www.ibm.com/developerworks/library/wa-nodejs-polling-app/
 
-* http://blog.mourafiq.com/post/55034504632/end-to-end-web-app-with-django-rest-framework
+***********
+Antecedents
+***********
+
+The ``qiprofile`` application structure is initialized from the Yeoman_
+``angular`` generator and adapted from the following examples:
+
+* frappe_
+
+* angular-express-seed_
+
+* angular-seed_
+
+* angular-app_
+
+* nodejs-polling-app_
+
+* ng-boilerplate_
 
 
 ************
@@ -47,6 +62,18 @@ This command installs the necessary `Node.js`_ packages [#xtk_fork]_.
 
 
 .. Targets:
+
+.. _frappe: https://github.com/dweldon/frappe
+
+.. _angular-express-seed: https://github.com/btford/angular-express-seed
+
+.. _angular-seed: https://github.com/angular/angular-seed
+
+.. _angular-app: https://github.com/angular-app/angular-app
+
+.. _nodejs-polling-app: http://www.ibm.com/developerworks/library/wa-nodejs-polling-app/
+
+.. _ng-boilerplate: http://joshdmiller.github.io/ng-boilerplate/#/home
 
 .. _Bower: http://bower.io/
 

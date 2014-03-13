@@ -1,0 +1,70 @@
+extends ../layout/partial
+
+block billboard
+  | {{ collection.capitalize() }} Patient {{ subject }}
+
+block content
+  h3 MR Sessions
+  .ul.qi-main-list(ng-repeat="sess in subject_detail.sessions | orderBy:'number'")
+    li
+      a(ng-href="/qiprofile/{{ collection.toLowerCase() }}/subject/{{ subject }}/session/{{ sess.number }}?id={{ sess.id }}")
+        Session {{ sess.number }}
+
+block help-text
+  .qi-help-text(ng-include="'/partials/help/subject_detail.html'")
+//- 
+//- 
+//- 
+//-   
+//-       <div class="two-column-table">
+//-     <div id="sessions" class="column">
+//-       <h3>
+//-         MR Sessions
+//-         {% if sessions|length > 1 %}
+//-           <button type="button">
+//-             {% if format == 'graph' %}
+//-             <a href="{% url 'qiprofile:subject:index' collection_name subject.number %}?id={{ subject.pk }}">
+//-               Table
+//-             </a>
+//-             {% else %}
+//-             <a href="{% url 'qiprofile:subject:index' collection_name subject.number %}?id={{ subject.pk }}&format=graph">
+//-               Graph
+//-             </a>
+//-             {% endif %}
+//-           </button>
+//-         {% endif %}
+//-       </h3>
+//-       {% if format == 'graph' %}
+//-       <p style="color: Red; padding: 12px">TODO - Flot time series plots go here</p>
+//-       {% else %}
+//-       <table class="borders">
+//-         <tr>
+//-           <!-- TODO: Add fly-over help for headings -->
+//-           <th>Session</th>
+//-           <th>Acquisition<br/>Date</th>
+//-           <th>&Delta;K<div class="small">trans</div></th>
+//-           <th>v<sub>e</sub></th>
+//-           <th>&tau;<sub>i</sub></th>
+//-         </tr>
+//-         {% for sess in sessions %}
+//-         <tr>
+//-           <td class="center">
+//-             <a href="{% url 'qiprofile:subject:session:view' collection_name subject.number sess.number %}?id={{ sess.pk }}">
+//-               {{ sess.number }}
+//-               </a>
+//-           </td>
+//-           <td class='center'>{{ sess.acquisition_date|date:"m/d/Y" }}</td>
+//-           <td>{{ sess.modeling.delta_k_trans }}</td>
+//-           <td>{{ sess.modeling.v_e }}</td>
+//-           <td>{{ sess.modeling.tau_i }}</td>
+//-         </tr>
+//-         {% endfor %}
+//-       </table>
+//-       {% endif %}
+//-     </div>
+//-     <div id="properties" class="column">
+//-       <h3>Clinical Profile</h3>
+//-       <p>TODO</p>
+//-     </div>
+//-   </div>
+//- {% endblock %}

@@ -1,1 +1,1 @@
-angular.module('qiprofile.directives', [])
+directives = angular.module 'qiprofile.directives', []

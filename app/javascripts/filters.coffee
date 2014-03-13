@@ -1,1 +1,1 @@
-angular.module('qiprofile.filters', [])
+filters = angular.module 'qiprofile.filters', []

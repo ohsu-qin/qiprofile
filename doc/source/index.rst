@@ -10,10 +10,7 @@ Synopsis
 The Quantitative Imaging Profile web application displays imaging and clinical
 data for the `OHSU QIN Sharepoint`_ study.
 
-:API: http://quip1.ohsu.edu:8080/qiprofile/api
-
 :Git: git\@quip1.ohsu.edu:qiprofile
-(`Browse <http://quip1.ohsu.edu:6060/qiprofile>`__)
 
 
 ************

@@ -3,109 +3,158 @@ module.exports = (grunt) ->
     pkg: grunt.file.readJSON('package.json')
     
     clean:
-      build: ['public/**', 'vendor/**']
-      dist: ['public/stylesheets/**', 'public/javascripts/**'
-             '!public/*/<%= pkg.name %>.min.*']
-
+      build: ['_public/*']
+    
     copy:
       css:
+        # Bootstrap references the CSS map, even though it is not minimized.
         expand: true
         flatten: true
         cwd: 'bower_components/'
-        src: [
-          '*bootstrap/dist/css/bootstrap.css',
-          '*bootstrap/dist/css/bootstrap-theme.css'
-        ]
-        dest: 'vendor/stylesheets'
+        src: ['bootstrap/dist/css/bootstrap.css.map']
+        dest: '_public/stylesheets/'
+      
       fonts:
         expand: true
         flatten: true
-        cwd: 'bower_components'
-        src: ['*bootstrap/dist/fonts/glyphicons*.eot']
-        dest: 'vendor/fonts/'
-      js:
-        expand: true
-        flatten: true
-        cwd: 'bower_components'
-        src: [
-          'angular/angular.js',
-          '*bootstrap/dist/js/bootstrap.js'
-        ]
-        dest: 'vendor/javascripts/'
-      lib:
-        expand: true
-        flatten: true
         cwd: 'bower_components/'
-        src: ['*bootstrap/lib/**']
-        dest: 'vendor/lib/'
-      app:
-        expand: true
-        cwd: 'app/'
-        src: ['media/**', '**/*.js', '**/*.css', '**/*.html']
-        dest: 'public/'
-      vendor:
-        expand: true
-        cwd: 'vendor/'
-        src: ['**', '!lib/**']
-        dest: 'public/'
+        src: ['bootstrap/dist/fonts/*', 'font-awesome/fonts/*']
+        dest: '_public/fonts/'
 
+      static:
+        expand: true
+        cwd: 'static/'
+        src: ['**']
+        dest: '_public/'
+
+    concat:
+      css:
+        src: [
+          'bower_components/bootstrap/dist/css/bootstrap.css'
+          'bower_components/font-awesome/css/font-awesome.css'
+        ]
+        dest: '_public/stylesheets/vendor.css'
+
+      js:
+        src: [
+          'bower_components/lodash/dist/lodash.underscore.js'
+          'bower_components/underscore.string/dist/*.js'
+          'bower_components/jquery/dist/*.js'
+          'bower_components/angular/*.js'
+          'bower_components/angular-bootstrap/*-tpls.js'
+          'bower_components/angular-resource/*.js'
+          'bower_components/angular-route/*.js'
+          'bower_components/d3/*.js'
+          'bower_components/angular-charts/dist/angular-charts.js'
+          '!bower_components/**/*.min.js'
+        ]
+        dest: '_public/javascripts/vendor.js'
+    
     coffee:
-      javascripts:
-        expand: true
-        cwd: 'app/'
-        ext: '.js'
-        src: ['javascripts/**/*.coffee']
-        dest: 'public/'
-
+      compile:
+        files:
+          '_public/javascripts/app.js': ['app/**/*.coffee']
+      
     jade:
       options:
         pretty: true
-      files:
+      compile:
         expand: true
-        flatten: true
         ext: '.html'
-        src: ['app/partials/*.jade']
-        dest: 'public/partials/'
-
-    sass:
-      options:
-        includePaths: ['vendor/lib']
-      files:
+        cwd: 'app/'
+        src: ['index.jade', 'partials/**/*.jade']
+        dest: '_public/'
+      
+    markdown:
+      compile:
         expand: true
-        flatten: true
-        ext: '.css'
-        src: ['app/stylesheets/*.scss']
-        dest: 'public/stylesheets/'
+        ext: '.html'
+        cwd: 'app/'
+        src: ['partials/**/*.md']
+        dest: '_public/'
+
+    stylus:
+      options:
+        compress: false
+      compile:
+        paths: ['_public/stylesheets']
+        files:
+          '_public/stylesheets/app.css': ['app/stylesheets/*.styl']
+
+    watch:
+      options:
+        livereload: true
+      stylus:
+        files: ['app/stylesheets/*.styl']
+        tasks: ['stylus']
+      coffee:
+        files: ['app/javascripts/*.coffee']
+        tasks: ['coffee']
+      jade:
+        files: ['app/**/*.jade']
+        tasks: ['jade']
+      
+    nodemon:
+      dev:
+        script: 'server.js'
+        options:
+          nodeArgs: ['--debug']
+          watch: ['app']
+      prod:
+        script: 'server.js'
+    
+    concurrent:
+      compile:
+        tasks: ['coffee', 'jade', 'markdown', 'stylus']
+      dev:
+        options:
+          logConcurrentOutput: true
+        tasks: ['nodemon:dev', 'watch']
+    
+    mochaTest:
+      test:
+        options:
+          require: ['coffee-script/register', './server', 'should']
+          reporter: 'spec'
+        src: ['app/test/**']
+
+    ngmin:
+      src: ['_public/javascripts/app.js']
+      dest: '._public/javascripts/app.ngmin.js'
 
     min:
       options:
         'nomunge': true
         'line-break': 80
       files:
-        src: ['public/javascripts/**/*.js',
-              '!public/javascripts/<%= pkg.name %>.min.js']
-        dest: 'public/javascripts/<%= pkg.name %>.min.js'
+        src: ['_public/stylesheets/app.ngmin.js']
+        dest: '_public/stylesheets/app.min.js'
 
     cssmin:
       options:
         'nomunge': true
         'line-break': 80
       files:
-        src: ['public/stylesheets/*.css',
-              '!public/stylesheets/<%= pkg.name %>.min.css']
-        dest: 'public/stylesheets/<%= pkg.name %>.min.css'
-
-    watch:
-      files: ['app/**']
-      tasks: ['coffee', 'jade', 'sass']
+        src: ['_public/stylesheets/app.css']
+        dest: '_public/stylesheets/app.min.css'
   )
 
   require('load-grunt-tasks')(grunt)
 
   grunt.registerTask('default', ['build'])
 
-  grunt.registerTask('build', ['copy', 'coffee', 'jade', 'sass'])
+  grunt.registerTask('vendor', ['copy', 'concat'])
 
-  grunt.registerTask('all', ['copy', 'coffee', 'jade', 'sass'])
+  grunt.registerTask('compile', ['concurrent:compile'])
 
-  grunt.registerTask('release', ['clean:build', 'build', 'min', 'cssmin', 'clean:dist'])
+  grunt.registerTask('build', ['clean', 'vendor', 'compile'])
+
+  grunt.registerTask('mocha', ['mochaTest'])
+
+  grunt.registerTask('start', ['concurrent:dev'])
+
+  grunt.registerTask('test', ['mocha'])
+
+  grunt.registerTask('jsmin', ['ngmin', 'min'])
+
+  grunt.registerTask('release', ['build', 'jsmin', 'cssmin'])

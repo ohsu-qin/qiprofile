@@ -1,0 +1,156 @@
+@import 'vendor.css' 
+
+body
+  margin 10px
+  font-family 'Open Sans', sans-serif
+
+h1, h2, h3
+  margin 0
+  padding 0
+
+a
+  text-decoration none
+  color Peru
+  &:hover
+    color Chocolate
+  & img
+    border none
+
+hr
+  display none
+
+table
+  border-collapse collapse
+
+table, th, td
+  border 1px solid Black
+
+th
+  padding 5px
+  font-size 110%
+  vertical-align bottom
+
+td
+  padding 0px 5px 0px 5px
+
+ul, ol
+  margin-bottom 6px
+
+clean-list()
+  text-indent -2em
+  & li
+    list-style-type none
+
+ul.qi-clean-list
+  clean-list()
+
+.qi-close-icon
+  text-align right
+
+.qi-transparent
+  background: transparent
+
+.qi-nudge
+  color #999999
+  padding-right 5px
+  font-size small
+
+.qi-navbar
+  min-height 62px
+  margin-bottom 0px
+  border 0px
+  border-radius: 4px 4px 0px 0px
+  background url('/static/media/header_bg.gif') repeat
+
+.qi-logo
+  float left
+  margin 0px 0px 0px 2px 
+
+.qi-brand
+  float right
+  padding 20px 0px 0px 0px
+  letter-spacing -2px
+  font-weight 400
+  font-size 40px
+  color GoldenRod
+  a
+    text-decoration none
+
+.qi-navbar-right
+  margin 5px
+  & li
+    margin 5px
+    padding 0px 0px 5px 5px
+  & > li > a
+    color Black !important
+    padding 7px 14px 7px 14px
+    border-radius 4px
+
+.qi-navbar-choice
+  color Black
+  background-image none
+  // The color is forced in order to retain the color when the help
+  // button is pressed. Setting the .active or :active style has no
+  // effect.
+  background-color Moccasin !important
+  &:hover
+    background-color Chocolate !important
+
+.qi-billboard
+  background MediumSlateBlue
+  color LightGoldenRodYellow
+  border-bottom 6px solid DarkBlue
+  border-radius: 0px 0px 4px 4px
+  & h2
+    text-indent 20px
+    margin 0
+
+.qi-content
+  margin 0px 0px 0px 5px
+
+.qi-main
+  margin 5px 0px 0px 0px
+
+ul.qi-main-list
+  clean-list()
+
+qi-transition(type, sec)
+  -webkit-transition all type sec
+  -moz-transition all type sec
+  -o-transition all type sec
+  transition all type sec
+
+slow-transition = 1s
+
+med-transition = 0.5s
+
+fast-transition = 0.2s
+
+.qi-no-transition
+  -webkit-transition none
+  -moz-transition none
+  // Opera doesn't support none
+  -o-transition all 0s
+  transition none
+
+.qi-help
+  background OldLace
+  border 1px solid Brown
+  qi-transition(linear, med-transition)
+
+.qi-help-text
+  // Downsize headers
+  for n in 1 2 3 4 5
+    h{n}
+      font-size (125% - (5 * n))
+      text-decoration underline
+
+.qi-footer
+  border-top 1px solid SlateGray
+  p.qi-legal
+    padding 1em 0em
+    text-align center
+    color DimGray
+    font-size Smaller
+    span.glyphicon-copyright-mark
+      padding 0 .2em 0 .2em

@@ -1,21 +1,26 @@
-# EditorConfig helps developers define and maintain consistent
-# coding styles between different editors and IDEs
-# editorconfig.org
+# The qiprofile EditorConfig (editorconfig.org) file.
+# EditConfig helps developers define and maintain consistent
+# coding styles between different editors and IDEs.
+# In order to use, download the plugin for your favorite
+# editor from editorconfig.org.
 
+# This is the top-most EditorConfig file.
 root = true
 
-
+# The settings below apply to all files.
 [*]
 
-# Change these settings to your own preference
+# Unix-style newlines with a newline ending every file.
+end_of_line = lf
+insert_final_newline = true
+charset = utf-8
+trim_trailing_whitespace = true
+
+# Indentation is two spaces. Note that whitespace is significant
+# for Coffescript, Jade and SASS.
 indent_style = space
 indent_size = 2
 
-# We recommend that you keep these unchanged
-end_of_line = lf
-charset = utf-8
-trim_trailing_whitespace = true
-insert_final_newline = true
-
+# Trailing whitespace is significant in Markdown. 
 [*.md]
 trim_trailing_whitespace = false

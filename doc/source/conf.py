@@ -2,6 +2,7 @@ import os
 
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx', 'sphinx.ext.todo']
 autoclass_content = "both"
+templates_path = ['templates']
 source_suffix = '.rst'
 master_doc = 'index'
 project = u'qiprofile'

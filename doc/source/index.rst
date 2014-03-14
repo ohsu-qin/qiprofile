@@ -11,6 +11,7 @@ The Quantitative Imaging Profile web application displays imaging and clinical
 data for the `OHSU QIN Sharepoint`_ study.
 
 :Git: git\@quip1.ohsu.edu:qiprofile
+      (`Browse <http://quip1.ohsu.edu:6060/qiprofile>`__)
 
 
 ************
@@ -33,16 +34,18 @@ Installation
 2. Contact the `OHSU QIN Git administrator`_ to obtain permission
    to access the ``qiprofile`` Git repository.
 
-3. Clone the `qiprofile repository`_::
+3. Clone the Git repository::
 
        cd ~/workspace
        git clone git@quip1:qiprofile
 
 4. Download npm_.
 
-5. Run the following in a console from the ``qiprofile`` directory::
+5. Run the following in a console from the ``qiprofile`` directory
+   (omit the ``--production`` flag for a development installation)::
 
        npm install --production
+       bower install --production
 
 6. Ensure that the file ``bin/qiprofile`` is executable.
 
@@ -50,9 +53,11 @@ Installation
 *****
 Usage
 *****
-Run the following command to start the server::
+Run the following command to start the production server::
 
      ./bin/qiprofile
+
+See the ``development.html`` page for starting a development server.
 
 ---------
 

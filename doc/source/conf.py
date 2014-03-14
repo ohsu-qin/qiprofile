@@ -8,7 +8,7 @@ master_doc = 'index'
 project = u'qiprofile'
 copyright = u'2014, OHSU Knight Cancer Institute'
 pygments_style = 'sphinx'
-html_theme = 'theme'
+html_theme = 'qiprofile_theme'
 html_theme_path = ['.']
 html_theme_options = dict(linkcolor='DarkSkyBlue', visitedlinkcolor='Navy')
 htmlhelp_basename = 'qiprofilerestdoc'

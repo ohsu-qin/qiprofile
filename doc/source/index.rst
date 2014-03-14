@@ -78,13 +78,3 @@ Run the following command to start the server::
 .. _qipipe: http://quip1.ohsu.edu:8080/qipipe
 
 .. _qiprofile repository: http://quip1.ohsu.edu:6060/qiprofile
-
-
-.. toctree::
-  :hidden:
-
-  api/index
-  api/helpers
-  api/interfaces
-  api/pipeline
-  api/staging

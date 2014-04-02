@@ -1,0 +1,35 @@
+extends ../layout/partial
+
+block billboard
+  | {{ session.subject.collection | capitalize }} Patient {{ session.subject.number }} Session {{ session.number }}
+
+block content
+  h4.qi-chart-title ROI Signal Intensity
+  .row
+    nvd3-line-chart#intensityGraph.qi-intensity-chart(data='session.graphData' showXAxis='true' showYAxis='true'
+      showLegend='true' color='graphColor' legendColor='graphColor' XAxisTickValues='$parent.session.seriesNumbers'
+      XAxisTickFormat='xTickFormat' YAxisShowMaxMin='false', XAxisLabel='Series' YAxisLabel='Intensity'
+      useInteractiveGuideline='true')
+  .qi-series-selection
+    .row
+      .col-md-1.qi-series-selection-key
+        p Scan
+      .btn-group(ng-repeat="image in session.scan.images")
+        qi-spinner(busy='image.state.loading')
+          .btn.btn-default.btn-xs.qi-btn.qi-intensity-btn.qi-scan-btn
+            .glyphicon.glyphicon-eye-open(ng-show='image.data')
+            .glyphicon.glyphicon-download(ng-hide='image.data', ng-click='image.load()')
+        
+    .row
+      .col-md-1.qi-series-selection-key
+        p Realigned
+      .btn-group(ng-repeat="image in session.registration.images")
+        qi-spinner(busy='image.state.loading')
+          .btn.btn-default.btn-xs.qi-btn.qi-intensity-btn.qi-reg-btn
+            // TODO - open image detail when clicked.
+            .glyphicon.glyphicon-eye-open(ng-show='image.data')
+            .glyphicon.glyphicon-download(ng-hide='image.data', ng-click='image.load()')
+
+
+block help-text
+  .qi-help-text(ng-include="'/partials/help/session_detail.html'")

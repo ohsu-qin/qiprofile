@@ -6,8 +6,9 @@ module.exports = (host='localhost', port=8000) ->
     path = "#{host}:#{port}" + req.path
     request[req.method.toLowerCase()](path)
       .query(format: 'json')
+      .query(req.query)
       .accept('json')
-      .auth('loneyf', '3nigma')
+      .send(req.body)
       .end (rest_res) ->
         if rest_res.ok
           res.json rest_res.body

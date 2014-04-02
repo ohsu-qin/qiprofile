@@ -53,7 +53,7 @@ server.get '/partials/*', (req, res) ->
   res.sendfile "#{root}/#{req.path}.html"
 
 # Serve index for all qiprofile routes.
-server.get '/qiprofile*', (req, res) ->
+server.get '/quip*', (req, res) ->
   res.sendfile "#{root}/index.html"
 
 # Development error handling.

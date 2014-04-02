@@ -2,6 +2,7 @@
 _*/
 bower_components/
 dist/
+**/build
 lib/
 node_modules/
 public/

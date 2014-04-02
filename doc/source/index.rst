@@ -83,3 +83,9 @@ See the ``development.html`` page for starting a development server.
 .. _qipipe: http://quip1.ohsu.edu:8080/qipipe
 
 .. _qiprofile repository: http://quip1.ohsu.edu:6060/qiprofile
+
+
+.. toctree::
+  :hidden:
+
+  development

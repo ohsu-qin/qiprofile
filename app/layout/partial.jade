@@ -1,11 +1,10 @@
 // The context billboard, e.g. 'Breast Patient 4'.
 .qi-billboard
-  h2
+  h3
     block billboard
 
 .row.qi-main
-  .div(ng-class="{'col-md-8': $parent.showHelp, 'col-md-12': !$parent.showHelp}")
-    .qi-content
+  .qi-content
       block content
   .col-md-4(ng-show='$parent.showHelp')
     alert.qi-help(type='info' close='$parent.showHelp = false' collapse='!$parent.showHelp')

@@ -32,20 +32,23 @@ module.exports = (grunt) ->
         src: [
           'bower_components/bootstrap/dist/css/bootstrap.css'
           'bower_components/font-awesome/css/font-awesome.css'
+          'bower_components/nvd3/nv.d3.css'
         ]
         dest: '_public/stylesheets/vendor.css'
 
       js:
         src: [
           'bower_components/lodash/dist/lodash.underscore.js'
-          'bower_components/underscore.string/dist/*.js'
+          'bower_components/underscore.string/lib/*.js'
           'bower_components/jquery/dist/*.js'
           'bower_components/angular/*.js'
           'bower_components/angular-bootstrap/*-tpls.js'
           'bower_components/angular-resource/*.js'
           'bower_components/angular-route/*.js'
+          'bower_components/spin.js/spin.js'
           'bower_components/d3/*.js'
-          'bower_components/angular-charts/dist/angular-charts.js'
+          'bower_components/nvd3/nv.d3.js'
+          'bower_components/angularjs-nvd3-directives/dist/*.js'
           '!bower_components/**/*.min.js'
         ]
         dest: '_public/javascripts/vendor.js'
@@ -62,7 +65,7 @@ module.exports = (grunt) ->
         expand: true
         ext: '.html'
         cwd: 'app/'
-        src: ['index.jade', 'partials/**/*.jade']
+        src: ['index.jade', 'partials/**/*.jade', 'templates/**/*.jade', '!**/include/**']
         dest: '_public/'
       
     markdown:

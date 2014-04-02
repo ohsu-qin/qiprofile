@@ -8,7 +8,7 @@ block content
     h3 {{ coll }}
     ul.qi-main-list(ng-repeat="sbj in subjects | filter: {collection: coll} | orderBy:'number'")
       li
-        a(ng-href="/qiprofile/{{ coll.toLowerCase() }}/subject/{{ sbj.number }}?detail_id={{ sbj.detail }}")
+        a(ng-href="/quip/{{ coll.toLowerCase() }}/subject/{{ sbj.number }}?project={{ sbj.project }}&detail={{ sbj.detail }}")
           | Patient {{ sbj.number }}
 
 block help-text

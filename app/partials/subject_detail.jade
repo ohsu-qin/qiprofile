@@ -1,13 +1,13 @@
 extends ../layout/partial
 
 block billboard
-  | {{ collection.capitalize() }} Patient {{ subject }}
+  | {{ subject.collection | capitalize }} Patient {{ subject.number }}
 
 block content
-  h3 MR Sessions
-  .ul.qi-main-list(ng-repeat="sess in subject_detail.sessions | orderBy:'number'")
+  .qi-subheading MR Sessions
+  .ul.qi-main-list(ng-repeat="sess in subject.sessions | orderBy:'number'")
     li
-      a(ng-href="/qiprofile/{{ collection.toLowerCase() }}/subject/{{ subject }}/session/{{ sess.number }}?id={{ sess.id }}")
+      a(ng-href="/quip/{{ subject.collection | lowercase }}/subject/{{ subject.number }}/session/{{ sess.number }}?project={{ subject.project }}&detail={{ sess.detail }}")
         Session {{ sess.number }}
 
 block help-text

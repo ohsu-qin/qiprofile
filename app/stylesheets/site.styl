@@ -1,7 +1,7 @@
 @import 'vendor.css' 
 
 body
-  margin 10px
+  margin 1em
   font-family 'Open Sans', sans-serif
 
 h1, h2, h3
@@ -23,24 +23,24 @@ table
   border-collapse collapse
 
 table, th, td
-  border 1px solid Black
+  border 0.1em solid Black
 
 th
-  padding 5px
+  padding 0.5em
   font-size 110%
   vertical-align bottom
 
 td
-  padding 0px 5px 0px 5px
+  padding 0 0.5em 0 0.5em
 
 ul, ol
-  margin-bottom 6px
+  margin-bottom 0.6em
 
 .qi-x-smaller
   font-size 75%
 
 clean-list()
-  -webkit-padding-start: 10px
+  -webkit-padding-start: 1em
   & li
     list-style-type none
 
@@ -60,43 +60,41 @@ ul.qi-clean-list
 
 .qi-nudge
   color #999999
-  padding-right 5px
+  padding-right 0.5em
   font-size small
 
 .qi-navbar
-  min-height 48px
-  margin-bottom 0px
-  border 0px
-  border-radius: 4px 4px 0px 0px
+  margin-bottom 0
+  border 0
+  border-radius: 0.4em 0.4em 0 0
   background url('/static/media/header_bg.gif') repeat
 
 .qi-logo
   float left
-  margin 0px 0px 0px 2px 
+  margin 0 0 0 0.2em 
 
 .qi-brand
   float right
-  padding 15px 0px 0px 0px
-  letter-spacing -2px
+  padding 0.5em 0 0 0
+  letter-spacing -.05em
   font-size 200%
   color GoldenRod
   a
     text-decoration none
 
 .qi-navbar-right
-  margin 5px
+  margin 0.2em 0 0 0
   & li
-    margin 5px
-    padding 0px 0px 2px 2px
+    margin 0.5em
   & > li > a
     color Black !important
-    padding 5px 10px 5px 10px
-    border-radius 4px
+    padding 0.5em 1em 0.5em 1em
+    border-radius 0.4em
 
 .qi-navbar-choice
   color Black
   background-image none
-  padding 5px 10px 5px 10px
+  padding 0.5em 1em 0.5em 1em
   border 0
   // The color is forced in order to retain the color when the help
   // button is pressed. Setting the .active or :active style has no
@@ -108,29 +106,32 @@ ul.qi-clean-list
 .qi-billboard
   background MediumSlateBlue
   color LightGoldenRodYellow
-  border-bottom 6px solid DarkBlue
-  border-radius: 0px 0px 4px 4px
+  border-bottom 0.6em solid DarkBlue
+  border-radius: 0 0 0.4em 0.4em
   text-indent 1em
   margin 0
 
 .qi-content
-  padding 0px 0px 0px 10px
+  padding 0 0 0 1em
   overflow hide
 
 .qi-subheading
   font-size large
 
 .qi-main
-  margin 5px 0px 0px 0px
+  margin 0.5em 0 0 0
 
 .qi-main-list
   clean-list()
 
 .qi-intensity-chart
   float left
-  margin 0px 0px 0px 65px
-  height 280px
-  width 905px
+  margin 0 0 0 4.7em
+  height 22em
+  width 68em
+
+.qi-series-selection
+  margin 0 0 1em 0
 
 .qi-series-selection-key
   text-align: right
@@ -138,10 +139,9 @@ ul.qi-clean-list
 .qi-image-btn-grp
   // Undo the Bootstrap adjacent button tweak.
   .btn + .btn
-    margin 0px 2px 0px 2px
+    margin 0 0.255em 0 0.2em
 
 .qi-image-btn
-  margin 0px 2px 0px 2px
   &:hover
     color Chocolate
 
@@ -155,9 +155,6 @@ ul.qi-clean-list
   &:hover
     background-color DarkGreen
 
-.qi-chart-title
-  margin-left 162px
-
 qi-bolus-bg()
   background Gainsboro
 
@@ -170,13 +167,13 @@ qi-bolus-bg()
 
 .qi-bolus
   qi-bolus-bg()
-  width 10px
-  height 200px
+  width 1em
+  height 16.2em
   position absolute
   // Note: changing the chart dimensions necessitates changing the bolus
   // position.
-  left 119px
-  top 168px
+  left 8.8em
+  top 12.8em
   opacity .6
 
 qi-transition(type, sec)
@@ -200,10 +197,10 @@ fast-transition = 0.2s
 
 .qi-help
   background OldLace
-  border 1px solid Brown
+  border 0.1em solid Brown
   position fixed
-  top 100px
-  right 18px
+  top 10em
+  right 1.8em
   width 25%
   qi-transition(linear, med-transition)
 
@@ -215,11 +212,11 @@ fast-transition = 0.2s
       text-decoration underline
 
 .qi-footer
-  border-top 1px solid SlateGray
+  border-top 0.1em solid SlateGray
   p.qi-legal
     padding 1em 0em
     text-align center
     color DimGray
     font-size x-small
     span.glyphicon-copyright-mark
-      padding 0 .2em 0 .2em
+      padding 0 0.2em 0 0.2em

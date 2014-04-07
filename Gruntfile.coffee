@@ -96,6 +96,9 @@ module.exports = (grunt) ->
       jade:
         files: ['app/**/*.jade']
         tasks: ['jade']
+      markdown:
+        files: ['app/partials/**/*.md']
+        tasks: ['markdown']
       
     nodemon:
       dev:

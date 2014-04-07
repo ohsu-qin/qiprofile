@@ -78,8 +78,7 @@ ul.qi-clean-list
   float right
   padding 15px 0px 0px 0px
   letter-spacing -2px
-  font-weight 400
-  font-size 28px
+  font-size 200%
   color GoldenRod
   a
     text-decoration none
@@ -111,7 +110,7 @@ ul.qi-clean-list
   color LightGoldenRodYellow
   border-bottom 6px solid DarkBlue
   border-radius: 0px 0px 4px 4px
-  text-indent 10px
+  text-indent 1em
   margin 0
 
 .qi-content
@@ -129,30 +128,56 @@ ul.qi-clean-list
 
 .qi-intensity-chart
   float left
-  margin 0px 0px 0px 62px
-  height 20em
-  width 64.8em
-
-.qi-chart-title
-  margin-left auto
-  margin-right auto
-  width 70%
+  margin 0px 0px 0px 65px
+  height 280px
+  width 905px
 
 .qi-series-selection-key
   text-align: right
 
-.qi-intensity-btn
-  margin 0px 2px 0px 2px
+.qi-image-btn-grp
+  // Undo the Bootstrap adjacent button tweak.
+  .btn + .btn
+    margin 0px 2px 0px 2px
 
-.qi-scan-btn
+.qi-image-btn
+  margin 0px 2px 0px 2px
+  &:hover
+    color Chocolate
+
+.qi-scan-image button
   background-color Thistle
   &:hover
     background-color Indigo
 
-.qi-reg-btn
+.qi-reg-image button
   background-color PaleGreen
   &:hover
     background-color DarkGreen
+
+.qi-chart-title
+  margin-left 162px
+
+qi-bolus-bg()
+  background Gainsboro
+
+.qi-bolus-legend
+  qi-bolus-bg()
+  width 9em
+  text-align center
+  font-size smaller
+  margin-top 2em
+
+.qi-bolus
+  qi-bolus-bg()
+  width 10px
+  height 200px
+  position absolute
+  // Note: changing the chart dimensions necessitates changing the bolus
+  // position.
+  left 119px
+  top 168px
+  opacity .6
 
 qi-transition(type, sec)
   -webkit-transition all type sec
@@ -173,15 +198,13 @@ fast-transition = 0.2s
   -o-transition all 0s
   transition none
 
-.qi-chart
-  // Nothing special yet
-
 .qi-help
   background OldLace
   border 1px solid Brown
   position fixed
   top 100px
   right 18px
+  width 25%
   qi-transition(linear, med-transition)
 
 .qi-help-text
@@ -197,6 +220,6 @@ fast-transition = 0.2s
     padding 1em 0em
     text-align center
     color DimGray
-    font-size Smaller
+    font-size x-small
     span.glyphicon-copyright-mark
       padding 0 .2em 0 .2em

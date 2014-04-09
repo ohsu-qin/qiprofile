@@ -45,6 +45,7 @@ module.exports = (grunt) ->
           'bower_components/angular-bootstrap/*-tpls.js'
           'bower_components/angular-resource/*.js'
           'bower_components/angular-route/*.js'
+          'bower_components/moment/*.js'
           'bower_components/spin.js/spin.js'
           'bower_components/d3/*.js'
           'bower_components/nvd3/nv.d3.js'

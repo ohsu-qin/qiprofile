@@ -17,5 +17,5 @@ test/results/
 *.pyc
 *.tar*
 **log
-*.js
+*/**/*.js
 *.css

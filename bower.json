@@ -21,6 +21,7 @@
     "font-awesome": "~4.0.3",
     "json3": "~3.3.0",
     "lodash": "~2.4.1",
+    "moment": "~2.5.1",
     "nvd3": "FredLoney/nvd3#master",
     "spin.js": "~2.0.0",
     "underscore.string": "~2.3.3",
@@ -40,8 +41,7 @@
   },
   "private": true,
   "resolutions": {
-    "angular": "1.2.15",
     "nvd3": "master",
-    "d3": "3.3.11"
+    "d3": "~3.3.11"
   }
 }

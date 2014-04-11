@@ -36,6 +36,13 @@ td
 ul, ol
   margin-bottom 0.6em
 
+// Undo Bootstrap changing the color of a small
+// span in the heading.
+for n in 1 2 3 4 5
+  h{n}
+    .qi-small
+      color Black
+
 .qi-x-smaller
   font-size 75%
 
@@ -115,18 +122,39 @@ ul.qi-clean-list
   padding 0 0 0 1em
   overflow hide
 
-.qi-subheading
-  font-size large
-
 .qi-main
   margin 0.5em 0 0 0
 
 .qi-main-list
   clean-list()
 
+qi-subject-profile()
+  width 50%
+  & h4
+    text-decoration underline
+
+.qi-profile-sheet
+  border 1px solid SlateGray
+  border-radius: 0.4em 0.4em 0.4em 0.4em
+
+.qi-modeling-profile
+  float left
+  qi-subject-profile()
+
+.qi-modeling-chart
+  float left
+  height 16em
+  width 32em
+
+.qi-clinical-profile
+  float right
+  qi-subject-profile()
+
+.qi-intensity
+  margin 0 0 0 4.7em
+
 .qi-intensity-chart
   float left
-  margin 0 0 0 4.7em
   height 22em
   width 68em
 
@@ -165,15 +193,10 @@ qi-bolus-bg()
   font-size smaller
   margin-top 2em
 
-.qi-bolus
+.qi-bolus-arrival
   qi-bolus-bg()
   width 1em
-  height 16.2em
   position absolute
-  // Note: changing the chart dimensions necessitates changing the bolus
-  // position.
-  left 8.8em
-  top 12.8em
   opacity .6
 
 qi-transition(type, sec)

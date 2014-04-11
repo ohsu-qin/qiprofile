@@ -41,6 +41,7 @@
   },
   "private": true,
   "resolutions": {
+    "angular": "1.2.15",
     "nvd3": "master",
     "d3": "~3.3.11"
   }

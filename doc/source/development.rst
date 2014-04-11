@@ -41,15 +41,23 @@ Setup
 1. Clone the ``qiprofile`` Git project as described in the Installation
    section.
 
-2. Install npm_ and Grunt_.
+2. Install npm_.
 
-3. Run the following in a console from the ``qiprofile`` directory::
+3. Install the Grunt_ CLI command:
+
+       npm install -g grunt-cli
+
+3. Install the Grunt_ CLI command:
+
+       npm install -g grunt-cli
+
+4. Run the following in a console from the ``qiprofile`` directory::
 
        bower install
 
 This command installs the necessary `Node.js`_ packages [#xtk_fork]_.
 
-4. Run the following Grunt_ script::
+5. Run the following Grunt_ script::
 
        grunt
 

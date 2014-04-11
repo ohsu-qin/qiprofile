@@ -1,0 +1,21 @@
+h5.col-md-offset-1.col-md-5.qi-chart-title
+  | Vascular Permeability (K<span class="small qi-small">trans</span>)
+//
+  Note: the forcey attribute requires an interpolated value, since nvd3
+  inconsistently does not accept a function.
+.row
+  nvd3-line-chart.qi-modeling-chart(data='kTransGraph.data' isArea='true'
+    showXAxis='true' showYAxis='true' showLegend='true' color='kTransGraph.color'
+    legendColor='kTransGraph.color' YAxisShowMaxMin='false' XAxisLabel='Visit Date'
+    XAxisTickValues='visitDateValues' forcey='{{ kTransGraph.maxMin() }}'
+    XAxisTickFormat='dateFormat' YAxisLabel='Ktrans'
+    interpolate='cardinal' tooltips='true' useInteractiveGuideline='true')
+  
+h5.col-md-offset-1.col-md-5.qi-chart-title Volume Fraction (v<sub>e</sub>)
+.row
+  nvd3-line-chart.qi-modeling-chart(data='veGraph.data'
+    showXAxis='true' showYAxis='true' showLegend='true' color='veGraph.color'
+    legendColor='veGraph.color' YAxisShowMaxMin='false' XAxisLabel='Visit Date'
+    XAxisTickValues='visitDateValues' forcey='{{ veGraph.maxMin() }}'
+    XAxisTickFormat='dateFormat' YAxisLabel='v_e'
+    interpolate='cardinal' tooltips='true' useInteractiveGuideline='true')

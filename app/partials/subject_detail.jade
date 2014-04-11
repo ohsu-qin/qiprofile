@@ -4,14 +4,35 @@ block billboard
   | {{ subject.collection | capitalize }} Patient {{ subject.number }}
 
 block content
-  .qi-subheading MR Sessions
-  .ul.qi-main-list(ng-repeat="sess in subject.sessions | orderBy:'number'")
-    li
-      a(ng-href="/quip/{{ subject.collection | lowercase }}/subject/{{ subject.number }}/session/{{ sess.number }}?project={{ subject.project }}&detail={{ sess.detail }}")
-        Session {{ sess.number }}
+  .qi-modeling-profile
+    h4.row.col-md-offset-1.col-md-4
+      Modeling Profile
+      button.btn.btn-default.btn-lg.qi-btn(ng-click='toggle_format()')
+        .glyphicon.glyphicon-list(ng-show="modeling_format == 'Table'")
+        .glyphicon.glyphicon-picture(ng-show="modeling_format == 'Graph'")
+    .qi-profile-sheet(ng-show='subject.sessions.length > 1')
+      .qi-modeling-charts(ng-show="modeling_format == 'Graph'")
+        include include/modeling_charts
+   //- .row
+    //- .row
+    //-   .col-md-2(ng-show='subject.sessions.length > 1')
+    //-     .ul.qi-main-list(ng-repeat="sess in subject.sessions | orderBy:'number'")
+    //-       li
+    //-         a(ng-href="/quip/{{ subject.collection | lowercase }}/subject/{{ subject.number }}/session/{{ sess.number }}?project={{ subject.project }}&detail={{ sess.detail }}")
+    //-           Session {{ sess.number }}
+
+    .row.col-md-2(ng-show='subject.sessions.length <= 1')
+      p TODO
+  
+  
+
+  .qi-clinical-profile
+    h4.col-md-offset-1 Clinical Profile
 
 block help-text
   .qi-help-text(ng-include="'/partials/help/subject_detail.html'")
+
+  
 //- 
 //- 
 //- 

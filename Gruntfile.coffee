@@ -66,7 +66,7 @@ module.exports = (grunt) ->
         expand: true
         ext: '.html'
         cwd: 'app/'
-        src: ['index.jade', 'partials/**/*.jade', 'templates/**/*.jade', '!**/include/**']
+        src: ['index.jade', 'partials/**/*.jade', '!**/include/**']
         dest: '_public/'
       
     markdown:

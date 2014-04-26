@@ -1,21 +1,17 @@
-h5.col-md-offset-1.col-md-5.qi-chart-title
-  | Vascular Permeability (K<span class="small qi-small">trans</span>)
-//
-  Note: the forcey attribute requires an interpolated value, since nvd3
-  inconsistently does not accept a function.
-.row
-  nvd3-line-chart.qi-modeling-chart(data='kTransGraph.data' isArea='true'
-    showXAxis='true' showYAxis='true' showLegend='true' color='kTransGraph.color'
-    legendColor='kTransGraph.color' YAxisShowMaxMin='false' XAxisLabel='Visit Date'
-    XAxisTickValues='visitDateValues' forcey='{{ kTransGraph.maxMin() }}'
-    XAxisTickFormat='dateFormat' YAxisLabel='Ktrans'
-    interpolate='cardinal' tooltips='true' useInteractiveGuideline='true')
-  
-h5.col-md-offset-1.col-md-5.qi-chart-title Volume Fraction (v<sub>e</sub>)
-.row
-  nvd3-line-chart.qi-modeling-chart(data='veGraph.data'
-    showXAxis='true' showYAxis='true' showLegend='true' color='veGraph.color'
-    legendColor='veGraph.color' YAxisShowMaxMin='false' XAxisLabel='Visit Date'
-    XAxisTickValues='visitDateValues' forcey='{{ veGraph.maxMin() }}'
-    XAxisTickFormat='dateFormat' YAxisLabel='v_e'
-    interpolate='cardinal' tooltips='true' useInteractiveGuideline='true')
+// The session list formatted as a dateline.
+h5.col-md-offset-5 MR Visits
+.row.qi-chart-row
+  qi-dateline.qi-dateline(data='subject.sessions' attribute='acquisition_date'
+    href='session_detail_link' height='30' width='475')
+  .qi-separator-faint
+
+// The PK parameter charts.
+h5.col-md-offset-1
+  | Vascular Permeability Transfer Constant (K<sup>trans</sup>)
+qi-modeling-chart(data='subject.sessions' chart='ktrans')
+.qi-separator-faint
+h5.col-md-offset-1 Extravascular Extracellular Volume Fraction (v<sub>e</sub>)
+qi-modeling-chart(data='subject.sessions' chart='ve')
+.qi-separator-faint
+h5.col-md-offset-1 Intracellular H<sub>2</sub>O Mean Lifetime (&tau;<sub>i</sub>)
+qi-modeling-chart(data='subject.sessions' chart='taui')

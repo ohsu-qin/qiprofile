@@ -51,6 +51,8 @@ server.get '/static/*', (req, res) ->
   res.sendfile path
 server.get '/partials/*', (req, res) ->
   res.sendfile "#{root}/#{req.path}.html"
+server.get '/templates/*', (req, res) ->
+  res.sendfile "#{root}/#{req.path}"
 
 # Serve index for all qiprofile routes.
 server.get '/quip*', (req, res) ->

@@ -46,6 +46,9 @@ for n in 1 2 3 4 5
 .qi-x-smaller
   font-size 75%
 
+.qi-text-right
+    text-align: right
+
 clean-list()
   -webkit-padding-start: 1em
   & li
@@ -60,15 +63,14 @@ ul.qi-clean-list
 .qi-transparent
   background: transparent
 
-.qi-btn
+.qi-separator-faint
+  border 0.1em solid Lavender
+
+.qi-nav-btn
   color Black
   background-image none
   border 0
-
-.qi-nudge
-  color #999999
-  padding-right 0.5em
-  font-size small
+  padding 0.2em 0.4em 0.2em 0.4em
 
 .qi-navbar
   margin-bottom 0
@@ -95,13 +97,13 @@ ul.qi-clean-list
     margin 0.5em
   & > li > a
     color Black !important
-    padding 0.5em 1em 0.5em 1em
+    padding 0.4em 0.8em 0.4em 0.8em
     border-radius 0.4em
 
 .qi-navbar-choice
   color Black
   background-image none
-  padding 0.5em 1em 0.5em 1em
+  padding 0.4em 0.8em 0.4em 0.8em
   border 0
   // The color is forced in order to retain the color when the help
   // button is pressed. Setting the .active or :active style has no
@@ -119,7 +121,6 @@ ul.qi-clean-list
   margin 0
 
 .qi-content
-  padding 0 0 0 1em
   overflow hide
 
 .qi-main
@@ -128,30 +129,55 @@ ul.qi-clean-list
 .qi-main-list
   clean-list()
 
-qi-subject-profile()
-  width 50%
-  & h4
-    text-decoration underline
+.qi-dateline
+  & svg > g > g > a > text
+    font-size inherit
+  & svg
+    margin 0 0 1em 0
 
+.qi-profile-btn
+  color Black
+  background-color Moccasin
+  &:hover
+    background-color Chocolate
+  margin 0 0 0 0.3em
+  padding 0 0.3em 0 0.3em
+  &:focus
+    outline none
+
+.qi-modeling-profile
+  padding 0 0.2em 0 0
+
+.qi-clinical-profile
+  padding 0 0 0 0.2em
+  & h4
+    // A little top padding is necessary to align the
+    // border top with the modeling profile border when
+    // there is a modeling list/chart toggle button for
+    // more than one visit, which is the common case.
+    // It is unknown why this necessary. 
+    padding 0 0 0.1em 0
+  
 .qi-profile-sheet
   border 1px solid SlateGray
   border-radius: 0.4em 0.4em 0.4em 0.4em
+  margin 0 0 0.2em 0
 
-.qi-modeling-profile
-  float left
-  qi-subject-profile()
+.qi-chart-row
+  // Undo the Bootstrap -15px margin offsets.
+  margin 0 0 0 0
 
 .qi-modeling-chart
-  float left
-  height 16em
-  width 32em
-
-.qi-clinical-profile
-  float right
-  qi-subject-profile()
+  // Note: Unlinke the intensity chart, the modeling chart
+  // CSS attributes are ignored by nv3d, perhaps because
+  // they formatted within a 6-column block. The work-around
+  // is to specify the attributes with pixel values in the
+  // nvd3-line-chart directive.
+  // height 18em
+  // width 32em
 
 .qi-intensity
-  margin 0 0 0 4.7em
+  margin 0 0 0 4.4em
 
 .qi-intensity-chart
   float left
@@ -159,15 +185,17 @@ qi-subject-profile()
   width 68em
 
 .qi-series-selection
-  margin 0 0 1em 0
+  margin 0 0 0.2em 0
 
 .qi-series-selection-key
   text-align: right
 
 .qi-image-btn-grp
+  .qi-image-btn
+    margin 0.1em 0.242em 0.1em 0.242em
   // Undo the Bootstrap adjacent button tweak.
   .btn + .btn
-    margin 0 0.255em 0 0.2em
+    margin 0.1em 0.242em 0.1em 0.242em
 
 .qi-image-btn
   &:hover
@@ -183,21 +211,16 @@ qi-subject-profile()
   &:hover
     background-color DarkGreen
 
-qi-bolus-bg()
-  background Gainsboro
-
 .qi-bolus-legend
-  qi-bolus-bg()
-  width 9em
-  text-align center
+  background Gainsboro
   font-size smaller
+  text-align center
   margin-top 2em
 
 .qi-bolus-arrival
-  qi-bolus-bg()
-  width 1em
-  position absolute
-  opacity .6
+  stroke Gainsboro
+  stroke-width 1em
+  stroke-opacity .8
 
 qi-transition(type, sec)
   -webkit-transition all type sec

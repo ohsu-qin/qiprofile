@@ -1,13 +1,13 @@
 // If there is image data, then the image selector is a button which
 // opens the image.
 // Otherwise, the image selector is a button which loads the image.
-button.btn.btn-default.btn-xs.qi-btn.qi-image-btn(
+button.btn.btn-default.btn-xs.qi-nav-btn.qi-image-btn(
   ng-click='open_image(image)'
   ng-show='image.data'
 )
   .glyphicon.glyphicon-eye-open
 
-button.btn.btn-default.btn-xs.qi-btn.qi-image-btn(
+button.btn.btn-default.btn-xs.qi-nav-btn.qi-image-btn(
   ng-click='image.load()'
   ng-hide='image.data'
   ng-disabled='image.state.loading'

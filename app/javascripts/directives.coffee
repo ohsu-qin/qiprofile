@@ -27,39 +27,6 @@ directives.directive 'qiSpin', () ->
         scope.spinner.stop()
 
 
-# Places a bolus arrival bar on the current graph element.
-directives.directive 'qiBolusArrival', () ->
-  restrict: 'E'
-  link: (scope, element, attrs) ->
-    # The intensity graph.
-    chart = element.parent().find('nvd3-line-chart.qi-intensity-chart')[0]
-    # Wait for the session detail to be fetched.
-    scope.deferred_session.then (sess) ->
-      # The chart axis tick marks start after the axis legend.
-      # Therefore, the plot width is the chart width minus the y-axis
-      # legend width and the plot height is the chart height minus the
-      # data series legend and the x-axis legend.
-      bar_width = element[0].clientWidth
-      # The chart is positioned based on the parent CSS margin.
-      chart_left = parseFloat(element.parent().css('marginLeft'))
-      # The plot offset relative to the parent chart element.
-      plot_offset = {left: 65, top: 29, bottom: 48, right: 35}
-      plot =
-        offset: plot_offset
-        width: chart.clientWidth - plot_offset.left - plot_offset.right
-        height: chart.clientHeight - plot_offset.top - plot_offset.bottom
-      delta = plot.width / (sess.scan.intensity.intensities.length - 1)
-      # The amount to shift the bar to the right from the origin.
-      shift = sess.bolus_arrival_index * delta
-      # Position the bar.
-      element.offset(
-        top: chart.offsetTop + plot.offset.top
-        left: chart_left + plot.offset.left - (bar_width / 2) + shift
-      )
-      # The bar runs along the plot y axis.
-      element.height(plot.height)
-
-
 # Displays a modeling chart.
 directives.directive 'qiModelingChart', ['Modeling', (Modeling) ->
   restrict: 'E'
@@ -110,7 +77,7 @@ directives.directive 'qiDateline', ['Helpers', (Helpers) ->
     hrefs =
       scope.href(obj) for obj in data
     
-    Helpers.d3Hyperlink(top, hrefs, fill: 'Peru')
+    Helpers.d3Hyperlink(top, hrefs)
     
   # Make the directive.
   restrict: 'E'

@@ -181,6 +181,10 @@ svcs.factory 'Helpers', [() ->
     element.selectAll('text').each (item, i) ->
       # The parent node wrapped by D3.
       p = d3.select(this.parentNode)
+      # The JQuery wrapper on this text element.
+      t = $(this)
+      # Remove this text element from the DOM.
+      t.detach()
       # Append a SVG anchor.
       a = p.append('svg:a')
       # Format the link.
@@ -190,8 +194,8 @@ svcs.factory 'Helpers', [() ->
       # Add link style to the SVG text element.
       for [k, v] in _.pairs(style)
         d3.select(this).attr(k, v)
-      # Move the SVG text element to the anchor.
-      $(this).appendTo(a)
+      # Reattach the text element to the anchor.
+      t.appendTo(a)
 ]
 
 

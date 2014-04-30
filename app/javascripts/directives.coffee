@@ -45,39 +45,76 @@ directives.directive 'qiModelingChart', ['Modeling', (Modeling) ->
 directives.directive 'qiDateline', ['Helpers', (Helpers) ->
   # Formats the dateline from the given data.
   format = (scope, element, attrs) ->
+    # Reformats the chart.
+    # @param chart the SVG chart element
+    # @param scales
+    # @param config the {x : {scale, axes: [{element, axis}, ...},
+    #                    y : ...} data structure
+    resize = (chart, config) ->
+      chartNode = chart.node()
+      # The parent element.
+      parent = chartNode.parentNode
+      # The chart height and width.
+      height = $(parent).height()
+      width = $(parent).width()
+      # Resize the chart.
+      config.x.scale.range([0, width])
+      for {element: elt, axis: axis} in config.x.axes
+        elt.attr('transform', "translate(0, #{ height })")
+        elt.call(axis)
+      if config.y
+        config.y.scale.range([height, 0])
+        for {element: elt, axis: axis} in config.y.axes
+          elt.call(axis)
+
+    # The element which contains the chart.
+    parent = d3.select(element[0])
+    # The visits to display.
     data = scope.data
+    # The visit dates.
     dates =
         obj[attrs.attribute] for obj in data
-    width = attrs.width or element.parent().width()
-    height = attrs.height or element.parent().height()
 
-    x = d3.scale.linear()
+    # The x axis scale.
+    x_scale = d3.scale.linear()
     domain = [_.min(dates), _.max(dates)]
-    x.domain(domain).range([0, width])
+    x_scale.domain(domain)
+
+    # The SVG chart.
+    chart = parent.append('svg')
 
     # The dates are displayed along the x axis bottom.
     bot_axis = d3.svg.axis()
-    bot_axis.scale(x).orient('bottom').tickValues(dates)
+    bot_axis.scale(x_scale).orient('bottom').tickValues(dates)
       .tickFormat(Helpers.dateFormat)
+    bottom = chart.append('g').attr('class', 'x axis')
     
+    # The visit numbers are displayed along the x axis top.
     top_axis = d3.svg.axis()
-    top_axis.scale(x).orient('top').tickValues(dates)
+    top_axis.scale(x_scale).orient('top').tickValues(dates)
       .tickFormat(Helpers.indexFormatter(dates, 1))
-
-    svg = d3.select(element[0]).append('svg')
-      .attr('width', width - 140)
-      .attr('height', height)
-    svg.append('g').attr('class', 'x axis')
-      .attr('transform', 'translate(50, ' + height + ')')
-      .call(bot_axis)
-    top = svg.append('g').attr('class', 'x axis')
-      .attr('transform', 'translate(50, ' + height + ')')
-      .call(top_axis)
+    top = chart.append('g').attr('class', 'x axis')
     
+    # The chart data structure.
+    config =
+      x:
+        scale: x_scale
+        axes: [
+          {element: bottom, axis: bot_axis}
+          {element: top, axis: top_axis}
+        ]
+    
+    # The visit hyperlinks.
     hrefs =
       scope.href(obj) for obj in data
-    
+    # Replace the visit text with hyperlinks.
     Helpers.d3Hyperlink(top, hrefs)
+    
+    # Make the chart responsive.
+    d3.select(window).on('resize', resize(chart, config))
+    
+    # Set the initial chart size.
+    resize(chart, config)
     
   # Make the directive.
   restrict: 'E'

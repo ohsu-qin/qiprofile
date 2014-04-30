@@ -181,45 +181,53 @@ ul.qi-clean-list
   // width 32em
 
 .qi-intensity
-  margin 0 0 0 4.4em
+  margin 0 0 0 3.2em
 
 .qi-intensity-chart
   float left
   height 22em
   width 68em
 
-.qi-series-selection
+.qi-image-selection
   margin 0 0 0.2em 0
+  float left
+  height 4em
+  width 68em
 
-.qi-series-selection-key
-  text-align: right
+.qi-image-selection-key
+  padding-right .2em 
+  text-align right
 
-.qi-image-btn-grp
+qi-image-btn-group()
   .qi-image-btn
     margin 0.1em 0.242em 0.1em 0.242em
   // Undo the Bootstrap adjacent button tweak.
   .btn + .btn
     margin 0.1em 0.242em 0.1em 0.242em
 
+.qi-scan-image-btn-group
+  qi-image-btn-group()
+  & button
+    background-color Thistle
+  & button:hover
+    background-color Indigo
+
+.qi-reg-image-btn-group
+  qi-image-btn-group()
+  & button
+    background-color PaleGreen
+  & button:hover
+    background-color DarkGreen
+
 .qi-image-btn
   &:hover
     color Chocolate
 
-.qi-scan-image button
-  background-color Thistle
-  &:hover
-    background-color Indigo
-
-.qi-reg-image button
-  background-color PaleGreen
-  &:hover
-    background-color DarkGreen
-
 .qi-bolus-legend
-  background Gainsboro
-  font-size smaller
-  text-align center
-  margin-top 2em
+  text-anchor end
+
+.qi-bolus-flood
+  flood-color Gainsboro
 
 .qi-bolus-arrival
   stroke Gainsboro

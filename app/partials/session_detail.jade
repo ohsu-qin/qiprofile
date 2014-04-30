@@ -7,20 +7,18 @@ block billboard
 block content
   include include/intensity_chart
   
-  .qi-series-selection
+  .qi-image-selection
     // The scan image selection buttons.
     .row
-      .col-md-1.qi-series-selection-key Scan
-      .btn-group.qi-image-btn-grp(ng-repeat="image in session.scan.images")
-        .qi-scan-image
-          include include/image_select
+      .col-md-1.qi-image-selection-key Scan
+      .btn-group.qi-scan-image-btn-group(ng-repeat="image in session.scan.images")
+        include include/image_select
         
     // The realigned image selection buttons.
     .row
-      .col-md-1.qi-series-selection-key Realigned
-      .btn-group.qi-image-btn-grp(ng-repeat="image in session.registration.images")
-        .qi-reg-image
-          include include/image_select
+      .col-md-1.qi-image-selection-key Realigned
+      .btn-group.qi-reg-image-btn-group(ng-repeat="image in session.registration.images")
+        include include/image_select
 
 
 block help-text

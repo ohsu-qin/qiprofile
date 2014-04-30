@@ -160,10 +160,12 @@ ctlrs.controller 'SessionDetailCtrl', ['$scope', '$routeParams',
     
     # Highlights the bolus arrival tick mark.
     $scope.highlight_bolus_arrival = (chart) ->
+      # Select the SVG element.
+      svg = d3.select(chart.container)
       # The x axis element.
-      x = d3.select(chart.container).select('.nv-x')
+      x_axis = svg.select('.nv-x')
       # The tick elements.
-      ticks = x.selectAll('.tick')[0]
+      ticks = x_axis.selectAll('.tick')[0]
       # The bolus tick element.
       bolus_tick = ticks[session.bolus_arrival_index]
       # The bolus tick child line element.
@@ -177,12 +179,26 @@ ctlrs.controller 'SessionDetailCtrl', ['$scope', '$routeParams',
       #   should read:
       #       if (value == node.classList) {
       # I don't know why jquery addClass doesn't work.
-      # TODO - retry jquery
       # TODO - fork and fix d3 
       $(highlight).attr('class', 'qi-bolus-arrival')
       # Place the highlight after the tick line.
       # It will display opaquely over the tick line.
       $(highlight).insertAfter(bolus_tick_line)
+      # Add the legend.
+      legend = svg.select('.nv-legend')
+      legend_grp = legend.select(':first-child')
+      bolus_grp = legend_grp.insert('svg:g', ':first-child')
+      bolus_grp.attr('transform', 'translate(-30, 5)')
+      filter = bolus_grp.append('svg:filter')
+      filter.attr('width', 1.2).attr('height', 1)
+      filter.attr('id', 'boluslegendbackground')
+      filter.append('feFlood').attr('class', 'qi-bolus-flood')
+      filter.append('feComposite').attr('in', 'SourceGraphic')
+      bolus_legend = bolus_grp.append('svg:text')
+      bolus_legend.attr('class', 'qi-bolus-legend')
+      bolus_legend.attr('dy', '.32em')
+      bolus_legend.attr('filter', 'url(#boluslegendbackground)')
+      bolus_legend.text('Bolus Arrival')
 
     $scope.open_image = (image) ->
       # TODO - Route to the image open page.

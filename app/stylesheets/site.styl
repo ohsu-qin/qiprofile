@@ -133,12 +133,6 @@ ul.qi-clean-list
 .qi-main-list
   clean-list()
 
-.qi-dateline
-  & svg > g > g > a > text
-    font-size inherit
-  & svg
-    margin 0 0 1em 0
-
 .qi-profile-btn
   color Black
   background-color Moccasin
@@ -170,15 +164,11 @@ ul.qi-clean-list
 .qi-chart-row
   // Undo the Bootstrap -15px margin offsets.
   margin 0 0 0 0
-
-.qi-modeling-chart
-  // Note: Unlinke the intensity chart, the modeling chart
-  // CSS attributes are ignored by nv3d, perhaps because
-  // they formatted within a 6-column block. The work-around
-  // is to specify the attributes with pixel values in the
-  // nvd3-line-chart directive.
-  // height 18em
-  // width 32em
+// .qi-dateline
+//   & svg > g > g > a > text
+//     font-size inherit
+//   & svg
+//     margin 0 0 1em 0
 
 .qi-intensity
   margin 0 0 0 3.2em

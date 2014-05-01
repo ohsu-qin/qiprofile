@@ -116,6 +116,19 @@ ctlrs.controller 'SubjectDetailCtrl', ['$scope', '$routeParams',
       "project=#{ subject.project }&detail=#{ session.detail_id }"
 
     ControllerHelper.clean_browser_url(subject.project)
+  
+    $scope.add_session_detail_links = (chart) ->
+      # Select the SVG element.
+      svg = d3.select(chart.container)
+      # The x axis element.
+      x_axis = svg.select('.nv-x')
+      # The tick elements.
+      ticks = x_axis.selectAll('.tick')[0]
+      for tick in ticks
+        hyperlink = tick.append('text')
+        hyperlink.attr('x', 0).attr('y', 12).attr('dy', '1.2em')
+        hyperlink.style('text-anchor: middle')
+        hyperlink.text('Foo')
 ]
 
 ctlrs.controller 'SessionDetailCtrl', ['$scope', '$routeParams',

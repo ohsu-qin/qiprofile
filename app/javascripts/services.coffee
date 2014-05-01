@@ -105,7 +105,8 @@ svcs.factory 'Helpers', [() ->
 
       ceiling = Math.ceil(value_range.max * factor)
       # Pad the graph max with the next higher significant tick mark.
-      upper = (ceiling + 1) / factor
+      upper_int = if ceiling == 0 then ceiling else ceiling + 1
+      upper = upper_int / factor
 
       # Round the minimum down to the nearest precision decimal.
       floor = Math.floor(value_range.min * factor)
@@ -249,23 +250,39 @@ svcs.factory 'Modeling', ['Helpers', (Helpers) ->
     ve: {x: x_config, y: y_configs.ve}
     taui: {x: x_config, y: y_configs.taui}
   
+  # @param sessions the session array 
   # @param chart the chart name
-  # @return the nvd3 chart format
-  configure_chart: (data, chart) ->
-    # Extracts the x values from the given nvd3 chart data.
-    # This function assumes that the chart data series share common
-    # x values.
-    #
-    # @param data the chart data
-    # @returns the chart x values
-    xValues = (data) ->
-      data_series = data[0]
-      coords = data_series.values
-      coord[0] for coord in coords
-    
+  # @returns the nvd3 chart format
+  configure_chart: (sessions, chart) ->
     data_cfg = configs[chart]
-    chart_cfg = Helpers.configure_chart(data, data_cfg)
-    chart_cfg.xValues = xValues
+    chart_cfg = Helpers.configure_chart(sessions, data_cfg)
+    chart_cfg.xValues =
+      data_cfg.x.accessor(sess) for sess in sessions
+    chart_cfg.xFormat = Helpers.dateFormat
+    chart_cfg
+]
+
+
+svcs.factory 'VisitDateline', ['Helpers', (Helpers) ->
+  # The data configuration.
+  config =
+    x:
+      accessor: (session) -> session.acquisition_date.valueOf()
+    y:
+      data:
+        [
+          # The y coordinate is always zero.
+          {
+            accessor: (session) -> 0
+          }
+        ]
+  # @param data the session array
+  # @returns the nvd3 chart format
+  configure_chart: (sessions, href) ->
+    # TODO - add x2axis with hperlinks and orientation top
+    chart_cfg = Helpers.configure_chart(sessions, config)
+    chart_cfg.xValues =
+      config.x.accessor(sess) for sess in sessions
     chart_cfg.xFormat = Helpers.dateFormat
     chart_cfg
 ]

@@ -1,10 +1,15 @@
 .row.qi-chart-row
-  //
-  nvd3-line-chart.qi-modeling-chart(data='config.data' height='200'
-    isArea='{{ config.multiSeries }}' showXAxis='true' showYAxis='true' showLegend='true'
+  // nvd3 has the following quirks (among many others):
+  // * isArea, labels and forcey must be interpolated
+  // * tickValues resolves an expression strictly in the
+  //   local scope; thus, parent scope references must
+  //   be qualified by $parent
+  nvd3-line-chart(data='config.data' height='200'
+    isArea='{{ config.multiSeries }}'
+    showXAxis='true' showYAxis='true' showLegend='true'
     color='config.color' legendColor='config.color'
     xAxisLabel='Visit Date' xAxisTickFormat='config.xFormat'
-    xAxisTickValues='config.xValues' xAxisShowMaxMin='false'
+    xAxisTickValues='$parent.config.xValues' xAxisShowMaxMin='false'
     yAxisLabel='{{ config.yLabel }}' forcey='{{ config.yMaxMin }}'
     yAxisShowMaxMin='false' yAxisTickFormat='config.yFormat'
     interpolate='cardinal' useInteractiveGuideline='true' tooltips='true')

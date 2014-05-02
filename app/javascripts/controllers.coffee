@@ -71,7 +71,47 @@ ctlrs.controller 'SubjectDetailCtrl', ['$scope', '$routeParams',
       number: parseInt($routeParams.subject)
       detail: $routeParams.detail
 
-      # Adds the fetched subject detail into the given subject.
+    $scope.toggleModelingFormat = () ->
+      if $scope.modelingFormat == 'Chart'
+        $scope.modelingFormat = 'Table'
+      else if $scope.modelingFormat == 'Table'
+        $scope.modelingFormat ='Chart'
+      else
+        throw "Modeling format is not recognized: " + $scope.modelingFormat
+    
+    # Adds the session links above the line.
+    $scope.add_session_detail_links = (chart) ->
+      # @returns the link to detail page for the given session
+      session_detail_link = (session) ->
+        "/quip/#{ subject.collection.toLowerCase() }/subject/" +
+        "#{ subject.number }/session/#{ session.number }?" +
+        "project=#{ subject.project }&detail=#{ session.detail_id }"
+      
+      # Select the SVG element.
+      svg = d3.select(chart.container)
+      # The x axis element.
+      x_axis = svg.select('.nv-x')
+      # The tick elements.
+      ticks = x_axis.selectAll('.tick')[0]
+      # Add the session hyperlinks.
+      for i in _.range(ticks.length)
+        # The session tick.
+        tick = ticks[i]
+        session = subject.sessions[i]
+        # Make a new SVG text element.
+        text = d3.select(tick).append('text')
+        text.attr('dx', '-.2em').attr('dy', '-.5em')
+        text.style('text-anchor: middle')
+        # The text content is the session number.
+        text.text(session.number)
+        # The hyperlink target.
+        href = session_detail_link(session)
+        # Wrap the text element in a hyperlink.
+        Helpers.d3Hyperlink(text.node(), href)
+      # TODO - draw the x axis line.
+      line = svg.append('line')
+    
+    # Adds the fetched subject detail into the given subject.
     add_detail = (detail, subject) ->
       # The default modeling format is Chart for more than
       # one session, Table otherwise.
@@ -101,34 +141,7 @@ ctlrs.controller 'SubjectDetailCtrl', ['$scope', '$routeParams',
         subject.detail = fetched.detail
         ControllerHelper.get_detail(subject, Subject, add_detail)
 
-    $scope.toggleModelingFormat = () ->
-      if $scope.modelingFormat == 'Chart'
-        $scope.modelingFormat = 'Table'
-      else if $scope.modelingFormat == 'Table'
-        $scope.modelingFormat ='Chart'
-      else
-        throw "Modeling format is not recognized: " + $scope.modelingFormat
-    
-    # @returns the link to detail page for the given session.
-    $scope.session_detail_link = (session) ->
-      "/quip/#{ subject.collection.toLowerCase() }/subject/" +
-      "#{ subject.number }/session/#{ session.number }?" +
-      "project=#{ subject.project }&detail=#{ session.detail_id }"
-
     ControllerHelper.clean_browser_url(subject.project)
-  
-    $scope.add_session_detail_links = (chart) ->
-      # Select the SVG element.
-      svg = d3.select(chart.container)
-      # The x axis element.
-      x_axis = svg.select('.nv-x')
-      # The tick elements.
-      ticks = x_axis.selectAll('.tick')[0]
-      for tick in ticks
-        hyperlink = tick.append('text')
-        hyperlink.attr('x', 0).attr('y', 12).attr('dy', '1.2em')
-        hyperlink.style('text-anchor: middle')
-        hyperlink.text('Foo')
 ]
 
 ctlrs.controller 'SessionDetailCtrl', ['$scope', '$routeParams',

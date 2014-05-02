@@ -20,6 +20,9 @@ a
   &:hover > text
     fill Chocolate
 
+svg
+  a
+    pointer-events all
 hr
   display none
 
@@ -164,11 +167,11 @@ ul.qi-clean-list
 .qi-chart-row
   // Undo the Bootstrap -15px margin offsets.
   margin 0 0 0 0
-// .qi-dateline
-//   & svg > g > g > a > text
-//     font-size inherit
-//   & svg
-//     margin 0 0 1em 0
+
+.qi-dateline-chart
+  // Override the nv3d style which hides the x axis line.
+  .nv-axis.nv-x path.domain
+    stroke-opacity: .25
 
 .qi-intensity
   margin 0 0 0 3.2em
@@ -177,11 +180,15 @@ ul.qi-clean-list
   float left
   height 22em
   width 68em
+  // TODO - set width to 100% here and in .qi-image-selection,
+  // then center each image button id a 100% partition rather
+  // than setting fixed margins.
 
 .qi-image-selection
   margin 0 0 0.2em 0
   float left
   height 4em
+  // width 100%
   width 68em
 
 .qi-image-selection-key
@@ -191,8 +198,10 @@ ul.qi-clean-list
 qi-image-btn-group()
   .qi-image-btn
     margin 0.1em 0.242em 0.1em 0.242em
-  // Undo the Bootstrap adjacent button tweak.
+  // Undo the Bootstrap adjacent button tweaks.
   .btn + .btn
+    margin 0.1em 0.242em 0.1em 0.242em
+  .btn:first-child
     margin 0.1em 0.242em 0.1em 0.242em
 
 .qi-scan-image-btn-group

@@ -178,25 +178,22 @@ svcs.factory 'Helpers', [() ->
       config.y.data[i].color
     
   # Replaces the given text elements with hyperlinks.
-  d3Hyperlink: (element, hrefs, style) ->  
-    element.selectAll('text').each (item, i) ->
-      # The parent node wrapped by D3.
-      p = d3.select(this.parentNode)
-      # The JQuery wrapper on this text element.
-      t = $(this)
-      # Remove this text element from the DOM.
-      t.detach()
-      # Append a SVG anchor.
-      a = p.append('svg:a')
-      # Format the link.
-      link = hrefs[i]
-      # Add the href.
-      a.attr('xlink:href', link)
-      # Add link style to the SVG text element.
-      for [k, v] in _.pairs(style)
-        d3.select(this).attr(k, v)
-      # Reattach the text element to the anchor.
-      t.appendTo(a)
+  d3Hyperlink: (element, href, style) ->  
+    # The parent node wrapped by D3.
+    p = d3.select(element.parentNode)
+    # The JQuery wrapper on this text element.
+    t = $(element)
+    # Remove this text element from the DOM.
+    t.detach()
+    # Append a SVG anchor.
+    a = p.append('svg:a')
+    # Add the href.
+    a.attr('xlink:href', href)
+    # Add link style to the SVG text element.
+    for [k, v] in _.pairs(style)
+      d3.select(this).attr(k, v)
+    # Reattach the text element to the anchor.
+    t.appendTo(a)
 ]
 
 

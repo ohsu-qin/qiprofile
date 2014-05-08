@@ -27,8 +27,8 @@ directives.directive 'qiSpin', () ->
         scope.spinner.stop()
 
 
-# Displays a modeling chart.
-directives.directive 'qiModelingChart', ['Modeling', (Modeling) ->
+# Displays a discrete bar chart.
+directives.directive 'qiModelingDiscreteChart', ['Modeling', (Modeling) ->
   restrict: 'E'
   scope:
     data: '='
@@ -37,7 +37,21 @@ directives.directive 'qiModelingChart', ['Modeling', (Modeling) ->
     scope.$watch 'data', (data) ->
       if data
         scope.config = Modeling.configure_chart(data, attrs.chart)
-  templateUrl: '/templates/modeling_chart.html'
+  templateUrl: '/templates/modeling_discrete_chart.html'
+]
+
+
+# Displays a multi bar chart.
+directives.directive 'qiModelingMultiChart', ['Modeling', (Modeling) ->
+  restrict: 'E'
+  scope:
+    data: '='
+    chart: '='
+  link: (scope, element, attrs) ->
+    scope.$watch 'data', (data) ->
+      if data
+        scope.config = Modeling.configure_chart(data, attrs.chart)
+  templateUrl: '/templates/modeling_multi_chart.html'
 ]
 
 

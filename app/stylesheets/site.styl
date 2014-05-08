@@ -168,7 +168,20 @@ ul.qi-clean-list
   // Undo the Bootstrap -15px margin offsets.
   margin 0 0 0 0
 
+.qi-tooltip
+  table, th, td
+    border none
+  th
+    border-bottom 1px solid SlateGray
+  th + th, td + td
+    border-left 1px solid SlateGray
+  td
+    text-align center
+
 .qi-dateline-chart
+  svg
+    margin 0 0 0 10%
+    width 80%
   // Override the nv3d style which hides the x axis line.
   .nv-axis.nv-x path.domain
     stroke-opacity: .25

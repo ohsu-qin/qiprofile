@@ -1,8 +1,8 @@
 .row.qi-chart-row
-  // See the modeling_chart template for nvd3 quirks.
+  // See the modeling_discrete_chart template for nvd3 quirks.
   nvd3-line-chart.qi-dateline-chart(data='config.data' height='100'
     showXAxis='true' showYAxis='false' showLegend='false'
-    color='config.color' yAxisTickValues='config.yValues'
+    yAxisTickValues='config.yValues'
     xAxisLabel='Visit Date' xAxisTickFormat='config.xFormat'
     xAxisTickValues='$parent.config.xValues' xAxisShowMaxMin='false'
     callback='$parent.add_session_detail_links')

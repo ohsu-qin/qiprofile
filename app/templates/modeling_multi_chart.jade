@@ -1,0 +1,10 @@
+.row.qi-chart-row
+  // See the modeling_discrete_chart template for nvd3 quirks..
+  nvd3-multi-bar-chart(data='config.data' height='200'
+    showXAxis='true' showYAxis='true' showLegend='true'
+    xAxisLabel='Visit Date' xAxisTickFormat='config.xFormat'
+    xAxisTickValues='$parent.config.xValues' xAxisShowMaxMin='false'
+    yAxisLabel='{{ config.yLabel }}' forcey='{{ config.yMaxMin }}'
+    yAxisShowMaxMin='false' yAxisTickFormat='config.yFormat'
+    useInteractiveGuideline='true' tooltips='true'
+    tooltipContent='config.tooltip')

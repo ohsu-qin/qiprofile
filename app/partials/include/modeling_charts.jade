@@ -6,10 +6,10 @@ qi-visit-dateline(data='subject.sessions')
 // The PK parameter charts.
 h5.col-md-offset-1
   | Vascular Permeability Transfer Constant (K<sup>trans</sup>)
-qi-modeling-chart(data='subject.sessions' chart='ktrans')
+qi-modeling-multi-chart(data='subject.sessions' chart='ktrans')
 .qi-separator-faint
 h5.col-md-offset-1 Extravascular Extracellular Volume Fraction (v<sub>e</sub>)
-qi-modeling-chart(data='subject.sessions' chart='ve')
+qi-modeling-discrete-chart(data='subject.sessions' chart='ve')
 .qi-separator-faint
 h5.col-md-offset-1 Intracellular H<sub>2</sub>O Mean Lifetime (&tau;<sub>i</sub>)
-qi-modeling-chart(data='subject.sessions' chart='taui')
+qi-modeling-discrete-chart(data='subject.sessions' chart='taui')

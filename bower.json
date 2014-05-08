@@ -3,10 +3,19 @@
   "version": "1.1.1",
   "description": "The Imaging Profile Javascript package",
   "author": "Fred Loney <loneyf@ohsu.edu>",
+  "keywords": [
+    "quip",
+    "qin",
+    "medical",
+    "imaging"
+  ],
+  "author": "Fred Loney <loneyf@ohsu.edu>",
+  "license": "Proprietary",
   "repository": {
     "type": "git",
     "url": "git@quip1:qiprofile"
   },
+  "private": true,
   "dependencies": {
     "angular": "1.2.15",
     "angular-animate": "1.2.15",
@@ -27,6 +36,10 @@
     "underscore.string": "~2.3.3",
     "xtk": "FredLoney/get#gh-pages"
   },
+  "devDependencies": {
+    "angular-mocks": "1.2.15",
+    "angular-scenario": "1.2.15"
+  },
   "overrides": {
     "es5-shim": {
       "main": "es5-shim.js"
@@ -35,11 +48,6 @@
       "main": "css/font-awesome.css"
     }
   },
-  "devDependencies": {
-    "angular-mocks": "1.2.15",
-    "angular-scenario": "1.2.15"
-  },
-  "private": true,
   "resolutions": {
     "angular": "1.2.15",
     "nvd3": "master",

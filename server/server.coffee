@@ -71,6 +71,6 @@ if server.get('env') == "test"
 port = server.get 'port'
 http.createServer(server).listen port, ->
   env = server.settings.env
-  console.log "The Imaging Profile server is listening on port #{port} in #{env} mode."
+  console.log "The qiprofile server is listening on port #{port} in #{env} mode."
 
 module.exports = server

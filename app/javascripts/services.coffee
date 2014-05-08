@@ -84,16 +84,15 @@ svcs.factory 'Helpers', [() ->
 
     # @returns the [{key: label, values: coordinates}] nvd3 data
     chart_data = (resources, config) ->
-      
       # @returns the {key, values} pair
       format_data_series = (resources, x_accessor, data_series) ->
-      
         # @returns the graph [x, y] coordinates
         coordinates = (resources, x_accessor, y_accessor) ->
           [x_accessor(rsc), y_accessor(rsc)] for rsc in resources
         
         key: data_series.label
         values: coordinates(resources, x_accessor, data_series.accessor)
+        color: data_series.color
 
       format_data_series(resources, config.x.accessor, ds) for ds in config.y.data
     
@@ -170,13 +169,10 @@ svcs.factory 'Helpers', [() ->
 
     # Return the graph configuration.
     data: chart_data(resources, config)
-    multiSeries: config.y.data.length > 1
     yFormat: decimal_formatter(precision)
     yLabel: config.y.label
     yMaxMin: _.values(chart_y_range)
-    color: (d, i) ->
-      config.y.data[i].color
-    
+
   # Replaces the given text elements with hyperlinks.
   d3Hyperlink: (element, href, style) ->  
     # The parent node wrapped by D3.
@@ -211,12 +207,12 @@ svcs.factory 'Modeling', ['Helpers', (Helpers) ->
         [
           {
             label: 'FXL Ktrans'
-            color: 'OliveDrab'
+            color: 'BurlyWood'
             accessor: (session) -> session.modeling.fxl_k_trans
           }
           {
             label: 'FXR Ktrans'
-            color: 'BurlyWood'
+            color: 'OliveDrab'
             accessor: (session) -> session.modeling.fxr_k_trans
           }
         ]
@@ -251,11 +247,19 @@ svcs.factory 'Modeling', ['Helpers', (Helpers) ->
   # @param chart the chart name
   # @returns the nvd3 chart format
   configure_chart: (sessions, chart) ->
+    # @returns the tooltip HTML
+    tooltip = (key, x, y, e, graph) ->
+      "<b>#{ key }</b>: #{ y }"
+    
+    # The nvd3 data configuration.
     data_cfg = configs[chart]
+    # The nvd3 chart configuration.
     chart_cfg = Helpers.configure_chart(sessions, data_cfg)
-    chart_cfg.xValues =
-      data_cfg.x.accessor(sess) for sess in sessions
+    # Additional nvd3 directive attribute values.
+    chart_cfg.xValues = data_cfg.x.accessor(sess) for sess in sessions
     chart_cfg.xFormat = Helpers.dateFormat
+    chart_cfg.tooltip = tooltip
+
     chart_cfg
 ]
 
@@ -276,7 +280,6 @@ svcs.factory 'VisitDateline', ['Helpers', (Helpers) ->
   # @param data the session array
   # @returns the nvd3 chart format
   configure_chart: (sessions, href) ->
-    # TODO - add x2axis with hperlinks and orientation top
     chart_cfg = Helpers.configure_chart(sessions, config)
     chart_cfg.xValues =
       config.x.accessor(sess) for sess in sessions

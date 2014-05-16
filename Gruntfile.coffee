@@ -37,6 +37,8 @@ module.exports = (grunt) ->
         dest: '_public/stylesheets/vendor.css'
 
       js:
+        options:
+          separator: ';'
         src: [
           'bower_components/lodash/dist/lodash.underscore.js'
           'bower_components/underscore.string/lib/*.js'
@@ -55,9 +57,12 @@ module.exports = (grunt) ->
         dest: '_public/javascripts/vendor.js'
       
       test_js:
+        options:
+          separator: ';'
         src: [
           'node_modules/chai/chai.js'
-          'node_modules/mocha/mocha.js'
+          'bower_components/angular-mocks/angular-mocks.js'
+          'node_modules/chai-as-promised/lib/chai-as-promised.js'
           'node_modules/ng-midway-tester/src/ngMidwayTester.js'
         ]
         dest: '_public/javascripts/test.js'
@@ -66,11 +71,6 @@ module.exports = (grunt) ->
       compile:
         files:
           '_public/javascripts/app.js': ['app/**/*.coffee']
-      test:
-        expand: true
-        ext: '.js'
-        src: ['test/**/*.coffee']
-        dest: '_public'
       
     jade:
       options:
@@ -90,7 +90,7 @@ module.exports = (grunt) ->
 
     karma:
       options:
-        singleRun: true
+        singleRun: not grunt.option('debug')
       unit:
         configFile: 'test/conf/karma_unit.conf.coffee'
       midway:
@@ -98,8 +98,8 @@ module.exports = (grunt) ->
       e2e:
         configFile: 'test/conf/karma_e2e.conf.coffee'
       continuous:
+        # TODO - enable.
         configFile: 'test/conf/karma_continuous.conf.coffee'
-        browsers: ['PhantomJS']
 
     markdown:
       compile:
@@ -185,38 +185,38 @@ module.exports = (grunt) ->
 
   require('load-grunt-tasks')(grunt)
 
-  grunt.registerTask('default', ['build'])
+  grunt.registerTask 'default', ['build']
 
-  grunt.registerTask('copy:app', ['copy:css', 'copy:fonts', 'copy:static'])
+  grunt.registerTask 'copy:app', ['copy:css', 'copy:fonts', 'copy:static']
 
-  grunt.registerTask('concat:app', ['concat:css', 'concat:js'])
+  grunt.registerTask 'concat:app', ['concat:css', 'concat:js']
 
-  grunt.registerTask('vendor:app', ['copy:app', 'concat:app'])
+  grunt.registerTask 'vendor:app', ['copy:app', 'concat:app']
 
-  grunt.registerTask('vendor:test', ['concat:test_js'])
+  grunt.registerTask 'vendor:test', ['concat:test_js']
 
-  grunt.registerTask('compile', ['concurrent:compile'])
+  grunt.registerTask 'compile', ['concurrent:compile']
 
-  grunt.registerTask('build:app', ['vendor:app', 'compile'])
+  grunt.registerTask 'build:app', ['vendor:app', 'compile']
 
-  grunt.registerTask('build:test', ['vendor:test', 'jade:test', 'coffee:test'])
+  grunt.registerTask 'build:test', ['vendor:test', 'jade:test']
 
-  grunt.registerTask('build', ['clean', 'build:app', 'build:test'])
+  grunt.registerTask 'build', ['clean', 'build:app', 'build:test']
 
-  grunt.registerTask('start:prod', ['nodemon:prod'])
+  grunt.registerTask 'start:prod', ['nodemon:prod']
 
-  grunt.registerTask('start:dev', ['concurrent:dev'])
+  grunt.registerTask 'start:dev', ['concurrent:dev']
 
-  grunt.registerTask('start', ['start:dev'])
+  grunt.registerTask 'start', ['start:dev']
 
-  grunt.registerTask('test:unit', ['karma:unit'])
+  grunt.registerTask 'test:unit', ['karma:unit']
 
-  grunt.registerTask('test:midway', ['express:test', 'karma:midway'])
+  grunt.registerTask 'test:midway', ['express:test', 'karma:midway']
 
-  grunt.registerTask('test:e2e', ['express:test', 'karma:e2e'])
+  grunt.registerTask 'test:e2e', ['express:test', 'karma:e2e']
 
-  grunt.registerTask('test', ['express:test', 'karma:unit', 'karma:midway', 'karma:e2e'])
+  grunt.registerTask 'test', ['express:test', 'karma:unit', 'karma:midway', 'karma:e2e']
 
-  grunt.registerTask('jsmin', ['ngmin', 'min'])
+  grunt.registerTask 'jsmin', ['ngmin', 'min']
 
-  grunt.registerTask('release', ['build', 'jsmin', 'cssmin'])
+  grunt.registerTask 'release', ['build', 'jsmin', 'cssmin']

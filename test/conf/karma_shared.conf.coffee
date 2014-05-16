@@ -1,20 +1,19 @@
 module.exports = (config) ->
   # The base path to resolve files.
-  basePath: '../../'
+  basePath: '../..'
 
   # The karma adapter frameworks to use.
   frameworks: ['mocha', 'chai']
+
+  # The test specs can be written in coffescript.
+  preprocessors: '**/*.coffee': 'coffee'
 
   # The files or patterns to load in the browser.
   files: [
     '_public/javascripts/vendor.js'
     '_public/javascripts/app.js'
     '_public/javascripts/test.js'
-  ]
-
-  # The files to exclude.
-  exclude: [
-    
+    'test/conf/mocha.conf.coffee'
   ]
 
   # The test results reporter.
@@ -27,7 +26,6 @@ module.exports = (config) ->
   # The logging level.
   # Possible values: config.LOG_DISABLE, config.LOG_ERROR, config.LOG_WARN,
   # config.LOG_INFO, config.LOG_DEBUG.
-  logLevel: config.LOG_DEBUG
 
   # Flag indicating whether to execute the tests whenever any file changes.
   autoWatch: false
@@ -48,4 +46,5 @@ module.exports = (config) ->
 
   # The Continuous Integration mode.
   # If true, then karma will capture the browsers, run the tests and exit.
-  singleRun: false
+  # This value is set in the grunt config file.
+  # singleRun: true

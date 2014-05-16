@@ -307,7 +307,9 @@ svcs.factory 'Image', ['$rootScope', '$timeout', ($rootScope, $timeout) ->
   load_data = (path) ->
     # Placeholder testing function to simulate data transfer.
     $timeout(
-      () -> 'loaded'
+      () ->
+        console.log(">> ld exit")
+        'loaded'
       5000
     )
     
@@ -316,8 +318,16 @@ svcs.factory 'Image', ['$rootScope', '$timeout', ($rootScope, $timeout) ->
     #   method: 'GET'
     #   url: '/static/' + path
 
+  # Creates an object which encapsulates an image. The object has
+  # the following properties:
+  # * filename - the image file name
+  # * state - contains the loading flag
+  # * data - the binary image content
+  # * load() - the function to transfer the binary content
+  #
+  # @param filename the image file path
+  # @returns a new image object
   create = (filename) ->
-    # Returns a new image object.
     filename: filename
     state:
       loading: false
@@ -329,14 +339,21 @@ svcs.factory 'Image', ['$rootScope', '$timeout', ($rootScope, $timeout) ->
       load_data(filename)
       .then (data) ->
         image.data = data
-        image.state.loading = false
+        image.state.loading = fals
         data
 
-  # Return the Image service singleton object which implements
-  # the images_for function.
+  # Obtains image objects for the given ImageContainer. The image
+  # object content is described in the create() function.
+  #
+  # This function caches the fetched image objects. If the image
+  # objects are already cached for the given image container,
+  # then this function returns the cached objects. Otherwise, this
+  # function creates, caches and returns new image objects. The
+  # cached object image content data is not loaded until the image
+  # object load() function is called.
+  #
+  # @param image the ImageContainer scan or registration object
+  # @returns the image objects
   images_for: (obj) ->
-    # If images are cached for given image file container object,
-    # then return the cached image objects.
-    # Otherwise, create, cache and return the new image objects.
     cache(obj.id) or cache(obj.id, obj.files...)
 ]

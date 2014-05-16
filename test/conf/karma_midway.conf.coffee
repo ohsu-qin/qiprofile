@@ -1,15 +1,17 @@
 sharedConfig = require './karma_shared.conf'
 
 module.exports = (config) ->
-  conf = sharedConfig(config)
+  cfg = sharedConfig(config)
   
-  conf.files = conf.files.concat [
-    'test/midway/**/appSpec.coffee'
+  cfg.files = cfg.files.concat [
+    'test/midway/**/*Spec.coffee'
   ]
 
-  # The the web server proxy.
-  conf.proxies =
-    '/': 'http//localhost:3001/quip/'
+  # The test server proxy.
+  cfg.proxies =
+    '/': 'http://localhost:3001/'
 
-  config.set conf
+  cfg.urlRoot = '/test/'
+  
+  config.set cfg
 

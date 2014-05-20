@@ -1,12 +1,12 @@
 directives = angular.module 'qiprofile.directives', []
 
 # Spinner directive.
-directives.directive 'qiSpin', () ->
+directives.directive 'qiSpin', ->
   (scope, element, attrs) ->
     # Replaces the DOM element with a spinner
     # while the qiSpin attribute is set.
     
-    create_spinner = () ->
+    create_spinner = ->
       # Creates an image selection spinner.
       new Spinner(
         lines: 10

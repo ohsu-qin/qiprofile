@@ -71,7 +71,7 @@ ctlrs.controller 'SubjectDetailCtrl', ['$scope', '$routeParams',
       number: parseInt($routeParams.subject)
       detail: $routeParams.detail
 
-    $scope.toggleModelingFormat = () ->
+    $scope.toggleModelingFormat = ->
       if $scope.modelingFormat == 'Chart'
         $scope.modelingFormat = 'Table'
       else if $scope.modelingFormat == 'Table'

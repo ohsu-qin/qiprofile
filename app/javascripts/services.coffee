@@ -14,7 +14,7 @@ svcs.factory 'Session', ['$resource', ($resource) ->
       url: '/api/session_detail/:id/'
 ]
 
-svcs.factory 'Helpers', [() ->
+svcs.factory 'Helpers', [->
   # If the given attribute value is a string, then this function
   # resets it to the parsed date.
   fix_date: (obj, attr) ->
@@ -288,7 +288,22 @@ svcs.factory 'VisitDateline', ['Helpers', (Helpers) ->
 ]
 
 
-svcs.factory 'Image', ['$rootScope', '$timeout', ($rootScope, $timeout) ->
+svcs.factory 'File', ['$http', ($http) ->
+  # Helper function to read the given server file.
+  # @param path the file path relative to the web app root
+  # @returns the Angular $http request
+  read: (path) ->
+    # Remove the leading slash, if necessary.
+    if path[0] == '/'
+      path = path[1..]
+    # Read the file.
+    $http
+      method: 'GET'
+      url: '/static/' + path
+]
+
+
+svcs.factory 'Image', ['$rootScope', 'File', ($rootScope, File) ->
   # A root scope {parent id: {filename: content} image cache.
   $rootScope.images = {}
   
@@ -302,45 +317,44 @@ svcs.factory 'Image', ['$rootScope', '$timeout', ($rootScope, $timeout) ->
         create(filename) for filename in files
     else
       $rootScope.images[id]
-  
-  # Helper function to load the given file.
-  load_data = (path) ->
-    # Placeholder testing function to simulate data transfer.
-    $timeout(
-      () ->
-        console.log(">> ld exit")
-        'loaded'
-      5000
-    )
-    
-    # TODO - replace the mock $timeout pseudo-load by the following:
-    # $http
-    #   method: 'GET'
-    #   url: '/static/' + path
 
   # Creates an object which encapsulates an image. The object has
   # the following properties:
   # * filename - the image file name
   # * state - contains the loading flag
   # * data - the binary image content
-  # * load() - the function to transfer the binary content
+  # * load() - the function to read the image file
   #
   # @param filename the image file path
   # @returns a new image object
   create = (filename) ->
+    # The image file path, relative to the web app root.
     filename: filename
+    
+    # The image state loading flag is true if the file is being
+    # loaded, false otherwise.
     state:
       loading: false
+    
+    # The image binary content.
     data: null
+    
+    # Transfers the image file content to the data attribute.
+    # The image state loading flag is set to true while the
+    # file is read.
+    #
+    # @returns the Angular $http request
     load: () ->
-      # Transfers the image file content to the data attribute.
-      this.state.loading = true
-      image = this
-      load_data(filename)
-      .then (data) ->
-        image.data = data
-        image.state.loading = fals
-        data
+      # Set the loading flag.
+      @state.loading = true
+      # Read the file. The Coffeescript fat arrow (=>) binds the
+      # this variable to the image object rather than the $http
+      # request.
+      File.read(filename).success (data, args...) =>
+        # Unset the loading flag.
+        @state.loading = false
+        # Set the data property to the file content.
+        @data = data
 
   # Obtains image objects for the given ImageContainer. The image
   # object content is described in the create() function.

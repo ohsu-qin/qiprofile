@@ -1,6 +1,6 @@
-describe 'The Subject List Controller', () ->
+describe 'The Subject List Controller', ->
 
-  beforeEach () ->
+  beforeEach ->
     # Load the controller module.
     module 'qiprofile.controllers'
     # Initialize the controller and a mock scope.

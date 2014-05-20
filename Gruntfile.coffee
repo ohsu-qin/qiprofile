@@ -60,7 +60,6 @@ module.exports = (grunt) ->
         options:
           separator: ';'
         src: [
-          'node_modules/chai/chai.js'
           'bower_components/angular-mocks/angular-mocks.js'
           'node_modules/chai-as-promised/lib/chai-as-promised.js'
           'node_modules/ng-midway-tester/src/ngMidwayTester.js'

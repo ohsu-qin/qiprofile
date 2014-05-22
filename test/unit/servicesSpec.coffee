@@ -4,7 +4,7 @@ describe 'Unit Testing Services', ->
     # Fake the services module.
     angular.mock.module('qiprofile.services')
 
-  describe 'The Image Service', ->
+  describe 'Image Service', ->
     # The qiprofile Image factory.
     Image = null
     # The mock Angular $http service provider.

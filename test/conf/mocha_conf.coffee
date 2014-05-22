@@ -1,1 +1,2 @@
-mocha.setup({timeout: 5000})
+mocha.setup
+  timeout: 5000

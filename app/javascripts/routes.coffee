@@ -3,14 +3,14 @@ routes = angular.module 'qiprofile.routes', ['ngRoute']
 routes.config ['$routeProvider', '$locationProvider',
   ($routeProvider, $locationProvider) ->
     $routeProvider
-      .when 'home', '/quip',
+      .when '/quip',
         templateUrl: '/partials/subject_list.html'
         controller:  'SubjectListCtrl'
-      .when 'subject', '/quip/:collection/subject/:subject',
+      .when '/quip/:collection/subject/:subject',
         templateUrl: '/partials/subject_detail.html'
         controller:  'SubjectDetailCtrl'
         reloadOnSearch: false
-      .when 'session', '/quip/:collection/subject/:subject/session/:session',
+      .when '/quip/:collection/subject/:subject/session/:session',
         templateUrl: '/partials/session_detail.html'
         controller:  'SessionDetailCtrl'
         reloadOnSearch: false

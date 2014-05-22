@@ -6,9 +6,9 @@ ctlrs.factory 'ControllerHelper', ['$location', ($location) ->
   # action function.
   get_detail: (obj, resource, action) ->
     resource.detail(id: obj.detail).$promise
-    .then (detail) ->
-      action(detail, obj)
-      obj
+      .then (detail) ->
+        action(detail, obj)
+        obj
 
   # Copies the given source object properties into the
   # destination object.
@@ -41,29 +41,23 @@ ctlrs.controller 'HelpCtrl', ['$scope',
 
 ctlrs.controller 'SubjectListCtrl', ['$scope', 'Subject',
   ($scope, Subject) ->
-    # Import the lodash utility library.
-    _ = window._
-
     # Export the deferred subjects REST promise to the scope.
     $scope.subjects = Subject.query()
 
     # When the subjects are loaded. then export the collections
     # to the scope.
     $scope.subjects.$promise
-    .then (subjects) ->
-      # The unique subject collections.
-      $scope.collections = _.uniq _.map(
-        $scope.subjects,
-        (subject) -> subject.collection
-      )
+      .then (subjects) ->
+        # The unique subject collections.
+        $scope.collections = _.uniq _.map(
+          $scope.subjects,
+          (subject) -> subject.collection
+        )
 ]
 
 ctlrs.controller 'SubjectDetailCtrl', ['$scope', '$routeParams',
   'ControllerHelper', 'Subject', 'Helpers',
   ($scope, $routeParams, ControllerHelper, Subject, Helpers) ->
-    # Import the lodash utility library.
-    _ = window._
-
     # Compose a subject from the route parameters.
     subject =
       project: $routeParams.project or 'QIN'
@@ -137,9 +131,9 @@ ctlrs.controller 'SubjectDetailCtrl', ['$scope', '$routeParams',
       ControllerHelper.get_detail(subject, Subject, add_detail)
     else
       Subject.get(subject).$promise
-      .then (fetched) ->
-        subject.detail = fetched.detail
-        ControllerHelper.get_detail(subject, Subject, add_detail)
+        .then (fetched) ->
+          subject.detail = fetched.detail
+          ControllerHelper.get_detail(subject, Subject, add_detail)
 
     ControllerHelper.clean_browser_url(subject.project)
 ]
@@ -255,7 +249,7 @@ ctlrs.controller 'SessionDetailCtrl', ['$scope', '$routeParams',
       ControllerHelper.copy_content(detail, session)
       # Add the registration.
       # TODO - handle more than one registration?
-      session.registration = session.reconstructions[0]
+      session.registration = session.registrations[0]
       # Add the intensity graph parameters.
       session.graphData = intensity_graph_data(
         Scan: session.scan.intensity.intensities
@@ -278,20 +272,20 @@ ctlrs.controller 'SessionDetailCtrl', ['$scope', '$routeParams',
     else
       # Fetch the subject...
       deferred = Subject.get(subject).$promise
-      .then (fetched) ->
-        # ...then fetch the subject detail...
-        Subject.detail(id: fetched.detail).$promise
-      .then (detail) ->
-        # ...find the session in the session list...
-        for sess in detail.sessions
-          if sess.number == session.number
-            # ...and fetch the session detail.
-            session.detail = sess.detail_id
-        # If the session was not found, then complain.
-        if not session.detail
-          throw "Subject #{ subject } does not have a session #{ session.number }"
-        # Fill in the session detail.
-        ControllerHelper.get_detail(session, Session, add_detail)
+        .then (fetched) ->
+          # ...then fetch the subject detail...
+          Subject.detail(id: fetched.detail).$promise
+        .then (detail) ->
+          # ...find the session in the session list...
+          for sess in detail.sessions
+            if sess.number == session.number
+              # ...and fetch the session detail.
+              session.detail = sess.detail_id
+          # If the session was not found, then complain.
+          if not session.detail
+            throw "Subject #{ subject } does not have a session #{ session.number }"
+          # Fill in the session detail.
+          ControllerHelper.get_detail(session, Session, add_detail)
 
     ControllerHelper.clean_browser_url(subject.project)
 ]

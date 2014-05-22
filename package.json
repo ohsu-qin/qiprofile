@@ -34,7 +34,6 @@
     "bower": "~1.2.8",
     "jade": "~1.1.5",
     "stylus": "~0.42.2",
-    "ng-midway-tester": "~2.0.5",
     "node-dev": "~0.2.8",
     "npmedge": "~0.1.1",
     "chai": "~1.9.1",

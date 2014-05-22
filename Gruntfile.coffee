@@ -62,7 +62,6 @@ module.exports = (grunt) ->
         src: [
           'bower_components/angular-mocks/angular-mocks.js'
           'node_modules/chai-as-promised/lib/chai-as-promised.js'
-          'node_modules/ng-midway-tester/src/ngMidwayTester.js'
         ]
         dest: '_public/javascripts/test.js'
     
@@ -91,12 +90,10 @@ module.exports = (grunt) ->
       options:
         singleRun: not grunt.option('debug')
       unit:
-        configFile: 'test/conf/karma_unit_conf.coffee'
-      midway:
-        configFile: 'test/conf/karma_midway_conf.coffee'
+        configFile: 'test/conf/karma_conf.coffee'
 
     protractor:
-      options:
+      e2e:
         configFile: 'test/conf/protractor_conf.coffee'
       
     markdown:
@@ -211,11 +208,9 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'test:unit', ['karma:unit']
 
-  grunt.registerTask 'test:midway', ['start:test', 'karma:midway']
+  grunt.registerTask 'test:e2e', ['start:test', 'protractor:e2e']
 
-  grunt.registerTask 'test:e2e', ['start:test', 'protractor']
-
-  grunt.registerTask 'test', ['express:test', 'karma:unit', 'karma:midway', 'karma:e2e']
+  grunt.registerTask 'test', ['start:test', 'test:unit', 'test:e2e']
 
   grunt.registerTask 'jsmin', ['ngmin', 'min']
 

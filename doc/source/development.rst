@@ -77,7 +77,6 @@ This command installs the necessary packages [#xtk_fork]_.
        grunt
 
 
-
 ***********
 Development
 ***********
@@ -108,7 +107,6 @@ The project is organized as follows::
       test/           # The top-level test directory
         conf/         # The karma and mocha configuration files
         e2e/          # End-to-end tests
-        midway/       # ngMidwayTester tests
         unit/         # Unit tests
 
 Adding dependencies
@@ -136,31 +134,28 @@ Each package occurs after packages on which it depends.
 
 Testing
 -------
-Testing is performed by the following grunt tasks:
+Testing is performed by the following grunt tasks[#midway]:
 
 * ``test:unit``: Run the unit tests
 
-* ``test:midway``: Run the ngMidwayTester_ tests
-
 * ``test:e2e``: Run the end-to-end tests
 
-The unit and midway tests are run with the Karma_ test runner using the
-Mocha_ and Chai_ frameworks and the PhantomJS_ headless server. For example,
-the command::
+The unit tests are run with the Karma_ test runner using the Mocha_ and
+Chai_ frameworks and the PhantomJS_ headless server. The command::
 
     grunt test:unit
 
-runs the grunt karma ``unit`` task. This task performs the following:
+runs the grunt karma ``unit`` task as follows:
 
-* Read the ``test/conf/karma_unit.conf.coffee`` configuration file
+* Read the ``test/conf/karma-conf.coffee`` configuration file
 
-* Start a headless web server as the Mocha test context, 
+* Start a headless web server as the Mocha test context
 
-* Exercise the ``test/unit/`` test cases.
+* Exercise the ``test/unit/`` test cases
 
-* Print the result to the console.
+* Print the result to the console
 
-Debugging a unit or midway test case is performed as follows:
+Debugging a unit test case is performed as follows:
 
 * Run the grunt task with the ``--debug`` option, e.g.:
 
@@ -172,13 +167,29 @@ Debugging a unit or midway test case is performed as follows:
 
 * Press the ``DEBUG`` button on that page.
 
-* Open the Developer Tools (DevTools_).
+* Open the Chrome Developer Tools (DevTools_).
 
 * Set a breakpoint in the ``base/_public/javascripts/app.js`` source file.
 
 * Refresh the page.
 
-The end-to-end tests are run with the Protractor_ framework.
+The end-to-end tests are run with the Protractor_ framework. The command::
+
+    grunt test:unit
+
+runs the grunt protractor ``e2e`` task as follows:
+
+* Read the ``test/conf/protractor-conf.coffee`` configuration file
+
+* Start the Express test server on port 3001
+
+* Start a Selenium web server as the Mocha test context
+
+* Run the qipipe_ test seed program
+
+* Exercise the ``test/e2e/`` test cases
+
+* Print the result to the console
 
 
 Coding Standards
@@ -189,9 +200,9 @@ Coding Standards
   and trimming the example.
 
 * All test cases are written as CoffeeScript files in the appropriate
-  ``e2e``, ``midway`` or ``unit`` test subdirectory. The CoffeeScript
-  test case is compiled on the fly to JavaScript by the Karma_ or
-  Protractor_ test runner.
+  ``unit`` or ``e2e`` test subdirectory. The CoffeeScript test case
+  is compiled on the fly to JavaScript by the Karma_ or Protractor_ test
+  runner.
 
 * All dynamic application HTML is compiled from an ``app/partials`` or
   ``app/templates`` CoffeeScript file.
@@ -276,10 +287,15 @@ Coding Standards
 .. rubric:: Footnotes
 
 .. [#xtk_fork]
-  :Note: XTK_ is not packaged for Bower_ or npm_. The `XTK Bower Fork`_ remedies
-  this omission.The qiprofile ``bower.json`` definition file specifies this GitHub fork.
-  The ``edge`` XTK version is used, following the recommendation on the _XTK home page.
+  :Note: XTK_ is not packaged for Bower_ or npm_. The `XTK Bower Fork`_
+  remedies this omission.The qiprofile ``bower.json`` definition file
+  specifies this GitHub fork. The ``edge`` XTK version is used, following
+  the recommendation on the _XTK home page.
 
+.. [#midway]
+   The ngMidwayTester_ purports to offer a testing solution intermediate
+   to unit and end-to-end testing. However, this package was evalutated
+   and found to be faulty and poorly documented, supported and maintained. 
 
 .. Targets:
 

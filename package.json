@@ -16,7 +16,7 @@
   "license": "Proprietary",
   "private": true,
   "scripts": {
-    "postinstall": "./node_modules/.bin/bower install; webdriver-manager update"
+    "postinstall": "./node_modules/.bin/bower install; ./node_modules/protractor/bin/webdriver-manager update"
   },
   "homepage": "http://quip1:8080/qiprofile",
   "directories": {

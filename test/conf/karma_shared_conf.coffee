@@ -1,4 +1,4 @@
-module.exports = (config) ->
+module.exports = ->
   # The base path to resolve files.
   basePath: '../..'
 
@@ -23,10 +23,6 @@ module.exports = (config) ->
   # Flag indicating whether to display colors in the reporter and log output.
   colors: true
 
-  # The logging level.
-  # Possible values: config.LOG_DISABLE, config.LOG_ERROR, config.LOG_WARN,
-  # config.LOG_INFO, config.LOG_DEBUG.
-
   # Flag indicating whether to execute the tests whenever any file changes.
   autoWatch: false
 
@@ -39,10 +35,22 @@ module.exports = (config) ->
   # - Safari (only Mac; has to be installed with `npm install karma-safari-launcher`)
   # - PhantomJS
   # - IE (only Windows; has to be installed with `npm install karma-ie-launcher`)
+  # In addition, custom launchers can be defined with the customLaunchers config.
   browsers: ['PhantomJS']
+  
+  # Custom debug launcher.
+  # Broken - doesn't capture output and times out.
+  # TODO - fix or kill.
+  # customLaunchers:
+  #   'PhantomJS_debug':
+  #     base: 'PhantomJS'
+  #     options:
+  #       debug: true
+  #     flags: ['--remote-debugger-port=9001']
+  #         
 
   # If the browser does not capture in given timeout (ms), then kill it.
-  captureTimeout: 10000
+  captureTimeout: 20000
 
   # The Continuous Integration mode.
   # If true, then karma will capture the browsers, run the tests and exit.

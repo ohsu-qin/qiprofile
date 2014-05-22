@@ -9,7 +9,6 @@
     "medical",
     "imaging"
   ],
-  "author": "Fred Loney <loneyf@ohsu.edu>",
   "license": "Proprietary",
   "repository": {
     "type": "git",
@@ -49,7 +48,6 @@
     }
   },
   "resolutions": {
-    "angular": "1.2.15",
     "nvd3": "master",
     "d3": "~3.3.11"
   }

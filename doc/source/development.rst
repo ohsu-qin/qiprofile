@@ -54,30 +54,28 @@ Setup
 
 2. Install the `Node.js`_ npm_ package manager.
 
-3. Install the bower_ client Javascript package manager::
+3. Install the bower_ client Javascript package manager globally::
 
        npm install -g bower
 
-4. Install the Grunt_ CLI command::
+4. Install the Grunt_ CLI command globally::
 
        npm install -g grunt-cli
 
-5. Run the following in a console from the ``qiprofile`` directory::
+5. Install the PhantomJS_ headless web server globally::
+
+       npm install -g phantomjs
+
+6. Run the following in a console from the ``qiprofile`` directory::
 
        npm install
 
 This command installs the necessary packages [#xtk_fork]_.
 
-6. Run the following Grunt_ script::
+7. Run the following Grunt_ script::
 
        grunt
 
-
-*******
-Testing
-*******
-
-TBD
 
 
 ***********
@@ -113,7 +111,6 @@ The project is organized as follows::
         midway/       # ngMidwayTester tests
         unit/         # Unit tests
 
-
 Adding dependencies
 -------------------
 Add a new client library as follows::
@@ -126,7 +123,62 @@ Add a new test library as follows::
 
 In both cases, after adding the dependency, edit the modified configuration
 (``bower.json`` or ``package.json``) to move the added dependency entry to
-the appropriate position in the roughly sorted list.
+the appropriate position in the list. The list is in alphabetical sort order
+within the following grouping order:
+
+* Application packages
+
+* Test packages
+
+* Grunt packages
+
+Each package occurs after packages on which it depends.
+
+Testing
+-------
+Testing is performed by the following grunt tasks:
+
+* ``test:unit``: Run the unit tests
+
+* ``test:midway``: Run the ngMidwayTester_ tests
+
+* ``test:e2e``: Run the end-to-end tests
+
+The unit and midway tests are run with the Karma_ test runner using the
+Mocha_ and Chai_ frameworks and the PhantomJS_ headless server. For example,
+the command::
+
+    grunt test:unit
+
+runs the grunt karma ``unit`` task. This task performs the following:
+
+* Read the ``test/conf/karma_unit.conf.coffee`` configuration file
+
+* Start a headless web server as the Mocha test context, 
+
+* Exercise the ``test/unit/`` test cases.
+
+* Print the result to the console.
+
+Debugging a unit or midway test case is performed as follows:
+
+* Run the grunt task with the ``--debug`` option, e.g.:
+
+      grunt --debug test:unit
+  
+  This starts the test runner but does not run the tests.
+
+* Open a Chrome web browser to the ``http://localhost:9876/test/`` page.
+
+* Press the ``DEBUG`` button on that page.
+
+* Open the Developer Tools (DevTools_).
+
+* Set a breakpoint in the ``base/_public/javascripts/app.js`` source file.
+
+* Refresh the page.
+
+The end-to-end tests are run with the Protractor_ framework.
 
 
 Coding Standards
@@ -138,8 +190,8 @@ Coding Standards
 
 * All test cases are written as CoffeeScript files in the appropriate
   ``e2e``, ``midway`` or ``unit`` test subdirectory. The CoffeeScript
-  test case is compiled on the fly to JavaScript by the Karma_ test
-  runner.
+  test case is compiled on the fly to JavaScript by the Karma_ or
+  Protractor_ test runner.
 
 * All dynamic application HTML is compiled from an ``app/partials`` or
   ``app/templates`` CoffeeScript file.
@@ -147,7 +199,18 @@ Coding Standards
 * All application CSS is compiled from the ``app/stylesheets/site.styl``
   Stylus file.
 
-* Every application AngularJS directive is camel case prefixed by ``qi``,
+* Coffeescript follows the `CoffeeScript Style Guide`_.
+
+* Coffeescript promise chain ``.then`` and AngularJS routeProvider
+  ``.when`` clauses are indented, e.g.::
+  
+      promise
+        .then (result) ->
+          ...
+        .then (more) ->
+          ...
+
+* Every application AngularJS directive is camelCase prefixed by ``qi``,
   e.g. ``qiSpin``.
 
 * Every custom CSS style is dash-separated lower case preceded by ``qi``,
@@ -196,6 +259,19 @@ Coding Standards
   progresses. A passing full-featured test case is necessary before
   integrating the branch into the master.
 
+* Commit git changes early and often. The commit message is a concise,
+  meaningful, readable change description. The message begins with a
+  capital letter and ends with a period, e.g.::
+  
+      Add a bolus arrival bar to the intensity chart.
+  
+  rather than::
+  
+      change intensity chart
+
+  If a git comment is longer than one sentence, then the commit probably
+  should have been broken out into several commits.
+
 
 .. rubric:: Footnotes
 
@@ -217,6 +293,14 @@ Coding Standards
 
 .. _Bower: http://bower.io/
 
+.. _Chai: http://chaijs.com/
+
+.. _Chrome: https://www.google.com/intl/en_us/chrome/browser/
+
+.. _CoffeeScript Style Guide : https://github.com/polarmobile/coffeescript-style-guide
+
+.. _DevTools: https://developer.chrome.com/devtools/index
+
 .. _Grunt: http://www.gruntjs.com/
 
 .. _jsdoc: http://usejsdoc.org/
@@ -225,6 +309,10 @@ Coding Standards
 
 .. _Karma: http://karma-runner.github.io/0.10/index.html
 
+.. _Mocha: http://visionmedia.github.io/mocha/
+
+.. _ngMidwayTester: https://github.com/yearofmoo/ngMidwayTester
+
 .. _Node.js: https://www.nodejs.org/
 
 .. _nodejs-polling-app: http://www.ibm.com/developerworks/library/wa-nodejs-polling-app/
@@ -232,6 +320,10 @@ Coding Standards
 .. _npm: https://www.npmjs.org/
 
 .. _ngdoc: https://github.com/angular/angular.js/wiki/Writing-AngularJS-Documentation
+
+.. _PhantomJS: http://phantomjs.org/
+
+.. _Protractor: https://github.com/angular/protractor
 
 .. _XTK: http://www.goXTK.com
 

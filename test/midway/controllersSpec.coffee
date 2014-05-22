@@ -7,15 +7,14 @@ describe 'Midway Testing Controllers', ->
   afterEach ->
     tester.destroy()
   
-  describe 'The Subject List', ->
+  describe 'Subject List', ->
     scope = null
     
     it 'should route home to the subject list', (done) ->
-      tester.visit '/quip', ->
-        console.log(">> sl visit enter")
-        expect(tester.path()).to.equal('/quip')
+      tester.visit '/test/quip', ->
+        #expect(tester.path()).to.equal('/')
         expect(tester.viewElement()).to.exist
-        expect(tester.viewScope()).to.exist
+        console.log(tester.viewElement().html())
         # scope = tester.inject('$route').current.scope
         # console.log(">> sl ck " + scope)
         # resolved = ->
@@ -23,4 +22,4 @@ describe 'Midway Testing Controllers', ->
         # tester.until resolved, ->
         #   console.log(">> sl rslvd enter")
         #   expect(scope.subjects).to.not.be.empty
-        #   done()
+        done()

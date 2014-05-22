@@ -1,9 +1,11 @@
-describe 'The Subject List Controller', ->
+chai = require 'chai'
+chaiAsPromised = require 'chai-as-promised'
+expect = chai.expect
+chai.use(chaiAsPromised)
 
-  beforeEach ->
-    # Load the controller module.
-    module 'qiprofile.controllers'
-    # Initialize the controller and a mock scope.
-    inject ($controller, $rootScope) ->
-      scope = $rootScope.$new()
-      SubjectListCtrl = $controller('SubjectListCtrl', $scope: scope)
+describe 'E2E Testing Controllers', ->
+
+  describe 'Subject List', ->
+    browser.get('http://www.angularjs.org')
+    it 'should be routed to the home page', ->
+      expect(browser.getCurrentUrl()).to.eventually.equal('/quip')

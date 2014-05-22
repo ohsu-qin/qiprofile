@@ -91,15 +91,14 @@ module.exports = (grunt) ->
       options:
         singleRun: not grunt.option('debug')
       unit:
-        configFile: 'test/conf/karma_unit.conf.coffee'
+        configFile: 'test/conf/karma_unit_conf.coffee'
       midway:
-        configFile: 'test/conf/karma_midway.conf.coffee'
-      e2e:
-        configFile: 'test/conf/karma_e2e.conf.coffee'
-      continuous:
-        # TODO - enable.
-        configFile: 'test/conf/karma_continuous.conf.coffee'
+        configFile: 'test/conf/karma_midway_conf.coffee'
 
+    protractor:
+      options:
+        configFile: 'test/conf/protractor_conf.coffee'
+      
     markdown:
       compile:
         expand: true
@@ -202,7 +201,9 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'build', ['clean', 'build:app', 'build:test']
 
-  grunt.registerTask 'start:prod', ['nodemon:prod']
+  grunt.registerTask 'start:prod', ['express:prod']
+
+  grunt.registerTask 'start:test', ['express:test']
 
   grunt.registerTask 'start:dev', ['concurrent:dev']
 
@@ -210,9 +211,9 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'test:unit', ['karma:unit']
 
-  grunt.registerTask 'test:midway', ['express:test', 'karma:midway']
+  grunt.registerTask 'test:midway', ['start:test', 'karma:midway']
 
-  grunt.registerTask 'test:e2e', ['express:test', 'karma:e2e']
+  grunt.registerTask 'test:e2e', ['start:test', 'protractor']
 
   grunt.registerTask 'test', ['express:test', 'karma:unit', 'karma:midway', 'karma:e2e']
 

@@ -1,3 +1,7 @@
+===============
+Developer Guide
+===============
+
 ********
 Overview
 ********
@@ -9,8 +13,8 @@ The ``qiprofile`` module implements the Imaging Profile UI web application.
 Antecedents
 ***********
 
-The ``qiprofile`` application structure is initialized from the Yeoman_
-``angular`` generator and adapted from the following examples:
+The ``qiprofile`` application structure is adapted from the following
+examples:
 
 * frappe_
 
@@ -25,6 +29,7 @@ The ``qiprofile`` application structure is initialized from the Yeoman_
 * ng-boilerplate_
 
 * Yeoman_
+
 
 ************
 Dependencies
@@ -185,7 +190,7 @@ runs the grunt protractor ``e2e`` task as follows:
 
 * Start a Selenium web server as the Mocha test context
 
-* Run the qipipe_ test seed program
+* Run the qiprofile-rest_ test seed program
 
 * Exercise the ``test/e2e/`` test cases
 
@@ -213,6 +218,39 @@ Coding Standards
 * File names are lower case hyphenated rather than underscore.
 
 * CoffeeScript follows the `CoffeeScript Style Guide`_.
+
+* CoffeeScript variable names are camelCase rather than underscore.
+
+* CoffeeScript function calls include parentheses in an assignment,
+  omit parentheses otherwise, e.g.::
+
+      module = angular.module('qiprofile.service', [])
+      module.value 'appName', 'QuIP'
+
+* Function and array boundaries are not padded with a string, e.g.::
+
+      module = angular.module('qiprofile')    # Good
+      numbers = [1, 2, 3]
+  
+  rather than::
+
+      module = angular.module( 'qiprofile' )  # Bad
+      numbers = [ 1, 2, 3 ]
+
+* CoffeeScript function definitions without arguments omit the
+  parentheses, e.g.::
+
+      fn = ->
+        ...
+
+* CoffeeScript, Jade and Stylus string literals have double quotation
+  marks if they are interpolated, single quotation marks otherwise,
+  e.g.::
+  
+      simpleString = 'A string'
+      interpolatedString = "#{ anotherVariable } string"
+  
+  Interpolations are padded with a space.
 
 * CoffeeScript promise chain ``.then`` and AngularJS routeProvider
   ``.when`` clauses are indented, e.g.::
@@ -299,9 +337,9 @@ Coding Standards
 
 .. [#xtk_fork]
   :Note: XTK_ is not packaged for Bower_ or npm_. The `XTK Bower Fork`_
-  remedies this omission.The qiprofile ``bower.json`` definition file
-  specifies this GitHub fork. The ``edge`` XTK version is used, following
-  the recommendation on the _XTK home page.
+    remedies this omission. The qiprofile ``bower.json`` definition file
+    specifies this GitHub fork. The ``edge`` XTK version is used, following
+    the recommendation on the _XTK home page.
 
 .. [#midway]
    The ngMidwayTester_ purports to offer a testing solution intermediate
@@ -351,6 +389,8 @@ Coding Standards
 .. _PhantomJS: http://phantomjs.org/
 
 .. _Protractor: https://github.com/angular/protractor
+
+.. _qiprofile-rest: http://quip1.ohsu.edu/8080/qiprofile-rest
 
 .. _SemVer: http://semver.org/
 

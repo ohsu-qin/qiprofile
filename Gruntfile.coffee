@@ -90,11 +90,11 @@ module.exports = (grunt) ->
       options:
         singleRun: not grunt.option('debug')
       unit:
-        configFile: 'test/conf/karma_conf.coffee'
+        configFile: 'test/conf/karma-conf.coffee'
 
     protractor:
       e2e:
-        configFile: 'test/conf/protractor_conf.coffee'
+        configFile: 'test/conf/protractor-conf.coffee'
       
     markdown:
       compile:

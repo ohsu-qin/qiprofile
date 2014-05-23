@@ -113,8 +113,8 @@ ctlrs.controller 'SubjectDetailCtrl', ['$scope', '$routeParams',
         if subject.sessions.length > 1 then 'Chart' else 'Table'
 
       # Fix the session and encounter dates.
-      Helpers.fix_date(sess, 'acquisition_date') for sess in detail.sessions
-      Helpers.fix_date(enc, 'date') for enc in detail.encounters
+      Helpers.fixDate(sess, 'acquisition_date') for sess in detail.sessions
+      Helpers.fixDate(enc, 'date') for enc in detail.encounters
       # Copy the detail content into the subject.
       ControllerHelper.copyContent(detail, subject)
       # Flag indicating whether there is more than one session.

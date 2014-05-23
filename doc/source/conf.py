@@ -1,7 +1,7 @@
 import os
 
 extensions = ['sphinx.ext.autodoc', 'sphinx.ext.intersphinx', 'sphinx.ext.todo']
-autoclass_content = "both"
+autoclass_content = 'both'
 templates_path = ['templates']
 source_suffix = '.rst'
 master_doc = 'index'
@@ -11,5 +11,5 @@ pygments_style = 'sphinx'
 html_theme = 'qiprofile_theme'
 html_theme_path = ['.']
 html_theme_options = dict(linkcolor='DarkSkyBlue', visitedlinkcolor='Navy')
-htmlhelp_basename = 'qiprofilerestdoc'
-html_title = "qiprofile"
+htmlhelp_basename = 'qiprofiledoc'
+html_title = 'qiprofile'

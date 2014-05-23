@@ -210,9 +210,11 @@ Coding Standards
 * All application CSS is compiled from the ``app/stylesheets/site.styl``
   Stylus file.
 
-* Coffeescript follows the `CoffeeScript Style Guide`_.
+* File names are lower case hyphenated rather than underscore.
 
-* Coffeescript promise chain ``.then`` and AngularJS routeProvider
+* CoffeeScript follows the `CoffeeScript Style Guide`_.
+
+* CoffeeScript promise chain ``.then`` and AngularJS routeProvider
   ``.when`` clauses are indented, e.g.::
   
       promise
@@ -283,6 +285,15 @@ Coding Standards
   If a git comment is longer than one sentence, then the commit probably
   should have been broken out into several commits.
 
+* Version numbers follow a one-based *major*.*minor*.*patch* format.
+  The version numbering scheme loosely follows the SemVer_ standard.
+  The major version is incremented at the initiation of a substantial
+  new public feature set. The minor version is incremented when there
+  is a backward-compatible functionality change. The patch version is
+  is incremented when there is a backward-compatible refactoring or bug
+  fix. The major version number is 0 prior to the initial public release.
+  Minor and patch version numbers begin at 1 rather than 0.
+
 
 .. rubric:: Footnotes
 
@@ -340,6 +351,8 @@ Coding Standards
 .. _PhantomJS: http://phantomjs.org/
 
 .. _Protractor: https://github.com/angular/protractor
+
+.. _SemVer: http://semver.org/
 
 .. _XTK: http://www.goXTK.com
 

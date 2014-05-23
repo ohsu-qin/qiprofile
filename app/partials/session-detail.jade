@@ -5,21 +5,21 @@ block billboard
 
 
 block content
-  include include/intensity_chart
+  include include/intensity-chart
   
   .qi-image-selection
     // The scan image selection buttons.
     .row
       .col-md-1.qi-image-selection-key Scan
       .btn-group.qi-scan-image-btn-group(ng-repeat="image in session.scan.images")
-        include include/image_select
+        include include/image-select
         
     // The realigned image selection buttons.
     .row
       .col-md-1.qi-image-selection-key Realigned
       .btn-group.qi-reg-image-btn-group(ng-repeat="image in session.registration.images")
-        include include/image_select
+        include include/image-select
 
 
 block help-text
-  .qi-help-text(ng-include="'/partials/help/session_detail.html'")
+  .qi-help-text(ng-include="'/partials/help/session-detail.html'")

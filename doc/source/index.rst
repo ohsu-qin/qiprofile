@@ -48,9 +48,10 @@ Installation
    (omit the ``--production`` flag for a development installation)::
 
        npm install --production
-       bower install --production
 
 6. Ensure that the file ``bin/qiprofile`` is executable.
+
+See the `Developer Guide`_ for installing a development project.
 
 
 *****
@@ -61,7 +62,7 @@ Run the following command to start the production server::
 
      ./bin/qiprofile
 
-See the `Developer Guide`_ page for starting a development server.
+See the `Developer Guide`_ for starting a development server.
 
 ---------
 

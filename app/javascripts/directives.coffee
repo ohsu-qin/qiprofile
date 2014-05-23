@@ -6,7 +6,7 @@ directives.directive 'qiSpin', ->
     # Replaces the DOM element with a spinner
     # while the qiSpin attribute is set.
     
-    create_spinner = ->
+    createSpinner = ->
       # Creates an image selection spinner.
       new Spinner(
         lines: 10
@@ -21,7 +21,7 @@ directives.directive 'qiSpin', ->
     scope.$watch attrs.qiSpin, (value, oldValue) ->
       if value
         if not scope.spinner
-          scope.spinner = create_spinner()
+          scope.spinner = createSpinner()
         scope.spinner.spin(element[0])
       else if scope.spinner
         scope.spinner.stop()
@@ -36,8 +36,8 @@ directives.directive 'qiModelingDiscreteChart', ['Modeling', (Modeling) ->
   link: (scope, element, attrs) ->
     scope.$watch 'data', (data) ->
       if data
-        scope.config = Modeling.configure_chart(data, attrs.chart)
-  templateUrl: '/templates/modeling_discrete_chart.html'
+        scope.config = Modeling.configureChart(data, attrs.chart)
+  templateUrl: '/templates/modeling-discrete-chart.html'
 ]
 
 
@@ -50,8 +50,8 @@ directives.directive 'qiModelingMultiChart', ['Modeling', (Modeling) ->
   link: (scope, element, attrs) ->
     scope.$watch 'data', (data) ->
       if data
-        scope.config = Modeling.configure_chart(data, attrs.chart)
-  templateUrl: '/templates/modeling_multi_chart.html'
+        scope.config = Modeling.configureChart(data, attrs.chart)
+  templateUrl: '/templates/modeling-multi-chart.html'
 ]
 
 
@@ -63,6 +63,6 @@ directives.directive 'qiVisitDateline', ['VisitDateline', (VisitDateline) ->
   link: (scope, element, attrs) ->
     scope.$watch 'data', (data) ->
       if data
-        scope.config = VisitDateline.configure_chart(data)
-  templateUrl: '/templates/visit_dateline_chart.html'
+        scope.config = VisitDateline.configureChart(data)
+  templateUrl: '/templates/visit-dateline-chart.html'
 ]

@@ -4,20 +4,20 @@ svcs.factory 'Subject', ['$resource', ($resource) ->
   $resource '/api/subjects/:number/', null,
     detail:
       method: 'GET'
-      url: '/api/subject_detail/:id/'
+      url: '/api/subject-detail/:id/'
 ]
 
 svcs.factory 'Session', ['$resource', ($resource) ->
-  $resource '/api/session_detail/:id/', null,
+  $resource '/api/session-detail/:id/', null,
     detail:
       method: 'GET'
-      url: '/api/session_detail/:id/'
+      url: '/api/session-detail/:id/'
 ]
 
 svcs.factory 'Helpers', [->
   # If the given attribute value is a string, then this function
   # resets it to the parsed date.
-  fix_date: (obj, attr) ->
+  fixDate: (obj, attr) ->
     date = obj[attr]
     # Silly Javascript idiom for string type testing.
     if typeof date == 'string' or date instanceof String
@@ -45,7 +45,7 @@ svcs.factory 'Helpers', [->
   #
   # The input configuration contains the attributes x and y, where:
   # * x is the x-axis {label, accessor}
-  # * y is the y-axis {[data_series], precision}
+  # * y is the y-axis {[dataSeries], precision}
   #   for the data series {label, accessor} specifications
   #
   # The result contains the following attributes:
@@ -56,98 +56,98 @@ svcs.factory 'Helpers', [->
   # @param resources the resource objects to graph
   # @param config the data configuration
   # @returns the chart configuration
-  configure_chart: (resources, config) ->
+  configureChart: (resources, config) ->
     # @returns the y values for the given resource
-    resource_values = (resource, config) ->
+    resourceValues = (resource, config) ->
       ds.accessor(resource) for ds in config.y.data
 
     # @returns the result of applying the given function to the
     #   values obtained from the y-axis configuration
-    apply_to_resources = (resources, config, fn) ->
+    applyToResources = (resources, config, fn) ->
 
       # @returns the result of applying the given function to the
       #   resource values of the given object
-      apply_to_resource = (resource, config, fn) ->
-        values = resource_values(resource, config)
+      applyToResource = (resource, config, fn) ->
+        values = resourceValues(resource, config)
         fn(values)
 
-      apply_to_resource(rsc, config, fn) for rsc in resources
+      applyToResource(rsc, config, fn) for rsc in resources
     
     # @param resources the graphed objects
     # @param config the y axis configuration
     # @returns the y axis {max, min} object
-    value_range = (resources, config) ->
+    valueRange = (resources, config) ->
 
       # Return the {max, min} range object.
-      max: _.max(apply_to_resources(resources, config, _.max))
-      min: _.min(apply_to_resources(resources, config, _.min))
+      max: _.max(applyToResources(resources, config, _.max))
+      min: _.min(applyToResources(resources, config, _.min))
 
     # @returns the [{key: label, values: coordinates}] nvd3 data
-    chart_data = (resources, config) ->
+    chartData = (resources, config) ->
       # @returns the {key, values} pair
-      format_data_series = (resources, x_accessor, data_series) ->
+      formatDataSeries = (resources, xAccessor, dataSeries) ->
         # @returns the graph [x, y] coordinates
-        coordinates = (resources, x_accessor, y_accessor) ->
-          [x_accessor(rsc), y_accessor(rsc)] for rsc in resources
+        coordinates = (resources, xAccessor, yAccessor) ->
+          [xAccessor(rsc), yAccessor(rsc)] for rsc in resources
         
-        key: data_series.label
-        values: coordinates(resources, x_accessor, data_series.accessor)
-        color: data_series.color
+        key: dataSeries.label
+        values: coordinates(resources, xAccessor, dataSeries.accessor)
+        color: dataSeries.color
 
-      format_data_series(resources, config.x.accessor, ds) for ds in config.y.data
+      formatDataSeries(resources, config.x.accessor, ds) for ds in config.y.data
     
-    # @param value_range the y values {max, min} range object
+    # @param valueRange the y values {max, min} range object
     # @param returns the chart y axis {max, min} range object
-    y_range = (value_range, precision) ->
+    yRange = (valueRange, precision) ->
       # The factor is 10**precision.
       factor = Math.pow(10, precision)
 
-      ceiling = Math.ceil(value_range.max * factor)
+      ceiling = Math.ceil(valueRange.max * factor)
       # Pad the graph max with the next higher significant tick mark.
-      upper_int = if ceiling == 0 then ceiling else ceiling + 1
-      upper = upper_int / factor
+      upperInt = if ceiling == 0 then ceiling else ceiling + 1
+      upper = upperInt / factor
 
       # Round the minimum down to the nearest precision decimal.
-      floor = Math.floor(value_range.min * factor)
+      floor = Math.floor(valueRange.min * factor)
       # If the floor is not at the origin, then pad the graph min with
       # the next lower significant tick mark.
-      lower_int = if floor == 0 then floor else floor - 1
-      lower = lower_int / factor
+      lowerInt = if floor == 0 then floor else floor - 1
+      lower = lowerInt / factor
 
       # Return the chart{max, min} range object.
       max: upper
       min: lower
     
-    default_precision = (resources, config) ->
-      default_resource_precision = (resource, config) ->
+    defaultPrecision = (resources, config) ->
+      defaultResourcePrecision = (resource, config) ->
         # @returns the number of decimals to display for the given
         #   value
-        default_value_precision = (value) ->
+        defaultValuePrecision = (value) ->
           if value == 0 or value > 1
             0
           else
-            1 + default_value_precision(value * 10)
+            1 + defaultValuePrecision(value * 10)
         
-        rsc_values = resource_values(resource, config)
-        value_precisions =
-          default_value_precision(value) for value in rsc_values
-        _.max(value_precisions)
+        rscValues = resourceValues(resource, config)
+        valuePrecisions =
+          defaultValuePrecision(value) for value in rscValues
+        _.max(valuePrecisions)
       
-      rsc_precisions =
-        default_resource_precision(rsc, config) for rsc in resources
-      _.max(rsc_precisions)
+      rscPrecisions =
+        defaultResourcePrecision(rsc, config) for rsc in resources
+      _.max(rscPrecisions)
     
     # The value range.
-    val_range = value_range(resources, config)
+    valRange = valueRange(resources, config)
     
     # Get the default precision, if necessary.
     if config.y.precision
       precision = config.y.precision
     else
-      precision = default_precision(resources, config)
+      precision = defaultPrecision(resources, config)
     
     # The chart range.
-    chart_y_range = y_range(val_range, precision)
+    chartYRange = yRange(valRange, precision)
     
     # This function is a work-around for the following missing
     # nv3d feature:
@@ -155,23 +155,23 @@ svcs.factory 'Helpers', [->
     #
     # @returns a function which formats the y axis
     #   ticks differently than the y tooltip values
-    decimal_formatter = (precision) ->
+    decimalFormatter = (precision) ->
       factor = Math.pow(10, precision)
-      format_tick = d3.format('.' + precision + 'f')
-      format_value = d3.format('.' + (precision + 2) + 'f')
+      formatTick = d3.format('.' + precision + 'f')
+      formatValue = d3.format('.' + (precision + 2) + 'f')
       
       (value) ->
         shifted = value * factor
         if shifted - Math.floor(shifted) < .001
-          format_tick(value)
+          formatTick(value)
         else
-          format_value(value)
+          formatValue(value)
 
     # Return the graph configuration.
-    data: chart_data(resources, config)
-    yFormat: decimal_formatter(precision)
+    data: chartData(resources, config)
+    yFormat: decimalFormatter(precision)
     yLabel: config.y.label
-    yMaxMin: _.values(chart_y_range)
+    yMaxMin: _.values(chartYRange)
 
   # Replaces the given text elements with hyperlinks.
   d3Hyperlink: (element, href, style) ->  
@@ -195,12 +195,12 @@ svcs.factory 'Helpers', [->
 
 svcs.factory 'Modeling', ['Helpers', (Helpers) ->
   # The x axis data configuration.
-  x_config =
+  xConfig =
     label: 'Visit Date'
     accessor: (session) -> session.acquisition_date.valueOf()
 
   # The y axis data configuration.
-  y_configs =
+  yConfigs =
     ktrans:
       label: 'Ktrans'
       data:
@@ -239,28 +239,28 @@ svcs.factory 'Modeling', ['Helpers', (Helpers) ->
   
   # The data configurations.
   configs =
-    ktrans: {x: x_config, y: y_configs.ktrans}
-    ve: {x: x_config, y: y_configs.ve}
-    taui: {x: x_config, y: y_configs.taui}
+    ktrans: {x: xConfig, y: yConfigs.ktrans}
+    ve: {x: xConfig, y: yConfigs.ve}
+    taui: {x: xConfig, y: yConfigs.taui}
   
   # @param sessions the session array 
   # @param chart the chart name
   # @returns the nvd3 chart format
-  configure_chart: (sessions, chart) ->
+  configureChart: (sessions, chart) ->
     # @returns the tooltip HTML
     tooltip = (key, x, y, e, graph) ->
       "<b>#{ key }</b>: #{ y }"
     
     # The nvd3 data configuration.
-    data_cfg = configs[chart]
+    dataCfg = configs[chart]
     # The nvd3 chart configuration.
-    chart_cfg = Helpers.configure_chart(sessions, data_cfg)
+    chartCfg = Helpers.configureChart(sessions, dataCfg)
     # Additional nvd3 directive attribute values.
-    chart_cfg.xValues = data_cfg.x.accessor(sess) for sess in sessions
-    chart_cfg.xFormat = Helpers.dateFormat
-    chart_cfg.tooltip = tooltip
+    chartCfg.xValues = dataCfg.x.accessor(sess) for sess in sessions
+    chartCfg.xFormat = Helpers.dateFormat
+    chartCfg.tooltip = tooltip
 
-    chart_cfg
+    chartCfg
 ]
 
 
@@ -279,12 +279,12 @@ svcs.factory 'VisitDateline', ['Helpers', (Helpers) ->
         ]
   # @param data the session array
   # @returns the nvd3 chart format
-  configure_chart: (sessions, href) ->
-    chart_cfg = Helpers.configure_chart(sessions, config)
-    chart_cfg.xValues =
+  configureChart: (sessions, href) ->
+    chartCfg = Helpers.configureChart(sessions, config)
+    chartCfg.xValues =
       config.x.accessor(sess) for sess in sessions
-    chart_cfg.xFormat = Helpers.dateFormat
-    chart_cfg
+    chartCfg.xFormat = Helpers.dateFormat
+    chartCfg
 ]
 
 
@@ -368,6 +368,6 @@ svcs.factory 'Image', ['$rootScope', 'File', ($rootScope, File) ->
   #
   # @param image the ImageContainer scan or registration object
   # @returns the image objects
-  images_for: (obj) ->
+  imagesFor: (obj) ->
     cache(obj.id) or cache(obj.id, obj.files...)
 ]

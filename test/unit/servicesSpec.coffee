@@ -30,13 +30,13 @@ describe 'Unit Testing Services', ->
       # There is an Image service.
       expect(Image).to.exist
       # The mock test "scan" object.
-      mock_scan = {id: 1, files: [path]}
+      mockScan = {id: 1, files: [path]}
       # The mock file URL.
       url = '/static/' + path
       # The mock http call.
       $httpBackend.whenGET(url).respond(expected)
       # The encapsulated "scan" images.
-      images = Image.images_for(mock_scan)
+      images = Image.imagesFor(mockScan)
       # There is one image.
       expect(images.length).to.equal(1)
       image = images[0]

@@ -3,7 +3,7 @@ This history lists major release themes. See the GitHub commits
 
 0.3.3 / 2014-05-22
 ------------------
-* Conform to file and variable naming standard.
+* Conform to the file and variable naming standards.
 
 0.3.2 / 2014-05-22
 ------------------

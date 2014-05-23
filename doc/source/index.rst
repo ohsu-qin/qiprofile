@@ -1,12 +1,13 @@
 .. _index:
 
-=======================================
-qiprofile: Quantitative Imaging Profile
-=======================================
+=====================================
+*QuIP* - Quantitative Imaging Profile
+=====================================
 
 ********
 Synopsis
 ********
+
 The Quantitative Imaging Profile web application displays imaging and clinical
 data for the `OHSU QIN Sharepoint`_ study.
 
@@ -17,6 +18,7 @@ data for the `OHSU QIN Sharepoint`_ study.
 ************
 Feature List
 ************
+
 1. OHSU QIN patient MR visualization.
 
 2. ROI capture.
@@ -29,6 +31,7 @@ Feature List
 ************
 Installation
 ************
+
 1. Install Git_ on your workstation.
 
 2. Contact the `OHSU QIN Git administrator`_ to obtain permission
@@ -53,11 +56,12 @@ Installation
 *****
 Usage
 *****
+
 Run the following command to start the production server::
 
      ./bin/qiprofile
 
-See the ``development.html`` page for starting a development server.
+See the `Developer Guide`_ page for starting a development server.
 
 ---------
 
@@ -69,6 +73,8 @@ See the ``development.html`` page for starting a development server.
 
 
 .. Targets:
+
+.. _Developer Guide: http://quip1.ohsu.edu:8080/qiprofile/development.html
 
 .. _Git: http://www.git-scm.com
 

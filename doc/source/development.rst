@@ -95,27 +95,27 @@ Project structure
 -----------------
 The project is organized as follows::
 
-    qiprofile/        # The top-level project directory
-      _public/        # The web app root
-      app/            # The source code
-        app.coffee    # The AngularJS application definition
-        index.jade    # The landing page
-        javascripts/  # The application non-vendor CoffeeScript 
-        layout/       # The common HTML layout
-        partials/     # The AngularJS partial Jade
+    qiprofile/        # Top-level project directory
+      _public/        # Web app root
+      app/            # Source code
+        app.coffee    # AngularJS application definition
+        index.jade    # Landing page
+        javascripts/  # Application non-vendor CoffeeScript 
+        layout/       # Common HTML layout
+        partials/     # AngularJS partial Jade
           help/       # Help content, one per partial
           include/    # Jade include files
-        stylesheets/  # The application non-vendor CSS
-        templates/    # The directive templates
-      bin/            # The command-line scripts
-        qiprofile     # The web app server script
+        stylesheets/  # Application non-vendor Stylus
+        templates/    # AngularJS directive templates
+      bin/            # Command line scripts
+        qiprofile     # Web app server script
       doc/            # Application documentation
-      server/         # Express server CoffeeScript
+      server/         # Express server configuration
       server.js       # Express server startup script
       static/         # Static content
         media/        # Images, icons and videos
-      test/           # The top-level test directory
-        conf/         # The karma and mocha configuration files
+      test/           # Top-level test directory
+        conf/         # Test configuration files
         e2e/          # End-to-end tests
         unit/         # Unit tests
 
@@ -334,8 +334,9 @@ Coding Standards
   public feature set. The minor version is incremented when there is a
   backward-compatible functionality change. The patch version is
   incremented when there is a backward-compatible refactoring or bug fix.
-  The major version number is 0 prior to the initial public release.
-  Minor and patch version numbers begin at 1 rather than 0.
+  The major version number is 0 for proof-of-concept releases, 1 for
+  releases leading to initial public availability. Minor and patch
+  version numbers begin at 1 rather than 0.
 
 * Add a new version as follows:
 

@@ -81,6 +81,11 @@ This command installs the necessary packages [#xtk_fork]_.
 
        grunt
 
+  The default Grunt task builds the project. The following command
+  lists the available Grunt tasks::
+  
+      grunt --help
+
 
 ***********
 Development
@@ -139,7 +144,7 @@ Each package occurs after packages on which it depends.
 
 Testing
 -------
-Testing is performed by the following grunt tasks[#midway]:
+Testing is performed by the following grunt tasks\ [#midway]_:
 
 * ``test:unit``: Run the unit tests
 
@@ -323,23 +328,46 @@ Coding Standards
   If a git comment is longer than one sentence, then the commit probably
   should have been broken out into several commits.
 
-* Version numbers follow a one-based *major*.*minor*.*patch* format.
-  The version numbering scheme loosely follows the SemVer_ standard.
-  The major version is incremented at the initiation of a substantial
-  new public feature set. The minor version is incremented when there
-  is a backward-compatible functionality change. The patch version is
-  is incremented when there is a backward-compatible refactoring or bug
-  fix. The major version number is 0 prior to the initial public release.
+* Version numbers follow a one-based *major*\ .\ *minor*\ .\ *patch* format.
+  The version numbering scheme loosely follows the SemVer_ standard. The
+  major version is incremented at the initiation of a substantial new
+  public feature set. The minor version is incremented when there is a
+  backward-compatible functionality change. The patch version is
+  incremented when there is a backward-compatible refactoring or bug fix.
+  The major version number is 0 prior to the initial public release.
   Minor and patch version numbers begin at 1 rather than 0.
 
+* Add a new version as follows:
 
+  * Add a short version theme description to ``History.rst``.
+  
+  * Increment the ``package.json`` version attribute.
+  
+  * Check in all tested changes.
+
+  * Rebase, test and merge the branch as described above.
+    You should now be on the ``master`` branch.
+  
+  * Set a git tag with a ``v`` prefix, e.g.::
+  
+        git tag v2.1.2
+  
+  * Update the server::
+  
+        git push --tags
+
+  * Periodically delete unused local and remote branches. Exercise care
+    when deleting a stale remote branch. See the
+    `Pro Git Book`_ `Deleting Remote Branches`_ section for details.
+
+  
 .. rubric:: Footnotes
 
 .. [#xtk_fork]
   :Note: XTK_ is not packaged for Bower_ or npm_. The `XTK Bower Fork`_
     remedies this omission. The qiprofile ``bower.json`` definition file
     specifies this GitHub fork. The ``edge`` XTK version is used, following
-    the recommendation on the _XTK home page.
+    the recommendation on the XTK_ home page.
 
 .. [#midway]
    The ngMidwayTester_ purports to offer a testing solution intermediate
@@ -365,6 +393,10 @@ Coding Standards
 .. _CoffeeScript Style Guide : https://github.com/polarmobile/coffeescript-style-guide
 
 .. _DevTools: https://developer.chrome.com/devtools/index
+
+.. _Pro Git Book: http://git-scm.com/book/en/
+
+.. _Deleting Remote Branches: http://git-scm.com/book/en/Git-Branching-Remote-Branches#Deleting-Remote-Branches
 
 .. _Grunt: http://www.gruntjs.com/
 

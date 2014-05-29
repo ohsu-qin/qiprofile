@@ -64,7 +64,7 @@ if server.get('env') == 'development'
   server.set 'pretty', true
 
 # The test port.
-if server.get('env') == "test"
+if server.get('env') == 'test'
   server.set 'port', PORT_TEST
 
 # Start the server.

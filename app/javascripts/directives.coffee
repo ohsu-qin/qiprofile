@@ -66,3 +66,15 @@ directives.directive 'qiVisitDateline', ['VisitDateline', (VisitDateline) ->
         scope.config = VisitDateline.configureChart(data)
   templateUrl: '/templates/visit-dateline-chart.html'
 ]
+
+
+# Displays a series image.
+directives.directive 'qiSeriesImage', ->
+  restrict: 'E'
+  scope:
+    image: '='
+  link: (scope, element, attrs) ->
+    scope.$watch 'image.data', (data) ->
+      if data
+        scope.image.configureRenderer()
+  templateUrl: '/templates/series-image-xtk.html'

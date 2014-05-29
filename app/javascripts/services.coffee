@@ -355,6 +355,11 @@ svcs.factory 'Image', ['$rootScope', 'File', ($rootScope, File) ->
         @state.loading = false
         # Set the data property to the file content.
         @data = data
+    
+    # Configures the XTK renderer for this Image.
+    configureRenderer: () ->
+      # TODO - Build the image config object.
+      # this.config = ...
 
   # Obtains image objects for the given ImageContainer. The image
   # object content is described in the create() function.
@@ -366,7 +371,7 @@ svcs.factory 'Image', ['$rootScope', 'File', ($rootScope, File) ->
   # cached object image content data is not loaded until the image
   # object load() function is called.
   #
-  # @param image the ImageContainer scan or registration object
+  # @param obj the ImageContainer scan or registration object
   # @returns the image objects
   imagesFor: (obj) ->
     cache(obj.id) or cache(obj.id, obj.files...)

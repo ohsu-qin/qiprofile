@@ -10,6 +10,9 @@ class SubjectListPage extends Page
 describe 'E2E Testing Subject List', ->
   page = new SubjectListPage '/quip'
   
+  it 'should display the billboard', ->
+    expect(page.billboard).to.eventually.equal('Patients')
+  
   it 'should have the Breast and Sarcoma collections', ->
     collections = page.collections()
     expect(collections).to.eventually.contain('Breast')

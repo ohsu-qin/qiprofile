@@ -3,9 +3,10 @@ path = require 'path'
 fs = require 'fs'
 exec = require('child_process').exec
 
-option = 'from qiprofile_rest.test.helpers import seed; seed.seed()'
+script = 'from qiprofile_rest.test.helpers import seed; seed.seed()'
 
-cmd = "python -c '#{ option }'"
+# TODO - link small test image file fixtures to destination _public/data.
+cmd = "python -c '#{ script }'"
 
 exec cmd, (error) ->
   if error

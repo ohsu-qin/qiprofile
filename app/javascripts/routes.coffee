@@ -14,6 +14,10 @@ routes.config ['$routeProvider', '$locationProvider',
         templateUrl: '/partials/session-detail.html'
         controller:  'SessionDetailCtrl'
         reloadOnSearch: false
+      .when '/quip/:collection/subject/:subject/session/:session/:image_container/series/:series',
+        templateUrl: '/partials/series-detail.html'
+        controller:  'SeriesDetailCtrl'
+        reloadOnSearch: false
 
     $locationProvider.html5Mode true
 ]

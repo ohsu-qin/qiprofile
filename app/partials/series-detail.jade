@@ -1,0 +1,10 @@
+extends ../layout/partial
+
+block billboard
+  | {{ session.subject.collection | capitalize }} Patient {{ session.subject.number }} Session {{ session.number }} {{ image.container.type | capitalize }} Series {{ image.container.series.number }}
+
+block content
+  qi-series-image.qi-series-image(data="{{ image.data }}")
+
+block help-text
+  .qi-help-text(ng-include="'/partials/help/series-detail.html'")

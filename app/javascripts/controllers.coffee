@@ -7,7 +7,8 @@ ctlrs.factory 'ControllerHelper', ['$location', ($location) ->
   getDetail: (obj, resource, action) ->
     resource.detail(id: obj.detail).$promise
       .then (detail) ->
-        action(detail, obj)
+        if action
+          action(detail, obj)
         obj
 
   # Copies the given source object properties into the
@@ -268,6 +269,66 @@ ctlrs.controller 'SessionDetailCtrl', ['$scope', '$routeParams',
     # If there is a detail id, then fetch the detail.
     # Otherwise, fetch the session and then the detail.
     if session.detail
+      ControllerHelper.getDetail(session, Session, addDetail)
+    else
+      # Fetch the subject...
+      Subject.get(subject).$promise
+        .then (fetched) ->
+          # ...then fetch the subject detail...
+          Subject.detail(id: fetched.detail).$promise
+        .then (detail) ->
+          # ...find the session in the session list...
+          for sess in detail.sessions
+            if sess.number == session.number
+              # ...and fetch the session detail.
+              session.detail = sess.detail_id
+          # If the session was not found, then complain.
+          if not session.detail
+            throw "Subject #{ subject } does not have a session #{ session.number }"
+          # Fill in the session detail.
+          ControllerHelper.getDetail(session, Session, addDetail)
+
+    ControllerHelper.cleanBrowserUrl(subject.project)
+]
+
+ctlrs.controller 'SeriesDetailCtrl', ['$scope', '$routeParams',
+  'ControllerHelper', 'Subject', 'Session', 'Image',
+  ($scope, $routeParams, ControllerHelper, Subject, Session, Image) ->
+    #
+    # TODO - replace below with nested states.
+    #
+    # Compose a subject from the route parameters.
+    subject =
+      project: $routeParams.project or 'QIN'
+      collection: _.str.capitalize($routeParams.collection)
+      number: parseInt($routeParams.subject)
+
+    # Compose a session from the route parameters.
+    session =
+      subject: subject
+      number: parseInt($routeParams.session)
+      detail: $routeParams.detail
+
+    # Fetches the detail into the given session.
+    addDetail = (detail, session) ->
+      # Copy the fetched detail into the session.
+      ControllerHelper.copyContent(detail, session)
+      # Add the registration.
+      # TODO - handle more than one registration?
+      session.registration = session.registrations[0]
+
+      # The series numbers.
+      session.seriesNumbers = [1..session.scan.intensity.intensities.length]
+      # Encapsulate the image files.
+      for obj in [session.scan, session.registration]
+        obj.images = Image.imagesFor(obj)
+      # Place the session in the scope.
+      $scope.session = session
+      # End of the addDetail function.
+
+    # If there is a detail id, then fetch the detail.
+    # Otherwise, fetch the session and then the detail.
+    if session.detail
       deferred = ControllerHelper.getDetail(session, Session, addDetail)
     else
       # Fetch the subject...
@@ -286,6 +347,30 @@ ctlrs.controller 'SessionDetailCtrl', ['$scope', '$routeParams',
             throw "Subject #{ subject } does not have a session #{ session.number }"
           # Fill in the session detail.
           ControllerHelper.getDetail(session, Session, addDetail)
+
+    # Compose an Image from the route parameters.
+    deferred
+      .then (fetched) ->
+        # The scan or registration image container object.
+        container = fetched[$routeParams.image_container]
+        if not container
+          throw "Unrecognized #{ subject.collection } Subject #{ subject.number } Session #{ session.number } image container: #{ container }"
+        # The series image.
+        imgNdx = parseInt($routeParams.series) - 1
+        image = container.images[imgNdx]
+        if not image
+          throw "Unrecognized #{ subject.collection } Subject #{ subject.number } Session #{ session.number } series: #{ $routeParams.series }"
+        # Add the series container to the image object.
+        image.container =
+          type: $routeParams.image_container
+          series:
+            session: session
+            number: $routeParams.series
+        # Place the image object in scope.
+        $scope.image = image
+        # Load the image binary data, if necessary.
+        if not image.data
+          image.load()
 
     ControllerHelper.cleanBrowserUrl(subject.project)
 ]

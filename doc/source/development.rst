@@ -201,6 +201,10 @@ runs the grunt protractor ``e2e`` task as follows:
 
 * Print the result to the console
 
+A single end-to-end test spec can be run with the ``--specs`` option::
+
+      grunt --specs test/e2e/<spec> test:e2e
+
 
 Coding Standards
 ----------------

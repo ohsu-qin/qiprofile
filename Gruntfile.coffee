@@ -79,12 +79,6 @@ module.exports = (grunt) ->
         cwd: 'app/'
         src: ['index.jade', 'partials/**/*.jade', 'templates/**/*.jade', '!**/include/**']
         dest: '_public/'
-      test:
-        expand: true
-        ext: '.html'
-        cwd: 'test/jade'
-        src: ['**/*.jade']
-        dest: '_public/test/'
 
     karma:
       options:
@@ -124,7 +118,7 @@ module.exports = (grunt) ->
           node_env: 'production'
       test:
         options:
-          node_env: 'test' 
+          node_env: 'test'
 
     watch:
       options:
@@ -141,21 +135,12 @@ module.exports = (grunt) ->
       markdown:
         files: ['app/partials/**/*.md']
         tasks: ['markdown']
-
-    nodemon:
-      dev:
-        script: 'server.js'
-        options:
-          nodeArgs: ['--debug']
-          watch: ['app']
     
     concurrent:
+      options:
+        logConcurrentOutput: true
       compile:
         tasks: ['coffee:compile', 'jade:compile', 'markdown', 'stylus']
-      dev:
-        options:
-          logConcurrentOutput: true
-        tasks: ['nodemon:dev', 'watch']
 
     ngmin:
       src: ['_public/javascripts/app.js']
@@ -194,23 +179,23 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'build:app', ['vendor:app', 'compile']
 
-  grunt.registerTask 'build:test', ['vendor:test', 'jade:test']
+  grunt.registerTask 'build:test', ['vendor:test']
 
   grunt.registerTask 'build', ['clean', 'build:app', 'build:test']
 
-  grunt.registerTask 'start:prod', ['express:prod']
+  grunt.registerTask 'start:prod', ['express:prod', 'watch']
 
-  grunt.registerTask 'start:test', ['express:test']
+  grunt.registerTask 'start:test', ['express:test', 'watch']
 
-  grunt.registerTask 'start:dev', ['concurrent:dev']
+  grunt.registerTask 'start:dev', ['express:dev', 'watch']
 
   grunt.registerTask 'start', ['start:dev']
 
   grunt.registerTask 'test:unit', ['karma:unit']
 
-  grunt.registerTask 'test:e2e', ['start:test', 'protractor:e2e']
+  grunt.registerTask 'test:e2e', ['express:test', 'protractor:e2e']
 
-  grunt.registerTask 'test', ['start:test', 'test:unit', 'test:e2e']
+  grunt.registerTask 'test', ['express:test', 'test:unit', 'test:e2e']
 
   grunt.registerTask 'jsmin', ['ngmin', 'min']
 

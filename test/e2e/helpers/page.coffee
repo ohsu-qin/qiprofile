@@ -1,5 +1,7 @@
 _ = require 'lodash'
 
+_.str = require 'underscore.string'
+
 # The PageObject pattern (https://code.google.com/p/selenium/wiki/PageObjects)
 # base class. If the Page is instantiated with an url argument, then the
 # given url is visited. The Page has accessors for the common qiprofile
@@ -16,38 +18,45 @@ module.exports = ->
   # @param selectors the CSS selectors
   # @returns the search target, or null if none found
   selectFrom = (parent, selectors...) ->
+    # @param parent the parent Page or WebElement
+    # @param selector the By locator or css search string
+    # @returns the WebElement search target
+    find = (parent, selector) ->
+      # If the selector is a string, then make a By locator.
+      # Otherwise, the selector is assumed to already be a
+      # By locator.
+      if _.isString(selector)
+        locator = By.css(selector)
+      else
+        locator = selector
+      # The finder function.
+      if parent instanceof Page
+        finder = element
+      else
+        finder = parent.element
+      # Find the element.
+      finder(locator)
+
     # The next selector.
     next = selectors.shift()
-    
-    if next
-      # The next element.
-      try
-        if parent instanceof Page
-          elt = $(next)
+    # If no selector, then the target is trivially the parent.
+    if not next
+      return parent
+    # The next element.
+    elt = find(parent, next)
+    # If the search target exists, then continue to apply
+    # the selectors until they run out.
+    elt.isPresent().then (exists) ->
+      if exists
+        if selectors.length
+          # Recurse.
+          selectFrom(elt, selectors...)
         else
-          elt = parent.$(next)
-      catch error
-        if error instanceof NoSuchElementError
-          return null
-        else
-          throw error
-      # If the search target exists, then continue to apply
-      # the selectors until they run out. Otherwise, return
-      # null.
-      elt.isPresent().then (exists) ->
-        if exists
-          if selectors.length
-            # Recurse.
-            return selectFrom(elt, selectors...)
-          else
-            # Return the search target element.
-            elt
-        else
-          # Not found.
-          null
-    else
-      # No selector.
-      parent
+          # Return the search target element.
+          elt
+      else
+        # No such element.
+        null
 
   class Page
     constructor: (url) ->

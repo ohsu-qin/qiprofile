@@ -36,6 +36,8 @@
     "stylus": "~0.42.2",
     "node-dev": "~0.2.8",
     "npmedge": "~0.1.1",
+    "lodash": "~2.4.1",
+    "underscore.string": "~2.3.3",
     "chai": "~1.9.1",
     "chai-as-promised": "~4.1.1",
     "mocha": "~1.17.1",

@@ -127,7 +127,7 @@ module.exports = (grunt) ->
         files: ['app/stylesheets/*.styl']
         tasks: ['stylus']
       coffee:
-        files: ['app/javascripts/*.coffee', 'test/**/*.coffee']
+        files: ['app/javascripts/*.coffee']
         tasks: ['coffee']
       jade:
         files: ['app/**/*.jade', 'test/**/*.jade']

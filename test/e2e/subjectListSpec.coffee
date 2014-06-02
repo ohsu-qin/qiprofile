@@ -15,7 +15,10 @@ class SubjectListPage extends Page
           null
 
 describe 'E2E Testing Subject List', ->
-  page = new SubjectListPage '/quip'
+  page = null
+
+  beforeEach ->
+    page = new SubjectListPage '/quip'
   
   it 'should display the billboard', ->
     expect(page.billboard).to.eventually.equal('Patients')

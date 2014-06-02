@@ -8,12 +8,12 @@ class SeriesDetailPage extends Page
     this.select('.qi-series-image')
 
 describe 'E2E Testing Series Detail', ->
-  
+    
   describe 'Scan', ->
     # The fetched page.
     page = null
     
-    beforeEach () ->
+    beforeEach ->
       page = new SeriesDetailPage('/quip/breast/subject/1/session/1/scan/series/1?project=QIN_Test')
 
     it 'should display the billboard', ->

@@ -205,6 +205,10 @@ A single end-to-end test spec can be run with the ``--specs`` option::
 
       grunt --specs test/e2e/<spec> test:e2e
 
+The best way to create an end-to-end test is to copy an existing test.
+``test/e2e/subjectListSpec.coffee`` is a good example. The ``Page``
+helper encapsulates the page being tested.
+
 
 Coding Standards
 ----------------
@@ -224,7 +228,11 @@ Coding Standards
 * All application CSS is compiled from the ``app/stylesheets/site.styl``
   Stylus file.
 
-* File names are lower case hyphenated rather than underscore.
+* Non-test file names are lower case hyphenated rather than underscore.
+
+* Test case file names are camelCase beginning with the application
+  module or partial being tested and ending in ``Spec``, e.g.
+  ``test/e2e/subjectListSpec.coffee``.
 
 * CoffeeScript follows the `CoffeeScript Style Guide`_.
 

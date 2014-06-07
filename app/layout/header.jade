@@ -3,15 +3,13 @@
     // The logo.
     img.qi-logo(src='/static/media/H.png' width='48' height='48' alt='Hydrogen')
     .brand.navbar-brand.qi-brand
-      a(href='/quip')
+      a(qi-sref='home')
         <em>Q<span class='qi-x-smaller'>U</span>IP</em> - Quantitative Imaging Profile
   // The navigation controls.
   .collapse.navbar-collapse
     ul.nav.navbar-nav.qi-navbar-right.navbar-right
       li
-        // The Home control.
-        a.qi-navbar-choice(href='/quip')
-          .glyphicon.glyphicon-home
+        div(ui-view='goHome')
       li
         // The Help control.
         //- The HelpCtrl controller resets the showHelp flag when the

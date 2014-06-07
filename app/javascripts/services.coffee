@@ -7,6 +7,7 @@ svcs.factory 'Subject', ['$resource', ($resource) ->
       url: '/api/subject-detail/:id/'
 ]
 
+
 svcs.factory 'Session', ['$resource', ($resource) ->
   $resource '/api/session-detail/:id/', null,
     detail:
@@ -14,7 +15,8 @@ svcs.factory 'Session', ['$resource', ($resource) ->
       url: '/api/session-detail/:id/'
 ]
 
-svcs.factory 'Helpers', [->
+
+svcs.factory 'Helpers', ->
   # If the given attribute value is a string, then this function
   # resets it to the parsed date.
   fixDate: (obj, attr) ->
@@ -190,7 +192,6 @@ svcs.factory 'Helpers', [->
       d3.select(this).attr(k, v)
     # Reattach the text element to the anchor.
     t.appendTo(a)
-]
 
 
 svcs.factory 'Modeling', ['Helpers', (Helpers) ->

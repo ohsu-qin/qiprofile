@@ -32,6 +32,15 @@ ctlrs.factory 'ControllerHelper', ['$location', ($location) ->
     $location.search(searchParams)
 ]
 
+
+ctlrs.controller 'GoHomeCtrl', ['$rootScope', '$scope', '$state',
+  ($rootScope, $scope, $state) ->
+    $scope.goHome = () ->
+      project = $rootScope.project or 'QIN'
+      $state.go('quip.home', project: project)
+]
+
+
 ctlrs.controller 'HelpCtrl', ['$scope',
   ($scope) ->
     $scope.$on '$locationChangeStart', (event, next, current) ->
@@ -40,10 +49,15 @@ ctlrs.controller 'HelpCtrl', ['$scope',
       $scope.$parent.showHelp = false
 ]
 
-ctlrs.controller 'SubjectListCtrl', ['$scope', 'Subject',
-  ($scope, Subject) ->
+
+ctlrs.controller 'SubjectListCtrl', ['$rootScope', '$scope', '$state', '$stateParams', 'Subject',
+  ($rootScope, $scope, $state, $stateParams, Subject) ->
+    $rootScope.project = $stateParams.project
+    project = $rootScope.project or 'QIN'
+    params = project: project
+
     # Export the deferred subjects REST promise to the scope.
-    $scope.subjects = Subject.query()
+    $scope.subjects = Subject.query(params)
 
     # When the subjects are loaded. then export the collections
     # to the scope.
@@ -56,15 +70,20 @@ ctlrs.controller 'SubjectListCtrl', ['$scope', 'Subject',
         )
 ]
 
-ctlrs.controller 'SubjectDetailCtrl', ['$scope', '$routeParams',
+
+#
+# TODO - get subject from state resolve.
+#
+ctlrs.controller 'SubjectDetailCtrl', ['$rootScope', '$scope', '$stateParams',
   'ControllerHelper', 'Subject', 'Helpers',
-  ($scope, $routeParams, ControllerHelper, Subject, Helpers) ->
+  ($rootScope, $scope, $stateParams, ControllerHelper, Subject, Helpers) ->
+    $rootScope.project = $stateParams.project
     # Compose a subject from the route parameters.
     subject =
-      project: $routeParams.project or 'QIN'
-      collection: _.str.capitalize($routeParams.collection)
-      number: parseInt($routeParams.subject)
-      detail: $routeParams.detail
+      project: $stateParams.project or 'QIN'
+      collection: _.str.capitalize($stateParams.collection)
+      number: parseInt($stateParams.subject)
+      detail: $stateParams.detail
 
     $scope.toggleModelingFormat = ->
       if $scope.modelingFormat == 'Chart'
@@ -139,20 +158,27 @@ ctlrs.controller 'SubjectDetailCtrl', ['$scope', '$routeParams',
     ControllerHelper.cleanBrowserUrl(subject.project)
 ]
 
-ctlrs.controller 'SessionDetailCtrl', ['$scope', '$routeParams',
+
+ctlrs.controller 'ClinicalProfileCtrl', ['$scope', '$stateParams',
+  ($scope, $stateParams) ->
+]
+
+
+ctlrs.controller 'SessionDetailCtrl', ['$rootScope', '$scope', '$stateParams',
   'ControllerHelper', 'Subject', 'Session', 'Image',
-  ($scope, $routeParams, ControllerHelper, Subject, Session, Image) ->
+  ($rootScope, $scope, $stateParams, ControllerHelper, Subject, Session, Image) ->
+    $rootScope.project = $stateParams.project
     # Compose a subject from the route parameters.
     subject =
-      project: $routeParams.project or 'QIN'
-      collection: _.str.capitalize($routeParams.collection)
-      number: parseInt($routeParams.subject)
+      project: $stateParams.project or 'QIN'
+      collection: _.str.capitalize($stateParams.collection)
+      number: parseInt($stateParams.subject)
 
     # Compose a session from the route parameters.
     session =
       subject: subject
-      number: parseInt($routeParams.session)
-      detail: $routeParams.detail
+      number: parseInt($stateParams.session)
+      detail: $stateParams.detail
 
     # TODO - refactor the chart formatting cruft below into a
     # directive a la the modeling charts.
@@ -291,23 +317,22 @@ ctlrs.controller 'SessionDetailCtrl', ['$scope', '$routeParams',
     ControllerHelper.cleanBrowserUrl(subject.project)
 ]
 
-ctlrs.controller 'SeriesDetailCtrl', ['$scope', '$routeParams',
+
+ctlrs.controller 'SeriesDetailCtrl', ['$rootScope', '$scope', '$stateParams',
   'ControllerHelper', 'Subject', 'Session', 'Image',
-  ($scope, $routeParams, ControllerHelper, Subject, Session, Image) ->
-    #
-    # TODO - replace below with nested states.
-    #
+  ($rootScope, $scope, $stateParams, ControllerHelper, Subject, Session, Image) ->
+    $rootScope.project = $stateParams.project
     # Compose a subject from the route parameters.
     subject =
-      project: $routeParams.project or 'QIN'
-      collection: _.str.capitalize($routeParams.collection)
-      number: parseInt($routeParams.subject)
+      project: $stateParams.project or 'QIN'
+      collection: _.str.capitalize($stateParams.collection)
+      number: parseInt($stateParams.subject)
 
     # Compose a session from the route parameters.
     session =
       subject: subject
-      number: parseInt($routeParams.session)
-      detail: $routeParams.detail
+      number: parseInt($stateParams.session)
+      detail: $stateParams.detail
 
     # Fetches the detail into the given session.
     addDetail = (detail, session) ->
@@ -352,20 +377,20 @@ ctlrs.controller 'SeriesDetailCtrl', ['$scope', '$routeParams',
     deferred
       .then (fetched) ->
         # The scan or registration image container object.
-        container = fetched[$routeParams.image_container]
+        container = fetched[$stateParams.image_container]
         if not container
           throw "Unrecognized #{ subject.collection } Subject #{ subject.number } Session #{ session.number } image container: #{ container }"
         # The series image.
-        imgNdx = parseInt($routeParams.series) - 1
+        imgNdx = parseInt($stateParams.series) - 1
         image = container.images[imgNdx]
         if not image
-          throw "Unrecognized #{ subject.collection } Subject #{ subject.number } Session #{ session.number } series: #{ $routeParams.series }"
+          throw "Unrecognized #{ subject.collection } Subject #{ subject.number } Session #{ session.number } series: #{ $stateParams.series }"
         # Add the series container to the image object.
         image.container =
-          type: $routeParams.image_container
+          type: $stateParams.image_container
           series:
             session: session
-            number: $routeParams.series
+            number: $stateParams.series
         # Place the image object in scope.
         $scope.image = image
         # Load the image binary data, if necessary.

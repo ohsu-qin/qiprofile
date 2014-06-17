@@ -1,0 +1,43 @@
+accordian
+  accordian-group
+    accordian-heading Vascular Permeability Transfer Constant (K<sup>trans</sup>)
+    table(ng-repeat="x in tableNumber")
+      th(colspan='2') Visit Date: {{tableDate[x]}}
+      tr
+        td &Delta;Ktrans
+        td.data {{tableKt[x][0]}}
+      tr(ng-hide="!tableKt[x][1]")
+        td &Delta;Ktrans % change
+        td.data {{tableKt[x][1]}}
+      tr
+        td FXL
+        td.data {{tableKt[x][2]}}
+      tr(ng-hide="!tableKt[x][3]")
+        td FXL % change
+        td.data {{tableKt[x][3]}}
+      tr
+        td FXR
+        td.data {{tableKt[x][4]}}
+      tr(ng-hide="!tableKt[x][3]")
+        td FXR % change
+        td.data {{tableKt[x][5]}}
+  accordian-group
+    accordian-heading Extravascular Extracellular Volume Fraction (v<sub>e</sub>)
+    table(ng-repeat="x in tableNumber")
+      th(colspan='2') Visit Date: {{tableDate[x]}}
+      tr
+        td V<sub>e</sub>
+        td.data {{tableVe[x][0]}}
+      tr(ng-hide="!tableVe[x][1]")
+        td V<sub>e</sub> % change
+        td.data {{tableVe[x][1]}}
+  accordian-group
+    accordian-heading Intracellular H<sub>2</sub>O Mean Lifetime (&tau;<sub>i</sub>)
+    table(ng-repeat="x in tableNumber")
+      th(colspan='2') Visit Date: {{tableDate[x]}}
+      tr
+        td &tau;<sub>i</sub>
+        td.data {{tableTi[x][0]}}
+      tr(ng-hide="!tableTi[x][1]")
+        td &tau;<sub>i</sub> % change
+        td.data {{tableTi[x][1]}}

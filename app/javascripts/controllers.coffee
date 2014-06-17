@@ -105,7 +105,81 @@ ctlrs.controller 'SubjectDetailCtrl', ['$scope', '$routeParams',
         Helpers.d3Hyperlink(text.node(), href)
       # TODO - draw the x axis line.
       line = svg.append('line')
-    
+
+    # Constructs the imaging profile sheet
+    $scope.imageProfileTable = ->
+      # Initiate arrays that will correspond to HTML tables.
+      tableNumber = []
+      tableDate = []
+      tableKt = []
+      tableVe = []
+      tableTi = []
+      # Number of decimal places displayed for data.
+      dpDat = 4
+      # Number of decimal places displayed for percentages.
+      dpPct = 2
+      # Iterate through the sessions and add to the arrays.
+      for sess, index in subject.sessions
+        # Add to iterator that is used to display tables.
+        tableNumber.push index
+        # Add to array of dates.
+        tableDate.push Helpers.dateFormat(sess.acquisition_date)
+        # Create Vascular Permeability (Ktrans) table.
+        thisSess = []
+        # delta-Ktrans.
+        delta_k = sess.modeling.fxr_k_trans - sess.modeling.fxl_k_trans
+        thisSess.push delta_k.toFixed(dpDat)
+        # delta-Ktrans percent change since previous visit.
+        if index == 0
+          thisSess.push null
+        else
+          thisSess.push ((delta_k - prev_delta_k)/prev_delta_k * 100).toFixed(dpPct)
+        prev_delta_k = delta_k
+        # FXL.
+        thisSess.push sess.modeling.fxl_k_trans.toFixed(dpDat)
+        # FXL percent change since previous visit.
+        if index == 0
+          thisSess.push null
+        else
+          thisSess.push ((sess.modeling.fxl_k_trans - prev_fxl_k_trans)/prev_fxl_k_trans * 100).toFixed(dpPct)
+        prev_fxl_k_trans = sess.modeling.fxl_k_trans
+        # FXR.
+        thisSess.push sess.modeling.fxr_k_trans.toFixed(dpDat)
+        # FXR percent change since previous visit.
+        if index == 0
+          thisSess.push null
+        else
+          thisSess.push ((sess.modeling.fxr_k_trans - prev_fxr_k_trans)/prev_fxr_k_trans * 100).toFixed(dpPct)
+        prev_fxr_k_trans = sess.modeling.fxr_k_trans
+        tableKt.push thisSess
+        # Create Volume Fraction (V_e) table.
+        thisSess = []
+        # V_e.
+        thisSess.push sess.modeling.v_e.toFixed(dpDat)
+        # V_e percent change since previous visit.
+        if index == 0
+          thisSess.push null
+        else
+          thisSess.push ((sess.modeling.v_e - prev_v_e)/prev_v_e * 100).toFixed(dpPct)
+        prev_v_e = sess.modeling.v_e
+        tableVe.push thisSess
+        # Create Intracellular H2O Mean Lifetime (tau_i) table.
+        thisSess = []
+        # Tau_i.
+        thisSess.push sess.modeling.tau_i.toFixed(dpDat)
+        # Tau_i percent change since previous visit.
+        if index == 0
+          thisSess.push null
+        else
+          thisSess.push ((sess.modeling.tau_i - prev_tau_i)/prev_tau_i * 100).toFixed(dpPct)
+        prev_tau_i = sess.modeling.tau_i
+        tableTi.push thisSess
+      $scope.tableNumber = tableNumber
+      $scope.tableDate = tableDate
+      $scope.tableKt = tableKt
+      $scope.tableVe = tableVe
+      $scope.tableTi = tableTi
+
     # Adds the fetched subject detail into the given subject.
     addDetail = (detail, subject) ->
       # The default modeling format is Chart for more than

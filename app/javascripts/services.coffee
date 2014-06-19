@@ -1,6 +1,6 @@
 svcs = angular.module 'qiprofile.services', ['ngResource']
 
-svcs.factory 'Subject', ['$resource', ($resource) ->
+svcs.factory 'Subject', ['$q', '$resource', ($q, $resource) ->
   $resource '/api/subjects/:number/', null,
     detail:
       method: 'GET'
@@ -8,6 +8,12 @@ svcs.factory 'Subject', ['$resource', ($resource) ->
 ]
 
 
+# Since the REST Session objects are embedded in SubjectDetail,
+# this Session factory only operates on the session-detail
+# REST objects. The preferred access method is detail, which
+# is a SessionDetail get. The query and delete methods are not
+# meaningful. Session delete is accomplished by the parent
+# Subject delete, which cascades to its embedded sessions.
 svcs.factory 'Session', ['$resource', ($resource) ->
   $resource '/api/session-detail/:id/', null,
     detail:
@@ -17,6 +23,16 @@ svcs.factory 'Session', ['$resource', ($resource) ->
 
 
 svcs.factory 'Helpers', ->
+  # Copies the given source object properties into the
+  # destination object.
+  copyContent: (source, dest) ->
+    # Copy the detail properties into the parent object.
+    srcProps = Object.getOwnPropertyNames(source)
+    destProps = Object.getOwnPropertyNames(dest)
+    fields = _.difference(srcProps, destProps)
+    for field in fields
+      dest[field] = source[field]
+
   # If the given attribute value is a string, then this function
   # resets it to the parsed date.
   fixDate: (obj, attr) ->
@@ -282,8 +298,7 @@ svcs.factory 'VisitDateline', ['Helpers', (Helpers) ->
   # @returns the nvd3 chart format
   configureChart: (sessions, href) ->
     chartCfg = Helpers.configureChart(sessions, config)
-    chartCfg.xValues =
-      config.x.accessor(sess) for sess in sessions
+    chartCfg.xValues = (config.x.accessor(sess) for sess in sessions)
     chartCfg.xFormat = Helpers.dateFormat
     chartCfg
 ]

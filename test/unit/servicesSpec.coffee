@@ -9,7 +9,7 @@ describe 'Unit Testing Services', ->
     Image = null
     # The mock Angular $http service provider.
     $httpBackend = null
-
+    
     beforeEach ->
       # Enable the test services.
       inject ['Image', '$timeout', '$httpBackend', (_Image_, _$timeout_, _$httpBackend_) ->

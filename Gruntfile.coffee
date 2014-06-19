@@ -46,7 +46,7 @@ module.exports = (grunt) ->
           'bower_components/angular/*.js'
           'bower_components/angular-bootstrap/*-tpls.js'
           'bower_components/angular-resource/*.js'
-          'bower_components/angular-route/*.js'
+          'bower_components/angular-ui-router/release/*.js'
           'bower_components/moment/*.js'
           'bower_components/spin.js/spin.js'
           'bower_components/d3/*.js'
@@ -69,7 +69,7 @@ module.exports = (grunt) ->
       compile:
         files:
           '_public/javascripts/app.js': ['app/**/*.coffee']
-      
+
     jade:
       options:
         pretty: true
@@ -77,7 +77,7 @@ module.exports = (grunt) ->
         expand: true
         ext: '.html'
         cwd: 'app/'
-        src: ['index.jade', 'partials/**/*.jade', 'templates/**/*.jade', '!**/include/**']
+        src: ['index.jade', 'partials/**/*.jade', 'views/**/*.jade', 'templates/**/*.jade', '!**/include/**']
         dest: '_public/'
 
     karma:
@@ -104,7 +104,7 @@ module.exports = (grunt) ->
       compile:
         paths: ['_public/stylesheets']
         files:
-          '_public/stylesheets/app.css': ['app/stylesheets/*.styl']
+          '_public/stylesheets/app.css': ['app/stylesheets/**/*.styl']
       
     express:
       options:
@@ -124,10 +124,10 @@ module.exports = (grunt) ->
       options:
         livereload: true
       stylus:
-        files: ['app/stylesheets/*.styl']
+        files: ['app/**/*.styl']
         tasks: ['stylus']
       coffee:
-        files: ['app/javascripts/*.coffee']
+        files: ['app/**/*.coffee']
         tasks: ['coffee']
       jade:
         files: ['app/**/*.jade', 'test/**/*.jade']

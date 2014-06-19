@@ -14,7 +14,7 @@ module.exports = (config) ->
       '_public/javascripts/vendor.js'
       '_public/javascripts/app.js'
       '_public/javascripts/test.js'
-      'test/conf/mocha-conf.coffee',
+      'test/conf/mocha-conf.coffee'
       'test/unit/**/*Spec.coffee'
     ]
 

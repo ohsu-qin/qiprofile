@@ -205,6 +205,10 @@ A single end-to-end test spec can be run with the ``--specs`` option::
 
       grunt --specs test/e2e/<spec> test:e2e
 
+The best way to create an end-to-end test is to copy an existing test.
+``test/e2e/subjectListSpec.coffee`` is a good example. The ``Page``
+helper encapsulates the page being tested.
+
 
 Coding Standards
 ----------------
@@ -224,18 +228,21 @@ Coding Standards
 * All application CSS is compiled from the ``app/stylesheets/site.styl``
   Stylus file.
 
-* File names are lower case hyphenated rather than underscore.
+* Non-test file names are lower case hyphenated rather than underscore.
+
+* Test case file names are camelCase beginning with the application
+  module or partial being tested and ending in ``Spec``, e.g.
+  ``test/e2e/subjectListSpec.coffee``.
 
 * CoffeeScript follows the `CoffeeScript Style Guide`_.
 
 * CoffeeScript variable names are camelCase rather than underscore.
 
-* CoffeeScript function calls include parentheses in an assignment,
-  omit parentheses otherwise, e.g.::
+* CoffeeScript function calls with an anonymous function argument
+  omit parentheses, e.g.::
 
-      module = angular.module('qiprofile.service', [])
-      module.value 'appName', 'QuIP'
-
+      result = _.sortBy array, (a, b) -> a.priority - b.priority
+  
 * Function and array boundaries are not padded with a string, e.g.::
 
       module = angular.module('qiprofile')    # Good
@@ -269,6 +276,11 @@ Coding Standards
           ...
         .then (more) ->
           ...
+  
+* Single unchanined promise ``.then`` calls are on the same line, e.g.::
+  
+      promise.then (result) ->
+        ...
 
 * Every application AngularJS directive is camelCase prefixed by ``qi``,
   e.g. ``qiSpin``.

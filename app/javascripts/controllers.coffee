@@ -2,25 +2,6 @@ ctlrs = angular.module 'qiprofile.controllers', ['qiprofile.services']
 
 # The controller helper methods.
 ctlrs.factory 'ControllerHelper', ['$location', ($location) ->
-  # Fetches a parent object's detail and apply the given
-  # action function.
-  getDetail: (obj, resource, action) ->
-    resource.detail(id: obj.detail).$promise
-      .then (detail) ->
-        if action
-          action(detail, obj)
-        obj
-
-  # Copies the given source object properties into the
-  # destination object.
-  copyContent: (source, dest) ->
-    # Copy the detail properties into the parent object.
-    srcProps = Object.getOwnPropertyNames(source)
-    destProps = Object.getOwnPropertyNames(dest)
-    fields = _.difference(srcProps, destProps)
-    for field in fields
-      dest[field] = source[field]
-
   # Replaces the browser URL search parameters to include at most
   # a non-default project, since all other search parameters are
   # redundant.
@@ -32,6 +13,15 @@ ctlrs.factory 'ControllerHelper', ['$location', ($location) ->
     $location.search(searchParams)
 ]
 
+
+ctlrs.controller 'GoHomeCtrl', ['$rootScope', '$scope', '$state',
+  ($rootScope, $scope, $state) ->
+    $scope.goHome = () ->
+      project = $rootScope.project or 'QIN'
+      $state.go('quip.home', project: project)
+]
+
+
 ctlrs.controller 'HelpCtrl', ['$scope',
   ($scope) ->
     $scope.$on '$locationChangeStart', (event, next, current) ->
@@ -40,41 +30,35 @@ ctlrs.controller 'HelpCtrl', ['$scope',
       $scope.$parent.showHelp = false
 ]
 
-ctlrs.controller 'SubjectListCtrl', ['$scope', 'Subject',
-  ($scope, Subject) ->
-    # Export the deferred subjects REST promise to the scope.
-    $scope.subjects = Subject.query()
 
-    # When the subjects are loaded. then export the collections
-    # to the scope.
-    $scope.subjects.$promise
-      .then (subjects) ->
-        # The unique subject collections.
-        $scope.collections = _.uniq _.map(
-          $scope.subjects,
-          (subject) -> subject.collection
-        )
+ctlrs.controller 'SubjectListCtrl', ['$rootScope', '$scope', 'project',
+  'subjects', 'collections',
+  ($rootScope, $scope, project, subjects, collections) ->
+    # Capture the current project.
+    $rootScope.project = project
+    # Place the subjects and collections in the scope.
+    $scope.subjects = subjects
+    $scope.collections = collections
 ]
 
-ctlrs.controller 'SubjectDetailCtrl', ['$scope', '$routeParams',
-  'ControllerHelper', 'Subject', 'Helpers',
-  ($scope, $routeParams, ControllerHelper, Subject, Helpers) ->
-    # Compose a subject from the route parameters.
-    subject =
-      project: $routeParams.project or 'QIN'
-      collection: _.str.capitalize($routeParams.collection)
-      number: parseInt($routeParams.subject)
-      detail: $routeParams.detail
+
+ctlrs.controller 'SubjectDetailCtrl', ['$rootScope', '$scope', 'subject',
+  'detail', 'ControllerHelper', 'Helpers',
+  ($rootScope, $scope, subject, detail, ControllerHelper, Helpers) ->
+    # Capture the current project.
+    $rootScope.project = subject.project
 
     $scope.toggleModelingFormat = ->
       if $scope.modelingFormat == 'Chart'
-        $scope.modelingFormat = 'Table'
-      else if $scope.modelingFormat == 'Table'
+        $scope.modelingFormat = 'List'
+      else if $scope.modelingFormat == 'List'
         $scope.modelingFormat ='Chart'
       else
         throw "Modeling format is not recognized: " + $scope.modelingFormat
     
-    # Adds the session links above the line.
+    # Adds the session hyperlinks above the timeline.
+    #
+    # @param chart the timeline chart
     $scope.addSessionDetailLinks = (chart) ->
       # @returns the link to detail page for the given session
       sessionDetailLink = (session) ->
@@ -106,53 +90,55 @@ ctlrs.controller 'SubjectDetailCtrl', ['$scope', '$routeParams',
       # TODO - draw the x axis line.
       line = svg.append('line')
     
-    # Adds the fetched subject detail into the given subject.
-    addDetail = (detail, subject) ->
-      # The default modeling format is Chart for more than
-      # one session, Table otherwise.
+    # Adds the subject content as follows:
+    # * Converts the subject detail session and encounter
+    #   dates into moments, if necessary 
+    # * copies the detail properties into the subject 
+    # * sets the subject multiSession flag
+    # * sets the modelingFormat to 'Chart' if there is more
+    #   than one session, 'List' otherwise
+    #
+    # @param session the session object
+    # @param detail the detail object
+    addDetail = (subject, detail) ->
+      # The default modeling format is 'Chart' for more than
+      # one session, 'List' otherwise.
       defaultModelingFormat = (subject) ->
-        if subject.sessions.length > 1 then 'Chart' else 'Table'
+        if subject.sessions.length > 1 then 'Chart' else 'List'
 
       # Fix the session and encounter dates.
       Helpers.fixDate(sess, 'acquisition_date') for sess in detail.sessions
       Helpers.fixDate(enc, 'date') for enc in detail.encounters
+      
       # Copy the detail content into the subject.
-      ControllerHelper.copyContent(detail, subject)
+      Helpers.copyContent(detail, subject)
+      
       # Flag indicating whether there is more than one session.
       subject.multiSession = subject.sessions.length > 1
-      # The modeling display format, Chart or Table.
+      
+      # The modeling display format, Chart or List.
       $scope.modelingFormat = defaultModelingFormat(subject)
-      # Place the subject in scope.
-      $scope.subject = subject
-      # End of the addDetail function.
 
-    # If there is a detail id, then fetch the detail.
-    # Otherwise, fetch the subject and then the detail.
-    if subject.detail
-      ControllerHelper.getDetail(subject, Subject, addDetail)
-    else
-      Subject.get(subject).$promise
-        .then (fetched) ->
-          subject.detail = fetched.detail
-          ControllerHelper.getDetail(subject, Subject, addDetail)
+    # Add the detail to the subject.
+    addDetail(subject, detail)
+    
+    # Place the subject in the scope.
+    $scope.subject = subject
 
     ControllerHelper.cleanBrowserUrl(subject.project)
 ]
 
-ctlrs.controller 'SessionDetailCtrl', ['$scope', '$routeParams',
-  'ControllerHelper', 'Subject', 'Session', 'Image',
-  ($scope, $routeParams, ControllerHelper, Subject, Session, Image) ->
-    # Compose a subject from the route parameters.
-    subject =
-      project: $routeParams.project or 'QIN'
-      collection: _.str.capitalize($routeParams.collection)
-      number: parseInt($routeParams.subject)
 
-    # Compose a session from the route parameters.
-    session =
-      subject: subject
-      number: parseInt($routeParams.session)
-      detail: $routeParams.detail
+ctlrs.controller 'ClinicalProfileCtrl', ['$scope', '$stateParams',
+  ($scope, $stateParams) ->
+]
+
+
+ctlrs.controller 'SessionDetailCtrl', ['$rootScope', '$scope',
+  'session', 'detail', 'Image', 'ControllerHelper', 'Helpers',
+  ($rootScope, $scope, session, detail, Image, ControllerHelper, Helpers) ->
+    # Capture the current project.
+    $rootScope.project = session.subject.project
 
     # TODO - refactor the chart formatting cruft below into a
     # directive a la the modeling charts.
@@ -180,7 +166,11 @@ ctlrs.controller 'SessionDetailCtrl', ['$scope', '$routeParams',
         value.toFixed(2)
     
     # Highlights the bolus arrival tick mark.
+    #
+    # @param chart the intensity chart
     $scope.highlightBolusArrival = (chart) ->
+      # TODO - move this function to a directive.
+      
       # Select the SVG element.
       svg = d3.select(chart.container)
       # The x axis element.
@@ -221,12 +211,20 @@ ctlrs.controller 'SessionDetailCtrl', ['$scope', '$routeParams',
       bolusLegend.attr('filter', 'url(#boluslegendbackground)')
       bolusLegend.text('Bolus Arrival')
 
+    # Opens the series image display page.
+    #
+    # @param image the Image object
     $scope.openImage = (image) ->
       # TODO - Route to the image open page.
       window.alert("Image open is not yet supported.")
 
-    # Fetches the detail into the given session.
-    addDetail = (detail, session) ->
+    # Adds the following session content:
+    # * the detail properties are copied into the session 
+    # * sets the session graph parameters
+    #
+    # @param session the session object
+    # @param detail the detail object
+    addDetail = (session, detail) ->
       # Makes the graph data parameters for the given
       # label: values associative array. The value arrays must be
       # the same length. The graph x axis labels are the
@@ -247,10 +245,12 @@ ctlrs.controller 'SessionDetailCtrl', ['$scope', '$routeParams',
         formatItem(key, data[key]) for key in _.keys(data)
 
       # Copy the fetched detail into the session.
-      ControllerHelper.copyContent(detail, session)
+      Helpers.copyContent(detail, session)
+      
       # Add the registration.
       # TODO - handle more than one registration?
       session.registration = session.registrations[0]
+      
       # Add the intensity graph parameters.
       session.graphData = intensityGraphData(
         Scan: session.scan.intensity.intensities
@@ -262,115 +262,24 @@ ctlrs.controller 'SessionDetailCtrl', ['$scope', '$routeParams',
       # Encapsulate the image files.
       for obj in [session.scan, session.registration]
         obj.images = Image.imagesFor(obj)
-      # Place the session in the scope.
-      $scope.session = session
-      # End of the addDetail function.
 
-    # If there is a detail id, then fetch the detail.
-    # Otherwise, fetch the session and then the detail.
-    if session.detail
-      ControllerHelper.getDetail(session, Session, addDetail)
-    else
-      # Fetch the subject...
-      Subject.get(subject).$promise
-        .then (fetched) ->
-          # ...then fetch the subject detail...
-          Subject.detail(id: fetched.detail).$promise
-        .then (detail) ->
-          # ...find the session in the session list...
-          for sess in detail.sessions
-            if sess.number == session.number
-              # ...and fetch the session detail.
-              session.detail = sess.detail_id
-          # If the session was not found, then complain.
-          if not session.detail
-            throw "Subject #{ subject } does not have a session #{ session.number }"
-          # Fill in the session detail.
-          ControllerHelper.getDetail(session, Session, addDetail)
+    # Add the detail to the session.
+    addDetail(session, detail)
 
-    ControllerHelper.cleanBrowserUrl(subject.project)
+    # Place the session in the scope.
+    $scope.session = session
+
+    ControllerHelper.cleanBrowserUrl(session.subject.project)
 ]
 
-ctlrs.controller 'SeriesDetailCtrl', ['$scope', '$routeParams',
-  'ControllerHelper', 'Subject', 'Session', 'Image',
-  ($scope, $routeParams, ControllerHelper, Subject, Session, Image) ->
-    #
-    # TODO - replace below with nested states.
-    #
-    # Compose a subject from the route parameters.
-    subject =
-      project: $routeParams.project or 'QIN'
-      collection: _.str.capitalize($routeParams.collection)
-      number: parseInt($routeParams.subject)
 
-    # Compose a session from the route parameters.
-    session =
-      subject: subject
-      number: parseInt($routeParams.session)
-      detail: $routeParams.detail
+ctlrs.controller 'SeriesDetailCtrl', ['$rootScope', '$scope', 'series',
+  ($rootScope, $scope, series) ->
+    # Capture the current project.
+    $rootScope.project = series.session.subject.project
 
-    # Fetches the detail into the given session.
-    addDetail = (detail, session) ->
-      # Copy the fetched detail into the session.
-      ControllerHelper.copyContent(detail, session)
-      # Add the registration.
-      # TODO - handle more than one registration?
-      session.registration = session.registrations[0]
+    # Place the series in the scope.
+    $scope.series = series
 
-      # The series numbers.
-      session.seriesNumbers = [1..session.scan.intensity.intensities.length]
-      # Encapsulate the image files.
-      for obj in [session.scan, session.registration]
-        obj.images = Image.imagesFor(obj)
-      # Place the session in the scope.
-      $scope.session = session
-      # End of the addDetail function.
-
-    # If there is a detail id, then fetch the detail.
-    # Otherwise, fetch the session and then the detail.
-    if session.detail
-      deferred = ControllerHelper.getDetail(session, Session, addDetail)
-    else
-      # Fetch the subject...
-      deferred = Subject.get(subject).$promise
-        .then (fetched) ->
-          # ...then fetch the subject detail...
-          Subject.detail(id: fetched.detail).$promise
-        .then (detail) ->
-          # ...find the session in the session list...
-          for sess in detail.sessions
-            if sess.number == session.number
-              # ...and fetch the session detail.
-              session.detail = sess.detail_id
-          # If the session was not found, then complain.
-          if not session.detail
-            throw "Subject #{ subject } does not have a session #{ session.number }"
-          # Fill in the session detail.
-          ControllerHelper.getDetail(session, Session, addDetail)
-
-    # Compose an Image from the route parameters.
-    deferred
-      .then (fetched) ->
-        # The scan or registration image container object.
-        container = fetched[$routeParams.image_container]
-        if not container
-          throw "Unrecognized #{ subject.collection } Subject #{ subject.number } Session #{ session.number } image container: #{ container }"
-        # The series image.
-        imgNdx = parseInt($routeParams.series) - 1
-        image = container.images[imgNdx]
-        if not image
-          throw "Unrecognized #{ subject.collection } Subject #{ subject.number } Session #{ session.number } series: #{ $routeParams.series }"
-        # Add the series container to the image object.
-        image.container =
-          type: $routeParams.image_container
-          series:
-            session: session
-            number: $routeParams.series
-        # Place the image object in scope.
-        $scope.image = image
-        # Load the image binary data, if necessary.
-        if not image.data
-          image.load()
-
-    ControllerHelper.cleanBrowserUrl(subject.project)
+    ControllerHelper.cleanBrowserUrl(series.session.subject.project)
 ]

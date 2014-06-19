@@ -238,12 +238,11 @@ Coding Standards
 
 * CoffeeScript variable names are camelCase rather than underscore.
 
-* CoffeeScript function calls include parentheses in an assignment,
-  omit parentheses otherwise, e.g.::
+* CoffeeScript function calls with an anonymous function argument
+  omit parentheses, e.g.::
 
-      module = angular.module('qiprofile.service', [])
-      module.value 'appName', 'QuIP'
-
+      result = _.sortBy array, (a, b) -> a.priority - b.priority
+  
 * Function and array boundaries are not padded with a string, e.g.::
 
       module = angular.module('qiprofile')    # Good
@@ -277,6 +276,11 @@ Coding Standards
           ...
         .then (more) ->
           ...
+  
+* Single unchanined promise ``.then`` calls are on the same line, e.g.::
+  
+      promise.then (result) ->
+        ...
 
 * Every application AngularJS directive is camelCase prefixed by ``qi``,
   e.g. ``qiSpin``.

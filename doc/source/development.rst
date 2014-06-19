@@ -103,10 +103,9 @@ The project is organized as follows::
         javascripts/  # Application non-vendor CoffeeScript 
         layout/       # Common HTML layout
         partials/     # AngularJS partial Jade
-          help/       # Help content, one per partial
+          help/       # Help content, one per main view
           include/    # Jade include files
         stylesheets/  # Application non-vendor Stylus
-        templates/    # AngularJS directive templates
       bin/            # Command line scripts
         qiprofile     # Web app server script
       doc/            # Application documentation

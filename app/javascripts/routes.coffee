@@ -2,15 +2,17 @@ routes = angular.module 'qiprofile.routes', ['qiprofile.services']
 
 routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
   ($stateProvider, $urlRouterProvider, $locationProvider) ->
-    # Make a subject from the route parameters. If there is not
-    # a detail parameter, then fetch the subject.
+    # Make a subject from the given route parameters. If there
+    # is not a detail parameter, then fetch the subject from the
+    # Subject resource.
     #
+    # @param project the project
+    # @param params the URL parameters 
     # @param resource the Subject resource
-    # @param params the URL parameters
     # @returns the subject
-    getSubject = (resource, params) ->
+    getSubject = (project, params, resource) ->
       sbj =
-        project: params.project or 'QIN'
+        project: project
         collection: _.str.capitalize(params.collection)
         number: parseInt(params.subject)
       if params.detail
@@ -18,10 +20,41 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
       else
         resource.get(sbj).$promise
     
+    # @param subject the parent object
+    # @param Subject the Subject Resource
+    # @returns the detail object
+    getSubjectDetail = (subject, Subject) ->
+      if subject.detail
+        Subject.detail(id: subject.detail).$promise
+      else
+        Subject.get(subject).$promise.then (fetched) ->
+          # If the fetched subject has no detail, then complain.
+          if not fetched.detail
+            throw "Subject does not have detail: #{ subject.number }"
+          getSubjectDetail(fetched, Subject)
+    
+    # @param session the parent object
+    # @param Session the Session Resource
+    # @returns the detail object
+    getSessionDetail = (session, Session, Subject) ->
+      if session.detail
+        Session.detail(id: session.detail).$promise
+      else
+        getSubjectDetail(session.subject, Subject).then (detail) ->
+          # Find the session in the session list.
+          sbj_session = _.find detail.sessions, (other) ->
+            other.number == session.number
+          # If the session was not found, then complain.
+          if not sbj_session
+            throw "Subject #{ subject.number } does not have a session #{ session.number }"
+          # Recurse.
+          session.detail = sbj_session.detail_id
+          getSessionDetail(session, Session, Subject)
+        
     $stateProvider
       # The top-level state. This abstract state is the ancestor
       # of all other states. It holds the url prefix. There are
-      # two ui-views in the index.html file: main and goHome. This
+      # two ui-views in the index.html file, main and goHome. This
       # top-level state formats the goHome navigation button. The
       # main ui-view is formatted by child states. Since the main
       # ui-view is in the root context, it is referenced by the
@@ -29,6 +62,9 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
       .state 'quip',
         url: '/quip?project'
         abstract: true
+        resolve:
+          project: ($stateParams) ->
+            $stateParams.project or 'QIN'
         views:
           # The home button.
           goHome:
@@ -38,6 +74,15 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
       # The home landing page.
       .state 'quip.home',
         url: ''
+        resolve:
+          Subject: 'Subject'
+          subjects: (Subject, project) ->
+            Subject.query(project: project).$promise
+          collections: ($state, subjects) ->
+            _.uniq _.map(
+              subjects,
+              (subject) -> subject.collection
+            )
         views:
           'main@':
             templateUrl: '/partials/subject-list.html'
@@ -48,19 +93,15 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
         abstract: true
         url: '/:collection/subject/{subject:[0-9]+}'
         resolve:
-          subject: ['$stateParams', 'Subject',
-            ($stateParams, Subject) ->
-              getSubject($stateParams, Subject)
-          ]
+          subject: (project, $stateParams, Subject) ->
+            getSubject(project, $stateParams, Subject)
       
       # The subject detail page.
       .state 'quip.subject.detail',
         url: '?detail'
         resolve:
-          detail: ['Subject', 'subject',
-            (Subject, subject) ->
-              Subject.detail(id: subject.detail)
-          ]
+          detail: (subject, Subject) ->
+            getSubjectDetail(subject, Subject)
         views:
           'main@':
             templateUrl: '/partials/subject-detail.html'
@@ -71,32 +112,32 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
       .state 'quip.subject.session',
         abstract: true
         url: '/session/{session:[0-9]+}'
-        # TODO - enable
-        # resolve:
-        #   session: ['$stateParams', 'subject', 'Session',
-        #     ($stateParams, subject, Session) ->
-        #       getSession($stateParams, subject, Session)
-        #   ]
+        resolve:
+          session: (subject, $stateParams) ->
+            subject: subject
+            number: parseInt($stateParams.session)
       
       # The session detail page.
       .state 'quip.subject.session.detail',
         url: '?detail'
-        # TODO - enable
-        # resolve:
-        #   detail: ['$stateParams', 'Session', 'session',
-        #     ($stateParams, Session, session) ->
-        #       detail_id = $stateParams.detail or ssession.detail
-        #       Session.detail(id: $stateParams.detail)
-        #   ]
+        resolve:
+          Session: 'Session'
+          detail: (session, Session, Subject) ->
+            getSessionDetail(session, Session, Subject)
         views:
           'main@':
             templateUrl: '/partials/session-detail.html'
             controller:  'SessionDetailCtrl'
         reloadOnSearch: false
      
-      # The series image page.
+      # The series detail page.
       .state 'quip.subject.session.series',
         url: '/:image_container/series/{series:[0-9]+}'
+        resolve:
+          series: (session, $stateParams) ->
+            session: session
+            number: parseInt($stateParams.series)
+            container: $stateParams.image_container
         views:
           'main@':
             templateUrl: '/partials/series-detail.html'

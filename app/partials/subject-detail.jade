@@ -12,11 +12,11 @@ block content
         ng-click='toggleModelingFormat()'
       )
         .glyphicon.glyphicon-list(ng-show="modelingFormat == 'Chart'")
-        .glyphicon.glyphicon-picture(ng-show="modelingFormat == 'Table'")
+        .glyphicon.glyphicon-picture(ng-show="modelingFormat == 'List'")
     .qi-profile-sheet
-      div(ng-show="modelingFormat == 'Chart'")
+      #qi-modeling-chart(ng-show="modelingFormat == 'Chart'")
         include include/modeling-charts
-      div(ng-show="modelingFormat == 'Table'")
+      #qi-modeling-list(ng-show="modelingFormat == 'List'")
         p
           | Lorem ipsum dolor sit amet, consectetur adipisicing elit,
           | sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.

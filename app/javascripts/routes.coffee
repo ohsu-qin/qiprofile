@@ -68,7 +68,7 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
         views:
           # The home button.
           goHome:
-            templateUrl: '/views/go-home.html'
+            templateUrl: '/partials/go-home.html'
             controller: 'GoHomeCtrl'
       
       # The home landing page.

@@ -37,7 +37,7 @@ directives.directive 'qiModelingDiscreteChart', ['Modeling', (Modeling) ->
     scope.$watch 'data', (data) ->
       if data
         scope.config = Modeling.configureChart(data, attrs.chart)
-  templateUrl: '/templates/modeling-discrete-chart.html'
+  templateUrl: '/partials/modeling-discrete-chart.html'
 ]
 
 
@@ -51,7 +51,7 @@ directives.directive 'qiModelingMultiChart', ['Modeling', (Modeling) ->
     scope.$watch 'data', (data) ->
       if data
         scope.config = Modeling.configureChart(data, attrs.chart)
-  templateUrl: '/templates/modeling-multi-chart.html'
+  templateUrl: '/partials/modeling-multi-chart.html'
 ]
 
 
@@ -64,7 +64,7 @@ directives.directive 'qiVisitDateline', ['VisitDateline', (VisitDateline) ->
     scope.$watch 'data', (data) ->
       if data
         scope.config = VisitDateline.configureChart(data)
-  templateUrl: '/templates/visit-dateline-chart.html'
+  templateUrl: '/partials/visit-dateline-chart.html'
 ]
 
 
@@ -77,4 +77,4 @@ directives.directive 'qiSeriesImage', ->
     scope.$watch 'image.data', (data) ->
       if data
         scope.image.configureRenderer()
-  templateUrl: '/templates/series-image-xtk.html'
+  templateUrl: '/partials/series-image-xtk.html'

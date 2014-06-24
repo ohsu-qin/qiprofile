@@ -31,4 +31,6 @@ block content
 
 
 block help-text
+  // The nested quote ensures evaluation to a string rather than
+  // a state variable.
   .qi-help-text(ng-include="'/partials/help/subject-detail.html'")

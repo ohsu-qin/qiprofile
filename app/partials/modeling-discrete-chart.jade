@@ -1,15 +1,17 @@
 .row.qi-chart-row
-  // nvd3 has the following quirks (among many others):
+  // nvd3 has the following quirks, inter alia:
   // * isArea, labels and forcey must be interpolated
-  // * tickValues resolves an expression strictly in the
-  //   local scope; thus, parent scope references must
-  //   be qualified by $parent
-  // * Setting the xAxisRangeBand results in an error
-  //   attempting to call undefined. Many variations
-  //   were tried unsuccessfully. Due to the nvd3
-  //   undocumented, undecipherable code, the easiest
-  //   technique is to issue a callback that hammers
-  //   on the generated SVG rect elements.
+  // * The callback and tickValue attributes resolve an expression strictly
+  //   in the local scope; thus, parent scope references must be qualified
+  //   by $parent. By contrast, tickFormat attributes are well-behaved Angular
+  //   directive attributes which resolve parent scope references automatically,
+  //   so needn't be prefixed with a $parent qualifier.
+  // * Setting the xAxisRangeBand results in an error attempting to call
+  //   undefined. Many variations were tried unsuccessfully. Due to the nvd3
+  //   undocumented, opaque code, the easiest technique is to issue a callback
+  //   that hammers on the generated SVG rect elements.
+  // * The yAxisTickFormat function is used to format both the y-axis tick
+  //   values and the tooltip y values.
   nvd3-discrete-bar-chart(data='config.data' height='200'
     showXAxis='true' xAxisShowMaxMin='false' xAxisLabel='Visit Date'
     xAxisTickFormat='config.xFormat' xAxisTickValues='$parent.config.xValues'

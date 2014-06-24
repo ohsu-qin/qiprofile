@@ -41,92 +41,106 @@ svcs.factory 'Helpers', ->
     if typeof date == 'string' or date instanceof String
       # Reset the attribute to a date.
       obj[attr] = moment(date)
+
   
-  # @param data the value array
-  # @param offset an optional integer offset for the index, e.g.
-  #   1 for a one-based index. The default is zero.
-  # @returns a value -> index function that returns the index of
-  #   the value in the data array
-  indexFormatter: (data, offset) ->
-    if offset == undefined
-      offset = 0
-    (value) ->
-      _.indexOf(data, value) + offset
-  
-  # @param date the moment date integer
-  # @return the formatted date
-  dateFormat: (date) ->
-    moment(date).format('MM/DD/YYYY')
-  
+svcs.factory 'Chart', ->
   # Builds the nvd3 chart format for the given input resource
   # objects and configuration.
   #
-  # The input configuration contains the attributes x and y, where:
-  # * x is the x-axis {label, accessor}
-  # * y is the y-axis {[dataSeries], precision}
-  #   for the data series {label, accessor} specifications
+  # The input data is the resource objects which contain the
+  # values to graph. The chart values are obtained by calling
+  # the input format x-axis accessor for each chart data series. 
   #
+  # The input dataSpec contains the follwing x and y attributes:
+  # * x is the x-axis {label, accessor}
+  # * y is the y-axis {[{label, accessor}, ...], precision},
+  # where label is the data series chart label and accessor
+  # is the data series value to chart, and precision is the
+  # decimal precision to use for all data series values
+  #   
   # The result contains the following attributes:
   # * data - the nvd3 chart data
   # * color - the nvd3 color function
   # * maxMin - the maximum and minimum chart y-axis display values
   #
-  # @param resources the resource objects to graph
-  # @param config the data configuration
+  # @param data the resource objects to graph
+  # @param dataSpec the data access specification
   # @returns the chart configuration
-  configureChart: (resources, config) ->
+  configureChart: (data, dataSpec) ->
+    # Note - nvd3 is undergoing a major version 2 rewrite.
+    # Hopefully, version 2 will address the anomalies noted in
+    # the modeling-discrete-chart template.
+    # TODO - Adapt this function for version 2 when it is
+    # completed.
+
     # @returns the y values for the given resource
-    resourceValues = (resource, config) ->
-      ds.accessor(resource) for ds in config.y.data
+    resourceYValues = (resource, dataSpec) ->
+      ds.accessor(resource) for ds in dataSpec.y.data
 
-    # @returns the result of applying the given function to the
-    #   values obtained from the y-axis configuration
-    applyToResources = (resources, config, fn) ->
-
-      # @returns the result of applying the given function to the
-      #   resource values of the given object
-      applyToResource = (resource, config, fn) ->
-        values = resourceValues(resource, config)
-        fn(values)
-
-      applyToResource(rsc, config, fn) for rsc in resources
-    
-    # @param resources the graphed objects
-    # @param config the y axis configuration
+    # @param data the graphed objects
+    # @param dataSpec the y axis dataSpec
     # @returns the y axis {max, min} object
-    valueRange = (resources, config) ->
+    getYValueRange = (data, dataSpec) ->
+      # @param data the resource objects to graph
+      # @param dataSpec the data access specification described
+      #   in configureChart
+      # @returns the result of first calling the accessor in the
+      #   data specification to the given resoure, and then applying
+      #   the given function
+      applyToAllResourcesYValues = (data, dataSpec, fn) ->
+        # @returns the result of applying the given function to the
+        #   resource values of the given object
+        applyToAResourceYValues = (resource, dataSpec, fn) ->
+          values = resourceYValues(resource, dataSpec)
+          fn(values)
+
+        applyToAResourceYValues(rsc, dataSpec, fn) for rsc in data
 
       # Return the {max, min} range object.
-      max: _.max(applyToResources(resources, config, _.max))
-      min: _.min(applyToResources(resources, config, _.min))
+      max: _.max(applyToAllResourcesYValues(data, dataSpec, _.max))
+      min: _.min(applyToAllResourcesYValues(data, dataSpec, _.min))
 
-    # @returns the [{key: label, values: coordinates}] nvd3 data
-    chartData = (resources, config) ->
+    # @param data the input resource objects
+    # @param dataSpec the dataSpec described in configureChart
+    # @returns the [{key: label, values: coordinates}, ...]
+    #   nvd3 configuration
+    configureAllDataSeries = (data, dataSpec) ->
+      # @param data the input resource objects
+      # @param x the x-xaxis {accessor: function} object
+      # @param y the y-axis  {accessor: function} object
       # @returns the {key, values} pair
-      formatDataSeries = (resources, xAccessor, dataSeries) ->
+      configureADataSeries = (data, x, y) ->
         # @returns the graph [x, y] coordinates
-        coordinates = (resources, xAccessor, yAccessor) ->
-          [xAccessor(rsc), yAccessor(rsc)] for rsc in resources
+        coordinates = (data, xAccessor, yAccessor) ->
+          [xAccessor(rsc), yAccessor(rsc)] for rsc in data
         
         key: dataSeries.label
-        values: coordinates(resources, xAccessor, dataSeries.accessor)
+        values: coordinates(data, x.accessor, y.accessor)
         color: dataSeries.color
 
-      formatDataSeries(resources, config.x.accessor, ds) for ds in config.y.data
+      for dataSeries in dataSpec.y.data
+       configureADataSeries(data, dataSpec.x, dataSeries)
     
-    # @param valueRange the y values {max, min} range object
-    # @param returns the chart y axis {max, min} range object
-    yRange = (valueRange, precision) ->
+    # Adds padding to the give value range as follows:
+    # * the the chart max is the next higher significant
+    #   tick mark
+    # * if the value min is zero, then that is the chart
+    #   min. Otherwise the chart min is the next lower
+    #   significant tick mark
+    #
+    # @param range the chart values {max, min} range object
+    # @param returns the chart axis {max, min} range object
+    padRange = (range, precision) ->
       # The factor is 10**precision.
       factor = Math.pow(10, precision)
 
-      ceiling = Math.ceil(valueRange.max * factor)
+      ceiling = Math.ceil(range.max * factor)
       # Pad the graph max with the next higher significant tick mark.
       upperInt = if ceiling == 0 then ceiling else ceiling + 1
       upper = upperInt / factor
 
       # Round the minimum down to the nearest precision decimal.
-      floor = Math.floor(valueRange.min * factor)
+      floor = Math.floor(range.min * factor)
       # If the floor is not at the origin, then pad the graph min with
       # the next lower significant tick mark.
       lowerInt = if floor == 0 then floor else floor - 1
@@ -136,60 +150,94 @@ svcs.factory 'Helpers', ->
       max: upper
       min: lower
     
-    defaultPrecision = (resources, config) ->
-      defaultResourcePrecision = (resource, config) ->
-        # @returns the number of decimals to display for the given
-        #   value
+    # @param data the resource objects
+    # @param dataSpec the data access specification
+    # @returns the number of decimals to display on the y-axis
+    defaultYPrecision = (data, dataSpec) ->
+      # @param resource the resource object
+      # @param dataSpec the data access specification
+      defaultResourcePrecision = (resource, dataSpec) ->
+        # Determine the default value precision as follows:
+        # * If the value is zero or greater then one, then zero
+        # * Otherwise, the number of significant decimal digits
+        #
+        # @param value the numeric value
+        # @returns the number of decimals to display for the
+        #   given value
         defaultValuePrecision = (value) ->
           if value == 0 or value > 1
             0
           else
             1 + defaultValuePrecision(value * 10)
         
-        rscValues = resourceValues(resource, config)
-        valuePrecisions =
-          defaultValuePrecision(value) for value in rscValues
-        _.max(valuePrecisions)
+        # The resource data series y values.
+        values = resourceYValues(resource, dataSpec)
+        # The precision for each value.
+        precisions =
+          defaultValuePrecision(value) for value in values
+        # Return the largest precision.
+        _.max(precisions)
       
-      rscPrecisions =
-        defaultResourcePrecision(rsc, config) for rsc in resources
-      _.max(rscPrecisions)
-    
-    # The value range.
-    valRange = valueRange(resources, config)
-    
-    # Get the default precision, if necessary.
-    if config.y.precision
-      precision = config.y.precision
-    else
-      precision = defaultPrecision(resources, config)
-    
-    # The chart range.
-    chartYRange = yRange(valRange, precision)
+      # The precision for each resource.
+      precisions =
+        defaultResourcePrecision(rsc, dataSpec) for rsc in data
+      # Return the largest precision.
+      _.max(precisions)
     
     # This function is a work-around for the following missing
     # nv3d feature:
-    # * allow different formats for y ticks and y tooltip values
+    # * allow different dataSpecs for y ticks and y tooltip
+    #   values
+    # This function allows for displaying the y-axis values
+    # with two more precision digits than the y-axis ticks.
     #
     # @returns a function which formats the y axis
     #   ticks differently than the y tooltip values
     decimalFormatter = (precision) ->
+      # The multiplicative factor.
       factor = Math.pow(10, precision)
+      # The y-axis tick format. 
       formatTick = d3.format('.' + precision + 'f')
+      # The y-axis value format allows for more precision than
+      # the tick mark.
       formatValue = d3.format('.' + (precision + 2) + 'f')
       
+      # @param value the value to format
+      # @returns the d3 formatter function
       (value) ->
+        # Shift the value to the left.
         shifted = value * factor
+        # If there are no significant decimal digits in
+        # the shifted value, then format the value as a
+        # tick mark. Otherwise, format the value as a data
+        # series value.
         if shifted - Math.floor(shifted) < .001
           formatTick(value)
         else
           formatValue(value)
+    
+    # The y-axis value range.
+    valueYRange = getYValueRange(data, dataSpec)
+    
+    # Get the default precision, if necessary.
+    if dataSpec.y.precision
+      precision = dataSpec.y.precision
+    else
+      precision = defaultYPrecision(data, dataSpec)
+    
+    # The chart y-axis range.
+    chartYRange = padRange(valueYRange, precision)
 
     # Return the graph configuration.
-    data: chartData(resources, config)
+    data: configureAllDataSeries(data, dataSpec)
     yFormat: decimalFormatter(precision)
-    yLabel: config.y.label
+    yLabel: dataSpec.y.label
     yMaxMin: _.values(chartYRange)
+  
+  # @param date the moment date integer
+  # @return the formatted date
+  dateFormat: (date) ->
+    moment(date).format('MM/DD/YYYY')
 
   # Replaces the given text elements with hyperlinks.
   d3Hyperlink: (element, href, style) ->  
@@ -210,14 +258,14 @@ svcs.factory 'Helpers', ->
     t.appendTo(a)
 
 
-svcs.factory 'Modeling', ['Helpers', (Helpers) ->
-  # The x axis data configuration.
-  xConfig =
+svcs.factory 'Modeling', ['Chart', (Chart) ->
+  # The common modeling x-axis specification.
+  x =
     label: 'Visit Date'
     accessor: (session) -> session.acquisition_date.valueOf()
 
-  # The y axis data configuration.
-  yConfigs =
+  # The chart-specific y-axis specifications.
+  y =
     ktrans:
       label: 'Ktrans'
       data:
@@ -254,53 +302,193 @@ svcs.factory 'Modeling', ['Helpers', (Helpers) ->
           }
         ]
   
-  # The data configurations.
-  configs =
-    ktrans: {x: xConfig, y: yConfigs.ktrans}
-    ve: {x: xConfig, y: yConfigs.ve}
-    taui: {x: xConfig, y: yConfigs.taui}
+  # The chart data access specifications.
+  DATA_SPECS =
+    ktrans: {x: x, y: y.ktrans}
+    ve: {x: x, y: y.ve}
+    taui: {x: x, y: y.taui}
   
   # @param sessions the session array 
   # @param chart the chart name
-  # @returns the nvd3 chart format
+  # @returns the nvd3 chart dataSpec
   configureChart: (sessions, chart) ->
-    # @returns the tooltip HTML
+    # @returns the nvd3 tooltip HTML
     tooltip = (key, x, y, e, graph) ->
       "<b>#{ key }</b>: #{ y }"
     
     # The nvd3 data configuration.
-    dataCfg = configs[chart]
-    # The nvd3 chart configuration.
-    chartCfg = Helpers.configureChart(sessions, dataCfg)
-    # Additional nvd3 directive attribute values.
-    chartCfg.xValues = dataCfg.x.accessor(sess) for sess in sessions
-    chartCfg.xFormat = Helpers.dateFormat
-    chartCfg.tooltip = tooltip
-
-    chartCfg
+    dataSpec = DATA_SPECS[chart]
+    # Return the standard chart configuration extended
+    # with the following:
+    # * the xValues and xFormat properties
+    # * the tooltip function
+    _.extend Chart.configureChart(sessions, dataSpec),
+      xValues: (dataSpec.x.accessor(sess) for sess in sessions)
+      xFormat: Chart.dateFormat
+      tooltip: tooltip
 ]
 
 
-svcs.factory 'VisitDateline', ['Helpers', (Helpers) ->
-  # The data configuration.
-  config =
-    x:
-      accessor: (session) -> session.acquisition_date.valueOf()
-    y:
-      data:
-        [
-          # The y coordinate is always zero.
-          {
-            accessor: (session) -> 0
-          }
-        ]
+svcs.factory 'VisitDateline', ['Chart', (Chart) ->
   # @param data the session array
-  # @returns the nvd3 chart format
-  configureChart: (sessions, href) ->
-    chartCfg = Helpers.configureChart(sessions, config)
-    chartCfg.xValues = (config.x.accessor(sess) for sess in sessions)
-    chartCfg.xFormat = Helpers.dateFormat
-    chartCfg
+  # @returns the nvd3 chart configuration
+  configureChart: (sessions) ->
+    # Adds the session hyperlinks above the timeline.
+    # The template sets the callback attribute to this
+    # function. 
+    #
+    # @param chart the timeline chart
+    addSessionDetailLinks = (sessions, chart) ->
+      # @returns the link to detail page for the given session
+      sessionDetailLink = (session) ->
+        "/quip/#{ session.subject.collection.toLowerCase() }/subject/" +
+        "#{ session.subject.number }/session/#{ session.number }?" +
+        "project=#{ session.subject.project }&detail=#{ session.detail_id }"
+      
+      # Select the SVG element.
+      svg = d3.select(chart.container)
+      # The x axis element.
+      xAxis = svg.select('.nv-x')
+      # The tick elements.
+      ticks = xAxis.selectAll('.tick')[0]
+      # Add the session hyperlinks.
+      for i in _.range(ticks.length)
+        # The session tick.
+        tick = ticks[i]
+        session = sessions[i]
+        # Make a new SVG text element.
+        text = d3.select(tick).append('text')
+        text.attr('dx', '-.2em').attr('dy', '-.5em')
+        text.style('text-anchor: middle')
+        # The text content is the session number.
+        text.text(session.number)
+        # The hyperlink target.
+        href = sessionDetailLink(session)
+        # Wrap the text element in a hyperlink.
+        Chart.d3Hyperlink(text.node(), href)
+
+    # The chart data specification.
+    dataSpec =
+      x:
+        accessor: (session) -> session.acquisition_date.valueOf()
+      y:
+        # The y coordinate is always zero.
+        data: [ accessor: (session) -> 0 ]
+
+    # Return the standard chart configuration extended
+    # with the following:
+    # * the xValues and xFormat properties
+    # * the addSessionDetailLinks function
+    _.extend Chart.configureChart(sessions, dataSpec),
+      xValues: (dataSpec.x.accessor(sess) for sess in sessions)
+      xFormat: Chart.dateFormat
+      addSessionDetailLinks: (chart) ->
+        addSessionDetailLinks(sessions, chart)
+]
+
+
+svcs.factory 'Intensity', ['Chart', (Chart) ->
+  # Highlights the bolus arrival tick mark.
+  #
+  # @param session the session object
+  # @param chart the intensity chart
+  highlightBolusArrival = (session, chart) ->
+    # Select the SVG element.
+    svg = d3.select(chart.container)
+    # The x axis element.
+    xAxis = svg.select('.nv-x')
+    # The tick elements.
+    ticks = xAxis.selectAll('.tick')[0]
+    # The bolus tick element.
+    bolusTick = ticks[session.bolus_arrival_index]
+    # The bolus tick child line element.
+    bolusTickLine = $(bolusTick).children('line')[0]
+    highlight = $(bolusTickLine).clone()
+    # Set the class attribute directly, since neither the d3 nor
+    # the jquery add class utility has any effect. d3 has the
+    # following bug:
+    # * In the d3 source, the function named 'classed' has a
+    #   condition:
+    #       if (value = node.classList) {
+    #   which should read:
+    #       if (value == node.classList) {
+    # It is unknown why the jquery addClass doesn't work.
+    $(highlight).attr('class', 'qi-bolus-arrival')
+    # Insert the highlight SVG element after the tick line.
+    # The highlight will display centered over the tick line.
+    $(highlight).insertAfter(bolusTickLine)
+    # Add the legend.
+    legend = svg.select('.nv-legend')
+    legendGroup = legend.select(':first-child')
+    bolusGroup = legendGroup.insert('svg:g', ':first-child')
+    bolusGroup.attr('transform', 'translate(-30, 5)')
+    filter = bolusGroup.append('svg:filter')
+    filter.attr('width', 1.2).attr('height', 1)
+    filter.attr('id', 'boluslegendbackground')
+    filter.append('feFlood').attr('class', 'qi-bolus-flood')
+    filter.append('feComposite').attr('in', 'SourceGraphic')
+    bolusLegend = bolusGroup.append('svg:text')
+    bolusLegend.attr('class', 'qi-bolus-legend')
+    bolusLegend.attr('dy', '.32em')
+    bolusLegend.attr('filter', 'url(#boluslegendbackground)')
+    bolusLegend.text('Bolus Arrival')
+
+  # The y-axis format function. If the given intensity value
+  # is integral, then this function returns the integer.
+  # Otherwise, the value is truncated to two decimal places. 
+  #
+  # nvd3 unfortunately uses this function to format both the tick
+  # values and the tooltip y values. Therefore, this function
+  # formats the integral tick values as an integer and the float
+  # y values as floats. Thus, both the y tick values and the
+  # tooltip are more readable.
+  #
+  # @param value the intensity value
+  # @returns the chart display value
+  yFormat = (value) ->
+    # ~~ is the obscure Javascript idiom for correctly converting
+    # a float to an int. Math.ceil does not correctly truncate
+    # negative floats.
+    intValue = ~~value
+    if value == intValue
+      intValue
+    else
+      value.toFixed(2)
+
+  # Makes the intensity chart  configuration for the given session.
+  #
+  # The result includes two data series, Scan and Realigned.
+  # The chart x-axis labels are the one-based series indexes,
+  # e.g. ['1', '2', ..., '12'] for 12 series.
+  #
+  # @param session the session object
+  # @returns the nvd3 chart configuration
+  configureChart: (session) ->
+    # @param intensities the intensity value array
+    # @returns the intensity chart [x, y] coordinates
+    coordinates = (intensities) ->
+      [i + 1, intensities[i]] for i in [0...intensities.length]
+
+    # The chart data configuration.
+    data = [
+      {
+        key: 'Scan'
+        values: coordinates(session.scan.intensity.intensities)
+        color: 'Indigo'
+      }
+      {
+        key: 'Realigned'
+        values: coordinates(session.registration.intensity.intensities)
+        color: 'LightGreen'
+      }
+    ]
+    
+    # Return the chart configuration.
+    data: data
+    xValues: (coord[0] for coord in data[0].values)
+    yFormat: yFormat
+    highlightBolusArrival: (chart) ->
+      highlightBolusArrival(session, chart)
 ]
 
 

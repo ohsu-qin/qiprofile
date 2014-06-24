@@ -20,27 +20,57 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
       else
         resource.get(sbj).$promise
     
+    # Fetches the subject detail and fixes it up as follows:
+    # * converts the session and encounter dates into moments
+    # * copies the detail properties into the subject 
+    # * sets the subject multiSession flag
+    #
     # @param subject the parent object
     # @param Subject the Subject Resource
-    # @returns the detail object
-    getSubjectDetail = (subject, Subject) ->
+    # @returns a promise which resolves to the detail object
+    getSubjectDetail = (subject, Subject, Helpers) ->
       if subject.detail
-        Subject.detail(id: subject.detail).$promise
+        Subject.detail(id: subject.detail).$promise.then (detail) ->
+          for sess in detail.sessions
+            # Set the session subject
+            sess.subject = subject
+            # Fix the acquisition date.
+            Helpers.fixDate(sess, 'acquisition_date')
+          # Fix the encounter dates.
+          Helpers.fixDate(enc, 'date') for enc in detail.encounters
+          # Copy the detail content into the subject.
+          Helpers.copyContent(detail, subject)
+          # Set a flag indicating whether there is more than
+          # one session.
+          subject.multiSession = subject.sessions.length > 1
+          # Resolve to the detail object.
+          detail
       else
         Subject.get(subject).$promise.then (fetched) ->
           # If the fetched subject has no detail, then complain.
           if not fetched.detail
             throw "Subject does not have detail: #{ subject.number }"
-          getSubjectDetail(fetched, Subject)
+          # Recurse.
+          getSubjectDetail(fetched, Subject, Helpers)
     
     # @param session the parent object
     # @param Session the Session Resource
     # @returns the detail object
-    getSessionDetail = (session, Session, Subject) ->
+    getSessionDetail = (session, Session, Subject, Image, Helpers) ->
       if session.detail
-        Session.detail(id: session.detail).$promise
+        Session.detail(id: session.detail).$promise.then (detail) ->
+          # Copy the fetched detail into the session.
+          Helpers.copyContent(detail, session)
+          # Add the registration.
+          # TODO - handle more than one registration?
+          session.registration = session.registrations[0]
+          # The series numbers.
+          session.seriesNumbers = [1..session.scan.intensity.intensities.length]
+          # Encapsulate the image files.
+          for obj in [session.scan, session.registration]
+            obj.images = Image.imagesFor(obj)
       else
-        getSubjectDetail(session.subject, Subject).then (detail) ->
+        getSubjectDetail(session.subject, Subject, Helpers).then (detail) ->
           # Find the session in the session list.
           sbj_session = _.find detail.sessions, (other) ->
             other.number == session.number
@@ -49,7 +79,7 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
             throw "Subject #{ subject.number } does not have a session #{ session.number }"
           # Recurse.
           session.detail = sbj_session.detail_id
-          getSessionDetail(session, Session, Subject)
+          getSessionDetail(session, Session, Subject, Image, Helpers)
         
     $stateProvider
       # The top-level state. This abstract state is the ancestor
@@ -63,6 +93,9 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
         url: '/quip?project'
         abstract: true
         resolve:
+          # The Helpers service is injected into all child states.
+          Helpers: 'Helpers'
+          # The project is shared by all states.
           project: ($stateParams) ->
             $stateParams.project or 'QIN'
         views:
@@ -100,8 +133,8 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
       .state 'quip.subject.detail',
         url: '?detail'
         resolve:
-          detail: (subject, Subject) ->
-            getSubjectDetail(subject, Subject)
+          detail: (subject, Subject, Helpers) ->
+            getSubjectDetail(subject, Subject, Helpers)
         views:
           'main@':
             templateUrl: '/partials/subject-detail.html'
@@ -122,8 +155,9 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
         url: '?detail'
         resolve:
           Session: 'Session'
-          detail: (session, Session, Subject) ->
-            getSessionDetail(session, Session, Subject)
+          Image: 'Image'
+          detail: (session, Session, Subject, Image, Helpers) ->
+            getSessionDetail(session, Session, Subject, Image, Helpers)
         views:
           'main@':
             templateUrl: '/partials/session-detail.html'

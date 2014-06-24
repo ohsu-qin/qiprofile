@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 (http://quip1:6060/qiprofile) for change details.
 
+0.4.2 / 2014-06-24
+------------------
+* Refactor module responsibility.
+
 0.4.1 / 2014-06-19
 ------------------
 * Implement the nested UI router.

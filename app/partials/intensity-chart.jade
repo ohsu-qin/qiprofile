@@ -1,0 +1,11 @@
+.row
+  // See the modeling-discrete-chart template for nvd3 quirks.
+  nvd3-line-chart.qi-intensity-chart(data='config.data'
+    showXAxis='true' showYAxis='true' showLegend='true'
+    XAxisTickValues='$parent.config.xValues'
+    YAxisTickFormat='config.yFormat'
+    YAxisShowMaxMin='false' XAxisLabel='Time Point'
+    YAxisLabel='Intensity' interpolate='cardinal'
+    tooltips='true' useInteractiveGuideline='true'
+    callback='config.highlightBolusArrival'
+  )

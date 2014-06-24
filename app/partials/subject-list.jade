@@ -4,7 +4,7 @@ block billboard
   | Patients
 
 block content
-  .div(ng-repeat='coll in collections')
+  div(ng-repeat='coll in collections')
     h3 {{ coll }}
     ul.qi-main-list(ng-repeat="sbj in subjects | filter: {collection: coll} | orderBy:'number'")
       li
@@ -12,4 +12,6 @@ block content
           | Patient {{ sbj.number }}
 
 block help-text
+  // The nested quote ensures evaluation to a string rather than
+  // a state variable.
   .qi-help-text(ng-include="'/partials/help/subject-list.html'")

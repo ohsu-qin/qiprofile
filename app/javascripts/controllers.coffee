@@ -114,34 +114,23 @@ ctlrs.controller 'SubjectDetailCtrl', ['$scope', '$routeParams',
       # Get the session data.
       sessionCounter = []
       sheetData = []
-      for sess, index in subject.sessions
-        sessionCounter.push index
+      delta_k_trans = []
+      for sess, i in subject.sessions
+        sessionCounter.push i
         # Calculate delta-Ktrans
-        delta_k_trans = sess.modeling.fxr_k_trans - sess.modeling.fxl_k_trans
+        delta_k_trans[i] = sess.modeling.fxr_k_trans - sess.modeling.fxl_k_trans
         # Unless this is the first visit,
-        # calculate percent change in Ktrans, FXL, FXR, V_e, and tau_i since last visit,
-        # otherwise set values to null.
-        if index == 0
-          delta_k_trans_change = null
-          fxl_change = null
-          fxr_change = null
-          v_e_change = null
-          tau_i_change = null
-        else
-          delta_k_trans_change = ((delta_k_trans - prev_delta_k_trans)/prev_delta_k_trans * 100).toFixed(dpPct)
-          fxl_change = ((sess.modeling.fxl_k_trans - prev_fxl_k_trans)/prev_fxl_k_trans * 100).toFixed(dpPct)
-          fxr_change = ((sess.modeling.fxr_k_trans - prev_fxr_k_trans)/prev_fxr_k_trans * 100).toFixed(dpPct)
-          v_e_change = ((sess.modeling.v_e - prev_v_e)/prev_v_e * 100).toFixed(dpPct)
-          tau_i_change = ((sess.modeling.tau_i - prev_tau_i)/prev_tau_i * 100).toFixed(dpPct)
-        prev_delta_k_trans = delta_k_trans
-        prev_fxl_k_trans = sess.modeling.fxl_k_trans
-        prev_fxr_k_trans = sess.modeling.fxr_k_trans
-        prev_v_e = sess.modeling.v_e
-        prev_tau_i = sess.modeling.tau_i
+        # calculate percent change in each property since previous visit.
+        unless i == 0
+          delta_k_trans_change = ((delta_k_trans[i] - sheetData[i-1].deltaKtrans)/sheetData[i-1].deltaKtrans * 100).toFixed(dpPct)
+          fxl_change = ((sess.modeling.fxl_k_trans - sheetData[i-1].fxl)/sheetData[i-1].fxl * 100).toFixed(dpPct)
+          fxr_change = ((sess.modeling.fxr_k_trans - sheetData[i-1].fxr)/sheetData[i-1].fxr * 100).toFixed(dpPct)
+          v_e_change = ((sess.modeling.v_e - sheetData[i-1].ve)/sheetData[i-1].ve * 100).toFixed(dpPct)
+          tau_i_change = ((sess.modeling.tau_i - sheetData[i-1].taui)/sheetData[i-1].taui * 100).toFixed(dpPct)
         # Update the parameters for this session.
-        sheetData[index] =
+        sheetData[i] =
           visitDate: Helpers.dateFormat(sess.acquisition_date)
-          deltaKtrans: delta_k_trans.toFixed(dpVal)
+          deltaKtrans: delta_k_trans[i].toFixed(dpVal)
           deltaKtransChange: delta_k_trans_change
           fxl: sess.modeling.fxl_k_trans.toFixed(dpVal)
           fxlChange: fxl_change

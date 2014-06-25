@@ -28,7 +28,6 @@ div.qi-modeling-sheet
               th= '% Change'
           tbody
             tr(ng-repeat="sess in sessionCounter")
-              // use: sess.acquisition_date | moment
               td.qi-date= '{{ sheetData[sess].visitDate }}'
               each prop in props[group]
                 td.qi-number= '{{ sheetData[sess].' + prop + ' }}'

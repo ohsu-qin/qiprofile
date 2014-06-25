@@ -148,14 +148,37 @@ ul.qi-clean-list
 
 .qi-modeling-profile
   padding 0 0.2em 0 0
-  & table
-    width 50%
+
+.qi-modeling-sheet
+  font-size smaller
+  & table, th, td
+    border 0.1em solid Bisque
   & th
     background-color Bisque
+    font-weight bold
     text-align center
-  & td.data
-    width 33%
+    white-space nowrap
+  & td
+    padding-top 0.2em
+    padding-bottom 0.2em
+  & .qi-date, .qi-number
+    text-align center
+  & .qi-pct
+    padding-right 1.5em
     text-align right
+
+.qi-prop-group
+  border-left 0.2em solid Silver
+
+.qi-wide-table
+  width 100%
+  & .qi-prop-group
+    width 13%
+
+.qi-narrow-table
+  width 50%
+  & .qi-prop-group
+    width 28%
 
 .qi-clinical-profile
   padding 0 0 0 0.2em

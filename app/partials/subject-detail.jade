@@ -16,7 +16,7 @@ block content
     .qi-profile-sheet
       #qi-modeling-chart(ng-show="modelingFormat == 'Chart'")
         include include/modeling-charts
-      div(ng-show="modelingFormat == 'Table'")
+      #qi-modeling-chart(ng-show="modelingFormat == 'List'")
         include include/modeling-sheet
 
   .col-md-6.qi-clinical-profile

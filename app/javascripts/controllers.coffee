@@ -43,8 +43,8 @@ ctlrs.controller 'SubjectListCtrl', ['$rootScope', '$scope', 'project',
 
 
 ctlrs.controller 'SubjectDetailCtrl', ['$rootScope', '$scope', 'subject',
-  'detail', 'ControllerHelper', 'Helpers',
-  ($rootScope, $scope, subject, detail, ControllerHelper, Helpers) ->
+  'detail', 'ControllerHelper', 'Chart',
+  ($rootScope, $scope, subject, detail, ControllerHelper, Chart) ->
     # Capture the current project.
     $rootScope.project = subject.project
 
@@ -80,7 +80,7 @@ ctlrs.controller 'SubjectDetailCtrl', ['$rootScope', '$scope', 'subject',
         tau_i_change = ((sess.modeling.tau_i - sheetData[i-1].taui)/sheetData[i-1].taui * 100).toFixed(dpPct)
       # Update the parameters for this session.
       sheetData[i] =
-        visitDate: Helpers.dateFormat(sess.acquisition_date)
+        visitDate: Chart.dateFormat(sess.acquisition_date)
         deltaKtrans: delta_k_trans[i].toFixed(dpVal)
         deltaKtransChange: delta_k_trans_change
         fxl: sess.modeling.fxl_k_trans.toFixed(dpVal)

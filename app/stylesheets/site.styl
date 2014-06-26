@@ -250,18 +250,17 @@ qi-transition(type, sec)
   -o-transition all type sec
   transition all type sec
 
-slow-transition = 1s
-
-med-transition = 0.5s
-
-fast-transition = 0.2s
-
 .qi-no-transition
   -webkit-transition none
   -moz-transition none
   // Opera doesn't support none
   -o-transition all 0s
   transition none
+
+slow-transition = 1s
+slower-transition = 0.75s
+med-transition = 0.5s
+fast-transition = 0.2s
 
 .qi-help
   background OldLace
@@ -270,7 +269,7 @@ fast-transition = 0.2s
   top 10em
   right 1.8em
   width 25%
-  qi-transition(linear, med-transition)
+  qi-transition(linear, slower-transition)
 
 .qi-help-text
   // Downsize headers

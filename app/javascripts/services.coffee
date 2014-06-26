@@ -455,7 +455,7 @@ svcs.factory 'Intensity', ['Chart', (Chart) ->
     else
       value.toFixed(2)
 
-  # Makes the intensity chart  configuration for the given session.
+  # Makes the intensity chart configuration for the given session.
   #
   # The result includes two data series, Scan and Realigned.
   # The chart x-axis labels are the one-based series indexes,

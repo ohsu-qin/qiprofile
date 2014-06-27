@@ -4,7 +4,7 @@ filters.filter 'capitalize', ->
   (s) -> _.str.capitalize(s)
 
 filters.filter 'moment', ->
-  (s) -> moment(s).format('MM/DD/YY')
+  (s) -> moment(s).format('MM/DD/YYYY')
 
 filters.filter 'visitDates', ->
   (sessions) ->

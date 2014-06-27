@@ -12,11 +12,13 @@ exec cmd, (error) ->
     throw "Test preparation seed script unsuccessful: #{ error }"
 
 # Link test data to _public/data.
+# The source image download root directory.
 src = process.env.QIPROFILE_DATA
-if src
-  # The web app root.
-  root = "#{ __dirname }/../../../_public"
+# The web app root.
+root = "#{ __dirname }/../../../_public"
+# The link destination.
+dest = "#{ root }/data"
+if src and not fs.exists(dest)
   if not fs.exists(root)
-    fs.mkdir(root)
-  dest = "#{ root }/data"
+    throw "Web app root not found: #{ root }"
   fs.symlink(src, dest)

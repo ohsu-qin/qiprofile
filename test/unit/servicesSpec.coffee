@@ -79,7 +79,7 @@ describe 'Unit Testing Services', ->
             intensities: (30 - Math.abs(10 - i) for i in [1..32])
          registration:
           intensity:
-            # Dampen the scan intensity a bit.
+            # Dampen the registration intensity a bit.
             intensities: (30 - (Math.abs(10 - i) * 1.2) for i in [1..32])
       
       # Configure the chart.
@@ -88,11 +88,12 @@ describe 'Unit Testing Services', ->
       expect(config.data.length).to.equal(2)
       
       # Verify the scan coordinates.
+      expectedX = [1..32]
       scan = _.find config.data, (dataSeries) -> dataSeries.key == 'Scan'
       expect(scan).to.exist
       expect(scan.values).to.exist
       scanX = (coord[0] for coord in scan.values)
-      expect(scanX).to.eql([1..32])
+      expect(scanX).to.eql(expectedX)
       scanY = (coord[1] for coord in scan.values)
       expect(scanY).to.eql(session.scan.intensity.intensities)
       
@@ -101,9 +102,9 @@ describe 'Unit Testing Services', ->
       expect(reg).to.exist
       expect(reg.values).to.exist
       regX = (coord[0] for coord in reg.values)
-      expect(regX).to.eql([1..32])
+      expect(regX).to.eql(expectedX)
       regY = (coord[1] for coord in reg.values)
       expect(regY).to.eql(session.registration.intensity.intensities)
 
       # Verify the x-axis values.
-      expect(config.xValues).to.eql([1..32])
+      expect(config.xValues).to.eql(expectedX)

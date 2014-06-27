@@ -23,7 +23,7 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
     # Fetches the subject detail and fixes it up as follows:
     # * converts the session and encounter dates into moments
     # * copies the detail properties into the subject 
-    # * sets the subject multiSession flag
+    # * sets the subject isMultiSession flag
     #
     # @param subject the parent object
     # @param Subject the Subject Resource
@@ -42,7 +42,7 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
           Helpers.copyContent(detail, subject)
           # Set a flag indicating whether there is more than
           # one session.
-          subject.multiSession = subject.sessions.length > 1
+          subject.isMultiSession = subject.sessions.length > 1
           # Resolve to the detail object.
           detail
       else

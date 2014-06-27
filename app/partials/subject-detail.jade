@@ -8,7 +8,7 @@ block content
     h4.row.col-md-offset-1
       | Imaging Profile
       button.btn.btn-med.qi-profile-btn(
-        ng-show='subject.multiSession'
+        ng-show='subject.isMultiSession'
         ng-click='toggleModelingFormat()'
       )
         .glyphicon.glyphicon-list(ng-show="modelingFormat == 'Chart'")

@@ -58,6 +58,13 @@ ctlrs.controller 'SubjectDetailCtrl', ['$rootScope', '$scope', 'subject',
         throw "Modeling format is not recognized: " +
           $scope.modelingFormat
 
+    # The modeling format is 'Chart' if the subject has
+    # more than one session, 'List' otherwise
+    if subject.isMultiSession
+      $scope.modelingFormat = 'Chart'
+    else
+      $scope.modelingFormat = 'List'
+
     # Prepares the headings and data for the modeling profile sheet.
     # Number of decimal places displayed for values and percentages.
     dpVal = 4

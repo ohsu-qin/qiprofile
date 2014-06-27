@@ -141,6 +141,13 @@ within the following grouping order:
 
 Each package occurs after packages on which it depends.
 
+If a new client library is added, then notify other developers that they
+need to run ``grunt`` to rebuild the application after refreshing their
+master branch.
+
+If a new test library is added, then notify other developers that they
+need to run ``npm install`` after refreshing their master branch.
+
 Testing
 -------
 Testing is performed by the following grunt tasks\ [#midway]_:
@@ -166,7 +173,7 @@ runs the grunt karma ``unit`` task as follows:
 
 Debugging a unit test case is performed as follows:
 
-* Run the grunt task with the ``--debug`` option, e.g.:
+* Run the grunt task with the ``--debug`` option, e.g.::
 
       grunt --debug test:unit
   
@@ -255,7 +262,7 @@ Coding Standards
 * CoffeeScript function definitions without arguments omit the
   parentheses, e.g.::
 
-      fn = ->
+      doSomethingUseful = ->
         ...
 
 * CoffeeScript, Jade and Stylus string literals have double quotation

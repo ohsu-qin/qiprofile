@@ -5,16 +5,16 @@
 // Table properties.
 - props    = { 'kTrans': ['deltaKtrans', 'fxl', 'fxr'], 've': ['ve'], 'taui': ['taui'] }
 - width    = { 'kTrans': 'qi-wide-table', 've': 'qi-narrow-table', 'taui': 'qi-narrow-table' }
-- colHdg   = { 'deltaKtrans': '&Delta;K<sup>trans</sup>', 'fxl': 'FXL', 'fxr': 'FXR', 've': 'V<sub>e</sub>', 'taui': 'T<sub>i</sub>'}
+- colHdg   = { 'deltaKtrans': '&Delta;K<sup>trans</sup>', 'fxl': 'FXL K<sup>trans</sup>', 'fxr': 'FXR K<sup>trans</sup>', 've': 'V<sub>e</sub>', 'taui': 'T<sub>i</sub>'}
 
 // Mark up accordian header and table content for each group.
 div.qi-modeling-table
   each group in groups
     accordion
-      accordion-group(is-open="groupOpen.#{group}")
+      accordion-group(is-open="groupOpen.#{ group }")
         accordion-heading!= groupHdg[group]
-          i.pull-right.glyphicon(ng-class="{'glyphicon-chevron-down': groupOpen.#{group}, 'glyphicon-chevron-right': !groupOpen.#{group}}")
-        table(class="#{width[group]}")
+          i.pull-right.glyphicon(ng-class="{'glyphicon-chevron-down': groupOpen.#{ group }, 'glyphicon-chevron-right': !groupOpen.#{ group }}")
+        table(class="#{ width[group] }")
           colgroup
             col
           each prop in props[group]

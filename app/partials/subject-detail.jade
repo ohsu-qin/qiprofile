@@ -14,6 +14,9 @@ block content
         .glyphicon.glyphicon-list(ng-show="modelingFormat == 'Chart'")
         .glyphicon.glyphicon-picture(ng-show="modelingFormat == 'List'")
     .qi-profile-panel
+      // The session list formatted as a dateline.
+      h5.col-md-offset-5 MR Visits
+      qi-visit-dateline(data='subject.sessions')
       #qi-modeling-chart(ng-show="modelingFormat == 'Chart'")
         include include/modeling-charts
       #qi-modeling-chart(ng-show="modelingFormat == 'List'")

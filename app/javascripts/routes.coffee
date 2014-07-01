@@ -36,6 +36,9 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
             sess.subject = subject
             # Fix the acquisition date.
             Helpers.fixDate(sess, 'acquisition_date')
+            # Calculate delta-ktrans.
+            _.extend sess.modeling, delta_k_trans: sess.modeling.fxr_k_trans \
+                - sess.modeling.fxl_k_trans
           # Fix the encounter dates.
           Helpers.fixDate(enc, 'date') for enc in detail.encounters
           # Copy the detail content into the subject.

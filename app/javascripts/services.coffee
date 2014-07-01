@@ -543,11 +543,12 @@ svcs.factory 'Image', ['$rootScope', 'File', ($rootScope, File) ->
     # The image binary content.
     data: null
     
-    # Transfers the image file content to the data attribute.
+    # Transfers the image file content to the data property.
     # The image state loading flag is set to true while the
     # file is read.
     #
-    # @returns the Angular $http request
+    # @returns a promise which resolves to this image when
+    #   file content is loaded into the data property
     load: () ->
       # Set the loading flag.
       @state.loading = true
@@ -559,11 +560,46 @@ svcs.factory 'Image', ['$rootScope', 'File', ($rootScope, File) ->
         @state.loading = false
         # Set the data property to the file content.
         @data = data
+        # Return the image.
+        this
     
-    # Configures the XTK renderer for this Image.
-    configureRenderer: () ->
-      # TODO - Build the image config object.
-      # this.config = ...
+    # Builds an XTK renderer for the given Image.
+    createRenderer: (image) ->
+      # The XTK renderer.
+      renderer = new X.renderer3D()
+      
+      # The volume to render.
+      volume = new X.volume()
+      volume.file = image.filename
+      volume.filedata = image.data
+      renderer.add volume
+      
+      # The rendering callback. This function is called after the
+      # volume is initialized and prior to the first rendering.
+      renderer.onShowtime = ->
+        # The volume display controls.
+        volumeCtls = new dat.GUI()
+        # The controls interact with the volume.
+        volumeCtls = gui.addFolder('Volume')
+        # The rendering control.
+        renderingCtl = volumeCtls.add(volume, 'volumeRendering')
+        # The opacity control.
+        opacityCtl = volumeCtls.add(volume, 'opacity', 0, 1).listen()
+        # The threshold min and max range controls.
+        minCtl = volumeCtls.add(volume, 'lowerThreshold', volume.min, volume.max)
+        maxCtl = volumeCtls.add(volume, 'upperThreshold', volume.min, volume.max)
+        # The slice dimension controls.
+        sliceXCtl = volumeCtls.add(volume, 'indexX', 0, volume.range[0] - 1)
+        sliceYCtl = volumeCtls.add(volume, 'indexY', 0, volume.range[1] - 1)
+        sliceZCtl = volumeCtls.add(volume, 'indexZ', 0, volume.range[2] - 1)
+        # Display the controls.
+        volumeCtls.open();
+
+      # Adjust the camera position.
+      renderer.camera.position = [120, 80, 160]
+      
+      # Return the renderer.
+      renderer
 
   # Obtains image objects for the given ImageContainer. The image
   # object content is described in the create() function.

@@ -130,8 +130,8 @@ ctlrs.controller 'SessionDetailCtrl', ['$rootScope', '$scope',
     #
     # @param image the Image object
     $scope.openImage = (image) ->
-      # TODO - Route to the image open page.
-      window.alert("Image open is not yet supported.")
+      # Route to the image detail page.
+      $state.go('quip.subject.session.image', project: project, time_series: image.series.time_point)
 
     # Place the session in the scope.
     $scope.session = session
@@ -140,10 +140,10 @@ ctlrs.controller 'SessionDetailCtrl', ['$rootScope', '$scope',
 ]
 
 
-ctlrs.controller 'SeriesDetailCtrl', ['$rootScope', '$scope', 'series',
-  ($rootScope, $scope, series) ->
+ctlrs.controller 'ImageDetailCtrl', ['$rootScope', '$scope', 'image',
+  ($rootScope, $scope, image) ->
     # Capture the current project.
-    $rootScope.project = series.session.subject.project
+    $rootScope.project = image.series.session.subject.project
 
     # Place the series in the scope.
     $scope.series = series

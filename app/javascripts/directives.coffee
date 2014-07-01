@@ -55,6 +55,19 @@ directives.directive 'qiModelingMultiChart', ['Modeling', (Modeling) ->
 ]
 
 
+# Displays the modeling tables.
+directives.directive 'qiModelingTable', ['Modeling', (Modeling) ->
+  restrict: 'E'
+  scope:
+    data: '='   # the subject sessions
+  link: (scope, element, attrs) ->
+    scope.$watch 'data', (data) ->
+      if data
+        scope.config = Modeling.configureTable(data)
+  templateUrl: '/partials/modeling-table.html'
+]
+
+
 # Displays the MR session visit dateline chart.
 directives.directive 'qiVisitDateline', ['VisitDateline', (VisitDateline) ->
   restrict: 'E'

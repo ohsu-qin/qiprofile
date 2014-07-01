@@ -1,7 +1,9 @@
 extends ../layout/partial
 
 block billboard
-  | {{ session.subject.collection | capitalize }} Patient {{ session.subject.number }} Session {{ session.number }}
+  | {{ session.subject.collection | capitalize }}
+  | Patient {{ session.subject.number }}
+  | Session {{ session.number }}
 
 
 block content
@@ -25,5 +27,5 @@ block content
 
 block help-text
   // The nested quote ensures evaluation to a string rather than
-  // a state variable.
+  // a scope variable.
   .qi-help-text(ng-include="'/partials/help/session-detail.html'")

@@ -359,6 +359,10 @@ svcs.factory 'Modeling', ['Chart', (Chart) ->
     ktransOpen: true
     veOpen: true
     tauiOpen: true
+    # The table widths.
+    ktransTableWidth: "full-width"
+    veTableWidth: "half-width"
+    tauiTableWidth: "half-width"
 ]
 
 

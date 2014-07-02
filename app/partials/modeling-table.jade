@@ -1,10 +1,7 @@
-// Accordion groups and headings.
 - groups = [ 'ktrans', 've', 'taui' ]
 - headings = { 'ktrans': 'Vascular Permeability Transfer Constant (K<sup>trans</sup>)', 've': 'Extravascular Extracellular Volume Fraction (v<sub>e</sub>)', 'taui': 'Intracellular H<sub>2</sub>O Mean Lifetime (&tau;<sub>i</sub>)' }
 
-// Table properties.
 - properties = { 'ktrans': ['delta_k_trans', 'fxl_k_trans', 'fxr_k_trans'], 've': ['v_e'], 'taui': ['tau_i'] }
-- width = { 'ktrans': 'qi-wide-table', 've': 'qi-narrow-table', 'taui': 'qi-narrow-table' }
 - columns = { 'delta_k_trans': '&Delta;K<sup>trans</sup>', 'fxl_k_trans': 'FXL K<sup>trans</sup>', 'fxr_k_trans': 'FXR K<sup>trans</sup>', 'v_e': 'V<sub>e</sub>', 'tau_i': 'T<sub>i</sub>'}
 
 // Mark up accordian header and table content for each group.
@@ -14,7 +11,7 @@ div.qi-modeling-table
       accordion-group(is-open="config.#{ group }Open")
         accordion-heading!= headings[group]
           i.pull-right.glyphicon(ng-class="{'glyphicon-chevron-down': config.#{ group }Open, 'glyphicon-chevron-right': !config.#{ group }Open}")
-        table(class="#{ width[group] }")
+        table(class="qi-{{ config.#{ group }TableWidth }}-table")
           colgroup
             col
           each prop in properties[group]

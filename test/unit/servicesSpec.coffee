@@ -108,3 +108,39 @@ describe 'Unit Testing Services', ->
 
       # Verify the x-axis values.
       expect(config.xValues).to.eql(expectedX)
+
+
+  describe 'Imaging Profile', ->
+    # The qiprofile Modeling factory.
+    Modeling = null
+
+    beforeEach ->
+      # Enable the test services.
+      inject ['Modeling', (_Modeling_) ->
+        Modeling = _Modeling_
+      ]
+
+    it 'should configure the imaging profile table', ->
+      # The mock input.
+      subject =
+        sessions:
+          [
+            {
+              acquisition_date: new Date
+              modeling: {
+                v_e: Math.random()
+                tau_i: Math.random()
+                fxl_k_trans: Math.random()
+                fxr_k_trans: Math.random()
+                delta_k_trans: Math.random()
+              }
+              number: 1
+            }
+          ]
+      # The expected result.
+      config = Modeling.configureTable(subject.sessions)
+      expect(config.data).to.exist
+      expect(config.data.length).to.equal(1)
+      expect(config.ktransOpen).to.equal(true)
+      expect(config.veOpen).to.equal(true)
+      expect(config.tauiOpen).to.equal(true)

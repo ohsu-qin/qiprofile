@@ -1,4 +1,24 @@
 h4.col-md-offset-1
   | Clinical Profile
 .qi-profile-panel(ng-controller='ClinicalProfileCtrl')
-  
+  accordion
+    accordion-group(is-open="true")
+      accordion-heading Demographics
+      div Age
+      div Race
+      div Ethnicity
+  accordion
+    accordion-group(is-open="true")
+      accordion-heading Biopsy
+      div Date
+      div Outcome
+  accordion
+    accordion-group(is-open="true")
+      accordion-heading Assessment
+      div Date
+      div Outcome
+  accordion
+    accordion-group(is-open="true")
+      accordion-heading Surgery
+      div Date
+      div Outcome

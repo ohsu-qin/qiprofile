@@ -326,6 +326,43 @@ svcs.factory 'Modeling', ['Chart', (Chart) ->
       xValues: (dataSpec.x.accessor(sess) for sess in sessions)
       xFormat: Chart.dateFormat
       tooltip: tooltip
+
+  # Configures the modeling tables.
+  configureTable: (sessions) ->
+    sessionsWithChangeProperties = (sessions) ->
+      addSessionChangeProperties = (current, previous) ->
+        extension = (current, previous) ->
+          percent_change = (current, previous) ->
+            (current - previous)/previous * 100
+          # Return an object with the change properties.
+          delta_k_trans_pct_change: percent_change(current.modeling.delta_k_trans, previous.modeling.delta_k_trans)
+          fxl_k_trans_pct_change: percent_change(current.modeling.fxl_k_trans, previous.modeling.fxl_k_trans)
+          fxr_k_trans_pct_change: percent_change(current.modeling.fxr_k_trans, previous.modeling.fxr_k_trans)
+          v_e_pct_change: percent_change(current.modeling.v_e, previous.modeling.v_e)
+          tau_i_pct_change: percent_change(current.modeling.tau_i, previous.modeling.tau_i)
+        if previous
+          _.extend current.modeling, extension(current, previous)
+        else
+          current
+
+      prev = null
+      result = []
+      for curr in sessions
+        result.push addSessionChangeProperties(curr, prev)
+        prev = curr
+      # Return the result
+      result
+
+    # Return the configuration object.
+    data: sessionsWithChangeProperties(sessions)
+    # The accordian controls.
+    ktransOpen: true
+    veOpen: true
+    tauiOpen: true
+    # The table size.
+    ktransTableSize: "qi-full-width-table"
+    veTableSize: "qi-half-width-table"
+    tauiTableSize: "qi-half-width-table"
 ]
 
 

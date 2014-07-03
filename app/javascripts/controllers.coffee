@@ -51,62 +51,19 @@ ctlrs.controller 'SubjectDetailCtrl', ['$rootScope', '$scope', 'subject',
     # The format button action.
     $scope.toggleModelingFormat = ->
       if $scope.modelingFormat == 'Chart'
-        $scope.modelingFormat = 'List'
-      else if $scope.modelingFormat == 'List'
+        $scope.modelingFormat = 'Table'
+      else if $scope.modelingFormat == 'Table'
         $scope.modelingFormat ='Chart'
       else
         throw "Modeling format is not recognized: " +
           $scope.modelingFormat
 
     # The modeling format is 'Chart' if the subject has
-    # more than one session, 'List' otherwise
+    # more than one session, 'Table' otherwise
     if subject.isMultiSession
       $scope.modelingFormat = 'Chart'
     else
-      $scope.modelingFormat = 'List'
-
-    # Prepares the headings and data for the modeling profile sheet.
-    # Number of decimal places displayed for values and percentages.
-    dpVal = 4
-    dpPct = 2
-    # Get the session data.
-    sessionCounter = []
-    sheetData = []
-    delta_k_trans = []
-    for sess, i in subject.sessions
-      sessionCounter.push i
-      # Calculate delta-Ktrans
-      delta_k_trans[i] = sess.modeling.fxr_k_trans - sess.modeling.fxl_k_trans
-      # Unless this is the first visit,
-      # calculate percent change in each property since previous visit.
-      unless i == 0
-        delta_k_trans_change = ((delta_k_trans[i] - sheetData[i-1].deltaKtrans)/sheetData[i-1].deltaKtrans * 100).toFixed(dpPct)
-        fxl_change = ((sess.modeling.fxl_k_trans - sheetData[i-1].fxl)/sheetData[i-1].fxl * 100).toFixed(dpPct)
-        fxr_change = ((sess.modeling.fxr_k_trans - sheetData[i-1].fxr)/sheetData[i-1].fxr * 100).toFixed(dpPct)
-        v_e_change = ((sess.modeling.v_e - sheetData[i-1].ve)/sheetData[i-1].ve * 100).toFixed(dpPct)
-        tau_i_change = ((sess.modeling.tau_i - sheetData[i-1].taui)/sheetData[i-1].taui * 100).toFixed(dpPct)
-      # Update the parameters for this session.
-      sheetData[i] =
-        visitDate: Chart.dateFormat(sess.acquisition_date)
-        deltaKtrans: delta_k_trans[i].toFixed(dpVal)
-        deltaKtransChange: delta_k_trans_change
-        fxl: sess.modeling.fxl_k_trans.toFixed(dpVal)
-        fxlChange: fxl_change
-        fxr: sess.modeling.fxr_k_trans.toFixed(dpVal)
-        fxrChange: fxr_change
-        ve: sess.modeling.v_e.toFixed(dpVal)
-        veChange: v_e_change
-        taui: sess.modeling.tau_i.toFixed(dpVal)
-        tauiChange: tau_i_change
-    # Place the sheet data in scope.
-    $scope.sessionCounter = sessionCounter
-    $scope.sheetData = sheetData
-
-    # Sets the modeling profile sheet accordion groups to open by default.
-    $scope.groupOpen =
-      kTrans: true
-      ve: true
-      taui: true
+      $scope.modelingFormat = 'Table'
 
     # Place the subject in the scope.
     $scope.subject = subject

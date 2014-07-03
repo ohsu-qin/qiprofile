@@ -20,6 +20,12 @@ a
   &:hover > text
     fill Chocolate
 
+// Overwrite the bootstrap accordian link style.
+.panel-heading a
+  color Peru
+  &:hover
+    color Chocolate
+
 svg
   a
     pointer-events all
@@ -149,7 +155,7 @@ ul.qi-clean-list
 .qi-modeling-profile
   padding 0 0.2em 0 0
 
-.qi-modeling-sheet
+.qi-modeling-table
   font-size smaller
   & table, th, td
     border 0.1em solid Bisque
@@ -162,12 +168,12 @@ ul.qi-clean-list
     padding-top 0.2em
     padding-bottom 0.2em
 
-.qi-wide-table
+.qi-full-width-table
   width 100%
   & .qi-prop-group
     width 13%
 
-.qi-narrow-table
+.qi-half-width-table
   width 50%
   & .qi-prop-group
     width 28%
@@ -176,11 +182,11 @@ ul.qi-clean-list
   border-left 0.2em solid Silver
 
 .qi-date, .qi-number
-    text-align center
+  text-align center
 
 .qi-pct
-    padding-right 1.5em
-    text-align right
+  padding-right 2em
+  text-align right
 
 .qi-clinical-profile
   padding 0 0 0 0.2em
@@ -192,7 +198,7 @@ ul.qi-clean-list
     // It is unknown why this necessary. 
     padding 0 0 0.1em 0
   
-.qi-profile-sheet
+.qi-profile-panel
   border 1px solid SlateGray
   border-radius: 0.4em 0.4em 0.4em 0.4em
   margin 0 0 0.2em 0

@@ -1,0 +1,31 @@
+- groups = [ 'ktrans', 've', 'taui' ]
+- headings = { 'ktrans': 'Vascular Permeability Transfer Constant (K<sup>trans</sup>)', 've': 'Extravascular Extracellular Volume Fraction (v<sub>e</sub>)', 'taui': 'Intracellular H<sub>2</sub>O Mean Lifetime (&tau;<sub>i</sub>)' }
+
+- properties = { 'ktrans': ['delta_k_trans', 'fxl_k_trans', 'fxr_k_trans'], 've': ['v_e'], 'taui': ['tau_i'] }
+- columns = { 'delta_k_trans': '&Delta;K<sup>trans</sup>', 'fxl_k_trans': 'FXL K<sup>trans</sup>', 'fxr_k_trans': 'FXR K<sup>trans</sup>', 'v_e': 'V<sub>e</sub>', 'tau_i': 'T<sub>i</sub>'}
+
+// Mark up accordian header and table content for each group.
+div.qi-modeling-table
+  each group in groups
+    accordion
+      accordion-group(is-open="config.#{ group }Open")
+        accordion-heading!= headings[group]
+          i.pull-right.glyphicon(ng-class="{'glyphicon-chevron-down': config.#{ group }Open, 'glyphicon-chevron-right': !config.#{ group }Open}")
+        table(class="{{ config.#{ group }TableSize }}")
+          colgroup
+            col
+          each prop in properties[group]
+            colgroup.qi-prop-group
+              col
+              col
+          thead
+            th Visit Date
+            each prop in properties[group]
+              th!= columns[prop]
+              th= '% Change'
+          tbody
+            tr(ng-repeat="sess in data")
+              td.qi-date= '{{ sess.acquisition_date | moment }}'
+              each prop in properties[group]
+                td.qi-number= '{{ sess.modeling.' + prop + ' | number:4 }}'
+                td.qi-pct= '{{ sess.modeling.' + prop + '_pct_change | number:0 }}'

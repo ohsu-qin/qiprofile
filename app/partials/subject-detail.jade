@@ -12,12 +12,16 @@ block content
         ng-click='toggleModelingFormat()'
       )
         .glyphicon.glyphicon-list(ng-show="modelingFormat == 'Chart'")
-        .glyphicon.glyphicon-picture(ng-show="modelingFormat == 'List'")
-    .qi-profile-sheet
+        .glyphicon.glyphicon-picture(ng-show="modelingFormat == 'Table'")
+    .qi-profile-panel
+      // The session list formatted as a dateline.
+      h5.col-md-offset-5 MR Visits
+      qi-visit-dateline(data='subject.sessions')
+      // The modeling chart or tables.
       #qi-modeling-chart(ng-show="modelingFormat == 'Chart'")
         include include/modeling-charts
-      #qi-modeling-chart(ng-show="modelingFormat == 'List'")
-        include include/modeling-sheet
+      #qi-modeling-chart(ng-show="modelingFormat == 'Table'")
+        qi-modeling-table(data='subject.sessions')
 
   .col-md-6.qi-clinical-profile
     include include/clinical_profile

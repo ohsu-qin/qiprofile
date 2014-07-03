@@ -11,7 +11,7 @@ div.qi-modeling-table
       accordion-group(is-open="config.#{ group }Open")
         accordion-heading!= headings[group]
           i.pull-right.glyphicon(ng-class="{'glyphicon-chevron-down': config.#{ group }Open, 'glyphicon-chevron-right': !config.#{ group }Open}")
-        table(class="qi-{{ config.#{ group }TableWidth }}-table")
+        table(class="{{ config.#{ group }TableSize }}")
           colgroup
             col
           each prop in properties[group]

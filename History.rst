@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 (http://quip1:6060/qiprofile) for change details.
 
+0.5.1 / 2014-07-03
+------------------
+* Added modeling table.
+
 0.4.2 / 2014-06-24
 ------------------
 * Refactor module responsibility.

@@ -5,6 +5,8 @@ expect = require('./helpers/expect')()
 Page = require('./helpers/page')()
 
 class ImageDetailPage extends Page
+  displayPanel: ->
+    this.select('qi-series-image')
 
 describe 'E2E Testing Image Detail', ->
   page = null
@@ -13,7 +15,7 @@ describe 'E2E Testing Image Detail', ->
     page = new ImageDetailPage '/quip/breast/subject/1/session/1/scan/1?project=QIN_Test'
   
   it 'should display the billboard', ->
-    expect(page.billboard).to.eventually.equal('Breast Patient 1 Session 1 Scan 1')
+    expect(page.billboard).to.eventually.equal('Breast Patient 1 Session 1 Scan Time Point 1')
   
   it 'should have a home button', ->
     pat = /.*\/quip\?project=QIN_Test$/
@@ -24,4 +26,4 @@ describe 'E2E Testing Image Detail', ->
   
   describe 'Image Display', ->
     it 'should display the image', ->
-      expect(true).to.be.false
+      expect(page.displayPanel()).to.eventually.exist

@@ -469,23 +469,46 @@ svcs.factory 'Intensity', ['Chart', (Chart) ->
     coordinates = (intensities) ->
       [i + 1, intensities[i]] for i in [0...intensities.length]
 
-    # The chart data configuration.
-    data = [
-      {
-        key: 'Scan'
-        values: coordinates(session.scan.intensity.intensities)
-        color: 'Indigo'
-      }
-      {
-        key: 'Realigned'
-        values: coordinates(session.registration.intensity.intensities)
-        color: 'LightGreen'
-      }
-    ]
+    # Makes the data series {key, color} format object for the
+    # given registration.
+    #
+    # The key is 'Realigned' if there is exactly one registration,
+    # otherwise the registration name
+    #
+    # @param registration the registration object
+    # @param index the index of the registration in the registrations array
+    # @returns the data series {key, color, values} format object
+    registration_data_series = (registration, index) ->
+      # The registration image select button colors.
+      COLORS = ['LightGreen', 'LightYellow', 'LightCyan', 'LemonChiffon']
+      
+      if session.registrations.length == 1
+        key = 'Realigned'
+      else
+        key = registration.name
+      
+      # TODO - Wrap the key in a registration parameters pop-up hyperlink.
+      # Return the data series format object.
+      key: key
+      color: COLORS[index % COLORS.length]
+      values: coordinates(registration.intensity.intensities)
+
+    # The scan data series configuration.
+    scan_data =
+      key: 'Scan'
+      values: coordinates(session.scan.intensity.intensities)
+      color: 'Indigo'
+
+    # The registration data series configuration.
+    for reg, i in session.registrations
+      # Set the data series property so the partial can use the data
+      # series key.
+      reg.data_series = registration_data_series(reg, i)
+    reg_data = ((reg.data_series for reg in session.registrations))
     
     # Return the chart configuration.
-    data: data
-    xValues: (coord[0] for coord in data[0].values)
+    data: [scan_data].concat(reg_data)
+    xValues: (coord[0] for coord in scan_data.values)
     yFormat: yFormat
     highlightBolusArrival: (chart) ->
       highlightBolusArrival(session, chart)
@@ -495,15 +518,14 @@ svcs.factory 'Intensity', ['Chart', (Chart) ->
 svcs.factory 'File', ['$http', ($http) ->
   # Helper function to read the given server file.
   # @param path the file path relative to the web app root
-  # @returns the Angular $http request
+  # @returns a promise which resolves to the file content
   read: (path) ->
     # Remove the leading slash, if necessary.
     if path[0] == '/'
       path = path[1..]
-    # Read the file.
-    $http
-      method: 'GET'
-      url: '/static/' + path
+    # Read the file and resolve to the content.
+    $http(method: 'GET', url: '/static/' + path).then (response) ->
+      response.data
 ]
 
 
@@ -512,15 +534,15 @@ svcs.factory 'Image', ['$rootScope', 'File', ($rootScope, File) ->
   $rootScope.images = {}
   
   # If there are file arguments, then this function
-  # caches the images for the given id.
+  # caches the images for the given parent object.
   # Otherwise, this function returns the cached images,
-  # or undefined if there is no cache entry for the id.
-  cache = (id, files...) ->
+  # or undefined if there is no cache entry for the object.
+  cache = (parent, files...) ->
     if files.length
-      $rootScope.images[id] =
-        create(filename) for filename in files
+      $rootScope.images[parent.id] =
+        create(parent, filename, i+1) for filename, i in files
     else
-      $rootScope.images[id]
+      $rootScope.images[parent.id]
 
   # Creates an object which encapsulates an image. The object has
   # the following properties:
@@ -529,11 +551,14 @@ svcs.factory 'Image', ['$rootScope', 'File', ($rootScope, File) ->
   # * data - the binary image content
   # * load() - the function to read the image file
   #
-  # @param filename the image file path
+  # @param parent the image parent container
+  # @param filename the image file path, relative to the web app root
+  # @param time_point the series time point
   # @returns a new image object
-  create = (filename) ->
-    # The image file path, relative to the web app root.
+  create = (parent, filename, time_point) ->
+    parent: parent
     filename: filename
+    time_point: time_point
     
     # The image state loading flag is true if the file is being
     # loaded, false otherwise.
@@ -548,14 +573,15 @@ svcs.factory 'Image', ['$rootScope', 'File', ($rootScope, File) ->
     # file is read.
     #
     # @returns a promise which resolves to this image when
-    #   file content is loaded into the data property
+    #   the image file file content is loaded into the data
+    #   property
     load: () ->
       # Set the loading flag.
       @state.loading = true
       # Read the file. The Coffeescript fat arrow (=>) binds the
       # this variable to the image object rather than the $http
       # request.
-      File.read(filename).success (data, args...) =>
+      File.read(filename).then (data) =>
         # Unset the loading flag.
         @state.loading = false
         # Set the data property to the file content.
@@ -563,15 +589,16 @@ svcs.factory 'Image', ['$rootScope', 'File', ($rootScope, File) ->
         # Return the image.
         this
     
-    # Builds an XTK renderer for the given Image.
-    createRenderer: (image) ->
+    # Builds an XTK renderer for this image.
+    createRenderer: =>
       # The XTK renderer.
       renderer = new X.renderer3D()
+      renderer.init()
       
       # The volume to render.
       volume = new X.volume()
-      volume.file = image.filename
-      volume.filedata = image.data
+      volume.file = @filename
+      volume.filedata = @data
       renderer.add volume
       
       # The rendering callback. This function is called after the
@@ -611,8 +638,8 @@ svcs.factory 'Image', ['$rootScope', 'File', ($rootScope, File) ->
   # cached object image content data is not loaded until the image
   # object load() function is called.
   #
-  # @param obj the ImageContainer scan or registration object
+  # @param parent the ImageContainer scan or registration object
   # @returns the image objects
-  imagesFor: (obj) ->
-    cache(obj.id) or cache(obj.id, obj.files...)
+  imagesFor: (parent) ->
+    cache(parent) or cache(parent, parent.files...)
 ]

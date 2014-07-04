@@ -1,4 +1,4 @@
-routes = angular.module 'qiprofile.routes', ['qiprofile.services']
+routes = angular.module 'qiprofile.routes', ['ui.router', 'qiprofile.services']
 
 routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
   ($stateProvider, $urlRouterProvider, $locationProvider) ->
@@ -7,10 +7,10 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
     # Subject resource.
     #
     # @param project the project
-    # @param params the URL parameters 
-    # @param resource the Subject resource
+    # @param params the URL parameters
+    # @param Subject the Subject resource
     # @returns the subject
-    getSubject = (project, params, resource) ->
+    getSubject = (project, params, Subject) ->
       sbj =
         project: project
         collection: _.str.capitalize(params.collection)
@@ -18,15 +18,16 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
       if params.detail
         sbj
       else
-        resource.get(sbj).$promise
-    
+        Subject.get(sbj).$promise
+
     # Fetches the subject detail and fixes it up as follows:
     # * converts the session and encounter dates into moments
-    # * copies the detail properties into the subject 
+    # * copies the detail properties into the subject
     # * sets the subject isMultiSession flag
     #
     # @param subject the parent object
     # @param Subject the Subject resource
+    # @param Helpers the Helpers service
     # @returns a promise which resolves to the detail object
     getSubjectDetail = (subject, Subject, Helpers) ->
       if subject.detail
@@ -52,22 +53,42 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
             throw "Subject does not have detail: #{ subject.number }"
           # Recurse.
           getSubjectDetail(fetched, Subject, Helpers)
-    
+
     # @param session the parent object
+    # @param params the URL parameters
     # @param Session the Session resource
+    # @param Subject the Subject resource
+    # @param Image the Image service
+    # @param Helpers the Helpers service
     # @returns the detail object
-    getSessionDetail = (session, Session, Subject, Image, Helpers) ->
+    getSessionDetail = (session, params, Session, Subject, Image, Helpers) ->
+      # Adds the session, container type and images properties to
+      # the given parent image container.
+      #
+      # @param parent the image container
+      # @param session the session holding the image container
+      addImageContainerContent = (parent, session, container_type) ->
+        # Set the container session property.
+        parent.session = session
+        # Set the container type property.
+        parent.container_type = container_type
+        # Encapsulate the image files.
+        parent.images = Image.imagesFor(parent)
+      
       if session.detail
         Session.detail(id: session.detail).$promise.then (detail) ->
           # Copy the fetched detail into the session.
           Helpers.copyContent(detail, session)
-          for ctr in [session.scan].concat(session.registrations)
-            # Set the container session property.
-            ctr.session = session
-            # Encapsulate the image files.
-            ctr.images = Image.imagesFor(ctr)
-        # Resolve to the detail object.
-        session.detail
+          addImageContainerContent(session.scan, session, 'scan')
+          for reg in session.registrations
+            addImageContainerContent(reg, session, 'registration')
+          # Resolve to the detail object.
+          detail
+      else if params.detail
+        # Set the session detail property from the URL detail parameter.
+        session.detail = params.detail
+        # Recurse.
+        getSessionDetail(session, params, Session, Subject, Image, Helpers)
       else
         getSubjectDetail(session.subject, Subject, Helpers).then (detail) ->
           # Find the session in the session list.
@@ -78,21 +99,59 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
             throw "Subject #{ subject.number } does not have a session #{ session.number }"
           # Recurse.
           session.detail = sbj_session.detail_id
-          getSessionDetail(session, Session, Subject, Image, Helpers)
+          getSessionDetail(session, params, Session, Subject, Image, Helpers)
+
+    # @param session the session to search
+    # @param name the container name
+    # @param Session the Session resource
+    # @param Subject the Subject resource
+    # @param Image the Image service
+    # @param Helpers the Helpers service
+    # @return the container object with the given name, if it exists,
+    #   otherwise undefined
+    getImageContainer = (session, params, Session, Subject, Image, Helpers) ->
+      if session.scan
+        # The container name.
+        name = params.container
+        # Look for the scan or registration container.
+        if name == 'scan'
+          ctr = session.scan
+        else
+          ctr = _.find session.registrations, (reg) -> reg.name == name
+        # If no such container, then complain.
+        if not ctr
+          throw " #{ session.subject.collection }" +
+                " Subject #{ session.subject.number }" +
+                " Session #{ session.number }" +
+                " does not have a #{ params.container } image."
+        # Resolve to the container.
+        ctr
+      else
+        # Load the session detail and recurse.
+        getSessionDetail(session, params, Session, Subject, Image, Helpers).then (detail) ->
+          if not detail.scan and not detail.registrations.length
+            throw " #{ session.subject.collection } Subject #{ session.subject.number }" +
+                  " Session #{ session.number } does not have any image containers."
+          getImageContainer(session, params, Session, Subject, Image, Helpers)
     
-    # @param image the image object
+    # @param parent the image parent container object
+    # @param time_point the one-based series time point
     # @returns the image, if the image data is already loaded,
     #   otherwise a promise which resolves to the image object
     #   when the image content is loaded into the data property
-    getImageDetail = (image, time_point) ->
-      parent = session[container]
-      if not parent
-        throw "Subject #{ subject.number } Session #{ session.number } does not have a #{ container.toLowerCase() }"
-      if time_point >= session.
+    getImageDetail = (parent, time_point) ->
+      image = parent.images[time_point - 1]
+      if not image
+        throw "Subject #{ subject.number } session #{ session.number } does not" +
+              " have an image at #{ parent.container_type } #{ parent.name }" +
+              " time point #{ time_point }"
+      if image.data
         image
       else
         image.load()
-    
+
+    ## The state definition. ##
+
     $stateProvider
       # The top-level state. This abstract state is the ancestor
       # of all other states. It holds the url prefix. There are
@@ -112,10 +171,14 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
             $stateParams.project or 'QIN'
         views:
           # The home button.
-          goHome:
-            templateUrl: '/partials/go-home.html'
-            controller: 'GoHomeCtrl'
-      
+          home:
+            templateUrl: '/partials/home.html'
+            controller: 'HomeCtrl'
+          # The help button.
+          help:
+            templateUrl: '/partials/help.html'
+            controller: 'HelpCtrl'
+
       # The home landing page.
       .state 'quip.home',
         url: ''
@@ -132,7 +195,7 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
           'main@':
             templateUrl: '/partials/subject-list.html'
             controller:  'SubjectListCtrl'
-      
+
       # The subject state.
       .state 'quip.subject',
         abstract: true
@@ -140,7 +203,7 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
         resolve:
           subject: (project, $stateParams, Subject) ->
             getSubject(project, $stateParams, Subject)
-      
+
       # The subject detail page.
       .state 'quip.subject.detail',
         url: '?detail'
@@ -152,7 +215,7 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
             templateUrl: '/partials/subject-detail.html'
             controller:  'SubjectDetailCtrl'
         reloadOnSearch: false
-      
+
       # The session state.
       .state 'quip.subject.session',
         abstract: true
@@ -161,46 +224,47 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
           session: (subject, $stateParams) ->
             subject: subject
             number: parseInt($stateParams.session)
-      
+
       # The session detail page.
       .state 'quip.subject.session.detail',
         url: '?detail'
         resolve:
           Session: 'Session'
           Image: 'Image'
-          detail: (session, Session, Subject, Image, Helpers) ->
-            getSessionDetail(session, Session, Subject, Image, Helpers)
+          detail: (session, $stateParams, Session, Subject, Image, Helpers) ->
+            getSessionDetail(session, $stateParams, Session, Subject, Image, Helpers)
         views:
           'main@':
             templateUrl: '/partials/session-detail.html'
             controller:  'SessionDetailCtrl'
         reloadOnSearch: false
-     
+
       # The image parent container state.
       .state 'quip.subject.session.container',
         abstract: true
-        url: '/:type'
+        url: '/:container'
         resolve:
-          container: (session, $stateParams) ->
-            container: session[$stateParams]
-     
+          container: (session, $stateParams, Session, Subject, Image, Helpers) ->
+            getImageContainer(session, $stateParams, Session, Subject, Image, Helpers)
+
       # The image detail page.
       .state 'quip.subject.session.container.image',
-        url: '/{time_point:[0-9]+}/'
+        url: '/{time_point:[1-9][0-9]*}'
         resolve:
-          image: ($stateParams) ->
-            getImageDetail(container, $stateParams.time_point)
+          image: (container, $stateParams) ->
+            time_point = parseInt($stateParams.time_point)
+            getImageDetail(container, time_point)
         views:
           'main@':
             templateUrl: '/partials/image-detail.html'
             controller:  'ImageDetailCtrl'
         reloadOnSearch: false
-    
-    # Redirect url with trailing slash to an url without it.
+
+    # Redirect an URL with trailing slash to an URL without it.
     $urlRouterProvider.rule ($injector, $location) ->
       # # Enable lodash.
       # _ = window._
-      # 
+      #
       path = $location.path()
       search = $location.search()
       if _.str.endsWith(path, '/')

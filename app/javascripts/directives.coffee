@@ -72,22 +72,23 @@ directives.directive 'qiVisitDateline', ['VisitDateline', (VisitDateline) ->
 directives.directive 'qiIntensityChart', ['Intensity', (Intensity) ->
   restrict: 'E'
   scope:
-    data: '='   # the subject sessions
+    session: '=' 
   link: (scope, element, attrs) ->
-    scope.$watch 'data', (data) ->
-      if data
-        scope.config = Intensity.configureChart(data)
+    # Wait for a session extended with detail, including the scan.
+    scope.$watch 'session.scan', (scan) ->
+      if scan
+        scope.config = Intensity.configureChart(scope.session)
   templateUrl: '/partials/intensity-chart.html'
 ]
 
 
-# Displays a series image.
+# Displays a scan or registration series 3D image.
 directives.directive 'qiSeriesImage', ->
   restrict: 'E'
   scope:
-    image: '='  # the image object
+    image: '='
   link: (scope, element, attrs) ->
     scope.$watch 'image.data', (data) ->
       if data
-        scope.image.configureRenderer()
-  templateUrl: '/partials/series-image-xtk.html'
+        scope.renderer = scope.image.createRenderer()
+  templateUrl: '/partials/series-image.html'

@@ -6,7 +6,7 @@
 .row.qi-main
   .qi-content
       block content
-  alert.qi-help(type='info' ng-show='$parent.showHelp'
-      close='$parent.showHelp = false' collapse='!$parent.showHelp'
-    )
+  alert.qi-help(type='info' ng-show='showHelp' close='toggleHelp()'
+    collapse='!showHelp'
+  )
     block help-text

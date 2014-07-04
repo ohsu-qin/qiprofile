@@ -12,9 +12,8 @@ describe 'Unit Testing Services', ->
     
     beforeEach ->
       # Enable the test services.
-      inject ['Image', '$timeout', '$httpBackend', (_Image_, _$timeout_, _$httpBackend_) ->
+      inject ['Image', '$httpBackend', (_Image_, _$httpBackend_) ->
         Image = _Image_
-        $timeout = _$timeout_
         $httpBackend = _$httpBackend_
       ]
     
@@ -77,11 +76,12 @@ describe 'Unit Testing Services', ->
           intensity:
             # Max intensity is at session 10.
             intensities: (30 - Math.abs(10 - i) for i in [1..32])
-         registration:
+        registrations: [
+          name: 'reg_01'
           intensity:
             # Dampen the registration intensity a bit.
             intensities: (30 - (Math.abs(10 - i) * 1.2) for i in [1..32])
-      
+        ]
       # Configure the chart.
       config = Intensity.configureChart(session)
       expect(config.data).to.exist
@@ -104,7 +104,7 @@ describe 'Unit Testing Services', ->
       regX = (coord[0] for coord in reg.values)
       expect(regX).to.eql(expectedX)
       regY = (coord[1] for coord in reg.values)
-      expect(regY).to.eql(session.registration.intensity.intensities)
+      expect(regY).to.eql(session.registrations[0].intensity.intensities)
 
       # Verify the x-axis values.
       expect(config.xValues).to.eql(expectedX)

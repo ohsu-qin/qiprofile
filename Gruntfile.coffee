@@ -47,11 +47,13 @@ module.exports = (grunt) ->
           'bower_components/angular-bootstrap/*-tpls.js'
           'bower_components/angular-resource/*.js'
           'bower_components/angular-ui-router/release/*.js'
+          'bower_components/dat.gui/dat.gui.js'
           'bower_components/moment/*.js'
           'bower_components/spin.js/spin.js'
           'bower_components/d3/*.js'
           'bower_components/nvd3/nv.d3.js'
           'bower_components/angularjs-nvd3-directives/dist/*.js'
+          'bower_components/xtk/xtk_edge.js'
           '!bower_components/**/*.min.js'
         ]
         dest: '_public/javascripts/vendor.js'

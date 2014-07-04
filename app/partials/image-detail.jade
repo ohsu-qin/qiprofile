@@ -1,0 +1,18 @@
+
+extends ../layout/partial
+
+block billboard
+  | {{ image.parent.session.subject.collection | capitalize }}
+  | Patient {{ image.parent.session.subject.number }}
+  | Session {{ image.parent.session.number }}
+  | {{ image.parent.container_type | capitalize }}
+  | {{ image.parent.name }}
+  | Time Point {{ image.time_point }}
+
+block content
+  qi-series-image(image='image')
+
+block help-text
+  // The nested quote ensures evaluation to a string rather than
+  // a scope variable.
+  .qi-help-text(ng-include="'/partials/help/image-detail.html'")

@@ -9,16 +9,6 @@
   .collapse.navbar-collapse
     ul.nav.navbar-nav.qi-navbar-right.navbar-right
       li
-        div(ui-view='goHome')
+        div(ui-view='home')
       li
-        // The Help control.
-        //- The HelpCtrl controller resets the showHelp flag when the
-        //- location changes. Defining the controller creates a new
-        //- Angular scope. Therefore, the showHelp flag is defined
-        //- in the parent scope in order to share it with the sibling
-        //- view scopes.
-        button.btn.btn-default.btn-med.qi-navbar-choice(
-          type='button', ng-controller='HelpCtrl',
-          ng-click="$parent.showHelp = !$parent.showHelp"
-        )
-          .glyphicon.glyphicon-question-sign
+        div(ui-view='help')

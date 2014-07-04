@@ -1,13 +1,15 @@
 extends ../layout/partial
 
 block billboard
-  | {{ session.subject.collection | capitalize }} Patient {{ session.subject.number }} Session {{ session.number }}
+  | {{ session.subject.collection | capitalize }}
+  | Patient {{ session.subject.number }}
+  | Session {{ session.number }}
 
 
 block content
   .row
     h4.col-md-offset-1.col-md-3.qi-chart-title Average Signal Intensity
-  qi-intensity-chart(data="session")
+  qi-intensity-chart(session="session")
   
   .qi-image-selection
     // The scan image selection buttons.
@@ -17,13 +19,14 @@ block content
         include include/image-select
         
     // The realigned image selection buttons.
-    .row
-      .col-md-1.qi-image-selection-key Realigned
-      .btn-group.qi-reg-image-btn-group(ng-repeat="image in session.registration.images")
-        include include/image-select
+    div(ng-repeat="reg in session.registrations")
+      .row
+        .col-md-1.qi-image-selection-key {{ reg.data_series.key }}
+        .btn-group.qi-reg-image-btn-group(ng-repeat="image in reg.images")
+          include include/image-select
 
 
 block help-text
   // The nested quote ensures evaluation to a string rather than
-  // a state variable.
+  // a scope variable.
   .qi-help-text(ng-include="'/partials/help/session-detail.html'")

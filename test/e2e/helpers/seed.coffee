@@ -11,12 +11,19 @@ exec cmd, (error) ->
   if error
     throw "Test preparation seed script unsuccessful: #{ error }"
 
-# Link test data to _public/data.
-src = process.env.QIPROFILE_DATA
-if src
-  # The web app root.
-  root = "#{ __dirname }/../../../_public"
-  if not fs.exists(root)
-    fs.mkdir(root)
-  dest = "#{ root }/data"
-  fs.symlink(src, dest)
+# The web app root.
+root = "#{ __dirname }/../../../_public"
+
+# The relative link source test images.
+src = '../test/fixtures/data'
+
+# The link destination.
+dest = "#{ root }/data"
+
+# Link the source images.
+# Note: contrary to the Node.js API (http://nodejs.org/api/fs.html#fs_class_fs_stats),
+# this is a proper use case for the exists method. 
+unless fs.existsSync(dest)
+  if not fs.existsSync(root)
+    throw "Web app root not found: #{ root }"
+  fs.symlinkSync(src, dest)

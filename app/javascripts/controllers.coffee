@@ -14,7 +14,7 @@ ctlrs.factory 'ControllerHelper', ['$location', ($location) ->
 ]
 
 
-ctlrs.controller 'GoHomeCtrl', ['$rootScope', '$scope', '$state',
+ctlrs.controller 'HomeCtrl', ['$rootScope', '$scope', '$state',
   ($rootScope, $scope, $state) ->
     $scope.goHome = () ->
       project = $rootScope.project or 'QIN'
@@ -22,12 +22,20 @@ ctlrs.controller 'GoHomeCtrl', ['$rootScope', '$scope', '$state',
 ]
 
 
-ctlrs.controller 'HelpCtrl', ['$scope',
-  ($scope) ->
+ctlrs.controller 'HelpCtrl', ['$rootScope', '$scope',
+  ($rootScope, $scope) ->
+    # Toggles the root scope showHelp flag.
+    # This method and the showHelp flag are defined in the root
+    # scope in order to share them with the partial template
+    # home alert attribute directives.
+    $rootScope.toggleHelp = () ->
+      $rootScope.showHelp = !$rootScope.showHelp
+    
+    # Unconditionally hide help when the location changes.
     $scope.$on '$locationChangeStart', (event, next, current) ->
       # Set the showHelp flag on the parent scope, since the
       # flag is shared with the sibling view scope.
-      $scope.$parent.showHelp = false
+      $rootScope.showHelp = false
 ]
 
 
@@ -45,9 +53,6 @@ ctlrs.controller 'SubjectListCtrl', ['$rootScope', '$scope', 'project',
 ctlrs.controller 'SubjectDetailCtrl', ['$rootScope', '$scope', 'subject',
   'detail', 'ControllerHelper', 'Chart',
   ($rootScope, $scope, subject, detail, ControllerHelper, Chart) ->
-    # Capture the current project.
-    $rootScope.project = subject.project
-
     # The format button action.
     $scope.toggleModelingFormat = ->
       if $scope.modelingFormat == 'Chart'
@@ -65,10 +70,10 @@ ctlrs.controller 'SubjectDetailCtrl', ['$rootScope', '$scope', 'subject',
     else
       $scope.modelingFormat = 'Table'
 
-    # Place the subject in the scope.
+    # Place the subject in scope.
     $scope.subject = subject
-
-    ControllerHelper.cleanBrowserUrl(subject.project)
+    # If the project is the default, then remove it from the URL.
+    ControllerHelper.cleanBrowserUrl($rootScope.project)
 ]
 
 
@@ -77,33 +82,36 @@ ctlrs.controller 'ClinicalProfileCtrl', ['$scope', '$stateParams',
 ]
 
 
-ctlrs.controller 'SessionDetailCtrl', ['$rootScope', '$scope',
-  'session', 'detail', 'Image', 'ControllerHelper', 'Helpers',
-  ($rootScope, $scope, session, detail, Image, ControllerHelper, Helpers) ->
-    # Capture the current project.
-    $rootScope.project = session.subject.project
-    
+ctlrs.controller 'SessionDetailCtrl', ['$rootScope', '$scope', '$state',
+  'session', 'ControllerHelper',
+  ($rootScope, $scope, $state, session, ControllerHelper) ->
     # Opens the series image display page.
     #
     # @param image the Image object
     $scope.openImage = (image) ->
-      # TODO - Route to the image open page.
-      window.alert("Image open is not yet supported.")
+      # Route to the image detail page.
+      params =
+        project: image.parent.session.subject.project
+        container: image.parent.container_type
+        time_point: image.time_point
+      $state.go('quip.subject.session.container.image', params)
 
+    # Capture the current project.
+    $rootScope.project = session.subject.project
     # Place the session in the scope.
     $scope.session = session
-
-    ControllerHelper.cleanBrowserUrl(session.subject.project)
+    # If the project is the default, then remove it from the URL.
+    ControllerHelper.cleanBrowserUrl($rootScope.project)
 ]
 
 
-ctlrs.controller 'SeriesDetailCtrl', ['$rootScope', '$scope', 'series',
-  ($rootScope, $scope, series) ->
+ctlrs.controller 'ImageDetailCtrl', ['$rootScope', '$scope', 'image',
+  'ControllerHelper',
+  ($rootScope, $scope, image, ControllerHelper) ->
     # Capture the current project.
-    $rootScope.project = series.session.subject.project
-
-    # Place the series in the scope.
-    $scope.series = series
-
-    ControllerHelper.cleanBrowserUrl(series.session.subject.project)
+    $rootScope.project = image.parent.session.subject.project
+    # Place the image in the scope.
+    $scope.image = image
+    # If the project is the default, then remove it from the URL.
+    ControllerHelper.cleanBrowserUrl($rootScope.project)
 ]

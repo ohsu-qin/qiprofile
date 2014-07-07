@@ -436,6 +436,12 @@ svcs.factory 'ClinicalProfile', ->
     race: subject.races.join(', ')
     ethnicity: subject.ethnicity
 
+    # The accordian controls.
+    demogrOpen: true
+    biopsyOpen: true
+    AssessOpen: true
+    SurgeryOpen: true
+
 
 svcs.factory 'Intensity', ['Chart', (Chart) ->
   # Highlights the bolus arrival tick mark.

@@ -1,9 +1,10 @@
 h4.col-md-offset-1
   | Clinical Profile
-.qi-profile-panel(ng-controller='ClinicalProfileCtrl')
+.qi-profile-panel(ng-controller="ClinicalProfileCtrl")
   accordion
-    accordion-group(is-open="true")
+    accordion-group(is-open="config.demogrOpen")
       accordion-heading Demographics
+        i.pull-right.glyphicon(ng-class="{'glyphicon-chevron-down': config.demogrOpen, 'glyphicon-chevron-right': !config.demogrOpen}")
       .row
         .col-md-2
           div.qi-clinical-prop Age
@@ -20,8 +21,9 @@ h4.col-md-offset-1
         .col-md-4
           div {{ config.ethnicity }}
   accordion
-    accordion-group(is-open="true")
+    accordion-group(is-open="config.biopsyOpen")
       accordion-heading Biopsy
+        i.pull-right.glyphicon(ng-class="{'glyphicon-chevron-down': config.biopsyOpen, 'glyphicon-chevron-right': !config.biopsyOpen}")
       .row
         .col-md-2
           div.qi-clinical-prop Date
@@ -29,8 +31,9 @@ h4.col-md-offset-1
         .col-md-2
           div.qi-clinical-prop Outcome
   accordion
-    accordion-group(is-open="true")
+    accordion-group(is-open="config.AssessOpen")
       accordion-heading Assessment
+        i.pull-right.glyphicon(ng-class="{'glyphicon-chevron-down': config.AssessOpen, 'glyphicon-chevron-right': !config.AssessOpen}")
       .row
         .col-md-2
           div.qi-clinical-prop Date
@@ -38,8 +41,9 @@ h4.col-md-offset-1
         .col-md-2
           div.qi-clinical-prop Outcome
   accordion
-    accordion-group(is-open="true")
+    accordion-group(is-open="config.SurgeryOpen")
       accordion-heading Surgery
+        i.pull-right.glyphicon(ng-class="{'glyphicon-chevron-down': config.SurgeryOpen, 'glyphicon-chevron-right': !config.SurgeryOpen}")
       .row
         .col-md-2
           div.qi-clinical-prop Date

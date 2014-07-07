@@ -424,6 +424,19 @@ svcs.factory 'VisitDateline', ['Chart', (Chart) ->
 ]
 
 
+svcs.factory 'ClinicalProfile', ->
+  configureProfile: (subject) ->
+    calculateAge = (birth_date) ->
+      d1 = new Date(birth_date)
+      d2 = new Date()
+      result = d2.getFullYear() - d1.getFullYear()
+      result
+
+    age: calculateAge(subject.birth_date)
+    race: subject.races.join(', ')
+    ethnicity: subject.ethnicity
+
+
 svcs.factory 'Intensity', ['Chart', (Chart) ->
   # Highlights the bolus arrival tick mark.
   #

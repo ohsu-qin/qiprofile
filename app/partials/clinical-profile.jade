@@ -4,21 +4,45 @@ h4.col-md-offset-1
   accordion
     accordion-group(is-open="true")
       accordion-heading Demographics
-      div Age
-      div Race
-      div Ethnicity
+      .row
+        .col-md-2
+          div.qi-clinical-prop Age
+        .col-md-4
+          div {{ config.age }}
+      .row
+        .col-md-2
+          div.qi-clinical-prop Race
+        .col-md-4
+          div {{ config.race }}
+      .row
+        .col-md-2
+          div.qi-clinical-prop Ethnicity
+        .col-md-4
+          div {{ config.ethnicity }}
   accordion
     accordion-group(is-open="true")
       accordion-heading Biopsy
-      div Date
-      div Outcome
+      .row
+        .col-md-2
+          div.qi-clinical-prop Date
+      .row
+        .col-md-2
+          div.qi-clinical-prop Outcome
   accordion
     accordion-group(is-open="true")
       accordion-heading Assessment
-      div Date
-      div Outcome
+      .row
+        .col-md-2
+          div.qi-clinical-prop Date
+      .row
+        .col-md-2
+          div.qi-clinical-prop Outcome
   accordion
     accordion-group(is-open="true")
       accordion-heading Surgery
-      div Date
-      div Outcome
+      .row
+        .col-md-2
+          div.qi-clinical-prop Date
+      .row
+        .col-md-2
+          div.qi-clinical-prop Outcome

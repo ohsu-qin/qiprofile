@@ -68,6 +68,19 @@ directives.directive 'qiModelingTable', ['Modeling', (Modeling) ->
 ]
 
 
+# Displays the clinical profile.
+directives.directive 'qiClinicalProfile', ['ClinicalProfile', (ClinicalProfile) ->
+  restrict: 'E'
+  scope:
+    data: '='   # the subject sessions
+  link: (scope, element, attrs) ->
+    scope.$watch 'data', (data) ->
+      if data
+        scope.config = ClinicalProfile.configureProfile(data)
+  templateUrl: '/partials/clinical-profile.html'
+]
+
+
 # Displays the MR session visit dateline chart.
 directives.directive 'qiVisitDateline', ['VisitDateline', (VisitDateline) ->
   restrict: 'E'

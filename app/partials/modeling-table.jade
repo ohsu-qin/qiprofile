@@ -1,31 +1,58 @@
+// The accordion groups.
 - groups = [ 'ktrans', 've', 'taui' ]
+// The group headings.
 - headings = { 'ktrans': 'Vascular Permeability Transfer Constant (K<sup>trans</sup>)', 've': 'Extravascular Extracellular Volume Fraction (v<sub>e</sub>)', 'taui': 'Intracellular H<sub>2</sub>O Mean Lifetime (&tau;<sub>i</sub>)' }
-
+// The group properties.
 - properties = { 'ktrans': ['delta_k_trans', 'fxl_k_trans', 'fxr_k_trans'], 've': ['v_e'], 'taui': ['tau_i'] }
+// The group column headings.
 - columns = { 'delta_k_trans': '&Delta;K<sup>trans</sup>', 'fxl_k_trans': 'FXL K<sup>trans</sup>', 'fxr_k_trans': 'FXR K<sup>trans</sup>', 'v_e': 'V<sub>e</sub>', 'tau_i': 'T<sub>i</sub>'}
 
 // Mark up accordian header and table content for each group.
 div.qi-modeling-table
   each group in groups
     accordion
+      // The open flag set in the controller expands or collapses the group,
+      // e.g. config.ktransOpen.
       accordion-group(is-open="config.#{ group }Open")
+        // The != assignment preserves the heading text without escaping the HTML.
         accordion-heading!= headings[group]
-          i.pull-right.glyphicon(ng-class="{'glyphicon-chevron-down': config.#{ group }Open, 'glyphicon-chevron-right': !config.#{ group }Open}")
+          // The open icon (down => open, right => closed).
+          i.pull-right.glyphicon(
+            ng-class="{'glyphicon-chevron-down': config.#{ group }Open, 'glyphicon-chevron-right': !config.#{ group }Open}"
+          )
+        
+        // The controller determines whether the property table is half or
+        // full length. Ktrans is full length, since it has three properties.
+        // The others are half length.
         table(class="{{ config.#{ group }TableSize }}")
+          // The visit date has its own column group.
           colgroup
             col
+          // There is a column group for each property, consisting of one
+          // column for the property value and one column for the percent
+          // change.
           each prop in properties[group]
             colgroup.qi-prop-group
               col
               col
+          
+          // The column headings.
           thead
+            // The visit data heading.
             th Visit Date
             each prop in properties[group]
+              // The property heading without HTML escapes.
               th!= columns[prop]
+              // The percent change heading.
               th= '% Change'
+          
+          // There is one property value row per session.
           tbody
-            tr(ng-repeat="sess in data")
+            tr(ng-repeat="sess in sessions")
+              // The visit date.
               td.qi-date= '{{ sess.acquisition_date | moment }}'
               each prop in properties[group]
+                // The property value with four decimals.
                 td.qi-number= '{{ sess.modeling.' + prop + ' | number:4 }}'
+                // The percent change without decimals.
                 td.qi-pct= '{{ sess.modeling.' + prop + '_pct_change | number:0 }}'

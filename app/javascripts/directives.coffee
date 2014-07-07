@@ -59,11 +59,11 @@ directives.directive 'qiModelingMultiChart', ['Modeling', (Modeling) ->
 directives.directive 'qiModelingTable', ['Modeling', (Modeling) ->
   restrict: 'E'
   scope:
-    data: '='   # the subject sessions
+    sessions: '='   # the subject sessions
   link: (scope, element, attrs) ->
-    scope.$watch 'data', (data) ->
-      if data
-        scope.config = Modeling.configureTable(data)
+    scope.$watch 'sessions', (sessions) ->
+      if sessions
+        scope.config = Modeling.configureTable(sessions)
   templateUrl: '/partials/modeling-table.html'
 ]
 
@@ -72,11 +72,11 @@ directives.directive 'qiModelingTable', ['Modeling', (Modeling) ->
 directives.directive 'qiVisitDateline', ['VisitDateline', (VisitDateline) ->
   restrict: 'E'
   scope:
-    data: '='   # the subject sessions
+    sessions: '='   # the subject sessions
   link: (scope, element, attrs) ->
-    scope.$watch 'data', (data) ->
-      if data
-        scope.config = VisitDateline.configureChart(data)
+    scope.$watch 'sessions', (sessions) ->
+      if sessions
+        scope.config = VisitDateline.configureChart(sessions)
   templateUrl: '/partials/visit-dateline-chart.html'
 ]
 

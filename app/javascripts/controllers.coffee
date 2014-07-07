@@ -51,8 +51,11 @@ ctlrs.controller 'SubjectListCtrl', ['$rootScope', '$scope', 'project',
 
 
 ctlrs.controller 'SubjectDetailCtrl', ['$rootScope', '$scope', 'subject',
-  'detail', 'ControllerHelper', 'Chart',
-  ($rootScope, $scope, subject, detail, ControllerHelper, Chart) ->
+  'ControllerHelper',
+  ($rootScope, $scope, subject, ControllerHelper) ->
+    # Capture the current project.
+    $rootScope.project = subject.project
+
     # The format button action.
     $scope.toggleModelingFormat = ->
       if $scope.modelingFormat == 'Chart'
@@ -64,7 +67,7 @@ ctlrs.controller 'SubjectDetailCtrl', ['$rootScope', '$scope', 'subject',
           $scope.modelingFormat
 
     # The modeling format is 'Chart' if the subject has
-    # more than one session, 'Table' otherwise
+    # more than one session, 'Table' otherwise.
     if subject.isMultiSession
       $scope.modelingFormat = 'Chart'
     else

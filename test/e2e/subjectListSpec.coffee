@@ -38,7 +38,7 @@ describe 'E2E Testing Subject List', ->
     expect(page.home()).to.eventually.match(pat)
   
   it 'should have help text', ->
-    expect(page.hasHelp()).to.eventually.be.true
+    expect(page.help()).to.eventually.exist
   
   describe 'Collections', ->
     content = null

@@ -2,17 +2,28 @@ _ = require 'lodash'
 
 _.str = require 'underscore.string'
 
-# The PageObject pattern (https://code.google.com/p/selenium/wiki/PageObjects)
-# base class. If the Page is instantiated with an url argument, then the
-# given url is visited. The Page has accessors for the common qiprofile
-# layout elements, e.g. the billboard text and help alert.
+expect = require('./expect')()
+
+# Page is the PageObject pattern
+# (https://code.google.com/p/selenium/wiki/PageObjects)
+# base class. If the Page is instantiated with an url argument,
+# then the given url is visited. The Page class has accessors for
+# the common qiprofile layout elements, e.g. the billboard text and
+# help alert.
+#
+# Page is intended to encapsulate structural HTML access. Extend Page
+# for each partial to be tested. Each Page accessor function should
+# validate that an element which should always be present exists,
+# but should not validate that the element content reflects the model.
+# Element content validation is the responsibility of the Mocha 'it'
+# clauses.
 #
 # Example:
 #   Page = require('../helpers/page')()
 #   class LoginPage extends Page
 #     ...
 #   login = LoginPage('/login')
-#   expect(login.billboard).to.equal('Login')
+#   expect(login.billboard).to.evantually.equal('Login')
 module.exports = ->
   # @param the parent Page or ElementFinder
   # @param selectors the By or string search conditions
@@ -27,10 +38,13 @@ module.exports = ->
       # Otherwise, the selector is assumed to already be a
       # By locator.
       if _.isString(selector)
-        # An xpath selector string has a slash or equals
-        # '..'. Anything else is assumed to be CSS.
+        # An xpath selector string has a slash or equals.
+        # An id selector starts with # and doesn't have a space.
+        # Anything else is assumed to be CSS.
         if selector == '..' or '/' in selector
           locator = By.xpath(selector)
+        else if selector[0] == '#' and not ' ' in selector
+          locator = By.id(selector[1..-1])
         else
           locator = By.css(selector)
       else
@@ -113,39 +127,31 @@ module.exports = ->
     
     # @returns the home URL
     home: () ->
-    # The home button is the parent of the home icon.
-     this.select('button .glyphicon-home', '..')
-      .then (button) ->
-        # @param the home button
-        # @returns the home URL
-        url = (button) ->
-          # Go home...
-          button.click().then ->
-            # ...grab the URL...
-            home_url = browser.getLocationAbsUrl()
-            # ...go back...
-            browser.navigate().back().then ->
-              # ...and resolve to the URL.
-              home_url
-      
-        if button then url(button) else null
+      # The home button is the parent of the home icon.
+      @select('button .glyphicon-home', '..').then (button) =>
+        expect(button).to.exist
+        # Go home...
+        button.click().then =>
+          # ...grab the URL...
+          home_url = browser.getLocationAbsUrl()
+          # ...go back...
+          browser.navigate().back().then ->
+            # ...and resolve to the URL.
+            home_url
     
     # @returns whether the help view has content
-    hasHelp: () ->
-      # The help button is the parent of the question mark icon.
-      page = this
-      page.select('button .glyphicon-question-sign', '..')
-        .then (button) ->
-          # @param the help button
-          # @returns whether there is a help text parent element
-          hasContent = (button) ->
-            # Open the help view...
-            button.click().then ->
-              # ...find the element...
-              page.select('.qi-main .qi-help-text').then (content) ->
-                # ...close the help view...
-                button.click().then ->
-                  # ...and resolve to whether there is a target.
-                  not not content
-        
-          if button then hasContent(button) else null
+    help: () ->
+      @select('.qi-help').then (block) =>
+        # Help is initially hidden.
+        expect(block.isDisplayed()).to.eventually.be.false
+        # The help button is the parent of the question mark icon.
+        @select('button .glyphicon-question-sign', '..').then (button) =>
+          expect(button).to.exist
+          # Open the help view...
+          button.click().then =>
+            # ...verify that the help is displayed...
+            expect(block.isDisplayed()).to.eventually.be.true
+            # ...find the element...
+            @select('.qi-main .qi-help-text').then (content) =>
+              # ...resolve to the formatted help content.
+              content.getInnerHtml()

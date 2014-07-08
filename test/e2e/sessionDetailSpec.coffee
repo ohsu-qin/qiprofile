@@ -32,7 +32,7 @@ describe 'E2E Testing Session Detail', ->
     expect(page.home()).to.eventually.match(pat)
   
   it 'should have help text', ->
-    expect(page.hasHelp()).to.eventually.be.true
+    expect(page.help()).to.eventually.exist
   
   describe 'Intensity Chart', ->
     # Note - chart content is not testable. See the subjectDetailSpec note

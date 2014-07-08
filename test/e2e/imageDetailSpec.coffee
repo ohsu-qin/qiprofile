@@ -22,7 +22,7 @@ describe 'E2E Testing Image Detail', ->
     expect(page.home()).to.eventually.match(pat)
   
   it 'should have help text', ->
-    expect(page.hasHelp()).to.eventually.be.true
+    expect(page.help()).to.eventually.exist
   
   describe 'Image Display', ->
     it 'should display the image', ->

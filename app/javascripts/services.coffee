@@ -426,21 +426,35 @@ svcs.factory 'VisitDateline', ['Chart', (Chart) ->
 
 svcs.factory 'ClinicalProfile', ->
   configureProfile: (subject) ->
-    calculateAge = (birth_date) ->
-      d1 = new Date(birth_date)
-      d2 = new Date()
-      result = d2.getFullYear() - d1.getFullYear()
-      result
+    # The standard FDA race categories.
+    RACE_CHOICES =
+      {
+        'White': 'White'
+        'Black': 'Black or African American'
+        'Asian': 'Asian'
+        'AIAN': 'American Indian or Alaska Native'
+        'NHOPI': 'Native Hawaiian or Other Pacific Islander'
+      }
+    # The standard FDA ethnicity categories.
+    ETHNICITY_CHOICES =
+      {
+        'Hispanic': 'Hispanic or Latino'
+        'Non-Hispanic': 'Not Hispanic or Latino'
+        null: 'Not specified'
+      }
 
-    age: calculateAge(subject.birth_date)
-    race: subject.races.join(', ')
-    ethnicity: subject.ethnicity
+    # Add accordion control boolean values to subject encounters.
+    for enc in subject.encounters
+      _.extend enc, accordion_open: true
+    # The encounters.
+    encounters: subject.encounters
 
-    # The accordian controls.
+    # The demographics accordion control.
     demogrOpen: true
-    biopsyOpen: true
-    AssessOpen: true
-    SurgeryOpen: true
+    # The demographic data.
+    age: subject.age
+    races: (RACE_CHOICES[race] for race in subject.races).join(', ')
+    ethnicity: ETHNICITY_CHOICES[subject.ethnicity]
 
 
 svcs.factory 'Intensity', ['Chart', (Chart) ->

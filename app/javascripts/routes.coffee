@@ -42,6 +42,17 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
             _.extend sess.modeling, delta_k_trans: delta_k_trans
           # Fix the encounter dates.
           Helpers.fixDate(enc, 'date') for enc in detail.encounters
+          # Calculate the subject's age.
+          getAge = (birth_date) ->
+            today = new Date()
+            birthday = new Date(birth_date)
+            thisYear = 0
+            if today.getMonth() < birthday.getMonth()
+              thisYear = 1
+            else thisYear = 1  if (today.getMonth() is birthday.getMonth()) and today.getDate() < birthday.getDate()
+            age = today.getFullYear() - birthday.getFullYear() - thisYear
+            age
+          _.extend detail, age: getAge(detail.birth_date)
           # Copy the detail content into the subject.
           Helpers.copyContent(detail, subject)
           # Set a flag indicating whether there is more than one

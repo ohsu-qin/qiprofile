@@ -42,7 +42,20 @@ svcs.factory 'Helpers', ->
       # Reset the attribute to a date.
       obj[attr] = moment(date)
 
-  
+  # Calculate a subject's age based on date of birth.
+  getAge: (birth_date) ->
+    today = new Date()
+    birthday = new Date(birth_date)
+    thisYear = 0
+    if today.getMonth() < birthday.getMonth()
+      thisYear = 1
+    else thisYear = 1  if (today.getMonth() is birthday.getMonth()) and today.getDate() < birthday.getDate()
+    # Subtract birth year from current year,
+    # then subtract 1 if today's month & date comes before birth month & date.
+    age = today.getFullYear() - birthday.getFullYear() - thisYear
+    age
+
+
 svcs.factory 'Chart', ->
   # Builds the nvd3 chart format for the given input resource
   # objects and configuration.

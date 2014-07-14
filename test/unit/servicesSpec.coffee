@@ -144,3 +144,56 @@ describe 'Unit Testing Services', ->
       expect(config.ktransOpen).to.equal(true)
       expect(config.veOpen).to.equal(true)
       expect(config.tauiOpen).to.equal(true)
+
+
+  describe 'Clinical Profile', ->
+      # The qiprofile Modeling factory.
+      ClinicalProfile = null
+
+      beforeEach ->
+        # Enable the test services.
+        inject ['ClinicalProfile', (_ClinicalProfile_) ->
+          ClinicalProfile = _ClinicalProfile_
+        ]
+
+      it 'should configure the imaging profile table', ->
+        # The mock input.
+        race_choices = ['White', 'Black', 'Asian', 'AIAN', 'NHOPI']
+        ethnicity_choices = ['Hispanic', 'Non-Hispanic']
+        subject =
+          birth_date: new Date
+          races: race_choices[Math.floor(Math.random() * race_choices.length)]
+          ethnicity: ethnicity_choices[Math.floor(Math.random() * ethnicity_choices.length)]
+          encounters:
+            [
+              {
+                date: new Date
+                outcome: {
+                  tnm: {
+                    grade: Math.floor(Math.random() * 4) + 1
+                    lymph_status: Math.floor(Math.random() * 5)
+                    metastasis: true
+                  }
+                }
+                encounter_type: "Biopsy"
+              }
+              {
+                date: new Date
+                outcome: {
+                  tnm: {
+                    grade: Math.floor(Math.random() * 4) + 1
+                    lymph_status: Math.floor(Math.random() * 5)
+                    metastasis: true
+                  }
+                }
+                encounter_type: "Assessment"
+              }
+            ]
+        # The expected result.
+        config = ClinicalProfile.configureProfile(subject)
+        expect(config.encounters).to.exist
+        expect(config.encounters.length).to.equal(2)
+        expect(config.races).to.exist
+        expect(config.ethnicity).to.exist
+        expect(config.demogrOpen).to.equal(true)
+

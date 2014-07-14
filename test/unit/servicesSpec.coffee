@@ -147,7 +147,7 @@ describe 'Unit Testing Services', ->
 
 
   describe 'Clinical Profile', ->
-      # The qiprofile Modeling factory.
+      # The qiprofile Clinical Profile factory.
       ClinicalProfile = null
 
       beforeEach ->
@@ -156,7 +156,7 @@ describe 'Unit Testing Services', ->
           ClinicalProfile = _ClinicalProfile_
         ]
 
-      it 'should configure the imaging profile table', ->
+      it 'should configure the clinical profile panel', ->
         # The mock input.
         race_choices = ['White', 'Black', 'Asian', 'AIAN', 'NHOPI']
         ethnicity_choices = ['Hispanic', 'Non-Hispanic']
@@ -196,4 +196,3 @@ describe 'Unit Testing Services', ->
         expect(config.races).to.exist
         expect(config.ethnicity).to.exist
         expect(config.demogrOpen).to.equal(true)
-

@@ -455,19 +455,30 @@ svcs.factory 'ClinicalProfile', ->
         'Non-Hispanic': 'Not Hispanic or Latino'
         null: 'Not specified'
       }
+    # The TNM metastatis parameters.
+    TNM_METASTASIS =
+      {
+        false: '0'
+        true: '1'
+      }
 
-    # Add accordion control boolean values to subject encounters.
+    # Extend the subject encounters.
     for enc in subject.encounters
+      # Construst the TNM score as a single string: TxNxMx.
+      tnm = enc.outcome.tnm
+      tnm_score = 'T'.concat(tnm.grade.toString(), 'N', tnm.lymph_status.toString(), 'M', TNM_METASTASIS[tnm.metastasis])
+      _.extend enc, tnm_score: tnm_score
+      # Add accordion control boolean values to subject encounters.
       _.extend enc, accordion_open: true
-    # The encounters.
+    # The subject encounters.
     encounters: subject.encounters
 
-    # The demographics accordion control.
-    demogrOpen: true
     # The demographic data.
     age: subject.age
     races: (RACE_CHOICES[race] for race in subject.races).join(', ')
     ethnicity: ETHNICITY_CHOICES[subject.ethnicity]
+    # The demographics accordion control.
+    demogrOpen: true
 
 
 svcs.factory 'Intensity', ['Chart', (Chart) ->

@@ -173,6 +173,7 @@ describe 'Unit Testing Services', ->
                     grade: Math.floor(Math.random() * 4) + 1
                     lymph_status: Math.floor(Math.random() * 5)
                     metastasis: true
+                    size: "pT".concat((Math.floor(Math.random() * 4) + 1).toString())
                   }
                 }
                 encounter_type: "Biopsy"
@@ -184,6 +185,7 @@ describe 'Unit Testing Services', ->
                     grade: Math.floor(Math.random() * 4) + 1
                     lymph_status: Math.floor(Math.random() * 5)
                     metastasis: true
+                    size: "pT".concat((Math.floor(Math.random() * 4) + 1).toString())
                   }
                 }
                 encounter_type: "Assessment"

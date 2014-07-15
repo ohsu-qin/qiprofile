@@ -1,6 +1,6 @@
 h4.col-md-offset-1
   | Clinical Profile
-.qi-profile-panel(ng-controller="ClinicalProfileCtrl")
+.qi-profile-panel
   accordion
     accordion-group(is-open="config.demogrOpen")
       accordion-heading Demographics
@@ -9,7 +9,7 @@ h4.col-md-offset-1
         .col-md-2
           div.qi-clinical-prop Age
         .col-md-10
-          div {{ config.age }}
+          div {{ subject.age }}
       .row
         .col-md-2
           div.qi-clinical-prop Race

@@ -80,11 +80,6 @@ ctlrs.controller 'SubjectDetailCtrl', ['$rootScope', '$scope', 'subject',
 ]
 
 
-ctlrs.controller 'ClinicalProfileCtrl', ['$scope', '$stateParams',
-  ($scope, $stateParams) ->
-]
-
-
 ctlrs.controller 'SessionDetailCtrl', ['$rootScope', '$scope', '$state',
   'session', 'ControllerHelper',
   ($rootScope, $scope, $state, session, ControllerHelper) ->

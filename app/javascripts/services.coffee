@@ -465,16 +465,15 @@ svcs.factory 'ClinicalProfile', ->
     # Extend the subject encounters.
     for enc in subject.encounters
       # Construct the TNM score as a single string: TxNxMxGx.
-      tnm = enc.outcome.tnm
-      tnm_score = tnm.size.concat('N', tnm.lymph_status.toString(), 'M', TNM_METASTASIS[tnm.metastasis], 'G', tnm.grade.toString())
-      _.extend enc, tnm_score: tnm_score
+      #tnm = enc.outcome.tnm
+      #tnm_score = tnm.size.concat('N', tnm.lymph_status.toString(), 'M', TNM_METASTASIS[tnm.metastasis], 'G', tnm.grade.toString())
+      #_.extend enc, tnm_score: tnm_score
       # Add accordion control boolean values to subject encounters.
       _.extend enc, accordion_open: true
     # The subject encounters.
     encounters: subject.encounters
 
     # The demographic data.
-    age: subject.age
     races: (RACE_CHOICES[race] for race in subject.races).join(', ')
     ethnicity: ETHNICITY_CHOICES[subject.ethnicity]
     # The demographics accordion control.

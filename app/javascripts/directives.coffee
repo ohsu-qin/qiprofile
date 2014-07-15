@@ -72,11 +72,11 @@ directives.directive 'qiModelingTable', ['Modeling', (Modeling) ->
 directives.directive 'qiClinicalProfile', ['ClinicalProfile', (ClinicalProfile) ->
   restrict: 'E'
   scope:
-    data: '='   # the subject sessions
+    subject: '='   # the subject
   link: (scope, element, attrs) ->
-    scope.$watch 'data', (data) ->
-      if data
-        scope.config = ClinicalProfile.configureProfile(data)
+    scope.$watch 'subject', (subject) ->
+      if subject
+        scope.config = ClinicalProfile.configureProfile(subject)
   templateUrl: '/partials/clinical-profile.html'
 ]
 

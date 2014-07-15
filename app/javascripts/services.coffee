@@ -464,7 +464,7 @@ svcs.factory 'ClinicalProfile', ->
 
     # Extend the subject encounters.
     for enc in subject.encounters
-      # Construst the TNM score as a single string: TxNxMxGx.
+      # Construct the TNM score as a single string: TxNxMxGx.
       tnm = enc.outcome.tnm
       tnm_score = tnm.size.concat('N', tnm.lymph_status.toString(), 'M', TNM_METASTASIS[tnm.metastasis], 'G', tnm.grade.toString())
       _.extend enc, tnm_score: tnm_score

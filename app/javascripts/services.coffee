@@ -461,13 +461,106 @@ svcs.factory 'ClinicalProfile', ->
         false: '0'
         true: '1'
       }
+    # Breast cancer stage inferred from TNM score
+    CANCER_STAGES =
+      'Breast':
+        {
+          'TisN0M0': '0'
+          'T1N0M0': 'IA'
+          'T0N1miM0': 'IB'
+          'T1N1miM0': 'IB'
+          'T0N1M0': 'IIA'
+          'T1N1M0': 'IIA'
+          'T2N0M0': 'IIA'
+          'T2N1M0': 'IIB'
+          'T3N0M0': 'IIB'
+          'T0N2M0': 'IIIA'
+          'T1N2M0': 'IIIA'
+          'T2N2M0': 'IIIA'
+          'T3N1M0': 'IIIA'
+          'T3N2M0': 'IIIA'
+          'T4N0M0': 'IIIB'
+          'T4N1M0': 'IIIB'
+          'T4N2M0': 'IIIB'
+          'T0N3M0': 'IIIC'
+          'T1N3M0': 'IIIC'
+          'T2N3M0': 'IIIC'
+          'T3N3M0': 'IIIC'
+          'T4N3M0': 'IIIC'
+        }
+      'Sarcoma':
+        {
+          'T1aN0M0G1': 'IA'
+          'T1aN0M0GX': 'IA'
+          'T1bN0M0G1': 'IA'
+          'T1bN0M0GX': 'IA'
+          'T2aN0M0G1': 'IB'
+          'T2aN0M0GX': 'IB'
+          'T2bN0M0G1': 'IB'
+          'T2bN0M0GX': 'IB'
+          'T1aN0M0G2': 'IIA'
+          'T1aN0M0G3': 'IIA'
+          'T1bN0M0G2': 'IIA'
+          'T1bN0M0G3': 'IIA'
+          'T2aN0M0G2': 'IIB'
+          'T2bN0M0G2': 'IIB'
+          'T2aN0M0G3': 'III'
+          'T2bN0M0G3': 'III'
+          'T1N1M0GX': 'III'
+          'T1aN1M0GX': 'III'
+          'T1bN1M0GX': 'III'
+          'T2N1M0GX': 'III'
+          'T2aN1M0GX': 'III'
+          'T2bN1M0GX': 'III'
+          'T1N1M0G1': 'III'
+          'T1aN1M0G1': 'III'
+          'T1bN1M0G1': 'III'
+          'T2N1M0G1': 'III'
+          'T2aN1M0G1': 'III'
+          'T2bN1M0G1': 'III'
+          'T1N1M0G2': 'III'
+          'T1aN1M0G2': 'III'
+          'T1bN1M0G2': 'III'
+          'T2N1M0G2': 'III'
+          'T2aN1M0G2': 'III'
+          'T2bN1M0G2': 'III'
+          'T1N1M0G3': 'III'
+          'T1aN1M0G3': 'III'
+          'T1bN1M0G3': 'III'
+          'T2N1M0G3': 'III'
+          'T2aN1M0G3': 'III'
+          'T2bN1M0G3': 'III'
+        }
 
     # Extend the subject encounters.
+    tnm =
+      { 
+         "grade": 3,
+         "lymph_status": 1,
+         "metastasis": false,
+         "size": "pT4"
+      }
     for enc in subject.encounters
-      # Construct the TNM score as a single string: TxNxMxGx.
+      # Construct the TNM and TNMG scores.
       #tnm = enc.outcome.tnm
-      #tnm_score = tnm.size.concat('N', tnm.lymph_status.toString(), 'M', TNM_METASTASIS[tnm.metastasis], 'G', tnm.grade.toString())
-      #_.extend enc, tnm_score: tnm_score
+      tnm_score = tnm.size.concat('N', tnm.lymph_status.toString(), 'M', TNM_METASTASIS[tnm.metastasis])
+      tnmg_score = tnm_score.concat('G', tnm.grade.toString())
+      _.extend enc, tnmg_score: tnmg_score
+      # Infer the cancer stage. It is always IV if metastasis is present.
+      # Breast cancer stage is based on T, N, and M scores only.
+      # Sarcoma stage is based on TNM and grade.
+      if tnm.metastasis
+        cancer_stage = 'IV'
+      else
+        if subject.collection == 'Breast'
+          key = tnm_score
+        else
+          key = tnmg_score
+        # If a prefix (e.g., 'p') exists, remove it from the
+        # TNM or TNMG score before looking up the stage.
+        key = key.substr(1) if key.substr(0, 1) != 'T'
+        cancer_stage = CANCER_STAGES[subject.collection][key]
+      _.extend enc, cancer_stage: cancer_stage
       # Add accordion control boolean values to subject encounters.
       _.extend enc, accordion_open: true
     # The subject encounters.

@@ -1,7 +1,16 @@
 svcs = angular.module 'qiprofile.services', ['ngResource']
 
 svcs.factory 'Subject', ['$q', '$resource', ($q, $resource) ->
-  $resource '/api/subjects/:number/', null,
+  # The Subject resource recognizes a 'get' query method on the
+  # subject id, but qiprofile does not call this in practice.
+  # Fetching a Subject is done by a query on the subject project,
+  # collection and number, which returns a singleton or empty
+  # array.
+  $resource '/api/subjects/:id', null,
+    query:
+      method: 'GET'
+      isArray: true
+      transformResponse: (data) -> angular.fromJson(data)._items
     detail:
       method: 'GET'
       url: '/api/subject-detail/:id/'
@@ -23,15 +32,18 @@ svcs.factory 'Session', ['$resource', ($resource) ->
 
 
 svcs.factory 'Helpers', ->
-  # Copies the given source object properties into the
-  # destination object.
-  copyContent: (source, dest) ->
+  # Copies the given source detail object properties into the
+  # destination object, with the following exception:
+  # * fields which begin with an underscore are not copied
+  #   (including the _id field)
+  copyDetail: (source, dest) ->
     # Copy the detail properties into the parent object.
     srcProps = Object.getOwnPropertyNames(source)
     destProps = Object.getOwnPropertyNames(dest)
     fields = _.difference(srcProps, destProps)
     for field in fields
-      dest[field] = source[field]
+      if field[0] != '_'
+        dest[field] = source[field]
 
   # If the given attribute value is a string, then this function
   # resets it to the parsed date.
@@ -41,7 +53,7 @@ svcs.factory 'Helpers', ->
     if typeof date == 'string' or date instanceof String
       # Reset the attribute to a date.
       obj[attr] = moment(date)
-
+  
   
 svcs.factory 'Chart', ->
   # Builds the nvd3 chart format for the given input resource
@@ -165,7 +177,7 @@ svcs.factory 'Chart', ->
         # @returns the number of decimals to display for the
         #   given value
         defaultValuePrecision = (value) ->
-          if value == 0 or value > 1
+          if not value or value > 1
             0
           else
             1 + defaultValuePrecision(value * 10)
@@ -330,27 +342,48 @@ svcs.factory 'Modeling', ['Chart', (Chart) ->
   # Configures the modeling tables.
   configureTable: (sessions) ->
     sessionsWithChangeProperties = (sessions) ->
+      # @param current the current modeling parameters
+      # @param previous the previous modeling parameters
+      # @returns the session objects extended to include
+      #   the percent change properties for all but the
+      #   first session
       addSessionChangeProperties = (current, previous) ->
+        # @param current the current modeling parameters
+        # @param previous the previous modeling parameters
+        # @returns the percent change properties object
         extension = (current, previous) ->
+          # @param current the current value
+          # @param previous the previous value
+          # @returns the percent change
           percent_change = (current, previous) ->
             (current - previous)/previous * 100
+          
           # Return an object with the change properties.
-          delta_k_trans_pct_change: percent_change(current.modeling.delta_k_trans, previous.modeling.delta_k_trans)
-          fxl_k_trans_pct_change: percent_change(current.modeling.fxl_k_trans, previous.modeling.fxl_k_trans)
-          fxr_k_trans_pct_change: percent_change(current.modeling.fxr_k_trans, previous.modeling.fxr_k_trans)
-          v_e_pct_change: percent_change(current.modeling.v_e, previous.modeling.v_e)
-          tau_i_pct_change: percent_change(current.modeling.tau_i, previous.modeling.tau_i)
+          delta_k_trans_pct_change: percent_change(current.delta_k_trans, previous.delta_k_trans)
+          fxl_k_trans_pct_change: percent_change(current.fxl_k_trans, previous.fxl_k_trans)
+          fxr_k_trans_pct_change: percent_change(current.fxr_k_trans, previous.fxr_k_trans)
+          v_e_pct_change: percent_change(current.v_e, previous.v_e)
+          tau_i_pct_change: percent_change(current.tau_i, previous.tau_i)
+        
+        # If this is not the first session's modeling object,
+        # then extend the object with the percent change properties,
+        # otherwise, return the first modeling object unchanged. 
         if previous
-          _.extend current.modeling, extension(current, previous)
+          _.extend current, extension(current, previous)
         else
           current
 
+      # The previous modeling object.
       prev = null
+      # The modeling objects extended with change properties.
       result = []
-      for curr in sessions
-        result.push addSessionChangeProperties(curr, prev)
-        prev = curr
-      # Return the result
+      # Extend all but the first modeling object with change properties.
+      for sess in sessions
+        curr = sess.modeling
+        if curr
+          result.push addSessionChangeProperties(curr, prev)
+          prev = curr
+      # Return the result.
       result
 
     # Return the configuration object.
@@ -380,7 +413,7 @@ svcs.factory 'VisitDateline', ['Chart', (Chart) ->
       sessionDetailLink = (session) ->
         "/quip/#{ session.subject.collection.toLowerCase() }/subject/" +
         "#{ session.subject.number }/session/#{ session.number }?" +
-        "project=#{ session.subject.project }&detail=#{ session.detail_id }"
+        "project=#{ session.subject.project }&detail=#{ session.detail }"
       
       # Select the SVG element.
       svg = d3.select(chart.container)
@@ -519,10 +552,7 @@ svcs.factory 'Intensity', ['Chart', (Chart) ->
       # The registration image select button colors.
       COLORS = ['LightGreen', 'LightYellow', 'LightCyan', 'LemonChiffon']
       
-      if session.registrations.length == 1
-        key = 'Realigned'
-      else
-        key = registration.name
+      key = registration.title
       
       # TODO - Wrap the key in a registration parameters pop-up hyperlink.
       # Return the data series format object.
@@ -532,7 +562,7 @@ svcs.factory 'Intensity', ['Chart', (Chart) ->
 
     # The scan data series configuration.
     scan_data =
-      key: 'Scan'
+      key: session.scan.title
       values: coordinates(session.scan.intensity.intensities)
       color: 'Indigo'
 
@@ -567,12 +597,13 @@ svcs.factory 'File', ['$http', ($http) ->
 
 
 svcs.factory 'Image', ['$rootScope', 'File', ($rootScope, File) ->
-  # A root scope {parent id: {filename: content} image cache.
-  $rootScope.images = {}
+  # The root scope {parent id: [Image objects]} cache.
+  if not $rootScope.images
+    $rootScope.images = {}
   
   # If there are file arguments, then this function
-  # caches the images for the given parent object.
-  # Otherwise, this function returns the cached images,
+  # caches the Image objects for the given parent object.
+  # Otherwise, this function returns the cached image objects,
   # or undefined if there is no cache entry for the object.
   cache = (parent, files...) ->
     if files.length
@@ -675,7 +706,7 @@ svcs.factory 'Image', ['$rootScope', 'File', ($rootScope, File) ->
   # cached object image content data is not loaded until the image
   # object load() function is called.
   #
-  # @param parent the ImageContainer scan or registration object
+  # @param parent the Scan or Registration object
   # @returns the image objects
   imagesFor: (parent) ->
     cache(parent) or cache(parent, parent.files...)

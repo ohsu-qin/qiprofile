@@ -18,7 +18,7 @@ div.qi-modeling-table
         accordion-heading!= headings[group]
           // The open icon (down => open, right => closed).
           i.pull-right.glyphicon(
-            ng-class="{'glyphicon-chevron-down': config.#{ group }Open, 'glyphicon-chevron-right': !config.#{ group }Open}"
+            ng-class="{'glyphicon-chevron-down': config.#{ group }Open, 'glyphicon-chevron-up': !config.#{ group }Open}"
           )
         
         // The controller determines whether the property table is half or

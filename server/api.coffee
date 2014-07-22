@@ -1,11 +1,12 @@
 request = require 'superagent'
+_ = require 'lodash'
 
-module.exports = (host='localhost', port=8000) ->
+module.exports = (host='localhost', port=5000) ->
   (req, res, next) ->
-    # Delegate to the REST server.
-    path = "#{host}:#{port}" + req.path
+    # The REST server URL.
+    path = "#{ host }:#{ port }#{ req.path }"
+    # Send the request.
     request[req.method.toLowerCase()](path)
-      .query(format: 'json')
       .query(req.query)
       .accept('json')
       .send(req.body)
@@ -13,5 +14,6 @@ module.exports = (host='localhost', port=8000) ->
         if restRes.ok
           res.json restRes.body
         else
-          res.status(404)
-            .send("The requested resource #{req.host}:#{port}#{req.path} was not found.")
+          res.status(404).send("The requested resource
+                                #{req.host}:#{port}#{req.path}
+                                was not found.")

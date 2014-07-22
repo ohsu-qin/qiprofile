@@ -461,117 +461,96 @@ svcs.factory 'ClinicalProfile', ->
         false: '0'
         true: '1'
       }
-    # Breast cancer stage inferred from TNM score
-    CANCER_STAGES =
+    # The cancer stage corresponding to tumor scores, where there is no metastasis (M0).
+    # Sources:
+    # * Breast: http://www.cancer.gov/cancertopics/pdq/treatment/breast/healthprofessional/page3
+    # * Sarcoma: http://...
+    #
+    # 'Breast':
+    #   {
+    #     Size:
+    #       {
+    #         Lymph Status: Stage
+    #       }
+    #   }
+    TUMOR_STAGES =
       'Breast':
         {
-          'TisN0M0': '0'
-          'T1N0M0': 'IA'
-          'T0N1miM0': 'IB'
-          'T1N1miM0': 'IB'
-          'T0N1M0': 'IIA'
-          'T1N1M0': 'IIA'
-          'T2N0M0': 'IIA'
-          'T2N1M0': 'IIB'
-          'T3N0M0': 'IIB'
-          'T0N2M0': 'IIIA'
-          'T1N2M0': 'IIIA'
-          'T2N2M0': 'IIIA'
-          'T3N1M0': 'IIIA'
-          'T3N2M0': 'IIIA'
-          'T4N0M0': 'IIIB'
-          'T4N1M0': 'IIIB'
-          'T4N2M0': 'IIIB'
-          'T0N3M0': 'IIIC'
-          'T1N3M0': 'IIIC'
-          'T2N3M0': 'IIIC'
-          'T3N3M0': 'IIIC'
-          'T4N3M0': 'IIIC'
-        }
-      'Sarcoma':
-        {
-          'T1aN0M0G1': 'IA'
-          'T1aN0M0GX': 'IA'
-          'T1bN0M0G1': 'IA'
-          'T1bN0M0GX': 'IA'
-          'T2aN0M0G1': 'IB'
-          'T2aN0M0GX': 'IB'
-          'T2bN0M0G1': 'IB'
-          'T2bN0M0GX': 'IB'
-          'T1aN0M0G2': 'IIA'
-          'T1aN0M0G3': 'IIA'
-          'T1bN0M0G2': 'IIA'
-          'T1bN0M0G3': 'IIA'
-          'T2aN0M0G2': 'IIB'
-          'T2bN0M0G2': 'IIB'
-          'T2aN0M0G3': 'III'
-          'T2bN0M0G3': 'III'
-          'T1N1M0GX': 'III'
-          'T1aN1M0GX': 'III'
-          'T1bN1M0GX': 'III'
-          'T2N1M0GX': 'III'
-          'T2aN1M0GX': 'III'
-          'T2bN1M0GX': 'III'
-          'T1N1M0G1': 'III'
-          'T1aN1M0G1': 'III'
-          'T1bN1M0G1': 'III'
-          'T2N1M0G1': 'III'
-          'T2aN1M0G1': 'III'
-          'T2bN1M0G1': 'III'
-          'T1N1M0G2': 'III'
-          'T1aN1M0G2': 'III'
-          'T1bN1M0G2': 'III'
-          'T2N1M0G2': 'III'
-          'T2aN1M0G2': 'III'
-          'T2bN1M0G2': 'III'
-          'T1N1M0G3': 'III'
-          'T1aN1M0G3': 'III'
-          'T1bN1M0G3': 'III'
-          'T2N1M0G3': 'III'
-          'T2aN1M0G3': 'III'
-          'T2bN1M0G3': 'III'
+          "is":
+            {
+              0: '0'
+            }
+          0:
+            {
+              '1mi': 'IB'
+              1: 'IIA'
+              2: 'IIIA'
+              3: 'IIIC'
+            }
+          1:
+            {
+              0: 'IA'
+              '1mi': 'IB'
+              1: 'IIA'
+              2: 'IIIA'
+              3: 'IIIC'
+            }
+          2:
+            {
+              0: 'IIA'
+              1: 'IIB'
+              2: 'IIIA'
+              3: 'IIIC'
+            }
+          3:
+            {
+              0: 'IIB'
+              1: 'IIIA'
+              2: 'IIIA'
+              3: 'IIIC'
+            }
+          4:
+            {
+              0: 'IIIB'
+              1: 'IIIB'
+              2: 'IIIB'
+              3: 'IIIC'
+            }
         }
 
-    # Extend the subject encounters.
     tnm =
       { 
-         "grade": 3,
+         "grade": 2,
          "lymph_status": 1,
          "metastasis": false,
-         "size": "pT4"
+         "size": "pT2"
       }
 
-    getScoreAndStage = (size, lymph_status, metastasis, grade, coll) ->
-      # Don't include the size prefix (e.g., 'p') if one exists.
-      t = "pT4"
-      n = lymph_status.toString()
-      m = TNM_METASTASIS[metastasis]
-      g = grade.toString()
-      # Construct the TNMG score.
-      tnmg_score = size.concat('N', n, 'M', m, 'G', g)
-      # Infer the cancer stage. It is always IV if metastasis is present.
-      # Breast cancer stage is based on T, N, and M scores only.
-      # Sarcoma stage is based on TNM and grade.
-      if metastasis
-        cancer_stage = 'IV'
-      else
-        stage_key = t.concat('N', n, 'M', m)
-        stage_key = stage_key.concat('G', g) if coll == "Sarcoma"
-        cancer_stage = CANCER_STAGES[coll][stage_key]
-      # Return the score and stage.
-      tnmg_score
-      cancer_stage
-
+    # Extend the subject encounters.
     for enc in subject.encounters
       #tnm = enc.outcome.tnm
-      # call getScoreAndStage(tnm.size, tnm.lymph_status, tnm.metastasis, tnm.grade, subject.collection)
-      _.extend enc, tnmg_score: # tnmg_score
-      _.extend enc, cancer_stage: # cancer_stage
-      # Add accordion control boolean values to subject encounters.
+      # Obtain the T, N, M, and G values.
+      t = tnm.size.split('T')[1]
+      n = tnm.lymph_status.toString()
+      m = TNM_METASTASIS[tnm.metastasis]
+      g = tnm.grade.toString()
+      # Add the composite TNMG score to the encounter.
+      _.extend enc, tumor_score: tnm.size.concat('N', n, 'M', m, 'G', g)
+      # Infer the tumor stage and add it to the encounter.
+      # If metastasis exits (M1), it is stage IV. Otherwise,
+      # breast cancer stage is determined by T and N scores
+      # and sarcoma stage is determined by T, N, and G scores.
+      if tnm.metastasis
+        tumor_stage = 'IV'
+      else if subject.collection == 'Breast'
+        tumor_stage = TUMOR_STAGES['Breast'][t][n]
+      else tumor_stage = TUMOR_STAGES['Sarcoma'][t][n][g]
+      tumor_stage = "undefined" if not tumor_stage
+      _.extend enc, tumor_stage: tumor_stage
+      # Add accordion control default boolean value to the encounter.
       _.extend enc, accordion_open: true
     # The subject encounters.
     encounters: subject.encounters
-
     # The demographic data.
     races: (RACE_CHOICES[race] for race in subject.races).join(', ')
     ethnicity: ETHNICITY_CHOICES[subject.ethnicity]

@@ -1,6 +1,6 @@
 ctlrs = angular.module 'qiprofile.controllers', ['qiprofile.services']
 
-# The controller helper methods.
+# The local controller helper methods.
 ctlrs.factory 'ControllerHelper', ['$location', ($location) ->
   # Replaces the browser URL search parameters to include at most
   # a non-default project, since all other search parameters are
@@ -63,8 +63,7 @@ ctlrs.controller 'SubjectDetailCtrl', ['$rootScope', '$scope', 'subject',
       else if $scope.modelingFormat == 'Table'
         $scope.modelingFormat ='Chart'
       else
-        throw "Modeling format is not recognized: " +
-          $scope.modelingFormat
+        throw "Modeling format is not recognized: #{ $scope.modelingFormat }"
 
     # The modeling format is 'Chart' if the subject has
     # more than one session, 'Table' otherwise.
@@ -114,7 +113,7 @@ ctlrs.controller 'ImageDetailCtrl', ['$rootScope', '$scope', 'image',
     # Capture the current project.
     $rootScope.project = image.parent.session.subject.project
     # Place the image in the scope.
-    $scope.image = image
+    $scope.image = image    
     # If the project is the default, then remove it from the URL.
     ControllerHelper.cleanBrowserUrl($rootScope.project)
 ]

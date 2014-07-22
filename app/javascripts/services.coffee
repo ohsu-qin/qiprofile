@@ -540,27 +540,33 @@ svcs.factory 'ClinicalProfile', ->
          "metastasis": false,
          "size": "pT4"
       }
-    for enc in subject.encounters
-      # Construct the TNM and TNMG scores.
-      #tnm = enc.outcome.tnm
-      tnm_score = tnm.size.concat('N', tnm.lymph_status.toString(), 'M', TNM_METASTASIS[tnm.metastasis])
-      tnmg_score = tnm_score.concat('G', tnm.grade.toString())
-      _.extend enc, tnmg_score: tnmg_score
+
+    getScoreAndStage = (size, lymph_status, metastasis, grade, coll) ->
+      # Don't include the size prefix (e.g., 'p') if one exists.
+      t = "pT4"
+      n = lymph_status.toString()
+      m = TNM_METASTASIS[metastasis]
+      g = grade.toString()
+      # Construct the TNMG score.
+      tnmg_score = size.concat('N', n, 'M', m, 'G', g)
       # Infer the cancer stage. It is always IV if metastasis is present.
       # Breast cancer stage is based on T, N, and M scores only.
       # Sarcoma stage is based on TNM and grade.
-      if tnm.metastasis
+      if metastasis
         cancer_stage = 'IV'
       else
-        if subject.collection == 'Breast'
-          key = tnm_score
-        else
-          key = tnmg_score
-        # If a prefix (e.g., 'p') exists, remove it from the
-        # TNM or TNMG score before looking up the stage.
-        key = key.substr(1) if key.substr(0, 1) != 'T'
-        cancer_stage = CANCER_STAGES[subject.collection][key]
-      _.extend enc, cancer_stage: cancer_stage
+        stage_key = t.concat('N', n, 'M', m)
+        stage_key = stage_key.concat('G', g) if coll == "Sarcoma"
+        cancer_stage = CANCER_STAGES[coll][stage_key]
+      # Return the score and stage.
+      tnmg_score
+      cancer_stage
+
+    for enc in subject.encounters
+      #tnm = enc.outcome.tnm
+      # call getScoreAndStage(tnm.size, tnm.lymph_status, tnm.metastasis, tnm.grade, subject.collection)
+      _.extend enc, tnmg_score: # tnmg_score
+      _.extend enc, cancer_stage: # cancer_stage
       # Add accordion control boolean values to subject encounters.
       _.extend enc, accordion_open: true
     # The subject encounters.

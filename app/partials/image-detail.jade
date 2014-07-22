@@ -5,8 +5,7 @@ block billboard
   | {{ image.parent.session.subject.collection | capitalize }}
   | Patient {{ image.parent.session.subject.number }}
   | Session {{ image.parent.session.number }}
-  | {{ image.parent.container_type | capitalize }}
-  | {{ image.parent.name }}
+  | {{ image.parent.title }}
   | Time Point {{ image.time_point }}
 
 block content

@@ -518,24 +518,54 @@ svcs.factory 'ClinicalProfile', ->
             }
         }
 
-    tnm =
+    # ** temp **
+    encounters = [ 
       { 
-         "grade": 2,
-         "lymph_status": 1,
-         "metastasis": false,
-         "size": "pT2"
+         "date": "2012-10-04T00:00:00",
+         "outcome": { 
+            "estrogen": { 
+               "positive": true,
+               "intensity": 68,
+               "quick_score": 2
+            },
+            "grade": { 
+               "tubular_formation": 2,
+               "mitotic_count": 1,
+               "nuclear_pleomorphism": 2
+            },
+            "her2_neu_ihc": 4,
+            "her2_neu_fish": true,
+            "progestrogen": { 
+               "positive": true,
+               "intensity": 9,
+               "quick_score": 7
+            },
+            "tnm": { 
+               "grade": 2,
+               "lymph_status": 1,
+               "metastasis": false,
+               "size": "pT2"
+            },
+            "ki_67": 40
+         },
+         "encounter_type": "Biopsy",
+         "id": "53c6bf0debafc4e7cf3d1d42"
       }
+    ]
 
     # Extend the subject encounters.
-    for enc in subject.encounters
-      #tnm = enc.outcome.tnm
+    #for enc in subject.encounters
+    for enc in encounters
+      tnm = enc.outcome.tnm
       # Obtain the T, N, M, and G values.
       t = tnm.size.split('T')[1]
       n = tnm.lymph_status.toString()
       m = TNM_METASTASIS[tnm.metastasis]
       g = tnm.grade.toString()
       # Add the composite TNMG score to the encounter.
-      _.extend enc, tumor_score: tnm.size.concat('N', n, 'M', m, 'G', g)
+      _.extend enc.outcome, tumor_score: tnm.size.concat('N', n, 'M', m, 'G', g)
+      # Add the size value to the encounter.
+      _.extend enc.outcome.tnm.t_number = t
       # Infer the tumor stage and add it to the encounter.
       # If metastasis exits (M1), it is stage IV. Otherwise,
       # breast cancer stage is determined by T and N scores
@@ -546,11 +576,18 @@ svcs.factory 'ClinicalProfile', ->
         tumor_stage = TUMOR_STAGES['Breast'][t][n]
       else tumor_stage = TUMOR_STAGES['Sarcoma'][t][n][g]
       tumor_stage = "undefined" if not tumor_stage
-      _.extend enc, tumor_stage: tumor_stage
+      _.extend enc.outcome, tumor_stage: tumor_stage
+      # Calculate and add the overall grade
+      grade = enc.outcome.grade
+      overall_grade = grade.tubular_formation + grade.mitotic_count + grade.nuclear_pleomorphism
+      _.extend enc.outcome, overall_grade: overall_grade
       # Add accordion control default boolean value to the encounter.
       _.extend enc, accordion_open: true
+      # Add boolean value to indicate that staging or grade data exist.
+      _.extend enc, is_staging_or_grade: true
     # The subject encounters.
-    encounters: subject.encounters
+    #encounters: subject.encounters
+    encounters: encounters
     # The demographic data.
     races: (RACE_CHOICES[race] for race in subject.races).join(', ')
     ethnicity: ETHNICITY_CHOICES[subject.ethnicity]

@@ -464,7 +464,7 @@ svcs.factory 'ClinicalProfile', ->
     # The cancer stage corresponding to tumor scores, where there is no metastasis (M0).
     # Sources:
     # * Breast: http://www.cancer.gov/cancertopics/pdq/treatment/breast/healthprofessional/page3
-    # * Sarcoma: http://...
+    # * Sarcoma: http://www.cancer.org/cancer/sarcoma-adultsofttissuecancer/detailedguide/sarcoma-adult-soft-tissue-cancer-staging
     #
     # 'Breast':
     #   {
@@ -473,6 +473,17 @@ svcs.factory 'ClinicalProfile', ->
     #         Lymph Status: Stage
     #       }
     #   }
+    # 'Sarcoma':
+    #   {
+    #     Size:
+    #       {
+    #         Lymph Status:
+    #           {
+    #             Grade: Stage
+    #           }
+    #       }
+    #   }
+    #
     TUMOR_STAGES =
       'Breast':
         {
@@ -517,6 +528,39 @@ svcs.factory 'ClinicalProfile', ->
               3: 'IIIC'
             }
         }
+      'Sarcoma':
+        {
+          1:
+            {
+              0:
+                {
+                  1: 'IA'
+                  2: 'IIA'
+                  3: 'IIA'
+                }
+              1:
+                {
+                  1: 'III'
+                  2: 'III'
+                  3: 'III'
+                }
+            }
+          2:
+            {
+              0:
+                {
+                  1: 'IB'
+                  2: 'IIB'
+                  3: 'III'
+                }
+              1:
+                {
+                  1: 'III'
+                  2: 'III'
+                  3: 'III'
+                }
+            }
+        }
 
     # ** temp **
     encounters = [ 
@@ -556,25 +600,29 @@ svcs.factory 'ClinicalProfile', ->
     # Extend the subject encounters.
     #for enc in subject.encounters
     for enc in encounters
+      # The TNM scores.
       tnm = enc.outcome.tnm
-      # Obtain the T, N, M, and G values.
-      t = tnm.size.split('T')[1]
-      n = tnm.lymph_status.toString()
-      m = TNM_METASTASIS[tnm.metastasis]
-      g = tnm.grade.toString()
+      # Add the T value without the prefix (i.e., c or p) to the encounter.
+      tValue = tnm.size.split('T')[1]
+      _.extend enc.outcome.tnm.t_value = tValue
+      # Obtain the N, M, and G values.
+      nValue = tnm.lymph_status.toString()
+      mValue = TNM_METASTASIS[tnm.metastasis]
+      gValue = tnm.grade.toString()
       # Add the composite TNMG score to the encounter.
-      _.extend enc.outcome, tumor_score: tnm.size.concat('N', n, 'M', m, 'G', g)
-      # Add the size value to the encounter.
-      _.extend enc.outcome.tnm.t_number = t
-      # Infer the tumor stage and add it to the encounter.
+      _.extend enc.outcome, tumor_score: tnm.size.concat('N', nValue, 'M', mValue, 'G', gValue)
+      # Look up the tumor stage and add it to the encounter.
       # If metastasis exits (M1), it is stage IV. Otherwise,
       # breast cancer stage is determined by T and N scores
       # and sarcoma stage is determined by T, N, and G scores.
       if tnm.metastasis
         tumor_stage = 'IV'
       else if subject.collection == 'Breast'
-        tumor_stage = TUMOR_STAGES['Breast'][t][n]
-      else tumor_stage = TUMOR_STAGES['Sarcoma'][t][n][g]
+        tumor_stage = TUMOR_STAGES['Breast'][tValue][nValue]
+      else
+        # Use the T value without any suffix (i.e., a or b) to do the lookup.
+        tValue = tValue.substring(0, 1)
+        tumor_stage = TUMOR_STAGES['Sarcoma'][tValue][nValue][gValue]
       tumor_stage = "undefined" if not tumor_stage
       _.extend enc.outcome, tumor_stage: tumor_stage
       # Calculate and add the overall grade

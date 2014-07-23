@@ -6,20 +6,14 @@ h4.col-md-offset-1
       accordion-heading Demographics
         i.pull-right.glyphicon(ng-class="{'glyphicon-chevron-down': config.demogrOpen, 'glyphicon-chevron-up': !config.demogrOpen}")
       .row
-        .col-md-2
-          div.qi-clinical-prop Age
-        .col-md-10
-          div {{ subject.age }}
+        .col-md-2.qi-clinical-prop Age
+        .col-md-10 {{ subject.age }}
       .row
-        .col-md-2
-          div.qi-clinical-prop Race
-        .col-md-10
-          div {{ config.races }}
+        .col-md-2.qi-clinical-prop Race
+        .col-md-10 {{ config.races }}
       .row
-        .col-md-2
-          div.qi-clinical-prop Ethnicity
-        .col-md-10
-          div {{ config.ethnicity }}
+        .col-md-2.qi-clinical-prop Ethnicity
+        .col-md-10 {{ config.ethnicity }}
   accordion(ng-repeat="enc in config.encounters")
     accordion-group(is-open="enc.accordion_open")
       accordion-heading {{ enc.encounter_type }}
@@ -39,7 +33,7 @@ h4.col-md-offset-1
                   .col-md-6 {{ enc.outcome.tumor_stage }}
                 .row
                   .col-md-6.qi-clin-profile-prop-name Size
-                  .col-md-6 {{ enc.outcome.tnm.t_number }}
+                  .col-md-6 {{ enc.outcome.tnm.t_value }}
                 .row
                   .col-md-6.qi-clin-profile-prop-name Lymph Status
                   .col-md-6 {{ enc.outcome.tnm.lymph_status }}

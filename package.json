@@ -7,8 +7,10 @@
     "url": "git@quip1:qiprofile.git"
   },
   "keywords": [
-    "quip",
-    "qin",
+    "QuIP",
+    "QIN",
+    "dce",
+    "mri",
     "medical",
     "imaging"
   ],
@@ -16,7 +18,7 @@
   "license": "Proprietary",
   "private": true,
   "scripts": {
-    "postinstall": "./node_modules/.bin/bower install; ./node_modules/protractor/bin/webdriver-manager update"
+    "postinstall": "./node_modules/.bin/bower install; ./node_modules/.bin/bower prune; ./node_modules/protractor/bin/webdriver-manager update"
   },
   "homepage": "http://quip1:8080/qiprofile",
   "directories": {
@@ -30,6 +32,10 @@
     "superagent": "~0.16.0"
   },
   "devDependencies": {
+    "jquery": "~2.1.1",
+    "angular": "1.2.19",
+    "angular-resource": "~0.1.1",
+    "angular-mocks": "1.2.19",
     "better-stack-traces": "~1.0.1",
     "bower": "~1.2.8",
     "jade": "~1.1.5",
@@ -71,12 +77,14 @@
     "grunt-contrib-stylus": "~0.13.2",
     "grunt-contrib-uglify": "~0.2.0",
     "grunt-contrib-watch": "~0.5.2",
+    "grunt-env": "~0.4.1",
     "grunt-express-server": "~0.4.17",
     "grunt-karma": "~0.8.3",
     "grunt-markdown": "~0.5.0",
     "grunt-mocha-test": "~0.9.3",
     "grunt-newer": "~0.5.4",
-    "grunt-ngmin": "~0.0.2",
+    "grunt-ng-annotate": "~0.3.0",
+    "grunt-preprocess": "~4.0.0",
     "grunt-protractor-runner": "~0.2.4",
     "grunt-rev": "~0.1.0",
     "grunt-usemin": "~2.0.0",

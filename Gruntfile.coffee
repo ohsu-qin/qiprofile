@@ -2,8 +2,18 @@ module.exports = (grunt) ->
   grunt.config.init(
     pkg: grunt.file.readJSON('package.json')
     
-    clean:
-      build: ['_public/*']
+    env:
+      dev:
+        NODE_ENV: 'development'
+      prod:
+        NODE_ENV: 'production'
+    
+    preprocess:
+      scripts:
+        src: 'app/layout/scripts.jade'
+        dest: '_build/layout/scripts.jade'
+    
+    clean: ['_build', '_public/*']
     
     copy:
       css:
@@ -42,10 +52,7 @@ module.exports = (grunt) ->
         src: [
           'bower_components/lodash/dist/lodash.underscore.js'
           'bower_components/underscore.string/lib/*.js'
-          'bower_components/jquery/dist/*.js'
-          'bower_components/angular/*.js'
           'bower_components/angular-bootstrap/*-tpls.js'
-          'bower_components/angular-resource/*.js'
           'bower_components/angular-ui-router/release/*.js'
           'bower_components/dat.gui/dat.gui.js'
           'bower_components/moment/*.js'
@@ -58,11 +65,19 @@ module.exports = (grunt) ->
         ]
         dest: '_public/javascripts/vendor.js'
       
+      # The karma unit test libraries. These are not used for
+      # the protractor end-to-end tests. The Google hosted CDN
+      # libraries loaded in the layout/scripts.jade are included
+      # in the package.json dev dependencies and listed below.
+      # The version in package.json should match the version in
+      # layout/scripts.jade. 
       test_js:
         options:
           separator: ';'
         src: [
-          'bower_components/angular-mocks/angular-mocks.js'
+          'node_modules/angular/lib/angular.js'
+          'node_modules/angular-resource/lib/angular-resource.js'
+          'node_modules/angular-mocks/angular-mocks.js'
           'node_modules/chai-as-promised/lib/chai-as-promised.js'
         ]
         dest: '_public/javascripts/test.js'
@@ -144,16 +159,16 @@ module.exports = (grunt) ->
       compile:
         tasks: ['coffee:compile', 'jade:compile', 'markdown', 'stylus']
 
-    ngmin:
+    ngAnnotate:
       src: ['_public/javascripts/app.js']
-      dest: '._public/javascripts/app.ngmin.js'
+      dest: '_build/javascripts/app.min.js'
 
     min:
       options:
         'nomunge': true
         'line-break': 80
       files:
-        src: ['_public/stylesheets/app.ngmin.js']
+        src: ['_build/javascripts/app.min.js']
         dest: '_public/stylesheets/app.min.js'
 
     cssmin:
@@ -167,7 +182,7 @@ module.exports = (grunt) ->
 
   require('load-grunt-tasks')(grunt)
 
-  grunt.registerTask 'default', ['build']
+  grunt.registerTask 'default', ['dev']
 
   grunt.registerTask 'copy:app', ['copy:css', 'copy:fonts', 'copy:static']
 
@@ -179,17 +194,23 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'compile', ['concurrent:compile']
 
-  grunt.registerTask 'build:app', ['vendor:app', 'compile']
+  grunt.registerTask 'build:app', ['clean', 'preprocess:scripts', 'vendor:app', 'compile']
 
   grunt.registerTask 'build:test', ['vendor:test']
 
-  grunt.registerTask 'build', ['clean', 'build:app', 'build:test']
+  grunt.registerTask 'build:dev', ['build:app', 'build:test']
 
-  grunt.registerTask 'start:prod', ['express:prod', 'watch']
+  grunt.registerTask 'build:prod', ['build:app']
+
+  grunt.registerTask 'dev', ['env:dev', 'build:dev']
+
+  grunt.registerTask 'prod', ['env:prod', 'build:prod']
+
+  grunt.registerTask 'start:dev', ['express:dev', 'watch']
 
   grunt.registerTask 'start:test', ['express:test', 'watch']
 
-  grunt.registerTask 'start:dev', ['express:dev', 'watch']
+  grunt.registerTask 'start:prod', ['express:prod', 'watch']
 
   grunt.registerTask 'start', ['start:dev']
 
@@ -199,6 +220,6 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'test', ['express:test', 'test:unit', 'test:e2e']
 
-  grunt.registerTask 'jsmin', ['ngmin', 'min']
+  grunt.registerTask 'jsmin', ['ngAnnotate', 'min']
 
   grunt.registerTask 'release', ['build', 'jsmin', 'cssmin']

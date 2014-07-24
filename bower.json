@@ -16,11 +16,7 @@
   },
   "private": true,
   "dependencies": {
-    "angular": "1.2.15",
-    "angular-animate": "1.2.15",
     "angular-bootstrap": "~0.10.0",
-    "angular-resource": "1.2.15",
-    "angular-route": "1.2.15",
     "angular-ui-router": "~0.2.8",
     "angular-ui-utils": "~0.0.3",
     "angularjs-nvd3-directives": "~0.0.5-beta",
@@ -35,9 +31,6 @@
     "spin.js": "~2.0.0",
     "underscore.string": "~2.3.3",
     "xtk": "FredLoney/get#gh-pages"
-  },
-  "devDependencies": {
-    "angular-mocks": "1.2.15"
   },
   "overrides": {
     "es5-shim": {

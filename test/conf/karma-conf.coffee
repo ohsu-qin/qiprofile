@@ -10,10 +10,12 @@ module.exports = (config) ->
     preprocessors: '**/*.coffee': 'coffee'
 
     # The files or patterns to load in the browser.
+    # test.js is first, since it contains the angular library,
+    # on which the other libraries depend.
     files: [
+      '_public/javascripts/test.js'
       '_public/javascripts/vendor.js'
       '_public/javascripts/app.js'
-      '_public/javascripts/test.js'
       'test/conf/mocha-conf.coffee'
       'test/unit/**/*Spec.coffee'
     ]

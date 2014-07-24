@@ -1,12 +1,24 @@
-# Print the full error message in an alert box. This is a work-around
-# for Chrome bug 331971
-# (cf. https://code.google.com/p/chromium/issues/detail?id=331971)
-# which truncates long error messages. This code is copied from
-# http://stackoverflow.com/a/22218280/674326.
-window.onerror = (errorMsg, url, lineNumber, columnNumber, errorObject) ->
-  # Check the errorObject as IE and FF don't pass it through (yet).
-  if (errorObject && errorObject != undefined)
-    errMsg = errorObject.message
-  else
-    errMsg = errorMsg
-  alert('Error: ' + errMsg)
+helpers = angular.module 'qiprofile.helpers', []
+
+helpers.factory 'Helpers', ->
+  # Copies the given source detail object properties into the
+  # destination object, with the following exception:
+  # * fields which begin with an underscore are not copied
+  #   (including the _id field)
+  copyDetail: (source, dest) ->
+    # Copy the detail properties into the parent object.
+    srcProps = Object.getOwnPropertyNames(source)
+    destProps = Object.getOwnPropertyNames(dest)
+    fields = _.difference(srcProps, destProps)
+    for field in fields
+      if field[0] != '_'
+        dest[field] = source[field]
+
+  # If the given attribute value is a string, then this function
+  # resets it to the parsed date.
+  fixDate: (obj, attr) ->
+    date = obj[attr]
+    # Silly Javascript idiom for string type testing.
+    if typeof date == 'string' or date instanceof String
+      # Reset the attribute to a date.
+      obj[attr] = moment(date)

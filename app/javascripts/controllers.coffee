@@ -1,4 +1,4 @@
-ctlrs = angular.module 'qiprofile.controllers', ['qiprofile.services']
+ctlrs = angular.module 'qiprofile.controllers', []
 
 # The local controller helper methods.
 ctlrs.factory 'ControllerHelper', ['$location', ($location) ->

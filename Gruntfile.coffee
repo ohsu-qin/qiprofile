@@ -65,16 +65,17 @@ module.exports = (grunt) ->
         ]
         dest: '_public/javascripts/vendor.js'
       
-      # The karma unit test libraries. These are not used for
-      # the protractor end-to-end tests. The Google hosted CDN
+      # The karma unit test libraries. These are not used for the
+      # protractor end-to-end tests. The Google hosted CDN angular
       # libraries loaded in the layout/scripts.jade are included
-      # in the package.json dev dependencies and listed below.
-      # The version in package.json should match the version in
-      # layout/scripts.jade. 
+      # in the package.json dev dependencies and listed below. The
+      # angular version in package.json should match the version
+      # in layout/scripts.jade.
       test_js:
         options:
           separator: ';'
         src: [
+          'node_modules/path/path.js'
           'node_modules/angular/lib/angular.js'
           'node_modules/angular-resource/lib/angular-resource.js'
           'node_modules/angular-mocks/angular-mocks.js'

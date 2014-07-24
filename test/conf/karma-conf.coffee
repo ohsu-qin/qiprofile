@@ -4,21 +4,28 @@ module.exports = (config) ->
     basePath: '../..'
 
     # The karma adapter frameworks to use.
-    frameworks: ['mocha', 'chai']
+    frameworks: ['mocha', 'requirejs', 'chai']
+
 
     # The test specs can be written in coffescript.
     preprocessors: '**/*.coffee': 'coffee'
 
     # The files or patterns to load in the browser.
+    
     # test.js is first, since it contains the angular library,
     # on which the other libraries depend.
     files: [
-      '_public/javascripts/test.js'
-      '_public/javascripts/vendor.js'
-      '_public/javascripts/app.js'
-      'test/conf/mocha-conf.coffee'
-      'test/unit/**/*Spec.coffee'
+      #'_public/javascripts/test.js'
+      #'_public/javascripts/vendor.js'
+      #'_public/javascripts/app.js'
+      
+      {pattern: '_public/javascripts/*.js', included: true}
+      {pattern: 'test/conf/mocha-conf.coffee', included: false}
+      #'test/unit/**/*Spec.coffee'
+      {pattern: 'test/unit/**/imageSpec.coffee', included: false}
+      'test/unit/main-test.coffee'
     ]
+
 
     # The test results reporter.
     # Possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'.

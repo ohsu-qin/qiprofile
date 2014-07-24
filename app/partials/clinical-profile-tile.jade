@@ -1,0 +1,21 @@
+.row.qi-clin-profile-row
+    .col-md-12.qi-clin-profile-tile
+      .row.qi-clin-profile-tile-header Tumor Staging
+      .row
+        .col-md-6.qi-clin-profile-prop-name Stage
+        .col-md-6 {{ enc.outcome.tumor_stage }}
+      .row
+        .col-md-6.qi-clin-profile-prop-name Size
+        .col-md-6 {{ enc.outcome.tnm.t_value }}
+      .row
+        .col-md-6.qi-clin-profile-prop-name Lymph Status
+        .col-md-6 {{ enc.outcome.tnm.lymph_status }}
+      .row
+        .col-md-6.qi-clin-profile-prop-name Metastasis
+        .col-md-6 {{ enc.outcome.tnm.metastasis | asTumorScore }}
+      .row
+        .col-md-6.qi-clin-profile-prop-name Grade
+        .col-md-6 {{ enc.outcome.tnm.grade }}
+      .row
+        .col-md-6.qi-clin-profile-prop-name Summary
+        .col-md-6 {{ enc.outcome.tumor_score }}

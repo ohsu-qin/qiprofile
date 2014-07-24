@@ -642,6 +642,38 @@ svcs.factory 'ClinicalProfile', ->
     # The demographics accordion control.
     demogrOpen: true
 
+  configureTile: (outcome) ->
+    tile = 
+      tnm:
+        heading: 'Tumor Staging'
+        row:
+          [
+            {
+              label: 'Stage'
+              accessor: null
+            }
+            {
+              label: 'Size'
+              accessor: null
+            }
+            {
+              label: 'Lymph Status'
+              accessor: null
+            }
+            {
+              label: 'Metastasis'
+              accessor: null
+            }
+            {
+              label: 'Grade'
+              accessor: null
+            }
+            {
+              label: 'Summary'
+              accessor: null
+            }
+          ]
+
 
 svcs.factory 'Intensity', ['Chart', (Chart) ->
   # Highlights the bolus arrival tick mark.

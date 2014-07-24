@@ -81,6 +81,19 @@ directives.directive 'qiClinicalProfile', ['ClinicalProfile', (ClinicalProfile) 
 ]
 
 
+# Displays a clinical profile tile.
+directives.directive 'qiClinicalProfileTile', ['ClinicalProfile', (ClinicalProfile) ->
+  restrict: 'E'
+  scope:
+    outcome: '='   # the outcome data
+  link: (scope, element, attrs) ->
+    scope.$watch 'outcome', (outcome) ->
+      if subject
+        scope.config = ClinicalProfile.configureTile(outcome)
+  templateUrl: '/partials/clinical-profile-tile.html'
+]
+
+
 # Displays the MR session visit dateline chart.
 directives.directive 'qiVisitDateline', ['VisitDateline', (VisitDateline) ->
   restrict: 'E'

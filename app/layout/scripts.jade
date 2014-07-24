@@ -1,0 +1,44 @@
+//-
+  NODE_ENV is set by the Grunt env task. Then the Grunt preprocess
+  task substitutes the NODE_ENV value for the right-hand side of
+  the assignment below and writes the resulting Jade file to
+  _build/layout/scripts.jade. The layout.jade file includes this
+  _build file. Then the Jade compiler sets the min variable
+  based on the env value and substitutes the min in the script
+  mixin.
+-var env = "<!-- @echo NODE_ENV -->"
+case env
+  when 'production'
+    -var min = '.min'
+  default
+    -var min = ''
+
+//- @param prefix the URL minus the extension
+//- @returns the script function
+mixin script(prefix)
+  script(src= prefix + min + '.js')
+
+//- The angular CDN location.
+-var cdn = '//ajax.googleapis.com/ajax/libs'
+
+//- The angular version.
+-var angularVers = '1.2.19'
+
+//- The angular CDN location.
+-var angularCDN = cdn + '/angularjs/' + angularVers
+
+//- The angular libraries to download.
+-var angular_libs = ['angular', 'angular-route', 'angular-resource', 'angular-animate']
+
+//- Format the script elements.
++script(cdn + '/jquery/2.1.1/jquery')
+for lib in angular_libs
+  +script(angularCDN + '/' + lib)
++script('/static/javascripts/vendor')
++script('/static/javascripts/app')
+
+//- IE kludge to simulate HTML5.
+//
+  [if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]

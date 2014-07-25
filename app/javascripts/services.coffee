@@ -642,37 +642,70 @@ svcs.factory 'ClinicalProfile', ->
     # The demographics accordion control.
     demogrOpen: true
 
-  configureTile: (outcome) ->
-    tile = 
+  configureTile: (outcome, tile) ->
+    TNM_METASTASIS =
+      {
+        false: '0'
+        true: '1'
+      }
+    TEST_RESULTS =
+      {
+        false: 'negative'
+        true: 'positive'
+      }
+    notNull = (val) ->
+      if val == null or val == undefined
+        false
+      else
+        true
+    # Formatting functions.
+    asPercent = (val) ->
+      val.toString().concat('%')
+    astestResult = (val) ->
+      TEST_RESULTS[val]
+    asTumorScore = (val) ->
+      TNM_METASTASIS[val]
+    asReactionScore = (val) ->
+      if val > 0
+        val.toString().concat('+')
+      else
+        val
+    # The tile specification.
+    tiles = 
       tnm:
-        heading: 'Tumor Staging'
-        row:
+        header: 'Tumor Staging'
+        rows:
           [
             {
               label: 'Stage'
-              accessor: null
+              accessor: (outcome) -> outcome.tumor_stage
             }
             {
               label: 'Size'
-              accessor: null
+              accessor: (outcome) -> outcome.tnm.t_value
             }
             {
               label: 'Lymph Status'
-              accessor: null
+              accessor: (outcome) -> outcome.tnm.lymph_status
             }
             {
               label: 'Metastasis'
-              accessor: null
+              accessor: (outcome) -> val = asTumorScore(outcome.tnm.metastasis)
             }
             {
               label: 'Grade'
-              accessor: null
+              accessor: (outcome) -> outcome.tnm.grade
             }
             {
               label: 'Summary'
-              accessor: null
+              accessor: (outcome) -> outcome.tumor_score
             }
           ]
+    rows = []
+    for row in tiles[tile].rows
+      rows.push row if notNull(row.accessor(outcome))
+    rows: rows
+    header: tiles[tile].header
 
 
 svcs.factory 'Intensity', ['Chart', (Chart) ->

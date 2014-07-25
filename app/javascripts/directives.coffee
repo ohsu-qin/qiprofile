@@ -86,10 +86,11 @@ directives.directive 'qiClinicalProfileTile', ['ClinicalProfile', (ClinicalProfi
   restrict: 'E'
   scope:
     outcome: '='   # the outcome data
+    tile: '='  # the outcome data group, e.g. 'tnm'
   link: (scope, element, attrs) ->
     scope.$watch 'outcome', (outcome) ->
-      if subject
-        scope.config = ClinicalProfile.configureTile(outcome)
+      if outcome
+        scope.config = ClinicalProfile.configureTile(outcome, attrs.tile)
   templateUrl: '/partials/clinical-profile-tile.html'
 ]
 

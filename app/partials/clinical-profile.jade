@@ -21,65 +21,19 @@ h4.col-md-offset-1
       .row.qi-clin-profile-row
         .col-md-1.qi-clin-profile-prop-name Date
         .col-md-11 {{ enc.date | moment }}
-      .row
-        // Tumor staging and grade column
-        .col-md-6(ng-show="enc.is_staging_or_grade")
-          // Tumor staging
-          qi-clinical-profile-tile(outcome='enc.outcome' tile='tnm')
-          // Nottingham grade
-          .row.qi-clin-profile-row
-            .col-md-12.qi-clin-profile-tile
-              .row.qi-clin-profile-tile-header Nottingham Grade
-              .row
-                .col-md-6.qi-clin-profile-prop-name Tubules
-                .col-md-6 {{ enc.outcome.grade.tubular_formation }}
-              .row
-                .col-md-6.qi-clin-profile-prop-name Nuclei
-                .col-md-6 {{ enc.outcome.grade.mitotic_count }}
-              .row
-                .col-md-6.qi-clin-profile-prop-name Mitoses
-                .col-md-6 {{ enc.outcome.grade.nuclear_pleomorphism }}
-              .row
-                .col-md-6.qi-clin-profile-prop-name Overall
-                .col-md-6 {{ enc.outcome.overall_grade }}
-        // // Hormone receptors and expression column
+      .row(ng-repeat="outcome in enc.outcomes")
+        // Column displaying tumor staging and grade information.
+        // Hide the column if there is no data.
+        .col-md-6(ng-show="outcome.is_staging_or_grade_data")
+          // Tumor staging tile.
+          qi-clinical-profile-tile(outcome='outcome' tile='tnm')
+          // Nottingham grade tile.
+          qi-clinical-profile-tile(outcome='outcome' tile='grade')
+        // Column displaying hormone receptor and expression data.
         .col-md-6
-          // Estrogen Receptor
-          .row.qi-clin-profile-row
-            .col-md-12.qi-clin-profile-tile
-              .row.qi-clin-profile-tile-header Estrogen Receptor
-              .row
-                .col-md-6.qi-clin-profile-prop-name Result
-                .col-md-6 {{ enc.outcome.estrogen.positive }}
-              .row
-                .col-md-6.qi-clin-profile-prop-name Intensity
-                .col-md-6 {{ enc.outcome.estrogen.intensity }}
-              .row
-                .col-md-6.qi-clin-profile-prop-name Quick Score
-                .col-md-6 {{ enc.outcome.estrogen.quick_score }}
-          // Progesterone Receptor
-          .row.qi-clin-profile-row
-            .col-md-12.qi-clin-profile-tile
-              .row.qi-clin-profile-tile-header Progesterone Receptor
-              .row
-                .col-md-6.qi-clin-profile-prop-name Result
-                .col-md-6 {{ enc.outcome.progestrogen.positive }}
-              .row
-                .col-md-6.qi-clin-profile-prop-name Intensity
-                .col-md-6 {{ enc.outcome.progestrogen.intensity }}
-              .row
-                .col-md-6.qi-clin-profile-prop-name Quick Score
-                .col-md-6 {{ enc.outcome.progestrogen.quick_score }}
-          // NExpression
-          .row.qi-clin-profile-row
-            .col-md-12.qi-clin-profile-tile
-              .row.qi-clin-profile-tile-header Expression
-              .row
-                .col-md-6.qi-clin-profile-prop-name HER2/neu IHC
-                .col-md-6 {{ enc.outcome.her2_neu_ihc }}
-              .row
-                .col-md-6.qi-clin-profile-prop-name HER2/neu FISH
-                .col-md-6 {{ enc.outcome.her2_neu_fish }}
-              .row
-                .col-md-6.qi-clin-profile-prop-name Ki-67
-                .col-md-6 {{ enc.outcome.ki_67 }}
+          // Estrogen Receptor.
+          qi-clinical-profile-tile(outcome='outcome' tile='estrogen')
+          // Progesterone Receptor.
+          qi-clinical-profile-tile(outcome='outcome' tile='progestrogen')
+          // Expression.
+          qi-clinical-profile-tile(outcome='outcome' tile='expression')

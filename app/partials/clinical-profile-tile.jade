@@ -1,4 +1,4 @@
-.row.qi-clin-profile-row
+.row.qi-clin-profile-row(ng-show="config.rows")
     .col-md-12.qi-clin-profile-tile
       .row.qi-clin-profile-tile-header {{ config.header }}
       .row(ng-repeat="row in config.rows")

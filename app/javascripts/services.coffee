@@ -438,224 +438,251 @@ svcs.factory 'VisitDateline', ['Chart', (Chart) ->
 
 
 svcs.factory 'ClinicalProfile', ->
-  configureProfile: (subject) ->
-    # The standard FDA race categories.
-    RACE_CHOICES =
+  # The standard FDA race categories.
+  RACE_CHOICES =
+    {
+      'White': 'White'
+      'Black': 'Black or African American'
+      'Asian': 'Asian'
+      'AIAN': 'American Indian or Alaska Native'
+      'NHOPI': 'Native Hawaiian or Other Pacific Islander'
+    }
+  # The standard FDA ethnicity categories.
+  ETHNICITY_CHOICES =
+    {
+      'Hispanic': 'Hispanic or Latino'
+      'Non-Hispanic': 'Not Hispanic or Latino'
+      null: 'Not specified'
+    }
+  # Test result categorized as positive or negative.
+  TEST_RESULTS =
+    {
+      false: 'negative'
+      true: 'positive'
+    }
+  # The TNM metastatis parameters.
+  TNM_METASTASIS =
+    {
+      false: '0'
+      true: '1'
+    }
+  # The cancer stages corresponding to tumor scores,
+  # assuming no metastasis (M0).
+  #
+  # 'Breast':
+  #   {
+  #     Size:
+  #       {
+  #         Lymph Status: Stage
+  #       }
+  #   }
+  # 'Sarcoma':
+  #   {
+  #     Size:
+  #       {
+  #         Lymph Status:
+  #           {
+  #             Grade: Stage
+  #           }
+  #       }
+  #   }
+  #
+  TUMOR_STAGES =
+    'Breast':
       {
-        'White': 'White'
-        'Black': 'Black or African American'
-        'Asian': 'Asian'
-        'AIAN': 'American Indian or Alaska Native'
-        'NHOPI': 'Native Hawaiian or Other Pacific Islander'
+        "X":
+          {
+          }
+        "is":
+          {
+            0: '0'
+          }
+        0:
+          {
+            '1mi': 'IB'
+            1: 'IIA'
+            2: 'IIIA'
+            3: 'IIIC'
+          }
+        1:
+          {
+            0: 'IA'
+            '1mi': 'IB'
+            1: 'IIA'
+            2: 'IIIA'
+            3: 'IIIC'
+          }
+        2:
+          {
+            0: 'IIA'
+            1: 'IIB'
+            2: 'IIIA'
+            3: 'IIIC'
+          }
+        3:
+          {
+            0: 'IIB'
+            1: 'IIIA'
+            2: 'IIIA'
+            3: 'IIIC'
+          }
+        4:
+          {
+            0: 'IIIB'
+            1: 'IIIB'
+            2: 'IIIB'
+            3: 'IIIC'
+          }
       }
-    # The standard FDA ethnicity categories.
-    ETHNICITY_CHOICES =
+    'Sarcoma':
       {
-        'Hispanic': 'Hispanic or Latino'
-        'Non-Hispanic': 'Not Hispanic or Latino'
-        null: 'Not specified'
+        1:
+          {
+            0:
+              {
+                1: 'IA'
+                2: 'IIA'
+                3: 'IIA'
+              }
+            1:
+              {
+                1: 'III'
+                2: 'III'
+                3: 'III'
+              }
+          }
+        2:
+          {
+            0:
+              {
+                1: 'IB'
+                2: 'IIB'
+                3: 'III'
+              }
+            1:
+              {
+                1: 'III'
+                2: 'III'
+                3: 'III'
+              }
+          }
       }
-    # The TNM metastatis parameters.
-    TNM_METASTASIS =
-      {
-        false: '0'
-        true: '1'
-      }
-    # The cancer stage corresponding to tumor scores, where there is no metastasis (M0).
-    # Sources:
-    # * Breast: http://www.cancer.gov/cancertopics/pdq/treatment/breast/healthprofessional/page3
-    # * Sarcoma: http://www.cancer.org/cancer/sarcoma-adultsofttissuecancer/detailedguide/sarcoma-adult-soft-tissue-cancer-staging
-    #
-    # 'Breast':
-    #   {
-    #     Size:
-    #       {
-    #         Lymph Status: Stage
-    #       }
-    #   }
-    # 'Sarcoma':
-    #   {
-    #     Size:
-    #       {
-    #         Lymph Status:
-    #           {
-    #             Grade: Stage
-    #           }
-    #       }
-    #   }
-    #
-    TUMOR_STAGES =
-      'Breast':
-        {
-          "X":
-            {
-            }
-          "is":
-            {
-              0: '0'
-            }
-          0:
-            {
-              '1mi': 'IB'
-              1: 'IIA'
-              2: 'IIIA'
-              3: 'IIIC'
-            }
-          1:
-            {
-              0: 'IA'
-              '1mi': 'IB'
-              1: 'IIA'
-              2: 'IIIA'
-              3: 'IIIC'
-            }
-          2:
-            {
-              0: 'IIA'
-              1: 'IIB'
-              2: 'IIIA'
-              3: 'IIIC'
-            }
-          3:
-            {
-              0: 'IIB'
-              1: 'IIIA'
-              2: 'IIIA'
-              3: 'IIIC'
-            }
-          4:
-            {
-              0: 'IIIB'
-              1: 'IIIB'
-              2: 'IIIB'
-              3: 'IIIC'
-            }
-        }
-      'Sarcoma':
-        {
-          1:
-            {
-              0:
-                {
-                  1: 'IA'
-                  2: 'IIA'
-                  3: 'IIA'
-                }
-              1:
-                {
-                  1: 'III'
-                  2: 'III'
-                  3: 'III'
-                }
-            }
-          2:
-            {
-              0:
-                {
-                  1: 'IB'
-                  2: 'IIB'
-                  3: 'III'
-                }
-              1:
-                {
-                  1: 'III'
-                  2: 'III'
-                  3: 'III'
-                }
-            }
-        }
+  # ** put this in routes **
+  encounters = [
+    {
+       "date": "2012-10-04T00:00:00",
+       "outcomes": [
+         {
+            "estrogen": {
+               "positive": true,
+               "intensity": 68,
+               "quick_score": 2
+            },
+            "grade": {
+               "tubular_formation": 2,
+               "mitotic_count": 1,
+               "nuclear_pleomorphism": 2
+            },
+            "her2_neu_ihc": 4,
+            "her2_neu_fish": true,
+            "progestrogen": {
+               "positive": true,
+               "intensity": 9,
+               "quick_score": 7
+            },
+            "tnm": {
+               "grade": 2,
+               "lymph_status": 1,
+               "metastasis": false,
+               "size": "pT2"
+            },
+            "ki_67": 40
+         }
+       ],
+       "encounter_type": "Biopsy",
+       "id": "53c6bf0debafc4e7cf3d1d42"
+    }
+  ]
 
-    # ** put this in routes **
-    encounters = [
-      {
-         "date": "2012-10-04T00:00:00",
-         "outcomes": [
-           {
-              "estrogen": {
-                 "positive": true,
-                 "intensity": 68,
-                 "quick_score": 2
-              },
-              "grade": {
-                 "tubular_formation": 2,
-                 "mitotic_count": 1,
-                 "nuclear_pleomorphism": 2
-              },
-              "her2_neu_ihc": 4,
-              "her2_neu_fish": true,
-              "progestrogen": {
-                 "positive": true,
-                 "intensity": 9,
-                 "quick_score": 7
-              },
-              "tnm": {
-                 "grade": 2,
-                 "lymph_status": 1,
-                 "metastasis": false,
-                 "size": "pT2"
-              },
-              "ki_67": 40
-           }
-         ],
-         "encounter_type": "Biopsy",
-         "id": "53c6bf0debafc4e7cf3d1d42"
-      }
-    ]
+  configureProfile: (subject) ->
+    dataExists = (obj) ->
+    # Check whether an object contains any data.
+      if not obj
+        false
+      else
+        result = false
+        for key of obj
+          if obj[key]?
+            result = true
+            break
+      result
+    addOverallTumorGrade = (grade) ->
+      # Calculate the overall Nottingham grade.
+      # Values for all three grade components are necessary,
+      # so if any are missing then return as 'undetermined'.
+      if Object.keys(grade).length < 3
+        overall_grade = 'undetermined'
+      else
+        overall_grade = 0
+        for key of grade
+          if grade[key]
+            overall_grade += grade[key]
+          else
+            overall_grade = 'undetermined'
+            break
+      overall_grade
+    addTumorStaging = (tnm) ->
+      # Add the T value without any prefixes (i.e. c or p) to the outcome.
+      if tnm.size
+        size = tnm.size
+        t_value = size.split('T')[1]
+      else
+        size = 'TX'
+        t_value = null
+      _.extend tnm, t_value: t_value
+      # Obtain the N, M, and G values as strings. Set to 'X' if no data.
+      t = if tnm.t_value then tnm.t_value else 'X'
+      n = if tnm.lymph_status then tnm.lymph_status.toString() else 'X'
+      m = if tnm.metastasis? then TNM_METASTASIS[tnm.metastasis] else 'X'
+      g = if tnm.grade then tnm.grade.toString() else 'X'
+      # Create the composite TNMG score.
+      tumor_score = size.concat('N', n, 'M', m, 'G', g)
+      # Look up the tumor stage.
+      # If metastasis exits (M1), it is stage IV. Otherwise,
+      # breast cancer stage is determined by T and N scores
+      # and sarcoma stage is determined by T, N, and G scores.
+      if tnm.metastasis
+        tumor_stage = 'IV'
+      else if subject.collection == 'Breast'
+        tumor_stage = TUMOR_STAGES['Breast'][t][n]
+      else
+        # For sarcoma, use the T value without any suffix (i.e. a or b).
+        tumor_stage = TUMOR_STAGES['Sarcoma'][t.substring(0, 1)][n][g]
+      tumor_stage = "undetermined" if not tumor_stage
+      # Return the composite TNM score and the stage.
+      tumor_score: tumor_score, tumor_stage: tumor_stage
 
     # Extend the subject encounters and outcomes.
     #for enc in subject.encounters
     for enc in encounters
       for outcome in enc.outcomes
-        # The TNM scores.
+        # Add the tumor composite score and stage to the outcome if data exist.
         tnm = outcome.tnm
-        for key of tnm
-          is_staging_data = true if tnm.key != null
+        is_staging_data = dataExists(tnm)
         if is_staging_data
-          # Add the T value without any prefixes (i.e., c or p) to the outcome.
-          if tnm.size
-            size = tnm.size
-            t_value = tnm.size.split('T')[1]
-          else
-            size = 'TX'
-            t_value = null
-          _.extend outcome.tnm, t_value: t_value
-          # Obtain the N, M, and G values as strings. Set to 'X' if no data.
-          t = if tnm.t_value == null then 'X' else tnm.t_value
-          n = if tnm.lymph_status == null then 'X' else tnm.lymph_status.toString()
-          m = if tnm.metastasis == null then 'X' else TNM_METASTASIS[tnm.metastasis]
-          g = if tnm.grade == null then 'X' else tnm.grade.toString()
-          # Add the composite TNMG score to the encounter.
-          _.extend outcome, tumor_score: size.concat('N', n, 'M', m, 'G', g)
-          # Look up the tumor stage and add it to the encounter.
-          # If metastasis exits (M1), it is stage IV. Otherwise,
-          # breast cancer stage is determined by T and N scores
-          # and sarcoma stage is determined by T, N, and G scores.
-          if tnm.metastasis
-            tumor_stage = 'IV'
-          else if subject.collection == 'Breast'
-            tumor_stage = TUMOR_STAGES['Breast'][t][n]
-          else
-            # Use the T value without any suffix (i.e., a or b) to do the lookup.
-            t = t.substring(0, 1) 
-            tumor_stage = TUMOR_STAGES['Sarcoma'][t][n][g]
-          tumor_stage = "undetermined" if not tumor_stage
-          _.extend outcome, tumor_stage: tumor_stage
-        # Calculate and add the overall grade
+          staging = addTumorStaging(tnm)
+          _.extend outcome, tumor_score: staging.tumor_score
+          _.extend outcome, tumor_stage: staging.tumor_stage
+        # Add the overall grade to the outcome if data exist.
         grade = outcome.grade
-        for key of grade
-          is_grade_data = true if grade.key != null
+        is_grade_data = dataExists(grade)
         if is_grade_data
-          if grade.tubular_formation == null or grade.mitotic_count == null or grade.nuclear_pleomorphism == null
-            overall_grade = 'N/A'
-          else
-            overall_grade = grade.tubular_formation + grade.mitotic_count + grade.nuclear_pleomorphism
-        else
-          overall_grade = null
-        _.extend outcome.grade, overall_grade: overall_grade
-        # Add boolean flag to indicate whether staging and grade data both exist.
-        flag = if is_staging_data or is_grade_data then true else false
-        _.extend outcome, is_staging_or_grade_data: flag
-      # Add accordion control default boolean flag to the encounter.
+          _.extend grade, overall_grade: addOverallTumorGrade(grade)
+        # Add a flag indicating whether staging and grade data both exist.
+        # If neither exist, the clinical profile column containing their tiles
+        # will be hidden.
+        _.extend outcome, is_staging_or_grade_data: is_staging_data or is_grade_data
+      # Add accordion control flag to the encounter.
       _.extend enc, accordion_open: true
     # The subject encounters.
     #encounters: subject.encounters
@@ -667,34 +694,15 @@ svcs.factory 'ClinicalProfile', ->
     demogrOpen: true
 
   configureTile: (outcome, tile) ->
-    TNM_METASTASIS =
-      {
-        false: '0'
-        true: '1'
-      }
-    TEST_RESULTS =
-      {
-        false: 'negative'
-        true: 'positive'
-      }
     # Formatting functions.
-    # Display with a % sign following the value.
-    asPercent = (val) ->
-      val.toString().concat('%')
-    # Display test result as positive or negative.
-    asTestResult = (val) ->
-      TEST_RESULTS[val]
-    # Display metastasis (M) as 0 or 1.
-    asTumorScore = (val) ->
-      TNM_METASTASIS[val]
-    # Display with a + sign following the value if it is not 0.
+    asPct = (val) ->
+      # Display with a % sign following the value unless it is null.
+      result = if val then val.toString().concat('%') else val
     asReactionScore = (val) ->
-      if val > 0
-        val.toString().concat('+')
-      else
-        val
+      # Display with a + sign following the value if it is not zero.
+      result = if val > 0 then val.toString().concat('+') else val
     # The tile specification.
-    tiles = 
+    tiles =
       tnm:
         header: 'Tumor Staging'
         rows:
@@ -713,8 +721,7 @@ svcs.factory 'ClinicalProfile', ->
             }
             {
               label: 'Metastasis'
-              accessor: (outcome) ->
-                val = asTumorScore(outcome.tnm.metastasis) if outcome.tnm.metastasis?
+              accessor: (outcome) -> TNM_METASTASIS[outcome.tnm.metastasis]
             }
             {
               label: 'Grade'
@@ -752,13 +759,11 @@ svcs.factory 'ClinicalProfile', ->
           [
             {
               label: 'Result'
-              accessor: (outcome) ->
-                val = asTestResult(outcome.estrogen.positive) if outcome.estrogen.positive?
+              accessor: (outcome) -> TEST_RESULTS[outcome.estrogen.positive]
             }
             {
               label: 'Intensity'
-              accessor: (outcome) ->
-                val = asPercent(outcome.estrogen.intensity) if outcome.estrogen.intensity?
+              accessor: (outcome) -> val = asPct(outcome.estrogen.intensity)
             }
             {
               label: 'Quick Score'
@@ -771,13 +776,11 @@ svcs.factory 'ClinicalProfile', ->
           [
             {
               label: 'Result'
-              accessor: (outcome) ->
-                val = asTestResult(outcome.progestrogen.positive) if outcome.progestrogen.positive?
+              accessor: (outcome) -> TEST_RESULTS[outcome.progestrogen.positive]
             }
             {
               label: 'Intensity'
-              accessor: (outcome) ->
-                val = asPercent(outcome.progestrogen.intensity) if outcome.progestrogen.intensity?
+              accessor: (outcome) -> val = asPct(outcome.progestrogen.intensity)
             }
             {
               label: 'Quick Score'
@@ -790,21 +793,19 @@ svcs.factory 'ClinicalProfile', ->
           [
             {
               label: 'HER2/neu IHC'
-              accessor: (outcome) ->
-                val = asReactionScore(outcome.her2_neu_ihc) if outcome.her2_neu_ihc?
+              accessor: (outcome) -> val = asReactionScore(outcome.her2_neu_ihc)
             }
             {
               label: 'HER2/neu FISH'
-              accessor: (outcome) ->
-                val = asTestResult(outcome.her2_neu_fish) if outcome.her2_neu_fish?
+              accessor: (outcome) -> TEST_RESULTS[outcome.her2_neu_fish]
             }
             {
               label: 'Ki-67'
-              accessor: (outcome) ->
-                val = asPercent(outcome.ki_67) if outcome.ki_67?
+              accessor: (outcome) -> val = asPct(outcome.ki_67)
             }
           ]
-    # Return the tile rows.
+    # Return the rows for the designated tile.
+    # Include only those for which data are not null.
     rows = []
     for row in tiles[tile].rows
       rows.push row if row.accessor(outcome)?

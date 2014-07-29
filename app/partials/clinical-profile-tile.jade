@@ -1,6 +1,9 @@
+// Show this tile only if at least one row of data exists.
 .row.qi-clin-profile-row(ng-show="config.rows")
     .col-md-12.qi-clin-profile-tile
+      // The tile header.
       .row.qi-clin-profile-tile-header {{ config.header }}
       .row(ng-repeat="row in config.rows")
+        // The row label and data.
         .col-md-6.qi-clin-profile-prop-name {{ row.label }}
         .col-md-6 {{ row.accessor(outcome) }}

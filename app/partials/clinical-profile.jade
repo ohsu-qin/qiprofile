@@ -11,14 +11,14 @@ h4.col-md-offset-1
         i.pull-right.glyphicon(
           ng-class="{'glyphicon-chevron-down': config.demogrOpen, 'glyphicon-chevron-up': !config.demogrOpen}"
         )
-      .row
-        .col-md-2.qi-clinical-prop Age
+      .row.qi-clin-element
+        .col-md-2.qi-clin-element-label Age
         .col-md-10 {{ subject.age }}
-      .row
-        .col-md-2.qi-clinical-prop Race
+      .row.qi-clin-element
+        .col-md-2.qi-clin-element-label Race
         .col-md-10 {{ config.races }}
-      .row
-        .col-md-2.qi-clinical-prop Ethnicity
+      .row.qi-clin-element
+        .col-md-2.qi-clin-element-label Ethnicity
         .col-md-10 {{ config.ethnicity }}
   // Mark up accordian header and content for each encounter.
   accordion(ng-repeat="enc in config.encounters")
@@ -27,9 +27,9 @@ h4.col-md-offset-1
         i.pull-right.glyphicon(
           ng-class="{'glyphicon-chevron-down': enc.accordion_open, 'glyphicon-chevron-up': !enc.accordion_open}"
         )
-      .row.qi-clin-profile-row
+      .row.qi-clin-element
         // The encounter date.
-        .col-md-1.qi-clin-profile-prop-name Date
+        .col-md-1.qi-clin-element-label Date
         .col-md-11 {{ enc.date | moment }}
       // Include tiles that display data for each outcome in the encounter.
       .row(ng-repeat="outcome in enc.outcomes")
@@ -40,13 +40,13 @@ h4.col-md-offset-1
         // staging or grade. If both catgories completely lack data, this
         // column is hidden and the receptor/expression column will float
         // from the right to the left.
-        .col-md-6.qi-clin-profile-col(ng-show="outcome.is_staging_or_grade_data")
+        .col-md-6.qi-clin-col(ng-show="outcome.is_staging_or_grade_data")
           // Tumor staging tile.
           qi-clinical-profile-tile(outcome="outcome" tile="tnm")
           // Nottingham grade tile.
           qi-clinical-profile-tile(outcome="outcome" tile="grade")
         // Column displaying hormone receptor and expression data.
-        .col-md-6.qi-clin-profile-col
+        .col-md-6.qi-clin-col
           // Estrogen Receptor tile.
           qi-clinical-profile-tile(outcome="outcome" tile="estrogen")
           // Progesterone Receptor tile.

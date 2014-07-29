@@ -567,46 +567,10 @@ svcs.factory 'ClinicalProfile', ->
               }
           }
       }
-  # ** put this in routes **
-  encounters = [
-    {
-       "date": "2012-10-04T00:00:00",
-       "outcomes": [
-         {
-            "estrogen": {
-               "positive": true,
-               "intensity": 68,
-               "quick_score": 2
-            },
-            "grade": {
-               "tubular_formation": 2,
-               "mitotic_count": 1,
-               "nuclear_pleomorphism": 2
-            },
-            "her2_neu_ihc": 4,
-            "her2_neu_fish": true,
-            "progestrogen": {
-               "positive": true,
-               "intensity": 9,
-               "quick_score": 7
-            },
-            "tnm": {
-               "grade": 2,
-               "lymph_status": 1,
-               "metastasis": false,
-               "size": "pT2"
-            },
-            "ki_67": 40
-         }
-       ],
-       "encounter_type": "Biopsy",
-       "id": "53c6bf0debafc4e7cf3d1d42"
-    }
-  ]
 
   configureProfile: (subject) ->
-    dataExists = (obj) ->
-    # Check whether an object contains any data.
+    dataExist = (obj) ->
+    # Check whether an object contains any outcome data.
       if not obj
         false
       else
@@ -616,7 +580,7 @@ svcs.factory 'ClinicalProfile', ->
             result = true
             break
       result
-    addOverallTumorGrade = (grade) ->
+    getOverallTumorGrade = (grade) ->
       # Calculate the overall Nottingham grade.
       # Values for all three grade components are necessary,
       # so if any are missing then return as 'undetermined'.
@@ -631,7 +595,7 @@ svcs.factory 'ClinicalProfile', ->
             overall_grade = 'undetermined'
             break
       overall_grade
-    addTumorStaging = (tnm) ->
+    getTumorStaging = (tnm) ->
       # Add the T value without any prefixes (i.e. c or p) to the outcome.
       if tnm.size
         size = tnm.size
@@ -663,30 +627,29 @@ svcs.factory 'ClinicalProfile', ->
       tumor_score: tumor_score, tumor_stage: tumor_stage
 
     # Extend the subject encounters and outcomes.
-    #for enc in subject.encounters
-    for enc in encounters
+    for enc in subject.encounters
       for outcome in enc.outcomes
-        # Add the tumor composite score and stage to the outcome if data exist.
+        # Add the tumor composite score and stage to the outcome
+        # if staging data exist.
         tnm = outcome.tnm
-        is_staging_data = dataExists(tnm)
+        is_staging_data = dataExist(tnm)
         if is_staging_data
-          staging = addTumorStaging(tnm)
+          staging = getTumorStaging(tnm)
           _.extend outcome, tumor_score: staging.tumor_score
           _.extend outcome, tumor_stage: staging.tumor_stage
-        # Add the overall grade to the outcome if data exist.
+        # Add the overall grade to the outcome if grade data exist.
         grade = outcome.grade
-        is_grade_data = dataExists(grade)
+        is_grade_data = dataExist(grade)
         if is_grade_data
-          _.extend grade, overall_grade: addOverallTumorGrade(grade)
+          _.extend grade, overall_grade: getOverallTumorGrade(grade)
         # Add a flag indicating whether staging and grade data both exist.
-        # If neither exist, the clinical profile column containing their tiles
-        # will be hidden.
+        # If neither do so, the clinical profile column containing their tiles
+        # will be hidden from display.
         _.extend outcome, is_staging_or_grade_data: is_staging_data or is_grade_data
-      # Add accordion control flag to the encounter.
+      # Add the accordion control flag to the encounter.
       _.extend enc, accordion_open: true
     # The subject encounters.
-    #encounters: subject.encounters
-    encounters: encounters
+    encounters: subject.encounters
     # The demographic data.
     races: (RACE_CHOICES[race] for race in subject.races).join(', ')
     ethnicity: ETHNICITY_CHOICES[subject.ethnicity]
@@ -704,7 +667,7 @@ svcs.factory 'ClinicalProfile', ->
     # The tile specification.
     tiles =
       tnm:
-        header: 'Tumor Staging'
+        label: 'Tumor Staging'
         rows:
           [
             {
@@ -733,7 +696,7 @@ svcs.factory 'ClinicalProfile', ->
             }
           ]
       grade:
-        header: 'Nottingham Grade'
+        label: 'Nottingham Grade'
         rows:
           [
             {
@@ -754,7 +717,7 @@ svcs.factory 'ClinicalProfile', ->
             }
           ]
       estrogen:
-        header: 'Estrogen Receptor'
+        label: 'Estrogen Receptor'
         rows:
           [
             {
@@ -771,7 +734,7 @@ svcs.factory 'ClinicalProfile', ->
             }
           ]
       progestrogen:
-        header: 'Progesterone Receptor'
+        label: 'Progesterone Receptor'
         rows:
           [
             {
@@ -788,7 +751,7 @@ svcs.factory 'ClinicalProfile', ->
             }
           ]
       expression:
-        header: 'Expression'
+        label: 'Expression'
         rows:
           [
             {
@@ -810,7 +773,7 @@ svcs.factory 'ClinicalProfile', ->
     for row in tiles[tile].rows
       rows.push row if row.accessor(outcome)?
     rows: rows
-    header: tiles[tile].header
+    label: tiles[tile].label
 
 
 svcs.factory 'Intensity', ['Chart', (Chart) ->

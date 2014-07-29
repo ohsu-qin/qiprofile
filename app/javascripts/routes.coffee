@@ -44,6 +44,42 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
           Helpers.fixDate(enc, 'date') for enc in detail.encounters
           # Calculate the subject's age.
           _.extend detail, age: Helpers.getAge(detail.birth_date)
+          #
+          #
+          # ** TEMP dummy outcome data **
+          dummy_outcome =
+            [
+              {
+                "estrogen": {
+                   "positive": true,
+                   "intensity": 68,
+                   "quick_score": 2
+                },
+                "grade": {
+                   "tubular_formation": 2,
+                   "mitotic_count": 1,
+                   "nuclear_pleomorphism": 2
+                },
+                "her2_neu_ihc": 4,
+                "her2_neu_fish": true,
+                "progestrogen": {
+                   "positive": true,
+                   "intensity": 9,
+                   "quick_score": 7
+                },
+                "tnm": {
+                   "grade": 2,
+                   "lymph_status": 1,
+                   "metastasis": false,
+                   "size": "pT2"
+                },
+                "ki_67": 40
+              }
+            ]
+          for enc in detail.encounters
+            _.extend enc, outcomes: dummy_outcome
+          #
+          #
           # Copy the detail content into the subject.
           Helpers.copyContent(detail, subject)
           # Set a flag indicating whether there is more than one

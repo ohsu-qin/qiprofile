@@ -580,17 +580,14 @@ svcs.factory 'ClinicalProfile', ->
     getOverallTumorGrade = (grade) ->
       # Calculate the overall Nottingham grade.
       # Values for all three grade components are necessary,
-      # so if any are missing then return as 'undetermined'.
-      if Object.keys(grade).length < 3
-        overall_grade = 'undetermined'
-      else
-        overall_grade = 0
-        for key of grade
-          if grade[key]
-            overall_grade += grade[key]
-          else
-            overall_grade = 'undetermined'
-            break
+      # so if any are null then return as 'undetermined'.
+      overall_grade = 0
+      for key of grade
+        if grade[key]
+          overall_grade += grade[key]
+        else
+          overall_grade = 'undetermined'
+          break
       overall_grade
     getTumorStaging = (tnm) ->
       # Add the T value without any prefixes (i.e. c or p) to the outcome.

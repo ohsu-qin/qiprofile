@@ -75,6 +75,32 @@ routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
                 },
                 "ki_67": 40
               }
+              {
+                "estrogen": {
+                   "positive": true,
+                   "intensity": 68,
+                   "quick_score": 2
+                },
+                "grade": {
+                   "tubular_formation": null,
+                   "mitotic_count": null,
+                   "nuclear_pleomorphism": null
+                },
+                "her2_neu_ihc": 4,
+                "her2_neu_fish": true,
+                "progestrogen": {
+                   "positive": true,
+                   "intensity": 9,
+                   "quick_score": 7
+                },
+                "tnm": {
+                   "grade": null,
+                   "lymph_status": null,
+                   "metastasis": null,
+                   "size": null
+                },
+                "ki_67": 40
+              }
             ]
           for enc in detail.encounters
             _.extend enc, outcomes: dummy_outcome

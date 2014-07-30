@@ -570,15 +570,12 @@ svcs.factory 'ClinicalProfile', ->
 
   configureProfile: (subject) ->
     dataExist = (obj) ->
-    # Check whether an object contains any outcome data.
-      if not obj
-        false
-      else
-        result = false
-        for key of obj
-          if obj[key]?
-            result = true
-            break
+      # Check whether an object contains any data.
+      result = false
+      for key of obj
+        if obj[key]?
+          result = true
+          break
       result
     getOverallTumorGrade = (grade) ->
       # Calculate the overall Nottingham grade.
@@ -641,7 +638,7 @@ svcs.factory 'ClinicalProfile', ->
         grade = outcome.grade
         is_grade_data = dataExist(grade)
         if is_grade_data
-          _.extend grade, overall_grade: getOverallTumorGrade(grade)
+          _.extend outcome, overall_grade: getOverallTumorGrade(grade)
         # Add a flag indicating whether staging and grade data both exist.
         # If neither do so, the clinical profile column containing their tiles
         # will be hidden from display.
@@ -713,7 +710,7 @@ svcs.factory 'ClinicalProfile', ->
             }
             {
               label: 'Overall'
-              accessor: (outcome) -> outcome.grade.overall_grade
+              accessor: (outcome) -> outcome.overall_grade
             }
           ]
       estrogen:

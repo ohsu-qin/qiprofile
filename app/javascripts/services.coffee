@@ -490,16 +490,11 @@ svcs.factory 'ClinicalProfile', ->
   TUMOR_STAGES =
     'Breast':
       {
-        "X":
+        'X':
           {
-          }
-        "is":
-          {
-            0: '0'
           }
         0:
           {
-            '1mi': 'IB'
             1: 'IIA'
             2: 'IIIA'
             3: 'IIIC'
@@ -507,7 +502,6 @@ svcs.factory 'ClinicalProfile', ->
         1:
           {
             0: 'IA'
-            '1mi': 'IB'
             1: 'IIA'
             2: 'IIIA'
             3: 'IIIC'
@@ -652,11 +646,11 @@ svcs.factory 'ClinicalProfile', ->
 
   configureTile: (outcome, tile) ->
     # Formatting functions.
-    asPct = (val) ->
+    addPctSign = (val) ->
       # Display with a % sign following the value unless it is null.
       result = if val then val.toString().concat('%') else val
     asReactionScore = (val) ->
-      # Display with a + sign following the value if it is not zero.
+      # Display with a + sign following the value if it is not zero or null.
       result = if val > 0 then val.toString().concat('+') else val
     # The tile specification.
     tiles =
@@ -720,7 +714,7 @@ svcs.factory 'ClinicalProfile', ->
             }
             {
               label: 'Intensity'
-              accessor: (outcome) -> val = asPct(outcome.estrogen.intensity)
+              accessor: (outcome) -> addPctSign(outcome.estrogen.intensity)
             }
             {
               label: 'Quick Score'
@@ -737,7 +731,7 @@ svcs.factory 'ClinicalProfile', ->
             }
             {
               label: 'Intensity'
-              accessor: (outcome) -> val = asPct(outcome.progestrogen.intensity)
+              accessor: (outcome) -> addPctSign(outcome.progestrogen.intensity)
             }
             {
               label: 'Quick Score'
@@ -745,12 +739,12 @@ svcs.factory 'ClinicalProfile', ->
             }
           ]
       expression:
-        label: 'Expression'
+        label: 'Genetic Expression'
         rows:
           [
             {
               label: 'HER2/neu IHC'
-              accessor: (outcome) -> val = asReactionScore(outcome.her2_neu_ihc)
+              accessor: (outcome) -> asReactionScore(outcome.her2_neu_ihc)
             }
             {
               label: 'HER2/neu FISH'
@@ -758,7 +752,7 @@ svcs.factory 'ClinicalProfile', ->
             }
             {
               label: 'Ki-67'
-              accessor: (outcome) -> val = asPct(outcome.ki_67)
+              accessor: (outcome) -> addPctSign(outcome.ki_67)
             }
           ]
     # Return the rows for the designated tile.

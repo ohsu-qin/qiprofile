@@ -57,12 +57,12 @@ server.get '/quip*', (req, res) ->
   res.sendfile "#{root}/index.html"
 
 # Development error handling.
-if server.get('env') == 'development'
+if server.get('env') is 'development'
   server.use express.errorHandler()
   server.set 'pretty', true
 
 # The test port.
-if server.get('env') == 'test'
+if server.get('env') is 'test'
   server.set 'port', PORT_TEST
 
 # Start the server.

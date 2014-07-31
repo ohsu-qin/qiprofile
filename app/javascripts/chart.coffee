@@ -1,5 +1,5 @@
-define ['angular'], (angular) ->
-  chart = angular.module 'qiprofile.chart', []
+define ['angular', 'lodash', 'jquery', 'moment'], (ng, _, $) ->
+  chart = ng.module 'qiprofile.chart', []
 
   chart.factory 'Chart', ->
     # Builds the nvd3 chart format for the given input resource

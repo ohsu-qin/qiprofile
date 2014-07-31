@@ -22,10 +22,10 @@ h4.col-md-offset-1
         .col-md-10 {{ config.ethnicity }}
   // Mark up accordian header and content for each encounter.
   accordion(ng-repeat="enc in config.encounters")
-    accordion-group(is-open="enc.accordion_open")
+    accordion-group(is-open="enc.accordionOpen")
       accordion-heading {{ enc.encounter_type }}
         i.pull-right.glyphicon(
-          ng-class="{'glyphicon-chevron-down': enc.accordion_open, 'glyphicon-chevron-up': !enc.accordion_open}"
+          ng-class="{'glyphicon-chevron-down': enc.accordionOpen, 'glyphicon-chevron-up': !enc.accordionOpen}"
         )
       .row.qi-clin-element
         // The encounter date.
@@ -40,7 +40,7 @@ h4.col-md-offset-1
         // staging or grade. If both catgories completely lack data, this
         // column is hidden and the receptor/expression column will float
         // from the right to the left.
-        .col-md-6.qi-clin-col(ng-show="outcome.is_staging_or_grade_data")
+        .col-md-6.qi-clin-col(ng-show="outcome.isStagingOrGradeData")
           // Tumor staging tile.
           qi-clinical-profile-tile(outcome="outcome" tile="tnm")
           // Nottingham grade tile.

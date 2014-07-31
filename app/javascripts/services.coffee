@@ -466,23 +466,47 @@ svcs.factory 'ClinicalProfile', ->
       false: '0'
       true: '1'
     }
-  # The cancer stages corresponding to tumor scores,
+  # TNM grades corresponding to overall Nottingham or FNCLCC grade.
+  TUMOR_GRADES =
+    'Breast':
+      {
+        3: '1'
+        4: '1'
+        5: '1'
+        6: '2'
+        7: '2'
+        8: '3'
+        9: '3'
+      }
+    'Sarcoma':
+      {
+        2: '1'
+        3: '1'
+        4: '2'
+        5: '2'
+        6: '3'
+        7: '3'
+        8: '3'
+      }
+  # The cancer stages corresponding to TNM scores,
   # assuming no metastasis (M0).
+  #
+  # KEY:
   #
   # 'Breast':
   #   {
-  #     Size:
+  #     Size (T):
   #       {
-  #         Lymph Status: Stage
+  #         Lymph Status (N): Stage
   #       }
   #   }
   # 'Sarcoma':
   #   {
-  #     Size:
+  #     Size (T):
   #       {
-  #         Lymph Status:
+  #         Lymph Status (N):
   #           {
-  #             Grade: Stage
+  #             Grade (M): Stage
   #           }
   #       }
   #   }
@@ -563,40 +587,30 @@ svcs.factory 'ClinicalProfile', ->
       }
 
   configureProfile: (subject) ->
-    dataExist = (obj) ->
-      # Check whether an object contains any data.
-      result = false
-      for key of obj
-        if obj[key]?
-          result = true
-          break
-      result
-    getOverallTumorGrade = (grade) ->
-      # Calculate the overall Nottingham grade.
-      # Values for all three grade components are necessary,
-      # so if any are null then return as 'undetermined'.
-      overall_grade = 0
-      for key of grade
-        if grade[key]
-          overall_grade += grade[key]
-        else
-          overall_grade = 'undetermined'
-          break
-      overall_grade
-    getTumorStaging = (tnm) ->
-      # Add the T value without any prefixes (i.e. c or p) to the outcome.
+    getNottinghamGrade = (grade) ->
+      # Calculate the overall Nottingham grade. Return as null if any of the
+      # three properties has a null value.
+      if _.every(_.values(grade), (val) -> val?)
+        overall_grade = grade.tubular_formation + grade.mitotic_count + grade.nuclear_pleomorphism
+      else
+        overall_grade = null
+    getTumorStaging = (tnm, grade) ->
+      # Breast or sarcoma collection.
+      coll = subject.collection
+      # Obtain the T value without any prefixes (i.e. c or p).
       if tnm.size
         size = tnm.size
         t_value = size.split('T')[1]
       else
         size = 'TX'
         t_value = null
-      _.extend tnm, t_value: t_value
-      # Obtain the N, M, and G values as strings. Set to 'X' if no data.
-      t = if tnm.t_value then tnm.t_value else 'X'
+      # Look up the TNM grade based on the overall Nottingham or FNCLCC grade.
+      g_value = TUMOR_GRADES[coll][grade]
+      # Obtain the T, N, M, and G values as strings or set to 'X' if null.
+      t = if t_value then t_value else 'X'
       n = if tnm.lymph_status then tnm.lymph_status.toString() else 'X'
       m = if tnm.metastasis? then TNM_METASTASIS[tnm.metastasis] else 'X'
-      g = if tnm.grade then tnm.grade.toString() else 'X'
+      g = if g_value then g_value else 'X'
       # Create the composite TNMG score.
       tumor_score = size.concat('N', n, 'M', m, 'G', g)
       # Look up the tumor stage.
@@ -605,37 +619,42 @@ svcs.factory 'ClinicalProfile', ->
       # and sarcoma stage is determined by T, N, and G scores.
       if tnm.metastasis
         tumor_stage = 'IV'
-      else if subject.collection == 'Breast'
+      else if coll == 'Breast'
         tumor_stage = TUMOR_STAGES['Breast'][t][n]
       else
         # For sarcoma, use the T value without any suffix (i.e. a or b).
         tumor_stage = TUMOR_STAGES['Sarcoma'][t.substring(0, 1)][n][g]
       tumor_stage = "undetermined" if not tumor_stage
       # Return the composite TNM score and the stage.
-      tumor_score: tumor_score, tumor_stage: tumor_stage
+      t_value: t_value, g_value: g_value, tumor_score: tumor_score, tumor_stage: tumor_stage
 
     # Extend the subject encounters and outcomes.
     for enc in subject.encounters
       for outcome in enc.outcomes
-        # Add the tumor composite score and stage to the outcome
-        # if staging data exist.
+        # Add the overall Nottingham grade to the outcome.
+        grade = outcome.grade
+        overall_grade = getNottinghamGrade(grade)
+        _.extend grade, overall_grade: overall_grade
+        # Add the tumor composite score and stage to the outcome if the value
+        # for at least one staging property is not null.
+        # Note: CoffeeScript '?' is specifically the equivalent of 'not null'.
+        # This is used to evaluate the data because for some properties,
+        # falsy values such as '0' or 'false' are valid data.
         tnm = outcome.tnm
-        is_staging_data = dataExist(tnm)
-        if is_staging_data
-          staging = getTumorStaging(tnm)
+        isStagingData = _.some(_.values(tnm), (val) -> val?)
+        if isStagingData
+          staging = getTumorStaging(tnm, overall_grade)
+          _.extend tnm, t_value: staging.t_value
+          _.extend tnm, g_value: staging.g_value
           _.extend outcome, tumor_score: staging.tumor_score
           _.extend outcome, tumor_stage: staging.tumor_stage
-        # Add the overall grade to the outcome if grade data exist.
-        grade = outcome.grade
-        is_grade_data = dataExist(grade)
-        if is_grade_data
-          _.extend outcome, overall_grade: getOverallTumorGrade(grade)
-        # Add a flag indicating whether staging and grade data both exist.
-        # If neither do so, the clinical profile column containing their tiles
+        # Add a flag indicating whether staging or grade data exist.
+        # If neither exist, the clinical profile column containing their tiles
         # will be hidden from display.
-        _.extend outcome, is_staging_or_grade_data: is_staging_data or is_grade_data
+        isGradeData = _.some(_.values(grade), (val) -> val?)
+        _.extend outcome, isStagingOrGradeData: isStagingData or isGradeData
       # Add the accordion control flag to the encounter.
-      _.extend enc, accordion_open: true
+      _.extend enc, accordionOpen: true
     # The subject encounters.
     encounters: subject.encounters
     # The demographic data.
@@ -676,7 +695,7 @@ svcs.factory 'ClinicalProfile', ->
             }
             {
               label: 'Grade'
-              accessor: (outcome) -> outcome.tnm.grade
+              accessor: (outcome) -> outcome.tnm.g_value
             }
             {
               label: 'Summary'
@@ -701,7 +720,7 @@ svcs.factory 'ClinicalProfile', ->
             }
             {
               label: 'Overall'
-              accessor: (outcome) -> outcome.overall_grade
+              accessor: (outcome) -> outcome.grade.overall_grade
             }
           ]
       estrogen:

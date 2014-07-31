@@ -1,56 +1,79 @@
-define ['angularMocks', 'qiprofile'], (mocks, app) ->
+define ['ngmocks', 'image'], ->
   describe 'Unit Testing Image Service', ->
-    # The qiprofile Image factory.
-    Image = null
     # The mock Angular $http service provider.
     $httpBackend = null
+    
+    # The mock objects.
+    mock =
+      # The mock image file content.
+      image:
+        data: 'test data'
+      # The mock scan.
+      scan:
+        id: 1
+        files: ['data/QIN/Breast008/Session01/series01.nii.gz']
+
+    # The encapsulated scan image object.
+    image = null
 
     beforeEach ->
-      # Fake the services module.
-      mocks.module('qiprofile.services')
+      # Fake the image service.
+      angular.mock.module('qiprofile.image')
       # Enable the test services.
       inject ['Image', '$httpBackend', (_Image_, _$httpBackend_) ->
         Image = _Image_
         $httpBackend = _$httpBackend_
+        # The mock test scan object.
+        # The mock file URL.
+        url = '/static/' + mock.scan.files[0]
+        # The mock http call.
+        $httpBackend.whenGET(url).respond(mock.image.data)
+        # The encapsulated mock scan images.
+        images = Image.imagesFor(mock.scan)
+        image = images[0]
       ]
-  
+
     afterEach ->
       $httpBackend.verifyNoOutstandingExpectation()
       $httpBackend.verifyNoOutstandingRequest()
-  
-    it 'should load the image file', (done) =>
-      # The mock file path.
-      path = 'data/QIN/Breast008/Session01/series01.nii.gz'
-      # The expected file content.
-      expected = 'test data'
-      # There is an Image service.
-      expect(Image).to.exist
-      # The mock test "scan" object.
-      mockScan = {id: 1, files: [path]}
-      # The mock file URL.
-      url = '/static/' + path
-      # The mock http call.
-      $httpBackend.whenGET(url).respond(expected)
-      # The encapsulated "scan" images.
-      images = Image.imagesFor(mockScan)
-      # There is one image.
-      expect(images.length).to.equal(1)
-      image = images[0]
-      # The image is not yet loading.
-      expect(image.state.loading).to.be.false
-      # Load the image.
-      promise = image.load()
+
+    describe 'Pre-load', ->
+      it 'should encapsulate the image file', ->
+        expect(image, "There is not an image object").to.exist
+
+      it 'should initialize the image state loading flag to false', ->
+        expect(image.state.loading, "The image state loading flag is not false").
+          to.be.false
+      
+      # TODO - verify image properties.
+
+    describe 'Load', ->
       # The loading flag is set to true during the load.
       # The load will not finish until the mock backend
       # is flushed at the end of this test case.
-      expect(image.state.loading).to.be.true
+      it 'should set the image state loading flag to true', ->
+        # Load the image.
+        image.load()
+        expect(image.state.loading, "The image state loading flag is not true")
+          .to.be.true
+        # Dispatch the backend request.
+        $httpBackend.flush()
+
+    describe 'Post-load', ->
       # When the image is loaded, then the loading flag
-      # is unset and the image data property is set to
-      # the file content.
-      promise.then (content) ->
-        expect(image.state.loading).to.be.false
-        expect(image.data).to.equal(expected)
-        # Tell the test case that it is done.
-        done()
-      # Fire the backend request.
-      $httpBackend.flush()
+      # is unset.
+      it 'should set the image state loading flag to false', ->
+        image.load().then ->
+          expect(image.state.loading, "The image state loading flag is not false")
+            .to.be.false
+        # Dispatch the backend request.
+        $httpBackend.flush()
+
+      # When the image is loaded, the image data property is
+      # set to the file content.
+      it 'should set the image data property to the file content', =>
+        image.load().then (content) ->
+          expect(image.data, "The data property value is incorrect").
+            to.equal(mock.image.data)
+        # Dispatch the backend request.
+        $httpBackend.flush()

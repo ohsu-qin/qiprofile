@@ -41,9 +41,9 @@ module.exports = ->
         # An xpath selector string has a slash or equals.
         # An id selector starts with # and doesn't have a space.
         # Anything else is assumed to be CSS.
-        if selector == '..' or '/' in selector
+        if selector is '..' or '/' in selector
           locator = By.xpath(selector)
-        else if selector[0] == '#' and not ' ' in selector
+        else if selector[0] is '#' and not ' ' in selector
           locator = By.id(selector[1..-1])
         else
           locator = By.css(selector)

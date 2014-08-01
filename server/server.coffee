@@ -11,7 +11,8 @@ server = express()
 PORT = 3000
 PORT_TEST = PORT + 1
 
-# Grunt places all compiled and copied files in the _public directory.
+# The grunt build tasks place all compiled and copied files within
+# the _public directory.
 root = path.join(__dirname, '..', '_public')
 
 # Rewrite all server /api requests to the REST server

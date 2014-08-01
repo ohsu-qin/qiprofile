@@ -12,7 +12,7 @@ import argparse
 CMD = 'node'
 """The ``Node.js`` executable."""
 
-APP = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'app.js'))
+APP = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'server.js'))
 """The Javascript to run."""
 
 

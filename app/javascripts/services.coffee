@@ -490,6 +490,9 @@ svcs.factory 'ClinicalProfile', ->
       }
   # The cancer stages corresponding to TNM scores,
   # assuming no metastasis (M0).
+  # Sources:
+  # * Breast: http://www.cancer.gov/cancertopics/pdq/treatment/breast/healthprofessional/page3
+  # * Sarcoma: http://www.cancer.gov/cancertopics/pdq/treatment/adult-soft-tissue-sarcoma/HealthProfessional/page3
   #
   # KEY:
   #
@@ -594,6 +597,8 @@ svcs.factory 'ClinicalProfile', ->
         overall_grade = grade.tubular_formation + grade.mitotic_count + grade.nuclear_pleomorphism
       else
         overall_grade = null
+    # TO DO - add a function to calculate overall FNCLCC grade.
+
     getTumorStaging = (tnm, grade) ->
       # Breast or sarcoma collection.
       coll = subject.collection

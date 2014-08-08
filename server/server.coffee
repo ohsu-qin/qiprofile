@@ -4,12 +4,19 @@
 express = require 'express'
 http = require 'http'
 path = require 'path'
+net = require 'net'
+forever = require 'forever-monitor'
 authenticate = require 'authenticate'
+spawn = require './spawn'
 
 server = express()
 
 PORT = 3000
 PORT_TEST = PORT + 1
+
+MONGODB_PORT = 27017
+
+EVE_PORT = 5000
 
 # The grunt build tasks place all compiled and copied files within
 # the _public directory.
@@ -46,14 +53,19 @@ server.get '/login', (req, res) ->
 # The API route.
 server.use '/api', api()
 
-# Serve static and partial files directly.
+# Serve the static files from root.
 server.get '/static/*', (req, res) ->
   path = root + req.path.replace('/static', '')
   res.sendfile path
+
+  # Serve the partial HTML files.
 server.get '/partials/*', (req, res) ->
   res.sendfile "#{root}/#{req.path}.html"
 
-# Serve index for all qiprofile routes.
+# Since qiprofile is an Angular Single-Page Application,
+# serve index for all quip routes. The qiprofile
+# application then resolves the URL on the client
+# and requests the partial.
 server.get '/quip*', (req, res) ->
   res.sendfile "#{root}/index.html"
 
@@ -66,10 +78,14 @@ if server.get('env') is 'development'
 if server.get('env') is 'test'
   server.set 'port', PORT_TEST
 
-# Start the server.
-port = server.get 'port'
-http.createServer(server).listen port, ->
-  env = server.settings.env
-  console.log "The qiprofile server is listening on port #{port} in #{env} mode."
+# Start MongoDB, if necessary...
+spawn 'mongod', MONGODB_PORT, ->
+  # ...then the REST app...
+  spawn 'qirest', EVE_PORT, ->
+    #...then the Express server.
+    port = server.get 'port'
+    http.createServer(server).listen port, ->
+      env = server.settings.env
+      console.log "The qiprofile server is listening on port #{port} in #{env} mode."
 
 module.exports = server

@@ -2,12 +2,54 @@ module.exports = (grunt) ->
   grunt.config.init(
     pkg: grunt.file.readJSON('package.json')
     
-    clean:
-      build: ['_public/*']
+    env:
+      dev:
+        NODE_ENV: 'development'
+      prod:
+        NODE_ENV: 'production'
+    
+    preprocess:
+      # Note: This 'preprocess' task is actually used to post-process
+      # the Javascript in place after it is compiled from CoffeeScript.
+      js:
+        src: '_public/javascripts/config.js'
+      options:
+        inline: true
+    
+    clean: ['_build', '_public/*']
     
     copy:
+      js:
+        expand: true
+        flatten: true
+        cwd: 'bower_components/'
+        src: [
+          'angular/angular.js'
+          'angular-animate/angular-animate.js'
+          'angular-bootstrap/ui-bootstrap-tpls.js'
+          'angular-resource/angular-resource.js'
+          'angular-route/angular-route.js'
+          'angular-ui-router/release/*.js'
+          'angularjs-nvd3-directives/dist/*.js'
+          'd3/*.js'
+          'dat.gui/dat.gui.js'
+          'jquery/dist/jquery.js'
+          'lodash/dist/lodash.underscore.js'
+          'moment/*.js'
+          'nvd3/nv.d3.js'
+          'requirejs/require.js'
+          'spin.js/spin.js'
+          'underscore.string/lib/*.js'
+          'xtk/xtk_edge.js'
+          # Exclude minimized files.
+          '!**/*.min.js'
+        ]
+        dest: '_public/javascripts/lib'
+        
       css:
-        # Bootstrap references the CSS map, even though it is not minimized.
+        # Note: Since the non-minimized Bootstrap module
+        # references the CSS map, the map must be colocated
+        # with the stylesheets.
         expand: true
         flatten: true
         cwd: 'bower_components/'
@@ -21,6 +63,7 @@ module.exports = (grunt) ->
         src: ['bootstrap/dist/fonts/*', 'font-awesome/fonts/*']
         dest: '_public/fonts/'
 
+      # The images and icons.
       static:
         expand: true
         cwd: 'static/'
@@ -36,41 +79,13 @@ module.exports = (grunt) ->
         ]
         dest: '_public/stylesheets/vendor.css'
 
-      js:
-        options:
-          separator: ';'
-        src: [
-          'bower_components/lodash/dist/lodash.underscore.js'
-          'bower_components/underscore.string/lib/*.js'
-          'bower_components/jquery/dist/*.js'
-          'bower_components/angular/*.js'
-          'bower_components/angular-bootstrap/*-tpls.js'
-          'bower_components/angular-resource/*.js'
-          'bower_components/angular-ui-router/release/*.js'
-          'bower_components/dat.gui/dat.gui.js'
-          'bower_components/moment/*.js'
-          'bower_components/spin.js/spin.js'
-          'bower_components/d3/*.js'
-          'bower_components/nvd3/nv.d3.js'
-          'bower_components/angularjs-nvd3-directives/dist/*.js'
-          'bower_components/xtk/xtk_edge.js'
-          '!bower_components/**/*.min.js'
-        ]
-        dest: '_public/javascripts/vendor.js'
-      
-      test_js:
-        options:
-          separator: ';'
-        src: [
-          'bower_components/angular-mocks/angular-mocks.js'
-          'node_modules/chai-as-promised/lib/chai-as-promised.js'
-        ]
-        dest: '_public/javascripts/test.js'
-    
     coffee:
       compile:
-        files:
-          '_public/javascripts/app.js': ['app/**/*.coffee']
+        expand: true
+        ext: '.js'
+        cwd: 'app/'
+        src: ['javascripts/*.coffee']
+        dest: '_public/'
 
     jade:
       options:
@@ -85,10 +100,18 @@ module.exports = (grunt) ->
     karma:
       options:
         singleRun: not grunt.option('debug')
+        browsers: [if grunt.option('debug') then 'Chrome' else 'PhantomJS']
+        logLevel: [if grunt.option('debug') then 'DEBUG' else 'ERROR']
       unit:
-        configFile: 'test/conf/karma-conf.coffee'
+        configFile: 'test/conf/karma-conf.coffee'        
 
     protractor:
+      options:
+        debug: not not grunt.option('debug')
+        keepAlive: not not grunt.option('debug')
+        mochaOpts:
+          debug: true
+          timeout: 4000
       e2e:
         configFile: 'test/conf/protractor-conf.coffee'
       
@@ -130,7 +153,7 @@ module.exports = (grunt) ->
         tasks: ['stylus']
       coffee:
         files: ['app/**/*.coffee']
-        tasks: ['coffee']
+        tasks: ['compile:js']
       jade:
         files: ['app/**/*.jade', 'test/**/*.jade']
         tasks: ['jade']
@@ -142,19 +165,26 @@ module.exports = (grunt) ->
       options:
         logConcurrentOutput: true
       compile:
-        tasks: ['coffee:compile', 'jade:compile', 'markdown', 'stylus']
-
-    ngmin:
-      src: ['_public/javascripts/app.js']
-      dest: '._public/javascripts/app.ngmin.js'
-
-    min:
-      options:
-        'nomunge': true
-        'line-break': 80
-      files:
-        src: ['_public/stylesheets/app.ngmin.js']
-        dest: '_public/stylesheets/app.min.js'
+        tasks: ['compile:js', 'jade:compile', 'markdown', 'stylus']
+    
+    # TODO - try this.
+    requirejs:
+      compile:
+        options:
+          appDir: "_public"
+          baseUrl: "javascripts"
+          dir: "_build"
+          mainConfigFile:'_public/javascripts/config.js'
+          # Skip the CDN modules.
+          paths:
+            angular: 'empty:'
+            domReady: 'empty:'
+            jquery: 'empty:'
+            nganimate: 'empty:'
+            ngresource: 'empty:' 
+            ngroute: 'empty:'
+          modules: [ name:'qiprofile' ]
+          findNestedDependencies: true
 
     cssmin:
       options:
@@ -167,29 +197,29 @@ module.exports = (grunt) ->
 
   require('load-grunt-tasks')(grunt)
 
-  grunt.registerTask 'default', ['build']
+  grunt.registerTask 'default', ['dev']
 
-  grunt.registerTask 'copy:app', ['copy:css', 'copy:fonts', 'copy:static']
+  grunt.registerTask 'copy:app', ['copy:js', 'copy:css', 'copy:fonts', 'copy:static']
 
-  grunt.registerTask 'concat:app', ['concat:css', 'concat:js']
+  grunt.registerTask 'concat:app', ['concat:css']
 
   grunt.registerTask 'vendor:app', ['copy:app', 'concat:app']
 
-  grunt.registerTask 'vendor:test', ['concat:test_js']
-
+  grunt.registerTask 'compile:js', ['coffee:compile', 'preprocess']
+  
   grunt.registerTask 'compile', ['concurrent:compile']
 
-  grunt.registerTask 'build:app', ['vendor:app', 'compile']
+  grunt.registerTask 'build:app', ['clean', 'vendor:app', 'compile']
 
-  grunt.registerTask 'build:test', ['vendor:test']
+  grunt.registerTask 'dev', ['env:dev', 'build:app']
 
-  grunt.registerTask 'build', ['clean', 'build:app', 'build:test']
+  grunt.registerTask 'prod', ['env:prod', 'build:app']
 
-  grunt.registerTask 'start:prod', ['express:prod', 'watch']
+  grunt.registerTask 'start:dev', ['express:dev', 'watch']
 
   grunt.registerTask 'start:test', ['express:test', 'watch']
 
-  grunt.registerTask 'start:dev', ['express:dev', 'watch']
+  grunt.registerTask 'start:prod', ['express:prod', 'watch']
 
   grunt.registerTask 'start', ['start:dev']
 
@@ -199,6 +229,4 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'test', ['express:test', 'test:unit', 'test:e2e']
 
-  grunt.registerTask 'jsmin', ['ngmin', 'min']
-
-  grunt.registerTask 'release', ['build', 'jsmin', 'cssmin']
+  grunt.registerTask 'release', ['build', 'requirejs', 'cssmin']

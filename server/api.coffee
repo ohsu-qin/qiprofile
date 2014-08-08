@@ -1,5 +1,4 @@
 request = require 'superagent'
-_ = require 'lodash'
 
 module.exports = (host='localhost', port=5000) ->
   (req, res, next) ->

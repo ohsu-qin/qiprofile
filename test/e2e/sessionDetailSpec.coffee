@@ -58,20 +58,21 @@ describe 'E2E Testing Session Detail', ->
     page = new SessionDetailPage '/quip/breast/subject/1/session/1?project=QIN_Test'
   
   it 'should display the billboard', ->
-    expect(page.billboard).to.eventually.equal('Breast Patient 1 Session 1')
+    expect(page.billboard, 'The billboard is incorrect')
+      .to.eventually.equal('Breast Patient 1 Session 1')
   
   it 'should have a home button', ->
     pat = /.*\/quip\?project=QIN_Test$/
-    expect(page.home()).to.eventually.match(pat)
+    expect(page.home(), 'The home URL is incorrect').to.eventually.match(pat)
   
   it 'should have help text', ->
-    expect(page.help()).to.eventually.exist
+    expect(page.help(), 'The help is missing').to.eventually.exist
   
   describe 'Intensity Chart', ->
     # Note - chart content is not testable. See the subjectDetailSpec note
     # for details.
     it 'should display the chart', ->
-      expect(page.chart()).to.eventually.exist
+      expect(page.chart(), 'The chart is not displayed').to.eventually.exist
 
     it 'should load the image', ->
       # Note: this test depends on the existence of the first session
@@ -80,12 +81,16 @@ describe 'E2E Testing Session Detail', ->
       page.firstScanImageButtons().then (buttons) ->
         # The download/display button pair.
         download = buttons.download
-        expect(download).to.exist
-        expect(download.isDisplayed()).to.eventually.be.true
+        expect(download, 'The download button is initially missing').to.exist
+        expect(download.isDisplayed(), 'The download button is initially hidden')
+          .to.eventually.be.true
         open = buttons.open
-        expect(open).to.exist
-        expect(open.isDisplayed()).to.eventually.be.false
+        expect(open, 'The open button is initially missing').to.exist
+        expect(open.isDisplayed(), 'The open button is initially displayed')
+          .to.eventually.be.false
         # Click the button, then wait for it to load.
         page.loadScanImage(download).then ->
-          expect(download.isDisplayed()).to.eventually.be.false
-          expect(open.isDisplayed()).to.eventually.be.true
+          expect(download.isDisplayed(), 'The download button is displayed after download')
+            .to.eventually.be.false
+          expect(open.isDisplayed(), 'The open button is hidden after download')
+            .to.eventually.be.true

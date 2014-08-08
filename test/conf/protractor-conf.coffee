@@ -11,3 +11,7 @@ exports.config =
   specs: ['../e2e/**/*Spec.coffee']
 
   onPrepare: '../e2e/helpers/seed'
+  
+  mochaOpts:
+    reporter: 'spec'
+    slow: 1200

@@ -9,28 +9,6 @@ Overview
 The ``qiprofile`` module implements the Imaging Profile UI web application.
 
 
-***********
-Antecedents
-***********
-
-The ``qiprofile`` application structure is adapted from the following
-examples:
-
-* frappe_
-
-* angular-express-seed_
-
-* angular-seed_
-
-* angular-app_
-
-* nodejs-polling-app_
-
-* ng-boilerplate_
-
-* Yeoman_
-
-
 ************
 Dependencies
 ************
@@ -59,25 +37,21 @@ Setup
 
 2. Install the `Node.js`_ npm_ package manager.
 
-3. Install the bower_ client Javascript package manager globally::
-
-       npm install -g bower
-
-4. Install the Grunt_ CLI command globally::
+3. Install the Grunt_ CLI command globally::
 
        npm install -g grunt-cli
 
-5. Install the PhantomJS_ headless web server globally::
+4. Install the PhantomJS_ headless web server globally::
 
        npm install -g phantomjs
 
-6. Run the following in a console from the ``qiprofile`` directory::
+5. Run the following in a console from the ``qiprofile`` directory::
 
        npm install
 
 This command installs the necessary packages [#xtk_fork]_.
 
-7. Run the following Grunt_ script::
+6. Run the following Grunt_ script::
 
        grunt
 
@@ -122,7 +96,7 @@ Adding dependencies
 -------------------
 Add a new client library as follows::
 
-    bower install --save <library>
+    ./node_modules/.bin/bower install --save <library>
 
 Add a new test library as follows::
 
@@ -139,14 +113,13 @@ within the following grouping order:
 
 * Grunt packages
 
-Each package occurs after packages on which it depends.
+If a new library is added, then notify other developers that they need to
+run the following to rebuild the application after refreshing their master
+branch::
 
-If a new client library is added, then notify other developers that they
-need to run ``grunt`` to rebuild the application after refreshing their
-master branch.
-
-If a new test library is added, then notify other developers that they
-need to run ``npm install`` after refreshing their master branch.
+    npm install
+    npm prune
+    grunt
 
 Testing
 -------
@@ -171,23 +144,25 @@ runs the grunt karma ``unit`` task as follows:
 
 * Print the result to the console
 
+-----
+
 Debugging a unit test case is performed as follows:
 
 * Run the grunt task with the ``--debug`` option, e.g.::
 
       grunt --debug test:unit
   
-  This starts the test runner but does not run the tests.
+  This starts a Chrome_ test runner but does not run the tests.
 
-* Open a Chrome web browser to the ``http://localhost:9876/test/`` page.
-
-* Press the ``DEBUG`` button on that page.
+* Press the ``DEBUG`` button on the launch page.
 
 * Open the Chrome Developer Tools (DevTools_).
 
 * Set a breakpoint in the ``base/_public/javascripts/app.js`` source file.
 
 * Refresh the page.
+
+-----
 
 The end-to-end tests are run with the Protractor_ framework. The command::
 
@@ -382,6 +357,28 @@ Coding Standards
   * Periodically delete unused local and remote branches. Exercise care
     when deleting a stale remote branch. See the
     `Pro Git Book`_ `Deleting Remote Branches`_ section for details.
+
+
+***********
+Antecedents
+***********
+
+The ``qiprofile`` application structure is freely adapted from the following
+examples:
+
+* frappe_
+
+* angular-express-seed_
+
+* angular-seed_
+
+* angular-app_
+
+* nodejs-polling-app_
+
+* ng-boilerplate_
+
+* Yeoman_
 
   
 .. rubric:: Footnotes

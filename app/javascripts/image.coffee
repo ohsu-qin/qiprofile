@@ -26,12 +26,12 @@ define ['angular', 'file', 'xtk'], (ng) ->
     #
     # @param parent the image parent container
     # @param filename the image file path, relative to the web app root
-    # @param time_point the series time point
+    # @param timePoint the series time point
     # @returns a new image object
-    create = (parent, filename, time_point) ->
+    create = (parent, filename, timePoint) ->
       parent: parent
       filename: filename
-      time_point: time_point
+      timePoint: timePoint
 
       # The image state loading flag is true if the file is being
       # loaded, false otherwise.
@@ -45,32 +45,44 @@ define ['angular', 'file', 'xtk'], (ng) ->
       # The image state loading flag is set to true while the
       # file is read.
       #
-      # @returns a promise which resolves to this image when
-      #   the image file file content is loaded into the data
-      #   property
+      # @returns a promise which resolves when the image file
+      #   read is completed
       load: () ->
         # Set the loading flag.
         @state.loading = true
-        # Read the file. The Coffeescript fat arrow (=>) binds the
-        # this variable to the image object rather than the $http
-        # request.
+        # Read the file into an ArrayBuffer. The Coffeescript fat
+        # arrow (=>) binds the this variable to the image object
+        # rather than the $http request.
         File.read(filename).then (data) =>
           # Unset the loading flag.
           @state.loading = false
           # Set the data property to the file content.
           @data = data
-          # Return the image.
-          this
 
       # Builds an XTK renderer for this image.
-      createRenderer: =>
+      createRenderer: ->
         # The XTK renderer.
         renderer = new X.renderer3D()
         renderer.init()
 
         # The volume to render.
         volume = new X.volume()
-        volume.file = @filename
+        # XTK seems to expect a .gz filename to have compressed
+        # data. However, Express and most servers uncompress
+        # content on the fly. Therefore, fool XTK into accepting
+        # the file content by stripping the .gz extension.
+        # TODO - is there a better approach?
+        if @filename[-3..] == '.gz'
+          volume.file = @filename[0..-3]
+        else
+          volume.file = @filename
+        # FIXME - XTK throws the following:
+        #   Uncaught RangeError: byte length of Uint16Array should be a multiple of 2 
+        # This occurs whether or not the filedata property is set
+        # below.
+        # TODO - Why does it fail even when filedata is not set?
+        # TODO - Walk through the XTK io code again to emulate their
+        # approach.
         volume.filedata = @data
         renderer.add volume
 

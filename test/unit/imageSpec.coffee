@@ -42,11 +42,21 @@ define ['ngmocks', 'image'], ->
         expect(image, "There is not an image object").to.exist
 
       it 'should initialize the image state loading flag to false', ->
-        expect(image.state.loading, "The image state loading flag is not false").
+        expect(image.state.loading, 'The image state loading flag is not false').
           to.be.false
-      
-      # TODO - verify image properties.
-
+    
+      it 'should have a parent property', ->
+        expect(image.parent, 'The image parent is missing').
+          to.exist
+    
+      it 'should set the parent property to the container', ->
+        expect(image.parent, 'The image parent is incorrect').
+          to.equal(mock.scan)
+    
+      it 'should set the time point', ->
+        expect(image.timePoint, 'The image state time point is incorrect').
+          to.equal(1)
+    
     describe 'Load', ->
       # The loading flag is set to true during the load.
       # The load will not finish until the mock backend
@@ -54,26 +64,26 @@ define ['ngmocks', 'image'], ->
       it 'should set the image state loading flag to true', ->
         # Load the image.
         image.load()
-        expect(image.state.loading, "The image state loading flag is not true")
+        expect(image.state.loading, 'The image state loading flag is not true')
           .to.be.true
         # Dispatch the backend request.
         $httpBackend.flush()
-
+    
     describe 'Post-load', ->
       # When the image is loaded, then the loading flag
       # is unset.
       it 'should set the image state loading flag to false', ->
         image.load().then ->
-          expect(image.state.loading, "The image state loading flag is not false")
+          expect(image.state.loading, 'The image state loading flag is not false')
             .to.be.false
         # Dispatch the backend request.
         $httpBackend.flush()
-
+    
       # When the image is loaded, the image data property is
       # set to the file content.
       it 'should set the image data property to the file content', =>
         image.load().then (content) ->
-          expect(image.data, "The data property value is incorrect").
+          expect(image.data, 'The data property value is incorrect').
             to.equal(mock.image.data)
         # Dispatch the backend request.
         $httpBackend.flush()

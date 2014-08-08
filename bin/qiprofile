@@ -2,11 +2,12 @@
 """
 qiprofile
 
-Starts the Imaging Profile web server.
+Starts the Quantitaive Imaging Profile web server.
 """
 
 import sys
 import os
+import subprocess
 import argparse
 
 CMD = 'node'
@@ -21,7 +22,7 @@ def main(argv=sys.argv):
     opts = _parse_arguments()
     
     # Start the server.
-    return os.system("%s %s" % (CMD, APP))
+    return subprocess.call([CMD, APP])
 
 
 def _parse_arguments():

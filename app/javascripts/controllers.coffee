@@ -64,7 +64,8 @@ define ['angular'], (ng) ->
         else if $scope.modelingFormat is 'Table'
           $scope.modelingFormat ='Chart'
         else
-          throw "Modeling format is not recognized: #{ $scope.modelingFormat }"
+          throw new Error "Modeling format is not recognized:" +
+                          " #{ $scope.modelingFormat }"
   
       # The modeling format is 'Chart' if the subject has
       # more than one session, 'Table' otherwise.
@@ -96,7 +97,7 @@ define ['angular'], (ng) ->
         params =
           project: image.parent.session.subject.project
           container: image.parent.container_type
-          time_point: image.time_point
+          timePoint: image.timePoint
         $state.go('quip.subject.session.container.image', params)
   
       # Capture the current project.

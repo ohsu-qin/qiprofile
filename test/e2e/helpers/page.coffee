@@ -116,6 +116,7 @@ module.exports = ->
     #   element, or null if no such element is found
     select: (selectors...) ->
       # page.select(...) delegates to select(page, ...)
+      # in this module's outer scope.
       select(this, selectors...)
 
     # @param selectors the target search selectors
@@ -129,7 +130,7 @@ module.exports = ->
     home: () ->
       # The home button is the parent of the home icon.
       @select('button .glyphicon-home', '..').then (button) =>
-        expect(button).to.exist
+        expect(button, 'The home button is missing').to.exist
         # Go home...
         button.click().then =>
           # ...grab the URL...
@@ -143,14 +144,16 @@ module.exports = ->
     help: () ->
       @select('.qi-help').then (block) =>
         # Help is initially hidden.
-        expect(block.isDisplayed()).to.eventually.be.false
+        expect(block.isDisplayed(), 'The help element is not initially hidden')
+          .to.eventually.be.false
         # The help button is the parent of the question mark icon.
         @select('button .glyphicon-question-sign', '..').then (button) =>
-          expect(button).to.exist
+          expect(button, 'The help button is missing').to.exist
           # Open the help view...
           button.click().then =>
             # ...verify that the help is displayed...
-            expect(block.isDisplayed()).to.eventually.be.true
+            expect(block.isDisplayed(), 'The help element is hidden after click')
+              .to.eventually.be.true
             # ...find the element...
             @select('.qi-main .qi-help-text').then (content) =>
               # ...resolve to the formatted help content.

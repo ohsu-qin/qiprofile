@@ -53,7 +53,7 @@ define ['angular', 'file', 'xtk'], (ng) ->
         # Read the file into an ArrayBuffer. The Coffeescript fat
         # arrow (=>) binds the this variable to the image object
         # rather than the $http request.
-        File.read(filename).then (data) =>
+        File.read(filename, responseType: 'arraybuffer').then (data) =>
           # Unset the loading flag.
           @state.loading = false
           # Set the data property to the file content.
@@ -81,8 +81,8 @@ define ['angular', 'file', 'xtk'], (ng) ->
         # This occurs whether or not the filedata property is set
         # below.
         # TODO - Why does it fail even when filedata is not set?
-        # TODO - Walk through the XTK io code again to emulate their
-        # approach.
+        # TODO - Walk through the XTK loader code again to emulate their
+        # approach. What is the loader container object?
         volume.filedata = @data
         renderer.add volume
 

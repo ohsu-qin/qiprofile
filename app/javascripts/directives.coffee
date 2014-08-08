@@ -1,4 +1,4 @@
-define ['angular', 'spin', 'dateline', 'intensity', 'modeling'], (ng) ->
+define ['angular', 'spin', 'dateline', 'intensity', 'modeling'], (ng, Spinner) ->
   directives = ng.module 'qiprofile.directives', ['qiprofile.dateline', 'qiprofile.intensity', 'qiprofile.modeling']
 
   # Spinner directive.

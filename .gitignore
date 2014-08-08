@@ -5,8 +5,6 @@ dist/
 **/build
 lib/
 node_modules/
-public/
-vendor/
 test/results/
 .DS_Store
 .idea

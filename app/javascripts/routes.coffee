@@ -52,28 +52,20 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'router', 'uirout
           # The subject state.
           .state 'quip.subject',
             abstract: true
-            url: '/:collection/subject/{subject:[0-9]+}?detail'
+            url: '/:collection/subject/{subject:[0-9]+}'
             resolve:
-              subject: (project, $stateParams, Router) ->
-                # The search parameters. The default project is in
-                # the root state. The state parameters contain the
-                # collection and the subject number as a string.
-                # If there is not a detail state parameter, then
-                # fetch the subject.
-                search =
-                  project: $stateParams.project or project
-                  collection: $stateParams.collection
-                  number: parseInt($stateParams.subject)
-                  fetch: $stateParams.detail?
-                # Delegate to the helper.
-                Router.getSubject(search)
+              subject: ($stateParams) ->
+                project: $stateParams.project or project
+                collection: _s.capitalize($stateParams.collection)
+                number: parseInt($stateParams.subject)
 
           # The subject detail page.
           .state 'quip.subject.detail',
-            url: ''
+            url: '?detail'
             resolve:
               detail: (subject, $stateParams, Router) ->
-                Router.getSubjectDetail(subject, $stateParams)
+                subject.detail = $stateParams.detail
+                Router.getSubjectDetail(subject)
             views:
               'main@':
                 templateUrl: '/partials/subject-detail.html'
@@ -90,12 +82,11 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'router', 'uirout
 
           # The session detail page.
           .state 'quip.subject.session.detail',
-            url: ''
+            url: '?detail'
             resolve:
-              Session: 'Session'
-              Image: 'Image'
               detail: (session, $stateParams, Router) ->
-                Router.getSessionDetail(session, $stateParams, Router)
+                session.detail = $stateParams.detail
+                Router.getSessionDetail(session)
             views:
               'main@':
                 templateUrl: '/partials/session-detail.html'
@@ -104,18 +95,23 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'router', 'uirout
           # The image parent container state.
           .state 'quip.subject.session.container',
             abstract: true
-            url: '/:container'
+            url: '/:container?detail'
             resolve:
               container: (session, $stateParams, Router) ->
-                Router.getImageContainer(session, $stateParams, Router)
+                # The optional session detail query parameter.
+                session.detail = $stateParams.detail
+                # The container name query parameter, e.g. 'scan'.
+                name = $stateParams.container
+                # Obtain the image container.
+                Router.getImageContainer(session, name)
 
           # The image detail page.
           .state 'quip.subject.session.container.image',
-            url: '/{time_point:[1-9][0-9]*}'
+            url: '/{timePoint:[1-9][0-9]*}'
             resolve:
-              image: (container, $stateParams) ->
-                time_point = parseInt($stateParams.time_point)
-                Router.getImageDetail(container, time_point)
+              image: (container, $stateParams, Router) ->
+                timePoint = parseInt($stateParams.timePoint)
+                Router.getImageDetail(container, timePoint)
             views:
               'main@':
                 templateUrl: '/partials/image-detail.html'

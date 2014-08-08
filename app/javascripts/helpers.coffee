@@ -2,24 +2,33 @@ define ['angular', 'lodash', 'moment'], (ng, _, moment) ->
   helpers = ng.module 'qiprofile.helpers', []
 
   helpers.factory 'Helpers', ->
-    # Copies the given source detail object properties into the
-    # destination object, with the following exception:
-    # * fields which begin with an underscore are not copied
+    # Copies the given source object properties into the
+    # destination object, with the following exceptions:
+    # * properties which begin with an underscore are not copied
     #   (including the _id field)
-    copyDetail: (source, dest) ->
+    # * null source property values are not copied
+    #
+    # @param source the copy source object
+    # @param dest the copy destination object
+    copyNonNullPublicProperties: (source, dest) ->
+      # @param obj the object to check
+      # @returns the properties which do not begin with an
+      #   underscore and have a non-null value
+      nonNullPublicProperties = (obj) ->
+        Object.keys(obj).filter (prop) -> obj[prop]? and prop[0] != '_'
+      
       # Copy the detail properties into the parent object.
-      srcProps = Object.getOwnPropertyNames(source)
-      destProps = Object.getOwnPropertyNames(dest)
-      fields = _.difference(srcProps, destProps)
-      for field in fields
-        if field[0] != '_'
-          dest[field] = source[field]
+      srcProps = nonNullPublicProperties(source)
+      destProps = nonNullPublicProperties(dest)
+      copyProps = _.difference(srcProps, destProps)
+      for prop in copyProps
+        dest[prop] = source[prop]
 
-    # If the given attribute value is a string, then this function
-    # resets it to the parsed date.
-    fixDate: (obj, attr) ->
-      date = obj[attr]
-      # Silly Javascript idiom for string type testing.
-      if typeof date is 'string' or date instanceof String
-        # Reset the attribute to a date.
-        obj[attr] = moment(date)
+    # If the value of the given property is a string, then this
+    # function resets it to the parsed date.
+    #
+    # @param obj the object containing the date property
+    # @param property the date property
+    fixDate: (obj, property) ->
+      date = obj[property]
+      obj[property] = moment(date) if _.isString(date)

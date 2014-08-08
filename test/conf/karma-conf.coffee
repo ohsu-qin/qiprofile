@@ -21,6 +21,8 @@ module.exports = (config) ->
       # The test libraries.
       {pattern: 'node_modules/angular-mocks/angular-mocks.js', included: false}
       {pattern: 'node_modules/chai-as-promised/lib/chai-as-promised.js', included: false}
+      {pattern: 'node_modules/pako/dist/pako.js', included: false}
+      {pattern: 'node_modules/text-encoding/**/*.js', included: false}
       # The test specs.
       {pattern: 'test/unit/*Spec.coffee', included: false}
       # The chai eventually assertion helper.

@@ -81,11 +81,6 @@ define ['angular'], (ng) ->
   ]
   
   
-  ctlrs.controller 'ClinicalProfileCtrl', ['$scope', '$stateParams',
-    ($scope, $stateParams) ->
-  ]
-  
-  
   ctlrs.controller 'SessionDetailCtrl', ['$rootScope', '$scope', '$state',
     'session', 'ControllerHelper',
     ($rootScope, $scope, $state, session, ControllerHelper) ->
@@ -119,3 +114,4 @@ define ['angular'], (ng) ->
       # If the project is the default, then remove it from the URL.
       ControllerHelper.cleanBrowserUrl($rootScope.project)
   ]
+

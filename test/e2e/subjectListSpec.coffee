@@ -31,14 +31,16 @@ describe 'E2E Testing Subject List', ->
     page = new SubjectListPage '/quip?project=QIN_Test'
   
   it 'should display the billboard', ->
-    expect(page.billboard).to.eventually.equal('Patients')
+    expect(page.billboard, 'The billboard is incorrect')
+      .to.eventually.equal('Patients')
   
   it 'should have a home button', ->
     pat = /.*\/quip\?project=QIN_Test$/
-    expect(page.home()).to.eventually.match(pat)
+    expect(page.home(), 'The home URL is incorrect')
+      .to.eventually.match(pat)
   
   it 'should have help text', ->
-    expect(page.help()).to.eventually.exist
+    expect(page.help(), 'The help is missing').to.eventually.exist
   
   describe 'Collections', ->
     content = null
@@ -51,10 +53,12 @@ describe 'E2E Testing Subject List', ->
         assns.map (assn) -> assn.name
       # The collections are sorted. The comparison is the Chai
       # deep equals operator eql rather than equal.
-      expect(collections).to.eventually.eql(['Breast', 'Sarcoma'])
+      expect(collections, 'The collections are incorrect')
+        .to.eventually.eql(['Breast', 'Sarcoma'])
 
     it 'should display the subjects', ->
       subjects = content.then (assns) ->
         assns.map (assn) -> assn.subjects 
       expected = (("Patient #{ n }" for n in [1, 2, 3]) for i in [1, 2])
-      expect(subjects).to.eventually.eql(expected)
+      expect(subjects, 'The subjects are incorrect')
+        .to.eventually.eql(expected)

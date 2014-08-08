@@ -105,11 +105,6 @@ module.exports = (grunt) ->
       unit:
         configFile: 'test/conf/karma-conf.coffee'        
 
-    mochaProtractor:
-      options:
-        browsers: ['Chrome']
-      files:  ['test/e2e/**/*Spec.coffee']
-
     protractor:
       options:
         debug: not not grunt.option('debug')

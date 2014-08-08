@@ -6,7 +6,7 @@ block billboard
   | Patient {{ image.parent.session.subject.number }}
   | Session {{ image.parent.session.number }}
   | {{ image.parent.title }}
-  | Time Point {{ image.time_point }}
+  | Time Point {{ image.timePoint }}
 
 block content
   qi-series-image(image='image')

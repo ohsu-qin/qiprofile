@@ -3,12 +3,12 @@ define ['lodash', 'ngmocks', 'expect', 'router'],
     describe 'Unit Testing Router', ->
       # The mock Router service module.
       Router = null
-    
+
       # The mock Angular $http service provider.
       $httpBackend = null
-      
+
       $rootScope = null
-      
+
       # The mock objects.
       mock =
         subject:
@@ -37,58 +37,42 @@ define ['lodash', 'ngmocks', 'expect', 'router'],
           ]
         session_detail:
           scan:
+            name: 'scan'
             intensity:
               intensities: [2.4]
           registrations: [
+            name: 'reg_test'
             intensity:
               intensities: [3.1]
           ]
 
       beforeEach ->
-        # Fake the service module.
+        # Fake the router service module.
         angular.mock.module('qiprofile.router')
 
-        inject ['Router', '$httpBackend', '$rootScope', (_Router_, _$httpBackend_, _$rootScope_) ->
-          Router = _Router_
-          $httpBackend = _$httpBackend_
-          $rootScope = _$rootScope_
-      
-          # The mock subjects http call.
-          url = encodeURI('/api/subjects?where=' +
-                          '{"project":"QIN_Test","collection":"Breast","number":1}')
-          $httpBackend.whenGET(url).respond(JSON.stringify(_items: [mock.subject]))
-        
-          # The mock subject-detail http call.
-          url = encodeURI('/api/subject-detail/a')
-          $httpBackend.whenGET(url).respond(JSON.stringify(mock.subject_detail))
-        
-          # The mock session-detail http call.
-          url = encodeURI('/api/session-detail/b')
-          $httpBackend.whenGET(url).respond(JSON.stringify(mock.session_detail))
+        inject ['Router', '$httpBackend', '$rootScope',
+          (_Router_, _$httpBackend_, _$rootScope_) ->
+            Router = _Router_
+            $httpBackend = _$httpBackend_
+            $rootScope = _$rootScope_
+
+            # The mock subjects http call.
+            url = encodeURI('/api/subjects?where=' +
+                            '{"project":"QIN_Test","collection":"Breast","number":1}')
+            $httpBackend.whenGET(url).respond(JSON.stringify(_items: [mock.subject]))
+
+            # The mock subject-detail http call.
+            url = encodeURI('/api/subject-detail/a')
+            $httpBackend.whenGET(url).respond(JSON.stringify(mock.subject_detail))
+
+            # The mock session-detail http call.
+            url = encodeURI('/api/session-detail/b')
+            $httpBackend.whenGET(url).respond(JSON.stringify(mock.session_detail))
         ]
 
       afterEach ->
         $httpBackend.verifyNoOutstandingExpectation()
         $httpBackend.verifyNoOutstandingRequest()
-
-      describe 'Subject', ->
-        it 'should fetch the subject when the fetch flag is set', ->
-          # "Fetch" the subject.
-          params = _.extend({fetch: true}, _.omit(mock.subject, 'detail'))
-          Router.getSubject(params).then (actual) ->
-              expect(_.pairs(actual), "Subject with fetch incorrect")
-                .to.deep.have.members(_.pairs(mock.subject))
-          # Dispatch the backend request.
-          $httpBackend.flush()
-    
-        it 'should not fetch the subject when the fetch flag is not set', ->
-          # The router ignores the detail parameter.
-          params = _.omit(mock.subject, 'detail')
-          Router.getSubject(params).then (actual) ->
-            expect(_.pairs(actual), "Subject without fetch incorrect")
-              .to.deep.have.members(_.pairs(params))
-          # Resolve the pending promise.
-          $rootScope.$apply()
 
       describe 'Subject Detail', ->
         # Validates the resolved subject.
@@ -111,25 +95,94 @@ define ['lodash', 'ngmocks', 'expect', 'router'],
           expect(mdl.delta_k_trans, "Delta Ktrans is not #{ mock_delta_k_trans }")
             .to.be.closeTo(mock_delta_k_trans, 0.0000001)
 
-        it 'should fetch the detail with a subject detail property', ->
+        it 'should fetch the detail with a detail property', ->
           subject = _.clone(mock.subject)
-          Router.getSubjectDetail(subject, {}).then ->
-            validate(subject)
-          # Dispatch the backend request.
-          $httpBackend.flush()
-  
-        it 'should fetch the detail with a detail query parameter', ->
-          subject = _.omit(mock.subject, 'detail')
-          Router.getSubjectDetail(subject, detail: mock.subject.detail).then ->
+          Router.getSubjectDetail(subject).then ->
             validate(subject)
           # Dispatch the backend request.
           $httpBackend.flush()
 
-        it 'should fetch the detail without a detail property or parameter', ->
+        it 'should fetch the detail without a detail property', ->
           subject = _.omit(mock.subject, 'detail')
-          Router.getSubjectDetail(subject, {}).then ->
+          Router.getSubjectDetail(subject).then ->
             validate(subject)
           # Dispatch the backend request.
           $httpBackend.flush()
 
-      # TODO - add Session tests.
+      describe 'Session Detail', ->
+        mock_session = null
+
+        # Validates the resolved session.
+        validate = (session) ->
+          expect(session.scan, "Session scan is missing").to.exist
+          expect(session.scan.intensity, "Session scan is incorrect")
+            .to.deep.eql(mock.session_detail.scan.intensity)
+          expect(session.registrations.length,
+               "Session registrations count is incorrect")
+            .to.equal(1)
+          reg = session.registrations[0]
+          mock_reg = mock.session_detail.registrations[0]
+          expect(reg.intensity, "Session registration is incorrect")
+            .to.deep.eql(mock_reg.intensity)
+
+        beforeEach ->
+          mock_session = mock.subject_detail.sessions[0]
+          # The session subject reference is set in the routes
+          # session resolution.
+          mock_session.subject = mock.subject
+
+        it 'should fetch the detail with a session detail property', ->
+          session = _.clone(mock_session)
+          Router.getSessionDetail(session).then ->
+            validate(session)
+          # Dispatch the backend request.
+          $httpBackend.flush()
+
+        it 'should fetch the detail without a detail property', ->
+          session = _.omit(mock_session, 'detail')
+          session.subject = _.clone(mock.subject)
+          Router.getSessionDetail(session).then ->
+            validate(session)
+          # Dispatch the backend request.
+          $httpBackend.flush()
+
+      describe 'Image Container', ->
+        mock_session = null
+
+        # Validates the resolved container.
+        validate = (image) ->
+          expect(session.scan, "Session scan is missing").to.exist
+          expect(session.scan.intensity, "Session scan is incorrect")
+            .to.deep.eql(mock.session_detail.scan.intensity)
+          expect(session.registrations.length,
+               "Session registrations count is incorrect")
+            .to.equal(1)
+          reg = session.registrations[0]
+          mock_reg = mock.session_detail.registrations[0]
+          expect(reg.intensity, "Session registration is incorrect")
+            .to.deep.eql(mock_reg.intensity)
+
+        beforeEach ->
+          mock_session = mock.subject_detail.sessions[0]
+          # The session subject reference is set in the routes
+          # session resolution.
+          mock_session.subject = mock.subject
+
+        it 'should find the scan container in a fetched session', ->
+          session = _.clone(mock_session)
+          session.scan = mock.session_detail.scan
+          actual = Router.getImageContainer(session, session.scan.name)
+          expect(actual, 'Image container missing').to.exist
+          expect(actual, 'Image container incorrect')
+            .to.equal(mock.session_detail.scan)
+
+        it 'should fetch a session if necessary to obtain the scan container', ->
+          session = _.omit(mock_session, 'detail')
+          session.subject = _.clone(mock.subject)
+          Router.getImageContainer(session, mock.session_detail.scan.name).then (container) ->
+            expect(container, 'Image container missing').to.exist
+            expect(container.intensity, 'Image container intensity incorrect').
+              to.eql(mock.session_detail.scan.intensity)
+          
+          # Dispatch the backend request.
+          $httpBackend.flush()

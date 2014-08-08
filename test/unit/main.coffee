@@ -72,11 +72,13 @@ requirejs.config
     uibootstrap: './lib/ui-bootstrap-tpls'
     xtk: './lib/xtk_edge'
     # The test helpers.
-    expect: '../../test/helpers/expect'
+    expect: '../../test/unit/helpers/expect'
     # The test vendor libraries.
     chai: '../../node_modules/chai/chai'
     chaiAsPromised: '../../node_modules/chai-as-promised/lib/chai-as-promised'
+    encoding: '../../node_modules/text-encoding/lib/encoding'
     ngmocks: '../../node_modules/angular-mocks/angular-mocks'
+    pako: '../../node_modules/pako/dist/pako'
 
   # The non-AMD module dependencies replicates the web app main
   # shim dependencies, extended with the test modules. See the

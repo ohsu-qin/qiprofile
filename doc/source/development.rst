@@ -278,6 +278,12 @@ Coding Standards
 * Each application AngularJS module is documented using the ngdoc_
   convention.
 
+* Pending code changes are described in a ``TODO`` comment.
+
+* Known bugs are described in a ``FIXME`` comment. These items should be
+  fixed and the comment deleted before a new version is tagged and
+  released.
+
 * Changes are made in a git branch. Make a local git branch by executing
   the following command::
   

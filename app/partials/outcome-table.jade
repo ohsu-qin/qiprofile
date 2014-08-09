@@ -1,9 +1,9 @@
 // Show the outcome only if at least one row of data exists.
-.row.qi-clin-element(ng-show="config.rows")
-    .col-md-12.qi-outcome
+.row.qi-clinical-row(ng-show="config.rows")
+    .col-md-12.qi-outcome-table
       // The outcome group header.
       .row.qi-outcome-header {{ config.label }}
       .row(ng-repeat="row in config.rows")
         // The outcome row label and data.
-        .col-md-6.qi-outcome-label {{ row.label }}
+        .col-md-6.qi-label.qi-outcome-label {{ row.label }}
         .col-md-6 {{ row.accessor(outcome) }}

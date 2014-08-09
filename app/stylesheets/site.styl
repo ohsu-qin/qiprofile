@@ -1,4 +1,18 @@
+//
+// The QuIP application stylesheet. This is the only stylesheet that
+// is served to the client.
+//
+// The CSS styles below are roughly organized from general to specific
+// categories. CSS style overrides are defined first, followed by
+// styles introduced for QuIP. The QuIP-specific styles are prefixed
+// by 'qi-', e.g. qi-logo. The qi- styles are organized by display
+// page.
+
+// Include all vendor styles.
 @import 'vendor.css' 
+
+
+//** Style overrides. **//
 
 body
   margin 1em
@@ -56,11 +70,24 @@ for n in 1 2 3 4 5
     .qi-small
       color Black
 
+
+//** General-purpose QuIP styles. **//
+
+.qi-label
+  font-weight: bold
+
 .qi-x-smaller
   font-size 75%
 
 .qi-text-right
     text-align: right
+
+.qi-date, .qi-number
+  text-align center
+
+.qi-pct
+  padding-right 2em
+  text-align right
 
 clean-list()
   -webkit-padding-start: 1em
@@ -78,6 +105,27 @@ ul.qi-clean-list
 
 .qi-separator-faint
   border 0.1em solid Lavender
+
+qi-transition(type, sec)
+  -webkit-transition all type sec
+  -moz-transition all type sec
+  -o-transition all type sec
+  transition all type sec
+
+.qi-no-transition
+  -webkit-transition none
+  -moz-transition none
+  // Opera doesn't support none
+  -o-transition all 0s
+  transition none
+
+slow-transition = 1s
+slower-transition = 0.75s
+med-transition = 0.5s
+fast-transition = 0.2s
+
+
+//** Navigation styles. **//
 
 .qi-nav-btn
   color Black
@@ -125,6 +173,9 @@ ul.qi-clean-list
   &:hover
     background-color Chocolate !important
 
+
+//** Main content styles. **//
+
 .qi-billboard
   background MediumSlateBlue
   color LightGoldenRodYellow
@@ -142,6 +193,37 @@ ul.qi-clean-list
 .qi-main-list
   clean-list()
 
+.qi-help
+  background OldLace
+  border 0.1em solid Brown
+  position fixed
+  top 10em
+  right 1.8em
+  width 25%
+  qi-transition(linear, slower-transition)
+
+.qi-help-text
+  // Downsize headers
+  for n in 1 2 3 4 5
+    h{n}
+      font-size (125% - (5 * n))
+      text-decoration underline
+
+.qi-footer
+  border-top 0.1em solid SlateGray
+  p.qi-legal
+    padding 1em 0em
+    text-align center
+    color DimGray
+    font-size x-small
+    span.glyphicon-copyright-mark
+      padding 0 0.2em 0 0.2em
+
+.qi-profile-panel
+  border 1px solid SlateGray
+  border-radius: 0.4em 0.4em 0.4em 0.4em
+  margin 0 0 0.2em 0
+
 .qi-profile-btn
   color Black
   background-color Moccasin
@@ -152,21 +234,8 @@ ul.qi-clean-list
   &:focus
     outline none
 
-.qi-modeling-profile
-  padding 0 0.2em 0 0
-
-.qi-modeling-table
-  font-size smaller
-  & table, th, td
-    border 0.1em solid BurlyWood
-  & th
-    background-color Bisque
-    font-weight bold
-    text-align center
-    white-space nowrap
-  & td
-    padding-top 0.2em
-    padding-bottom 0.2em
+.qi-prop-group
+  border-left 0.2em solid Silver
 
 .qi-full-width-table
   width 100%
@@ -178,30 +247,8 @@ ul.qi-clean-list
   & .qi-prop-group
     width 28%
 
-.qi-prop-group
-  border-left 0.2em solid Silver
 
-.qi-date, .qi-number
-  text-align center
-
-.qi-pct
-  padding-right 2em
-  text-align right
-
-.qi-clinical-profile
-  padding 0 0 0 0.2em
-  & h4
-    // A little top padding is necessary to align the
-    // border top with the modeling profile border when
-    // there is a modeling list/chart toggle button for
-    // more than one visit, which is the common case.
-    // It is unknown why this necessary. 
-    padding 0 0 0.1em 0
-
-.qi-profile-panel
-  border 1px solid SlateGray
-  border-radius: 0.4em 0.4em 0.4em 0.4em
-  margin 0 0 0.2em 0
+//** Chart styles. **//
 
 .qi-chart-row
   // Undo the Bootstrap -15px margin offsets.
@@ -225,6 +272,25 @@ ul.qi-clean-list
   .nv-axis.nv-x path.domain
     stroke-opacity: .25
 
+
+//** Modeling Profile styles. **//
+
+.qi-modeling-profile
+  padding 0 0.2em 0 0
+
+.qi-modeling-table
+  font-size smaller
+  & table, th, td
+    border 0.1em solid BurlyWood
+  & th
+    background-color Bisque
+    font-weight bold
+    text-align center
+    white-space nowrap
+  & td
+    padding-top 0.2em
+    padding-bottom 0.2em
+
 .qi-intensity-chart
   margin 0 0 0 3.2em
   float left
@@ -238,7 +304,8 @@ ul.qi-clean-list
   margin 0 0 0.2em 0
   float left
   height 4em
-  // width 100%
+  // 68em is 100% of the chart width. See .qi-intensity-chart
+  // TODO comment.
   width 68em
 
 .qi-image-selection-key
@@ -284,72 +351,34 @@ qi-image-btn-group()
   stroke-width 1em
   stroke-opacity .8
 
-qi-transition(type, sec)
-  -webkit-transition all type sec
-  -moz-transition all type sec
-  -o-transition all type sec
-  transition all type sec
 
-.qi-no-transition
-  -webkit-transition none
-  -moz-transition none
-  // Opera doesn't support none
-  -o-transition all 0s
-  transition none
+//** Clinical Profile styles. **//
 
-slow-transition = 1s
-slower-transition = 0.75s
-med-transition = 0.5s
-fast-transition = 0.2s
+.qi-clinical-profile
+  padding 0 0 0 0.2em
+  & h4
+    // A little top padding is necessary to align the
+    // border top with the modeling profile border when
+    // there is a modeling list/chart toggle button for
+    // more than one visit, which is the common case.
+    // It is unknown why this is necessary. 
+    padding 0 0 0.1em 0
 
-.qi-help
-  background OldLace
-  border 0.1em solid Brown
-  position fixed
-  top 10em
-  right 1.8em
-  width 25%
-  qi-transition(linear, slower-transition)
-
-.qi-help-text
-  // Downsize headers
-  for n in 1 2 3 4 5
-    h{n}
-      font-size (125% - (5 * n))
-      text-decoration underline
-
-.qi-footer
-  border-top 0.1em solid SlateGray
-  p.qi-legal
-    padding 1em 0em
-    text-align center
-    color DimGray
-    font-size x-small
-    span.glyphicon-copyright-mark
-      padding 0 0.2em 0 0.2em
-
-
-// New styles for the clinical profile.
-
-.qi-clin-element
+.qi-clinical-row
   margin 0em 0em 0.5em 0em
 
-.qi-clin-element-label
-  font-weight: bold
-
-.qi-clin-col
+.qi-clinical-col
   margin 0.8em 0em 0em 0em
 
-.qi-clin-tile
+.qi-outcome-table
   border 1px solid BurlyWood
 
-.qi-clin-tile-header
+.qi-outcome-header
   font-weight: bold
   text-align center
   white-space nowrap
   background-color Bisque
   border-bottom 1px solid BurlyWood
 
-.qi-clin-outcome-label
-  font-weight: bold
+.qi-outcome-label
   color: SlateGray

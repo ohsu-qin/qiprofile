@@ -8,11 +8,11 @@ define ['ngmocks', 'modeling'], ->
         sessions: [
           acquisition_date: new Date
           modeling:
-            v_e: Math.random()
-            tau_i: Math.random()
-            fxl_k_trans: Math.random()
-            fxr_k_trans: Math.random()
-            delta_k_trans: Math.random()
+            v_e: 2.4
+            tau_i: 0.1
+            fxl_k_trans: 2.3
+            fxr_k_trans: 2.1
+            delta_k_trans: 0.2
           number: 1
         ]
       

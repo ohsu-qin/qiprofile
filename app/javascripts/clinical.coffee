@@ -20,8 +20,8 @@ define ['angular', 'lodash'], (ng, _) ->
         null: 'Not specified'
       }
 
-    # Test result categorized as positive or negative.
-    TEST_RESULTS =
+    # Lab result categorized as positive or negative.
+    POS_NEG_RESULTS =
       {
         false: 'negative'
         true: 'positive'
@@ -167,9 +167,47 @@ define ['angular', 'lodash'], (ng, _) ->
         else
           null
       
-      # TO DO - add a function to calculate overall FNCLCC grade.
+      # TODO - add a function to calculate overall FNCLCC grade.
 
+      # Determine the composite score and stage from the given TNM
+      # and grade. This function creates a staging object consisting
+      # of the following properties:
+      # * t_value - the tumor size (the TNM T parameter)
+      # * g_value - the TNM grade (the TNM G parameter)
+      # * tumor_score - the composite TNM score
+      # * tumor_stage - the I-IV stage defined in TUMOR_STAGES
+      #
+      # @param the TNM object
+      # @param grade the tumor type-specific detail grade, e.g.
+      #   Nottingham for Breast or FNCLCC for Sarcoma
+      # @returns the staging object
       getTumorStaging = (tnm, grade) ->
+        # TODO - Create a separate helper in this Clinical service for
+        # each tumor type, e.g.
+        #   Breast =
+        #     GRADES = ...
+        #     STAGES = ...
+        #     getOverallGrade: (tnm) -> ...
+        #     getStage: (tnm) ->
+        # Remove all type-specific references in this main function.
+        # All type-specific code should be contained in the respecive
+        # service, so calls are by tumor type lookup, e.g.:
+        #   FORMATTERS =
+        #     Breast: Breast
+        #     Sarcoma: Sarcoma
+        #   formatter = FORMATTERS[coll]
+        #   grade = formatter.getOverallGrade(tnm)
+        #   ...
+        # There should be no conditions like the following:
+        #   if coll == 'Breast'
+        #   else if coll == 'Sarcoma'
+        #   ...
+        #
+        # TODO - The REST TNM model size field will become a composite
+        # Size object. After this REST model change takes effect, remove
+        # parsing the size string value and instead get the values
+        # directly from the size object.
+        #
         # Breast or sarcoma collection.
         coll = subject.collection
         # Obtain the T value without any prefixes (i.e. c or p).
@@ -192,6 +230,7 @@ define ['angular', 'lodash'], (ng, _) ->
         # If metastasis exits (M1), it is stage IV. Otherwise,
         # breast cancer stage is determined by T and N scores
         # and sarcoma stage is determined by T, N, and G scores.
+        # TODO - delegate to the tumor type-specific service.
         if tnm.metastasis
           tumor_stage = 'IV'
         else if coll == 'Breast'
@@ -203,14 +242,23 @@ define ['angular', 'lodash'], (ng, _) ->
         # Return the composite TNM score and the stage.
         t_value: t_value, g_value: g_value, tumor_score: tumor_score, tumor_stage: tumor_stage
 
-      # Extend the subject encounters and outcomes.
+      # Extend the subject encounters and outcomes as follows:
+      # * Add the t and g value properties to a TNM.
+      # * If the outcome is a TNM or has a TNM, then add the tumor score
+      #   to the outcome.
+      # * Add the isStagingOrGradeData flag to the outcome.
+      # * Add the accordionOpen flag to the encounter
       for enc in subject.encounters
         for outcome in enc.outcomes
           # Add staging properties.
-          tnm = outcome.tnm
-          # Note: CoffeeScript '?' is specifically the equivalent of 'not null'.
-          # This is used to evaluate the data because for some properties,
-          # falsy values such as '0' or 'false' are valid data.
+          #
+          # TODO - generalize for non-pathology and Sarcoma
+          # (or any future tumor type). See the clinical-table.jade
+          # TODOs. The assignment below is a kludgy work-around.
+          tnm = if outcome._cls is 'TNM' then outcome else outcome.tnm
+          # Note: CoffeeScript '?' is specifically the equivalent of not null.
+          # This is used to evaluate the data because for some properties
+          # falsy values such as 0 or false are valid data.
           isStagingData = tnm? and _.some(_.values(tnm), (val) -> val?)
           if isStagingData
             # Add the overall Nottingham grade to the outcome.
@@ -231,6 +279,7 @@ define ['angular', 'lodash'], (ng, _) ->
           _.extend outcome, isStagingOrGradeData: isStagingData or isGradeData
         # Add the accordion control flag to the encounter.
         _.extend enc, accordionOpen: true
+      
       # The subject encounters.
       encounters: subject.encounters
       # The demographic data.
@@ -305,7 +354,7 @@ define ['angular', 'lodash'], (ng, _) ->
             [
               {
                 label: 'Result'
-                accessor: (outcome) -> TEST_RESULTS[outcome.estrogen.positive]
+                accessor: (outcome) -> POS_NEG_RESULTS[outcome.estrogen.positive]
               }
               {
                 label: 'Intensity'
@@ -322,7 +371,7 @@ define ['angular', 'lodash'], (ng, _) ->
             [
               {
                 label: 'Result'
-                accessor: (outcome) -> TEST_RESULTS[outcome.progestrogen.positive]
+                accessor: (outcome) -> POS_NEG_RESULTS[outcome.progestrogen.positive]
               }
               {
                 label: 'Intensity'
@@ -343,7 +392,7 @@ define ['angular', 'lodash'], (ng, _) ->
               }
               {
                 label: 'HER2/neu FISH'
-                accessor: (outcome) -> TEST_RESULTS[outcome.her2_neu_fish]
+                accessor: (outcome) -> POS_NEG_RESULTS[outcome.her2_neu_fish]
               }
               {
                 label: 'Ki-67'

@@ -12,5 +12,6 @@ define ['angular', 'underscore.string', 'ngresource'], (ng, _s) ->
       if path[0] is '/'
         path = path[1..]
       # Read the file and resolve to the content.
-      $http(method: 'GET', url: '/static/' + path, config)
+      $http(method: 'GET', url: '/static/' + path, config).then (res) ->
+        res.data
   ]

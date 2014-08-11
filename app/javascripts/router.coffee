@@ -27,38 +27,6 @@ define ['angular', 'lodash', 'underscore.string', 'helpers', 'image', 'resources
           # Return the {where: condition} object.
           where: "{#{ cond }}"
 
-        # # Fetches a subject from the given search parameters. This method
-        # # returns a promise which resolves to a subject object as follows:
-        # # * If the search parameters contain a fetch flag which is truthy,
-        # #   then the resolved value is the Subject resource object fetched
-        # #   with the search parameters.
-        # # * Otherwise, the return promise resolves to a new object with
-        # #   the project, collection and subject number copied from the 
-        # #   search parameters.
-        # #
-        # # @param params the search parameters
-        # # @returns a promise which resolves to the Subject resource
-        # #   object
-        # getSubject: (params) ->
-        #   # The subject is built from the search parameters.
-        #   subject =
-        #     project: params.project
-        #     collection: _s.capitalize(params.collection)
-        #     number: params.number
-        #   # If the fetch flag is set, then query the Subject resource
-        #   # with the subject as the query condition.
-        #   if params.fetch
-        #     Subject.query(where(subject)).$promise.then (subjects) ->
-        #       if subjects.length > 1
-        #         throw "Subject query returned more than one subject:" +
-        #               " #{ _.pairs(subject) }"
-        #       subjects[0]
-        #   else
-        #     # Make a promise which immediately resolves to the subject.
-        #     deferred = $q.defer()
-        #     deferred.resolve(subject)
-        #     deferred.promise
-
         # Fetches the subject detail and fixes it up as follows:
         # * converts the session and encounter dates into moments
         # * copies the detail properties into the subject
@@ -110,6 +78,7 @@ define ['angular', 'lodash', 'underscore.string', 'helpers', 'image', 'resources
                                   " are not yet supported."
                 sess.modeling = sess.modeling[0]
       
+              
               # Fix the encounter dates.
               Helpers.fixDate(enc, 'date') for enc in detail.encounters
               # Copy the detail content into the subject.

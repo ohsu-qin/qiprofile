@@ -83,10 +83,26 @@ define ['angular', 'lodash'], (ng, _) ->
     #       }
     #   }
     #
+    
+    # TODO - change stage and grade to an array lookup, e.g.:
+    # Breast =
+    #   GRADE_RANGES = [[3..5], [6..7], [8..9]]
+    #   STAGES = [
+    #    ['IIA', 'IIIA', 'IIIC']
+    #    ...
+    #   ]
+    #   stage = (t, n) ->
+    #     STAGES[t][n] if t?
+    #   summaryGrade = (cumulativeGrade) ->
+    #     1 + _.findIndex(GRADE_RANGES, (range) -> cumulativeGrade in range)
+    #
+    # Then there is no need to convert t, n, m or g to string.
+    #
+    
     TUMOR_STAGES =
       'Breast':
         {
-          'X':
+          X:
             {
             }
           0:
@@ -210,22 +226,25 @@ define ['angular', 'lodash'], (ng, _) ->
         #
         # Breast or sarcoma collection.
         coll = subject.collection
-        # Obtain the T value without any prefixes (i.e. c or p).
-        if tnm.size
-          size = tnm.size
-          t_value = size.split('T')[1]
-        else
-          size = 'TX'
-          t_value = null
+        
+        # TODO - make a getTumorScore(tnm) method.
+        size = if tnm.size? then tnm.size else {}
+
         # Look up the TNM grade based on the overall Nottingham or FNCLCC grade.
         g_value = TUMOR_GRADES[coll][grade]
+        # The T value is the TNM size tumor_size property.
+        t_value = size.tumor_size
         # Obtain the T, N, M, and G values as strings or set to 'X' if null.
-        t = if t_value then t_value else 'X'
-        n = if tnm.lymph_status then tnm.lymph_status.toString() else 'X'
+        t = if t_value? then t_value.toString() else 'X'
+        n = if tnm.lymph_status? then tnm.lymph_status.toString() else 'X'
         m = if tnm.metastasis? then TNM_METASTASIS[tnm.metastasis] else 'X'
         g = if g_value then g_value else 'X'
+        # The size as a string.
+        prefix = if size.prefix? then size.prefix else ''
+        suffix = if size.suffix? then size.suffix else ''
+        size_s = "#{ prefix }T#{ t }#{ suffix }"
         # Create the composite TNMG score.
-        tumor_score = size.concat('N', n, 'M', m, 'G', g)
+        tumor_score = "#{ size_s }N#{ n }M#{ m }G#{ g }"
         # Look up the tumor stage.
         # If metastasis exits (M1), it is stage IV. Otherwise,
         # breast cancer stage is determined by T and N scores

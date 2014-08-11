@@ -130,5 +130,6 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'router', 'uirout
           paramStr = params.join('&')
           [path, paramStr].join('?')
 
-        $locationProvider.html5Mode true
+        # HTML5 mode enables the back button to work properly.
+        $locationProvider.html5Mode(true).hashPrefix('!')
     ]

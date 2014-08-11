@@ -37,6 +37,11 @@ define ['angular', 'chart', 'lodash'], (ng) ->
           # The hyperlink target.
           href = sessionDetailLink(session)
           # Wrap the text element in a hyperlink.
+          #
+          # TODO - the back button no longer returns to the previous state.
+          # This is a regression after moving to ui-router. The links should
+          # be uisref rather than href. See
+          # https://github.com/angular-ui/ui-router/issues/372
           Chart.d3Hyperlink(text.node(), href)
   
       # The chart data specification.

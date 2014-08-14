@@ -178,7 +178,6 @@ module.exports = (grunt) ->
           paths:
             angular: 'empty:'
             domReady: 'empty:'
-            jquery: 'empty:'
             nganimate: 'empty:'
             ngresource: 'empty:' 
             ngroute: 'empty:'

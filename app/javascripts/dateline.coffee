@@ -57,6 +57,27 @@ define ['angular', 'chart', 'lodash'], (ng) ->
         a = createSessionDetailLink(ticks[i], sessions[i])
         callback(a) if callback
   
+    # TODO - Add treatments and encounters to the dateline.
+    # Each treatment is a bar spanning the start and end dates.
+    # Each encounter is a flash glyph.
+    # The treatment and encounter types are distinguished by color.
+    # There are legends for each type.
+    # To do so, make a tri-partite config on a heterogenous data spec:
+    #   visitTicks = [{session:sess, tick:tick}, ...]
+    #   trtTicks = [{treatment:trt, start:tick, end:tick}, ...]
+    #   encTicks = [{encounter:enc, tick:tick}, ...]
+    # 
+    # addTreatmentBars = (session, chart) ->
+    #   # Select the SVG element.
+    #   svg = d3.select(chart.container)
+    #   # The x axis element.
+    #   xAxis = svg.select('.nv-x')
+    #   # The tick elements.
+    #   ticks = xAxis.selectAll('.tick')[0]
+    #   for i in [0...ticks.length]
+    #     a = createSessionDetailLink(ticks[i], sessions[i])
+    #     callback(a) if callback      
+  
     # @param data the session array
     # @returns the nvd3 chart configuration
     configureChart: (sessions) ->
@@ -74,5 +95,5 @@ define ['angular', 'chart', 'lodash'], (ng) ->
       # * the addSessionDetailLinks function
       _.extend Chart.configureChart(sessions, dataSpec),
         xValues: (dataSpec.x.accessor(sess) for sess in sessions)
-        xFormat: Chart.dateFormat          
+        xFormat: Chart.dateFormat
   ]

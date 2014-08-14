@@ -61,15 +61,28 @@ define ['angular', 'spin', 'dateline', 'intensity', 'modeling', 'clinical'],
 
 
     # Displays the MR session visit dateline chart.
-    directives.directive 'qiVisitDateline', ['VisitDateline', (VisitDateline) ->
-      restrict: 'E'
-      scope:
-        sessions: '='   # the subject sessions
-      link: (scope, element, attrs) ->
-        scope.$watch 'sessions', (sessions) ->
-          if sessions
-            scope.config = VisitDateline.configureChart(sessions)
-      templateUrl: '/partials/visit-dateline-chart.html'
+    directives.directive 'qiVisitDateline', ['VisitDateline', '$compile',
+      (VisitDateline, $compile) ->
+        restrict: 'E'
+        scope:
+          sessions: '='   # the subject sessions
+        link: (scope, element, attrs) ->
+          scope.$watch 'sessions', (sessions) ->
+            if sessions
+              scope.config = VisitDateline.configureChart(sessions)
+              # This function is called by D3 after the chart DOM is built.
+              #
+              # @param chart the chart SVG element
+              scope.applyChart = (chart) ->
+                # Compile the anchor element ui-sref directive.
+                compileDetailLink = (a) ->
+                  $compile(a)(scope)
+                  
+                # Add and compile the ui-sref anchor hyperlinks.
+                VisitDateline.addSessionDetailLinks(sessions, chart,
+                                                    compileDetailLink)
+                  
+        templateUrl: '/partials/visit-dateline-chart.html'
     ]
 
 

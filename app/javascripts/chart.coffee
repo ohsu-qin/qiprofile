@@ -1,4 +1,4 @@
-define ['angular', 'lodash', 'jquery', 'moment'], (ng, _, $) ->
+define ['angular', 'lodash', 'moment'], (ng, _, moment) ->
   chart = ng.module 'qiprofile.chart', []
 
   chart.factory 'Chart', ->
@@ -197,20 +197,32 @@ define ['angular', 'lodash', 'jquery', 'moment'], (ng, _, $) ->
     dateFormat: (date) ->
       moment(date).format('MM/DD/YYYY')
 
-    # Replaces the given text elements with hyperlinks.
-    d3Hyperlink: (element, href, style) ->  
+    # Replaces the given text element with a ui-router ui-sref
+    # hyperlink anchor element.
+    #
+    # Note: since this function modifies the DOM with an AngularJS
+    # directive, the element returned by this function must be
+    # compiled by AngularJS with the scope $compile function.
+    #
+    # @param text the text element
+    # @param the ui-router ui-sef
+    # @returns the new ui-sref anchor element
+    d3Hyperlink: (text, sref) ->
       # The parent node wrapped by D3.
-      p = d3.select(element.parentNode)
-      # The JQuery wrapper on this text element.
-      t = $(element)
+      p = d3.select(text.parentNode)
+      # The D3 wrapper on this text element.
+      t = d3.select(text)
       # Remove this text element from the DOM.
-      t.detach()
+      t.remove()
       # Append a SVG anchor.
       a = p.append('svg:a')
-      # Add the href.
-      a.attr('xlink:href', href)
-      # Add link style to the SVG text element.
-      for [k, v] in _.pairs(style)
-        d3.select(this).attr(k, v)
+      # Add the ui-sref.
+      a.attr('ui-sref', sref)
       # Reattach the text element to the anchor.
-      t.appendTo(a)
+      # The D3 selection append method takes either a string,
+      # in which case it creates a new element as in the above
+      # svg:a append, or a function which returns a DOM element.
+      # In the call below, the text element is appended. 
+      a.append(-> text)
+      # Return the anchor element
+      a.node()

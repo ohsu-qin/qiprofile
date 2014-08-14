@@ -69,19 +69,23 @@ server.get '/partials/*', (req, res) ->
 server.get '/quip*', (req, res) ->
   res.sendfile "#{root}/index.html"
 
+# The run environment.
+env = server.get('env')
+
 # Development error handling.
-if server.get('env') is 'development'
+if env is 'development'
   server.use express.errorHandler()
   server.set 'pretty', true
 
 # The test port.
-if server.get('env') is 'test'
+if env is 'test'
   server.set 'port', PORT_TEST
 
 # Start MongoDB, if necessary...
 spawn 'mongod', MONGODB_PORT, ->
   # ...then the REST app...
-  spawn 'qirest', EVE_PORT, ->
+  cmd = if env? then "qirest --#{ env }" else 'qirest'
+  spawn cmd, EVE_PORT, ->
     #...then the Express server.
     port = server.get 'port'
     http.createServer(server).listen port, ->

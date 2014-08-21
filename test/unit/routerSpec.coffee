@@ -1,5 +1,5 @@
-define ['lodash', 'ngmocks', 'expect', 'router'],
-  (_, mocks, expect, router) ->
+define ['lodash', 'ngmocks', 'expect', 'router', 'moment'],
+  (_, mocks, expect, router, moment) ->
     describe 'Unit Testing Router', ->
       # The mock Router service module.
       Router = null
@@ -29,11 +29,17 @@ define ['lodash', 'ngmocks', 'expect', 'router'],
           ]
           encounters: [
             encounter_type: 'Biopsy'
+            date: moment('July 12, 2013').valueOf()
             outcomes: [
               _cls: 'BreastPathology'
               tnm:
                 size: 'T3'
             ]
+          ]
+          treatments: [
+            treatment_type: 'neodjuvant'
+            begin_date: moment('June 4, 2013').valueOf()
+            end_date: moment('July 16, 2013').valueOf()
           ]
         session_detail:
           scan:
@@ -77,11 +83,28 @@ define ['lodash', 'ngmocks', 'expect', 'router'],
       describe 'Subject Detail', ->
         # Validates the resolved subject.
         validate = (subject) ->
+          # There should be encounters.
+          expect(subject.encounters, "Subject is missing encounters").to.exist
+          expect(subject.encounters.length).to.equal(1)
+          enc = subject.encounters[0]
+          expect(enc.encounter_type, "Encounter type is incorrect")
+            .to.equal(mock.subject_detail.encounters[0].encounter_type)
+          # There should be treatments.
+          expect(subject.treatments, "Subject is missing treatments").to.exist
+          expect(subject.treatments.length).to.equal(1)
+          trt = subject.treatments[0]
+          expect(trt.treatment_type, "Treatment type is incorrect")
+            .to.equal(mock.subject_detail.treatments[0].treatment_type)
+          expect(trt.begin_date.valueOf(), "Treatment begin date is incorrect")
+            .to.equal(mock.subject_detail.treatments[0].begin_date)
+          # There should be sessions.
           expect(subject.sessions, "Subject is missing sessions").to.exist
           expect(subject.sessions.length).to.equal(1)
           expect(subject.isMultiSession).to.be.false
           sess = subject.sessions[0]
+          # There should be a parent subject.
           expect(sess.subject, "Session is missing a subject").to.exist
+          # Validate the modeling.
           expect(sess.modeling, "Session is missing modeling").to.exist
           # TODO - replace the assignment below for multiple
           # modeling results per session.

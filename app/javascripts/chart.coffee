@@ -9,17 +9,21 @@ define ['angular', 'lodash', 'moment'], (ng, _, moment) ->
     # values to graph. The chart values are obtained by calling
     # the input format x-axis accessor for each chart data series. 
     #
-    # The input dataSpec contains the follwing x and y attributes:
+    # The input dataSpec contains the following x and y attributes:
     # * x is the x-axis {label, accessor}
-    # * y is the y-axis {[{label, accessor}, ...], precision},
-    # where label is the data series chart label and accessor
-    # is the data series value to chart, and precision is the
-    # decimal precision to use for all data series values
-    #   
-    # The result contains the following attributes:
+    # * y is the y-axis {[{label, color, accessor}, ...], precision},
+    # where:
+    # * label is the data series chart label
+    # * color is the data series chart color
+    # * accessor is the data value access function
+    # * precision is the decimal precision to use for all data series
+    #   values
+    #
+    # The result configuration object contains the following properties:
     # * data - the nvd3 chart data
-    # * color - the nvd3 color function
-    # * maxMin - the maximum and minimum chart y-axis display values
+    # * yLabel - the nvd3 yAxisLabel value
+    # * yFormat - the nvd3 yAxisTickFormat function
+    # * yMaxMin - the nvd3 forcey range
     #
     # @param data the resource objects to graph
     # @param dataSpec the data access specification
@@ -72,12 +76,12 @@ define ['angular', 'lodash', 'moment'], (ng, _, moment) ->
           coordinates = (data, xAccessor, yAccessor) ->
             [xAccessor(rsc), yAccessor(rsc)] for rsc in data
         
-          key: dataSeries.label
+          key: y.label
           values: coordinates(data, x.accessor, y.accessor)
-          color: dataSeries.color
+          color: y.color
 
-        for dataSeries in dataSpec.y.data
-         configureADataSeries(data, dataSpec.x, dataSeries)
+        for y in dataSpec.y.data
+         configureADataSeries(data, dataSpec.x, y)
     
       # Adds padding to the give value range as follows:
       # * the the chart max is the next higher significant

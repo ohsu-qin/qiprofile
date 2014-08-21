@@ -81,6 +81,10 @@ define ['angular', 'lodash', 'underscore.string', 'helpers', 'image', 'resources
               
               # Fix the encounter dates.
               Helpers.fixDate(enc, 'date') for enc in detail.encounters
+              # Fix the treatment dates.
+              for trt in detail.treatments
+                Helpers.fixDate(trt, 'begin_date')
+                Helpers.fixDate(trt, 'end_date')
               # Copy the detail content into the subject.
               Helpers.copyNonNullPublicProperties(detail, subject)
               # Set a flag indicating whether there is more than one

@@ -13,12 +13,16 @@ block content
       )
         .glyphicon.glyphicon-list(ng-show="modelingFormat == 'Chart'")
         .glyphicon.glyphicon-picture(ng-show="modelingFormat == 'Table'")
-    .qi-profile-panel
-      // The session list formatted as a dateline.
-      h5.col-md-offset-5 MR Visits
-      qi-visit-dateline(sessions='subject.sessions')
+    .panel-group.qi-profile-panel
+      // The session list formatted as a timeline.
+      .panel.panel-default
+        .panel-heading
+          h4.panel-title MR Visit Timeline
+        .panel-collapse
+          .panel-body
+            qi-visit-dateline(subject='subject')
       // The modeling chart or tables.
-      #qi-modeling-chart(ng-show="modelingFormat == 'Chart'")
+      #qi-modeling-chart.panel.panel-default(ng-show="modelingFormat == 'Chart'")
         include include/modeling-charts
       #qi-modeling-table(ng-show="modelingFormat == 'Table'")
         qi-modeling-table(sessions='subject.sessions')

@@ -1,4 +1,4 @@
-define ['angular', 'lodash', 'jquery', 'moment'], (ng, _, $) ->
+define ['angular', 'lodash', 'moment'], (ng, _, moment) ->
   chart = ng.module 'qiprofile.chart', []
 
   chart.factory 'Chart', ->
@@ -9,17 +9,21 @@ define ['angular', 'lodash', 'jquery', 'moment'], (ng, _, $) ->
     # values to graph. The chart values are obtained by calling
     # the input format x-axis accessor for each chart data series. 
     #
-    # The input dataSpec contains the follwing x and y attributes:
+    # The input dataSpec contains the following x and y attributes:
     # * x is the x-axis {label, accessor}
-    # * y is the y-axis {[{label, accessor}, ...], precision},
-    # where label is the data series chart label and accessor
-    # is the data series value to chart, and precision is the
-    # decimal precision to use for all data series values
-    #   
-    # The result contains the following attributes:
+    # * y is the y-axis {[{label, color, accessor}, ...], precision},
+    # where:
+    # * label is the data series chart label
+    # * color is the data series chart color
+    # * accessor is the data value access function
+    # * precision is the decimal precision to use for all data series
+    #   values
+    #
+    # The result configuration object contains the following properties:
     # * data - the nvd3 chart data
-    # * color - the nvd3 color function
-    # * maxMin - the maximum and minimum chart y-axis display values
+    # * yLabel - the nvd3 yAxisLabel value
+    # * yFormat - the nvd3 yAxisTickFormat function
+    # * yMaxMin - the nvd3 forcey range
     #
     # @param data the resource objects to graph
     # @param dataSpec the data access specification
@@ -72,12 +76,12 @@ define ['angular', 'lodash', 'jquery', 'moment'], (ng, _, $) ->
           coordinates = (data, xAccessor, yAccessor) ->
             [xAccessor(rsc), yAccessor(rsc)] for rsc in data
         
-          key: dataSeries.label
+          key: y.label
           values: coordinates(data, x.accessor, y.accessor)
-          color: dataSeries.color
+          color: y.color
 
-        for dataSeries in dataSpec.y.data
-         configureADataSeries(data, dataSpec.x, dataSeries)
+        for y in dataSpec.y.data
+         configureADataSeries(data, dataSpec.x, y)
     
       # Adds padding to the give value range as follows:
       # * the the chart max is the next higher significant
@@ -197,20 +201,32 @@ define ['angular', 'lodash', 'jquery', 'moment'], (ng, _, $) ->
     dateFormat: (date) ->
       moment(date).format('MM/DD/YYYY')
 
-    # Replaces the given text elements with hyperlinks.
-    d3Hyperlink: (element, href, style) ->  
+    # Replaces the given text element with a ui-router ui-sref
+    # hyperlink anchor element.
+    #
+    # Note: since this function modifies the DOM with an AngularJS
+    # directive, the element returned by this function must be
+    # compiled by AngularJS with the scope $compile function.
+    #
+    # @param text the text element
+    # @param the ui-router ui-sef
+    # @returns the new ui-sref anchor element
+    d3Hyperlink: (text, sref) ->
       # The parent node wrapped by D3.
-      p = d3.select(element.parentNode)
-      # The JQuery wrapper on this text element.
-      t = $(element)
+      p = d3.select(text.parentNode)
+      # The D3 wrapper on this text element.
+      t = d3.select(text)
       # Remove this text element from the DOM.
-      t.detach()
+      t.remove()
       # Append a SVG anchor.
       a = p.append('svg:a')
-      # Add the href.
-      a.attr('xlink:href', href)
-      # Add link style to the SVG text element.
-      for [k, v] in _.pairs(style)
-        d3.select(this).attr(k, v)
+      # Add the ui-sref.
+      a.attr('ui-sref', sref)
       # Reattach the text element to the anchor.
-      t.appendTo(a)
+      # The D3 selection append method takes either a string,
+      # in which case it creates a new element as in the above
+      # svg:a append, or a function which returns a DOM element.
+      # In the call below, the text element is appended. 
+      a.append(-> text)
+      # Return the anchor element
+      a.node()

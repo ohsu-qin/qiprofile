@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 (http://quip1:6060/qiprofile) for change details.
 
+0.7.1 / 2014-08-14
+------------------
+* Show treatments and encounters in the dateline.
+
 0.6.1 / 2014-08-11
 ------------------
 * Modularize into require.js components.

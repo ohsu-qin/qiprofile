@@ -2,35 +2,49 @@ define ['angular', 'chart'], (ng) ->
   intensity = ng.module 'qiprofile.intensity', ['qiprofile.chart']
 
   intensity.factory 'Intensity', ['Chart', (Chart) ->
-    # Highlights the bolus arrival tick mark.
+    # Highlights the bolus arrival tick mark. The bolus arrival is
+    # only highlighted if it occurs after the first series.  
     #
     # @param session the session object
     # @param chart the intensity chart
     highlightBolusArrival = (session, chart) ->
+      # If the bolus arrival index is zero, then it does not have
+      # have a tick mark, so bail.
+      if not session.bolus_arrival_index
+        return
       # Select the SVG element.
       svg = d3.select(chart.container)
       # The x axis element.
       xAxis = svg.select('.nv-x')
-      # The tick elements.
-      ticks = xAxis.selectAll('.tick')[0]
+      # The D3 CSS3 bolus tick selector. The tick marks are SVG
+      # g elements with the tick class. There is a tick mark for
+      # all but the first and last series. Therefore, the tick
+      # offset is one less than the bolus arrival index.
+      offset = session.bolus_arrival_index - 1
+      # The D3 CSS3 nth-of-type selector argument of zero returns
+      # null. Work around this possible D3 bug by using the
+      # first-of-type selector argument in that case.
+      if offset
+        bolusTickSltr = "g.tick:nth-of-type(#{ offset })"
+      else
+        bolusTickSltr = "g.tick:first-of-type"
       # The bolus tick element.
-      bolusTick = ticks[session.bolus_arrival_index]
+      bolusTick = xAxis.select(bolusTickSltr)
       # The bolus tick child line element.
-      bolusTickLine = $(bolusTick).children('line')[0]
-      highlight = $(bolusTickLine).clone()
-      # Set the class attribute directly, since neither the d3 nor
-      # the jquery add class utility has any effect. d3 has the
-      # following bug:
-      # * In the d3 source, the function named 'classed' has a
-      #   condition:
-      #       if (value = node.classList) {
-      #   which should read:
-      #       if (value == node.classList) {
-      # It is unknown why the jquery addClass doesn't work.
-      $(highlight).attr('class', 'qi-bolus-arrival')
+      bolusTickLine = bolusTick.select('line')
+      highlightNode = bolusTickLine.node().cloneNode()
+      highlight = d3.select(highlightNode)
+      # Set the bolus CSS class.
+      highlight.classed('qi-bolus-arrival', true)
       # Insert the highlight SVG element after the tick line.
       # The highlight will display centered over the tick line.
-      $(highlight).insertAfter(bolusTickLine)
+      # D3 insert differs from jQuery insert. The D3 arguments are
+      # a function which returns a DOM element and the selector
+      # before which the node is inserted. In our case, the
+      # node to insert is the highlight node and the before
+      # selector is the bolus tick selector.
+      highlightNodeFunc = -> highlightNode 
+      bolusTick.insert(highlightNodeFunc, 'line')
       # Add the legend.
       legend = svg.select('.nv-legend')
       legendGroup = legend.select(':first-child')

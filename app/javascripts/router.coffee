@@ -5,6 +5,9 @@ define ['angular', 'lodash', 'underscore.string', 'helpers', 'image', 'resources
 
     router.factory 'Router', ['Subject', 'Session', 'Image', 'Helpers',
       (Subject, Session, Image, Helpers) ->
+        # The Subject search fields.
+        SUBJECT_SECONDARY_KEY_FIELDS = ['project', 'collection', 'number']
+        
         # Formats the {where: condition} Eve REST query parameter.
         # Each key in the condition parameters is quoted.
         # The condition value is unquoted for numbers, quoted otherwise.
@@ -46,12 +49,9 @@ define ['angular', 'lodash', 'underscore.string', 'helpers', 'image', 'resources
           # @returns a promise which resolves to the fetched subject
           fetchSubject = (subject) ->
             # Filter out the null properties.
-            search = _.omit(subject, 'detail')
+            search = _.pick(subject, SUBJECT_SECONDARY_KEY_FIELDS)
             Subject.query(where(search)).$promise.then (subjects) ->
               if subjects.length > 1
-                console.log(">>" + search)
-                console.log(">>" + subjects
-                )
                 throw new Error "Subject query returned more than" +
                                 " one subject: #{ _.pairs(subject) }"
               subjects[0]
@@ -81,6 +81,10 @@ define ['angular', 'lodash', 'underscore.string', 'helpers', 'image', 'resources
               
               # Fix the encounter dates.
               Helpers.fixDate(enc, 'date') for enc in detail.encounters
+              # Fix the treatment dates.
+              for trt in detail.treatments
+                Helpers.fixDate(trt, 'begin_date')
+                Helpers.fixDate(trt, 'end_date')
               # Copy the detail content into the subject.
               Helpers.copyNonNullPublicProperties(detail, subject)
               # Set a flag indicating whether there is more than one
@@ -92,9 +96,12 @@ define ['angular', 'lodash', 'underscore.string', 'helpers', 'image', 'resources
             # Fetch the subject.
             fetchSubject(subject).then (fetched) =>
               # If the fetched subject has no detail, then complain.
+              if not fetched
+                throw new Error "#{ subject.collection } Subject #{ subject.number }" +
+                                " was not found"
               if not fetched.detail
-                throw new Error "Subject #{ subject.number } does not" +
-                                " reference a detail object"
+                throw new Error "#{ subject.collection } Subject #{ subject.number }" +
+                                " does not reference a detail object"
               # Copy the fetched id and detail reference.
               subject._id = fetched._id
               subject.detail = fetched.detail

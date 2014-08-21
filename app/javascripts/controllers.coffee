@@ -3,14 +3,13 @@ define ['angular'], (ng) ->
 
   # The local controller helper methods.
   ctlrs.factory 'ControllerHelper', ['$location', ($location) ->
-    # Replaces the browser URL search parameters to include at most
+    # Resets the browser URL search parameters to include at most
     # a non-default project, since all other search parameters are
     # redundant.
     cleanBrowserUrl: (project) ->
       searchParams = {}
       if project != 'QIN'
         searchParams.project = project
-      $location.replace()
       $location.search(searchParams)
   ]
 

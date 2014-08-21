@@ -58,7 +58,7 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'router', 'uirout
                 project: $stateParams.project or project
                 collection: _s.capitalize($stateParams.collection)
                 number: parseInt($stateParams.subject)
-
+          
           # The subject detail page.
           .state 'quip.subject.detail',
             url: '?detail'
@@ -131,5 +131,5 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'router', 'uirout
           [path, paramStr].join('?')
 
         # HTML5 mode enables the back button to work properly.
-        $locationProvider.html5Mode(true).hashPrefix('!')
+        $locationProvider.html5Mode(true)
     ]

@@ -24,7 +24,7 @@ module.exports = (command, port, callback) ->
   # @fallback the function to call if the connection is refused
   ping = (port, callback, fallback) ->
     sock = new net.Socket()
-    sock.setTimeout 1000
+    sock.setTimeout 3000
     sock
       .on 'connect', ->
         sock.end()

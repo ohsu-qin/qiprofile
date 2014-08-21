@@ -33,7 +33,6 @@ module.exports = (grunt) ->
           'angularjs-nvd3-directives/dist/*.js'
           'd3/*.js'
           'dat.gui/dat.gui.js'
-          'jquery/dist/jquery.js'
           'lodash/dist/lodash.underscore.js'
           'moment/*.js'
           'nvd3/nv.d3.js'
@@ -179,7 +178,6 @@ module.exports = (grunt) ->
           paths:
             angular: 'empty:'
             domReady: 'empty:'
-            jquery: 'empty:'
             nganimate: 'empty:'
             ngresource: 'empty:' 
             ngroute: 'empty:'

@@ -1,5 +1,5 @@
-define ['angular', 'spin', 'dateline', 'intensity', 'modeling', 'clinical'],
-  (ng, Spinner) ->
+define ['angular', 'lodash', 'spin', 'dateline', 'intensity', 'modeling', 'clinical'],
+  (ng, _, Spinner) ->
     directives = ng.module(
       'qiprofile.directives',
       ['qiprofile.dateline', 'qiprofile.intensity', 'qiprofile.modeling', 'qiprofile.clinical']
@@ -61,15 +61,32 @@ define ['angular', 'spin', 'dateline', 'intensity', 'modeling', 'clinical'],
 
 
     # Displays the MR session visit dateline chart.
-    directives.directive 'qiVisitDateline', ['VisitDateline', (VisitDateline) ->
-      restrict: 'E'
-      scope:
-        sessions: '='   # the subject sessions
-      link: (scope, element, attrs) ->
-        scope.$watch 'sessions', (sessions) ->
-          if sessions
-            scope.config = VisitDateline.configureChart(sessions)
-      templateUrl: '/partials/visit-dateline-chart.html'
+    directives.directive 'qiVisitDateline', ['VisitDateline', '$compile',
+      (VisitDateline, $compile) ->
+        restrict: 'E'
+        scope:
+          subject: '='   # the subject
+        link: (scope, element, attrs) ->
+          scope.$watch 'subject', (subject) ->
+            if _.any(subject.sessions)
+              scope.config = VisitDateline.configureChart(subject)
+              # This function is called by D3 after the chart DOM is built.
+              #
+              # @param chart the chart SVG element
+              scope.applyChart = (chart) ->
+                # Compiles the given anchor element ui-sref directive
+                # in the current scope.
+                #
+                # @param a the anchor element
+                compileDetailLink = (a) ->
+                  $compile(a)(scope)
+                
+                # Add the session detail hyperlinks, treatment bars and
+                # encounter points. The callback compiles the ui-sref
+                # anchor hyperlinks after they are added to the DOM.
+                VisitDateline.decorate(subject, chart, scope.config, compileDetailLink)
+                  
+        templateUrl: '/partials/visit-dateline-chart.html'
     ]
 
 

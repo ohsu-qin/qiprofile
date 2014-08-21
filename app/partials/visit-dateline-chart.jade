@@ -4,4 +4,5 @@
     showXAxis='true' showYAxis='false' showLegend='false'
     xAxisLabel='Visit Date' xAxisTickFormat='config.xFormat'
     xAxisTickValues='$parent.config.xValues' xAxisShowMaxMin='false'
-    callback='config.addSessionDetailLinks')
+    forcex="{{ config.xMaxMin }}"
+    callback='applyChart')

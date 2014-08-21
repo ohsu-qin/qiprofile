@@ -1,11 +1,23 @@
 // The PK parameter charts.
-.qi-separator-faint
-h5.col-md-offset-1
-  | Vascular Permeability Transfer Constant (K<sup>trans</sup>)
-qi-modeling-multi-chart(data='subject.sessions' chart='ktrans')
-.qi-separator-faint
-h5.col-md-offset-1 Extravascular Extracellular Volume Fraction (v<sub>e</sub>)
-qi-modeling-discrete-chart(data='subject.sessions' chart='ve')
-.qi-separator-faint
-h5.col-md-offset-1 Intracellular H<sub>2</sub>O Mean Lifetime (&tau;<sub>i</sub>)
-qi-modeling-discrete-chart(data='subject.sessions' chart='taui')
+.panel-group
+  .panel.panel-default
+    .panel-heading
+      h4.panel-title
+        | Vascular Permeability Transfer Constant (K<sup>trans</sup>)
+    .panel-collapse
+      .panel-body
+        qi-modeling-multi-chart(data='subject.sessions' chart='ktrans')
+  .panel.panel-default
+    .panel-heading
+      h4.panel-title
+        | Extravascular Extracellular Volume Fraction (v<sub>e</sub>)
+    .panel-collapse
+      .panel-body
+        qi-modeling-discrete-chart(data='subject.sessions' chart='ve')
+  .panel.panel-default
+    .panel-heading
+      h4.panel-title
+        | Intracellular H<sub>2</sub>O Mean Lifetime (&tau;<sub>i</sub>)
+    .panel-collapse
+      .panel-body
+        qi-modeling-discrete-chart(data='subject.sessions' chart='taui')

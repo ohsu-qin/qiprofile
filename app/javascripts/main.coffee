@@ -55,6 +55,11 @@ requirejs.config
     uibootstrap: './lib/ui-bootstrap-tpls'
     xtk: './lib/xtk_edge'
 
+  # The module configurations.
+  config:
+    moment:
+      noGlobal: true
+  
   # The non-AMD module dependencies.
   shim:
     angular: exports : 'angular'

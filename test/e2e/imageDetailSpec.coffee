@@ -12,7 +12,7 @@ describe 'E2E Testing Image Detail', ->
   page = null
 
   beforeEach ->
-    page = new ImageDetailPage '/quip/breast/subject/1/session/1/scan/1?project=QIN_Test'
+    page = new ImageDetailPage '/quip/sarcoma/subject/1/session/1/scan/20?project=QIN_Test'
   
   it 'should display the billboard', ->
     expect(page.billboard, 'The billboard is incorrect')

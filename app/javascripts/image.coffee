@@ -1,4 +1,4 @@
-define ['angular', 'file', 'xtk'], (ng) ->
+define ['angular', 'xtk', 'file'], (ng) ->
   image = ng.module 'qiprofile.image', ['qiprofile.file']
 
   image.factory 'Image', ['$rootScope', 'File', ($rootScope, File) ->

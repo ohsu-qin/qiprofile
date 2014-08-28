@@ -1,4 +1,4 @@
-define ['angular', 'xtk', 'file'], (ng) ->
+define ['angular', 'xtk', 'file', 'dat'], (ng) ->
   image = ng.module 'qiprofile.image', ['qiprofile.file']
 
   image.factory 'Image', ['$rootScope', 'File', ($rootScope, File) ->
@@ -38,7 +38,7 @@ define ['angular', 'xtk', 'file'], (ng) ->
       state:
         loading: false
 
-      # The image binary content.
+      # The image file content.
       data: null
 
       # Transfers the image file content to the data property.
@@ -47,9 +47,10 @@ define ['angular', 'xtk', 'file'], (ng) ->
       #
       # @returns a promise which resolves when the image file
       #   read is completed
-      load: () ->
+      load: ->
         # Set the loading flag.
         @state.loading = true
+        
         # Read the file into an ArrayBuffer. The Coffeescript fat
         # arrow (=>) binds the this variable to the image object
         # rather than the $http request.
@@ -58,43 +59,31 @@ define ['angular', 'xtk', 'file'], (ng) ->
           @state.loading = false
           # Set the data property to the file content.
           @data = data
-
-      # Builds an XTK renderer for this image.
-      createRenderer: ->
-        # The XTK renderer.
+      
+      # Renders the image in the given parent element.
+      #
+      # @param element the Angular jQueryLite element
+      open: (element) ->
+        # The XTK renderer for this image.
         renderer = new X.renderer3D()
+        # The image is rendered within the given element.
+        renderer.container = element[0]
+        # Build the renderer.
         renderer.init()
-
         # The volume to render.
         volume = new X.volume()
-        # XTK seems to expect a .gz filename to have compressed
-        # data. However, Express and most servers uncompress
-        # content on the fly. Therefore, fool XTK into accepting
-        # the file content by stripping the .gz extension.
-        # TODO - is there a better approach?
-        if @filename[-3..] == '.gz'
-          volume.file = @filename[0..-3]
-        else
-          volume.file = @filename
-        # FIXME - XTK throws the following:
-        #   Uncaught RangeError: byte length of Uint16Array should be a multiple of 2 
-        # This occurs whether or not the filedata property is set
-        # below.
-        # TODO - Why does it fail even when filedata is not set?
-        # TODO - Walk through the XTK loader code again to emulate their
-        # approach. What is the loader container object?
+        volume.file = @filename
         volume.filedata = @data
-        renderer.add volume
+        renderer.add(volume)
 
         # The rendering callback. This function is called after the
         # volume is initialized and prior to the first rendering.
         renderer.onShowtime = ->
-          # The volume display controls.
-          volumeCtls = new dat.GUI()
+          # The volume display controls. The element is manually
+          # placed later in this function.
+          gui = new dat.GUI(autoplace: false)
           # The controls interact with the volume.
           volumeCtls = gui.addFolder('Volume')
-          # The rendering control.
-          renderingCtl = volumeCtls.add(volume, 'volumeRendering')
           # The opacity control.
           opacityCtl = volumeCtls.add(volume, 'opacity', 0, 1).listen()
           # The threshold min and max range controls.
@@ -104,14 +93,17 @@ define ['angular', 'xtk', 'file'], (ng) ->
           sliceXCtl = volumeCtls.add(volume, 'indexX', 0, volume.range[0] - 1)
           sliceYCtl = volumeCtls.add(volume, 'indexY', 0, volume.range[1] - 1)
           sliceZCtl = volumeCtls.add(volume, 'indexZ', 0, volume.range[2] - 1)
+          # The control is placed after the image display.
+          ctlElt = ng.element(gui.domElement)
+          element.after(ctlElt)
           # Display the controls.
-          volumeCtls.open();
+          volumeCtls.open()
 
         # Adjust the camera position.
         renderer.camera.position = [120, 80, 160]
 
-        # Return the renderer.
-        renderer
+        # Render the image.
+        renderer.render()
 
     # Obtains image objects for the given ImageContainer. The image
     # object content is described in the create() function.

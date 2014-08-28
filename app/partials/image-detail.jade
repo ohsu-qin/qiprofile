@@ -9,7 +9,8 @@ block billboard
   | Time Point {{ image.timePoint }}
 
 block content
-  qi-series-image(image='image')
+  .qi-image-background
+    qi-series-image.col-md-9.qi-series-image(image='image')
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

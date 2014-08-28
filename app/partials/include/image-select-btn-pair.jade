@@ -2,7 +2,13 @@
 // opens the image.
 // Otherwise, the image selector is a button which loads the image.
 button.btn.btn-default.btn-xs.qi-nav-btn.qi-image-btn(
-  ng-click='openImage(image)'
+  // openImage is defined in the session detail controller.
+  // Apparently, openImage is not visible in the button
+  // scope.
+  // TODO - try setting openImage in the qiImageSelection directive
+  // scope with the following magic setting:
+  //   openImage: '='
+  ng-click='$parent.$parent.openImage(image)'
   ng-show='image.data'
 )
   .glyphicon.glyphicon-eye-open

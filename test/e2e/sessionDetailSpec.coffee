@@ -5,10 +5,14 @@ expect = require('./helpers/expect')()
 Page = require('./helpers/page')()
 
 class SessionDetailPage extends Page
-  # @returns a promise resolving to a
+  # @returns a promise resolving to the given time point
   #   {download: button, display: button} object
-  firstScanImageButtons: ->
-    div = element(By.repeater('image in session.scan.images').row(0))
+  #
+  # @param time_point the time point
+  scanImageButtons: (time_point) ->
+    # Since the time point is one-based, the zero-based image select
+    # index is one less than the time point.
+    div = element(By.repeater('image in session.scan.images').row(time_point - 1))
     div.findElement(By.css('.glyphicon-download')).then (download) ->
       div.findElement(By.css('.glyphicon-eye-open')).then (open) ->
         download: download
@@ -52,14 +56,20 @@ class SessionDetailPage extends Page
     this.select('//qi-intensity-chart//nvd3-line-chart')
 
 describe 'E2E Testing Session Detail', ->
+  # The Sarcoma001 Session01 time point 21. This is the time point for
+  # which there is a test fixture scan image file. The seed helper
+  # function called from the protractor config links the test fixture
+  # data directory to _public/data subdirectory.
+  TEST_TIME_POINT = 21
+  
   page = null
 
   beforeEach ->
-    page = new SessionDetailPage '/quip/breast/subject/1/session/1?project=QIN_Test'
+    page = new SessionDetailPage '/quip/sarcoma/subject/1/session/1?project=QIN_Test'
   
   it 'should display the billboard', ->
     expect(page.billboard, 'The billboard is incorrect')
-      .to.eventually.equal('Breast Patient 1 Session 1')
+      .to.eventually.equal('Sarcoma Patient 1 Session 1')
   
   it 'should have a home button', ->
     pat = /.*\/quip\?project=QIN_Test$/
@@ -75,10 +85,7 @@ describe 'E2E Testing Session Detail', ->
       expect(page.chart(), 'The chart is not displayed').to.eventually.exist
 
     it 'should load the image', ->
-      # Note: this test depends on the existence of the first session
-      # scan image in the _public/data subdirectory. This file is created
-      # by the seed helper function set in the protractor config.
-      page.firstScanImageButtons().then (buttons) ->
+      page.scanImageButtons(TEST_TIME_POINT).then (buttons) ->
         # The download/display button pair.
         download = buttons.download
         expect(download, 'The download button is initially missing').to.exist

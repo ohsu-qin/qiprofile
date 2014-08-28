@@ -10,20 +10,7 @@ block content
   .row
     h4.col-md-offset-1.col-md-3.qi-chart-title Average Signal Intensity
   qi-intensity-chart(session="session")
-  
-  .qi-image-selection
-    // The scan image selection buttons.
-    .row
-      .col-md-1.qi-image-selection-key Scan
-      .btn-group.qi-scan-image-btn-group(ng-repeat="image in session.scan.images")
-        include include/image-select
-        
-    // The realigned image selection buttons.
-    div(ng-repeat="reg in session.registrations")
-      .row
-        .col-md-1.qi-image-selection-key {{ reg.data_series.key }}
-        .btn-group.qi-reg-image-btn-group(ng-repeat="image in reg.images")
-          include include/image-select
+  qi-image-selection(session="session")
 
 
 block help-text

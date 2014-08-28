@@ -39,7 +39,7 @@ module.exports = (grunt) ->
           'requirejs/require.js'
           'spin.js/spin.js'
           'underscore.string/lib/*.js'
-          'xtk/xtk_edge.js'
+          'xtk/dist/xtk.js'
           # Exclude minimized files.
           '!**/*.min.js'
         ]

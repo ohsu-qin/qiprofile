@@ -119,9 +119,6 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'router', 'uirout
 
         # Redirect an URL with trailing slash to an URL without it.
         $urlRouterProvider.rule ($injector, $location) ->
-          # # Enable lodash.
-          # _ = window._
-          #
           path = $location.path()
           search = $location.search()
           if _s.endsWith(path, '/')

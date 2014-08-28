@@ -41,6 +41,7 @@ requirejs.config
   paths:
     angular: [NG_LIB + '/' + 'angular' + MIN, './lib/angular'] 
     d3: './lib/d3'
+    dat: './lib/dat.gui'
     domReady: [DOM_READY_LIB + '/domReady' + MIN, './lib/domReady']
     lodash: './lib/lodash.underscore'
     moment: './lib/moment'
@@ -53,7 +54,7 @@ requirejs.config
     'underscore.string': './lib/underscore.string'
     uirouter: './lib/angular-ui-router'
     uibootstrap: './lib/ui-bootstrap-tpls'
-    xtk: './lib/xtk_edge'
+    xtk: './lib/xtk'
 
   # The module configurations.
   config:

@@ -70,7 +70,7 @@ requirejs.config
     'underscore.string': './lib/underscore.string'
     uirouter: './lib/angular-ui-router'
     uibootstrap: './lib/ui-bootstrap-tpls'
-    xtk: './lib/xtk_edge'
+    xtk: './lib/xtk'
     # The test helpers.
     expect: '../../test/unit/helpers/expect'
     # The test vendor libraries.

@@ -136,11 +136,30 @@ define ['angular', 'lodash', 'spin', 'dateline', 'intensity', 'modeling', 'clini
       scope:
         session: '=' 
       link: (scope, element, attrs) ->
-        # Wait for a session extended with detail, including the scan.
+        # Wait for a session extended with detail to digest the scan.
         scope.$watch 'session.scan', (scan) ->
-          if scan
-            scope.config = Intensity.configureChart(scope.session)
+          if scan?
+            scope.config = Intensity.configureChart(scope.session, element)
       templateUrl: '/partials/intensity-chart.html'
+    ]
+
+
+    # Displays the series image selection.
+    directives.directive 'qiImageSelection', ['Intensity', (Intensity) ->
+      restrict: 'E'
+      scope:
+        session: '=' 
+      link: (scope, element, attrs) ->
+        # Wait for a session extended with detail to digest both the scan
+        # and the registrations. The registrations listener is necessary
+        # because the registration buttons are not added to the DOM until
+        # just before the registrations listener is called.
+        scope.$watch 'session.scan', (scan) ->
+          if scan?
+            scope.$watch 'session.registrations', (regs) ->
+              if regs?
+                scope.config = Intensity.formatSelection(element)
+      templateUrl: '/partials/image-selection.html'
     ]
 
 
@@ -152,5 +171,4 @@ define ['angular', 'lodash', 'spin', 'dateline', 'intensity', 'modeling', 'clini
       link: (scope, element, attrs) ->
         scope.$watch 'image.data', (data) ->
           if data
-            scope.renderer = scope.image.createRenderer()
-      templateUrl: '/partials/series-image.html'
+            scope.image.open(element)

@@ -43,7 +43,7 @@ define ['angular', 'chart'], (ng) ->
       # before which the node is inserted. In our case, the
       # node to insert is the highlight node and the before
       # selector is the bolus tick selector.
-      highlightNodeFunc = -> highlightNode 
+      highlightNodeFunc = -> highlightNode
       bolusTick.insert(highlightNodeFunc, 'line')
       # Add the legend.
       legend = svg.select('.nv-legend')
@@ -90,8 +90,9 @@ define ['angular', 'chart'], (ng) ->
     # e.g. ['1', '2', ..., '12'] for 12 series.
     #
     # @param session the session object
+    # @param element the chart Angular jQueryLite element
     # @returns the nvd3 chart configuration
-    configureChart: (session) ->
+    configureChart: (session, element) ->
       # @param intensities the intensity value array
       # @returns the intensity chart [x, y] coordinates
       coordinates = (intensities) ->
@@ -130,11 +131,64 @@ define ['angular', 'chart'], (ng) ->
         # series key.
         reg.data_series = registration_data_series(reg, i)
       reg_data = ((reg.data_series for reg in session.registrations))
-    
+      
+      # Pad the image selection buttons based on the number of series.
+
       # Return the chart configuration.
       data: [scan_data].concat(reg_data)
       xValues: (coord[0] for coord in scan_data.values)
       yFormat: yFormat
       highlightBolusArrival: (chart) ->
         highlightBolusArrival(session, chart)
+
+    # Formats the intensity selection block for the given session.
+    # Padding is added to each button sufficient to center the
+    # button under the intensity chart x-axis tick marks.
+    #
+    # @param element the selection Angular jQueryLite element
+    formatSelection: (element) ->
+      formatRow = (row) ->
+        # The width of the entire row.
+        rowWidth = row[0].clientWidth
+        # The selection key label and buttons.
+        children = row.children()
+        # The width of the first key element holding the label,
+        # e.g. 'Scan'.
+        keyWidth = children[0].clientWidth
+        # The button width without padding.
+        buttonWidth = children[1].clientWidth
+        # The number of buttons.
+        buttonCnt = children.length - 1
+        # The width available to pad the buttons.
+        available = rowWidth - keyWidth - (buttonCnt * buttonWidth) 
+        # The button left and right pad amount. Since the left-most
+        # and right-most buttons are only padded on one side, count
+        # those two buttons as one for the purpose of computing the
+        # pad amount.
+        pad = available / (2 * (buttonCnt - 1))
+        # The buttons include all but the first child.
+        buttons = (ng.element(children[i]) for i in [1..buttonCnt])
+        
+        
+        # FIXME - this has no effect. Perhaps the margin precision
+        # is too large, since setting it to a precision > 3 in the
+        # style sheet fails. But setting margin here to an int
+        # has no effect either.
+        #
+        # TODO - remove the css margin and get this to work.
+        #
+        # # Add a right pad for all but the last button.
+        # for btn in buttons[0...buttonCnt-1]
+        #   btn.css('margin-right', pad)
+        # # Add a left pad for all but the first button.
+        # for btn in buttons[1...buttonCnt]
+        #   btn.css('margin-left', pad)
+      
+      # Format each row.
+      for childDom in element.children()
+        child = ng.element(childDom)
+        if child.hasClass('row')
+          formatRow(child)
+        else
+          this.formatSelection(child)
   ]

@@ -1,0 +1,12 @@
+// The scan image selection buttons.
+.row
+  .qi-image-selection-key Scan
+  .btn-group.qi-scan-image-btn-group(ng-repeat="image in session.scan.images")
+    include include/image-select-btn-pair
+    
+// The realigned image selection buttons.
+div(ng-repeat="reg in session.registrations")
+  .row
+    .qi-image-selection-key {{ reg.data_series.key }}
+    .btn-group.qi-reg-image-btn-group(ng-repeat="image in reg.images")
+      include include/image-select-btn-pair

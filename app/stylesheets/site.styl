@@ -78,6 +78,9 @@ for n in 1 2 3 4 5
 
 //** General-purpose QuIP styles. **//
 
+.qi-body
+  background-color WhiteSmoke
+
 .qi-label
   font-weight: bold
 
@@ -352,34 +355,33 @@ fast-transition = 0.2s
     padding-bottom 0.2em
 
 .qi-intensity-chart
-  margin 0 0 0 3.2em
+  margin 0 0 0 2em
   float left
   height 22em
-  width 68em
-  // TODO - set width to 100% here and in .qi-image-selection,
-  // then center each image button in a 100% partition rather
-  // than setting fixed margins.
+  width 98%
 
 .qi-image-selection
-  margin 0 0 0.2em 0
+  margin 0 0 2em 0
   float left
   height 4em
-  // 68em is 100% of the chart width. See .qi-intensity-chart
-  // TODO comment.
-  width 68em
+  width 95%
 
 .qi-image-selection-key
-  padding-right .2em 
+  float left
+  width 6em
+  padding-right .1em
   text-align right
+  font-size smaller
 
 qi-image-btn-group()
+  // TODO - set margins dynamically in Intensity.formatSelection.
   .qi-image-btn
-    margin 0.1em 0.242em 0.1em 0.242em
+    margin 0 .12em 0 .12em
   // Undo the Bootstrap adjacent button tweaks.
   .btn + .btn
-    margin 0.1em 0.242em 0.1em 0.242em
+    margin 0 .12em 0 .12em
   .btn:first-child
-    margin 0.1em 0.242em 0.1em 0.242em
+    margin 0 .12em 0 .12em
 
 .qi-scan-image-btn-group
   qi-image-btn-group()
@@ -397,6 +399,7 @@ qi-image-btn-group()
     background-color DarkGreen
 
 .qi-image-btn
+  font-size 10px
   &:hover
     color Chocolate
 
@@ -442,3 +445,8 @@ qi-image-btn-group()
 
 .qi-outcome-label
   color: SlateGray
+
+
+//** Image Display styles. **//
+.qi-series-image
+  height 36em

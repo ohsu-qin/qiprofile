@@ -90,6 +90,9 @@ define ['angular'], (ng) ->
         # Route to the image detail page.
         params =
           project: image.parent.session.subject.project
+          subject: image.parent.session.subject.number
+          session: image.parent.session.number
+          detail: image.parent.session.detail
           container: image.parent.container_type
           timePoint: image.timePoint
         $state.go('quip.subject.session.container.image', params)

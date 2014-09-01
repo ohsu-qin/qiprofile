@@ -1,4 +1,4 @@
-define ['ngmocks', 'clinical'], (ngmocks, clinical) -> 
+define ['ngmocks', 'moment', 'clinical'], (ngmocks, moment, clinical) -> 
   describe 'Unit Testing Clinical Service', ->
     # The qiprofile Clinical Profile factory.
     Clinical = null
@@ -15,17 +15,18 @@ define ['ngmocks', 'clinical'], (ngmocks, clinical) ->
       # TODO - change mock to conform with REST model and
       # rerun after clinical is refactored per the app TODOs.
       mock =
+        # TODO - Use the resource data model to create the mock subject.          
         subject:
-          birth_date: new Date
+          # The anonymized birth date is July 7.
+          birth_date: moment([1985, 6, 7])
           races: ['Black', 'Asian']
           ethnicity: 'Non-Hispanic'
           encounters:
             [
               {
-                date: new Date
+                date: moment([2014, 2, 12])
                 outcomes: [
-                  # TODO - make a pathology outcome here.
-                  # TODO - grade is composite.
+                  # TODO - grade is an aggregate.
                   # tnm: {
                   #   grade: 2
                   #   lymph_status: 3
@@ -36,7 +37,7 @@ define ['ngmocks', 'clinical'], (ngmocks, clinical) ->
                 encounter_type: "Biopsy"
               }
               {
-                date: new Date
+                date: moment([2014, 4, 6])
                 outcomes: [
                   # tnm: {
                   #   #
@@ -57,6 +58,7 @@ define ['ngmocks', 'clinical'], (ngmocks, clinical) ->
         # Validate the configuration.
         # TODO - compare to the mock values for each encounter
         # and each demographic and outcome value.
+        # TODO - test the age property.
         # TODO - these should be broken out into test cases.
         # TODO - add expect message arguments.
         expect(config.encounters).to.exist

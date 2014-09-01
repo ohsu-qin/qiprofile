@@ -84,7 +84,7 @@ if env is 'test'
 # Start MongoDB, if necessary...
 spawn 'mongod', MONGODB_PORT, ->
   # ...then the REST app...
-  cmd = if env? then "qirest --#{ env }" else 'qirest'
+  cmd = if env then "qirest --#{ env }" else 'qirest'
   spawn cmd, EVE_PORT, ->
     #...then the Express server.
     port = server.get 'port'

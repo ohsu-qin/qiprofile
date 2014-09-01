@@ -1,7 +1,7 @@
-define ['angular', 'lodash', 'moment', 'chart'], (ng, _, moment) ->
-  dateline = ng.module 'qiprofile.dateline', ['qiprofile.chart']
+define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
+  dateline = ng.module 'qiprofile.dateline', ['qiprofile.helpers', 'qiprofile.chart']
   
-  dateline.factory 'VisitDateline', ['Chart', (Chart) ->
+  dateline.factory 'VisitDateline', ['ObjectHelper', 'Chart', (ObjectHelper, Chart) ->
     # A helper function to calculate the effective treatment dates.
     # If there is not a begin date, then this function returns an
     # empty array. Otherwise, this function returns a [begin, end]
@@ -13,7 +13,7 @@ define ['angular', 'lodash', 'moment', 'chart'], (ng, _, moment) ->
     # @param treatment the treatment object
     # @returns the [begin, end] array
     treatmentSpan = (treatment) ->
-      if treatment.begin_date?
+      if ObjectHelper.exists(treatment.begin_date)
         begin = treatment.begin_date.valueOf()
         endDate = treatment.end_date or moment()
         end = endDate.valueOf()

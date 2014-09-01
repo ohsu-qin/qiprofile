@@ -1,10 +1,10 @@
-define ['angular', 'lodash', 'underscore.string', 'helpers', 'image', 'resources'],
-  (ng, _, _s) ->
+define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 'resources'],
+  (ng, _, _s, moment) ->
     router = ng.module 'qiprofile.router', ['qiprofile.resources',
                                             'qiprofile.helpers', 'qiprofile.image']
 
-    router.factory 'Router', ['Subject', 'Session', 'Image', 'Helpers',
-      (Subject, Session, Image, Helpers) ->
+    router.factory 'Router', ['Subject', 'Session', 'Image', 'ObjectHelper', 'DateHelper',
+      (Subject, Session, Image, ObjectHelper, DateHelper) ->
         # The Subject search fields.
         SUBJECT_SECONDARY_KEY_FIELDS = ['project', 'collection', 'number']
         
@@ -31,6 +31,8 @@ define ['angular', 'lodash', 'underscore.string', 'helpers', 'image', 'resources
           where: "{#{ cond }}"
 
         # Fetches the subject detail and fixes it up as follows:
+        # * anonymizes the birth date by setting it to July 7
+        # * adds the age property
         # * converts the session and encounter dates into moments
         # * copies the detail properties into the subject
         # * sets the subject isMultiSession flag
@@ -58,11 +60,22 @@ define ['angular', 'lodash', 'underscore.string', 'helpers', 'image', 'resources
           
           if subject.detail
             Subject.detail(id: subject.detail).$promise.then (detail) ->
+              if ObjectHelper.exists(detail.birth_date)
+                # Fix the birth date.
+                date = DateHelper.asMoment(subject.birth_date)
+                # Anonymize the birth date.
+                detail.birth_date = DateHelper.anonymize(date)
+                # July 7 of this year.
+                nowish = DateHelper.anonymize(moment())
+                # Add the subject age property.
+                subject.age = nowish.diff(detail.birth_date, 'years')
+              
               for sess in detail.sessions
                 # Set the session subject property.
                 sess.subject = subject
                 # Fix the acquisition date.
-                Helpers.fixDate(sess, 'acquisition_date')
+                if ObjectHelper.exists(sess.acquisition_date)
+                  sess.acquisition_date = DateHelper.asMoment(sess.acquisition_date)
                 # Calculate the delta Ktrans property.
                 for mdl in sess.modeling
                   delta_k_trans = mdl.fxr_k_trans - mdl.fxl_k_trans
@@ -77,16 +90,19 @@ define ['angular', 'lodash', 'underscore.string', 'helpers', 'image', 'resources
                   throw new Error "Multiple modeling results per session" +
                                   " are not yet supported."
                 sess.modeling = sess.modeling[0]
-      
               
               # Fix the encounter dates.
-              Helpers.fixDate(enc, 'date') for enc in detail.encounters
+              for enc in detail.encounters
+                if ObjectHelper.exists(enc.date)
+                  enc.date = DateHelper.asMoment(enc.date)
               # Fix the treatment dates.
               for trt in detail.treatments
-                Helpers.fixDate(trt, 'begin_date')
-                Helpers.fixDate(trt, 'end_date')
+                if ObjectHelper.exists(trt.begin_date)
+                  trt.begin_date = DateHelper.asMoment(trt.begin_date)
+                if ObjectHelper.exists(trt.end_date)
+                  trt.end_date = DateHelper.asMoment(trt.end_date)
               # Copy the detail content into the subject.
-              Helpers.copyNonNullPublicProperties(detail, subject)
+              ObjectHelper.copyNonNullPublicProperties(detail, subject)
               # Set a flag indicating whether there is more than one
               # session.
               subject.isMultiSession = subject.sessions.length > 1
@@ -164,7 +180,7 @@ define ['angular', 'lodash', 'underscore.string', 'helpers', 'image', 'resources
           if session.detail
             Session.detail(id: session.detail).$promise.then (detail) =>
               # Copy the fetched detail into the session.
-              Helpers.copyNonNullPublicProperties(detail, session)
+              ObjectHelper.copyNonNullPublicProperties(detail, session)
               addImageContainerContent(session.scan, session, 'scan')
               for reg in session.registrations
                 addImageContainerContent(reg, session, 'registration')

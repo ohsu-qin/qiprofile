@@ -1,38 +1,30 @@
-define ['angular', 'lodash'], (ng, _) ->
-  clinical = ng.module 'qiprofile.clinical', []
+define ['angular', 'lodash', 'helpers'], (ng, _) ->
+  clinical = ng.module 'qiprofile.clinical', ['qiprofile.helpers']
 
-  clinical.factory 'Clinical', ->
+  clinical.factory 'Clinical', ['ObjectHelper', (ObjectHelper) ->
     # The standard FDA race categories.
     RACE_CHOICES =
-      {
-        'White': 'White'
-        'Black': 'Black or African American'
-        'Asian': 'Asian'
-        'AIAN': 'American Indian or Alaska Native'
-        'NHOPI': 'Native Hawaiian or Other Pacific Islander'
-      }
+      'White': 'White'
+      'Black': 'Black or African American'
+      'Asian': 'Asian'
+      'AIAN': 'American Indian or Alaska Native'
+      'NHOPI': 'Native Hawaiian or Other Pacific Islander'
 
     # The standard FDA ethnicity categories.
     ETHNICITY_CHOICES =
-      {
-        'Hispanic': 'Hispanic or Latino'
-        'Non-Hispanic': 'Not Hispanic or Latino'
-        null: 'Not specified'
-      }
+      'Hispanic': 'Hispanic or Latino'
+      'Non-Hispanic': 'Not Hispanic or Latino'
+      null: 'Not specified'
 
     # Lab result categorized as positive or negative.
     POS_NEG_RESULTS =
-      {
-        false: 'negative'
-        true: 'positive'
-      }
+      false: 'negative'
+      true: 'positive'
 
     # The TNM metastatis parameters.
     TNM_METASTASIS =
-      {
-        false: '0'
-        true: '1'
-      }
+      false: '0'
+      true: '1'
 
     # TNM grades corresponding to overall Nottingham or FNCLCC grade.
     TUMOR_GRADES =
@@ -92,7 +84,7 @@ define ['angular', 'lodash'], (ng, _) ->
     #    ...
     #   ]
     #   stage = (t, n) ->
-    #     STAGES[t][n] if t?
+    #     STAGES[t][n] if ObjectHelper.exists(t)
     #   summaryGrade = (cumulativeGrade) ->
     #     1 + _.findIndex(GRADE_RANGES, (range) -> cumulativeGrade in range)
     #
@@ -175,15 +167,23 @@ define ['angular', 'lodash'], (ng, _) ->
         }
 
     configureProfile: (subject) ->
-      getNottinghamGrade = (grade) ->
-        # Calculate the overall Nottingham grade. Return as null if any of the
-        # three properties has a null value.
-        if grade? and _.every(_.values(grade), (val) -> val?)
-          grade.tubular_formation + grade.mitotic_count + grade.nuclear_pleomorphism
+      GRADE_SCORES =
+        NottinghamGrade: ['tubular_formation', 'mitotic_count', 'nuclear_pleomorphism']
+        FNCLCCGrade: ['differentiation', 'mitotic_count', 'necrosis']
+      
+      # Calculates the overall grade. Return null if any grade score property
+      # value is null.
+      #
+      # @param grade the grade
+      getOverallGrade = (grade) ->
+        return null unless grade?
+        props = GRADE_SCORES[grade._cls]
+        if not props?
+          throw new Error("Grade type not recognized: #{ grade._cls }")
+        if _.every(props, (prop) -> grade[prop]?)
+          _.reduce(props, ((sum, prop) -> sum + grade[prop]), 0)
         else
           null
-      
-      # TODO - add a function to calculate overall FNCLCC grade.
 
       # Determine the composite score and stage from the given TNM
       # and grade. This function creates a staging object consisting
@@ -228,20 +228,20 @@ define ['angular', 'lodash'], (ng, _) ->
         coll = subject.collection
         
         # TODO - make a getTumorScore(tnm) method.
-        size = if tnm.size? then tnm.size else {}
+        size = if ObjectHelper.exists(tnm.size) then tnm.size else {}
 
         # Look up the TNM grade based on the overall Nottingham or FNCLCC grade.
         g_value = TUMOR_GRADES[coll][grade]
         # The T value is the TNM size tumor_size property.
         t_value = size.tumor_size
         # Obtain the T, N, M, and G values as strings or set to 'X' if null.
-        t = if t_value? then t_value.toString() else 'X'
-        n = if tnm.lymph_status? then tnm.lymph_status.toString() else 'X'
-        m = if tnm.metastasis? then TNM_METASTASIS[tnm.metastasis] else 'X'
+        t = if ObjectHelper.exists(t_value) then t_value.toString() else 'X'
+        n = if ObjectHelper.exists(tnm.lymph_status) then tnm.lymph_status.toString() else 'X'
+        m = if ObjectHelper.exists(tnm.metastasis) then TNM_METASTASIS[tnm.metastasis] else 'X'
         g = if g_value then g_value else 'X'
         # The size as a string.
-        prefix = if size.prefix? then size.prefix else ''
-        suffix = if size.suffix? then size.suffix else ''
+        prefix = if ObjectHelper.exists(size.prefix) then size.prefix else ''
+        suffix = if ObjectHelper.exists(size.suffix) then size.suffix else ''
         size_s = "#{ prefix }T#{ t }#{ suffix }"
         # Create the composite TNMG score.
         tumor_score = "#{ size_s }N#{ n }M#{ m }G#{ g }"
@@ -254,10 +254,10 @@ define ['angular', 'lodash'], (ng, _) ->
           tumor_stage = 'IV'
         else if coll == 'Breast'
           tumor_stage = TUMOR_STAGES['Breast'][t][n]
-        else
+        else if coll == 'Sarcoma'
           # For sarcoma, use the T value without any suffix (i.e. a or b).
           tumor_stage = TUMOR_STAGES['Sarcoma'][t.substring(0, 1)][n][g]
-        tumor_stage = "undetermined" if not tumor_stage
+        tumor_stage = 'undetermined' if not tumor_stage
         # Return the composite TNM score and the stage.
         t_value: t_value, g_value: g_value, tumor_score: tumor_score, tumor_stage: tumor_stage
 
@@ -280,9 +280,9 @@ define ['angular', 'lodash'], (ng, _) ->
           # falsy values such as 0 or false are valid data.
           isStagingData = tnm? and _.some(_.values(tnm), (val) -> val?)
           if isStagingData
-            # Add the overall Nottingham grade to the outcome.
+            # Add the overall grade to the outcome.
             grade = tnm.grade
-            overall_grade = getNottinghamGrade(grade)
+            overall_grade = getOverallGrade(grade)
             _.extend grade, overall_grade: overall_grade
             # Add the tumor composite score and stage to the outcome if the value
             # for at least one staging property is not null.
@@ -312,10 +312,12 @@ define ['angular', 'lodash'], (ng, _) ->
       addPctSign = (val) ->
         # Display with a % sign following the value unless it is null.
         result = if val then val.toString().concat('%') else val
+      
       asReactionScore = (val) ->
         # Display with a + sign following the value if it is not zero or null.
         result = if val > 0 then val.toString().concat('+') else val
       # The outcome specification.
+      
       groups =
         tnm:
           label: 'Tumor Staging'
@@ -346,7 +348,7 @@ define ['angular', 'lodash'], (ng, _) ->
                 accessor: (outcome) -> outcome.tumor_score
               }
             ]
-        grade:
+        nottingham_grade:
           label: 'Nottingham Grade'
           rows:
             [
@@ -357,6 +359,27 @@ define ['angular', 'lodash'], (ng, _) ->
               {
                 label: 'Nuclei'
                 accessor: (outcome) -> outcome.tnm.grade.nuclear_pleomorphism
+              }
+              {
+                label: 'Mitoses'
+                accessor: (outcome) -> outcome.tnm.grade.mitotic_count
+              }
+              {
+                label: 'Overall'
+                accessor: (outcome) -> outcome.tnm.grade.overall_grade
+              }
+            ]
+        fnclcc_grade:
+          label: 'FNCLCC Grade'
+          rows:
+            [
+              {
+                label: 'Differentiation'
+                accessor: (outcome) -> outcome.tnm.grade.differentiation
+              }
+              {
+                label: 'Necrosis'
+                accessor: (outcome) -> outcome.tnm.grade.necrosis
               }
               {
                 label: 'Mitoses'
@@ -418,10 +441,22 @@ define ['angular', 'lodash'], (ng, _) ->
                 accessor: (outcome) -> addPctSign(outcome.ki_67)
               }
             ]
+      
+      GROUPS =
+        BreastPathology: ['tnm', 'nottingham_grade', 'estrogen', 'progestrogen', 'expression']
+        SarcomaPathology: ['tnm', 'fnclcc_grade']
+      
       # Return the rows for the designated outcome group.
       # Include only those for which data are not null.
       rows = []
-      for row in groups[group].rows
-        rows.push row if row.accessor(outcome)?
+      if not group in groups
+        throw new Error("Outcome group not recognized: #{ group }")
+      coll_grps = GROUPS[outcome._cls]
+      if not coll_grps
+        throw new Error("Outcome not recognized: #{ outcome._cls }")
+      if group in coll_grps
+        for row in groups[group].rows
+          rows.push row if row.accessor(outcome)?
       rows: rows
       label: groups[group].label
+  ]

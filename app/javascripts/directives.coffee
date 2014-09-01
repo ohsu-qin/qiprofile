@@ -1,8 +1,8 @@
-define ['angular', 'lodash', 'spin', 'dateline', 'intensity', 'modeling', 'clinical'],
+define ['angular', 'lodash', 'spin', 'helpers', 'dateline', 'intensity', 'modeling', 'clinical'],
   (ng, _, Spinner) ->
     directives = ng.module(
       'qiprofile.directives',
-      ['qiprofile.dateline', 'qiprofile.intensity', 'qiprofile.modeling', 'qiprofile.clinical']
+      ['qiprofile.helpers', 'qiprofile.dateline', 'qiprofile.intensity', 'qiprofile.modeling', 'qiprofile.clinical']
     )
     
     # Spinner directive.
@@ -131,35 +131,37 @@ define ['angular', 'lodash', 'spin', 'dateline', 'intensity', 'modeling', 'clini
 
 
     # Displays the session intensity chart.
-    directives.directive 'qiIntensityChart', ['Intensity', (Intensity) ->
-      restrict: 'E'
-      scope:
-        session: '=' 
-      link: (scope, element, attrs) ->
-        # Wait for a session extended with detail to digest the scan.
-        scope.$watch 'session.scan', (scan) ->
-          if scan?
-            scope.config = Intensity.configureChart(scope.session, element)
-      templateUrl: '/partials/intensity-chart.html'
+    directives.directive 'qiIntensityChart', ['Intensity', 'ObjectHelper',
+      (Intensity, ObjectHelper) ->
+        restrict: 'E'
+        scope:
+          session: '=' 
+        link: (scope, element, attrs) ->
+          # Wait for a session extended with detail to digest the scan.
+          scope.$watch 'session.scan', (scan) ->
+            if ObjectHelper.exists(scan)
+              scope.config = Intensity.configureChart(scope.session, element)
+        templateUrl: '/partials/intensity-chart.html'
     ]
 
 
     # Displays the series image selection.
-    directives.directive 'qiImageSelection', ['Intensity', (Intensity) ->
-      restrict: 'E'
-      scope:
-        session: '=' 
-      link: (scope, element, attrs) ->
-        # Wait for a session extended with detail to digest both the scan
-        # and the registrations. The registrations listener is necessary
-        # because the registration buttons are not added to the DOM until
-        # just before the registrations listener is called.
-        scope.$watch 'session.scan', (scan) ->
-          if scan?
-            scope.$watch 'session.registrations', (regs) ->
-              if regs?
-                scope.config = Intensity.formatSelection(element)
-      templateUrl: '/partials/image-selection.html'
+    directives.directive 'qiImageSelection', ['Intensity', 'ObjectHelper',
+      (Intensity, ObjectHelper) ->
+        restrict: 'E'
+        scope:
+          session: '=' 
+        link: (scope, element, attrs) ->
+          # Wait for a session extended with detail to digest both the scan
+          # and the registrations. The registrations listener is necessary
+          # because the registration buttons are not added to the DOM until
+          # just before the registrations listener is called.
+          scope.$watch 'session.scan', (scan) ->
+            if ObjectHelper.exists(scan)
+              scope.$watch 'session.registrations', (regs) ->
+                if ObjectHelper.exists(regs)
+                  scope.config = Intensity.formatSelection(element)
+        templateUrl: '/partials/image-selection.html'
     ]
 
 

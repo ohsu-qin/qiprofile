@@ -57,8 +57,8 @@ requirejs.config
   paths:
     angular: './lib/angular'
     d3: './lib/d3'
+    dat: './lib/dat.gui'
     domReady: './lib/domReady'
-    jquery: './lib/jquery'
     lodash: './lib/lodash.underscore'
     moment: './lib/moment'
     nganimate: './lib/angular-animate'

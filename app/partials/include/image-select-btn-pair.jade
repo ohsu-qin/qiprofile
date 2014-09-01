@@ -1,13 +1,14 @@
 // If there is image data, then the image selector is a button which
 // opens the image.
 // Otherwise, the image selector is a button which loads the image.
+//
+// Note - The openImage function is defined in the session detail
+// controller. Apparently, openImage is not visible in the button
+// scope.
+// TODO - try setting openImage in the qiImageSelection directive
+// scope with the following magic setting:
+//   openImage: '='
 button.btn.btn-default.btn-xs.qi-nav-btn.qi-image-btn(
-  // openImage is defined in the session detail controller.
-  // Apparently, openImage is not visible in the button
-  // scope.
-  // TODO - try setting openImage in the qiImageSelection directive
-  // scope with the following magic setting:
-  //   openImage: '='
   ng-click='$parent.$parent.openImage(image)'
   ng-show='image.data'
 )

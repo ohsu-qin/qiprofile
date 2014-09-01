@@ -2,12 +2,16 @@ define ['angular', 'lodash', 'moment'], (ng, _, moment) ->
   helpers = ng.module 'qiprofile.helpers', []
 
   helpers.factory 'ObjectHelper', ->
+    # The exists implementation is defined as a local variable,
+    # since it is used in the copyNonNullPublicProperties function.
+    _exists = (value) ->
+      typeof value != 'undefined' and value != null
+
     # Tests the given value for existence.
     #
     # @param value the value to test
     # @returns whether the value is neither undefined nor null
-    exists: (value) ->
-      typeof value != 'undefined' and value != null
+    exists: _exists
 
     # Copies the given source object properties into the
     # destination object, with the following exceptions:
@@ -22,7 +26,8 @@ define ['angular', 'lodash', 'moment'], (ng, _, moment) ->
       # @returns the properties which do not begin with an
       #   underscore and have a non-null value
       nonNullPublicProperties = (obj) ->
-        Object.keys(obj).filter (prop) -> obj[prop]? and prop[0] != '_'
+        Object.getOwnPropertyNames(obj).filter (prop) ->
+          prop[0] != '_' and _exists(obj[prop])
       
       # Copy the detail properties into the parent object.
       srcProps = nonNullPublicProperties(source)
@@ -30,6 +35,37 @@ define ['angular', 'lodash', 'moment'], (ng, _, moment) ->
       copyProps = _.difference(srcProps, destProps)
       for prop in copyProps
         dest[prop] = source[prop]
+    
+    # Parses the JSON data into a Javascript object and creates
+    # camelCase property aliases for underscore property names.
+    # If the input data is an array Eve REST result, signified
+    # by the presence of an _items array property, then this
+    # method returns an array of Javascript objects, each of
+    # which is recursively transformed by this function.
+    #
+    # @param data the REST JSON data
+    # @returns the Javascript object
+    fromJson: (data) ->
+      camelizeProperties = (obj) ->
+        camelizeProperty = (obj, prop) ->
+          alias = prop[0] + _.camelize(prop[1..-1])
+          Object.addProperty obj, alias,
+            get: -> this[prop]
+            set: (value) -> this[prop] = value
+        
+        for key of obj
+          # If the key has a non-leading underscore and is not
+          # a function, then the key is an underscore property
+          # name.
+          if key.lastIndexOf('_') > 0 and not _.isFunction(obj.prop)
+            camelizeProperty(obj, prop)
+       
+      obj = ng.fromJson(data)
+      if '_items' in obj
+        [camelizeProperties(item) for item in obj._items]
+      else
+        camelizeProperties(obj)
+      obj
 
 
   helpers.factory 'DateHelper', ['ObjectHelper', (ObjectHelper) ->

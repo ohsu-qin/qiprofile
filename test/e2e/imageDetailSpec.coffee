@@ -16,7 +16,7 @@ describe 'E2E Testing Image Detail', ->
   
   it 'should display the billboard', ->
     expect(page.billboard, 'The billboard is incorrect')
-      .to.eventually.equal('Breast Patient 1 Session 1 Scan Time Point 21')
+      .to.eventually.equal('Sarcoma Patient 1 Session 1 Scan Time Point 21')
   
   it 'should have a home button', ->
     pat = /.*\/quip\?project=QIN_Test$/

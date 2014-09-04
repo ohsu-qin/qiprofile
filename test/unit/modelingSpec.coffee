@@ -6,13 +6,13 @@ define ['ngmocks', 'modeling'], ->
       # The mock input.
       mock = 
         sessions: [
-          acquisition_date: new Date
+          acquisitionDate: new Date
           modeling:
             v_e: 2.4
             tau_i: 0.1
-            fxl_k_trans: 2.3
-            fxr_k_trans: 2.1
-            delta_k_trans: 0.2
+            fxlKTrans: 2.3
+            fxrKTrans: 2.1
+            deltaKTrans: 0.2
           number: 1
         ]
       

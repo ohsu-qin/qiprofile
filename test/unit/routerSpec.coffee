@@ -17,14 +17,17 @@ define ['lodash', 'ngmocks', 'expect', 'router', 'moment'],
           number: 1
           detail: 'a'
         subject_detail:
+          _id: 'a'
+          birth_date: moment([1961, 6, 7]).valueOf()
           sessions: [
             number: 1
+            acquisition_date: moment('July 1, 2013').valueOf()
             detail: 'b'
             modeling: [
               name: 'pk_aUjr'
               image_container_name: 'reg_8L3W'
-              fxl_k_trans: 2.3
-              fxr_k_trans: 2.5
+              fxlKTrans: 2.3
+              fxrKTrans: 2.5
             ]
           ]
           encounters: [
@@ -42,6 +45,7 @@ define ['lodash', 'ngmocks', 'expect', 'router', 'moment'],
             end_date: moment('July 16, 2013').valueOf()
           ]
         session_detail:
+          _id: 'b'
           scan:
             name: 'scan'
             intensity:
@@ -83,15 +87,23 @@ define ['lodash', 'ngmocks', 'expect', 'router', 'moment'],
       describe 'Subject Detail', ->
         # Validates the resolved subject.
         validate = (subject) ->
+          # There should be an age.
+          expect('age' of subject, "Subject is missing an age property").to.be.true
+          expect(subject.age, "Subject is missing an age").to.exist
+          nowish = moment([moment().year(), 6, 7])
+          expect(subject.age, "Subject age is incorrect")
+            .to.equal(nowish.diff(mock.subject_detail.birth_date, 'years'))
           # There should be encounters.
           expect(subject.encounters, "Subject is missing encounters").to.exist
-          expect(subject.encounters.length).to.equal(1)
+          expect(subject.encounters.length, "Subject encounters length is incorrect")
+            .to.equal(1)
           enc = subject.encounters[0]
           expect(enc.encounter_type, "Encounter type is incorrect")
             .to.equal(mock.subject_detail.encounters[0].encounter_type)
           # There should be treatments.
           expect(subject.treatments, "Subject is missing treatments").to.exist
-          expect(subject.treatments.length).to.equal(1)
+          expect(subject.treatments.length, "Subject encounters length is incorrect")
+            .to.equal(1)
           trt = subject.treatments[0]
           expect(trt.treatment_type, "Treatment type is incorrect")
             .to.equal(mock.subject_detail.treatments[0].treatment_type)
@@ -99,8 +111,10 @@ define ['lodash', 'ngmocks', 'expect', 'router', 'moment'],
             .to.equal(mock.subject_detail.treatments[0].begin_date)
           # There should be sessions.
           expect(subject.sessions, "Subject is missing sessions").to.exist
-          expect(subject.sessions.length).to.equal(1)
-          expect(subject.isMultiSession).to.be.false
+          expect(subject.sessions.length, "Subject sessions length is incorrect")
+            .to.equal(1)
+          expect(subject.isMultiSession, "Subject multi-session flag is incorrect")
+            .to.be.false
           sess = subject.sessions[0]
           # There should be a parent subject.
           expect(sess.subject, "Session is missing a subject").to.exist
@@ -111,12 +125,12 @@ define ['lodash', 'ngmocks', 'expect', 'router', 'moment'],
           #expect(sess.modeling.length).to.equal(1)
           #mdl = sess.modeling[0]
           mdl = sess.modeling
-          expect(mdl.delta_k_trans, "Modeling is missing a delta Ktrans")
+          expect(mdl.deltaKTrans, "Modeling is missing a delta Ktrans")
             .to.exist
           mock_mdl = mock.subject_detail.sessions[0].modeling[0]
-          mock_delta_k_trans = mock_mdl.fxr_k_trans - mock_mdl.fxl_k_trans
-          expect(mdl.delta_k_trans, "Delta Ktrans is not #{ mock_delta_k_trans }")
-            .to.be.closeTo(mock_delta_k_trans, 0.0000001)
+          expectedDeltaKTrans = mock_mdl.fxrKTrans - mock_mdl.fxlKTrans
+          expect(mdl.deltaKTrans, "Delta Ktrans is not #{ expectedDeltaKTrans }")
+            .to.be.closeTo(expectedDeltaKTrans, 0.0000001)
 
         it 'should fetch the detail with a detail property', ->
           subject = _.clone(mock.subject)

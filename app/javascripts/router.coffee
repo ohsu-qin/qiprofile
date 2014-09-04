@@ -60,26 +60,30 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
           
           if subject.detail
             Subject.detail(id: subject.detail).$promise.then (detail) ->
-              if ObjectHelper.exists(detail.birth_date)
+              # Add the subject age property, if necessary.
+              if ObjectHelper.exists(detail.birthDate) and
+                 not subject.hasOwnProperty('age')
                 # Fix the birth date.
-                date = DateHelper.asMoment(subject.birth_date)
+                date = DateHelper.asMoment(detail.birthDate)
                 # Anonymize the birth date.
-                detail.birth_date = DateHelper.anonymize(date)
+                detail.birthDate = DateHelper.anonymize(date)
                 # July 7 of this year.
                 nowish = DateHelper.anonymize(moment())
-                # Add the subject age property.
-                subject.age = nowish.diff(detail.birth_date, 'years')
+                # Make the subject age property.
+                Object.defineProperty subject, 'age',
+                  get: -> nowish.diff(detail.birthDate, 'years')
+                  set: (years) ->
+                    detail.birthDate = nowish.subtract('years', years)
               
               for sess in detail.sessions
                 # Set the session subject property.
                 sess.subject = subject
                 # Fix the acquisition date.
-                if ObjectHelper.exists(sess.acquisition_date)
-                  sess.acquisition_date = DateHelper.asMoment(sess.acquisition_date)
+                sess.acquisitionDate = DateHelper.asMoment(sess.acquisitionDate)
                 # Calculate the delta Ktrans property.
                 for mdl in sess.modeling
-                  delta_k_trans = mdl.fxr_k_trans - mdl.fxl_k_trans
-                  _.extend mdl, delta_k_trans: delta_k_trans
+                  Object.defineProperty mdl, 'deltaKTrans',
+                    get: -> this.fxrKTrans - this.fxlKTrans
         
                 ### FIXME - Only one modeling per session is supported. ###
                 # Work-around is to reset modeling to the first modeling
@@ -97,12 +101,10 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
                   enc.date = DateHelper.asMoment(enc.date)
               # Fix the treatment dates.
               for trt in detail.treatments
-                if ObjectHelper.exists(trt.begin_date)
-                  trt.begin_date = DateHelper.asMoment(trt.begin_date)
-                if ObjectHelper.exists(trt.end_date)
-                  trt.end_date = DateHelper.asMoment(trt.end_date)
+                trt.begin_date = DateHelper.asMoment(trt.begin_date)
+                trt.end_date = DateHelper.asMoment(trt.end_date)
               # Copy the detail content into the subject.
-              ObjectHelper.copyNonNullPublicProperties(detail, subject)
+              ObjectHelper.aliasPublicDataProperties(detail, subject)
               # Set a flag indicating whether there is more than one
               # session.
               subject.isMultiSession = subject.sessions.length > 1
@@ -180,7 +182,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
           if session.detail
             Session.detail(id: session.detail).$promise.then (detail) =>
               # Copy the fetched detail into the session.
-              ObjectHelper.copyNonNullPublicProperties(detail, session)
+              ObjectHelper.aliasPublicDataProperties(detail, session)
               addImageContainerContent(session.scan, session, 'scan')
               for reg in session.registrations
                 addImageContainerContent(reg, session, 'registration')

@@ -4,35 +4,88 @@ define ['ngmocks', 'helpers', 'moment'], (mocks, helpers, moment) ->
       ObjectHelper = null
 
       beforeEach ->
-        # Obtain the Helpers service.
+        # Obtain the ObjectHelper service.
         angular.mock.module('qiprofile.helpers')
         inject ['ObjectHelper', (_ObjectHelper_) ->
           ObjectHelper = _ObjectHelper_
         ]
+      
+      describe 'fromJSON', ->
+        mock =
+          _id: 1
+          an_int: 1
+          inner:
+            an_obj:
+              an_int: 3
+        obj = null
+        
+        beforeEach ->
+          data = JSON.stringify(mock)
+          obj = ObjectHelper.fromJson(data)
+        
+        it 'should add camelCase aliases to underscore properties', ->
+          expect('anInt' in Object.keys(obj), "the alias is not defined as an enumerable property")
+            .to.be.true
+          expect(obj.anInt, "the alias value is incorrect").to.equal(mock.an_int)
+          obj.an_int = obj.an_int + 1
+          expect(obj.anInt, "the alias value does not reflect an underscore change")
+            .to.equal(obj.an_int)
+          obj.anInt = obj.anInt + 1
+          expect(obj.an_int, "the underscore value does not reflect an alias change")
+            .to.equal(obj.anInt)
 
-      describe 'copyNonNullPublicProperties', ->
-        it 'should copy public properties', ->
+        it 'should make the camelCase alias enumerable', ->
+          expect('anInt' in Object.keys(obj), "the underscore property is still enumerable")
+            .to.be.true   
+
+        it 'should make the underscore property non-enumerable', ->
+          expect('an_int' in Object.keys(obj), "the underscore property is still enumerable")
+            .to.be.false   
+
+        it 'should make the underscore property nonenumerable', ->
+          expect(obj.an_int, "an_int is incorrect").to.equal(mock.an_int)   
+
+        it 'should add camelCase aliases to inner objects', ->
+          expect('anObj' in Object.keys(obj.inner), "the inner underscore property is not aliased")
+            .to.be.true
+          expect(obj.inner.anObj.anInt, "the inner reference alias value is incorrect")
+            .to.eql(mock.inner.an_obj.an_int)
+
+      describe 'aliasPublicDataProperties', ->
+        it 'should alias public value properties', ->
           src = {a: 1}
           dest = {}
-          ObjectHelper.copyNonNullPublicProperties(src, dest)
-          expect(dest.a, 'A public property was not copied').to.equal(src.a)
+          ObjectHelper.aliasPublicDataProperties(src, dest)
+          expect(dest.a, 'The public value property was not aliased').to.equal(src.a)
 
-        it 'should replace null public properties', ->
+        it 'should alias public virtual properties', ->
           src = {a: 1}
-          dest = {a: null}
-          ObjectHelper.copyNonNullPublicProperties(src, dest)
-          expect(dest.a, 'A public property was not copied').to.equal(src.a)
+          Object.defineProperty src, 'b',
+            enumerable: true
+            get: -> src.a
+          dest = {}
+          ObjectHelper.aliasPublicDataProperties(src, dest)
+          expect(dest.b, 'The public virtual property was not aliased').to.equal(src.b)
 
-        it 'should not copy private properties', ->
+        it 'should alias non-eumerable public properties', ->
+          src = {}
+          Object.defineProperty src, 'a',
+            enumerable: false
+            value: 1
+          dest = {}
+          ObjectHelper.aliasPublicDataProperties(src, dest)
+          expect(dest.a, 'The public virtual property was not aliased').to.equal(src.a)
+
+        it 'should not alias private properties', ->
           src = {_a: 2}
           dest = {}
-          ObjectHelper.copyNonNullPublicProperties(src, dest)
-          expect(dest._a, 'A private property was copied').to.not.exist
+          ObjectHelper.aliasPublicDataProperties(src, dest)
+          expect(dest._a, 'A private property was aliased').to.not.exist
 
-        it 'should not overwrite non-null properties', ->
+        it 'should not alias existing properties', ->
           src = {a: 1}
-          dest = {a: 2}
-          ObjectHelper.copyNonNullPublicProperties(src, dest)
+          dest = {a: null}
+          ObjectHelper.aliasPublicDataProperties(src, dest)
           expect(dest.a, 'A non-null destination property was overrwritten')
             .to.not.equal(src.a)
 
@@ -40,7 +93,7 @@ define ['ngmocks', 'helpers', 'moment'], (mocks, helpers, moment) ->
       DateHelper = null
 
       beforeEach ->
-        # Obtain the Helpers service.
+        # Obtain the DateHelper service.
         angular.mock.module('qiprofile.helpers')
         inject ['DateHelper', (_DateHelper_) ->
           DateHelper = _DateHelper_

@@ -25,11 +25,11 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'router', 'uirout
             views:
               # The home button.
               home:
-                templateUrl: '/partials/home.html'
+                templateUrl: '/partials/home-btn.html'
                 controller: 'HomeCtrl'
               # The help button.
               help:
-                templateUrl: '/partials/help.html'
+                templateUrl: '/partials/help-btn.html'
                 controller: 'HelpCtrl'
 
           # The home landing page.

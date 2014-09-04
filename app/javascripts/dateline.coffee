@@ -239,14 +239,14 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
         for enc in subject.encounters
           values.push(enc.date.valueOf())
         for sess in subject.sessions
-          values.push(sess.acquisition_date.valueOf())
+          values.push(sess.acquisitionDate.valueOf())
         # Return the min and max date.
         [_.min(values), _.max(values)]
 
       # The chart data specification.
       dataSpec =
         x:
-          accessor: (session) -> session.acquisition_date.valueOf()
+          accessor: (session) -> session.acquisitionDate.valueOf()
         y:
           # There is one tri-partite data series. The y coordinate
           # for this data series is always zero.

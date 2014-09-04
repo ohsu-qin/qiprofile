@@ -9,4 +9,4 @@ define ['angular', 'moment', 'underscore.string'], (ng, moment, _s) ->
 
   filters.filter 'visitDates', ->
     (sessions) ->
-      sess.acquisition_date() for sess in sessions
+      sess.acquisitionDate() for sess in sessions

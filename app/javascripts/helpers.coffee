@@ -1,9 +1,9 @@
-define ['angular', 'lodash', 'moment'], (ng, _, moment) ->
+define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment) ->
   helpers = ng.module 'qiprofile.helpers', []
-
+    
   helpers.factory 'ObjectHelper', ->
     # The exists implementation is defined as a local variable,
-    # since it is used in the copyNonNullPublicProperties function.
+    # since it is used in the aliasPublicDataProperties function.
     _exists = (value) ->
       typeof value != 'undefined' and value != null
 
@@ -13,28 +13,49 @@ define ['angular', 'lodash', 'moment'], (ng, _, moment) ->
     # @returns whether the value is neither undefined nor null
     exists: _exists
 
-    # Copies the given source object properties into the
-    # destination object, with the following exceptions:
-    # * properties which begin with an underscore are not copied
-    #   (including the _id field)
-    # * null source property values are not copied
+    # Aliases the source object properties which are not
+    # already defined in the destination object.
     #
     # @param source the copy source object
     # @param dest the copy destination object
-    copyNonNullPublicProperties: (source, dest) ->
-      # @param obj the object to check
-      # @returns the properties which do not begin with an
-      #   underscore and have a non-null value
-      nonNullPublicProperties = (obj) ->
-        Object.getOwnPropertyNames(obj).filter (prop) ->
-          prop[0] != '_' and _exists(obj[prop])
+    # @param filter an optional function that filters the
+    #   properties to alias
+    aliasProperties: (source, dest, filter=null) ->
+      # @param prop the source property to alias in the destination
+      defineAlias = (prop) ->
+        Object.defineProperty dest, prop,
+          enumerable: true
+          get: -> source[prop]
+          set: (val) -> source[prop] = val
+        
+      # The properties to alias.
+      srcProps = Object.getOwnPropertyNames(source)
+      destProps = Object.getOwnPropertyNames(dest)
+      aliasProps = _.difference(srcProps, destProps)
+      if filter
+        aliasProps = aliasProps.filter(filter)
+      # Make the virtual properties.
+      # Note - each property must be defined in a call to the defineAlias
+      # function. That function body cannot be inlined in the loop below
+      # since Coffeescript defines the iteration variable prop in a scope
+      # outside of the loop, which in turn implies that the alias getter
+      # and setter have a function closure which refers to a shared prop
+      # variable which will resolve to the last iteration value.
+      for prop in aliasProps
+        defineAlias(prop)
       
-      # Copy the detail properties into the parent object.
-      srcProps = nonNullPublicProperties(source)
-      destProps = nonNullPublicProperties(dest)
-      copyProps = _.difference(srcProps, destProps)
-      for prop in copyProps
-        dest[prop] = source[prop]
+    # Aliases the source object properties which are not already
+    # defined in the destination object and satisfy thew following
+    # conditions:
+    # * the property name does not begin with an underscore (_)
+    #   or dollar sign ($)
+    # * the source property value is not a function
+    #
+    # @param source the copy source object
+    # @param dest the copy destination object
+    aliasPublicDataProperties: (source, dest) ->
+      this.aliasProperties source, dest, (prop) ->
+        prop[0] not in '_$' and not _.isFunction(source[prop])
     
     # Parses the JSON data into a Javascript object and creates
     # camelCase property aliases for underscore property names.
@@ -46,26 +67,58 @@ define ['angular', 'lodash', 'moment'], (ng, _, moment) ->
     # @param data the REST JSON data
     # @returns the Javascript object
     fromJson: (data) ->
-      camelizeProperties = (obj) ->
+      # Aliases underscore properties with camelCase properties. 
+      #
+      # @param obj the input object to modify
+      # @returns the input object
+      camelizeProperties = (obj, visited={}) ->
         camelizeProperty = (obj, prop) ->
-          alias = prop[0] + _.camelize(prop[1..-1])
-          Object.addProperty obj, alias,
-            get: -> this[prop]
-            set: (value) -> this[prop] = value
+          # The camelCase alias.
+          alias = prop[0] + _s.camelize(prop.substring(1))
+          # If the camelCase alias is not yet defined, then
+          # create the new property.
+          if not obj.hasOwnProperty(alias)
+            # Make the camelCase property.
+            Object.defineProperty obj, alias,
+              enumerable: true
+              get: -> obj[prop]
+              set: (value) -> obj[prop] = value
+            obj[alias] = obj[prop]
+            # Preserve the underscore property, but remove
+            # it from the enumerable list.
+            Object.defineProperty obj, prop,
+              enumerable: false
+              value: obj[prop]
+              writable: true
         
-        for key of obj
-          # If the key has a non-leading underscore and is not
-          # a function, then the key is an underscore property
-          # name.
-          if key.lastIndexOf('_') > 0 and not _.isFunction(obj.prop)
-            camelizeProperty(obj, prop)
-       
+        # Only unvisited plain objects are wrapped.
+        if obj and obj.constructor is Object and not visited[obj._id]
+          # If the object has an id, then mark it as visited.
+          visited[obj._id] = true if obj._id
+          # Add camelCase aliases to underscore properties.
+          for key of obj
+            # If the key has a non-leading underscore, then
+            # camelize the underscore property.
+            if key.lastIndexOf('_') > 0
+              camelizeProperty(obj, key)
+            # Recurse.
+            val = obj[key]
+            if _.isArray(val)
+              camelizeProperties(item, visited) for item in val
+            else
+              camelizeProperties(val, visited)
+        # Return the input object.
+        obj
+
+      # The initial parsed Javascript object.
       obj = ng.fromJson(data)
-      if '_items' in obj
-        [camelizeProperties(item) for item in obj._items]
+      # If the object is a REST array with _items, then return
+      # the camelized items. Otherwise, returns the camelized
+      # object.
+      if obj.hasOwnProperty('_items')
+        camelizeProperties(item) for item in obj._items
       else
         camelizeProperties(obj)
-      obj
 
 
   helpers.factory 'DateHelper', ['ObjectHelper', (ObjectHelper) ->

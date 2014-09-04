@@ -5,7 +5,7 @@ define ['angular', 'lodash', 'chart'], (ng, _) ->
     # The common modeling x-axis specification.
     x =
       label: 'Visit Date'
-      accessor: (session) -> session.acquisition_date.valueOf()
+      accessor: (session) -> session.acquisitionDate.valueOf()
 
     # The chart-specific y-axis specifications.
     y =
@@ -16,12 +16,12 @@ define ['angular', 'lodash', 'chart'], (ng, _) ->
             {
               label: 'FXL Ktrans'
               color: 'BurlyWood'
-              accessor: (session) -> session.modeling.fxl_k_trans
+              accessor: (session) -> session.modeling.fxlKTrans
             }
             {
               label: 'FXR Ktrans'
               color: 'OliveDrab'
-              accessor: (session) -> session.modeling.fxr_k_trans
+              accessor: (session) -> session.modeling.fxrKTrans
             }
           ]
       ve:
@@ -90,9 +90,9 @@ define ['angular', 'lodash', 'chart'], (ng, _) ->
               (current - previous)/previous * 100
           
             # Return an object with the change properties.
-            delta_k_trans_pct_change: percent_change(current.delta_k_trans, previous.delta_k_trans)
-            fxl_k_trans_pct_change: percent_change(current.fxl_k_trans, previous.fxl_k_trans)
-            fxr_k_trans_pct_change: percent_change(current.fxr_k_trans, previous.fxr_k_trans)
+            deltaKTrans_pct_change: percent_change(current.deltaKTrans, previous.deltaKTrans)
+            fxlKTrans_pct_change: percent_change(current.fxlKTrans, previous.fxlKTrans)
+            fxrKTrans_pct_change: percent_change(current.fxrKTrans, previous.fxrKTrans)
             v_e_pct_change: percent_change(current.v_e, previous.v_e)
             tau_i_pct_change: percent_change(current.tau_i, previous.tau_i)
         

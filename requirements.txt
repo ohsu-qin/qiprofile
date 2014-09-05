@@ -1,1 +1,1 @@
-qiprofile-rest==2.1.6
+qiprofile-rest==2.1.7

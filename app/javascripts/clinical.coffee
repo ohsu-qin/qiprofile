@@ -14,8 +14,8 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
     ETHNICITY_CHOICES =
       'Hispanic': 'Hispanic or Latino'
       'Non-Hispanic': 'Not Hispanic or Latino'
-      null: 'Not specified'
-      undefined: 'Not specified'
+      #null: 'Not specified'
+      #undefined: 'Not specified'
 
     # Lab result categorized as positive or negative.
     POS_NEG_RESULTS =
@@ -302,7 +302,7 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
       
       # The subject encounters.
       encounters: subject.encounters
-      # The demographic data.
+      # The demographics data.
       races: (RACE_CHOICES[race] for race in subject.races).join(', ')
       ethnicity: ETHNICITY_CHOICES[subject.ethnicity]
       # The demographics accordion control.

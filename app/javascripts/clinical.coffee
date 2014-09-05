@@ -307,6 +307,8 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
       ethnicity: ETHNICITY_CHOICES[subject.ethnicity]
       # The demographics accordion control.
       demogrOpen: true
+      # The treatments accordion control.
+      treatmentOpen: true
 
     configureOutcome: (outcome, group) ->
       # Formatting functions.

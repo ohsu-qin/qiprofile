@@ -169,8 +169,8 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
 
     configureProfile: (subject) ->
       GRADE_SCORES =
-        NottinghamGrade: ['tubular_formation', 'mitotic_count', 'nuclear_pleomorphism']
-        FNCLCCGrade: ['differentiation', 'mitotic_count', 'necrosis']
+        NottinghamGrade: ['tubularFormation', 'mitoticCount', 'nuclearPleomorphism']
+        FNCLCCGrade: ['differentiation', 'mitoticCount', 'necrosis']
       
       # Calculates the overall grade. Return null if any grade score property
       # value is null.
@@ -189,10 +189,10 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
       # Determine the composite score and stage from the given TNM
       # and grade. This function creates a staging object consisting
       # of the following properties:
-      # * t_value - the tumor size (the TNM T parameter)
-      # * g_value - the TNM grade (the TNM G parameter)
-      # * tumor_score - the composite TNM score
-      # * tumor_stage - the I-IV stage defined in TUMOR_STAGES
+      # * tValue - the tumor size (the TNM T parameter)
+      # * gValue - the TNM grade (the TNM G parameter)
+      # * tumorScore - the composite TNM score
+      # * tumorStage - the I-IV stage defined in TUMOR_STAGES
       #
       # @param the TNM object
       # @param grade the tumor type-specific detail grade, e.g.
@@ -232,35 +232,35 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
         size = if ObjectHelper.exists(tnm.size) then tnm.size else {}
 
         # Look up the TNM grade based on the overall Nottingham or FNCLCC grade.
-        g_value = TUMOR_GRADES[coll][grade]
+        gValue = TUMOR_GRADES[coll][grade]
         # The T value is the TNM size tumor_size property.
-        t_value = size.tumor_size
+        tValue = size.tumor_size
         # Obtain the T, N, M, and G values as strings or set to 'X' if null.
-        t = if ObjectHelper.exists(t_value) then t_value.toString() else 'X'
-        n = if ObjectHelper.exists(tnm.lymph_status) then tnm.lymph_status.toString() else 'X'
+        t = if ObjectHelper.exists(tValue) then tValue.toString() else 'X'
+        n = if ObjectHelper.exists(tnm.lymphStatus) then tnm.lymphStatus.toString() else 'X'
         m = if ObjectHelper.exists(tnm.metastasis) then TNM_METASTASIS[tnm.metastasis] else 'X'
-        g = if g_value then g_value else 'X'
+        g = if gValue then gValue else 'X'
         # The size as a string.
         prefix = if ObjectHelper.exists(size.prefix) then size.prefix else ''
         suffix = if ObjectHelper.exists(size.suffix) then size.suffix else ''
         size_s = "#{ prefix }T#{ t }#{ suffix }"
         # Create the composite TNMG score.
-        tumor_score = "#{ size_s }N#{ n }M#{ m }G#{ g }"
+        tumorScore = "#{ size_s }N#{ n }M#{ m }G#{ g }"
         # Look up the tumor stage.
         # If metastasis exits (M1), it is stage IV. Otherwise,
         # breast cancer stage is determined by T and N scores
         # and sarcoma stage is determined by T, N, and G scores.
         # TODO - delegate to the tumor type-specific service.
         if tnm.metastasis
-          tumor_stage = 'IV'
+          tumorStage = 'IV'
         else if coll == 'Breast'
-          tumor_stage = TUMOR_STAGES['Breast'][t][n]
+          tumorStage = TUMOR_STAGES['Breast'][t][n]
         else if coll == 'Sarcoma'
           # For sarcoma, use the T value without any suffix (i.e. a or b).
-          tumor_stage = TUMOR_STAGES['Sarcoma'][t.substring(0, 1)][n][g]
-        tumor_stage = 'undetermined' if not tumor_stage
+          tumorStage = TUMOR_STAGES['Sarcoma'][t.substring(0, 1)][n][g]
+        tumorStage = 'undetermined' if not tumorStage
         # Return the composite TNM score and the stage.
-        t_value: t_value, g_value: g_value, tumor_score: tumor_score, tumor_stage: tumor_stage
+        tValue: tValue, gValue: gValue, tumorScore: tumorScore, tumorStage: tumorStage
 
       # Extend the subject encounters and outcomes as follows:
       # * Add the t and g value properties to a TNM.
@@ -283,15 +283,15 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
           if isStagingData
             # Add the overall grade to the outcome.
             grade = tnm.grade
-            overall_grade = getOverallGrade(grade)
-            _.extend grade, overall_grade: overall_grade
+            overallGrade = getOverallGrade(grade)
+            _.extend grade, overallGrade: overallGrade
             # Add the tumor composite score and stage to the outcome if the value
             # for at least one staging property is not null.
-            staging = getTumorStaging(tnm, overall_grade)
-            _.extend tnm, t_value: staging.t_value
-            _.extend tnm, g_value: staging.g_value
-            _.extend outcome, tumor_score: staging.tumor_score
-            _.extend outcome, tumor_stage: staging.tumor_stage
+            staging = getTumorStaging(tnm, overallGrade)
+            _.extend tnm, tValue: staging.tValue
+            _.extend tnm, gValue: staging.gValue
+            _.extend outcome, tumorScore: staging.tumorScore
+            _.extend outcome, tumorStage: staging.tumorStage
           # Add a flag indicating whether staging or grade data exist.
           # If neither exist, the clinical profile column containing their outcomes
           # will be hidden from display.
@@ -326,15 +326,15 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
             [
               {
                 label: 'Stage'
-                accessor: (outcome) -> outcome.tumor_stage
+                accessor: (outcome) -> outcome.tumorStage
               }
               {
                 label: 'Size'
-                accessor: (outcome) -> outcome.tnm.t_value
+                accessor: (outcome) -> outcome.tnm.tValue
               }
               {
                 label: 'Lymph Status'
-                accessor: (outcome) -> outcome.tnm.lymph_status
+                accessor: (outcome) -> outcome.tnm.lymphStatus
               }
               {
                 label: 'Metastasis'
@@ -342,11 +342,11 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
               }
               {
                 label: 'Grade'
-                accessor: (outcome) -> outcome.tnm.g_value
+                accessor: (outcome) -> outcome.tnm.gValue
               }
               {
                 label: 'Summary'
-                accessor: (outcome) -> outcome.tumor_score
+                accessor: (outcome) -> outcome.tumorScore
               }
             ]
         nottingham_grade:
@@ -355,19 +355,19 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
             [
               {
                 label: 'Tubules'
-                accessor: (outcome) -> outcome.tnm.grade.tubular_formation
+                accessor: (outcome) -> outcome.tnm.grade.tubularFormation
               }
               {
                 label: 'Nuclei'
-                accessor: (outcome) -> outcome.tnm.grade.nuclear_pleomorphism
+                accessor: (outcome) -> outcome.tnm.grade.nuclearPleomorphism
               }
               {
                 label: 'Mitoses'
-                accessor: (outcome) -> outcome.tnm.grade.mitotic_count
+                accessor: (outcome) -> outcome.tnm.grade.mitoticCount
               }
               {
                 label: 'Overall'
-                accessor: (outcome) -> outcome.tnm.grade.overall_grade
+                accessor: (outcome) -> outcome.tnm.grade.overallGrade
               }
             ]
         fnclcc_grade:
@@ -384,11 +384,11 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
               }
               {
                 label: 'Mitoses'
-                accessor: (outcome) -> outcome.tnm.grade.mitotic_count
+                accessor: (outcome) -> outcome.tnm.grade.mitoticCount
               }
               {
                 label: 'Overall'
-                accessor: (outcome) -> outcome.tnm.grade.overall_grade
+                accessor: (outcome) -> outcome.tnm.grade.overallGrade
               }
             ]
         estrogen:
@@ -405,7 +405,7 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
               }
               {
                 label: 'Quick Score'
-                accessor: (outcome) -> outcome.estrogen.quick_score
+                accessor: (outcome) -> outcome.estrogen.quickScore
               }
             ]
         progestrogen:
@@ -422,7 +422,7 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
               }
               {
                 label: 'Quick Score'
-                accessor: (outcome) -> outcome.progestrogen.quick_score
+                accessor: (outcome) -> outcome.progestrogen.quickScore
               }
             ]
         expression:
@@ -431,15 +431,15 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
             [
               {
                 label: 'HER2/neu IHC'
-                accessor: (outcome) -> asReactionScore(outcome.her2_neu_ihc)
+                accessor: (outcome) -> asReactionScore(outcome.her2NeuIhc)
               }
               {
                 label: 'HER2/neu FISH'
-                accessor: (outcome) -> POS_NEG_RESULTS[outcome.her2_neu_fish]
+                accessor: (outcome) -> POS_NEG_RESULTS[outcome.her2NeuFish]
               }
               {
                 label: 'Ki-67'
-                accessor: (outcome) -> addPctSign(outcome.ki_67)
+                accessor: (outcome) -> addPctSign(outcome.ki67)
               }
             ]
       

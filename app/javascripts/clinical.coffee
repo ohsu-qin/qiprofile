@@ -1,4 +1,4 @@
-define ['angular', 'lodash', 'helpers'], (ng, _) ->
+define ['angular', 'lodash', 'moment', 'helpers'], (ng, _, moment) ->
   clinical = ng.module 'qiprofile.clinical', ['qiprofile.helpers']
 
   clinical.factory 'Clinical', ['ObjectHelper', (ObjectHelper) ->
@@ -186,6 +186,11 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
         else
           null
 
+      # @param date the moment date integer
+      # @return the formatted date
+      dateFormat = (date) ->
+        moment(date).format('MM/DD/YYYY')
+
       # Determine the composite score and stage from the given TNM
       # and grade. This function creates a staging object consisting
       # of the following properties:
@@ -300,6 +305,13 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
         # Add the accordion control flag to the encounter.
         _.extend enc, accordionOpen: true
       
+      # The Treatment begin and end dates.
+      # End dates are optional in the data model, so check whether it exists.
+      # If it does not, then display "Not specified".
+      for treatment in subject.treatments
+        display_end_date = if treatment.end_date then dateFormat(treatment.end_date) else "Not specified"
+        _.extend treatment, display_end_date: display_end_date
+      treatments: subject.treatments
       # The subject encounters.
       encounters: subject.encounters
       # The demographics data.

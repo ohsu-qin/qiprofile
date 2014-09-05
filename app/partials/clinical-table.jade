@@ -29,12 +29,12 @@ h4.col-md-offset-1 Clinical Profile
         )
       .row.qi-clinical-row
         .col-md-3.qi-label Type
-        .col-md-3.qi-label Start date
+        .col-md-3.qi-label Begin date
         .col-md-3.qi-label End date
-      .row(ng-repeat="treatment in subject.treatments").qi-clinical-row
+      .row(ng-repeat="treatment in config.treatments").qi-clinical-row
         .col-md-3 {{ treatment.treatment_type }}
         .col-md-3 {{ treatment.begin_date | moment }}
-        .col-md-3 {{ treatment.end_date | moment }}
+        .col-md-3 {{ treatment.display_end_date }}
 
   // Mark up accordian header and content for each encounter.
   // FIXME - This only supports breast pathology outcomes. See TODO below.

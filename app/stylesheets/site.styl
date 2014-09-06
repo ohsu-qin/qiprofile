@@ -132,6 +132,18 @@ slower-transition = 0.75s
 med-transition = 0.5s
 fast-transition = 0.2s
 
+// empty-line() is the reusable idiom for the :after selective of a
+// text-align justify style. This selector is necessary to center
+// the preceding row elements.
+//
+// Note - the line adds vertical space. Setting the font-size,
+// line-height, height or negative margins has no effect. The
+// styles which use the empty-line can counteract this effect by
+// setting a negative bottom margin.
+empty-line()
+  content ''
+  display inline-block
+  width 100%
 
 //** Navigation styles. **//
 
@@ -333,7 +345,7 @@ fast-transition = 0.2s
     fill MediumSlateBlue
   span&
     color MediumBlue
-    margin .5em     
+    margin .5em
 
 
 //** Modeling Profile styles. **//
@@ -354,34 +366,57 @@ fast-transition = 0.2s
     padding-top 0.2em
     padding-bottom 0.2em
 
+
+//** Session Detail styles. **//
+
+.qi-session-detail
+  // A small offset on the right to balance the room
+  // allowed on the left for the y-axis and image
+  // selection labels.
+  margin-right 2em
+
 .qi-intensity-chart
-  margin 0 0 0 2em
+  // Allow room for the image selection label below
+  // the chart. The time points align with the image
+  // select buttons.
+  margin-left 2em
   float left
   height 22em
-  width 98%
-
-.qi-image-selection
-  margin 0 0 2em 0
-  float left
-  height 4em
-  width 95%
+  width 100%
 
 .qi-image-selection-key
   float left
-  width 6em
-  padding-right .1em
+  width 6.1em
+  padding-right .5em
   text-align right
   font-size smaller
 
+.qi-justified-list
+  // The negative bottom margin corrects for the
+  // spacing injected after the list.
+  margin-bottom -1.2em
+  text-align justify
+  list-style none
+  &:after
+    empty-line()
+
+.qi-justified-list-item
+  display inline-block
+
 qi-image-btn-group()
-  // TODO - set margins dynamically in Intensity.formatSelection.
-  .qi-image-btn
-    margin 0 .12em 0 .12em
-  // Undo the Bootstrap adjacent button tweaks.
-  .btn + .btn
-    margin 0 .12em 0 .12em
-  .btn:first-child
-    margin 0 .12em 0 .12em
+  // The right margin compensates for the offset created by
+  // nvd3 chart.
+  margin-right 1em
+  & .tooltip
+    font-size .7em
+  & .tooltip-inner
+    background-color IndianRed
+  & .tooltip.top .tooltip-arrow
+    border-top-color IndianRed
+
+// TODO - set the scan and registration colors to the
+// data series color dynamically in the format function.
+// This allows for more than one registration.
 
 .qi-scan-image-btn-group
   qi-image-btn-group()
@@ -390,7 +425,6 @@ qi-image-btn-group()
   & button:hover
     background-color Indigo
 
-// TODO - allow for more than one registration.
 .qi-reg-image-btn-group
   qi-image-btn-group()
   & button
@@ -399,9 +433,7 @@ qi-image-btn-group()
     background-color DarkGreen
 
 .qi-image-btn
-  font-size 10px
-  &:hover
-    color Chocolate
+  font-size 9px
 
 .qi-bolus-legend
   text-anchor end

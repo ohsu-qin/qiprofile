@@ -1,0 +1,37 @@
+//
+  This image selection panel consists of image selection rows
+  for the scan and each registration. The image selection row
+  includes the data series key, e.g. 'Scan' or 'Realigned',
+  followed by one image select button pair per series.
+  
+  Note: the repeats below work around the following AngularJS
+  bug:
+  
+  * CSS justification doesn't work with AngularJS ng-repeat
+  
+  AngularJS ng-repeat does not emit whitespace between the li
+  elements, which is necessary for justification
+  (cf http://stackoverflow.com/questions/23252601/angular-why-doesnt-css-justification-work-with-ng-repeat).
+  The work-around is to set the repeat on a span which wraps
+  the list element rather than the list itself.
+  
+  As a result, the button "group" styles are added to each
+  iterated button list item rather than the list repeat
+  element itself. This is somewhat counter-intuitive, but is
+  necessary to work around the AngularJS bug.
+
+// The scan image selection buttons.
+.row
+  .qi-image-selection-key Scan
+  ul.qi-justified-list.qi-scan-image-btn-group
+    span(ng-repeat="image in session.scan.images" tooltip="{{ $index + 1 }}")
+      li.qi-justified-list-item
+        include ./image-select-btn-pair
+
+// The realigned image selection buttons.
+.row(ng-repeat="reg in session.registrations")
+  .qi-image-selection-key {{ reg.data_series.key }}
+  ul.qi-justified-list.qi-reg-image-btn-group
+    span(ng-repeat="image in reg.images" tooltip="{{ $index + 1 }}")
+      li.qi-justified-list-item
+        include ./image-select-btn-pair

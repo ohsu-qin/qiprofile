@@ -5,12 +5,12 @@ block billboard
   | Patient {{ session.subject.number }}
   | Session {{ session.number }}
 
-
 block content
-  .row
-    h4.col-md-offset-1.col-md-3.qi-chart-title Average Signal Intensity
-  qi-intensity-chart(session="session")
-  qi-image-selection(session="session")
+  .qi-session-detail
+    .row
+      h4.col-md-offset-1.col-md-3.qi-chart-title Average Signal Intensity
+    qi-intensity-chart(session="session")
+    include include/image-selection
 
 
 block help-text

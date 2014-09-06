@@ -364,6 +364,130 @@ Coding Standards
     when deleting a stale remote branch. See the
     `Pro Git Book`_ `Deleting Remote Branches`_ section for details.
 
+**********
+Deployment
+**********
+
+The deployment targets are as follows:
+
+* ``quip5`` - the XNAT server
+
+* ``quip4`` - the Express_ and qiprofile-rest_ server
+
+Both ``quip5`` and ``quip4`` share a Direct Attached Storage (DAS) mounted
+at::
+
+   /home/groups/quip/xnat
+
+The quip5 XNAT server is configured to place the image files on this DAS
+volume via a symbolic link::
+
+    /var/local/xnat -> /home/groups/quip/xnat
+
+Thus, when XNAT archives an image file it places it in the standard XNAT
+location ``/var/local/xnat`` which in turn resolves the shared DAS volume
+location.
+
+XNAT places the image files according to its own fixed hierarchy. For
+example, the sarcoma patient 1 visit 1 scan 50 file would be at::
+
+    /home/groups/quip/xnat/
+      QIN/arc001/Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz
+
+The corresponding image file for the registration named ``reg_j3P9u``
+would be::
+
+    /home/groups/quip/xnat/
+      QIN/arc001/Sarcoma001_Session01/RESOURCES/reg_j3P9u/series050.nii.gz
+
+on the shared DAS volume of both quip4 and quip5.
+
+The quip4 Express server hosts the qiprofile web app at root directory::
+
+    /var/local/express/webapps/qiprofile
+
+There is a ``data`` link in this root directory to the XNAT location::
+
+    /var/local/express/webapps/qiprofile/
+      data -> /home/groups/quip/xnat
+
+The qiprofile-rest data model has classes::
+
+    class SessionDetail(mongoengine.Document):
+        """The MR session detailed content."""
+        scan = fields.EmbeddedDocumentField('Scan')
+
+        registrations = fields.ListField(
+            field=fields.EmbeddedDocumentField('Registration')
+        )
+        ...
+
+    class ImageContainer(mongoengine.EmbeddedDocument):
+        """The patient scan or registration."""
+        files = fields.ListField(field=fields.StringField())
+        ...
+
+    class Scan(ImageContainer):
+        """The patient image scan."""
+        ...
+
+    class Registration(ImageContainer):
+    """The patient image registration that results from processing
+     the image scan."""
+        ...
+
+The session scan and registrations ``files`` consists of the XNAT series
+image file path for each series in the MR session.
+
+A qipipe_ pipeline task populates the MongoDB ``qiprofile`` database with
+new MR session data, filling in the files list with the series file paths
+relative to the parent location, e.g.::
+
+    Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz
+
+The qiprofile router reads this data into a Javascript Session object, e.g.::
+
+    session = {
+      scan: {
+        files: […, 'Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz', ...]
+      }
+    }
+
+When the QuIP Session Detail series scan or registration image download
+button is clicked, then QuIP builds the file location relative to the web
+app directory, e.g.::
+
+    data/QIN/arc001/Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz
+
+where ``QIN`` is the project name. QuIP then dispatches an HTTP XHR_ request
+for the static file at that location::
+
+     HTTP GET /static/data/QIN/arc001/Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz
+
+The QuIP Express server recognizes the ``/static/`` prefix as a request for
+a file relative to the web app root and returns the content of the server file,
+in this case the file at::
+
+      /var/local/express/webapps/qiprofile/
+        data/QIN/arc001/Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz
+
+When the file content is received by the QuIP client, the Session Detail image
+download button is hidden and the open button is shown. When the open button is
+clicked, then the Image Detail page is visited with the image file content.
+
+The ``qiprofile-rest`` ``test/helpers/seed.py`` script populates the
+``ImageContainer`` ``files`` field described above for the 24 Breast and
+Sarcoma test MR sessions. The ``grunt test:e2e`` end-to-end testing task runs
+the ``qiprofile-rest`` seed script and creates a link in the local ``_public``
+web app build to the test image file fixtures location::
+
+      _public/data -> ../test/fixtures/data
+
+There is a single test image file fixture:
+
+      test/fixtures/data/
+        QIN_Test/arc001/Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz
+
 
 ***********
 Antecedents
@@ -420,6 +544,8 @@ examples:
 
 .. _DevTools: https://developer.chrome.com/devtools/index
 
+.. _Express: http://expressjs.com/
+
 .. _Pro Git Book: http://git-scm.com/book/en/
 
 .. _Deleting Remote Branches: http://git-scm.com/book/en/Git-Branching-Remote-Branches#Deleting-Remote-Branches
@@ -448,9 +574,13 @@ examples:
 
 .. _Protractor: https://github.com/angular/protractor
 
+.. _qipipe: http://quip1.ohsu.edu/8080/qipipe
+
 .. _qiprofile-rest: http://quip1.ohsu.edu/8080/qiprofile-rest
 
 .. _SemVer: http://semver.org/
+
+.. _XHR: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
 
 .. _XTK: http://www.goXTK.com
 

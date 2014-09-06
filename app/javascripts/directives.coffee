@@ -13,11 +13,19 @@ define ['angular', 'lodash', 'spin', 'helpers', 'dateline', 'intensity', 'modeli
   
         createSpinner = ->
           # Creates an image selection spinner.
+          # position relative places the spinner element
+          # with respect to the button. top .6em centers
+          # the spinner on the button. The spinner has
+          # 10 spokes radiating out 2 pixels from the
+          # center of the button with length and width
+          # 4 pixels.
           new Spinner(
+            position: 'relative'
+            top: '.6em'
             lines: 10
             width: 4
             length: 4
-            radius: 4
+            radius: 2
             trail: 80
             speed: 1
             color: 'Orange'
@@ -137,31 +145,16 @@ define ['angular', 'lodash', 'spin', 'helpers', 'dateline', 'intensity', 'modeli
         scope:
           session: '=' 
         link: (scope, element, attrs) ->
-          # Wait for a session extended with detail to digest the scan.
-          scope.$watch 'session.scan', (scan) ->
-            if ObjectHelper.exists(scan)
-              scope.config = Intensity.configureChart(scope.session, element)
-        templateUrl: '/partials/intensity-chart.html'
-    ]
-
-
-    # Displays the series image selection.
-    directives.directive 'qiImageSelection', ['Intensity', 'ObjectHelper',
-      (Intensity, ObjectHelper) ->
-        restrict: 'E'
-        scope:
-          session: '=' 
-        link: (scope, element, attrs) ->
           # Wait for a session extended with detail to digest both the scan
-          # and the registrations. The registrations listener is necessary
-          # because the registration buttons are not added to the DOM until
-          # just before the registrations listener is called.
+          # and the registrations. Both the scan and registrations listener
+          # are necessary because there is a data series for the scan and
+          # each registration.
           scope.$watch 'session.scan', (scan) ->
             if ObjectHelper.exists(scan)
               scope.$watch 'session.registrations', (regs) ->
                 if ObjectHelper.exists(regs)
-                  scope.config = Intensity.formatSelection(element)
-        templateUrl: '/partials/image-selection.html'
+                  scope.config = Intensity.configureChart(scope.session, element)
+        templateUrl: '/partials/intensity-chart.html'
     ]
 
 

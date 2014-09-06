@@ -29,7 +29,7 @@ define ['ngmocks', 'moment', 'clinical'], (ngmocks, moment, clinical) ->
                   # TODO - grade is an aggregate.
                   # tnm: {
                   #   grade: 2
-                  #   lymph_status: 3
+                  #   lymphStatus: 3
                   #   metastasis: true
                   #   size: "pT3"
                   # }
@@ -42,7 +42,7 @@ define ['ngmocks', 'moment', 'clinical'], (ngmocks, moment, clinical) ->
                   # tnm: {
                   #   #
                   #   grade: 3
-                  #   lymph_status: 2
+                  #   lymphStatus: 2
                   #   metastasis: true
                   #   size: "pT2"
                   # }

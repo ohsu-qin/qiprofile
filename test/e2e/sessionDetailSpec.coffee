@@ -35,10 +35,7 @@ class SessionDetailPage extends Page
     # @param retry the number of times to retry (default 8)
     # @return a promise that resolves when either the button
     #   is hidden or the retry limit is reached
-    waitWhileVisible = (button, retry) ->
-      # The silly Javascript idiom to check for an unset variable.
-      if typeof retry is 'undefined'
-        retry = 8
+    waitWhileVisible = (button, retry=8) ->
       if retry
         # Wait a while, then check if the button is visible.
         browser.executeAsyncScript(SLEEP).then ->

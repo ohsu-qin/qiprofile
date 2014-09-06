@@ -1,7 +1,7 @@
 define ['angular', 'chart'], (ng) ->
-  intensity = ng.module 'qiprofile.intensity', ['qiprofile.chart']
+  intensity = ng.module 'qiprofile.intensity', []
 
-  intensity.factory 'Intensity', ['Chart', (Chart) ->
+  intensity.factory 'Intensity', ->
     # Highlights the bolus arrival tick mark. The bolus arrival is
     # only highlighted if it occurs after the first series.  
     #
@@ -10,7 +10,7 @@ define ['angular', 'chart'], (ng) ->
     highlightBolusArrival = (session, chart) ->
       # If the bolus arrival index is zero, then it does not have
       # have a tick mark, so bail.
-      if not session.bolus_arrival_index
+      if not session.bolusArrivalIndex
         return
       # Select the SVG element.
       svg = d3.select(chart.container)
@@ -20,29 +20,29 @@ define ['angular', 'chart'], (ng) ->
       # g elements with the tick class. There is a tick mark for
       # all but the first and last series. Therefore, the tick
       # offset is one less than the bolus arrival index.
-      offset = session.bolus_arrival_index - 1
+      offset = session.bolusArrivalIndex - 1
       # The D3 CSS3 nth-of-type selector argument of zero returns
-      # null. Work around this possible D3 bug by using the
-      # first-of-type selector argument in that case.
+      # null. The work-around for this possible D3 bug by using
+      # the first-of-type selector argument in that case.
       if offset
-        bolusTickSltr = "g.tick:nth-of-type(#{ offset })"
+        bolusTickSlct = "g.tick:nth-of-type(#{ offset })"
       else
-        bolusTickSltr = "g.tick:first-of-type"
+        bolusTickSlct = "g.tick:first-of-type"
       # The bolus tick element.
-      bolusTick = xAxis.select(bolusTickSltr)
+      bolusTick = xAxis.select(bolusTickSlct)
       # The bolus tick child line element.
       bolusTickLine = bolusTick.select('line')
       highlightNode = bolusTickLine.node().cloneNode()
       highlight = d3.select(highlightNode)
       # Set the bolus CSS class.
       highlight.classed('qi-bolus-arrival', true)
-      # Insert the highlight SVG element after the tick line.
-      # The highlight will display centered over the tick line.
-      # D3 insert differs from jQuery insert. The D3 arguments are
-      # a function which returns a DOM element and the selector
-      # before which the node is inserted. In our case, the
-      # node to insert is the highlight node and the before
-      # selector is the bolus tick selector.
+      # Insert the highlight SVG element after the tick line. The
+      # highlight will display centered over the tick line. Note
+      # that D3 insert differs from jQuery insert. The D3 arguments
+      # are a function which returns a DOM element and the selector
+      # before which the node is inserted. In our case, the node to
+      # insert is the highlight node and the before selector is the
+      # bolus tick selector.
       highlightNodeFunc = -> highlightNode
       bolusTick.insert(highlightNodeFunc, 'line')
       # Add the legend.
@@ -110,9 +110,9 @@ define ['angular', 'chart'], (ng) ->
       registration_data_series = (registration, index) ->
         # The registration image select button colors.
         COLORS = ['LightGreen', 'LightYellow', 'LightCyan', 'LemonChiffon']
-      
+    
         key = registration.title
-      
+    
         # TODO - Wrap the key in a registration parameters pop-up hyperlink.
         # Return the data series format object.
         key: key
@@ -131,7 +131,7 @@ define ['angular', 'chart'], (ng) ->
         # series key.
         reg.data_series = registration_data_series(reg, i)
       reg_data = ((reg.data_series for reg in session.registrations))
-      
+    
       # Pad the image selection buttons based on the number of series.
 
       # Return the chart configuration.
@@ -140,55 +140,3 @@ define ['angular', 'chart'], (ng) ->
       yFormat: yFormat
       highlightBolusArrival: (chart) ->
         highlightBolusArrival(session, chart)
-
-    # Formats the intensity selection block for the given session.
-    # Padding is added to each button sufficient to center the
-    # button under the intensity chart x-axis tick marks.
-    #
-    # @param element the selection Angular jQueryLite element
-    formatSelection: (element) ->
-      formatRow = (row) ->
-        # The width of the entire row.
-        rowWidth = row[0].clientWidth
-        # The selection key label and buttons.
-        children = row.children()
-        # The width of the first key element holding the label,
-        # e.g. 'Scan'.
-        keyWidth = children[0].clientWidth
-        # The button width without padding.
-        buttonWidth = children[1].clientWidth
-        # The number of buttons.
-        buttonCnt = children.length - 1
-        # The width available to pad the buttons.
-        available = rowWidth - keyWidth - (buttonCnt * buttonWidth) 
-        # The button left and right pad amount. Since the left-most
-        # and right-most buttons are only padded on one side, count
-        # those two buttons as one for the purpose of computing the
-        # pad amount.
-        pad = available / (2 * (buttonCnt - 1))
-        # The buttons include all but the first child.
-        buttons = (ng.element(children[i]) for i in [1..buttonCnt])
-        
-        
-        # FIXME - this has no effect. Perhaps the margin precision
-        # is too large, since setting it to a precision > 3 in the
-        # style sheet fails. But setting margin here to an int
-        # has no effect either.
-        #
-        # TODO - remove the css margin and get this to work.
-        #
-        # # Add a right pad for all but the last button.
-        # for btn in buttons[0...buttonCnt-1]
-        #   btn.css('margin-right', pad)
-        # # Add a left pad for all but the first button.
-        # for btn in buttons[1...buttonCnt]
-        #   btn.css('margin-left', pad)
-      
-      # Format each row.
-      for childDom in element.children()
-        child = ng.element(childDom)
-        if child.hasClass('row')
-          formatRow(child)
-        else
-          this.formatSelection(child)
-  ]

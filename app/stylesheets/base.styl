@@ -1,0 +1,62 @@
+//** The base CSS style overrides. **//
+
+body
+  margin 1em
+  font-family 'Open Sans', sans-serif
+
+h1, h2, h3
+  margin 0
+  padding 0
+
+a
+  text-decoration none
+  color Peru
+  &:hover
+    color Chocolate
+  & img
+    border none
+  & > text
+    fill Peru
+  &:hover > text
+    fill Chocolate
+
+// Overwrite the bootstrap accordian link style.
+.panel-heading
+  & .panel-title
+    color Indigo
+  & a
+    color Peru
+    &:hover
+      color Chocolate
+
+svg
+  a
+    cursor pointer
+    pointer-events all
+
+hr
+  display none
+
+table
+  border-collapse collapse
+
+table, th, td
+  border 0.1em solid Black
+
+th
+  padding 0.5em
+  font-size 110%
+  vertical-align bottom
+
+td
+  padding 0 0.5em 0 0.5em
+
+ul, ol
+  margin-bottom 0.6em
+
+// Undo Bootstrap changing the color of a small
+// span in the heading.
+for n in 1 2 3 4 5
+  h{n}
+    .qi-small
+      color Black

@@ -1,0 +1,51 @@
+// ** Transition animation styles. **//
+
+qi-transition(type, sec)
+  -webkit-transition all type sec
+  -moz-transition all type sec
+  -o-transition all type sec
+  transition all type sec
+
+.qi-no-transition
+  -webkit-transition none
+  -moz-transition none
+  // Opera doesn't support none
+  -o-transition all 0s
+  transition none
+
+slow-transition = 1s
+slower-transition = 0.75s
+med-transition = 0.5s
+fast-transition = 0.2s
+
+ease-in-transition()
+  -webkit-transition -webkit-transform 0.3s ease-in, opacity 0.3s ease-in 
+  -moz-transition -moz-transform 0.3s ease-in, opacity 0.3s ease-in 
+  -o-transition -o-transform 0.3s ease-in, opacity 0.3s ease-in 
+  transition transform 0.3s ease-in, opacity 0.3s ease-in 
+
+transition-show()
+  -webkit-transform scaleX(1) 
+  -o-transform scaleX(1) 
+  transform scaleX(1) 
+  opacity 1 
+
+transition-hide()
+  -webkit-transform scaleX(0.0001) 
+  -o-transform scaleX(0.0001) 
+  transform scaleX(0.0001) 
+  opacity 0 
+
+.qi-slide
+  &.ng-enter
+    // Start hidden, End shown.
+    ease-in-transition()
+    transition-hide()
+    position absolute 
+    &.ng-enter-active
+      transition-show()
+  &.ng-leave
+    ease-in-transition()
+    position relative 
+    &.ng-leave-active
+      transition-hide()

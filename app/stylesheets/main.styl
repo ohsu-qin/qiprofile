@@ -1,0 +1,81 @@
+//**  The Main content styles. **//
+
+@require 'helpers'
+
+@require 'animation'
+
+@require 'navigation'
+
+.qi-body
+  background-color WhiteSmoke
+
+.qi-billboard
+  background MediumSlateBlue
+  color LightGoldenRodYellow
+  border-bottom 0.6em solid DarkBlue
+  border-radius: 0 0 0.4em 0.4em
+  text-indent 1em
+  margin 0
+
+.qi-content
+  overflow hide
+
+.qi-main
+  margin 0.5em 0 0 0
+
+.qi-main-list
+  clean-list()
+
+.qi-help
+  background OldLace
+  border 0.1em solid Brown
+  position fixed
+  top 10em
+  right 1.8em
+  width 25%
+  qi-transition(linear, slower-transition)
+
+.qi-help-text
+  // Downsize headers
+  for n in 1 2 3 4 5
+    h{n}
+      font-size (125% - (5 * n))
+      text-decoration underline
+
+.qi-footer
+  border-top 0.1em solid SlateGray
+  p.qi-legal
+    padding 1em 0em
+    text-align center
+    color DimGray
+    font-size x-small
+    span.glyphicon-copyright-mark
+      padding 0 0.2em 0 0.2em
+
+.qi-profile-panel
+  border 1px solid SlateGray
+  border-radius: 0.4em 0.4em 0.4em 0.4em
+  margin 0 0 0.2em 0
+
+.qi-profile-btn
+  color Black
+  background-color Moccasin
+  &:hover
+    background-color Chocolate
+  margin 0 0 0 0.3em
+  padding 0 0.3em 0 0.3em
+  &:focus
+    outline none
+
+.qi-prop-group
+  border-left 0.2em solid Silver
+
+.qi-full-width-table
+  width 100%
+  & .qi-prop-group
+    width 13%
+
+.qi-half-width-table
+  width 50%
+  & .qi-prop-group
+    width 28%

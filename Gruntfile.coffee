@@ -126,9 +126,8 @@ module.exports = (grunt) ->
       options:
         compress: false
       compile:
-        paths: ['_public/stylesheets']
-        files:
-          '_public/stylesheets/app.css': ['app/stylesheets/**/*.styl']
+        src: ['app/stylesheets/app.styl']
+        dest: '_public/stylesheets/app.css'
       
     express:
       options:

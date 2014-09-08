@@ -11,13 +11,13 @@ h4.col-md-offset-1 Clinical Profile
           ng-class="{'glyphicon-chevron-down': config.demogrOpen, 'glyphicon-chevron-up': !config.demogrOpen}"
         )
       .row.qi-clinical-row
-        .col-md-2.qi-clinical-row-label Age
+        .col-md-2 Age
         .col-md-10 {{ subject.age }}
       .row.qi-clinical-row
-        .col-md-2.qi-clinical-row-label Race
+        .col-md-2 Race
         .col-md-10 {{ config.races }}
       .row.qi-clinical-row
-        .col-md-2.qi-clinical-row-label Ethnicity
+        .col-md-2 Ethnicity
         .col-md-10 {{ config.ethnicity }}
 
   // Mark up accordian header and content for each encounter.

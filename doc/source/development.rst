@@ -483,7 +483,7 @@ web app build to the test image file fixtures location::
 
       _public/data -> ../test/fixtures/data
 
-There is a single test image file fixture:
+There is a single test image file fixture::
 
       test/fixtures/data/
         QIN_Test/arc001/Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz

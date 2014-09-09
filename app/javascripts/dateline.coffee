@@ -20,9 +20,11 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
         [begin, end]
       else
         []
-      
-    # Adds the session hyperlinks, encounter dates and treatment
-    # begin-end bars to the dateline.
+    
+    # Decorates the dateline as follows:
+    # * Add the session hyperlinks, encounter dates and treatment
+    #   begin-end bars.
+    # * Rotate the date x-axis tick labels
     #
     # Note - The session hyperlinks are ui-sref attributes. However,
     # D3 mutates the DOM after the Angular digest cycle. Consequently,
@@ -152,6 +154,16 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
           # nabla math special character (the wedge-like del operator).
           text.text(TREATMENT_SYMBOL)
       
+      # Rotates the x-axis visit date tick labels by 45 degrees.
+      #
+      # @param chart the dateline chart
+      # @param xAxis the x-axis D3 selection
+      rotateDateLabels = (chart, xAxis) ->
+        xTicks = xAxis.selectAll('.tick')
+        labels = xTicks.select('text')
+        labels.attr 'transform', (d, i, j) ->
+            'translate (-27, 18) rotate(-40, 0, 0)'
+    
       # Adds the treatment and encounter legend directly before the
       # SVG element.
       #
@@ -221,6 +233,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
       addTreatmentBars(xAxis.node(), config)
       addEncounterDates(xAxis.node(), config)
       addSessionDetailLinks(subject.sessions, xAxis, dy)
+      rotateDateLabels(chart, xAxis)
       addLegend(svg.node())
   
     # @param subject the subject to display

@@ -1,7 +1,7 @@
 define ['angular', 'xtk', 'file', 'dat'], (ng) ->
   image = ng.module 'qiprofile.image', ['qiprofile.file']
 
-  image.factory 'Image', ['$rootScope', 'File', ($rootScope, File) ->
+  image.factory 'Image', ['$rootScope', '$q', 'File', ($rootScope, $q, File) ->
     # The root scope {parent id: [Image objects]} cache.
     if not $rootScope.images
       $rootScope.images = {}
@@ -37,9 +37,12 @@ define ['angular', 'xtk', 'file', 'dat'], (ng) ->
       # loaded, false otherwise.
       state:
         loading: false
+        loaded: false
 
       # The image file content.
       data: null
+      labelmapData: null
+      colortableData: null
 
       # Transfers the image file content to the data property.
       # The image state loading flag is set to true while the
@@ -49,16 +52,29 @@ define ['angular', 'xtk', 'file', 'dat'], (ng) ->
       #   read is completed
       load: ->
         # Set the loading flag.
-        @state.loading = true
-        
+        @state.loading = true     # <--error occurs here
+
+        # Temporary file locations.
+        labelmapFilename = 'data/QIN_Test/k_trans_map.nii.gz'
+        colortableFilename = 'data/QIN_Test/generic-colors.txt'
+
         # Read the file into an ArrayBuffer. The Coffeescript fat
         # arrow (=>) binds the this variable to the image object
         # rather than the $http request.
-        File.read(filename, responseType: 'arraybuffer').then (data) =>
+        scanFile = File.read(filename, responseType: 'arraybuffer').then (data) =>
+          # Set the data property to the scan file content.
+          @data = data
+        labelmapFile = File.read(labelmapFilename, responseType: 'arraybuffer').then (labelmapData) =>
+          # Set the data property to the label map file content.
+          @labelmapData = labelmapData
+        colortableFile = File.read(colortableFilename).then (colortableData) =>
+          # Set the data property to the color table file content.
+          @colortableData = colortableData
+        allImageFiles = $q.all(scanFile, labelmapFile, colortableFile)
+        allImageFiles.then ->
           # Unset the loading flag.
           @state.loading = false
-          # Set the data property to the file content.
-          @data = data
+          @state.loaded = true
       
       # Renders the image in the given parent element.
       #

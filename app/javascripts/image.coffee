@@ -29,8 +29,14 @@ define ['angular', 'xtk', 'file', 'dat'], (ng) ->
     # @param timePoint the series time point
     # @returns a new image object
     create = (parent, filename, timePoint) ->
+
+      labelmapFilename = 'data/QIN_Test/k_trans_map.nii.gz'
+      colortableFilename = 'data/QIN_Test/generic-colors.txt'
+
       parent: parent
       filename: filename
+      labelmapFilename: labelmapFilename
+      colortableFilename: colortableFilename
       timePoint: timePoint
 
       # The image state loading flag is true if the file is being
@@ -52,11 +58,7 @@ define ['angular', 'xtk', 'file', 'dat'], (ng) ->
       #   read is completed
       load: ->
         # Set the loading flag.
-        @state.loading = true     # <--error occurs here
-
-        # Temporary file locations.
-        labelmapFilename = 'data/QIN_Test/k_trans_map.nii.gz'
-        colortableFilename = 'data/QIN_Test/generic-colors.txt'
+        @state.loading = true
 
         # Read the file into an ArrayBuffer. The Coffeescript fat
         # arrow (=>) binds the this variable to the image object
@@ -66,15 +68,18 @@ define ['angular', 'xtk', 'file', 'dat'], (ng) ->
           @data = data
         labelmapFile = File.read(labelmapFilename, responseType: 'arraybuffer').then (labelmapData) =>
           # Set the data property to the label map file content.
+          @labelmapFilename = labelmapFilename
           @labelmapData = labelmapData
-        colortableFile = File.read(colortableFilename).then (colortableData) =>
+        colortableFile = File.read(colortableFilename, responseType: 'arraybuffer').then (colortableData) =>
           # Set the data property to the color table file content.
+          @colortableFilename = colortableFilename
           @colortableData = colortableData
-        allImageFiles = $q.all(scanFile, labelmapFile, colortableFile)
-        allImageFiles.then ->
+        allImagesLoaded = $q.all(scanFile, labelmapFile, colortableFile)
+        allImagesLoaded.then =>
           # Unset the loading flag.
           @state.loading = false
           @state.loaded = true
+          @allImagesLoaded = true
       
       # Renders the image in the given parent element.
       #
@@ -90,6 +95,10 @@ define ['angular', 'xtk', 'file', 'dat'], (ng) ->
         volume = new X.volume()
         volume.file = @filename
         volume.filedata = @data
+        volume.labelmap.file = @labelmapFilename
+        volume.labelmap.filedata = @labelmapData
+        volume.labelmap.colortable.file = @colortableFilename
+        volume.labelmap.colortable.filedata = @colortableData
         renderer.add(volume)
 
         # The rendering callback. This function is called after the
@@ -114,6 +123,11 @@ define ['angular', 'xtk', 'file', 'dat'], (ng) ->
           element.after(ctlElt)
           # Display the controls.
           volumeCtls.open()
+
+          labelmapGui = gui.addFolder('Label Map');
+          labelMapVisibleCtl = labelmapGui.add(volume.labelmap, 'visible')
+          labelMapOpacityCtl = labelmapGui.add(volume.labelmap, 'opacity', 0, 1)
+          labelmapGui.open()
 
         # Adjust the camera position.
         renderer.camera.position = [120, 20, 20]

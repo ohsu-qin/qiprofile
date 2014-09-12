@@ -68,11 +68,9 @@ define ['angular', 'xtk', 'file', 'dat'], (ng) ->
           @data = data
         labelmapFile = File.read(labelmapFilename, responseType: 'arraybuffer').then (labelmapData) =>
           # Set the data property to the label map file content.
-          @labelmapFilename = labelmapFilename
           @labelmapData = labelmapData
         colortableFile = File.read(colortableFilename, responseType: 'arraybuffer').then (colortableData) =>
           # Set the data property to the color table file content.
-          @colortableFilename = colortableFilename
           @colortableData = colortableData
         allImagesLoaded = $q.all(scanFile, labelmapFile, colortableFile)
         allImagesLoaded.then =>
@@ -124,6 +122,7 @@ define ['angular', 'xtk', 'file', 'dat'], (ng) ->
           # Display the controls.
           volumeCtls.open()
 
+          # The label map display controls.
           labelmapGui = gui.addFolder('Label Map');
           labelMapVisibleCtl = labelmapGui.add(volume.labelmap, 'visible')
           labelMapOpacityCtl = labelmapGui.add(volume.labelmap, 'opacity', 0, 1)

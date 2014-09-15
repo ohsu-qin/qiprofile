@@ -20,8 +20,12 @@ define ['angular', 'xtk', 'file', 'dat'], (ng) ->
     # Creates an object which encapsulates an image. The object has
     # the following properties:
     # * filename - the image file name
+    # * labelmapFilename - the label map (overlay) file name
+    # * colortableFilename - the color lookup table file name
     # * state - contains the loading flag
     # * data - the binary image content
+    # * labelmapData - the label map image content
+    # * colortableData - the color table content
     # * load() - the function to read the image file
     #
     # @param parent the image parent container
@@ -30,6 +34,7 @@ define ['angular', 'xtk', 'file', 'dat'], (ng) ->
     # @returns a new image object
     create = (parent, filename, timePoint) ->
 
+      # Temporary hard-coded filepaths to the label map and color table.
       labelmapFilename = 'data/QIN_Test/k_trans_map.nii.gz'
       colortableFilename = 'data/QIN_Test/generic-colors.txt'
 
@@ -39,28 +44,28 @@ define ['angular', 'xtk', 'file', 'dat'], (ng) ->
       colortableFilename: colortableFilename
       timePoint: timePoint
 
-      # The image state loading flag is true if the file is being
+      # The image state loading flag is true if the files are being
       # loaded, false otherwise.
       state:
         loading: false
         loaded: false
 
-      # The image file content.
+      # The image, label map, and color table file content.
       data: null
       labelmapData: null
       colortableData: null
 
-      # Transfers the image file content to the data property.
+      # Transfers the file content to the data properties.
       # The image state loading flag is set to true while the
-      # file is read.
+      # files are being read.
       #
-      # @returns a promise which resolves when the image file
-      #   read is completed
+      # @returns a promise which resolves when the file reads
+      #   are completed
       load: ->
         # Set the loading flag.
         @state.loading = true
 
-        # Read the file into an ArrayBuffer. The Coffeescript fat
+        # Read each file into an ArrayBuffer. The Coffeescript fat
         # arrow (=>) binds the this variable to the image object
         # rather than the $http request.
         scanFile = File.read(filename, responseType: 'arraybuffer').then (data) =>
@@ -72,11 +77,13 @@ define ['angular', 'xtk', 'file', 'dat'], (ng) ->
         colortableFile = File.read(colortableFilename, responseType: 'arraybuffer').then (colortableData) =>
           # Set the data property to the color table file content.
           @colortableData = colortableData
+        # Combine the multiple promises into a single promise.
         allImagesLoaded = $q.all(scanFile, labelmapFile, colortableFile)
         allImagesLoaded.then =>
           # Unset the loading flag.
           @state.loading = false
           @state.loaded = true
+          # Set a flag indicating that all file reads are complete.
           @allImagesLoaded = true
       
       # Renders the image in the given parent element.
@@ -89,7 +96,7 @@ define ['angular', 'xtk', 'file', 'dat'], (ng) ->
         renderer.container = element[0]
         # Build the renderer.
         renderer.init()
-        # The volume to render.
+        # The volume and label map to render.
         volume = new X.volume()
         volume.file = @filename
         volume.filedata = @data
@@ -122,10 +129,10 @@ define ['angular', 'xtk', 'file', 'dat'], (ng) ->
           # Display the controls.
           volumeCtls.open()
 
-          # The label map display controls.
-          labelmapGui = gui.addFolder('Label Map');
-          labelMapVisibleCtl = labelmapGui.add(volume.labelmap, 'visible')
-          labelMapOpacityCtl = labelmapGui.add(volume.labelmap, 'opacity', 0, 1)
+          # Display the label map (overlay) controls.
+          labelmapGui = gui.addFolder('Overlay');
+          labelmapVisibleCtl = labelmapGui.add(volume.labelmap, 'visible')
+          labelmapOpacityCtl = labelmapGui.add(volume.labelmap, 'opacity', 0, 1)
           labelmapGui.open()
 
         # Adjust the camera position.

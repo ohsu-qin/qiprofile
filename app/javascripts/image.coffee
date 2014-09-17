@@ -130,8 +130,8 @@ define ['angular', 'xtk', 'file', 'dat'], (ng) ->
           volumeCtls.open()
 
           # Display the label map (overlay) controls.
-          labelmapGui = gui.addFolder('Overlay');
-          labelmapVisibleCtl = labelmapGui.add(volume.labelmap, 'visible')
+          labelmapGui = gui.addFolder('Label Map');
+          labelmapVisibleCtl = labelmapGui.add(volume.labelmap, 'visible', volume.labelmap.visible = false)
           labelmapOpacityCtl = labelmapGui.add(volume.labelmap, 'opacity', 0, 1)
           labelmapGui.open()
 

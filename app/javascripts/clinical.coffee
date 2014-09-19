@@ -272,7 +272,8 @@ define ['angular', 'lodash', 'moment', 'helpers'], (ng, _, moment) ->
       # * If the outcome is a TNM or has a TNM, then add the tumor score
       #   to the outcome.
       # * Add the isStagingOrGradeData flag to the outcome.
-      # * Add the accordionOpen flag to the encounter
+      # * Add the accordionOpen flag to the encounter.
+      # * Add the diamond icon color styling to the encounter.
       for enc in subject.encounters
         for outcome in enc.outcomes
           # Add staging properties.
@@ -304,13 +305,22 @@ define ['angular', 'lodash', 'moment', 'helpers'], (ng, _, moment) ->
           _.extend outcome, isStagingOrGradeData: isStagingData or isGradeData
         # Add the accordion control flag to the encounter.
         _.extend enc, accordionOpen: true
+        # Add the encounter diamond icon color style.
+        encounterColorKey = "qi-encounter-#{ enc.encounter_type.toLowerCase() }"
+        _.extend enc, encounterColorKey: encounterColorKey
       
-      # The Treatment begin and end dates.
+      # The Treatment begin and end dates and color keys.
       # End dates are optional in the data model, so check whether it exists.
-      # If it does not, then display "Not specified".
+      #   If it does not, then display "Not specified".
+      # The diamond icon appearing next to the treatment type is assigned a
+      #   style that matches the color scheme used in the MR visit timeline.
       for treatment in subject.treatments
         display_end_date = if treatment.end_date then dateFormat(treatment.end_date) else "Not specified"
         _.extend treatment, display_end_date: display_end_date
+        # Add the treatment diamond icon color style.
+        treatmentColorKey = "qi-treatment-#{ treatment.treatment_type.toLowerCase() }"
+        _.extend treatment, treatmentColorKey: treatmentColorKey
+
       treatments: subject.treatments
       # The subject encounters.
       encounters: subject.encounters

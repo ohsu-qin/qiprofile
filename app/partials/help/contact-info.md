@@ -1,1 +1,1 @@
-Please feel free to contact us with your questions and comments. You can reach us at <a href="mailto:quip@ohsu.edu">email</a>.
+Please feel free to contact us with your questions and comments at <a href="mailto:quip@ohsu.edu">quip@ohsu.edu</a>.

@@ -102,7 +102,7 @@ module.exports = (grunt) ->
         browsers: [if grunt.option('debug') then 'Chrome' else 'PhantomJS']
         logLevel: [if grunt.option('debug') then 'DEBUG' else 'ERROR']
       unit:
-        configFile: 'test/conf/karma-conf.coffee'        
+        configFile: 'test/conf/karma-conf.coffee'
 
     protractor:
       options:

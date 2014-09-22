@@ -3,7 +3,7 @@
 //- The group headings.
 - headings = { 'ktrans': 'Vascular Permeability Transfer Constant (K<sup>trans</sup>)', 've': 'Extravascular Extracellular Volume Fraction (v<sub>e</sub>)', 'taui': 'Intracellular H<sub>2</sub>O Mean Lifetime (&tau;<sub>i</sub>)' }
 //- The group properties.
-- properties = { 'ktrans': ['deltaKTrans', 'fxlKTrans', 'fxrKTrans'], 've': ['v_e'], 'taui': ['tau_i'] }
+- properties = { 'ktrans': ['deltaKTrans', 'fxlKTrans', 'fxrKTrans'], 've': ['vE'], 'taui': ['tauI'] }
 //- The group column headings.
 - columns = { 'deltaKTrans': '&Delta;K<sup>trans</sup>', 'fxlKTrans': 'FXL K<sup>trans</sup>', 'fxrKTrans': 'FXR K<sup>trans</sup>', 'v_e': 'V<sub>e</sub>', 'tau_i': 'T<sub>i</sub>'}
 
@@ -32,7 +32,7 @@
           // column for the property value and one column for the percent
           // change.
           each prop in properties[group]
-            colgroup.qi-prop-group
+            colgroup.qi-colgroup
               col
               col
           
@@ -53,6 +53,6 @@
               td.qi-date= '{{ sess.acquisitionDate | moment }}'
               each prop in properties[group]
                 // The property value with four decimals.
-                td.qi-number= '{{ sess.modeling.' + prop + ' | number:4 }}'
+                td.qi-number= '{{ sess.modeling.' + prop + '.average | number:4 }}'
                 // The percent change without decimals.
-                td.qi-pct= '{{ sess.modeling.' + prop + '_pct_change | number:0 }}'
+                td.qi-pct= '{{ sess.modeling.' + prop + 'PctChange | number:0 }}'

@@ -59,7 +59,7 @@ h4.col-md-offset-1 Clinical Profile
         // * the controllers place the relative objects in scope, e.g.:
         //     $scope.tnm = $scope.outcome.tnm
         // * the partial formats the data, e.g. /partials/breast-pathology.jade is:
-        //    .col-md-6.qi-clinical-col(ng-show="tnm")
+        //    .col-md-6.qi-outcome-panel(ng-show="tnm")
         //      div(ui-view='tnm')
         //      div(ui-view='grade')
         //    ...
@@ -78,7 +78,7 @@ h4.col-md-offset-1 Clinical Profile
         // staging or grade. If both catgories completely lack data, this
         // column is hidden and the receptor/expression column will float
         // from the right to the left.
-        .col-md-6.qi-clinical-col(ng-show="outcome.isStagingOrGradeData")
+        .col-md-6.qi-outcome-panel(ng-show="outcome.isStagingOrGradeData")
           // Tumor staging tile.
           qi-outcome-table(outcome="outcome" group="tnm")
           // Nottingham grade tile.
@@ -86,7 +86,7 @@ h4.col-md-offset-1 Clinical Profile
           // FNCLCCGrade grade tile.
           qi-outcome-table(outcome="outcome" group="fnclcc_grade" ng-show="outcome.tnm.grade._cls == 'FNCLCCGrade'")
         // Column displaying hormone receptor and expression data.
-        .col-md-6.qi-clinical-col(ng-show="outcome._cls == 'BreastPathology'")
+        .col-md-6.qi-outcome-panel(ng-show="outcome._cls == 'BreastPathology'")
           // Estrogen Receptor tile.
           qi-outcome-table(outcome="outcome" group="estrogen")
           // Progesterone Receptor tile.

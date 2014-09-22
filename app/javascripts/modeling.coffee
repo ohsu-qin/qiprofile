@@ -16,12 +16,12 @@ define ['angular', 'lodash', 'chart'], (ng, _) ->
             {
               label: 'FXL Ktrans'
               color: 'BurlyWood'
-              accessor: (session) -> session.modeling.fxlKTrans
+              accessor: (session) -> session.modeling.fxlKTrans.average
             }
             {
               label: 'FXR Ktrans'
               color: 'OliveDrab'
-              accessor: (session) -> session.modeling.fxrKTrans
+              accessor: (session) -> session.modeling.fxrKTrans.average
             }
           ]
       ve:
@@ -31,7 +31,7 @@ define ['angular', 'lodash', 'chart'], (ng, _) ->
             {
               label: 'v_e'
               color: 'MediumSeaGreen'
-              accessor: (session) -> session.modeling.v_e
+              accessor: (session) -> session.modeling.vE.average
             }
           ]
       taui:
@@ -41,7 +41,7 @@ define ['angular', 'lodash', 'chart'], (ng, _) ->
             {
               label: 'tau_i'
               color: 'PaleVioletRed'
-              accessor: (session) -> session.modeling.tau_i
+              accessor: (session) -> session.modeling.tauI.average
             }
           ]
   
@@ -86,15 +86,15 @@ define ['angular', 'lodash', 'chart'], (ng, _) ->
             # @param current the current value
             # @param previous the previous value
             # @returns the percent change
-            percent_change = (current, previous) ->
+            percentChange = (current, previous) ->
               (current - previous)/previous * 100
           
             # Return an object with the change properties.
-            deltaKTrans_pct_change: percent_change(current.deltaKTrans, previous.deltaKTrans)
-            fxlKTrans_pct_change: percent_change(current.fxlKTrans, previous.fxlKTrans)
-            fxrKTrans_pct_change: percent_change(current.fxrKTrans, previous.fxrKTrans)
-            v_e_pct_change: percent_change(current.v_e, previous.v_e)
-            tau_i_pct_change: percent_change(current.tau_i, previous.tau_i)
+            deltaKTransPctChange: percentChange(current.deltaKTrans.average, previous.deltaKTrans.average)
+            fxlKTransPctChange: percentChange(current.fxlKTrans.average, previous.fxlKTrans.average)
+            fxrKTransPctChange: percentChange(current.fxrKTrans.average, previous.fxrKTrans.average)
+            vEPctChange: percentChange(current.vE.average, previous.vE.average)
+            tauIPctChange: percentChange(current.tauI.average, previous.tauI.average)
         
           # If this is not the first session's modeling object,
           # then extend the object with the percent change properties,

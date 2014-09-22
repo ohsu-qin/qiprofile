@@ -1,0 +1,18 @@
+accordion
+  // The open flag set in the controller expands or collapses the group,
+  // e.g. config.demogrOpen.
+  accordion-group(is-open="open")
+    accordion-heading Demographics
+      // The open icon (down => open, up => closed).
+      i.pull-right.glyphicon(
+        ng-class="{'glyphicon-chevron-down': open, 'glyphicon-chevron-up': !open}"
+      )
+    .row.qi-clinical-row
+      .col-md-2 Age
+      .col-md-10 {{ subject.age }}
+    .row.qi-clinical-row
+      .col-md-2 Race
+      .col-md-10 {{ config.races }}
+    .row.qi-clinical-row
+      .col-md-2 Ethnicity
+      .col-md-10 {{ config.ethnicity }}

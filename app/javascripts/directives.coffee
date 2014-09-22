@@ -73,7 +73,7 @@ define ['angular', 'lodash', 'spin', 'helpers', 'dateline', 'intensity', 'modeli
       (VisitDateline, $compile) ->
         restrict: 'E'
         scope:
-          subject: '='   # the subject
+          subject: '='
         link: (scope, element, attrs) ->
           scope.$watch 'subject', (subject) ->
             if _.any(subject.sessions)
@@ -115,7 +115,7 @@ define ['angular', 'lodash', 'spin', 'helpers', 'dateline', 'intensity', 'modeli
     directives.directive 'qiClinicalTable', ['Clinical', (Clinical) ->
       restrict: 'E'
       scope:
-        subject: '='   # the subject
+        subject: '='
       link: (scope, element, attrs) ->
         scope.$watch 'subject', (subject) ->
           if subject
@@ -123,6 +123,14 @@ define ['angular', 'lodash', 'spin', 'helpers', 'dateline', 'intensity', 'modeli
       templateUrl: '/partials/clinical-table.html'
     ]
 
+
+    # Displays the subject demographics.
+    directives.directive 'qiDemographicsTable', ['Race', 'Ethnicity', (Race, Ethnicity) ->
+      restrict: 'E'
+      scope:
+        subject: '='
+      templateUrl: '/partials/demographics-table.html'
+    ]
 
     # Displays a clinical outcome.
     directives.directive 'qiOutcomeTable', ['Clinical', (Clinical) ->

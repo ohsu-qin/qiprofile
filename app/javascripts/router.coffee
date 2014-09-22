@@ -80,10 +80,6 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
                 sess.subject = subject
                 # Fix the acquisition date.
                 sess.acquisitionDate = DateHelper.asMoment(sess.acquisitionDate)
-                # Calculate the delta Ktrans property.
-                for mdl in sess.modeling
-                  Object.defineProperty mdl, 'deltaKTrans',
-                    get: -> this.fxrKTrans - this.fxlKTrans
         
                 ### FIXME - Only one modeling per session is supported. ###
                 # Work-around is to reset modeling to the first modeling

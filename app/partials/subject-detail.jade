@@ -21,11 +21,11 @@ block content
         .panel-collapse
           .panel-body
             qi-visit-dateline(subject='subject')
-      // The modeling chart or tables.
+      // The modeling chart or table.
       #qi-modeling-chart.panel.panel-default(ng-show="modelingFormat == 'Chart'")
         include include/modeling-charts
-      #qi-modeling-table(ng-show="modelingFormat == 'Table'")
-        qi-modeling-table(sessions='subject.sessions')
+      qi-modeling-table(sessions='subject.sessions'
+                        ng-show="modelingFormat == 'Table'")
 
   .col-md-6.qi-clinical-profile
     qi-clinical-table(subject='subject')

@@ -1,5 +1,5 @@
-define ['lodash', 'ngmocks', 'expect', 'router', 'moment'],
-  (_, mocks, expect, router, moment) ->
+define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
+  (ng, _, mocks, expect, moment, router) ->
     describe 'Unit Testing Router', ->
       # The mock Router service module.
       Router = null
@@ -26,8 +26,16 @@ define ['lodash', 'ngmocks', 'expect', 'router', 'moment'],
             modeling: [
               name: 'pk_aUjr'
               image_container_name: 'reg_8L3W'
-              fxlKTrans: 2.3
-              fxrKTrans: 2.5
+              fxlKTrans:
+                average: 2.3
+              fxrKTrans:
+                average: 2.5
+              deltaKTrans:
+                average: 2.3
+                filename: 'data/Breast001/Session01/delta_k_trans.nii.gz'
+                colorization:
+                  filename: 'data/Breast001/Session01/delta_k_trans_color.nii.gz'
+                  color_lut: 'etc/jet_colors.txt'
             ]
           ]
           encounters: [
@@ -58,7 +66,7 @@ define ['lodash', 'ngmocks', 'expect', 'router', 'moment'],
 
       beforeEach ->
         # Fake the router service module.
-        angular.mock.module('qiprofile.router')
+        ng.mock.module('qiprofile.router')
 
         inject ['Router', '$httpBackend', '$rootScope',
           (_Router_, _$httpBackend_, _$rootScope_) ->
@@ -128,9 +136,17 @@ define ['lodash', 'ngmocks', 'expect', 'router', 'moment'],
           expect(mdl.deltaKTrans, "Modeling is missing a delta Ktrans")
             .to.exist
           mock_mdl = mock.subject_detail.sessions[0].modeling[0]
-          expectedDeltaKTrans = mock_mdl.fxrKTrans - mock_mdl.fxlKTrans
-          expect(mdl.deltaKTrans, "Delta Ktrans is not #{ expectedDeltaKTrans }")
-            .to.be.closeTo(expectedDeltaKTrans, 0.0000001)
+          expect(mdl.deltaKTrans.average, "Delta Ktrans average is incorrect")
+            .to.equal(mock_mdl.deltaKTrans.average)
+          expect(mdl.deltaKTrans.filename, "Delta Ktrans filename is incorrect")
+            .to.equal(mock_mdl.deltaKTrans.filename)
+          colorization = mdl.deltaKTrans.colorization
+          expect(colorization, "Delta Ktrans is missing the colorization")
+            .to.equal(mock_mdl.deltaKTrans.colorization)
+          expect(colorization.filename, "Delta Ktrans colorization filename is incorrect")
+            .to.equal(mock_mdl.deltaKTrans.colorization.filename)
+          expect(colorization.color_lut, "Delta Ktrans colorization LUT is incorrect")
+            .to.equal(mock_mdl.deltaKTrans.colorization.color_lut)
 
         it 'should fetch the detail with a detail property', ->
           subject = _.clone(mock.subject)

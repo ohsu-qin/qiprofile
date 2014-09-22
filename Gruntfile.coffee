@@ -102,7 +102,7 @@ module.exports = (grunt) ->
         browsers: [if grunt.option('debug') then 'Chrome' else 'PhantomJS']
         logLevel: [if grunt.option('debug') then 'DEBUG' else 'ERROR']
       unit:
-        configFile: 'test/conf/karma-conf.coffee'        
+        configFile: 'test/conf/karma-conf.coffee'
 
     protractor:
       options:
@@ -126,9 +126,8 @@ module.exports = (grunt) ->
       options:
         compress: false
       compile:
-        paths: ['_public/stylesheets']
-        files:
-          '_public/stylesheets/app.css': ['app/stylesheets/**/*.styl']
+        src: ['app/stylesheets/app.styl']
+        dest: '_public/stylesheets/app.css'
       
     express:
       options:

@@ -1,0 +1,21 @@
+//**  The general-purpose utility substitutions. **//
+
+// clean-list is the style for list with slight indentation
+// and no list item indicator (e.g. no bullet for a ul).
+clean-list()
+  -webkit-padding-start: 1em
+  & li
+    list-style-type none
+
+// empty-line() is the reusable idiom for the :after selective of a
+// text-align justify style. This selector is necessary to center
+// the preceding row elements.
+//
+// Note - the line adds vertical space. Setting the font-size,
+// line-height, height or negative margins has no effect. The
+// styles which use the empty-line can counteract this effect by
+// setting a negative bottom margin.
+empty-line()
+  content ''
+  display inline-block
+  width 100%

@@ -1,0 +1,53 @@
+//**  The Main content styles. **//
+
+@require 'helpers'
+
+@require 'animation'
+
+@require 'navigation'
+
+.qi-body
+  background-color WhiteSmoke
+
+.qi-billboard
+  background MediumSlateBlue
+  color LightGoldenRodYellow
+  border-bottom 0.6em solid DarkBlue
+  border-radius: 0 0 0.4em 0.4em
+  text-indent 1em
+  margin 0
+
+.qi-content
+  overflow hide
+
+.qi-main
+  margin 0.5em 0 0 0
+
+.qi-main-list
+  clean-list()
+
+.qi-help
+  background OldLace
+  border 0.1em solid Brown
+  position fixed
+  top 10em
+  right 1.8em
+  width 25%
+  qi-transition(slower-transition, linear)
+
+.qi-help-text
+  // Downsize headers
+  for n in 1 2 3 4 5
+    h{n}
+      font-size (125% - (5 * n))
+      text-decoration underline
+
+.qi-footer
+  border-top 0.1em solid SlateGray
+  p.qi-legal
+    padding 1em 0em
+    text-align center
+    color DimGray
+    font-size x-small
+    span.glyphicon-copyright-mark
+      padding 0 0.2em 0 0.2em

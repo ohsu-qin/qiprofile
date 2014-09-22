@@ -1,0 +1,50 @@
+//**  The navigation styles. **//
+
+.qi-nav-btn
+  color Black
+  background-image none
+  border 0
+  padding 0.2em 0.4em 0.2em 0.4em
+
+.qi-navbar
+  margin-bottom 0
+  border 0
+  border-radius: 0.4em 0.4em 0 0
+  background url('/static/media/header-bg.gif') repeat
+
+.qi-logo
+  float left
+  margin 0 0 0 0.2em 
+
+.qi-brand
+  float right
+  padding 0.5em 0 0 0
+  letter-spacing -.05em
+  font-size 200%
+  .navbar-default &
+    color SandyBrown
+    &:hover, &:focus
+      color SandyBrown
+  a
+    text-decoration none
+
+.qi-navbar-right
+  margin 0.2em 0 0 0
+  & li
+    margin 0.5em
+  & > li > a
+    color Black !important
+    padding 0.4em 0.8em 0.4em 0.8em
+    border-radius 0.4em
+
+.qi-navbar-choice
+  color Black
+  background-image none
+  padding 0.4em 0.8em 0.4em 0.8em
+  border 0
+  // The color is forced in order to retain the color when the help
+  // button is pressed. Setting the .active or :active style has no
+  // effect.
+  background-color Moccasin !important
+  &:hover
+    background-color Chocolate !important

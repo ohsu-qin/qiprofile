@@ -1,0 +1,61 @@
+//** The MR visit dateline styles. **//
+
+.qi-dateline-chart
+  svg
+  // Override the nv3d style which hides the x axis line.
+  .nv-axis.nv-x path.domain
+    stroke-opacity: .25
+
+.qi-dateline-neoadjuvant
+  opacity .4
+  rect&
+    fill DarkOliveGreen
+  span&
+    color LightYellow
+    background-color DarkOliveGreen
+    margin .2em     
+    padding 0 .5em 0 .5em
+
+.qi-dateline-primary
+  opacity .4
+  rect&
+    fill Crimson
+  span&
+    color LightYellow
+    background-color Crimson
+    margin .2em
+    padding 0 .5em 0 .5em
+
+.qi-dateline-adjuvant
+  opacity .4
+  rect&
+    fill DarkSlateBlue
+  span&
+    color LightYellow
+    background-color DarkSlateBlue
+    margin .2em     
+    padding 0 .5em 0 .5em
+
+.qi-dateline-biopsy
+  text&
+    font-size large
+    fill Chartreuse
+  span&
+    color Chartreuse
+    margin .5em     
+
+.qi-dateline-surgery
+  text&
+    font-size large
+    fill DarkRed
+  span&
+    color DarkRed
+    margin .5em     
+
+.qi-dateline-assessment
+  text&
+    font-size large
+    fill MediumSlateBlue
+  span&
+    color MediumBlue
+    margin .5em

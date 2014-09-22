@@ -1,0 +1,67 @@
+// ** Transition animation styles. **//
+
+// General transition substitution template.
+//
+// @example
+//   qi-transition(linear, slower-transition)
+//
+// @param duration the transition duration
+// @param timing the transition timing function
+//   (cf. http://www.w3schools.com/cssref/css3_pr_transition-timing-function.asp)
+qi-transition(duration, timing=ease)
+  -webkit-transition all timing duration
+  -moz-transition all timing duration
+  -o-transition all timing duration
+  transition all timing duration
+
+// Disable transition.
+.qi-no-transition
+  -webkit-transition none
+  -moz-transition none
+  // Opera doesn't support none
+  -o-transition all 0s
+  transition none
+
+// Transition durations.
+slow-transition = 1s
+slower-transition = 0.75s
+med-transition = 0.5s
+fast-transition = 0.2s
+
+// A transition which fades into and out of view.
+//
+// @param duration the transition duration
+fade-transition(duration)
+  -webkit-transition -webkit-transform duration ease-in, opacity duration ease-in 
+  -moz-transition -moz-transform duration ease-in, opacity duration ease-in 
+  -o-transition -o-transform duration ease-in, opacity duration ease-in 
+  transition transform duration ease-in, opacity duration ease-in 
+
+// The visible state.
+transition-show()
+  -webkit-transform scaleX(1) 
+  -o-transform scaleX(1) 
+  transform scaleX(1) 
+  opacity 1 
+
+// The hidden state.
+transition-hide()
+  -webkit-transform scaleX(0.0001) 
+  -o-transform scaleX(0.0001) 
+  transform scaleX(0.0001) 
+  opacity 0 
+
+// Slide into and out of view.
+.qi-slide
+  &.ng-enter
+    // Start hidden, End shown.
+    fade-transition(fast-transition)
+    transition-hide()
+    position absolute 
+    &.ng-enter-active
+      transition-show()
+  &.ng-leave
+    fade-transition(fast-transition)
+    position relative 
+    &.ng-leave-active
+      transition-hide()

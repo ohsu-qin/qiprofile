@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 (http://quip1:6060/qiprofile) for change details.
 
+0.8.1 / 2014-09-22
+------------------
+* Support REST ModelingParameters structure.
+
 0.7.4 / 2014-09-10
 ------------------
 * Make the demographics directive.

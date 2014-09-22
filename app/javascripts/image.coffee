@@ -100,7 +100,7 @@ define ['angular', 'xtk', 'file', 'dat'], (ng) ->
           volumeCtls.open()
 
         # Adjust the camera position.
-        renderer.camera.position = [120, 80, 160]
+        renderer.camera.position = [120, 20, 20]
 
         # Render the image.
         renderer.render()

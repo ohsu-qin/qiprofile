@@ -27,7 +27,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
           enumerable: true
           get: -> source[prop]
           set: (val) -> source[prop] = val
-        
+      
       # The properties to alias.
       srcProps = Object.getOwnPropertyNames(source)
       destProps = Object.getOwnPropertyNames(dest)

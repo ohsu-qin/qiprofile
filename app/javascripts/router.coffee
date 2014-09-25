@@ -61,7 +61,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
           if subject.detail
             Subject.detail(id: subject.detail).$promise.then (detail) ->
               # Add the subject age property, if necessary.
-              if ObjectHelper.exists(detail.birthDate) and
+              if detail.birthDate? and
                  not subject.hasOwnProperty('age')
                 # Fix the birth date.
                 date = DateHelper.asMoment(detail.birthDate)
@@ -86,7 +86,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
               
               # Fix the encounter dates.
               for enc in detail.encounters
-                if ObjectHelper.exists(enc.date)
+                if enc.date?
                   enc.date = DateHelper.asMoment(enc.date)
               # Fix the treatment dates.
               for trt in detail.treatments

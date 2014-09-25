@@ -13,7 +13,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
     # @param treatment the treatment object
     # @returns the [begin, end] array
     treatmentSpan = (treatment) ->
-      if ObjectHelper.exists(treatment.begin_date)
+      if treatment.begin_date?
         begin = treatment.begin_date.valueOf()
         endDate = treatment.end_date or moment()
         end = endDate.valueOf()

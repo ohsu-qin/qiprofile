@@ -159,9 +159,9 @@ define ['angular', 'lodash', 'spin', 'helpers', 'dateline', 'intensity', 'modeli
           # are necessary because there is a data series for the scan and
           # each registration.
           scope.$watch 'session.scan', (scan) ->
-            if ObjectHelper.exists(scan)
+            if scan?
               scope.$watch 'session.registrations', (regs) ->
-                if ObjectHelper.exists(regs)
+                if regs?
                   scope.config = Intensity.configureChart(scope.session, element)
         templateUrl: '/partials/intensity-chart.html'
     ]

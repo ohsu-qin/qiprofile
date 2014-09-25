@@ -85,7 +85,7 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
     #    ...
     #   ]
     #   stage = (t, n) ->
-    #     STAGES[t][n] if ObjectHelper.exists(t)
+    #     STAGES[t][n] if t?
     #   summaryGrade = (cumulativeGrade) ->
     #     1 + _.findIndex(GRADE_RANGES, (range) -> cumulativeGrade in range)
     #
@@ -229,20 +229,20 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
         coll = subject.collection
         
         # TODO - make a getTumorScore(tnm) method.
-        size = if ObjectHelper.exists(tnm.size) then tnm.size else {}
+        size = if tnm.size? then tnm.size else {}
 
         # Look up the TNM grade based on the overall Nottingham or FNCLCC grade.
         gValue = TUMOR_GRADES[coll][grade]
         # The T value is the TNM size tumor_size property.
         tValue = size.tumor_size
         # Obtain the T, N, M, and G values as strings or set to 'X' if null.
-        t = if ObjectHelper.exists(tValue) then tValue.toString() else 'X'
-        n = if ObjectHelper.exists(tnm.lymphStatus) then tnm.lymphStatus.toString() else 'X'
-        m = if ObjectHelper.exists(tnm.metastasis) then TNM_METASTASIS[tnm.metastasis] else 'X'
+        t = if tValue? then tValue.toString() else 'X'
+        n = if tnm.lymphStatus? then tnm.lymphStatus.toString() else 'X'
+        m = if tnm.metastasis? then TNM_METASTASIS[tnm.metastasis] else 'X'
         g = if gValue then gValue else 'X'
         # The size as a string.
-        prefix = if ObjectHelper.exists(size.prefix) then size.prefix else ''
-        suffix = if ObjectHelper.exists(size.suffix) then size.suffix else ''
+        prefix = if size.prefix? then size.prefix else ''
+        suffix = if size.suffix? then size.suffix else ''
         size_s = "#{ prefix }T#{ t }#{ suffix }"
         # Create the composite TNMG score.
         tumorScore = "#{ size_s }N#{ n }M#{ m }G#{ g }"

@@ -2,17 +2,6 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
   helpers = ng.module 'qiprofile.helpers', []
     
   helpers.factory 'ObjectHelper', ->
-    # The exists implementation is defined as a local variable,
-    # since it is used in the aliasPublicDataProperties function.
-    _exists = (value) ->
-      typeof value != 'undefined' and value != null
-
-    # Tests the given value for existence.
-    #
-    # @param value the value to test
-    # @returns whether the value is neither undefined nor null
-    exists: _exists
-
     # Aliases the source object properties which are not
     # already defined in the destination object.
     #
@@ -130,7 +119,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
     # @returns the parsed moment date, or the input date
     #    if the input date is undefined or null
     asMoment: (date) ->
-      if ObjectHelper.exists(date)
+      if date?
         moment(date)
       else
         date
@@ -142,7 +131,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
     # @returns the new anonymized date, or the input date
     #    if the input date is undefined or null
     anonymize: (date) ->
-      if ObjectHelper.exists(date)
+      if date?
         # The quirky Javascript Date month is zero-based but the
         # day of month ('date' in Javascript Date's equally quirky
         # naming convention) is one-based.

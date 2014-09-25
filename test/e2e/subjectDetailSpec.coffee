@@ -172,27 +172,38 @@ describe 'E2E Testing Subject Detail', ->
                   # The percent change of the first row is blank. All other columns
                   # are non-blank.
                   #
-                  # FIXME - the validation below is broken. All values are blank,
-                  # even though they show up in the browser.
+                  # The validation below is broken. All values are reported as blank,
+                  # even though they show up in the browser. The code below cannot
+                  # be debugged to the protractor bug described at
+                  # https://github.com/angular/protractor/issues/552.
+                  # Furthermore, protractor cannot be updated to 0.24.2 because that
+                  # version results in the following error:
+                  # * protractor 0.24.2 cannot find the chromedriver
+                  # The work-around is to disable the test below and validate the
+                  # modeling table in the modelingSpec unit test and the browser.
                   #
-                  for value, i in cols[1..-1]
-                    # Every other column is a percent change.
-                    if i % 2 == 1
-                      # A percent change column - the first row is blank, other rows
-                      # have a value.
-                      if rowNdx == 0
-                        expect(value, "The percent change in Imaging Profile table #{ tblNdx + 1 }" +
-                                      " row #{ rowNdx + 1 } column #{ i + 2 } is not blank: #{ value }")
-                          .to.eventually.equal('')
-                      else
-                        expect(value, "The percent change in Imaging Profile table #{ tblNdx + 1 }" +
-                                      " row #{ rowNdx + 1 } column #{ i + 2 } is blank")
-                          .to.eventually.not.be.empty
-                    else
-                      # Not a percent change column.
-                      expect(value, "Imaging Profile table #{ tblNdx + 1 }" +
-                                    " row #{ rowNdx + 1 } column #{ i + 2 } is blank")
-                        .to.eventually.not.be.empty
+                  # TODO - upgrade versions and retry this in 2015.
+                  #
+                  # for value, i in cols[1..-1]
+                  #   # Every other column is a percent change.
+                  #   if i % 2 == 1
+                  #     # A percent change column - the first row is blank, other rows
+                  #     # have a value.
+                  #     if rowNdx == 0
+                  #       expect(value, "The percent change in Imaging Profile" +
+                  #                     " table #{ tblNdx + 1 } non-header row #{ rowNdx + 1 }" +
+                  #                     " column #{ i + 2 } is not blank: #{ value }")
+                  #         .to.eventually.equal('')
+                  #     else
+                  #       expect(value, "The percent change in Imaging Profile" +
+                  #                     " table #{ tblNdx + 1 } non-header row #{ rowNdx + 1 }" +
+                  #                     " column #{ i + 2 } is blank")
+                  #         .to.eventually.not.be.empty
+                  #   else
+                  #     # Not a percent change column.
+                  #     expect(value, "Imaging Profile table #{ tblNdx + 1 } non-header" +
+                  #                   " row #{ rowNdx + 1 } column #{ i + 2 } is blank")
+                  #       .to.eventually.not.be.empty
 
   # describe 'Clinical Profile', ->
   #   describe 'Demographics', ->

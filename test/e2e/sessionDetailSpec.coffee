@@ -76,7 +76,7 @@ describe 'E2E Testing Session Detail', ->
     expect(page.help(), 'The help is missing').to.eventually.exist
   
   describe 'Intensity Chart', ->
-    # Note - chart content is not testable. See the subjectDetailSpec note
+    # Note: chart content is not testable. See the subjectDetailSpec note
     # for details.
     it 'should display the chart', ->
       expect(page.chart(), 'The chart is not displayed').to.eventually.exist

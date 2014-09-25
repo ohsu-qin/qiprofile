@@ -24,7 +24,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
       if filter
         aliasProps = aliasProps.filter(filter)
       # Make the virtual properties.
-      # Note - each property must be defined in a call to the defineAlias
+      # Note: each property must be defined in a call to the defineAlias
       # function. That function body cannot be inlined in the loop below
       # since Coffeescript defines the iteration variable prop in a scope
       # outside of the loop, which in turn implies that the alias getter

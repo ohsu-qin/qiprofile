@@ -12,13 +12,13 @@ h4.col-md-offset-1 Clinical Profile
         )
       .row.qi-clinical-row
         .col-md-2 Age
-        .col-md-10 {{ subject.age }}
+        .col-md-10 {{ subject.birthDate | age }}
       .row.qi-clinical-row
         .col-md-2 Race
-        .col-md-10 {{ config.races }}
+        .col-md-10 {{ subject.races | races }}
       .row.qi-clinical-row
         .col-md-2 Ethnicity
-        .col-md-10 {{ config.ethnicity }}
+        .col-md-10 {{ subject.ethnicity | ethnicity }}
 
   // Mark up accordian header and content for each encounter.
   // FIXME - This only supports breast pathology outcomes. See TODO below.

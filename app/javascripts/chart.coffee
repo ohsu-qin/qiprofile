@@ -29,7 +29,7 @@ define ['angular', 'lodash', 'moment'], (ng, _, moment) ->
     # @param dataSpec the data access specification
     # @returns the chart configuration
     configureChart: (data, dataSpec) ->
-      # Note - nvd3 is undergoing a major version 2 rewrite.
+      # Note: nvd3 is undergoing a major version 2 rewrite.
       # Hopefully, version 2 will address the anomalies noted in
       # the modeling-discrete-chart template.
       # TODO - Adapt this function for version 2 when it is

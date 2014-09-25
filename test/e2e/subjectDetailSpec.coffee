@@ -4,11 +4,20 @@ Page = require('./helpers/page')()
 
 class SubjectDetailPage extends Page
   # Finds the profile table WebElements for the given CSS style.
-  # The return value is a table promise resolving to a list of
-  # row promises, each of which resolves to a list of column
-  # text promises.
+  # The return value is an array of table body promises. Each table
+  # body promise resolves to an array of row promises. Each row
+  # promise resolves to an array of column text promises.
   #
-  # @returns the imaging profile tables promise
+  # Example:
+  # profileTablesForCss('qi-clinical-table').then (tables) ->
+  #   for tablePromise in tables
+  #     tablePromise.then (table) ->
+  #       for rowPromise in table
+  #         rowPromise.then (row) ->
+  #         for colPromise in row
+  #           expect(colPromise).to.eventually.exist
+  #
+  # @returns the profile table promises
   profileTablesForCss: (style) ->
     # Note: a version of this with the all function fails, e.g.:
     #   element(By.css()).all(...)
@@ -16,14 +25,13 @@ class SubjectDetailPage extends Page
     #   TypeError: Object #<Object> has no method 'all'
     @select(style).then (panel) ->
       expect(panel, "The #{ style } table is missing").to.exist
-      panel.findElements(By.tagName('table')).then (tables) ->
+      panel.findElements(By.tagName('tbody')).then (tables) ->
         tables.map (table) ->
-          table.findElement(By.tagName('tbody')).then (body) ->
-            body.findElements(By.tagName('tr')).then (rows) ->
-              rows.map (row) ->
-                row.findElements(By.tagName('td')).then (cols) ->
-                  cols.map (col) ->
-                    col.getText()
+          table.findElements(By.tagName('tr')).then (rows) ->
+            rows.map (row) ->
+              row.findElements(By.tagName('td')).then (cols) ->
+                cols.map (col) ->
+                  col.getText()
   
   # Finds the imaging profile table WebElements.
   # See profileTablesForCss.
@@ -138,7 +146,7 @@ describe 'E2E Testing Subject Detail', ->
       it 'should display the dateline', ->
         expect(page.linechart(), 'The dateline is missing').to.eventually.exist
 
-    describe 'Table', ->
+    describe.only 'Table', ->
       it 'should show the imaging properties when the format button is clicked', ->
         page.imagingProfileTables().then (tables) ->
           # There are three imaging properties.
@@ -148,24 +156,24 @@ describe 'E2E Testing Subject Detail', ->
           # set below.
           expectedVisitDate = []
           # Validate each table.
-          for table, tblNdx in tables
-            table.then (rows) ->
-              # There are four visits.
-              expect(rows.length, 'The row count is incorrect').to.equal(4)
-              for row, rowNdx in rows
-                row.then (cols) ->
+          for tablePromise, tblNdx in tables
+            tablePromise.then (table) ->
+              # There are four Breast patient visits.
+              expect(table.length, "Table #{ tblNdx + 1 } row count is incorrect").to.equal(4)
+              for rowPromise, rowNdx in rowPromises
+                rowPromise.then (row) ->
                   # The first table is Ktrans with seven columns.
                   # The other tables have three columns.
                   # The first column is the visit date.
                   if tblNdx == 0
-                    expect(cols.length, 'The Ktrans table column length is incorrect')
+                    expect(row.length, 'The Ktrans table column length is incorrect')
                       .to.equal(7)
-                    cols[0].then (value) ->
+                    row[0].then (value) ->
                       expectedVisitDate[rowNdx] = value
                   else
-                    expect(cols.length, 'The non-Ktrans table column length is incorrect')
+                    expect(row.length, 'The non-Ktrans table column length is incorrect')
                       .to.equal(3)
-                    visitDate = cols[0]
+                    visitDate = row[0]
                     expect(visitDate, 'The table visit date is incorrect')
                       .to.eventually.equal(expectedVisitDate[rowNdx])
                   # The percent change is in the third, fifth and seventh column.
@@ -176,64 +184,73 @@ describe 'E2E Testing Subject Detail', ->
                   # even though they show up in the browser. The code below cannot
                   # be debugged to the protractor bug described at
                   # https://github.com/angular/protractor/issues/552.
+                  #
                   # Furthermore, protractor cannot be updated to 0.24.2 because that
                   # version results in the following error:
                   # * protractor 0.24.2 cannot find the chromedriver
+                  #
                   # The work-around is to disable the test below and validate the
                   # modeling table in the modelingSpec unit test and the browser.
                   #
-                  # TODO - upgrade versions and retry this in 2015.
+                  # In addition, console debug messages do not print on the console.
                   #
-                  # for value, i in cols[1..-1]
+                  # In addition, throwing a debug error does not print to the console.
+                  #
+                  # In conclusion, protractor acts *really* flakey in this test,
+                  # possibly because of the deeply nested promises.
+                  #
+                  # TODO - update protractor version and retry this in 2015.
+                  #
+                  # for colPromise, colNdx in row[1..-1]
                   #   # Every other column is a percent change.
-                  #   if i % 2 == 1
+                  #   if colNdx % 2 == 1
                   #     # A percent change column - the first row is blank, other rows
                   #     # have a value.
                   #     if rowNdx == 0
-                  #       expect(value, "The percent change in Imaging Profile" +
-                  #                     " table #{ tblNdx + 1 } non-header row #{ rowNdx + 1 }" +
-                  #                     " column #{ i + 2 } is not blank: #{ value }")
-                  #         .to.eventually.equal('')
+                  #       expect(colPromise, "Imaging Profile table #{ tblNdx + 1 } body" +
+                  #                          " row #{ rowNdx + 1 } percent change" +
+                  #                          " column #{ colNdx + 2 } is not blank")
+                  #         .to.eventually.be.empty
                   #     else
-                  #       expect(value, "The percent change in Imaging Profile" +
-                  #                     " table #{ tblNdx + 1 } non-header row #{ rowNdx + 1 }" +
-                  #                     " column #{ i + 2 } is blank")
+                  #       expect(colPromise, "Imaging Profile table #{ tblNdx + 1 } body" +
+                  #                          " row #{ rowNdx + 1 } percent change" +
+                  #                          " column #{ colNdx + 2 } is blank")
                   #         .to.eventually.not.be.empty
                   #   else
                   #     # Not a percent change column.
-                  #     expect(value, "Imaging Profile table #{ tblNdx + 1 } non-header" +
-                  #                   " row #{ rowNdx + 1 } column #{ i + 2 } is blank")
+                  #     expect(colPromise, "Imaging Profile table #{ tblNdx + 1 } body" +
+                  #                        " row #{ rowNdx + 1 } column #{ colNdx + 2 }" +
+                  #                        " is blank")
                   #       .to.eventually.not.be.empty
 
-  # describe 'Clinical Profile', ->
-  #   describe 'Demographics', ->
-  #     # Demographics is collection-independent.
-  #     beforeEach ->
-  #       page = new SubjectDetailPage '/quip/breast/subject/1?project=QIN_Test'
-  #     
-  #     it 'should show the demographics table', ->
-  #       page.clinicalProfileTables().then (tables) ->
-  #         # TODO - add test case.
-  # 
-  #   describe 'Outcomes', ->
-  #     describe 'Breast', ->
-  #       beforeEach ->
-  #         page = new SubjectDetailPage '/quip/breast/subject/1?project=QIN_Test'
-  # 
-  #       describe 'Biopsy', ->
-  #         # TODO - Add test cases for the date and every outcome table.
-  # 
-  #       describe 'Assessment', ->
-  #         # TODO - Add test cases for the date and every outcome table.
-  #     
-  #     describe 'Sarcoma', ->
-  #       beforeEach ->
-  #         page = new SubjectDetailPage '/quip/sarcoma/subject/1?project=QIN_Test'
-  # 
-  #       describe 'Biopsy', ->
-  #         # TODO - Add test cases for the date and every outcome table.
-  # 
-  #       describe 'Assessment', ->
-  #         # TODO - Add test cases for the date and every outcome table.
-  # 
-          
+  describe 'Clinical Profile', ->
+      describe 'Demographics', ->
+        # Demographics is collection-independent.
+        beforeEach ->
+          page = new SubjectDetailPage '/quip/breast/subject/1?project=QIN_Test'
+        
+        it 'should show the demographics table', ->
+          page.clinicalProfileTables().then (tables) ->
+            # Validate the demographics values.
+            
+    
+      describe 'Outcomes', ->
+        describe 'Breast', ->
+          beforeEach ->
+            page = new SubjectDetailPage '/quip/breast/subject/1?project=QIN_Test'
+    
+          describe 'Biopsy', ->
+            # TODO - Add test cases for the date and every outcome table.
+    
+          describe 'Assessment', ->
+            # TODO - Add test cases for the date and every outcome table.
+        
+        describe 'Sarcoma', ->
+          beforeEach ->
+            page = new SubjectDetailPage '/quip/sarcoma/subject/1?project=QIN_Test'
+    
+          describe 'Biopsy', ->
+            # TODO - Add test cases for the date and every outcome table.
+    
+          describe 'Assessment', ->
+            # TODO - Add test cases for the date and every outcome table.

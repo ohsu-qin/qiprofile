@@ -2,21 +2,6 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
   clinical = ng.module 'qiprofile.clinical', ['qiprofile.helpers']
 
   clinical.factory 'Clinical', ['ObjectHelper', (ObjectHelper) ->
-    # The standard FDA race categories.
-    RACE_CHOICES =
-      'White': 'White'
-      'Black': 'Black or African American'
-      'Asian': 'Asian'
-      'AIAN': 'American Indian or Alaska Native'
-      'NHOPI': 'Native Hawaiian or Other Pacific Islander'
-
-    # The standard FDA ethnicity categories.
-    ETHNICITY_CHOICES =
-      'Hispanic': 'Hispanic or Latino'
-      'Non-Hispanic': 'Not Hispanic or Latino'
-      null: 'Not specified'
-      undefined: 'Not specified'
-
     # Lab result categorized as positive or negative.
     POS_NEG_RESULTS =
       false: 'negative'
@@ -276,9 +261,8 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
           # (or any future tumor type). See the clinical-table.jade
           # TODOs. The assignment below is a kludgy work-around.
           tnm = if outcome._cls is 'TNM' then outcome else outcome.tnm
-          # Note: CoffeeScript '?' is specifically the equivalent of not null.
-          # This is used to evaluate the data because for some properties
-          # falsy values such as 0 or false are valid data.
+          # Test for a value, including zero, using the CoffeeScript
+          # existence operator '?'.
           isStagingData = tnm? and _.some(_.values(tnm), (val) -> val?)
           if isStagingData
             # Add the overall grade to the outcome.
@@ -300,11 +284,6 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
         # Add the accordion control flag to the encounter.
         _.extend enc, accordionOpen: true
       
-      # The subject encounters.
-      encounters: subject.encounters
-      # The demographic data.
-      races: (RACE_CHOICES[race] for race in subject.races).join(', ')
-      ethnicity: ETHNICITY_CHOICES[subject.ethnicity]
       # The demographics accordion control.
       demogrOpen: true
 
@@ -319,7 +298,7 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
         result = if val > 0 then val.toString().concat('+') else val
       # The outcome specification.
       
-      groups =
+      GROUP_CFG =
         tnm:
           label: 'Tumor Staging'
           rows:
@@ -450,14 +429,13 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
       # Return the rows for the designated outcome group.
       # Include only those for which data are not null.
       rows = []
-      if not group in groups
-        throw new Error("Outcome group not recognized: #{ group }")
-      coll_grps = GROUPS[outcome._cls]
-      if not coll_grps
-        throw new Error("Outcome not recognized: #{ outcome._cls }")
+      cfg = GROUP_CFG[group] or
+            throw new ReferenceError("Outcome group not recognized: #{ group }")
+      coll_grps = GROUPS[outcome._cls] or
+                  throw new ReferenceError("Outcome not recognized: #{ outcome._cls }")
       if group in coll_grps
-        for row in groups[group].rows
+        for row in cfg.rows
           rows.push row if row.accessor(outcome)?
       rows: rows
-      label: groups[group].label
+      label: cfg.label
   ]

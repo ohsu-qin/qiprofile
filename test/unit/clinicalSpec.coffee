@@ -57,14 +57,5 @@ define ['ngmocks', 'moment', 'clinical'], (ngmocks, moment, clinical) ->
         # The Clinical Profile configuration.
         config = Clinical.configureProfile(mock.subject)
 
-      it 'should configure the clinical profile panel', ->
-        # Validate the configuration.
-        # TODO - compare to the mock values for each encounter
-        # and each demographic and outcome value.
-        # TODO - these should be broken out into test cases.
-        # TODO - add expect message arguments.
-        expect(config.encounters).to.exist
-        expect(config.encounters.length).to.equal(2)
-        expect(config.races).to.exist
-        expect(config.ethnicity).to.exist
-        expect(config.demogrOpen).to.equal(true)
+      it.only 'should set the open flag', ->
+        expect(config.open, "Open flag is not true").to.be.true

@@ -132,6 +132,7 @@ define ['angular', 'lodash', 'spin', 'helpers', 'dateline', 'intensity', 'modeli
       templateUrl: '/partials/demographics-table.html'
     ]
 
+
     # Displays a clinical outcome.
     directives.directive 'qiOutcomeTable', ['Clinical', (Clinical) ->
       restrict: 'E'

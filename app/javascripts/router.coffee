@@ -67,13 +67,6 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
                 date = DateHelper.asMoment(detail.birthDate)
                 # Anonymize the birth date.
                 detail.birthDate = DateHelper.anonymize(date)
-                # July 7 of this year.
-                nowish = DateHelper.anonymize(moment())
-                # Make the subject age property.
-                Object.defineProperty subject, 'age',
-                  get: -> nowish.diff(detail.birthDate, 'years')
-                  set: (years) ->
-                    detail.birthDate = nowish.subtract('years', years)
               
               for sess in detail.sessions
                 # Set the session subject property.

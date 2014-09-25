@@ -1,6 +1,5 @@
 accordion
-  // The open flag set in the controller expands or collapses the group,
-  // e.g. config.demogrOpen.
+  // The open flag set in the controller expands or collapses the group.
   accordion-group(is-open="open")
     accordion-heading Demographics
       // The open icon (down => open, up => closed).
@@ -9,10 +8,10 @@ accordion
       )
     .row.qi-clinical-row
       .col-md-2 Age
-      .col-md-10 {{ subject.age }}
+      .col-md-10 {{ subject.birthDate | age }}
     .row.qi-clinical-row
       .col-md-2 Race
-      .col-md-10 {{ config.races }}
+      .col-md-10 {{ subject.races | races }}
     .row.qi-clinical-row
       .col-md-2 Ethnicity
-      .col-md-10 {{ config.ethnicity }}
+      .col-md-10 {{ subject.ethnicity | ethnicity }}

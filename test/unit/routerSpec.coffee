@@ -26,11 +26,11 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
             modeling: [
               name: 'pk_aUjr'
               image_container_name: 'reg_8L3W'
-              fxlKTrans:
+              fxl_k_trans:
                 average: 2.3
-              fxrKTrans:
+              fxr_k_trans:
                 average: 2.5
-              deltaKTrans:
+              delta_k_trans:
                 average: 2.3
                 filename: 'data/Breast001/Session01/delta_k_trans.nii.gz'
                 colorization:
@@ -96,11 +96,11 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
         # Validates the resolved subject.
         validate = (subject) ->
           # There should be an age.
-          expect('age' of subject, "Subject is missing an age property").to.be.true
-          expect(subject.age, "Subject is missing an age").to.exist
-          nowish = moment([moment().year(), 6, 7])
-          expect(subject.age, "Subject age is incorrect")
-            .to.equal(nowish.diff(mock.subject_detail.birth_date, 'years'))
+          expect('birthDate' of subject, "Subject is missing a birthDate property")
+            .to.be.true
+          expect(subject.birthDate, "Subject is missing a birth date").to.exist
+          expect(subject.birthDate.valueOf(), "Subject birth date is incorrect")
+            .to.equal(mock.subject_detail.birth_date)
           # There should be encounters.
           expect(subject.encounters, "Subject is missing encounters").to.exist
           expect(subject.encounters.length, "Subject encounters length is incorrect")
@@ -133,20 +133,18 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
           #expect(sess.modeling.length).to.equal(1)
           #mdl = sess.modeling[0]
           mdl = sess.modeling
-          expect(mdl.deltaKTrans, "Modeling is missing a delta Ktrans")
-            .to.exist
+          expect(mdl.deltaKTrans, "Modeling is missing a delta Ktrans").to.exist
           mock_mdl = mock.subject_detail.sessions[0].modeling[0]
-          expect(mdl.deltaKTrans.average, "Delta Ktrans average is incorrect")
-            .to.equal(mock_mdl.deltaKTrans.average)
-          expect(mdl.deltaKTrans.filename, "Delta Ktrans filename is incorrect")
-            .to.equal(mock_mdl.deltaKTrans.filename)
+          expect(mdl.deltaKTrans.average, "delta Ktrans average is incorrect")
+            .to.equal(mock_mdl.delta_k_trans.average)
+          expect(mdl.deltaKTrans.filename, "delta Ktrans filename is incorrect")
+            .to.equal(mock_mdl.delta_k_trans.filename)
           colorization = mdl.deltaKTrans.colorization
-          expect(colorization, "Delta Ktrans is missing the colorization")
-            .to.equal(mock_mdl.deltaKTrans.colorization)
-          expect(colorization.filename, "Delta Ktrans colorization filename is incorrect")
-            .to.equal(mock_mdl.deltaKTrans.colorization.filename)
-          expect(colorization.color_lut, "Delta Ktrans colorization LUT is incorrect")
-            .to.equal(mock_mdl.deltaKTrans.colorization.color_lut)
+          expect(colorization, "delta Ktrans is missing the colorization").to.exist
+          expect(colorization.filename, "delta Ktrans colorization filename is incorrect")
+            .to.equal(mock_mdl.delta_k_trans.colorization.filename)
+          expect(colorization.colorLut, "delta Ktrans colorization LUT is incorrect")
+            .to.equal(mock_mdl.delta_k_trans.colorization.color_lut)
 
         it 'should fetch the detail with a detail property', ->
           subject = _.clone(mock.subject)

@@ -82,7 +82,7 @@ define ['ngmocks', 'image'], ->
       # When the image is loaded, the image data property is
       # set to the file content.
       it 'should set the image data property to the file content', =>
-        image.load().then (content) ->
+        image.load().then ->
           expect(image.data, 'The data property value is incorrect').
             to.equal(mock.image.data)
         # Dispatch the backend request.

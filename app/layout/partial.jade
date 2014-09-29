@@ -6,7 +6,10 @@
 .row.qi-main
   .qi-content
       block content
-  div.qi-help(type='info' ng-show='showHelp' close='toggleHelp()'
+  .qi-help(type='info' ng-show='showHelp' close='toggleHelp()'
     collapse='!showHelp'
   )
     block help-text
+    .qi-contact-info(ng-include="'/partials/help/contact-info.html'")
+    .modal-footer
+      button.btn.btn-default(ng-click='toggleHelp()') OK

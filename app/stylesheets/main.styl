@@ -29,13 +29,15 @@
 .qi-help
   background OldLace
   border 0.1em solid Brown
-  border-radius: 0.4em 0.4em 0.4em 0.4em
-  padding 1em
+  border-radius 0.4em 0.4em 0.4em 0.4em
+  padding 1em 1em 0 1em
   position fixed
   top 8em
-  right 1.8em
+  right 1.1em
+  max-height 80%
   width 25%
-  qi-transition(linear, slower-transition)
+  overflow-y auto
+  qi-transition(linear, fast-transition)
 
 .qi-help-text
   // Downsize headers

@@ -14,8 +14,8 @@ define ['angular', 'lodash', 'moment', 'helpers'], (ng, _, moment) ->
     ETHNICITY_CHOICES =
       'Hispanic': 'Hispanic or Latino'
       'Non-Hispanic': 'Not Hispanic or Latino'
-      #null: 'Not specified'
-      #undefined: 'Not specified'
+      null: 'Not specified'
+      undefined: 'Not specified'
 
     # Lab result categorized as positive or negative.
     POS_NEG_RESULTS =

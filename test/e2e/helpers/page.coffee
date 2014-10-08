@@ -158,3 +158,9 @@ module.exports = ->
             @select('.qi-main .qi-help-text').then (content) =>
               # ...resolve to the formatted help content.
               content.getInnerHtml()
+    
+    # @returns the contact information contact
+    contact: () ->
+      @select('.qi-main .qi-contact-info').then (content) =>
+        # ...resolve to the formatted contact information content.
+        content.getInnerHtml()

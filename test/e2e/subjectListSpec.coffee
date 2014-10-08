@@ -42,6 +42,11 @@ describe 'E2E Testing Subject List', ->
   it 'should have help text', ->
     expect(page.help(), 'The help is missing').to.eventually.exist
   
+  it 'should have contact information', ->
+    pat = /a href="mailto:quip@ohsu.edu"/
+    expect(page.contact(), 'The email address is missing')
+      .to.eventually.match(pat)
+
   describe 'Collections', ->
     content = null
     

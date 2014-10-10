@@ -1,4 +1,4 @@
-define ['angular', 'xtk', 'file', 'dat'], (ng) ->
+define ['angular', 'xtk', 'file', 'slider'], (ng) ->
   image = ng.module 'qiprofile.image', ['qiprofile.file']
 
   image.factory 'Image', ['$rootScope', 'File', ($rootScope, File) ->
@@ -81,23 +81,23 @@ define ['angular', 'xtk', 'file', 'dat'], (ng) ->
         renderer.onShowtime = ->
           # The volume display controls. The element is manually
           # placed later in this function.
-          gui = new dat.GUI(autoplace: false)
+          #gui = new dat.GUI(autoplace: false)
           # The controls interact with the volume.
-          volumeCtls = gui.addFolder('Volume')
+          #volumeCtls = gui.addFolder('Volume')
           # The opacity control.
-          opacityCtl = volumeCtls.add(volume, 'opacity', 0, 1).listen()
+          #opacityCtl = volumeCtls.add(volume, 'opacity', 0, 1).listen()
           # The threshold min and max range controls.
-          minCtl = volumeCtls.add(volume, 'lowerThreshold', volume.min, volume.max)
-          maxCtl = volumeCtls.add(volume, 'upperThreshold', volume.min, volume.max)
+          #minCtl = volumeCtls.add(volume, 'lowerThreshold', volume.min, volume.max)
+          #maxCtl = volumeCtls.add(volume, 'upperThreshold', volume.min, volume.max)
           # The slice dimension controls.
-          sliceXCtl = volumeCtls.add(volume, 'indexX', 0, volume.range[0] - 1)
-          sliceYCtl = volumeCtls.add(volume, 'indexY', 0, volume.range[1] - 1)
-          sliceZCtl = volumeCtls.add(volume, 'indexZ', 0, volume.range[2] - 1)
+          #sliceXCtl = volumeCtls.add(volume, 'indexX', 0, volume.range[0] - 1)
+          #sliceYCtl = volumeCtls.add(volume, 'indexY', 0, volume.range[1] - 1)
+          #sliceZCtl = volumeCtls.add(volume, 'indexZ', 0, volume.range[2] - 1)
           # The control is placed after the image display.
-          ctlElt = ng.element(gui.domElement)
-          element.after(ctlElt)
+          #ctlElt = ng.element(gui.domElement)
+          #element.after(ctlElt)
           # Display the controls.
-          volumeCtls.open()
+          #volumeCtls.open()
 
         # Adjust the camera position.
         renderer.camera.position = [120, 20, 20]

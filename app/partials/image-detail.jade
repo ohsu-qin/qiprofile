@@ -11,6 +11,36 @@ block billboard
 block content
   .qi-image-background
     qi-series-image.col-md-9.qi-series-image(image='image')
+      .qi-image-ctl
+        accordion
+          accordion-group(is-open="true")
+            accordion-heading Overlay
+            .btn-group.qi-overlay-select
+              button.btn.btn-primary(btn-radio='1') FXR K<sup>trans</sup>
+              button.btn.btn-primary(btn-radio='2') FXL K<sup>trans</sup>
+              button.btn.btn-primary(btn-radio='3') &Delta;K<sup>trans</sup>
+              button.btn.btn-primary(btn-radio='4') V<sub>e</sub>
+              button.btn.btn-primary(btn-radio='5') tau<sub>i</sub>
+        accordion
+          accordion-group(is-open="true")
+            accordion-heading Opacity
+            slider(floor='0' ceiling='1' precision='0.1')
+        accordion
+          accordion-group(is-open="true")
+            accordion-heading Slices
+            h5 Sagittal
+            slider(floor='0' ceiling='319' precision='1')
+            h5 Coronal
+            slider(floor='0' ceiling='319' precision='1')
+            h5 Axial
+            slider(floor='0' ceiling='319' precision='1')
+        accordion
+          accordion-group(is-open="true")
+            accordion-heading Thresholding
+            h5 Lower
+            slider(floor='0' ceiling='445' precision='1')
+            h5 Upper
+            slider(floor='0' ceiling='445' precision='1')
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

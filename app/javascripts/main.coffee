@@ -41,7 +41,6 @@ requirejs.config
   paths:
     angular: [NG_LIB + '/' + 'angular' + MIN, './lib/angular'] 
     d3: './lib/d3'
-    dat: './lib/dat.gui'
     domReady: [DOM_READY_LIB + '/domReady' + MIN, './lib/domReady']
     lodash: './lib/lodash.underscore'
     moment: './lib/moment'
@@ -50,6 +49,7 @@ requirejs.config
     ngroute: [NG_LIB + '/' + 'angular-route' + MIN, './lib/angular-route']
     ngnvd3: './lib/angularjs-nvd3-directives'
     nvd3: './lib/nv.d3'
+    slider: './lib/slider'
     spin: './lib/spin'
     'underscore.string': './lib/underscore.string'
     uirouter: './lib/angular-ui-router'

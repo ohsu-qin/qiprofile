@@ -57,7 +57,6 @@ requirejs.config
   paths:
     angular: './lib/angular'
     d3: './lib/d3'
-    dat: './lib/dat.gui'
     domReady: './lib/domReady'
     lodash: './lib/lodash.underscore'
     moment: './lib/moment'
@@ -66,6 +65,7 @@ requirejs.config
     ngroute: './lib/angular-route'
     ngnvd3: './lib/angularjs-nvd3-directives'
     nvd3: './lib/nv.d3'
+    slider: './lib/slider'
     spin: './lib/spin'
     'underscore.string': './lib/underscore.string'
     uirouter: './lib/angular-ui-router'

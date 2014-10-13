@@ -10,7 +10,7 @@ if ENV is 'production'
   WAIT = 3      # less than the default of 7
 else
   MIN = ''      # the unminimized file
-  WAIT = 0      # 0 => infinite wait
+  WAIT = 1      # go to the cache quickly
 
 # The Google CDN.
 GOOGLE_LIBS = '//ajax.googleapis.com/ajax/libs'
@@ -41,7 +41,6 @@ requirejs.config
   paths:
     angular: [NG_LIB + '/' + 'angular' + MIN, './lib/angular'] 
     d3: './lib/d3'
-    dat: './lib/dat.gui'
     domReady: [DOM_READY_LIB + '/domReady' + MIN, './lib/domReady']
     lodash: './lib/lodash.underscore'
     moment: './lib/moment'

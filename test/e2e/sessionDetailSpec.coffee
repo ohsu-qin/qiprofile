@@ -5,47 +5,55 @@ expect = require('./helpers/expect')()
 Page = require('./helpers/page')()
 
 class SessionDetailPage extends Page
-  # @returns a promise resolving to the given time point
-  #   {download: button, display: button} object
-  #
   # @param time_point the time point
+  # @returns a promise resolving to the given time point
+  #   {download: ElementFinder, display: ElementFinder}
+  #   associative object, where each ElementFinder resolves
+  #   to the respective button
   scanImageButtons: (time_point) ->
-    # Since the time point is one-based, the zero-based image select
-    # index is one less than the time point.
-    div = element(By.repeater('image in session.scan.images').row(time_point - 1))
-    div.findElement(By.css('.glyphicon-download')).then (download) ->
-      div.findElement(By.css('.glyphicon-eye-open')).then (open) ->
-        download: download
-        open: open
+    # The locator for the image select button group element.
+    # Since the time point is one-based, the zero-based image
+    # select index is one less than the time point.
+    locator = By.repeater('image in session.scan.images').row(time_point - 1)
+    
+    # Find the image select button group element, then...
+    @select(locator).then (div) ->
+      # ...return the associative object which contains the
+      # both button ElementFinders.
+      download: div.element(By.css('.glyphicon-download'))
+      open: div.element(By.css('.glyphicon-eye-open'))
   
   # Loads the image by clicking the given download button.
   #
   # @param button the image download button
   # @return a promise that resolves when either the button is hidden
-  #   or app. 450 milliseconds has expired
+  #   or roughly one second has expired
   loadScanImage: (button) ->
-    # Sleep 50 milliseconds and then invoke the async callback
+    # Sleep 1/10 of a second and then invoke the async callback
     # (cf. https://github.com/angular/protractor/blob/master/docs/api.md#api-webdriver-webdriver-prototype-executeasyncscript).
-    SLEEP = 'window.setTimeout(arguments[arguments.length - 1], 50);'
+    SLEEP = 'window.setTimeout(arguments[arguments.length - 1], 100);'
 
     # Sit and spin until either the given button is hidden or
-    # almost half a second has expired.
+    # sufficient time has transpired.
     #
     # @param button the scan image download button
-    # @param retry the number of times to retry (default 8)
+    # @param retry the maximum number of times to reiterate
+    #   until the image is loaded (default 10)
     # @return a promise that resolves when either the button
     #   is hidden or the retry limit is reached
-    waitWhileVisible = (button, retry=8) ->
+    waitWhileVisible = (button, retry=10) ->
       if retry
         # Wait a while, then check if the button is visible.
         browser.executeAsyncScript(SLEEP).then ->
           button.isDisplayed().then (visible) ->
             if visible
-              # Try again. Note: this recursion is pushed onto the stack,
-              # but no more than eight times.
+              # Decrement the retry count and try again.
+              # Note: this recursion is pushed onto the stack,
+              # but no more times than the initial retry count.
               waitWhileVisible(button, retry - 1)
     
-    button.click().then =>
+    # Click the button and wait until it is hidden.
+    button.click().then ->
       waitWhileVisible(button)
   
   # @returns the line chart promise
@@ -82,19 +90,23 @@ describe 'E2E Testing Session Detail', ->
       expect(page.chart(), 'The chart is not displayed').to.eventually.exist
 
     it 'should load the image', ->
-      page.scanImageButtons(TEST_TIME_POINT).then (buttons) ->
-        # The download/display button pair.
-        download = buttons.download
-        expect(download, 'The download button is initially missing').to.exist
+      # Find the download/display button pair, then...
+      page.scanImageButtons(TEST_TIME_POINT).then (btnGroup) ->
+        # The download button should be displayed.
+        download = btnGroup.download
         expect(download.isDisplayed(), 'The download button is initially hidden')
           .to.eventually.be.true
-        open = buttons.open
-        expect(open, 'The open button is initially missing').to.exist
+        
+        # The open button should be hidden.
+        open = btnGroup.open
         expect(open.isDisplayed(), 'The open button is initially displayed')
           .to.eventually.be.false
-        # Click the button, then wait for it to load.
+        
+        # Click the download button, wait for the image to load, then...
         page.loadScanImage(download).then ->
+          # The download button should now be hidden.
           expect(download.isDisplayed(), 'The download button is displayed after download')
             .to.eventually.be.false
+          # The open button should be displayed.
           expect(open.isDisplayed(), 'The open button is hidden after download')
             .to.eventually.be.true

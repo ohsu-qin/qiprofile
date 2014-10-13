@@ -1,3 +1,5 @@
+_ = require 'lodash'
+
 expect = require('./helpers/expect')()
 
 Page = require('./helpers/page')()
@@ -8,115 +10,112 @@ class SubjectDetailPage extends Page
   # body promise resolves to an array of row promises. Each row
   # promise resolves to an array of column text promises.
   #
-  # Example:
-  # profileTablesForCss('qi-clinical-table').then (tables) ->
-  #   for tablePromise in tables
-  #     tablePromise.then (table) ->
-  #       for rowPromise in table
-  #         rowPromise.then (row) ->
-  #         for colPromise in row
-  #           expect(colPromise).to.eventually.exist
+  # If the function argument is provided, then it is applied to
+  # each table cell text value promise.
   #
-  # @returns the profile table promises
-  profileTablesForCss: (style) ->
-    # Note: a version of this with the all function fails, e.g.:
-    #   element(By.css()).all(...)
-    # results in:
-    #   TypeError: Object #<Object> has no method 'all'
-    @select(style).then (panel) ->
-      expect(panel, "The #{ style } table is missing").to.exist
-      panel.findElements(By.tagName('tbody')).then (tables) ->
-        tables.map (table) ->
-          table.findElements(By.tagName('tr')).then (rows) ->
-            rows.map (row) ->
-              row.findElements(By.tagName('td')).then (cols) ->
-                cols.map (col) ->
-                  col.getText()
+  # Example:
+  # page.profileTablesForCss 'qi-clinical-table', (text) ->
+  #   expect(text).to.eventually.exist
+  #
+  # @param style the Page.select() search selector
+  # @param fn the optional function to apply to each table cell
+  #   text value
+  profileTablesForCss: (selector, fn) ->
+    tables = (panel) ->
+      panel.all(By.tagName('tbody'))
+    
+    rows = (table) ->
+      table.all(By.tagName('tr'))
+    
+    columns = (row) ->
+      row.all(By.tagName('td'))
+
+    text = (col) ->
+      col.getText().then (text) ->
+        fn(text) if text? and fn?
+        text
+    
+    mapTables = (panel) ->
+      tables(panel).map(mapTable)
+
+    mapTable = (table) ->
+      rows(table).map(mapRow)
+
+    mapRow = (row) ->
+      columns(row).map(text)
+    
+    @select(selector)
+      .then(mapTables)
+
+  # @param fn optional function to apply to the resolved button
+  #   ElementFinder
+  # @returns a promise which resolves to the image profile button
+  #   ElementFinder
+  imageProfileFormatButton: (fn) ->
+    @select('.qi-modeling-profile button').then (button) ->
+      fn(button) if button? and fn?
+      button
   
   # Finds the imaging profile table WebElements.
   # See profileTablesForCss.
   #
+  # @param fn optional function to run on the resolved tables
   # @returns the imaging profile tables promise
-  imagingProfileTables: () ->
-    @profileTablesForCss('qi-modeling-table')
+  imagingProfileTables: (fn) ->
+    click = (button) ->
+      button.click()
+
+    tables = =>
+      @profileTablesForCss('qi-modeling-table', fn)
+
+    # Click the imaging profile format button to show the imaging
+    # profile tables.
+    @imageProfileFormatButton()
+      .then(click)
+      .then(tables)
+  
+  # Finds the imaging profile table panel WebElement.
+  #
+  # @param fn optional function to run on the resolved panel
+  # @returns the imaging profile table panel promise
+  imagingProfileTablePanel: (fn) ->
+    @select('qi-modeling-table').then (panel) ->
+      fn(panel) if panel? and fn?
+      panel
   
   # Finds the clinical profile table WebElements.
   # See profileTablesForCss.
   #
+  # @param fn optional function to run on the resolved tables
   # @returns the clinical profile tables promise
-  clinicalProfileTables: () ->
+  clinicalProfileTables: (fn) ->
     # Note: a version of this with the all function fails, e.g.:
     #   element(By.css()).all(...)
     # results in:
     #   TypeError: Object #<Object> has no method 'all'
-    @profileTablesForCss('qi-clinical-table')
-  
-  # This method verifies that the format button correctly toggles
-  # the chart and table display, specifically:
-  # * the imaging profile chart is initially displayed
-  # * the imaging profile table is initially hidden
-  # * the table is displayed and the chart is hidden when the
-  #   button is clicked the first time
-  # * the table is hidden and the chart is displayed when the
-  #   button is clicked again
-  #
-  # @returns a promise which resolves to whether the format
-  #   button correctly toggles the chart and table display
-  # @throws an expectation failure if the button toggle
-  #   behavior is incorrect
-  toggleImagingProfileFormatButton: ->
-    # The use of => rather than -> below retains the 'this'
-    # variable as this page in the promises, allowing
-    # us to call the select function as @select.
-    @select('#qi-modeling-chart').then (chart) =>
-      # The chart exists and...
-      expect(chart, 'The modeling chart is missing').to.exist
-      chart.isDisplayed().then (chartDisplayed) =>
-        # ...the chart is displayed and...
-        expect(chartDisplayed, 'The modeling chart is initially hidden')
-          .to.be.true
-        @select('qi-modeling-table').then (table) =>
-          # ..the table exists and...
-          expect(table, 'The modeling table is missing').to.exist
-          table.isDisplayed().then (tableDisplayed) =>
-            # ...the table is hidden and...
-            expect(tableDisplayed, 'The modeling table is initially displayed')
-              .to.be.false
-            @select('.qi-modeling-profile button').then (button) =>
-              # ...the button exists and when it is clicked then...
-              expect(button).to.exist
-              button.click().then =>
-                table.isDisplayed().then (tableDisplayed) =>
-                  # ...the table is displayed and...
-                  expect(tableDisplayed,
-                         'The modeling table is hidden after the format button is clicked')
-                    .to.be.true
-                  chart.isDisplayed().then (chartDisplayed) =>
-                    # ...the chart is hidden and when the button
-                    # is clicked again then...
-                    expect(chartDisplayed,
-                           'The modeling chart is displayed after the format button is clicked')
-                      .to.be.false
-                    button.click().then =>
-                      table.isDisplayed().then (tableDisplayed) =>
-                        # ...the table is hidden and the chart is displayed.
-                        expect(tableDisplayed,
-                               'The modeling table is displayed after the format button is clicked twice')
-                          .to.be.false
-                        chart.isDisplayed()
+    @profileTablesForCss('qi-clinical-table', fn)
 
+  # @param fn optional function to run on the resolved tables
+  modelingChart: (fn) ->
+    @select('#qi-modeling-chart').then (chart) ->
+      fn(chart) if chart? and fn?
+      chart
+  
+  # @param fn optional function to run on the resolved chart
   # @returns the line chart promise
-  linechart: ->
-    this.select('//qi-visit-dateline//nvd3-line-chart')
+  lineChart: (fn) ->
+    this.select('//qi-visit-dateline//nvd3-line-chart').then (chart) ->
+      fn(chart) if chart? and fn?
+      chart
 
 describe 'E2E Testing Subject Detail', ->
   page = null
   
-  # The header test cases.
-  describe 'Header', ->
-    beforeEach ->
-      page = new SubjectDetailPage '/quip/breast/subject/1?project=QIN_Test'
+  before ->
+    page = new SubjectDetailPage '/quip/breast/subject/1?project=QIN_Test'
   
+  # The page header test cases.
+  describe 'Header', ->
     it 'should display the billboard', ->
       expect(page.billboard, 'The billboard is incorrect').to.eventually.equal('Breast Patient 1')
   
@@ -127,101 +126,143 @@ describe 'E2E Testing Subject Detail', ->
     it 'should have help text', ->
       expect(page.help(), 'The help is missing').to.eventually.exist
   
+  # The page main body test cases.
   describe 'Imaging Profile', ->
-    # The imaging profile is collection-independent.
-    beforeEach ->
-      page = new SubjectDetailPage '/quip/breast/subject/1?project=QIN_Test'
-
-    it 'should toggle the imaging chart and table', ->
-      expect(page.toggleImagingProfileFormatButton(),
-             'The imaging chart is hidden after the format button is clicked twice')
-        .to.eventually.be.true
-
-    describe 'Chart', ->
+    chart = null
+    table = null
+    
+    before ->
+      page.modelingChart().then (elt) ->
+        chart = elt
+      table = page.imagingProfileTablePanel().then (elt) ->
+        table = elt
+    
+    describe 'Dateline', ->
       # Note: this is as deep as the chart can be tested,
       # since the chart SVG content is not visible to the
       # tester, perhaps because the chart directive dynamically
       # inserts the SVG into the DOM, and the app directive
       # then further modifies it.
-      it 'should display the dateline', ->
-        expect(page.linechart(), 'The dateline is missing').to.eventually.exist
-
-    describe.only 'Table', ->
-      it 'should show the imaging properties when the format button is clicked', ->
-        page.imagingProfileTables().then (tables) ->
-          # There are three imaging properties.
+      it 'should exist', ->
+        expect(page.lineChart(), 'The dateline is missing').to.eventually.exist
+    
+    describe 'Format Button', ->
+      it 'should toggle the chart/table display', ->
+        page.imageProfileFormatButton().then (button) ->
+          # The format button exists.
+          expect(button, 'The imaging profile format button is missing')
+            .to.exist
+          # When the button is clicked, then the imaging profile table
+          # panel is displayed.
+          button.click().then ->
+            table.isDisplayed().then (displayed) ->
+              expect(displayed, 'The modeling table panel is hidden after the' +
+                                ' format button is clicked').to.be.true
+            # The chart is hidden.
+            chart.isDisplayed().then (displayed) ->
+              expect(displayed, 'The modeling chart is displayed after the' +
+                                ' format button is clicked').to.be.false
+            # When the button is clicked again, then the table is hidden and
+            # the chart is displayed.
+            button.click().then ->
+              table.isDisplayed().then (displayed) ->
+                expect(displayed, 'The modeling table panel is displayed' +
+                                  ' after the format button is clicked twice')
+                  .to.be.false
+    
+    describe 'Chart', ->
+      it 'should display the imaging chart', ->
+        # The chart exists.
+        expect(chart, 'The modeling chart is missing').to.eventually.exist
+        # The chart is displayed.
+        chart.isDisplayed().then (displayed) ->
+          expect(displayed, 'The modeling chart is initially hidden')
+            .to.be.true
+      
+    describe 'Table', ->
+      it 'should hide the table', ->
+        # The modeling tables panel exists.
+        expect(table, 'The modeling table panel is missing').to.eventually.exist
+        # The panel is hidden.
+        table.isDisplayed().then (displayed) ->
+          expect(displayed, 'The modeling table is initially displayed')
+            .to.be.false
+      
+      describe 'Properties', ->
+        tables = null
+        
+        before ->
+          page.imagingProfileTables().then (elt) ->
+            tables = elt
+        
+        it 'should show the imaging properties when the format button is clicked', ->
+          # There are three imaging profile tables, one for each
+          # PK modeling property.
           expect(tables.length, 'The imaging profile table count is incorrect')
             .to.equal(3)
-          # The visit dates are the first column of the first table
-          # set below.
-          expectedVisitDate = []
-          # Validate each table.
-          for tablePromise, tblNdx in tables
-            tablePromise.then (table) ->
-              # There are four Breast patient visits.
-              expect(table.length, "Table #{ tblNdx + 1 } row count is incorrect").to.equal(4)
-              for rowPromise, rowNdx in rowPromises
-                rowPromise.then (row) ->
-                  # The first table is Ktrans with seven columns.
-                  # The other tables have three columns.
-                  # The first column is the visit date.
-                  if tblNdx == 0
-                    expect(row.length, 'The Ktrans table column length is incorrect')
-                      .to.equal(7)
-                    row[0].then (value) ->
-                      expectedVisitDate[rowNdx] = value
-                  else
-                    expect(row.length, 'The non-Ktrans table column length is incorrect')
-                      .to.equal(3)
-                    visitDate = row[0]
-                    expect(visitDate, 'The table visit date is incorrect')
-                      .to.eventually.equal(expectedVisitDate[rowNdx])
-                  # The percent change is in the third, fifth and seventh column.
-                  # The percent change of the first row is blank. All other columns
-                  # are non-blank.
-                  #
-                  # The validation below is broken. All values are reported as blank,
-                  # even though they show up in the browser. The code below cannot
-                  # be debugged to the protractor bug described at
-                  # https://github.com/angular/protractor/issues/552.
-                  #
-                  # Furthermore, protractor cannot be updated to 0.24.2 because that
-                  # version results in the following error:
-                  # * protractor 0.24.2 cannot find the chromedriver
-                  #
-                  # The work-around is to disable the test below and validate the
-                  # modeling table in the modelingSpec unit test and the browser.
-                  #
-                  # In addition, console debug messages do not print on the console.
-                  #
-                  # In addition, throwing a debug error does not print to the console.
-                  #
-                  # In conclusion, protractor acts *really* flakey in this test,
-                  # possibly because of the deeply nested promises.
-                  #
-                  # TODO - update protractor version and retry this in 2015.
-                  #
-                  # for colPromise, colNdx in row[1..-1]
-                  #   # Every other column is a percent change.
-                  #   if colNdx % 2 == 1
-                  #     # A percent change column - the first row is blank, other rows
-                  #     # have a value.
-                  #     if rowNdx == 0
-                  #       expect(colPromise, "Imaging Profile table #{ tblNdx + 1 } body" +
-                  #                          " row #{ rowNdx + 1 } percent change" +
-                  #                          " column #{ colNdx + 2 } is not blank")
-                  #         .to.eventually.be.empty
-                  #     else
-                  #       expect(colPromise, "Imaging Profile table #{ tblNdx + 1 } body" +
-                  #                          " row #{ rowNdx + 1 } percent change" +
-                  #                          " column #{ colNdx + 2 } is blank")
-                  #         .to.eventually.not.be.empty
-                  #   else
-                  #     # Not a percent change column.
-                  #     expect(colPromise, "Imaging Profile table #{ tblNdx + 1 } body" +
-                  #                        " row #{ rowNdx + 1 } column #{ colNdx + 2 }" +
-                  #                        " is blank")
-                  #       .to.eventually.not.be.empty
+        
+        it 'should have four Breast patient visits', ->
+          for table, tblNdx in tables
+            # There are four Breast patient visits.
+            expect(table.length, "Table #{ tblNdx + 1 } row count is incorrect")
+              .to.equal(4)
+        
+        it 'should show the visit dates', ->
+          # The expected visit dates are the first column of the first table.
+          expected = ((_.first(columns) for columns in _.first(tables)))
+          # The date values for every remaining table should be
+          # consistent with those of the first table.
+          for table, tblNdx in _.rest(tables)
+            for columns, rowNdx in table
+              visitDate = _.first(columns)
+              expect(visitDate, "The table #{ tblNdx + 2 } visit date is incorrect")
+                .to.equal(expected[rowNdx])
+        
+        it 'should have seven Ktrans table columns', ->
+          # The KTrans table is the first table.
+          table = _.first(tables)
+          for row, rowNdx in table
+            expect(row.length, "The Ktrans table row #{ rowNdx + 1 } column" +
+                              " count is incorrect").to.equal(7)
+        
+        it 'should have three non-Ktrans table columns', ->
+          # The KTrans table is the first table.
+          tables = _.rest(tables)
+          for table, tblNdx in tables
+            for row, rowNdx in table
+              expect(row.length, "The table #{ tblNdx + 2 } row #{ rowNdx + 1 }" +
+                                 " column count is incorrect").to.equal(3)
+        
+        it 'should not have a blank non-percent change value', ->
+          for rows, tblNdx in tables
+            for columns, rowNdx in rows
+              # The odd columns hold non-percent change values.
+              for colNdx in _.range(1, columns.length, 2)
+                value = columns[colNdx]
+                expect(value, "Imaging Profile table #{ tblNdx + 1 } body" +
+                              " row #{ rowNdx + 1 } percent change column" +
+                              " #{ colNdx + 1 } is not blank").to.not.be.empty
+        
+        it 'should have blank percent values in the first row', ->
+          for rows, tblNdx in tables
+            columns = _.first(rows)
+            # The percent change is in the third, fifth and seventh column.
+            # The percent changes of the first row are blank.
+            # The odd columns hold non-percent change values.
+            for colNdx in _.range(2, columns.length, 2)
+              value = columns[colNdx]
+              expect(value, "Imaging Profile table #{ tblNdx + 1 } body" +
+                            " row 0 percent change column #{ colNdx + 1 }" +
+                            " is not blank").to.be.empty
+        
+        it 'should not have a blank percent value in the remaining rows', ->
+          for rows, tblNdx in tables
+            for columns, rowNdx in _.rest(rows)
+              for colNdx in _.range(2, columns.length, 2)
+                value = columns[colNdx]
+                expect(value, "Imaging Profile table #{ tblNdx + 1 } body" +
+                              " row #{ rowNdx + 2 } percent change column" +
+                              " #{ colNdx + 1 } is blank").to.not.be.empty
 
   describe 'Clinical Profile', ->
       describe 'Demographics', ->
@@ -232,7 +273,7 @@ describe 'E2E Testing Subject Detail', ->
         it 'should show the demographics table', ->
           page.clinicalProfileTables().then (tables) ->
             # Validate the demographics values.
-            
+      
     
       describe 'Outcomes', ->
         describe 'Breast', ->

@@ -114,8 +114,6 @@ define ['angular', 'lodash', 'spin', 'helpers', 'dateline', 'intensity', 'modeli
     # Displays the clinical profile.
     directives.directive 'qiClinicalTable', ['Clinical', (Clinical) ->
       restrict: 'E'
-      scope:
-        subject: '='
       link: (scope, element, attrs) ->
         scope.$watch 'subject', (subject) ->
           if subject
@@ -125,12 +123,9 @@ define ['angular', 'lodash', 'spin', 'helpers', 'dateline', 'intensity', 'modeli
 
 
     # Displays the subject demographics.
-    directives.directive 'qiDemographicsTable', ['Race', 'Ethnicity', (Race, Ethnicity) ->
+    directives.directive 'qiDemographicsTable', ->
       restrict: 'E'
-      scope:
-        subject: '='
       templateUrl: '/partials/demographics-table.html'
-    ]
 
 
     # Displays a clinical outcome.

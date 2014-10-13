@@ -1,24 +1,7 @@
 h4.col-md-offset-1 Clinical Profile
 // Mark up accordian header and demographic content.
 .qi-profile-panel
-  accordion
-    // The open flag set in the controller expands or collapses the group,
-    // e.g. config.demogrOpen.
-    accordion-group(is-open="config.demogrOpen")
-      accordion-heading Demographics
-        // The open icon (down => open, up => closed).
-        i.pull-right.glyphicon(
-          ng-class="{'glyphicon-chevron-down': config.demogrOpen, 'glyphicon-chevron-up': !config.demogrOpen}"
-        )
-      .row.qi-clinical-row
-        .col-md-2 Age
-        .col-md-10 {{ subject.birthDate | age }}
-      .row.qi-clinical-row
-        .col-md-2 Race
-        .col-md-10 {{ subject.races | races }}
-      .row.qi-clinical-row
-        .col-md-2 Ethnicity
-        .col-md-10 {{ subject.ethnicity | ethnicity }}
+  qi-demographics-table
 
   // Mark up accordian header and content for each encounter.
   // FIXME - This only supports breast pathology outcomes. See TODO below.

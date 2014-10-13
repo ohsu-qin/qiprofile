@@ -61,6 +61,22 @@ This command installs the necessary packages [#xtk_fork]_.
       grunt --help
 
 
+******
+Update
+******
+
+Update the ``qiprofile`` package as follows::
+
+    git pull
+    bower update
+    bower install
+    bower prune
+    npm update
+    npm install
+    npm prune
+    grunt
+
+
 ***********
 Development
 ***********

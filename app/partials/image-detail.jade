@@ -16,31 +16,41 @@ block content
           accordion-group(is-open="true")
             accordion-heading Overlay
             .btn-group.qi-overlay-select
-              button.btn.btn-primary(btn-radio='1') FXR K<sup>trans</sup>
-              button.btn.btn-primary(btn-radio='2') FXL K<sup>trans</sup>
-              button.btn.btn-primary(btn-radio='3') &Delta;K<sup>trans</sup>
-              button.btn.btn-primary(btn-radio='4') V<sub>e</sub>
-              button.btn.btn-primary(btn-radio='5') tau<sub>i</sub>
+              button.btn.btn-primary(btn-radio='1' ng-model='image') FXR K<sup>trans</sup>
+              button.btn.btn-primary(btn-radio='2' ng-model='image') FXL K<sup>trans</sup>
+              button.btn.btn-primary(btn-radio='3' ng-model='image') &Delta;K<sup>trans</sup>
+              button.btn.btn-primary(btn-radio='4' ng-model='image') V<sub>e</sub>
+              button.btn.btn-primary(btn-radio='5' ng-model='image') tau<sub>i</sub>
         accordion
           accordion-group(is-open="true")
             accordion-heading Opacity
-            slider(floor='0' ceiling='1' precision='0.1')
+            slider(floor='0' ceiling='1' precision='0.1' ng-model='image.volume.opacity')
         accordion
           accordion-group(is-open="true")
             accordion-heading Slices
-            h5 Sagittal
-            slider(floor='0' ceiling='319' precision='1')
-            h5 Coronal
-            slider(floor='0' ceiling='319' precision='1')
-            h5 Axial
-            slider(floor='0' ceiling='319' precision='1')
+            .row
+              .col-md-3 Sagittal
+              .col-md-9
+                slider(floor='0' ceiling='319' precision='1')
+            .row   
+              .col-md-3 Coronal
+              .col-md-9
+                slider(floor='0' ceiling='319' precision='1')
+            .row
+              .col-md-3 Axial
+              .col-md-9
+                slider(floor='0' ceiling='319' precision='1')
         accordion
           accordion-group(is-open="true")
             accordion-heading Thresholding
-            h5 Lower
-            slider(floor='0' ceiling='445' precision='1')
-            h5 Upper
-            slider(floor='0' ceiling='445' precision='1')
+            .row   
+              .col-md-3 Lower
+              .col-md-9
+                slider(floor='0' ceiling='445' precision='1')
+            .row
+              .col-md-3 Upper
+              .col-md-9
+                slider(floor='0' ceiling='445' precision='1')
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

@@ -203,6 +203,13 @@ describe 'E2E Testing Subject Detail', ->
   #     it 'should show the demographics table', ->
   #       page.clinicalProfileTables().then (tables) ->
   #         # TODO - add test case.
+  #
+  #   describe 'Treatments', ->
+  #     beforeEach ->
+  #       page = new SubjectDetailPage '/quip/breast/subject/1?project=QIN_Test'
+  #     
+  #     it 'should show the treatments table', ->
+  #       # TODO - add test case.
   # 
   #   describe 'Outcomes', ->
   #     describe 'Breast', ->

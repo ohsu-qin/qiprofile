@@ -13,21 +13,23 @@ a
   color Peru
   &:hover
     color Chocolate
+    cursor pointer
   & img
     border none
   & > text
     fill Peru
   &:hover > text
     fill Chocolate
+    text-decoration none
 
-// Overwrite the bootstrap accordian link style.
+// Overwrite the bootstrap accordian link style to emulate
+// the preceding hyperlink style.
 .panel-heading
-  & .panel-title
-    color Indigo
   & a
     color Peru
     &:hover
       color Chocolate
+      text-decoration none
 
 svg
   a
@@ -41,7 +43,7 @@ table
   border-collapse collapse
 
 table, th, td
-  border 0.1em solid Black
+  border 1px solid Black
 
 th
   padding 0.5em

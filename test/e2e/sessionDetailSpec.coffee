@@ -2,7 +2,7 @@ _ = require 'lodash'
 
 expect = require('./helpers/expect')()
 
-Page = require('./helpers/page')()
+Page = require './helpers/page' 
 
 class SessionDetailPage extends Page
   # @param time_point the time point
@@ -78,10 +78,10 @@ describe 'E2E Testing Session Detail', ->
   
   it 'should have a home button', ->
     pat = /.*\/quip\?project=QIN_Test$/
-    expect(page.home(), 'The home URL is incorrect').to.eventually.match(pat)
+    expect(page.home, 'The home URL is incorrect').to.eventually.match(pat)
   
   it 'should have help text', ->
-    expect(page.help(), 'The help is missing').to.eventually.exist
+    expect(page.help, 'The help is missing').to.eventually.exist
   
   describe 'Intensity Chart', ->
     # Note: chart content is not testable. See the subjectDetailSpec note

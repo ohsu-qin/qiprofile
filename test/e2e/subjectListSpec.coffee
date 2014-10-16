@@ -1,6 +1,6 @@
 expect = require('./helpers/expect')()
 
-Page = require('./helpers/page')()
+Page = require './helpers/page' 
 
 class SubjectListPage extends Page
   h3Locator = By.tagName('h3')
@@ -37,11 +37,11 @@ describe 'E2E Testing Subject List', ->
   
   it 'should have a home button', ->
     pat = /.*\/quip\?project=QIN_Test$/
-    expect(page.home(), 'The home URL is incorrect')
+    expect(page.home, 'The home URL is incorrect')
       .to.eventually.match(pat)
   
   it 'should have help text', ->
-    expect(page.help(), 'The help is missing').to.eventually.exist
+    expect(page.help, 'The help is missing').to.eventually.exist
   
   describe 'Collections', ->
     content = null

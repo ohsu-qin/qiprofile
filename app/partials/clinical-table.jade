@@ -2,7 +2,11 @@ h4.col-md-offset-1 Clinical Profile
 // Mark up accordian header and demographic content.
 .qi-profile-panel
   qi-demographics-table
-
+  
+  //- // The encounter outcome tables.
+  //- accordion(ng-repeat="encounter in subject.encounters")
+  //-    accordion-group(is-open="enc.accordionOpen")
+  
   // Mark up accordian header and content for each encounter.
   // FIXME - This only supports breast pathology outcomes. See TODO below.
   // Work-around is the repeat filter below, which should be removed when
@@ -10,7 +14,7 @@ h4.col-md-offset-1 Clinical Profile
   accordion(ng-repeat="enc in config.encounters | filter:{encounter_type: 'Biopsy'}")
     accordion-group(is-open="enc.accordionOpen")
       accordion-heading {{ enc.encounter_type }}
-        i.pull-right.glyphicon(
+       .pull-right.glyphicon(
           ng-class="{'glyphicon-chevron-down': enc.accordionOpen, 'glyphicon-chevron-up': !enc.accordionOpen}"
         )
       

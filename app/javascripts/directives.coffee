@@ -112,23 +112,37 @@ define ['angular', 'lodash', 'spin', 'helpers', 'dateline', 'intensity', 'modeli
 
 
     # Displays the clinical profile.
-    directives.directive 'qiClinicalTable', ['Clinical', (Clinical) ->
+    directives.directive 'qiClinicalProfile', ['Clinical', (Clinical) ->
       restrict: 'E'
       link: (scope, element, attrs) ->
         scope.$watch 'subject', (subject) ->
           if subject
             scope.config = Clinical.configureProfile(subject)
-      templateUrl: '/partials/clinical-table.html'
+      templateUrl: '/partials/clinical-profile.html'
     ]
 
 
-    # Displays the subject demographics.
-    directives.directive 'qiDemographicsTable', ->
-      restrict: 'E'
-      link: (scope) ->
-        # The accordion group is initially open.
-        scope.isOpen = true
-      templateUrl: '/partials/demographics-table.html'
+    # Subject Detail clinical profile directives. There is a unique
+    # directive for demographics and for each encounter and outcome.
+    ENCOUNTER_DIRECTIVES = ['Biopsy']
+    OUTCOME_DIRECTIVES = ['BreastPathology', 'TNM']
+    CLINICAL_DIRECTIVES =
+      ['Demographics']
+        .concat(ENCOUNTER_DIRECTIVES)
+        .concat(OUTCOME_DIRECTIVES)
+    
+    for directive in CLINICAL_DIRECTIVES
+      # The directive name, e.g. qiDemographicsTable.
+      name = "qi#{ directive }Table"
+      # The directive URL, e.g. /partials/breast-pathology-table.
+      url = "/partials/#{ _s.dasherize(directive) }-table.html"
+      # Declare the directive.
+      directives.directive name, ->
+        restrict: 'E'
+        link: (scope) ->
+          # The accordion group is initially open.
+          scope.isOpen = true
+        templateUrl: url
 
 
     # Displays a clinical outcome.

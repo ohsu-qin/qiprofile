@@ -130,10 +130,10 @@ define ['angular', 'xtk', 'file', 'slider'], (ng) ->
           #volumeCtls.open()
 
           # Display the label map (overlay) controls.
-          labelmapGui = gui.addFolder('Label Map');
-          labelmapVisibleCtl = labelmapGui.add(volume.labelmap, 'visible', volume.labelmap.visible = false)
-          labelmapOpacityCtl = labelmapGui.add(volume.labelmap, 'opacity', 0, 1)
-          labelmapGui.open()
+          #labelmapGui = gui.addFolder('Label Map');
+          #labelmapVisibleCtl = labelmapGui.add(volume.labelmap, 'visible', volume.labelmap.visible = false)
+          #labelmapOpacityCtl = labelmapGui.add(volume.labelmap, 'opacity', 0, 1)
+          #labelmapGui.open()
 
         # Adjust the camera position.
         renderer.camera.position = [120, 20, 20]

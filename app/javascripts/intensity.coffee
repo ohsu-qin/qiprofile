@@ -45,22 +45,41 @@ define ['angular', 'chart'], (ng) ->
       # bolus tick selector.
       highlightNodeFunc = -> highlightNode
       bolusTick.insert(highlightNodeFunc, 'line')
-      # Add the legend.
-      legend = svg.select('.nv-legend')
-      legendGroup = legend.select(':first-child')
-      bolusGroup = legendGroup.insert('svg:g', ':first-child')
-      bolusGroup.attr('transform', 'translate(-30, 5)')
-      filter = bolusGroup.append('svg:filter')
+
+      # The bolus legend is filtered with a bar the same color
+      # as the bolus arrival chart bar.
+      defs = svg.append('svg:defs')
+      filter = defs.append('svg:filter')
       filter.attr('width', 1.2).attr('height', 1)
+      # The bar id is referenced in the legend filter attribute
+      # below.
       filter.attr('id', 'boluslegendbackground')
+      # feFlood paints the bolus legend color.
       filter.append('feFlood').attr('class', 'qi-bolus-flood')
       filter.append('feComposite').attr('in', 'SourceGraphic')
+
+      # The chart legend.
+      legend = svg.select('.nv-legend')
+      # The legend group holds the legend elements.
+      legendGroup = legend.select(':first-child')
+      # Add a bolus legend before the standard legends.
+      bolusGroup = legendGroup.insert('svg:g', ':first-child')
+      bolusGroup.attr('transform', 'translate(-25, 5)')
+      text = 'Bolus Arrival'
+      textScale = 0.32
+      textWidth = textScale * text.length
+      bolusLegendBar = bolusGroup.append('svg:rect')
+      bolusLegendBar.attr('width', "#{ textWidth + 1 }em")
+      bolusLegendBar.attr('height', '1.1em')
+      bolusLegendBar.attr('x', "#{ -textWidth - 1.1 + textScale }em")
+      bolusLegendBar.attr('y', "-#{ textScale + .2 }em")
+      bolusLegendBar.attr('fill', 'Gainsboro')
+      # The bolus legend text.
       bolusLegend = bolusGroup.append('svg:text')
       bolusLegend.attr('class', 'qi-bolus-legend')
-      bolusLegend.attr('dy', '.32em')
-      bolusLegend.attr('filter', 'url(#boluslegendbackground)')
-      bolusLegend.text('Bolus Arrival')
-
+      bolusLegend.attr('dy', "#{ textScale }em")
+      bolusLegend.text(text)
+      
     # The y-axis format function. If the given intensity value
     # is integral, then this function returns the integer.
     # Otherwise, the value is truncated to two decimal places. 

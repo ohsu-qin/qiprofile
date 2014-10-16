@@ -125,6 +125,9 @@ define ['angular', 'lodash', 'spin', 'helpers', 'dateline', 'intensity', 'modeli
     # Displays the subject demographics.
     directives.directive 'qiDemographicsTable', ->
       restrict: 'E'
+      link: (scope) ->
+        # The accordion group is initially open.
+        scope.isOpen = true
       templateUrl: '/partials/demographics-table.html'
 
 

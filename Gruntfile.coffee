@@ -75,6 +75,7 @@ module.exports = (grunt) ->
           'bower_components/bootstrap/dist/css/bootstrap.css'
           'bower_components/font-awesome/css/font-awesome.css'
           'bower_components/nvd3/nv.d3.css'
+          'bower_components/angular-slider/slider.css'
         ]
         dest: '_public/stylesheets/vendor.css'
 

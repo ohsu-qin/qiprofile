@@ -1,5 +1,4 @@
-h4.row.col-md-offset-1
-  | Imaging Profile
+h4.row.col-md-offset-1 Imaging Profile
   button.btn.btn-med.qi-profile-btn(
     ng-show='subject.isMultiSession'
     ng-click='toggleModelingFormat()'
@@ -17,6 +16,6 @@ h4.row.col-md-offset-1
   // The modeling chart or table.
   #qi-modeling-chart.panel.panel-default(ng-show="modelingFormat == 'Chart'")
     include modeling-charts
-  qi-modeling-table(sessions='subject.sessions'
+  qi-modeling-tables(sessions='subject.sessions'
                     ng-show="modelingFormat == 'Table'")
 

@@ -99,7 +99,7 @@ define ['angular', 'lodash', 'spin', 'helpers', 'dateline', 'intensity', 'modeli
 
 
     # Displays the modeling tables.
-    directives.directive 'qiModelingTable', ['Modeling', (Modeling) ->
+    directives.directive 'qiModelingTables', ['Modeling', (Modeling) ->
       restrict: 'E'
       scope:
         sessions: '='   # the subject sessions
@@ -107,7 +107,7 @@ define ['angular', 'lodash', 'spin', 'helpers', 'dateline', 'intensity', 'modeli
         scope.$watch 'sessions', (sessions) ->
           if sessions
             scope.config = Modeling.configureTable(sessions)
-      templateUrl: '/partials/modeling-table.html'
+      templateUrl: '/partials/modeling-tables.html'
     ]
 
 

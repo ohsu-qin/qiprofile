@@ -14,7 +14,8 @@ accordion(close-others="false")
     // e.g. config.ktransOpen.
     accordion-group(is-open="config.#{ group }Open")
       // The != assignment preserves the heading text without escaping the HTML.
-      accordion-heading!= headings[group]
+      accordion-heading!= he
+      adings[group]
         // The open icon (down => open, right => closed).
         .pull-right.glyphicon(
           ng-class="{'glyphicon-chevron-down': config.#{ group }Open, 'glyphicon-chevron-up': !config.#{ group }Open}"

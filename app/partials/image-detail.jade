@@ -12,55 +12,55 @@ block content
   .qi-image-background
     qi-series-image.col-md-9.qi-series-image(image='image')
       // Mark up accordian header and image controls.
+  .qi-overlay-select
+    .btn-group
+      button.btn.btn-primary(btn-radio='1') None
+      button.btn.btn-primary(btn-radio='2') &Delta;K<sup>trans</sup>
+      button.btn.btn-primary(btn-radio='3') FXR K<sup>trans</sup>
+      button.btn.btn-primary(btn-radio='4') FXL K<sup>trans</sup>
+      button.btn.btn-primary(btn-radio='5') v<sub>e</sub>
+      button.btn.btn-primary(btn-radio='6') &tau;<sub>i</sub>
   .qi-image-ctl
     accordion
       accordion-group(is-open="true")
-        accordion-heading Volume
-        // The volume opacity control.
-        .col
-          .row
-            .col-md-5.qi-image-ctl-label Opacity
-            .col-md-7
-              slider(floor='0' ceiling='1' precision='0.1' ng-model='image.volume.opacity')
-        // The slice controls.
-        .col.qi-image-ctl-group
-          .row
-            .col-md-5.qi-image-ctl-label Sagittal
-            .col-md-7
-              slider(floor='0' ceiling='319' precision='1' ng-model='image')
-          .row   
-            .col-md-5.qi-image-ctl-label Coronal
-            .col-md-7
-              slider(floor='0' ceiling='319' precision='1' ng-model='image')
-          .row
-            .col-md-5.qi-image-ctl-label Axial
-            .col-md-7
-              slider(floor='0' ceiling='319' precision='1' ng-model='image')
-        // The thresholding controls.
-        .col.qi-image-ctl-group
-          .row   
-            .col-md-5.qi-image-ctl-label Lower Threshold
-            .col-md-7
-              slider(floor='0' ceiling='445' precision='1' ng-model='image')
-          .row
-            .col-md-5.qi-image-ctl-label Upper Threshold
-            .col-md-7
-              slider(floor='0' ceiling='445' precision='1' ng-model='image')
+        accordion-heading Opacity
+        // The opacity controls.
+        .row
+          .col-md-3.qi-image-ctl-label Volume
+          .col-md-9
+            slider(floor='0' ceiling='1' step='0.1' precision='1' ng-model='image.volume.opacity')
+        .row
+          .col-md-3.qi-image-ctl-label Overlay
+          .col-md-9
+            slider(floor='0' ceiling='1' step='0.1' precision='1' ng-model='image.volume.labelmap.opacity')
     accordion
       accordion-group(is-open="true")
-        accordion-heading Overlays
-        .col
-          .btn-group.qi-overlay-select
-            button.btn.btn-primary(btn-radio='3' ng-model='image') &Delta;K<sup>trans</sup>
-            button.btn.btn-primary(btn-radio='1' ng-model='image') FXR K<sup>trans</sup>
-            button.btn.btn-primary(btn-radio='2' ng-model='image') FXL K<sup>trans</sup>
-            button.btn.btn-primary(btn-radio='4' ng-model='image') v<sub>e</sub>
-            button.btn.btn-primary(btn-radio='5' ng-model='image') &tau;<sub>i</sub>
-        .col.qi-image-ctl-group
-          .row
-            .col-md-5.qi-image-ctl-label Opacity
-            .col-md-7
-              slider(floor='0' ceiling='1' precision='0.1' ng-model='image.volume.labelmap.opacity')
+        accordion-heading Slices
+        // The slice controls.
+        .row
+          .col-md-3.qi-image-ctl-label Sagittal
+          .col-md-9
+            slider(floor='0' ceiling='319' step='1' ng-model='image.volume.range[0]')
+        .row   
+          .col-md-3.qi-image-ctl-label Coronal
+          .col-md-9
+            slider(floor='0' ceiling='319' step='1' ng-model='image.volume.range[1]')
+        .row
+          .col-md-3.qi-image-ctl-label Axial
+          .col-md-9
+            slider(floor='0' ceiling='319' step='1' ng-model='image.volume.range[2]')
+    accordion
+      accordion-group(is-open="true")
+        accordion-heading Thresholding
+        // The thresholding controls.
+        .row   
+          .col-md-3.qi-image-ctl-label Lower
+          .col-md-9
+            slider(floor='0' ceiling='445' step='1' ng-model='image.volume.min')
+        .row
+          .col-md-3.qi-image-ctl-label Upper
+          .col-md-9
+            slider(floor='0' ceiling='445' step='1' ng-model='image.volume.max')
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

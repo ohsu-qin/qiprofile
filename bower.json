@@ -21,7 +21,6 @@
     "angular-bootstrap": "~0.10.0",
     "angular-resource": "~1.2.19",
     "angular-route": "~1.2.19",
-    "angular-slider": "~0.2.3",
     "angular-ui-router": "~0.2.8",
     "angular-ui-utils": "~0.0.3",
     "angularjs-nvd3-directives": "~0.0.5-beta",
@@ -35,6 +34,7 @@
     "requirejs": "~2.1.14",
     "spin.js": "~2.0.0",
     "underscore.string": "~2.3.3",
+    "venturocket-angular-slider": "~0.3.0",
     "xtk": "FredLoney/X"
   },
   "overrides": {

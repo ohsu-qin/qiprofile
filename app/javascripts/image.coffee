@@ -1,5 +1,5 @@
-define ['angular', 'xtk', 'file', 'slider'], (ng) ->
-  image = ng.module 'qiprofile.image', ['qiprofile.file']
+define ['angular', 'xtk', 'file', 'slider', 'touch'], (ng) ->
+  image = ng.module 'qiprofile.image', ['qiprofile.file', 'vr.directives.slider']
 
   image.factory 'Image', ['$rootScope', '$q', 'File', ($rootScope, $q, File) ->
     # The root scope {parent id: [Image objects]} cache.
@@ -136,7 +136,7 @@ define ['angular', 'xtk', 'file', 'slider'], (ng) ->
           #labelmapGui.open()
 
         # Adjust the camera position.
-        renderer.camera.position = [120, 20, 20]
+        renderer.camera.position = [0, 0, 240]
 
         # Render the image.
         renderer.render()

@@ -9,17 +9,19 @@ block billboard
   | Time Point {{ image.timePoint }}
 
 block content
+  .row.qi-overlay-select
+    .col-md-1.qi-overlay-select-label Overlay
+    .col-md-11
+      .btn-group
+        button.btn.btn-primary(btn-radio='1') None
+        button.btn.btn-primary(btn-radio='2') &Delta;K<sup>trans</sup>
+        button.btn.btn-primary(btn-radio='3') FXR K<sup>trans</sup>
+        button.btn.btn-primary(btn-radio='4') FXL K<sup>trans</sup>
+        button.btn.btn-primary(btn-radio='5') v<sub>e</sub>
+        button.btn.btn-primary(btn-radio='6') &tau;<sub>i</sub>
   .qi-image-background
     qi-series-image.col-md-9.qi-series-image(image='image')
       // Mark up accordian header and image controls.
-  .qi-overlay-select
-    .btn-group
-      button.btn.btn-primary(btn-radio='1') None
-      button.btn.btn-primary(btn-radio='2') &Delta;K<sup>trans</sup>
-      button.btn.btn-primary(btn-radio='3') FXR K<sup>trans</sup>
-      button.btn.btn-primary(btn-radio='4') FXL K<sup>trans</sup>
-      button.btn.btn-primary(btn-radio='5') v<sub>e</sub>
-      button.btn.btn-primary(btn-radio='6') &tau;<sub>i</sub>
   .qi-image-ctl
     accordion
       accordion-group(is-open="true")

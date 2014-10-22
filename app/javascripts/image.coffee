@@ -1,4 +1,4 @@
-define ['angular', 'xtk', 'file', 'slider', 'touch'], (ng) ->
+define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
   image = ng.module 'qiprofile.image', ['qiprofile.file', 'vr.directives.slider']
 
   image.factory 'Image', ['$rootScope', '$q', 'File', ($rootScope, $q, File) ->
@@ -90,6 +90,29 @@ define ['angular', 'xtk', 'file', 'slider', 'touch'], (ng) ->
       #
       # @param element the Angular jQueryLite element
       open: (element) ->
+
+        # The available label map types.
+        labelmapTypes = [
+          "None"
+          "Ktrans"
+          "v_e"
+          "tau_i"
+        ]
+        labelmapFiles = [
+          null
+          "data/QIN_Test/k_trans_map.nii.gz"
+          "data/QIN_Test/v_e_map.nii.gz"
+          "data/QIN_Test/tau_i_map.nii.gz"
+        ]
+
+        # ** Need valid color lookup tables corresponding to the map types **
+        colortableFiles = [
+          null
+          "data/QIN_Test/generic-colors.txt"
+          "data/QIN_Test/generic-colors.txt"
+          "data/QIN_Test/generic-colors.txt"
+        ]
+
         # The XTK renderer for this image.
         renderer = new X.renderer3D()
         # The image is rendered within the given element.
@@ -105,35 +128,72 @@ define ['angular', 'xtk', 'file', 'slider', 'touch'], (ng) ->
         volume.labelmap.colortable.file = @colortableFilename
         volume.labelmap.colortable.filedata = @colortableData
         renderer.add(volume)
+        # We need to re-load the gui after we change the label map type.
+        gui = null
+        # We need this loader as a container to keep track of the current map.
+        _loader = Type: "None"
+        # Display no label map by default.
+        volume.labelmap.visible = false
 
         # The rendering callback. This function is called after the
         # volume is initialized and prior to the first rendering.
         renderer.onShowtime = ->
+          if gui
+            # If we already have a gui, destroy it
+            # .. it will be re-created immediately.
+            gui.destroy()
+            gui = null
           # The volume display controls. The element is manually
           # placed later in this function.
-          #gui = new dat.GUI(autoplace: false)
+          gui = new dat.GUI(autoplace: false)
           # The controls interact with the volume.
-          #volumeCtls = gui.addFolder('Volume')
+          volumeCtls = gui.addFolder('Volume')
           # The opacity control.
-          #opacityCtl = volumeCtls.add(volume, 'opacity', 0, 1).listen()
+          opacityCtl = volumeCtls.add(volume, 'opacity', 0, 1).name('Opacity')
           # The threshold min and max range controls.
-          #minCtl = volumeCtls.add(volume, 'lowerThreshold', volume.min, volume.max)
-          #maxCtl = volumeCtls.add(volume, 'upperThreshold', volume.min, volume.max)
+          minCtl = volumeCtls.add(volume, 'lowerThreshold', volume.min, volume.max).name('Min Threshold')
+          maxCtl = volumeCtls.add(volume, 'upperThreshold', volume.min, volume.max).name('Max Threshold')
           # The slice dimension controls.
-          #sliceXCtl = volumeCtls.add(volume, 'indexX', 0, volume.range[0] - 1)
-          #sliceYCtl = volumeCtls.add(volume, 'indexY', 0, volume.range[1] - 1)
-          #sliceZCtl = volumeCtls.add(volume, 'indexZ', 0, volume.range[2] - 1)
+          sliceXCtl = volumeCtls.add(volume, 'indexX', 0, volume.range[0] - 1).name('Sagittal')
+          sliceYCtl = volumeCtls.add(volume, 'indexY', 0, volume.range[1] - 1).name('Coronal')
+          sliceZCtl = volumeCtls.add(volume, 'indexZ', 0, volume.range[2] - 1).name('Axial')
           # The control is placed after the image display.
-          #ctlElt = ng.element(gui.domElement)
-          #element.after(ctlElt)
+          ctlElt = ng.element(gui.domElement)
+          element.after(ctlElt)
           # Display the controls.
-          #volumeCtls.open()
+          volumeCtls.open()
 
           # Display the label map (overlay) controls.
-          #labelmapGui = gui.addFolder('Label Map');
-          #labelmapVisibleCtl = labelmapGui.add(volume.labelmap, 'visible', volume.labelmap.visible = false)
-          #labelmapOpacityCtl = labelmapGui.add(volume.labelmap, 'opacity', 0, 1)
-          #labelmapGui.open()
+          labelmapCtls = gui.addFolder('Overlay')
+          labelmapTypeCtl = labelmapCtls.add(_loader, 'Type', labelmapTypes).name('Type')
+          labelmapOpacityCtl = labelmapCtls.add(volume.labelmap, 'opacity', 0, 1)
+          labelmapCtls.open()
+
+          # Change the label map type callback.
+          # See: http://jsfiddle.net/gh/get/toolkit/edge/xtk/lessons/tree/master/12/
+          #
+          labelmapTypeCtl.onChange (value) ->
+            _index = labelmapTypes.indexOf(value)
+            
+            # Now we (re-)load the selected label map files.
+            if _index > 0
+              labelmapFilename: labelmapFiles[_index]
+              labelmapFile = File.read(labelmapFilename, responseType: 'arraybuffer').then (labelmapData) =>
+                # Set the data property to the label map file content.
+                @labelmapData = labelmapData
+              colortableFilename: colortableFiles[_index]
+              colortableFile = File.read(colortableFilename, responseType: 'arraybuffer').then (colortableData) =>
+                # Set the data property to the color table file content.
+                @colortableData = colortableData
+              volume.labelmap.colortable.file = colortableFiles[_index]
+              volume.labelmap.file = @labelmapFilename
+              volume.labelmap.filedata = @labelmapData
+              volume.labelmap.colortable.file = @colortableFilename
+              volume.labelmap.colortable.filedata = @colortableData
+              volume.labelmap.visible = true
+            else
+              volume.labelmap.visible = false
+            return
 
         # Adjust the camera position.
         renderer.camera.position = [0, 0, 240]

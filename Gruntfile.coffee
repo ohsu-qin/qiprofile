@@ -33,6 +33,7 @@ module.exports = (grunt) ->
           'angular-ui-router/release/*.js'
           'angularjs-nvd3-directives/dist/*.js'
           'd3/*.js'
+          'dat.gui/dat.gui.js'
           'lodash/dist/lodash.underscore.js'
           'moment/*.js'
           'nvd3/nv.d3.js'

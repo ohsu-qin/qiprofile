@@ -33,10 +33,67 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
     # @param timePoint the series time point
     # @returns a new image object
     create = (parent, filename, timePoint) ->
+      
+      overlays =
+        [
+          {
+            label: 'None'
+            labelmap:
+              temp_accessor: 'data/QIN_Test/blank.nii.gz'
+              #accessor: (parent) -> ...
+            colortable:
+              temp_accessor: 'data/QIN_Test/generic-colors.txt'
+              #accessor: (parent) -> ...
+          }
+          {
+            label: 'deltaKtrans'
+            labelmap:
+              temp_accessor: 'data/QIN_Test/k_trans_map.nii.gz'
+              #accessor: (parent) -> ...
+            colortable:
+              temp_accessor: 'data/QIN_Test/generic-colors.txt'
+              #accessor: (parent) -> ...
+          }
+          {
+            label: 'FXR Ktrans'
+            labelmap:
+              temp_accessor: 'data/QIN_Test/k_trans_map.nii.gz'
+              #accessor: (parent) -> ...
+            colortable:
+              temp_accessor: 'data/QIN_Test/generic-colors.txt'
+              #accessor: (parent) -> ...
+          }
+          {
+            label: 'FXL Ktrans'
+            labelmap:
+              temp_accessor: 'data/QIN_Test/k_trans_map.nii.gz'
+              #accessor: (parent) -> ...
+            colortable:
+              temp_accessor: 'data/QIN_Test/generic-colors.txt'
+              #accessor: (parent) -> ...
+          }
+          {
+            label: 'v_e'
+            labelmap:
+              temp_accessor: 'data/QIN_Test/v_e_map.nii.gz'
+              #accessor: (parent) -> ...
+            colortable:
+              temp_accessor: 'data/QIN_Test/generic-colors.txt'
+              #accessor: (parent) -> ...
+          }
+          {
+            label: 'tau_i'
+            labelmap:
+              temp_accessor: 'data/QIN_Test/tau_i_map.nii.gz'
+              #accessor: (parent) -> ...
+            colortable:
+              temp_accessor: 'data/QIN_Test/generic-colors.txt'
+              #accessor: (parent) -> ...
+          }
+        ]
 
-      # Temporary hard-coded filepaths to the label map and color table.
-      labelmapFilename = 'data/QIN_Test/k_trans_map.nii.gz'
-      colortableFilename = 'data/QIN_Test/generic-colors.txt'
+      labelmapFilename = overlays[0].labelmap.temp_accessor
+      colortableFilename = overlays[0].colortable.temp_accessor
 
       parent: parent
       filename: filename
@@ -92,26 +149,8 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
       open: (element) ->
 
         # The available label map types.
-        labelmapTypes = [
-          "None"
-          "Ktrans"
-          "v_e"
-          "tau_i"
-        ]
-        labelmapFiles = [
-          null
-          "data/QIN_Test/k_trans_map.nii.gz"
-          "data/QIN_Test/v_e_map.nii.gz"
-          "data/QIN_Test/tau_i_map.nii.gz"
-        ]
-
-        # ** Need valid color lookup tables corresponding to the map types **
-        colortableFiles = [
-          null
-          "data/QIN_Test/generic-colors.txt"
-          "data/QIN_Test/generic-colors.txt"
-          "data/QIN_Test/generic-colors.txt"
-        ]
+        labelmapTypes = []
+        labelmapTypes.push overlay.label for overlay in overlays
 
         # The XTK renderer for this image.
         renderer = new X.renderer3D()
@@ -166,7 +205,7 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
           # Display the label map (overlay) controls.
           labelmapCtls = gui.addFolder('Overlay')
           labelmapTypeCtl = labelmapCtls.add(_loader, 'Type', labelmapTypes).name('Type')
-          labelmapOpacityCtl = labelmapCtls.add(volume.labelmap, 'opacity', 0, 1)
+          labelmapOpacityCtl = labelmapCtls.add(volume.labelmap, 'opacity', 0, 1).name('Opacity')
           labelmapCtls.open()
 
           # Change the label map type callback.
@@ -174,18 +213,20 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
           #
           labelmapTypeCtl.onChange (value) ->
             _index = labelmapTypes.indexOf(value)
-            
             # Now we (re-)load the selected label map files.
             if _index > 0
-              labelmapFilename: labelmapFiles[_index]
+              labelmapData: null
+              colortableData: null
+              labelmapFilename = overlays[_index].labelmap.temp_accessor
+              labelmapFilename: labelmapFilename
               labelmapFile = File.read(labelmapFilename, responseType: 'arraybuffer').then (labelmapData) =>
                 # Set the data property to the label map file content.
                 @labelmapData = labelmapData
-              colortableFilename: colortableFiles[_index]
+              colortableFilename = overlays[_index].colortable.temp_accessor
+              colortableFilename: colortableFilename
               colortableFile = File.read(colortableFilename, responseType: 'arraybuffer').then (colortableData) =>
                 # Set the data property to the color table file content.
                 @colortableData = colortableData
-              volume.labelmap.colortable.file = colortableFiles[_index]
               volume.labelmap.file = @labelmapFilename
               volume.labelmap.filedata = @labelmapData
               volume.labelmap.colortable.file = @colortableFilename
@@ -193,7 +234,6 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
               volume.labelmap.visible = true
             else
               volume.labelmap.visible = false
-            return
 
         # Adjust the camera position.
         renderer.camera.position = [0, 0, 240]

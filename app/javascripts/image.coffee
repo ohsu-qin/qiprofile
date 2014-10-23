@@ -2,6 +2,93 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
   image = ng.module 'qiprofile.image', ['qiprofile.file', 'vr.directives.slider']
 
   image.factory 'Image', ['$rootScope', '$q', 'File', ($rootScope, $q, File) ->
+
+    # The overlay and color table specification.
+    # TODO - Replace hardcoded temp filepaths with proper references.
+    # The labels are used by the dat gui menu. (This will be replaced
+    #    by the radio button bar.)
+    overlays =
+      [
+        {
+          label: 'None'
+          labelmap:
+            accessor: (parent) -> 'data/QIN_Test/blank.nii.gz'
+          colortable:
+            accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
+        }
+        {
+          label: 'deltaKtrans'
+          labelmap:
+            accessor: (parent) -> 'data/QIN_Test/k_trans_map.nii.gz'
+          colortable:
+            accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
+        }
+        {
+          label: 'FXR Ktrans'
+          labelmap:
+            accessor: (parent) -> 'data/QIN_Test/k_trans_map.nii.gz'
+          colortable:
+            accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
+        }
+        {
+          label: 'FXL Ktrans'
+          labelmap:
+            accessor: (parent) -> 'data/QIN_Test/k_trans_map.nii.gz'
+          colortable:
+            accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
+        }
+        {
+          label: 'v_e'
+          labelmap:
+            accessor: (parent) -> 'data/QIN_Test/v_e_map.nii.gz'
+          colortable:
+            accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
+        }
+        {
+          label: 'tau_i'
+          labelmap:
+            accessor: (parent) -> 'data/QIN_Test/tau_i_map.nii.gz'
+          colortable:
+            accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
+        }
+      ]
+
+    # The available label map types.
+    overlayTypes = []
+    overlayTypes.push overlay.label for overlay in overlays
+
+    # Overlay selection change callback function.
+    selectOverlay = (value, volume) ->
+      # Get the selected index value of the overlay menu.
+      _index = overlayTypes.indexOf(value)
+      # If 'None' is selected, turn the label map off...
+      if _index == 0
+        volume.labelmap.visible = false
+      # ...and if an overlay option is selected, load the new label map
+      # and color table.
+      else
+        # Read each file into an ArrayBuffer. The Coffeescript fat
+        # arrow (=>) binds the this variable to the image object
+        # rather than the $http request.
+        newLabelmapFilename = overlays[_index].labelmap.accessor(parent)
+        @newLabelmapFilename = newLabelmapFilename
+        newColortableFilename = overlays[_index].colortable.accessor(parent)
+        @newColortableFilename = newColortableFilename
+        newLabelmapFile = File.read(newLabelmapFilename, responseType: 'arraybuffer').then (newLabelmapData) =>
+          # Set the data property to the label map file content.
+          @newLabelmapData = newLabelmapData
+        newColortableFile = File.read(newColortableFilename, responseType: 'arraybuffer').then (newColortableData) =>
+          # Set the data property to the color table file content.
+          @newColortableData = newColortableData
+        allNewFilesLoaded = $q.all(newLabelmapFile, newColortableFile)
+        allNewFilesLoaded.then =>
+          # Reload the selected overlay files.
+          volume.labelmap.file = @newLabelmapFilename
+          volume.labelmap.filedata = @newLabelmapData
+          volume.labelmap.colortable.file = @newColortableFilename
+          volume.labelmap.colortable.filedata = @newColortableData
+          volume.labelmap.visible = true
+
     # The root scope {parent id: [Image objects]} cache.
     if not $rootScope.images
       $rootScope.images = {}
@@ -33,53 +120,8 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
     # @param timePoint the series time point
     # @returns a new image object
     create = (parent, filename, timePoint) ->
-      # TODO - Replace hardcoded temp filepaths with proper references.
-      overlays =
-        [
-          {
-            label: 'None'
-            labelmap:
-              accessor: (parent) -> 'data/QIN_Test/blank.nii.gz'
-            colortable:
-              accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
-          }
-          {
-            label: 'deltaKtrans'
-            labelmap:
-              accessor: (parent) -> 'data/QIN_Test/k_trans_map.nii.gz'
-            colortable:
-              accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
-          }
-          {
-            label: 'FXR Ktrans'
-            labelmap:
-              accessor: (parent) -> 'data/QIN_Test/k_trans_map.nii.gz'
-            colortable:
-              accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
-          }
-          {
-            label: 'FXL Ktrans'
-            labelmap:
-              accessor: (parent) -> 'data/QIN_Test/k_trans_map.nii.gz'
-            colortable:
-              accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
-          }
-          {
-            label: 'v_e'
-            labelmap:
-              accessor: (parent) -> 'data/QIN_Test/v_e_map.nii.gz'
-            colortable:
-              accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
-          }
-          {
-            label: 'tau_i'
-            labelmap:
-              accessor: (parent) -> 'data/QIN_Test/tau_i_map.nii.gz'
-            colortable:
-              accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
-          }
-        ]
 
+      # Set the default overlay and color table.
       labelmapFilename = overlays[0].labelmap.accessor(parent)
       colortableFilename = overlays[0].colortable.accessor(parent)
 
@@ -135,11 +177,6 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
       #
       # @param element the Angular jQueryLite element
       open: (element) ->
-
-        # The available label map types.
-        labelmapTypes = []
-        labelmapTypes.push overlay.label for overlay in overlays
-
         # The XTK renderer for this image.
         renderer = new X.renderer3D()
         # The image is rendered within the given element.
@@ -155,9 +192,8 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
         volume.labelmap.colortable.file = @colortableFilename
         volume.labelmap.colortable.filedata = @colortableData
         renderer.add(volume)
-        # We need to re-load the gui after we change the label map type.
-        gui = null
-        # We need this loader as a container to keep track of the current map.
+
+        # We need this loader as a container to keep track of the current overlay.
         _loader = Type: "None"
         # Display no label map by default.
         volume.labelmap.visible = false
@@ -165,7 +201,6 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
         # The rendering callback. This function is called after the
         # volume is initialized and prior to the first rendering.
         renderer.onShowtime = ->
-          gui = null
           # The volume display controls. The element is manually
           # placed later in this function.
           gui = new dat.GUI(autoplace: false)
@@ -188,41 +223,16 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
 
           # Display the label map (overlay) controls.
           labelmapCtls = gui.addFolder('Overlay')
-          labelmapTypeCtl = labelmapCtls.add(_loader, 'Type', labelmapTypes).name('Type')
+          labelmapTypeCtl = labelmapCtls.add(_loader, 'Type', overlayTypes).name('Type')
           labelmapOpacityCtl = labelmapCtls.add(volume.labelmap, 'opacity', 0, 1).name('Opacity')
           labelmapCtls.open()
 
           # Label map selection callback.
           labelmapTypeCtl.onChange (value) ->
-            # Get the selected index value of the overlay menu.
-            _index = labelmapTypes.indexOf(value)
-            # If 'None' is selected, turn the label map off...
-            if _index == 0
-              volume.labelmap.visible = false
-            # ...and if an overlay option is selected, load the new label map
-            # and color table.
-            else
-              newLabelmapFilename = overlays[_index].labelmap.accessor(parent)
-              @newLabelmapFilename = newLabelmapFilename
-              newColortableFilename = overlays[_index].colortable.accessor(parent)
-              @newColortableFilename = newColortableFilename
-              newLabelmapFile = File.read(newLabelmapFilename, responseType: 'arraybuffer').then (newLabelmapData) =>
-                # Set the data property to the label map file content.
-                @newLabelmapData = newLabelmapData
-              newColortableFile = File.read(newColortableFilename, responseType: 'arraybuffer').then (newColortableData) =>
-                # Set the data property to the color table file content.
-                @newColortableData = newColortableData
-              # Now we (re-)load the selected label map files.
-              allNewFilesLoaded = $q.all(newLabelmapFile, newColortableFile)
-              allNewFilesLoaded.then =>
-                volume.labelmap.file = @newLabelmapFilename
-                volume.labelmap.filedata = @newLabelmapData
-                volume.labelmap.colortable.file = @newColortableFilename
-                volume.labelmap.colortable.filedata = @newColortableData
-                volume.labelmap.visible = true
-                # Destroy the old control..
-                # ..it will be re-created.
-                ctlElt.remove()
+            selectOverlay(value, volume)
+            # Destroy the old control...
+            # ...it will be re-created.
+            ctlElt.remove()
 
         # Adjust the camera position.
         renderer.camera.position = [0, 0, 240]

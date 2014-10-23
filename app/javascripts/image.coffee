@@ -33,67 +33,55 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
     # @param timePoint the series time point
     # @returns a new image object
     create = (parent, filename, timePoint) ->
-      
+      # TODO - Replace hardcoded temp filepaths with proper references.
       overlays =
         [
           {
             label: 'None'
             labelmap:
-              temp_accessor: 'data/QIN_Test/blank.nii.gz'
-              #accessor: (parent) -> ...
+              accessor: (parent) -> 'data/QIN_Test/blank.nii.gz'
             colortable:
-              temp_accessor: 'data/QIN_Test/generic-colors.txt'
-              #accessor: (parent) -> ...
+              accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
           }
           {
             label: 'deltaKtrans'
             labelmap:
-              temp_accessor: 'data/QIN_Test/k_trans_map.nii.gz'
-              #accessor: (parent) -> ...
+              accessor: (parent) -> 'data/QIN_Test/k_trans_map.nii.gz'
             colortable:
-              temp_accessor: 'data/QIN_Test/generic-colors.txt'
-              #accessor: (parent) -> ...
+              accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
           }
           {
             label: 'FXR Ktrans'
             labelmap:
-              temp_accessor: 'data/QIN_Test/k_trans_map.nii.gz'
-              #accessor: (parent) -> ...
+              accessor: (parent) -> 'data/QIN_Test/k_trans_map.nii.gz'
             colortable:
-              temp_accessor: 'data/QIN_Test/generic-colors.txt'
-              #accessor: (parent) -> ...
+              accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
           }
           {
             label: 'FXL Ktrans'
             labelmap:
-              temp_accessor: 'data/QIN_Test/k_trans_map.nii.gz'
-              #accessor: (parent) -> ...
+              accessor: (parent) -> 'data/QIN_Test/k_trans_map.nii.gz'
             colortable:
-              temp_accessor: 'data/QIN_Test/generic-colors.txt'
-              #accessor: (parent) -> ...
+              accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
           }
           {
             label: 'v_e'
             labelmap:
-              temp_accessor: 'data/QIN_Test/v_e_map.nii.gz'
-              #accessor: (parent) -> ...
+              accessor: (parent) -> 'data/QIN_Test/v_e_map.nii.gz'
             colortable:
-              temp_accessor: 'data/QIN_Test/generic-colors.txt'
-              #accessor: (parent) -> ...
+              accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
           }
           {
             label: 'tau_i'
             labelmap:
-              temp_accessor: 'data/QIN_Test/tau_i_map.nii.gz'
-              #accessor: (parent) -> ...
+              accessor: (parent) -> 'data/QIN_Test/tau_i_map.nii.gz'
             colortable:
-              temp_accessor: 'data/QIN_Test/generic-colors.txt'
-              #accessor: (parent) -> ...
+              accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
           }
         ]
 
-      labelmapFilename = overlays[0].labelmap.temp_accessor
-      colortableFilename = overlays[0].colortable.temp_accessor
+      labelmapFilename = overlays[0].labelmap.accessor(parent)
+      colortableFilename = overlays[0].colortable.accessor(parent)
 
       parent: parent
       filename: filename
@@ -177,11 +165,7 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
         # The rendering callback. This function is called after the
         # volume is initialized and prior to the first rendering.
         renderer.onShowtime = ->
-          if gui
-            # If we already have a gui, destroy it
-            # .. it will be re-created immediately.
-            gui.destroy()
-            gui = null
+          gui = null
           # The volume display controls. The element is manually
           # placed later in this function.
           gui = new dat.GUI(autoplace: false)
@@ -208,32 +192,37 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
           labelmapOpacityCtl = labelmapCtls.add(volume.labelmap, 'opacity', 0, 1).name('Opacity')
           labelmapCtls.open()
 
-          # Change the label map type callback.
-          # See: http://jsfiddle.net/gh/get/toolkit/edge/xtk/lessons/tree/master/12/
-          #
+          # Label map selection callback.
           labelmapTypeCtl.onChange (value) ->
+            # Get the selected index value of the overlay menu.
             _index = labelmapTypes.indexOf(value)
-            # Now we (re-)load the selected label map files.
-            if _index > 0
-              labelmapData: null
-              colortableData: null
-              labelmapFilename = overlays[_index].labelmap.temp_accessor
-              labelmapFilename: labelmapFilename
-              labelmapFile = File.read(labelmapFilename, responseType: 'arraybuffer').then (labelmapData) =>
-                # Set the data property to the label map file content.
-                @labelmapData = labelmapData
-              colortableFilename = overlays[_index].colortable.temp_accessor
-              colortableFilename: colortableFilename
-              colortableFile = File.read(colortableFilename, responseType: 'arraybuffer').then (colortableData) =>
-                # Set the data property to the color table file content.
-                @colortableData = colortableData
-              volume.labelmap.file = @labelmapFilename
-              volume.labelmap.filedata = @labelmapData
-              volume.labelmap.colortable.file = @colortableFilename
-              volume.labelmap.colortable.filedata = @colortableData
-              volume.labelmap.visible = true
-            else
+            # If 'None' is selected, turn the label map off...
+            if _index == 0
               volume.labelmap.visible = false
+            # ...and if an overlay option is selected, load the new label map
+            # and color table.
+            else
+              newLabelmapFilename = overlays[_index].labelmap.accessor(parent)
+              @newLabelmapFilename = newLabelmapFilename
+              newColortableFilename = overlays[_index].colortable.accessor(parent)
+              @newColortableFilename = newColortableFilename
+              newLabelmapFile = File.read(newLabelmapFilename, responseType: 'arraybuffer').then (newLabelmapData) =>
+                # Set the data property to the label map file content.
+                @newLabelmapData = newLabelmapData
+              newColortableFile = File.read(newColortableFilename, responseType: 'arraybuffer').then (newColortableData) =>
+                # Set the data property to the color table file content.
+                @newColortableData = newColortableData
+              # Now we (re-)load the selected label map files.
+              allNewFilesLoaded = $q.all(newLabelmapFile, newColortableFile)
+              allNewFilesLoaded.then =>
+                volume.labelmap.file = @newLabelmapFilename
+                volume.labelmap.filedata = @newLabelmapData
+                volume.labelmap.colortable.file = @newColortableFilename
+                volume.labelmap.colortable.filedata = @newColortableData
+                volume.labelmap.visible = true
+                # Destroy the old control..
+                # ..it will be re-created.
+                ctlElt.remove()
 
         # Adjust the camera position.
         renderer.camera.position = [0, 0, 240]

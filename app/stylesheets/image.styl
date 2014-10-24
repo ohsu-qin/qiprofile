@@ -11,10 +11,19 @@
   & button
     width 7em
     padding 0.2em
+    border 1px solid Peru
     margin 0em 0em 0.2em 0em
+    color Black
+    background OldLace
+    &:hover
+      border 1px solid Peru
+      color Black
+      background Chocolate
+    &:focus, &.active
+      border 1px solid Peru
+      color White
+      background Chocolate
 
-.qi-overlay-select-label
-  padding-top 0.2em
 
 .qi-image-ctl
   display block
@@ -23,7 +32,7 @@
   border-radius 0.4em 0.4em 0.4em 0.4em
   margin 0 0 0.2em 0
   position absolute
-  top 7.5em
+  top 8em
   right 1.1em
   width 21em
 
@@ -73,9 +82,11 @@ slider
         -webkit-box-shadow none
         box-shadow none
     &.pointer
+      // Modified the width and height (were 20px) so the knobs are not off-center.
+      // Modified the background color of the knobs for consistency with app.
       cursor pointer
-      width 20px
-      height 20px
+      width 22px
+      height 22px
       top -8px
       background-color #fff
       border 1px solid #000
@@ -84,7 +95,8 @@ slider
       border-radius 1em/1em
       &:after
         content ''
-        background-color #808080
+        background-color Peru
+        //background-color #808080
         width 8px
         height 8px
         position absolute
@@ -94,10 +106,12 @@ slider
         border-radius 1em/1em
       &:hover
         &:after
-          background-color #000
+          background-color Chocolate
+          //background-color #000
       &.active
         &:after
-          background-color #f00
+          background-color Chocolate
+          //background-color #f00
     &.bubble
       cursor default
       top -22px

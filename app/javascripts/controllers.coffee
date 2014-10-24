@@ -113,8 +113,11 @@ define ['angular'], (ng) ->
       $rootScope.project = image.parent.session.subject.project
       # Place the image in the scope.
       $scope.image = image
-      # Place the default overlay selection in the scope.
+      # Place the image control settings in the scope.
       $scope.overlaySelect = 'none'
+      $scope.opacityOpen = true
+      $scope.slicesOpen = true
+      $scope.threshOpen = true
       $scope.selectOverlay = (type) -> alert(type)
       # If the project is the default, then remove it from the URL.
       ControllerHelper.cleanBrowserUrl($rootScope.project)

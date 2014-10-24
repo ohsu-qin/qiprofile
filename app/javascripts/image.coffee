@@ -5,16 +5,20 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
 
     # The overlay and color table specification.
     # TODO - Replace hardcoded temp filepaths with proper references.
-    # The labels are used by the dat gui menu. (This will be replaced
-    #    by the radio button bar.)
+    # The labels are the menu choices that appear in the dat gui, which will
+    #   be replaceD by the radio button bar.
     overlays =
       [
         {
           label: 'None'
+          # Note that some label map and color LUT must be specified for
+          # the initial load even though by default no label map is shown.
           labelmap:
-            accessor: (parent) -> 'data/QIN_Test/blank.nii.gz'
+            accessor: (parent) -> 'data/QIN_Test/k_trans_map.nii.gz'
+            # Replace with accessor: (parent) -> parent.....filename
           colortable:
             accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
+            # Replace with accessor: (parent) -> parent.....colorization.filename
         }
         {
           label: 'deltaKtrans'
@@ -53,9 +57,9 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
         }
       ]
 
-    # The available label map types.
-    overlayTypes = []
-    overlayTypes.push overlay.label for overlay in overlays
+    # The available label map types. Used by the dat gui control.
+    #overlayTypes = []
+    #overlayTypes.push overlay.label for overlay in overlays
 
     # Overlay selection change callback function.
     selectOverlay = (value, volume) ->
@@ -80,9 +84,11 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
         newColortableFile = File.read(newColortableFilename, responseType: 'arraybuffer').then (newColortableData) =>
           # Set the data property to the color table file content.
           @newColortableData = newColortableData
+        # Combine the promises into a single promise.
         allNewFilesLoaded = $q.all(newLabelmapFile, newColortableFile)
         allNewFilesLoaded.then =>
-          # Reload the selected overlay files.
+          # Modify the volume with the newly selected overlay files.
+          # This triggers a re-load of the volume with the new overlay.
           volume.labelmap.file = @newLabelmapFilename
           volume.labelmap.filedata = @newLabelmapData
           volume.labelmap.colortable.file = @newColortableFilename
@@ -121,7 +127,7 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
     # @returns a new image object
     create = (parent, filename, timePoint) ->
 
-      # Set the default overlay and color table.
+      # Set the default label map and color LUT.
       labelmapFilename = overlays[0].labelmap.accessor(parent)
       colortableFilename = overlays[0].colortable.accessor(parent)
 
@@ -194,7 +200,7 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
         renderer.add(volume)
 
         # We need this loader as a container to keep track of the current overlay.
-        _loader = Type: "None"
+        #_loader = Type: "None"
         # Display no label map by default.
         volume.labelmap.visible = false
 
@@ -203,36 +209,36 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
         renderer.onShowtime = ->
           # The volume display controls. The element is manually
           # placed later in this function.
-          gui = new dat.GUI(autoplace: false)
+          #gui = new dat.GUI(autoplace: false)
           # The controls interact with the volume.
-          volumeCtls = gui.addFolder('Volume')
+          #volumeCtls = gui.addFolder('Volume')
           # The opacity control.
-          opacityCtl = volumeCtls.add(volume, 'opacity', 0, 1).name('Opacity')
+          #opacityCtl = volumeCtls.add(volume, 'opacity', 0, 1).name('Opacity')
           # The threshold min and max range controls.
-          minCtl = volumeCtls.add(volume, 'lowerThreshold', volume.min, volume.max).name('Min Threshold')
-          maxCtl = volumeCtls.add(volume, 'upperThreshold', volume.min, volume.max).name('Max Threshold')
+          #minCtl = volumeCtls.add(volume, 'lowerThreshold', volume.min, volume.max).name('Min Threshold')
+          #maxCtl = volumeCtls.add(volume, 'upperThreshold', volume.min, volume.max).name('Max Threshold')
           # The slice dimension controls.
-          sliceXCtl = volumeCtls.add(volume, 'indexX', 0, volume.range[0] - 1).name('Sagittal')
-          sliceYCtl = volumeCtls.add(volume, 'indexY', 0, volume.range[1] - 1).name('Coronal')
-          sliceZCtl = volumeCtls.add(volume, 'indexZ', 0, volume.range[2] - 1).name('Axial')
+          #sliceXCtl = volumeCtls.add(volume, 'indexX', 0, volume.range[0] - 1).name('Sagittal')
+          #sliceYCtl = volumeCtls.add(volume, 'indexY', 0, volume.range[1] - 1).name('Coronal')
+          #sliceZCtl = volumeCtls.add(volume, 'indexZ', 0, volume.range[2] - 1).name('Axial')
           # The control is placed after the image display.
-          ctlElt = ng.element(gui.domElement)
-          element.after(ctlElt)
+          #ctlElt = ng.element(gui.domElement)
+          #element.after(ctlElt)
           # Display the controls.
-          volumeCtls.open()
+          #volumeCtls.open()
 
           # Display the label map (overlay) controls.
-          labelmapCtls = gui.addFolder('Overlay')
-          labelmapTypeCtl = labelmapCtls.add(_loader, 'Type', overlayTypes).name('Type')
-          labelmapOpacityCtl = labelmapCtls.add(volume.labelmap, 'opacity', 0, 1).name('Opacity')
-          labelmapCtls.open()
+          #labelmapCtls = gui.addFolder('Overlay')
+          #labelmapTypeCtl = labelmapCtls.add(_loader, 'Type', overlayTypes).name('Type')
+          #labelmapOpacityCtl = labelmapCtls.add(volume.labelmap, 'opacity', 0, 1).name('Opacity')
+          #labelmapCtls.open()
 
           # Label map selection callback.
-          labelmapTypeCtl.onChange (value) ->
-            selectOverlay(value, volume)
-            # Destroy the old control...
-            # ...it will be re-created.
-            ctlElt.remove()
+          #labelmapTypeCtl.onChange (value) ->
+          #  selectOverlay(value, volume)
+          #  # Destroy the old control...
+          #  # ...it will be re-created.
+          #  ctlElt.remove()
 
         # Adjust the camera position.
         renderer.camera.position = [0, 0, 240]

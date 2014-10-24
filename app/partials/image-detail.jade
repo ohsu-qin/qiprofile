@@ -23,8 +23,11 @@ block content
   // Mark up accordian header and image controls.
   .qi-image-ctl
     accordion
-      accordion-group(is-open="true")
+      accordion-group(is-open="opacityOpen")
         accordion-heading Opacity
+          i.pull-right.glyphicon(
+            ng-class="{'glyphicon-chevron-down': opacityOpen, 'glyphicon-chevron-up': !opacityOpen}"
+          )
         // The opacity controls.
         .row
           .col-md-3.qi-image-ctl-label Volume
@@ -35,8 +38,11 @@ block content
           .col-md-9
             slider(ng-model='image.volume.labelmap.opacity' floor='0' ceiling='1' step='0.1' precision='1')
     accordion
-      accordion-group(is-open="true")
+      accordion-group(is-open="slicesOpen")
         accordion-heading Slices
+          i.pull-right.glyphicon(
+            ng-class="{'glyphicon-chevron-down': slicesOpen, 'glyphicon-chevron-up': !slicesOpen}"
+          )
         // The slice controls.
         .row
           .col-md-3.qi-image-ctl-label Sagittal
@@ -51,8 +57,11 @@ block content
           .col-md-9
             slider(ng-model='image.volume.indexZ' floor='0' ceiling='319' step='1')
     accordion
-      accordion-group(is-open="true")
+      accordion-group(is-open="threshOpen")
         accordion-heading Thresholding
+          i.pull-right.glyphicon(
+            ng-class="{'glyphicon-chevron-down': threshOpen, 'glyphicon-chevron-up': !threshOpen}"
+          )
         // The thresholding controls.
         .row   
           .col-md-3.qi-image-ctl-label Lower

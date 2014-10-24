@@ -21,7 +21,7 @@ block content
   .qi-image-background
     qi-series-image.col-md-9.qi-series-image(image='image')
   // Mark up accordian header and image controls.
-  .qi-image-ctl
+  .qi-image-ctl(image='image')
     accordion
       accordion-group(is-open="opacityOpen")
         accordion-heading Opacity
@@ -38,12 +38,12 @@ block content
           .col-md-9
             slider(ng-model='image.volume.labelmap.opacity' floor='0' ceiling='1' step='0.1' precision='1')
     accordion
-      accordion-group(is-open="slicesOpen")
-        accordion-heading Slices
+      accordion-group(is-open="axesOpen")
+        accordion-heading Axes
           i.pull-right.glyphicon(
-            ng-class="{'glyphicon-chevron-down': slicesOpen, 'glyphicon-chevron-up': !slicesOpen}"
+            ng-class="{'glyphicon-chevron-down': axesOpen, 'glyphicon-chevron-up': !axesOpen}"
           )
-        // The slice controls.
+        // The axis (slice) controls.
         .row
           .col-md-3.qi-image-ctl-label Sagittal
           .col-md-9

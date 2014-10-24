@@ -5,95 +5,92 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
 
     # The overlay and color table specification.
     # TODO - Replace hardcoded temp filepaths with proper references.
-    # The labels are the menu choices that appear in the dat gui, which will
-    #   be replaceD by the radio button bar.
     overlays =
-      [
-        {
-          label: 'None'
-          # Note that some label map and color LUT must be specified for
-          # the initial load even though by default no label map is shown.
-          labelmap:
-            accessor: (parent) -> 'data/QIN_Test/k_trans_map.nii.gz'
-            # Replace with accessor: (parent) -> parent.....filename
-          colortable:
-            accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
-            # Replace with accessor: (parent) -> parent.....colorization.filename
-        }
-        {
-          label: 'deltaKtrans'
-          labelmap:
-            accessor: (parent) -> 'data/QIN_Test/k_trans_map.nii.gz'
-          colortable:
-            accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
-        }
-        {
-          label: 'FXR Ktrans'
-          labelmap:
-            accessor: (parent) -> 'data/QIN_Test/k_trans_map.nii.gz'
-          colortable:
-            accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
-        }
-        {
-          label: 'FXL Ktrans'
-          labelmap:
-            accessor: (parent) -> 'data/QIN_Test/k_trans_map.nii.gz'
-          colortable:
-            accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
-        }
-        {
-          label: 'v_e'
-          labelmap:
-            accessor: (parent) -> 'data/QIN_Test/v_e_map.nii.gz'
-          colortable:
-            accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
-        }
-        {
-          label: 'tau_i'
-          labelmap:
-            accessor: (parent) -> 'data/QIN_Test/tau_i_map.nii.gz'
-          colortable:
-            accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
-        }
-      ]
+      # Note that some label map and color LUT must be specified for
+      # the initial load even though by default no label map is shown.
+      none:
+        labelmap:
+          accessor: (parent) -> 'data/QIN_Test/delta_k_trans_map.nii.gz'
+          # Replace with accessor: (parent) -> parent.....filename
+        colortable:
+          accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
+          # Replace with accessor: (parent) -> parent.....colorization.filename
+      deltaKTrans:
+        labelmap:
+          accessor: (parent) -> 'data/QIN_Test/delta_k_trans_map.nii.gz'
+        colortable:
+          accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
+      fxlKTrans:
+        labelmap:
+          accessor: (parent) -> 'data/QIN_Test/fxl_k_trans_map.nii.gz'
+        colortable:
+          accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
+      fxrKTrans:
+        labelmap:
+          accessor: (parent) -> 'data/QIN_Test/fxr_k_trans_map.nii.gz'
+        colortable:
+          accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
+      v_e:
+        labelmap:
+          accessor: (parent) -> 'data/QIN_Test/v_e_map.nii.gz'
+        colortable:
+          accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
+      tau_i:
+        labelmap:
+          accessor: (parent) -> 'data/QIN_Test/tau_i_map.nii.gz'
+        colortable:
+          accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
+
+    # Old specification used by the dat gui control.
+    #overlays:
+    #  [
+    #    {
+    #      label: 'None'
+    #      labelmap:
+    #        accessor: (parent) -> 'data/QIN_Test/delta_k_trans_map.nii.gz'
+    #      colortable:
+    #        accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
+    #    }
+    #    {
+    #      label: 'delta Ktrans'
+    #      labelmap:
+    #        accessor: (parent) -> 'data/QIN_Test/delta_k_trans_map.nii.gz'
+    #      colortable:
+    #        accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
+    #    }
+    #    {
+    #      label: 'FXR Ktrans'
+    #      labelmap:
+    #        accessor: (parent) -> 'data/QIN_Test/fxl_k_trans_map.nii.gz'
+    #      colortable:
+    #        accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
+    #    }
+    #    {
+    #      label: 'FXL Ktrans'
+    #      labelmap:
+    #        accessor: (parent) -> 'data/QIN_Test/fxr_k_trans_map.nii.gz'
+    #      colortable:
+    #        accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
+    #    }
+    #    {
+    #      label: 'v_e'
+    #      labelmap:
+    #        accessor: (parent) -> 'data/QIN_Test/v_e_map.nii.gz'
+    #      colortable:
+    #        accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
+    #    }
+    #    {
+    #      label: 'tau_i'
+    #      labelmap:
+    #        accessor: (parent) -> 'data/QIN_Test/tau_i_map.nii.gz'
+    #      colortable:
+    #        accessor: (parent) -> 'data/QIN_Test/generic-colors.txt'
+    #    }
+    #  ]
 
     # The available label map types. Used by the dat gui control.
     #overlayTypes = []
     #overlayTypes.push overlay.label for overlay in overlays
-
-    # Overlay selection change callback function.
-    selectOverlay = (value, volume) ->
-      # Get the selected index value of the overlay menu.
-      _index = overlayTypes.indexOf(value)
-      # If 'None' is selected, turn the label map off...
-      if _index == 0
-        volume.labelmap.visible = false
-      # ...and if an overlay option is selected, load the new label map
-      # and color table.
-      else
-        # Read each file into an ArrayBuffer. The Coffeescript fat
-        # arrow (=>) binds the this variable to the image object
-        # rather than the $http request.
-        newLabelmapFilename = overlays[_index].labelmap.accessor(parent)
-        @newLabelmapFilename = newLabelmapFilename
-        newColortableFilename = overlays[_index].colortable.accessor(parent)
-        @newColortableFilename = newColortableFilename
-        newLabelmapFile = File.read(newLabelmapFilename, responseType: 'arraybuffer').then (newLabelmapData) =>
-          # Set the data property to the label map file content.
-          @newLabelmapData = newLabelmapData
-        newColortableFile = File.read(newColortableFilename, responseType: 'arraybuffer').then (newColortableData) =>
-          # Set the data property to the color table file content.
-          @newColortableData = newColortableData
-        # Combine the promises into a single promise.
-        allNewFilesLoaded = $q.all(newLabelmapFile, newColortableFile)
-        allNewFilesLoaded.then =>
-          # Modify the volume with the newly selected overlay files.
-          # This triggers a re-load of the volume with the new overlay.
-          volume.labelmap.file = @newLabelmapFilename
-          volume.labelmap.filedata = @newLabelmapData
-          volume.labelmap.colortable.file = @newColortableFilename
-          volume.labelmap.colortable.filedata = @newColortableData
-          volume.labelmap.visible = true
 
     # The root scope {parent id: [Image objects]} cache.
     if not $rootScope.images
@@ -128,8 +125,9 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
     create = (parent, filename, timePoint) ->
 
       # Set the default label map and color LUT.
-      labelmapFilename = overlays[0].labelmap.accessor(parent)
-      colortableFilename = overlays[0].colortable.accessor(parent)
+      type = 'none'
+      labelmapFilename = overlays[type].labelmap.accessor(parent)
+      colortableFilename = overlays[type].colortable.accessor(parent)
 
       parent: parent
       filename: filename
@@ -183,6 +181,7 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
       #
       # @param element the Angular jQueryLite element
       open: (element) ->
+        # TODO - Change volume to @volume.
         # The XTK renderer for this image.
         renderer = new X.renderer3D()
         # The image is rendered within the given element.
@@ -260,4 +259,39 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
     # @returns the image objects
     imagesFor: (parent) ->
       cache(parent) or cache(parent, parent.files...)
+
+        # Overlay selection change callback function.
+    selectOverlay: (type, volume) ->
+      # TODO - Change volume to @volume.
+      # Get the selected index value of the dat verlay menu.
+      #_index = overlayTypes.indexOf(value)
+      # If 'nonw' is selected, turn the label map off...
+      if type == 'none'
+        volume.labelmap.visible = false
+      # ...and if an overlay option is selected, load the new label map
+      # and color table.
+      else
+        # Read each file into an ArrayBuffer. The Coffeescript fat
+        # arrow (=>) binds the this variable to the image object
+        # rather than the $http request.
+        newLabelmapFilename = overlays[type].labelmap.accessor(parent)
+        @newLabelmapFilename = newLabelmapFilename
+        newColortableFilename = overlays[type].colortable.accessor(parent)
+        @newColortableFilename = newColortableFilename
+        newLabelmapFile = File.read(newLabelmapFilename, responseType: 'arraybuffer').then (newLabelmapData) =>
+          # Set the data property to the label map file content.
+          @newLabelmapData = newLabelmapData
+        newColortableFile = File.read(newColortableFilename, responseType: 'arraybuffer').then (newColortableData) =>
+          # Set the data property to the color table file content.
+          @newColortableData = newColortableData
+        # Combine the promises into a single promise.
+        allNewFilesLoaded = $q.all(newLabelmapFile, newColortableFile)
+        allNewFilesLoaded.then =>
+          # Modify the volume with the newly selected overlay files.
+          # This triggers a re-load of the volume with the new overlay.
+          volume.labelmap.file = @newLabelmapFilename
+          volume.labelmap.filedata = @newLabelmapData
+          volume.labelmap.colortable.file = @newColortableFilename
+          volume.labelmap.colortable.filedata = @newColortableData
+          volume.labelmap.visible = true
   ]

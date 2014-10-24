@@ -41,6 +41,8 @@
 
 
 // Source: http://prajwalkman.github.io/angular-slider/angular-slider/angular-slider.css
+// Modified the pointer width and height so they are not off-center.
+// Modified the pointer background colors for consistency with the app.
 slider
   display inline-block
   position relative
@@ -82,8 +84,6 @@ slider
         -webkit-box-shadow none
         box-shadow none
     &.pointer
-      // Modified the width and height (were 20px) so the knobs are not off-center.
-      // Modified the background color of the knobs for consistency with app.
       cursor pointer
       width 22px
       height 22px
@@ -96,7 +96,6 @@ slider
       &:after
         content ''
         background-color Peru
-        //background-color #808080
         width 8px
         height 8px
         position absolute
@@ -107,11 +106,9 @@ slider
       &:hover
         &:after
           background-color Chocolate
-          //background-color #000
       &.active
         &:after
           background-color Chocolate
-          //background-color #f00
     &.bubble
       cursor default
       top -22px

@@ -116,9 +116,9 @@ define ['angular'], (ng) ->
       # Place the image control settings in the scope.
       $scope.overlaySelect = 'none'
       $scope.opacityOpen = true
-      $scope.slicesOpen = true
+      $scope.axesOpen = true
       $scope.threshOpen = true
-      $scope.selectOverlay = (type) -> alert(type)
+      $scope.selectOverlay = (type) -> Image.selectOverlay(type, image.volume)
       # If the project is the default, then remove it from the URL.
       ControllerHelper.cleanBrowserUrl($rootScope.project)
   ]

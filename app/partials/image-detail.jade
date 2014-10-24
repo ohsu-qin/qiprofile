@@ -10,7 +10,7 @@ block billboard
 
 block content
   // Mark up the overlay selection radio button controls.
-  .row.col-md-offset-2.qi-overlay-select(image='image')
+  .qi-overlay-select(image='image')
     .btn-group
       button.btn.btn-primary(ng-model='overlaySelect' btn-radio='"none"' ng-click='selectOverlay("none")') No overlay
       button.btn.btn-primary(ng-model='overlaySelect' btn-radio='"deltaKTrans"' ng-click='selectOverlay("deltaKTrans")') &Delta;K<sup>trans</sup>

@@ -119,10 +119,10 @@ describe 'E2E Testing Subject Detail', ->
     it 'should have help text', ->
       expect(page.help(), 'The help is missing').to.eventually.exist
   
-  it 'should display a contact email link', ->
-    pat = /a href="mailto:\w+@ohsu.edu"/
-    expect(page.contact(), 'The email address is missing')
-      .to.eventually.match(pat)
+    it 'should display a contact email link', ->
+      pat = /a href="mailto:\w+@ohsu.edu"/
+      expect(page.contact(), 'The email address is missing')
+        .to.eventually.match(pat)
   
   describe 'Imaging Profile', ->
     # The imaging profile is collection-independent.

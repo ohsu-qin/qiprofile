@@ -29,6 +29,7 @@ module.exports = (grunt) ->
           'angular-bootstrap/ui-bootstrap-tpls.js'
           'angular-resource/angular-resource.js'
           'angular-route/angular-route.js'
+          'angular-touch/angular-touch.js'
           'angular-ui-router/release/*.js'
           'angularjs-nvd3-directives/dist/*.js'
           'd3/*.js'
@@ -39,6 +40,7 @@ module.exports = (grunt) ->
           'requirejs/require.js'
           'spin.js/spin.js'
           'underscore.string/lib/*.js'
+          'venturocket-angular-slider/build/angular-slider.js'
           'xtk/dist/xtk.js'
           # Exclude minimized files.
           '!**/*.min.js'

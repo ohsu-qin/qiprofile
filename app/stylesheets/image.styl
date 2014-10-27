@@ -1,4 +1,122 @@
 //**  The Image Display styles. **//
 
 .qi-series-image
-  height 36em
+  margin-top 3em
+  height 44em
+
+.qi-overlay-select
+  position absolute
+  top 8em
+  left 1.1em
+  & button
+    width 7em
+    padding 0.2em
+    border 1px solid Peru
+    margin 0em 0em 0.2em 0em
+    color Black
+    background OldLace
+    &:hover
+      border 1px solid Peru
+      color Black
+      background Chocolate
+    &:focus, &.active
+      border 1px solid Peru
+      color White
+      background Chocolate
+
+
+.qi-image-ctl
+  display block
+  background-color White
+  border 1px solid SlateGray
+  border-radius 0.4em 0.4em 0.4em 0.4em
+  margin 0 0 0.2em 0
+  position absolute
+  top 8em
+  right 1.1em
+  width 21em
+
+.qi-image-ctl-label
+  padding-top 1.2em
+
+
+// Source: http://prajwalkman.github.io/angular-slider/angular-slider/angular-slider.css
+// Modified the pointer width and height so they are not off-center.
+// Modified the pointer background colors for consistency with the app.
+slider
+  display inline-block
+  position relative
+  height 7px
+  width 100%
+  margin 25px 5px 25px 5px
+  vertical-align middle
+  span
+    white-space nowrap
+    position absolute
+    display inline-block
+    &.base
+      width 100%
+      height 100%
+      padding 0
+    &.bar
+      width 100%
+      height 100%
+      z-index 0
+      -webkit-border-radius 1em/1em
+      border-radius 1em/1em
+      background -webkit-gradient(linear, left top, left bottom, color-stop(0, #c0c0c0), color-stop(1, #8d8d8d))
+      background -webkit-linear-gradient(top, #c0c0c0 0, #8d8d8d 100%)
+      background -moz-linear-gradient(top, #c0c0c0 0, #8d8d8d 100%)
+      background -o-linear-gradient(top, #c0c0c0 0, #8d8d8d 100%)
+      background -ms-linear-gradient(top, #c0c0c0 0, #8d8d8d 100%)
+      background linear-gradient(top, #c0c0c0 0, #8d8d8d 100%)
+      -webkit-box-shadow inset 2px 2px 5px
+      box-shadow inset 2px 2px 5px
+      &.selection
+        width 0%
+        z-index 1
+        background -webkit-gradient(linear, left top, left bottom, color-stop(0, #13b6ff), color-stop(1, #00a8f3))
+        background -webkit-linear-gradient(top, #13b6ff 0, #00a8f3 100%)
+        background -moz-linear-gradient(top, #13b6ff 0, #00a8f3 100%)
+        background -o-linear-gradient(top, #13b6ff 0, #00a8f3 100%)
+        background -ms-linear-gradient(top, #13b6ff 0, #00a8f3 100%)
+        background linear-gradient(top, #13b6ff 0, #00a8f3 100%)
+        -webkit-box-shadow none
+        box-shadow none
+    &.pointer
+      cursor pointer
+      width 22px
+      height 22px
+      top -8px
+      background-color #fff
+      border 1px solid #000
+      z-index 2
+      -webkit-border-radius 1em/1em
+      border-radius 1em/1em
+      &:after
+        content ''
+        background-color Peru
+        width 8px
+        height 8px
+        position absolute
+        top 6px
+        left 6px
+        -webkit-border-radius 1em/1em
+        border-radius 1em/1em
+      &:hover
+        &:after
+          background-color Chocolate
+      &.active
+        &:after
+          background-color Chocolate
+    &.bubble
+      cursor default
+      top -22px
+      padding 1px 3px 1px 3px
+      font-size 0.7em
+      font-family sans-serif
+      &.selection
+        top 15px
+      &.limit
+        color #808080
+

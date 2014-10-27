@@ -9,8 +9,68 @@ block billboard
   | Time Point {{ image.timePoint }}
 
 block content
+  // Mark up the overlay selection radio button controls.
+  .qi-overlay-select(image='image')
+    .btn-group
+      button.btn.btn-primary(ng-model='overlaySelect' btn-radio='"none"' ng-click='selectOverlay("none")') No overlay
+      button.btn.btn-primary(ng-model='overlaySelect' btn-radio='"deltaKTrans"' ng-click='selectOverlay("deltaKTrans")') &Delta;K<sup>trans</sup>
+      button.btn.btn-primary(ng-model='overlaySelect' btn-radio='"fxlKTrans"' ng-click='selectOverlay("fxlKTrans")') FXL K<sup>trans</sup>
+      button.btn.btn-primary(ng-model='overlaySelect' btn-radio='"fxrKTrans"' ng-click='selectOverlay("fxrKTrans")') FXR K<sup>trans</sup>
+      button.btn.btn-primary(ng-model='overlaySelect' btn-radio='"v_e"' ng-click='selectOverlay("v_e")') v<sub>e</sub>
+      button.btn.btn-primary(ng-model='overlaySelect' btn-radio='"tau_i"' ng-click='selectOverlay("tau_i")') &tau;<sub>i</sub>
   .qi-image-background
     qi-series-image.col-md-9.qi-series-image(image='image')
+  // Mark up accordian header and image controls.
+  .qi-image-ctl(image='image')
+    accordion
+      accordion-group(is-open="opacityOpen")
+        accordion-heading Opacity
+          i.pull-right.glyphicon(
+            ng-class="{'glyphicon-chevron-down': opacityOpen, 'glyphicon-chevron-up': !opacityOpen}"
+          )
+        // The opacity controls.
+        .row
+          .col-md-3.qi-image-ctl-label Volume
+          .col-md-9
+            slider(ng-model='image.volume.opacity' floor='0' ceiling='1' step='0.1' precision='1')
+        .row
+          .col-md-3.qi-image-ctl-label Overlay
+          .col-md-9
+            slider(ng-model='image.volume.labelmap.opacity' floor='0' ceiling='1' step='0.1' precision='1')
+    accordion
+      accordion-group(is-open="axesOpen")
+        accordion-heading Axes
+          i.pull-right.glyphicon(
+            ng-class="{'glyphicon-chevron-down': axesOpen, 'glyphicon-chevron-up': !axesOpen}"
+          )
+        // The axis (slice) controls.
+        .row
+          .col-md-3.qi-image-ctl-label Sagittal
+          .col-md-9
+            slider(ng-model='image.volume.indexX' floor='0' ceiling='319' step='1')
+        .row   
+          .col-md-3.qi-image-ctl-label Coronal
+          .col-md-9
+            slider(ng-model='image.volume.indexY' floor='0' ceiling='319' step='1')
+        .row
+          .col-md-3.qi-image-ctl-label Axial
+          .col-md-9
+            slider(ng-model='image.volume.indexZ' floor='0' ceiling='118' step='1')
+    accordion
+      accordion-group(is-open="threshOpen")
+        accordion-heading Thresholding
+          i.pull-right.glyphicon(
+            ng-class="{'glyphicon-chevron-down': threshOpen, 'glyphicon-chevron-up': !threshOpen}"
+          )
+        // The thresholding controls.
+        .row   
+          .col-md-3.qi-image-ctl-label Lower
+          .col-md-9
+            slider(ng-model='image.volume.lowerThreshold' floor='0' ceiling='445' step='1')
+        .row
+          .col-md-3.qi-image-ctl-label Upper
+          .col-md-9
+            slider(ng-model='image.volume.upperThreshold' floor='0' ceiling='445' step='1')
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

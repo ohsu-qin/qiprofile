@@ -7,6 +7,10 @@ Page = require('./helpers/page')()
 class ImageDetailPage extends Page
   displayPanel: ->
     this.select('qi-series-image')
+  overlaySelector: ->
+    this.select('.qi-overlay-select')
+  imageCtlPanel: ->
+    this.select('.qi-image-ctl')
 
 describe 'E2E Testing Image Detail', ->
   page = null
@@ -38,3 +42,21 @@ describe 'E2E Testing Image Detail', ->
     
     it 'should display the image', ->
       expect(panel, 'The image panel is missing').to.eventually.exist
+
+  describe 'Overlay Selection Buttons', ->
+    panel = null
+    
+    beforeEach ->
+      panel = page.overlaySelector()
+    
+    it 'should display the overlay selection buttons', ->
+      expect(panel, 'The overlay selection buttons are missing').to.eventually.exist
+
+  describe 'Image Control Panel', ->
+    panel = null
+    
+    beforeEach ->
+      panel = page.imageCtlPanel()
+    
+    it 'should display the image control panel', ->
+      expect(panel, 'The image control panel is missing').to.eventually.exist

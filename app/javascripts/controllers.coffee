@@ -94,7 +94,7 @@ define ['angular'], (ng) ->
           session: image.parent.session.number
           detail: image.parent.session.detail
           container: image.parent.container_type
-          timePoint: image.timePoint
+          timePoint: image.timePoin
         $state.go('quip.subject.session.container.image', params)
   
       # Capture the current project.
@@ -106,13 +106,23 @@ define ['angular'], (ng) ->
   ]
   
   
-  ctlrs.controller 'ImageDetailCtrl', ['$rootScope', '$scope', 'image',
+  ctlrs.controller 'ImageDetailCtrl', ['$rootScope', '$scope', 'image', 'Image'
     'ControllerHelper',
-    ($rootScope, $scope, image, ControllerHelper) ->
+    ($rootScope, $scope, image, Image, ControllerHelper) ->
       # Capture the current project.
       $rootScope.project = image.parent.session.subject.project
       # Place the image in the scope.
-      $scope.image = image    
+      $scope.image = image
+      # Place the image control settings in the scope.
+      $scope.overlaySelect = 'none'
+      $scope.opacityOpen = true
+      $scope.axesOpen = true
+      $scope.threshOpen = true
+      # Calls the overlay selection function.
+      #
+      # @param type the selected overlay type
+      # @param image.volume the image volume
+      $scope.selectOverlay = (type) -> Image.selectOverlay(type, image.volume)
       # If the project is the default, then remove it from the URL.
       ControllerHelper.cleanBrowserUrl($rootScope.project)
   ]

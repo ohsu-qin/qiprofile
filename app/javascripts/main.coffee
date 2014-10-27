@@ -50,7 +50,9 @@ requirejs.config
     ngroute: [NG_LIB + '/' + 'angular-route' + MIN, './lib/angular-route']
     ngnvd3: './lib/angularjs-nvd3-directives'
     nvd3: './lib/nv.d3'
+    slider: './lib/angular-slider'
     spin: './lib/spin'
+    touch: './lib/angular-touch'
     'underscore.string': './lib/underscore.string'
     uirouter: './lib/angular-ui-router'
     uibootstrap: './lib/ui-bootstrap-tpls'

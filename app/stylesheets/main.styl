@@ -29,11 +29,22 @@
 .qi-help
   background OldLace
   border 0.1em solid Brown
+  border-radius 0.4em 0.4em 0.4em 0.4em
+  padding 1em 1em 0 1em
   position fixed
-  top 10em
-  right 1.8em
+  top 8em
+  right 1.1em
+  max-height 80%
   width 25%
-  qi-transition(slower-transition, linear)
+  overflow-y auto
+  qi-transition(linear, fast-transition)
+
+.qi-modal-close
+  position absolute
+  top 0.2em
+  right 0.2em
+  padding 0.2em
+  cursor pointer
 
 .qi-help-text
   // Downsize headers
@@ -41,6 +52,9 @@
     h{n}
       font-size (125% - (5 * n))
       text-decoration underline
+
+.qi-contact-info
+  padding-top 1em
 
 .qi-footer
   border-top 0.1em solid SlateGray

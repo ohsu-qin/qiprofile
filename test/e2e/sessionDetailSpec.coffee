@@ -75,6 +75,11 @@ describe 'E2E Testing Session Detail', ->
   it 'should have help text', ->
     expect(page.help(), 'The help is missing').to.eventually.exist
   
+  it 'should display a contact email link', ->
+    pat = /a href="mailto:\w+@ohsu.edu"/
+    expect(page.contact(), 'The email address is missing')
+      .to.eventually.match(pat)
+  
   describe 'Intensity Chart', ->
     # Note - chart content is not testable. See the subjectDetailSpec note
     # for details.

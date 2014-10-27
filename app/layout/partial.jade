@@ -6,7 +6,9 @@
 .row.qi-main
   .qi-content
       block content
-  alert.qi-help(type='info' ng-show='showHelp' close='toggleHelp()'
+  .qi-help(type='info' ng-show='showHelp' close='toggleHelp()'
     collapse='!showHelp'
   )
+    .qi-modal-close.glyphicon.glyphicon-remove(ng-click='toggleHelp()')
     block help-text
+    .qi-contact-info(ng-include="'/partials/help/contact-info.html'")

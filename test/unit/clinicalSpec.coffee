@@ -21,6 +21,24 @@ define ['ngmocks', 'moment', 'clinical'], (ngmocks, moment, clinical) ->
           birth_date: moment([1985, 6, 7])
           races: ['Black', 'Asian']
           ethnicity: 'Non-Hispanic'
+          treatments:
+            [
+              {
+                treatment_type: "Neoadjuvant"
+                begin_date: moment([2014, 2, 12])
+                end_date: moment([2014, 3, 9])
+              }
+              {
+                treatment_type: "Primary"
+                begin_date: moment([2014, 3, 30])
+                end_date: null
+              }
+              {
+                treatment_type: "Adjuvant"
+                begin_date: moment([2014, 4, 6])
+                end_date: moment([2014, 5, 6])
+              }
+            ]
           encounters:
             [
               {
@@ -63,6 +81,8 @@ define ['ngmocks', 'moment', 'clinical'], (ngmocks, moment, clinical) ->
         # and each demographic and outcome value.
         # TODO - these should be broken out into test cases.
         # TODO - add expect message arguments.
+        expect(config.treatments).to.exist
+        expect(config.treatments.length).to.equal(3)
         expect(config.encounters).to.exist
         expect(config.encounters.length).to.equal(2)
         expect(config.races).to.exist

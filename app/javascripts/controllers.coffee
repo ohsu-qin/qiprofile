@@ -94,7 +94,7 @@ define ['angular'], (ng) ->
           session: image.parent.session.number
           detail: image.parent.session.detail
           container: image.parent.container_type
-          timePoint: image.timePoint
+          timePoint: image.timePoin
         $state.go('quip.subject.session.container.image', params)
   
       # Capture the current project.

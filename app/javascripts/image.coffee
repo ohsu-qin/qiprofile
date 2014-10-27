@@ -189,23 +189,29 @@ define ['angular', 'xtk', 'file', 'dat', 'slider', 'touch'], (ng) ->
         # Build the renderer.
         renderer.init()
         # The volume and label map to render.
-        volume = new X.volume()
-        volume.file = @filename
-        volume.filedata = @data
-        volume.labelmap.file = @labelmapFilename
-        volume.labelmap.filedata = @labelmapData
-        volume.labelmap.colortable.file = @colortableFilename
-        volume.labelmap.colortable.filedata = @colortableData
-        renderer.add(volume)
+        @volume = new X.volume()
+        @volume.file = @filename
+        @volume.filedata = @data
+        @volume.labelmap.file = @labelmapFilename
+        @volume.labelmap.filedata = @labelmapData
+        @volume.labelmap.colortable.file = @colortableFilename
+        @volume.labelmap.colortable.filedata = @colortableData
+        renderer.add(@volume)
 
         # We need this loader as a container to keep track of the current overlay.
         #_loader = Type: "None"
+
+        # Set the threshold values to default values.
+        # These must be set here for the slider controls to load with the
+        # values.
+        @volume.lowerThreshold = 0
+        @volume.upperThreshold = 445
         # Display no label map by default.
-        volume.labelmap.visible = false
+        @volume.labelmap.visible = false
 
         # The rendering callback. This function is called after the
         # volume is initialized and prior to the first rendering.
-        renderer.onShowtime = ->
+        #renderer.onShowtime = ->
           # The volume display controls. The element is manually
           # placed later in this function.
           #gui = new dat.GUI(autoplace: false)

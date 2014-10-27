@@ -65,9 +65,10 @@ requirejs.config
     ngroute: './lib/angular-route'
     ngnvd3: './lib/angularjs-nvd3-directives'
     nvd3: './lib/nv.d3'
-    slider: './lib/slider'
+    slider: './lib/angular-slider'
     spin: './lib/spin'
     'underscore.string': './lib/underscore.string'
+    touch: './lib/angular-touch'
     uirouter: './lib/angular-ui-router'
     uibootstrap: './lib/ui-bootstrap-tpls'
     xtk: './lib/xtk'
@@ -85,12 +86,15 @@ requirejs.config
   # paths note above.
   shim:
     angular: exports : 'angular'
+    slider: deps: ['angular']
     lodash: exports: '_'
     nganimate: deps: ['angular']
     ngnvd3: deps: ['angular', 'nvd3']
     ngresource: deps: ['angular']
     ngroute: deps: ['angular']
     nvd3: deps: ['d3']
+    slider: deps: ['angular']
+    touch: deps: ['angular']
     uibootstrap: deps: ['angular']
     uirouter: deps: ['ngroute']
     # The test vendor dependencies.

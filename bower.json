@@ -26,7 +26,6 @@
     "angularjs-nvd3-directives": "~0.0.5-beta",
     "bootstrap": "~3.1.1",
     "d3": "~3.3.11",
-    "dat.gui": "*",
     "font-awesome": "~4.0.3",
     "json3": "~3.3.0",
     "lodash": "~2.4.1",

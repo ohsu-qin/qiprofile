@@ -41,7 +41,6 @@ requirejs.config
   paths:
     angular: [NG_LIB + '/' + 'angular' + MIN, './lib/angular'] 
     d3: './lib/d3'
-    dat: './lib/dat.gui'
     domReady: [DOM_READY_LIB + '/domReady' + MIN, './lib/domReady']
     lodash: './lib/lodash.underscore'
     moment: './lib/moment'

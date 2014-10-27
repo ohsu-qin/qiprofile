@@ -118,6 +118,10 @@ define ['angular'], (ng) ->
       $scope.opacityOpen = true
       $scope.axesOpen = true
       $scope.threshOpen = true
+      # Calls the overlay selection function.
+      #
+      # @param type the selected overlay type
+      # @param image.volume the image volume
       $scope.selectOverlay = (type) -> Image.selectOverlay(type, image.volume)
       # If the project is the default, then remove it from the URL.
       ControllerHelper.cleanBrowserUrl($rootScope.project)

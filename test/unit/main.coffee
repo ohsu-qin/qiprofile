@@ -93,7 +93,7 @@ requirejs.config
     ngresource: deps: ['angular']
     ngroute: deps: ['angular']
     nvd3: deps: ['d3']
-    slider: deps: ['angular']
+    slider: deps: ['touch']
     touch: deps: ['angular']
     uibootstrap: deps: ['angular']
     uirouter: deps: ['ngroute']

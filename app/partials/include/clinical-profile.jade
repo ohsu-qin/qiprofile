@@ -1,0 +1,17 @@
+h4.col-md-offset-1 Clinical Profile
+.qi-profile-panel
+  accordion(close-others='false')
+    // Contrary to expectation, the scope of the qi-demographics-table
+    // directive below is a peer of the accordion-group scope rather
+    // than a child. Work around this anomaly by making a parent div
+    // for both the accordion-group and the qi-demographics-table.
+    // TODO - explain this anomaly.
+    div(ng-controller='AccordionGroupCtrl')
+      accordion-group(is-open="isOpen")
+        qi-demographics
+    
+    // Iterate over the encounters to include the encounter type
+    // script fragment. See the leading comment above.
+    div(ng-repeat="encounter in subject.encounters" ng-controller='AccordionGroupCtrl')
+     accordion-group(is-open="isOpen")
+      qi-encounter

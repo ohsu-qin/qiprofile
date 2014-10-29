@@ -10,7 +10,7 @@ if ENV is 'production'
   WAIT = 3      # less than the default of 7
 else
   MIN = ''      # the unminimized file
-  WAIT = 0      # 0 => infinite wait
+  WAIT = 1      # go to the cache quickly
 
 # The Google CDN.
 GOOGLE_LIBS = '//ajax.googleapis.com/ajax/libs'
@@ -71,6 +71,8 @@ requirejs.config
     ngresource: deps: ['angular']
     ngroute: deps: ['angular']
     nvd3: deps: ['d3']
+    slider: deps: ['touch']
+    touch: deps: ['angular']
     uibootstrap: deps: ['angular']
     uirouter: deps: ['ngroute']
   

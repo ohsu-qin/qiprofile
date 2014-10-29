@@ -80,6 +80,67 @@ define ['angular'], (ng) ->
   ]
   
   
+  ctlrs.controller 'AccordionGroupCtrl', ['$scope',
+    ($scope) ->
+      # The accordion group is initially open.
+      $scope.isOpen = true
+  ]
+  
+  
+  ctlrs.controller 'PathologyCtrl', ['$scope',
+    ($scope) ->
+      $scope.pathology = $scope.encounter.evaluation
+  ]
+  
+  
+  ctlrs.controller 'PathologyEstrogenCtrl', ['$scope',
+    ($scope) ->
+      $scope.receptorStatus = $scope.pathology.estrogen
+  ]
+  
+  
+  ctlrs.controller 'PathologyProgestrogenCtrl', ['$scope',
+    ($scope) ->
+      $scope.receptorStatus = $scope.pathology.progestrogen
+  ]
+  
+  
+  ctlrs.controller 'HormoneReceptorCtrl', ['$scope',
+    ($scope) ->
+      # The parent of a generic HormoneReceptor is a
+      # generic evaluation outcome iterator.
+      $scope.receptorStatus = $scope.outcome
+  ]
+  
+  
+  ctlrs.controller 'TNMCtrl', ['$scope',
+    ($scope) ->
+      # The parent can either be a pathology evaluation or
+      # a generic evaluation outcome iterator.
+      path = $scope.pathology
+      $scope.tnm = if path then path.tnm else $scope.outcome 
+  ]
+  
+  
+  ctlrs.controller 'GradeCtrl', ['$scope',
+    ($scope) ->
+      $scope.grade = $scope.tnm.grade 
+  ]
+
+
+  ctlrs.controller 'EvaluationCtrl', ['$scope',
+    ($scope) ->
+      $scope.evaluation = $scope.encounter.evaluation
+  ]
+
+  
+  ctlrs.controller 'ProgestrogenCtrl', ['$scope',
+    ($scope) ->
+      $scope.hormone = 'Progestrogen'
+      $scope.receptorStatus = $scope.pathology.progestrogen
+  ]
+
+  
   ctlrs.controller 'SessionDetailCtrl', ['$rootScope', '$scope', '$state',
     'session', 'ControllerHelper',
     ($rootScope, $scope, $state, session, ControllerHelper) ->
@@ -87,15 +148,29 @@ define ['angular'], (ng) ->
       #
       # @param image the Image object
       $scope.openImage = (image) ->
-        # Route to the image detail page.
+        # The parent scan or registration image container.
+        container = image.parent
+        # The common parameters.
         params =
-          project: image.parent.session.subject.project
-          subject: image.parent.session.subject.number
-          session: image.parent.session.number
-          detail: image.parent.session.detail
-          container: image.parent.container_type
-          timePoint: image.timePoin
-        $state.go('quip.subject.session.container.image', params)
+          project: container.session.subject.project
+          subject: container.session.subject.number
+          session: container.session.number
+          detail: container.session.detail
+          timePoint: image.timePoint
+        # The target route, a prefix for now.
+        route = 'quip.subject.session.scan.'
+        if container._cls == 'Scan'
+          params.scan = container.name
+          route += 'image'
+        else if container._cls == 'Registration'
+          params.scan = container.scan.name
+          params.registration = container.name
+          route += 'registration.image'
+        else
+          throw new TypeError("Unsupported image container type:" +
+                              " #{ container._cls }")
+        # Route to the image detail page.      
+        $state.go(route, params)
   
       # Capture the current project.
       $rootScope.project = session.subject.project

@@ -1,0 +1,19 @@
+include include/accordion-heading-mixin
+
++accordion-heading('{{ encounter.encounter_type }}')
+
+table.qi-table.qi-bottom-buffer
+  tr
+    th.col-md-2 Date
+    td.col-md-10 {{ encounter.date | moment }}
+
+// Iterate over the outcomes to include the outcome type
+// directive.
+
+.qi-evaluation(ng-switch='encounter.evaluation._cls' ng-show='!!encounter.evaluation')
+  div(ng-switch-when='BreastPathology')
+    qi-breast-pathology(ng-controller='PathologyCtrl')
+  div(ng-switch-when='SarcomaPathology')
+    qi-sarcoma-pathology(ng-controller='PathologyCtrl')
+  div(ng-switch-when='GenericEvaluation')
+    qi-generic-evaluation(ng-controller='EvaluationCtrl')

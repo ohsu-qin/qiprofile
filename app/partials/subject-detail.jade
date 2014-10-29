@@ -5,30 +5,10 @@ block billboard
 
 block content
   .col-md-6.qi-modeling-profile
-    h4.row.col-md-offset-1
-      | Imaging Profile
-      button.btn.btn-med.qi-profile-btn(
-        ng-show='subject.isMultiSession'
-        ng-click='toggleModelingFormat()'
-      )
-        .glyphicon.glyphicon-list(ng-show="modelingFormat == 'Chart'")
-        .glyphicon.glyphicon-picture(ng-show="modelingFormat == 'Table'")
-    .panel-group.qi-profile-panel
-      // The session list formatted as a timeline.
-      .panel.panel-default
-        .panel-heading
-          h4.panel-title MR Visit Timeline
-        .panel-collapse
-          .panel-body
-            qi-visit-dateline(subject='subject')
-      // The modeling chart or table.
-      #qi-modeling-chart.panel.panel-default(ng-show="modelingFormat == 'Chart'")
-        include include/modeling-charts
-      qi-modeling-table(sessions='subject.sessions'
-                        ng-show="modelingFormat == 'Table'")
+    include include/modeling-profile
 
   .col-md-6.qi-clinical-profile
-    qi-clinical-table(subject='subject')
+    include include/clinical-profile
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

@@ -1,16 +1,18 @@
-define ['angular', 'lodash', 'spin', 'helpers', 'dateline', 'intensity', 'modeling', 'clinical'],
-  (ng, _, Spinner) ->
+define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
+        'dateline', 'intensity', 'modeling', 'clinical', 'tnm'],
+  (ng, _, _s, Spinner, ClinicalModels) ->
     directives = ng.module(
       'qiprofile.directives',
-      ['qiprofile.helpers', 'qiprofile.dateline', 'qiprofile.intensity', 'qiprofile.modeling', 'qiprofile.clinical']
+      ['qiprofile.helpers', 'qiprofile.dateline', 'qiprofile.intensity',
+       'qiprofile.modeling', 'qiprofile.clinical', 'qiprofile.tnm']
     )
-    
+
     # Spinner directive.
     directives.directive 'qiSpin', ->
       (scope, element, attrs) ->
         # Replaces the DOM element with a spinner
         # while the qiSpin attribute is set.
-  
+
         createSpinner = ->
           # Creates an image selection spinner.
           # position relative places the spinner element
@@ -30,7 +32,7 @@ define ['angular', 'lodash', 'spin', 'helpers', 'dateline', 'intensity', 'modeli
             speed: 1
             color: 'Orange'
           )
-  
+
         scope.$watch attrs.qiSpin, (value, oldValue) ->
           if value
             if not scope.spinner
@@ -88,18 +90,18 @@ define ['angular', 'lodash', 'spin', 'helpers', 'dateline', 'intensity', 'modeli
                 # @param a the anchor element
                 compileDetailLink = (a) ->
                   $compile(a)(scope)
-                
+
                 # Add the session detail hyperlinks, treatment bars and
                 # encounter points. The callback compiles the ui-sref
                 # anchor hyperlinks after they are added to the DOM.
                 VisitDateline.decorate(subject, chart, scope.config, compileDetailLink)
-                  
+
         templateUrl: '/partials/visit-dateline-chart.html'
     ]
 
 
     # Displays the modeling tables.
-    directives.directive 'qiModelingTable', ['Modeling', (Modeling) ->
+    directives.directive 'qiModelingTables', ['Modeling', (Modeling) ->
       restrict: 'E'
       scope:
         sessions: '='   # the subject sessions
@@ -107,43 +109,59 @@ define ['angular', 'lodash', 'spin', 'helpers', 'dateline', 'intensity', 'modeli
         scope.$watch 'sessions', (sessions) ->
           if sessions
             scope.config = Modeling.configureTable(sessions)
-      templateUrl: '/partials/modeling-table.html'
+      templateUrl: '/partials/modeling-tables.html'
     ]
 
 
-    # Displays the clinical profile.
-    directives.directive 'qiClinicalTable', ['Clinical', (Clinical) ->
+    directives.directive 'qiDemographics', ->
       restrict: 'E'
-      scope:
-        subject: '='
-      link: (scope, element, attrs) ->
-        scope.$watch 'subject', (subject) ->
-          if subject
-            scope.config = Clinical.configureProfile(subject)
-      templateUrl: '/partials/clinical-table.html'
-    ]
+      templateUrl: '/partials/demographics.html'
 
 
-    # Displays the subject demographics.
-    directives.directive 'qiDemographicsTable', ['Race', 'Ethnicity', (Race, Ethnicity) ->
+    directives.directive 'qiEncounter', ->
       restrict: 'E'
-      scope:
-        subject: '='
-      templateUrl: '/partials/demographics-table.html'
+      templateUrl: '/partials/encounter.html'
+
+
+    directives.directive 'qiBreastPathology', ->
+      restrict: 'E'
+      templateUrl: '/partials/breast-pathology.html'
+
+
+    directives.directive 'qiSarcomaPathology', ->
+      restrict: 'E'
+      templateUrl: '/partials/sarcoma-pathology.html'
+
+
+    directives.directive 'qiGenericEvaluation', ->
+      restrict: 'E'
+      templateUrl: '/partials/generic-evaluation.html'
+
+
+    directives.directive 'qiHormoneReceptor', ->
+      restrict: 'E'
+      templateUrl: '/partials/hormone-receptor.html'
+
+
+    directives.directive 'qiTnm', ['TNM', (tnm) ->
+      restrict: 'E'
+      templateUrl: '/partials/tnm.html'
     ]
 
-    # Displays a clinical outcome.
-    directives.directive 'qiOutcomeTable', ['Clinical', (Clinical) ->
+
+    directives.directive 'qiGrade', ->
       restrict: 'E'
-      scope:
-        outcome: '='  # the outcome data
-        group: '='    # the outcome data group, e.g. 'tnm'
-      link: (scope, element, attrs) ->
-        scope.$watch 'outcome', (outcome) ->
-          if outcome
-            scope.config = Clinical.configureOutcome(outcome, attrs.group)
-      templateUrl: '/partials/outcome-table.html'
-    ]
+      templateUrl: '/partials/grade.html'
+
+
+    directives.directive 'qiNottinghamGrade', ->
+      restrict: 'E'
+      templateUrl: '/partials/nottingham-grade.html'
+
+
+    directives.directive 'qiFnclccGrade', ->
+      restrict: 'E'
+      templateUrl: '/partials/fnclcc-grade.html'
 
 
     # Displays the session intensity chart.
@@ -152,16 +170,11 @@ define ['angular', 'lodash', 'spin', 'helpers', 'dateline', 'intensity', 'modeli
         restrict: 'E'
         scope:
           session: '=' 
-        link: (scope, element, attrs) ->
-          # Wait for a session extended with detail to digest both the scan
-          # and the registrations. Both the scan and registrations listener
-          # are necessary because there is a data series for the scan and
-          # each registration.
-          scope.$watch 'session.scan', (scan) ->
-            if ObjectHelper.exists(scan)
-              scope.$watch 'session.registrations', (regs) ->
-                if ObjectHelper.exists(regs)
-                  scope.config = Intensity.configureChart(scope.session, element)
+        link: (scope, element) ->
+          # Wait for a session extended with detail to digest the scan.
+          scope.$watch 'session.scans.t1', (scan) ->
+            if scan?
+              scope.config = Intensity.configureChart(scope.session, element)
         templateUrl: '/partials/intensity-chart.html'
     ]
 
@@ -171,7 +184,7 @@ define ['angular', 'lodash', 'spin', 'helpers', 'dateline', 'intensity', 'modeli
       restrict: 'E'
       scope:
         image: '='
-      link: (scope, element, attrs) ->
+      link: (scope, element) ->
         scope.$watch 'image.data', (data) ->
           if data
             scope.image.open(element)

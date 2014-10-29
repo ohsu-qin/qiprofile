@@ -26,11 +26,11 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
             modeling: [
               name: 'pk_aUjr'
               image_container_name: 'reg_8L3W'
-              fxlKTrans:
+              fxl_k_trans:
                 average: 2.3
-              fxrKTrans:
+              fxr_k_trans:
                 average: 2.5
-              deltaKTrans:
+              delta_k_trans:
                 average: 2.3
                 filename: 'data/Breast001/Session01/delta_k_trans.nii.gz'
                 colorization:
@@ -54,15 +54,16 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
           ]
         session_detail:
           _id: 'b'
-          scan:
-            name: 'scan'
-            intensity:
-              intensities: [2.4]
-          registrations: [
-            name: 'reg_test'
-            intensity:
-              intensities: [3.1]
-          ]
+          scans:
+            t1:
+              name: 't1'
+              intensity:
+                intensities: [2.4]
+              registrations: [
+                name: 't1'
+                intensity:
+                  intensities: [3.1]
+              ]
 
       beforeEach ->
         # Fake the router service module.
@@ -96,11 +97,11 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
         # Validates the resolved subject.
         validate = (subject) ->
           # There should be an age.
-          expect('age' of subject, "Subject is missing an age property").to.be.true
-          expect(subject.age, "Subject is missing an age").to.exist
-          nowish = moment([moment().year(), 6, 7])
-          expect(subject.age, "Subject age is incorrect")
-            .to.equal(nowish.diff(mock.subject_detail.birth_date, 'years'))
+          expect('birthDate' of subject, "Subject is missing a birthDate property")
+            .to.be.true
+          expect(subject.birthDate, "Subject is missing a birth date").to.exist
+          expect(subject.birthDate.valueOf(), "Subject birth date is incorrect")
+            .to.equal(mock.subject_detail.birth_date)
           # There should be encounters.
           expect(subject.encounters, "Subject is missing encounters").to.exist
           expect(subject.encounters.length, "Subject encounters length is incorrect")
@@ -133,20 +134,18 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
           #expect(sess.modeling.length).to.equal(1)
           #mdl = sess.modeling[0]
           mdl = sess.modeling
-          expect(mdl.deltaKTrans, "Modeling is missing a delta Ktrans")
-            .to.exist
+          expect(mdl.deltaKTrans, "Modeling is missing a delta Ktrans").to.exist
           mock_mdl = mock.subject_detail.sessions[0].modeling[0]
-          expect(mdl.deltaKTrans.average, "Delta Ktrans average is incorrect")
-            .to.equal(mock_mdl.deltaKTrans.average)
-          expect(mdl.deltaKTrans.filename, "Delta Ktrans filename is incorrect")
-            .to.equal(mock_mdl.deltaKTrans.filename)
+          expect(mdl.deltaKTrans.average, "delta Ktrans average is incorrect")
+            .to.equal(mock_mdl.delta_k_trans.average)
+          expect(mdl.deltaKTrans.filename, "delta Ktrans filename is incorrect")
+            .to.equal(mock_mdl.delta_k_trans.filename)
           colorization = mdl.deltaKTrans.colorization
-          expect(colorization, "Delta Ktrans is missing the colorization")
-            .to.equal(mock_mdl.deltaKTrans.colorization)
-          expect(colorization.filename, "Delta Ktrans colorization filename is incorrect")
-            .to.equal(mock_mdl.deltaKTrans.colorization.filename)
-          expect(colorization.color_lut, "Delta Ktrans colorization LUT is incorrect")
-            .to.equal(mock_mdl.deltaKTrans.colorization.color_lut)
+          expect(colorization, "delta Ktrans is missing the colorization").to.exist
+          expect(colorization.filename, "delta Ktrans colorization filename is incorrect")
+            .to.equal(mock_mdl.delta_k_trans.colorization.filename)
+          expect(colorization.colorLut, "delta Ktrans colorization LUT is incorrect")
+            .to.equal(mock_mdl.delta_k_trans.colorization.color_lut)
 
         it 'should fetch the detail with a detail property', ->
           subject = _.clone(mock.subject)
@@ -167,14 +166,16 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
 
         # Validates the resolved session.
         validate = (session) ->
-          expect(session.scan, "Session scan is missing").to.exist
-          expect(session.scan.intensity, "Session scan is incorrect")
-            .to.deep.eql(mock.session_detail.scan.intensity)
-          expect(session.registrations.length,
-               "Session registrations count is incorrect")
-            .to.equal(1)
-          reg = session.registrations[0]
-          mock_reg = mock.session_detail.registrations[0]
+          scan = session.scans.t1
+          expect(scan, "Session is missing the T1 scan").to.exist
+          mock_scan = mock.session_detail.scans.t1
+          expect(scan.intensity, "Session scan is incorrect")
+            .to.deep.eql(mock_scan.intensity)
+          expect(scan.intensity, "Session scan is incorrect")
+            .to.deep.eql(mock_scan.intensity)
+          reg = scan.registrations[0]
+          expect(reg, "Session is missing the T1 registration").to.exist
+          mock_reg = mock.session_detail.scans.t1.registrations[0]
           expect(reg.intensity, "Session registration is incorrect")
             .to.deep.eql(mock_reg.intensity)
 
@@ -199,21 +200,8 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
           # Dispatch the backend request.
           $httpBackend.flush()
 
-      describe 'Image Container', ->
+      describe 'Scan', ->
         mock_session = null
-
-        # Validates the resolved container.
-        validate = (image) ->
-          expect(session.scan, "Session scan is missing").to.exist
-          expect(session.scan.intensity, "Session scan is incorrect")
-            .to.deep.eql(mock.session_detail.scan.intensity)
-          expect(session.registrations.length,
-               "Session registrations count is incorrect")
-            .to.equal(1)
-          reg = session.registrations[0]
-          mock_reg = mock.session_detail.registrations[0]
-          expect(reg.intensity, "Session registration is incorrect")
-            .to.deep.eql(mock_reg.intensity)
 
         beforeEach ->
           mock_session = mock.subject_detail.sessions[0]
@@ -223,19 +211,20 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
 
         it 'should find the scan container in a fetched session', ->
           session = _.clone(mock_session)
-          session.scan = mock.session_detail.scan
-          actual = Router.getImageContainer(session, session.scan.name)
+          session.scans = mock.session_detail.scans
+          actual = Router.getScan(session, 't1')
           expect(actual, 'Image container missing').to.exist
           expect(actual, 'Image container incorrect')
-            .to.equal(mock.session_detail.scan)
+            .to.equal(mock.session_detail.scans.t1)
 
-        it 'should fetch a session if necessary to obtain the scan container', ->
+        it 'should fetch a session if necessary to obtain the scan', ->
           session = _.omit(mock_session, 'detail')
           session.subject = _.clone(mock.subject)
-          Router.getImageContainer(session, mock.session_detail.scan.name).then (container) ->
+          mock_scan = mock.session_detail.scans.t1
+          Router.getScan(session, mock_scan.name).then (container) ->
             expect(container, 'Image container missing').to.exist
             expect(container.intensity, 'Image container intensity incorrect').
-              to.eql(mock.session_detail.scan.intensity)
+              to.eql(mock_scan.intensity)
           
           # Dispatch the backend request.
           $httpBackend.flush()

@@ -13,7 +13,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
     # @param treatment the treatment object
     # @returns the [begin, end] array
     treatmentSpan = (treatment) ->
-      if ObjectHelper.exists(treatment.begin_date)
+      if treatment.begin_date?
         begin = treatment.begin_date.valueOf()
         endDate = treatment.end_date or moment()
         end = endDate.valueOf()
@@ -26,7 +26,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
     #   begin-end bars.
     # * Rotate the date x-axis tick labels
     #
-    # Note - The session hyperlinks are ui-sref attributes. However,
+    # Note: The session hyperlinks are ui-sref attributes. However,
     # D3 mutates the DOM after the Angular digest cycle. Consequently,
     # the callback must call Angular $compile with the current scope
     # on each new hyperlink.ui-sref directive.

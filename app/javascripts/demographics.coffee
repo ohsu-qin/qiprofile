@@ -1,6 +1,8 @@
 define ['angular'], (ng) ->
   demographics = ng.module 'qiprofile.demographics', []
 
+  DEFAULT_VALUE = 'Not specified'
+  
   # The race helper functions.
   demographics.factory 'Race', ->
     # The map of database value to display value.
@@ -13,7 +15,11 @@ define ['angular'], (ng) ->
       NHOPI: 'Native Hawaiian or Other Pacific Islander'
     
     toDisplayValue: (dbValue) ->
-      CHOICES[dbValue] or DEFAULT_VALUE
+      if dbValue?
+        CHOICES[dbValue] or
+          throw new ReferenceError("Race database value not recognized: #{ dbValue }")
+      else
+        DEFAULT_VALUE
       
   # The ethnicity helper functions.
   demographics.factory 'Ethnicity', ->
@@ -24,4 +30,8 @@ define ['angular'], (ng) ->
       'Non-Hispanic': 'Not Hispanic or Latino'
     
     toDisplayValue: (dbValue) ->
-      CHOICES[dbValue] or DEFAULT_VALUE
+      if dbValue?
+        CHOICES[dbValue] or
+          throw new ReferenceError("Ethnicity database value not recognized: #{ dbValue }")
+      else
+        DEFAULT_VALUE

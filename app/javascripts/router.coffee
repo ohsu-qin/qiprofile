@@ -29,6 +29,12 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
           cond = paramStrs.join(',')
           # Return the {where: condition} object.
           where: "{#{ cond }}"
+        
+        # @returns a collection/subject/session title string
+        subjectTitle = (session) ->
+          "#{ session.subject.collection }" +
+          " Subject #{ session.subject.number }" +
+          " Session #{ session.number }"
 
         # Fetches the subject detail and fixes it up as follows:
         # * anonymizes the birth date by setting it to July 7
@@ -54,26 +60,19 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
             search = _.pick(subject, SUBJECT_SECONDARY_KEY_FIELDS)
             Subject.query(where(search)).$promise.then (subjects) ->
               if subjects.length > 1
-                throw new Error "Subject query returned more than" +
-                                " one subject: #{ _.pairs(subject) }"
+                throw new ReferenceError "Subject query returned more than" +
+                                         " one subject: #{ _.pairs(subject) }"
               subjects[0]
           
           if subject.detail
             Subject.detail(id: subject.detail).$promise.then (detail) ->
               # Add the subject age property, if necessary.
-              if ObjectHelper.exists(detail.birthDate) and
+              if detail.birthDate? and
                  not subject.hasOwnProperty('age')
                 # Fix the birth date.
                 date = DateHelper.asMoment(detail.birthDate)
                 # Anonymize the birth date.
                 detail.birthDate = DateHelper.anonymize(date)
-                # July 7 of this year.
-                nowish = DateHelper.anonymize(moment())
-                # Make the subject age property.
-                Object.defineProperty subject, 'age',
-                  get: -> nowish.diff(detail.birthDate, 'years')
-                  set: (years) ->
-                    detail.birthDate = nowish.subtract('years', years)
               
               for sess in detail.sessions
                 # Set the session subject property.
@@ -93,7 +92,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
               
               # Fix the encounter dates.
               for enc in detail.encounters
-                if ObjectHelper.exists(enc.date)
+                if enc.date?
                   enc.date = DateHelper.asMoment(enc.date)
               # Fix the treatment dates.
               for trt in detail.treatments
@@ -145,43 +144,25 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
         # @returns a promise which resolves to the session detail
         getSessionDetail: (session) ->
           # Adds the session, container type and images properties to
-          # the given parent image container.
+          # the given image container.
           #
-          # @param parent the image container
-          # @param session the session holding the image container
-          addImageContainerContent = (parent, session, container_type) ->
-            # @param parent the image container
-            # @returns the display title
-            titleFor = (parent) ->
-              if container_type == 'scan'
-                'Scan'
-              else if container_type == 'registration'
-                if session.registrations.length == 1
-                  'Realigned'
-                else
-                  'Registration' + parent.name.replace('reg_', '')
-              else
-                throw new Error "Unrecognized image container type:" +
-                                " #{ container_type }"
-    
+          # @param container the image container
+          addImageContainerContent = (container) ->
             # The unique container id for cacheing.
-            parent.id = "#{ session.detail }.#{ parent.name }"
+            container.id = "#{ session.detail }.#{ container._cls }#{ container.name }"
             # The container session property.
-            parent.session = session
-            # The container type property.
-            parent.container_type = container_type
-            # The display title.
-            parent.title = titleFor(parent)
+            container.session = session
             # Encapsulate the image files.
-            parent.images = Image.imagesFor(parent)
+            container.images = Image.imagesFor(container)
   
           if session.detail
             Session.detail(id: session.detail).$promise.then (detail) =>
               # Copy the fetched detail into the session.
               ObjectHelper.aliasPublicDataProperties(detail, session)
-              addImageContainerContent(session.scan, session, 'scan')
-              for reg in session.registrations
-                addImageContainerContent(reg, session, 'registration')
+              for scan in _.values(session.scans)
+                addImageContainerContent(scan, session)
+                for reg in scan.registrations
+                  addImageContainerContent(reg, session)
               # Resolve to the detail object.
               detail
           else if session.subject
@@ -193,9 +174,9 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
                 other.number == session.number
               # If the session was not found, then complain.
               if not fetched
-                throw new Error "Subject #{ subject.number }" +
-                                " Session #{ session.number }" +
-                                " does not reference a detail object"
+                throw new ReferenceError "Subject #{ subject.number }" +
+                                         " Session #{ session.number }" +
+                                         " does not reference a detail object"
               # Copy the fetched id and detail reference.
               session._id = fetched._id
               session.detail = fetched.detail
@@ -207,26 +188,10 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
                             " not reference a subject."
 
         # @param session the session to search
-        # @param name the container name
-        # @return the container object or a promise which resolves
-        #   to the container object
-        getImageContainer: (session, name) ->
-          # @returns a collection/subject/session title string
-          subjectTitle = ->
-            "#{ session.subject.collection }" +
-            " Subject #{ session.subject.number }" +
-            " Session #{ session.number }"
-          
-          # Looks for the scan or registration container which
-          # matches the container name.
-          #
-          # @returns the container object, if found, otherwise null
-          findContainerInSession = ->
-            if name == 'scan'
-              session.scan
-            else if session.registrations
-              _.find(session.registrations, (reg) -> reg.name is name)
-          
+        # @param name the scan name
+        # @return the scan object or a promise which resolves
+        #   to the scan object
+        getScan: (session, name) ->
           # Every session detail has a scan property. When the detail
           # is fetched, the detail properties are copied into the session
           # object. Therefore, the presence of the session scan
@@ -234,26 +199,42 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
           #
           # @returns whether the session detail is loaded
           isSessionDetailLoaded = ->
-            session.scan?
+            session.scans?
 
           # If the session detail is loaded, then find the scan or
           # registration container based on the name parameter,
           # which is 'scan' or the registration name.
           if isSessionDetailLoaded()
-            container = findContainerInSession()
-            # If no such container, then complain.
-            if not container
-              throw new Error "#{ subjectTitle() } does not have a" +
-                              " #{ name } image."
-            container
+            scan = session.scans[name]
+            # If no such scan, then complain.
+            if not scan
+              throw new ReferenceError "#{ subjectTitle(session) }" +
+                                       " does not have a #{ name } scan."
+            scan
           else
             # Load the session detail...
             this.getSessionDetail(session).then =>
-              if not session.scan and not session.registrations.length
-                throw new Error "#{ subjectTitle() } does not have any" +
-                                " image containers."
+              if not session.scans
+                throw new ReferenceError "#{ subjectTitle(session) }" +
+                                         " does not have any scans."
               # ...and recurse.
-              this.getImageContainer(session, name)
+              this.getScan(session, name)
+
+        # @param scan the scan to search
+        # @param name the registration name
+        # @return the registration object or a promise which resolves
+        #   to the registration object
+        getRegistration: (scan, name) ->
+          reg = _.find(scan.registrations, (reg) -> reg.name is name)
+          # If no such registrations, then complain.
+          if not reg
+            throw new ReferenceError "#{ subjectTitle(session) }" +
+                                     " scan #{ scan.name } does not have" +
+                                     " a #{ name } registration."
+          # Set the parent reference.
+          reg.scan = scan
+          # Return the registration.
+          reg
 
         # @param container the image parent container object
         # @param timePoint the one-based series time point
@@ -263,11 +244,11 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
         getImageDetail: (container, timePoint) ->
           image = container.images[timePoint - 1]
           if not image
-            throw new Error "Subject #{ subject.number }" + 
-                            " Session #{ session.number }" +
-                            " does not have an image at" +
-                            " #{ container.title } time point" +
-                            " #{ timePoint }"
+            throw new ReferenceError "Subject #{ subject.number }" + 
+                                     " Session #{ session.number }" +
+                                     " does not have an image at" +
+                                     " #{ container.title } time point" +
+                                     " #{ timePoint }"
           if image.data
             image
           else

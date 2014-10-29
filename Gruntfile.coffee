@@ -33,14 +33,14 @@ module.exports = (grunt) ->
           'angular-ui-router/release/*.js'
           'angularjs-nvd3-directives/dist/*.js'
           'd3/*.js'
-          'dat.gui/dat.gui.js'
+          'domready/ready.js'
           'lodash/dist/lodash.underscore.js'
           'moment/*.js'
           'nvd3/nv.d3.js'
           'requirejs/require.js'
           'spin.js/spin.js'
           'underscore.string/lib/*.js'
-          'venturocket-angular-slider/build/angular-slider.js'
+          'venturocket-angular-slider/build/*.js'
           'xtk/dist/xtk.js'
           # Exclude minimized files.
           '!**/*.min.js'
@@ -106,16 +106,27 @@ module.exports = (grunt) ->
       unit:
         configFile: 'test/conf/karma-conf.coffee'
 
+    exec:
+      selenium:
+        # If selenium is not already running, then start it. Suppress all
+        # output, since there are no documented options to tailor the
+        # selenium log level or log file at the command line. The selenium
+        # server is spawned as a background process that survives the grunt
+        # session. The command pseudo-code is as follows:
+        # * Check for a process which listens on port 4444
+        # * Start the selenium server as a background process
+        # * Suppress all output
+        # The selenium server can be killed by getting the process id
+        # using the netstat command and issuing a kill command on that pid.
+        # This command runs in Mac and Linux, but not Windows.
+        command: 'netstat -lnp tcp 2>/dev/null | grep -q 4444 || ' +
+                 './node_modules/selenium-standalone/bin/start-selenium' +
+                  ' > /dev/null 2>&1 &'
+    
     protractor:
-      options:
-        debug: not not grunt.option('debug')
-        keepAlive: not not grunt.option('debug')
-        mochaOpts:
-          debug: true
-          timeout: 4000
       e2e:
         configFile: 'test/conf/protractor-conf.coffee'
-      
+
     markdown:
       compile:
         expand: true
@@ -130,7 +141,7 @@ module.exports = (grunt) ->
       compile:
         src: ['app/stylesheets/app.styl']
         dest: '_public/stylesheets/app.css'
-      
+
     express:
       options:
         script: 'server.js'
@@ -224,8 +235,8 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'test:unit', ['karma:unit']
 
-  grunt.registerTask 'test:e2e', ['express:test', 'protractor:e2e']
+  grunt.registerTask 'test:e2e', ['exec:selenium', 'express:test', 'protractor:e2e']
 
-  grunt.registerTask 'test', ['express:test', 'test:unit', 'test:e2e']
+  grunt.registerTask 'test', ['test:unit', 'test:e2e']
 
   grunt.registerTask 'release', ['build', 'requirejs', 'cssmin']

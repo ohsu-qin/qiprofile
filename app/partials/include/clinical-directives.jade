@@ -1,0 +1,23 @@
+// This file makes a script element for each encounter and
+// outcome directive. Each list item is the directive element
+// tag without the qi- prefix. The script element is th
+// The supported encounter directives, without the qi- prefix.
+// This list must align with the REST data model. Each item in
+// the list
+- encounters = ['biopsy']
+
+// The supported outcome directives. This list must align with the
+// REST data model.
+- outcomes = ['breast-pathology', 'tnm']
+
+// Iterate over the encounters and outcomes using the Jade each
+// operator. The script include is simply the encounter or outcome
+// directive, e.g. qi-biopsy.
+
+each encounter in encounters
+  script(type="text/ng-template" id=encounter)
+    = 'qi' + encounter
+
+each outcome in outcomes
+  script(type="text/ng-template" id=outcome)
+    = 'qi' + outcome

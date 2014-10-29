@@ -2,12 +2,6 @@
 
 @require 'helpers'
 
-.qi-session-detail
-  // A small offset on the right to balance the room
-  // allowed on the left for the y-axis and image
-  // selection labels.
-  margin-right 2em
-
 .qi-intensity-chart
   // Allow room for the image selection label below
   // the chart. The time points align with the image
@@ -41,7 +35,9 @@ qi-image-btn-group()
   // nvd3 chart.
   margin-right 1em
   & .tooltip
-    font-size .7em
+    // Make the tooltip font slightly smaller than the chart font.
+    font-size .6em
+  // The tooltip background is a Moab red.
   & .tooltip-inner
     background-color IndianRed
   & .tooltip.top .tooltip-arrow

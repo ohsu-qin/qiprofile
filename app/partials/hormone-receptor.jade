@@ -1,0 +1,13 @@
+// Note: receptorStatus is set by the parent controller.
+.qi-subtable-title {{ receptorStatus.hormone | capitalize }} Receptor Status
+
+table.qi-table
+  tr
+    th.col-md-2 Result
+    td.col-md-10 {{ receptorStatus.positive | positiveNegative }}
+  tr
+    th.col-md-2 Intensity
+    td.col-md-10 {{ receptorStatus.intensity | percentSign }}
+  tr
+    th.col-md-2 Quick Score
+    td.col-md-10 {{ receptorStatus.quickScore }}

@@ -1,6 +1,6 @@
 expect = require('./helpers/expect')()
 
-Page = require('./helpers/page')()
+Page = require './helpers/page' 
 
 class SubjectListPage extends Page
   h3Locator = By.tagName('h3')
@@ -12,12 +12,12 @@ class SubjectListPage extends Page
     element.all(By.repeater('coll in collections')).map (repeat) ->
       repeat.isElementPresent(h3Locator).then (exists) ->
         if exists
-          repeat.findElement(h3Locator).then (h3) ->
+          repeat.element(h3Locator).then (h3) ->
             coll = h3.getText()
             repeat.isElementPresent(anchorLocator).then (exists) ->
               if exists
-                repeat.findElements(anchorLocator).then (aElts) ->
-                  sbjs = (a.getText() for a in aElts)
+                repeat.all(anchorLocator).then (hyperlinks) ->
+                  sbjs = ((hyperlink.getText() for hyperlink in hyperlinks))
                   {name: coll, subjects: sbjs}  
               else
                 {name: coll, subjects: []}  
@@ -31,16 +31,17 @@ describe 'E2E Testing Subject List', ->
     page = new SubjectListPage '/quip?project=QIN_Test'
   
   it 'should display the billboard', ->
+    expect(true).to.be.true
     expect(page.billboard, 'The billboard is incorrect')
       .to.eventually.equal('Patients')
   
   it 'should have a home button', ->
     pat = /.*\/quip\?project=QIN_Test$/
-    expect(page.home(), 'The home URL is incorrect')
+    expect(page.home, 'The home URL is incorrect')
       .to.eventually.match(pat)
   
   it 'should have help text', ->
-    expect(page.help(), 'The help is missing').to.eventually.exist
+    expect(page.help, 'The help is missing').to.eventually.exist
   
   it 'should display a contact email link', ->
     pat = /a href="mailto:\w+@ohsu.edu"/
@@ -52,7 +53,7 @@ describe 'E2E Testing Subject List', ->
     
     beforeEach ->
       content = page.collection_subjects()
-
+  
     it 'should display the Breast and Sarcoma collections', ->
       collections = content.then (assns) ->
         assns.map (assn) -> assn.name
@@ -60,7 +61,7 @@ describe 'E2E Testing Subject List', ->
       # deep equals operator eql rather than equal.
       expect(collections, 'The collections are incorrect')
         .to.eventually.eql(['Breast', 'Sarcoma'])
-
+  
     it 'should display the subjects', ->
       subjects = content.then (assns) ->
         assns.map (assn) -> assn.subjects 

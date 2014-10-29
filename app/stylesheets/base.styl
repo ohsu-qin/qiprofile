@@ -13,22 +13,47 @@ a
   color Peru
   &:hover
     color Chocolate
+    cursor pointer
   & img
     border none
   & > text
     fill Peru
   &:hover > text
     fill Chocolate
+    text-decoration none
 
-// Overwrite the bootstrap accordian link style.
+// Overwrite the bootstrap accordian panel heading style
+// to emulate the preceding hyperlink style.
 .panel-heading
-  & .panel-title
-    color Indigo
   & a
     color Peru
     &:hover
       color Chocolate
+      text-decoration none
 
+// Overwrite the bootstrap panel heading background color.
+.panel-default > .panel-heading
+  background-color MintCream
+
+// Overwrite the bootstrap panel style to remove the superfluous
+// margin, but add a slightly larger border the same color as the
+// surrounding border.
+.panel-group
+  // Remove the bootstrap bottom margin.
+  margin-bottom 0
+  // Add a thin border to a nested panel group.
+  & .panel-group
+    border-top: 1px solid SlateGray
+  // Add a thin border to separate panel groups.
+  & .panel + .panel
+    border-top: 1px solid SlateGray
+    margin-top: 0
+
+// Reduce the bootstrap panel body padding from 15 to 5.
+.panel-body
+  padding 5px
+
+// Change the SVG hyperlink cursor to a pointer.
 svg
   a
     cursor pointer
@@ -41,7 +66,7 @@ table
   border-collapse collapse
 
 table, th, td
-  border 0.1em solid Black
+  border 1px solid Black
 
 th
   padding 0.5em

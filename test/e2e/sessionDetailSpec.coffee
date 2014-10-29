@@ -14,7 +14,7 @@ class SessionDetailPage extends Page
     # The locator for the image select button group element.
     # Since the time point is one-based, the zero-based image
     # select index is one less than the time point.
-    locator = By.repeater('image in session.scan.images').row(time_point - 1)
+    locator = By.repeater('image in session.scans.t1.images').row(time_point - 1)
     
     # Find the image select button group element, then...
     @select(locator).then (div) ->
@@ -61,11 +61,11 @@ class SessionDetailPage extends Page
     this.select('//qi-intensity-chart//nvd3-line-chart')
 
 describe 'E2E Testing Session Detail', ->
-  # The Sarcoma001 Session01 time point 21. This is the time point for
+  # The Sarcoma001 Session01 time point 20. This is the time point for
   # which there is a test fixture scan image file. The seed helper
   # function called from the protractor config links the test fixture
   # data directory to _public/data subdirectory.
-  TEST_TIME_POINT = 21
+  TEST_TIME_POINT = 20
   
   page = null
 

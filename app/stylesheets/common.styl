@@ -31,8 +31,27 @@ ul.qi-clean-list
 .qi-separator-faint
   border 1px solid Lavender
 
+.qi-top-buffer
+  // Make some room at the top.
+  margin-top 0.5em
+
+.qi-right-buffer
+  // Make some room on the right.
+  margin-right 0.5em
+
+.qi-bottom-buffer
+  // Make some room at the bottom.
+  margin-bottom 0.5em
+
+.qi-nested-panel
+  border 1px solid SlateGray
+  border-radius: 0.4em 0.4em 0.4em 0.4em
+  padding 0.5em
+
 // The standard data table style.
 .qi-table
+  // Fill out small tables.
+  min-width 80%
   & table, th, td
     // Cells have a thin light brown border.
     border 1px solid BurlyWood
@@ -47,8 +66,17 @@ ul.qi-clean-list
     // Horizontal formatting is the page responsibility.
     padding-top 0.2em
     padding-bottom 0.2em
-
   & colgroup
     // A column group is delineated by a thin silver line.
     border-left 0.2em solid Silver
-  
+
+.qi-spaced-table
+  // Space adjacent rows.
+  border 0
+  border-collapse separate
+  border-spacing 0 0.5em
+
+.qi-subtable-title
+  font-size larger
+  font-style italic
+  margin-left 0.5 em

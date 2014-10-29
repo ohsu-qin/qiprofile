@@ -54,15 +54,16 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
           ]
         session_detail:
           _id: 'b'
-          scan:
-            name: 'scan'
-            intensity:
-              intensities: [2.4]
-          registrations: [
-            name: 'reg_test'
-            intensity:
-              intensities: [3.1]
-          ]
+          scans:
+            t1:
+              name: 't1'
+              intensity:
+                intensities: [2.4]
+              registrations: [
+                name: 't1'
+                intensity:
+                  intensities: [3.1]
+              ]
 
       beforeEach ->
         # Fake the router service module.
@@ -165,14 +166,16 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
 
         # Validates the resolved session.
         validate = (session) ->
-          expect(session.scan, "Session scan is missing").to.exist
-          expect(session.scan.intensity, "Session scan is incorrect")
-            .to.deep.eql(mock.session_detail.scan.intensity)
-          expect(session.registrations.length,
-               "Session registrations count is incorrect")
-            .to.equal(1)
-          reg = session.registrations[0]
-          mock_reg = mock.session_detail.registrations[0]
+          scan = session.scans.t1
+          expect(scan, "Session is missing the T1 scan").to.exist
+          mock_scan = mock.session_detail.scans.t1
+          expect(scan.intensity, "Session scan is incorrect")
+            .to.deep.eql(mock_scan.intensity)
+          expect(scan.intensity, "Session scan is incorrect")
+            .to.deep.eql(mock_scan.intensity)
+          reg = scan.registrations[0]
+          expect(reg, "Session is missing the T1 registration").to.exist
+          mock_reg = mock.session_detail.scans.t1.registrations[0]
           expect(reg.intensity, "Session registration is incorrect")
             .to.deep.eql(mock_reg.intensity)
 
@@ -197,21 +200,8 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
           # Dispatch the backend request.
           $httpBackend.flush()
 
-      describe 'Image Container', ->
+      describe 'Scan', ->
         mock_session = null
-
-        # Validates the resolved container.
-        validate = (image) ->
-          expect(session.scan, "Session scan is missing").to.exist
-          expect(session.scan.intensity, "Session scan is incorrect")
-            .to.deep.eql(mock.session_detail.scan.intensity)
-          expect(session.registrations.length,
-               "Session registrations count is incorrect")
-            .to.equal(1)
-          reg = session.registrations[0]
-          mock_reg = mock.session_detail.registrations[0]
-          expect(reg.intensity, "Session registration is incorrect")
-            .to.deep.eql(mock_reg.intensity)
 
         beforeEach ->
           mock_session = mock.subject_detail.sessions[0]
@@ -221,19 +211,20 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
 
         it 'should find the scan container in a fetched session', ->
           session = _.clone(mock_session)
-          session.scan = mock.session_detail.scan
-          actual = Router.getImageContainer(session, session.scan.name)
+          session.scans = mock.session_detail.scans
+          actual = Router.getScan(session, 't1')
           expect(actual, 'Image container missing').to.exist
           expect(actual, 'Image container incorrect')
-            .to.equal(mock.session_detail.scan)
+            .to.equal(mock.session_detail.scans.t1)
 
-        it 'should fetch a session if necessary to obtain the scan container', ->
+        it 'should fetch a session if necessary to obtain the scan', ->
           session = _.omit(mock_session, 'detail')
           session.subject = _.clone(mock.subject)
-          Router.getImageContainer(session, mock.session_detail.scan.name).then (container) ->
+          mock_scan = mock.session_detail.scans.t1
+          Router.getScan(session, mock_scan.name).then (container) ->
             expect(container, 'Image container missing').to.exist
             expect(container.intensity, 'Image container intensity incorrect').
-              to.eql(mock.session_detail.scan.intensity)
+              to.eql(mock_scan.intensity)
           
           # Dispatch the backend request.
           $httpBackend.flush()

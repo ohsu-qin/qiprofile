@@ -1,0 +1,14 @@
+// The mixin for a standard accordion heading.
+//
+// @param title the heading title text
+mixin accordion-heading(title)
+  accordion-heading
+    // The heading title is set by the mixin caller.
+    =title
+    // The isOpen flag set in the controller expands or collapses the group.
+    // The open status is reflected in the following icon, where:
+    // * open => down
+    // * closed => up
+    .pull-right.glyphicon(
+      ng-class="{'glyphicon-chevron-down': isOpen, 'glyphicon-chevron-up': !isOpen}"
+    )

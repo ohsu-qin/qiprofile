@@ -5,25 +5,38 @@ expect = require('./helpers/expect')()
 Page = require './helpers/page'
 
 class SubjectDetailPage extends Page
-  # Finds the profile table WebElements for the given CSS style.
-  # The return value is an array of table body promises. Each table
-  # body promise resolves to an array of row promises. Each row
-  # promise resolves to an array of column text promises.
+  # Finds the profile table WebElements for the given Page.select()
+  # selector. The return value is an array of table promises.
+  # Each table promise resolves to an object {header, body},
+  # where:
+  # * header is a promise which resolves to an array of table
+  #   heading text value promises
+  # * body is a promise which resolves to an array of row promises
+  #
+  # Each row promise resolves to an array of column text promises.
   #
   # If the function argument is provided, then it is applied to
   # each table cell text value promise.
   #
   # Example:
-  # page.profileTablesForCss 'qi-clinical-table', (text) ->
-  #   expect(text).to.eventually.exist
+  # page.findProfileTables 'qi-clinical-table', (tables) ->
+  #   expect(tables).to.exist.and.not.be.empty
+  #   for table in tables
+  #     table.header.then (headings) ->
+  #       expect(headings).to.exist.and.not.be.empty
+  #       expect(heading[0]).to.equal('Age')
+  #     table.body.then (rows) ->
+  #       expect(rows).to.exist.and.not.be.empty
+  #       for row in rows
+  #          row.then (columns) ->
+  #            expect(columns).to.exist.and.not.be.empty
+  #            expect(columns[0]).to.equal('32')
   #
-  # @param style the Page.select() search selector
+  # @param selector the Protractor CSS locator argument
   # @param fn the optional function to apply to each table cell
   #   text value
-  profileTablesForCss: (selector, fn) ->
-    tables = (panel) ->
-      panel.all(By.tagName('table'))
-
+  # @returns the table body promises
+  findProfileTables: (selector, fn) ->
     headings = (table) ->
       table.all(By.tagName('th'))
 
@@ -39,23 +52,29 @@ class SubjectDetailPage extends Page
         fn(text) if text? and fn?
         text
 
-    mapTables = (panel) ->
+    mapTables = (tables) ->
       mapTable = (table) ->
         mapHeader = ->
+          # Return the [heading values] promise.
           headings(table).map(text)
         
         mapBody = ->
           mapRow = (row) ->
+            # Return the [column values] promise.
             columns(row).map(text)
 
+          # Return the [rows] promise.
           rows(table).map(mapRow)
         
+        # Return the {header, body}
         header: mapHeader()
         body: mapBody()
 
-      tables(panel).map(mapTable)
+      # Return the [{header, body}, ...] promise.
+      tables.map(mapTable)
 
-    @select(selector)
+    # Return the [tables] promise.
+    element.all(By.css(selector))
       .then(mapTables)
 
   # @param fn optional function to apply to the resolved button
@@ -72,12 +91,12 @@ class SubjectDetailPage extends Page
   # @param fn optional function to run on the resolved panel
   # @returns the imaging profile table panel promise
   imagingProfileTablePanel: (fn) ->
-    @select('qi-modeling-table').then (panel) ->
+    @select('qi-modeling-tables').then (panel) ->
       fn(panel) if panel? and fn?
       panel
 
   # Finds the imaging profile table WebElements.
-  # See profileTablesForCss.
+  # See findProfileTables.
   #
   # @param fn optional function to run on the resolved tables
   # @returns the imaging profile tables promise
@@ -86,7 +105,7 @@ class SubjectDetailPage extends Page
       button.click()
 
     tables = =>
-      @profileTablesForCss('qi-modeling-table', fn)
+      @findProfileTables('.qi-modeling-table', fn)
 
     # Click the imaging profile format button to show the imaging
     # profile tables.
@@ -173,7 +192,7 @@ class SubjectDetailPage extends Page
     addComponentTables = (panel) ->
       componentTables =
         demographics:
-          selector: 'qi-demographics-table'
+          selector: 'qi-demographics'
           bindings:
             age: 'birthDate'
             races: 'races'
@@ -185,8 +204,8 @@ class SubjectDetailPage extends Page
       for prop, spec of componentTables
         addComponentTable(prop, spec.selector, spec.bindings)
 
-    # Find the clinical profile table.
-    @select('qi-clinical-table').then (panel) =>
+    # Find the clinical profile panel.
+    @select('.qi-clinical-profile').then (panel) =>
       if panel?
         # Add the component table functions.
         addComponentTables(panel)
@@ -194,10 +213,6 @@ class SubjectDetailPage extends Page
         fn(panel) if fn?
       panel
 
-  # Finds the demographics profile table WebElements.
-  #
-  # @param fn optional function to run on the resolved table
-  # @returns the demographics table promise
 
 describe 'E2E Testing Subject Detail', ->
   page = null
@@ -221,13 +236,13 @@ describe 'E2E Testing Subject Detail', ->
     # The page main body test cases.
     describe 'Imaging Profile', ->
       chart = null
-      table = null
+      tablePanel = null
 
       before ->
         page.modelingChart().then (elt) ->
           chart = elt
         page.imagingProfileTablePanel().then (elt) ->
-          table = elt
+          tablePanel = elt
 
       describe 'Dateline', ->
         # Note: this is as deep as the chart can be tested,
@@ -247,7 +262,7 @@ describe 'E2E Testing Subject Detail', ->
             # When the button is clicked, then the imaging profile table
             # panel is displayed.
             button.click().then ->
-              table.isDisplayed().then (displayed) ->
+              tablePanel.isDisplayed().then (displayed) ->
                 expect(displayed, 'The modeling table panel is hidden after the' +
                                   ' format button is clicked').to.be.true
               # The chart is hidden.
@@ -257,7 +272,7 @@ describe 'E2E Testing Subject Detail', ->
               # When the button is clicked again, then the table is hidden and
               # the chart is displayed.
               button.click().then ->
-                table.isDisplayed().then (displayed) ->
+                tablePanel.isDisplayed().then (displayed) ->
                   expect(displayed, 'The modeling table panel is displayed' +
                                     ' after the format button is clicked twice')
                     .to.be.false
@@ -274,9 +289,9 @@ describe 'E2E Testing Subject Detail', ->
       describe 'Table', ->
         it 'should hide the table', ->
           # The modeling tables panel exists.
-          expect(table, 'The modeling table panel is missing').to.eventually.exist
+          expect(tablePanel, 'The modeling table panel is missing').to.eventually.exist
           # The panel is hidden.
-          table.isDisplayed().then (displayed) ->
+          tablePanel.isDisplayed().then (displayed) ->
             expect(displayed, 'The modeling table panel is initially displayed')
               .to.be.false
 
@@ -284,89 +299,106 @@ describe 'E2E Testing Subject Detail', ->
           tables = null
 
           before ->
-            page.imagingProfileTables().then (elt) ->
-              tables = elt
+            page.imagingProfileTables().then (elts) ->
+              tables = elts
 
-          it 'should show the imaging properties when the format button is clicked', ->
-            # There are three imaging profile tables, one for each
-            # PK modeling property.
+          it 'should show the imaging profile table panel when the format button is clicked', ->
+            expect(tables, 'The imaging profile table panel is not shown')
+              .to.exist
+
+          # There are three imaging profile tables, one for each
+          # PK modeling property.
+          it 'should have three imaging profile tables', ->
             expect(tables.length, 'The imaging profile table count is incorrect')
               .to.equal(3)
 
+
           it 'should display the column headers', ->
             for table, tblNdx in tables
-              for heading, hdgNdx in table.header
-                expect(heading, "Table #{ tblNdx + 1 } is missing heading" +
-                                " #{ hdgNdx + 1 }").to.exist.and.not.be.empty
+              table.header.then (headings) ->
+                for heading, hdgNdx in headings 
+                  expect(heading, "Table #{ tblNdx + 1 } is missing column" +
+                                  " heading #{ hdgNdx + 1 }")
+                    .to.exist.and.not.be.empty
 
           it 'should have four Breast patient visits', ->
             for table, tblNdx in tables
-              rows = table.body
-              for row in rows
+              table.body.then (rows) ->
                 expect(rows.length, "Table #{ tblNdx + 1 } row count is incorrect")
                   .to.equal(4)
 
           it 'should show the visit dates', ->
             # The expected visit dates are the first column of the first table.
             referenceTable = _.first(tables)
-            expected = ((_.first(columns) for columns in referenceTable.body))
+            expected = null
+            referenceTable.body.then (rows) ->
+              expected = ((_.first(columns) for columns in rows))
             # The date values for every remaining table should be
             # consistent with those of the first table.
             for table, tblNdx in _.rest(tables)
-              rows = table.body
-              for columns, rowNdx in rows
-                visitDate = _.first(columns)
-                expect(visitDate, "The table #{ tblNdx + 2 } visit date is incorrect")
-                  .to.equal(expected[rowNdx])
+              table.body.then (rows) ->
+                for columns, rowNdx in rows
+                  visitDate = _.first(columns)
+                  expect(visitDate, "The table #{ tblNdx + 2 } visit date is incorrect")
+                    .to.equal(expected[rowNdx])
 
           it 'should have seven Ktrans table columns', ->
             # The KTrans table is the first table.
             table = _.first(tables)
-            for row, rowNdx in table.body
-              expect(row.length, "The Ktrans table row #{ rowNdx + 1 } column" +
-                                 " count is incorrect").to.equal(7)
+            table.body.then (rows) ->
+              for row, rowNdx in rows
+                expect(row.length, "The Ktrans table row #{ rowNdx + 1 } column" +
+                                   " count is incorrect").to.equal(7)
 
           it 'should have three non-Ktrans table columns', ->
             # The KTrans table is the first table.
             tables = _.rest(tables)
             for table, tblNdx in tables
-              for row, rowNdx in table.body
-                expect(row.length, "The table #{ tblNdx + 2 } row #{ rowNdx + 1 }" +
-                                   " column count is incorrect").to.equal(3)
+              table.body.then (rows) ->
+                for row, rowNdx in rows
+                  expect(row.length, "The table #{ tblNdx + 2 } row #{ rowNdx + 1 }" +
+                                     " column count is incorrect").to.equal(3)
 
           it 'should not have a blank non-percent change value', ->
             for table, tblNdx in tables
-              rows = table.body
-              for columns, rowNdx in rows
-                # The odd columns hold non-percent change values.
-                for colNdx in _.range(1, columns.length, 2)
-                  value = columns[colNdx]
-                  expect(value, "Imaging Profile table #{ tblNdx + 1 } body" +
-                                " row #{ rowNdx + 1 } percent change column" +
-                                " #{ colNdx + 1 } is not blank").to.not.be.empty
+              table.body.then (rows) ->
+                for columns, rowNdx in rows
+                  # The odd columns hold non-percent change values.
+                  for colNdx in _.range(1, columns.length, 2)
+                    value = columns[colNdx]
+                    expect(value, "Imaging Profile table #{ tblNdx + 1 } body" +
+                                  " row #{ rowNdx + 1 } percent change column" +
+                                  " #{ colNdx + 1 } is not blank")
+                      .to.not.be.empty
 
           it 'should have blank percent values in the first row', ->
             for table, tblNdx in tables
-              rows = table.body
-              columns = _.first(rows)
-              # The percent change is in the third, fifth and seventh column.
-              # The percent changes of the first row are blank.
-              # The odd columns hold non-percent change values.
-              for colNdx in _.range(2, columns.length, 2)
-                value = columns[colNdx]
-                expect(value, "Imaging Profile table #{ tblNdx + 1 } body" +
-                              " row 0 percent change column #{ colNdx + 1 }" +
-                              " is not blank").to.be.empty
-
-          it 'should not have a blank percent value in the remaining rows', ->
-            for table, tblNdx in tables
-              rows = table.body
-              for columns, rowNdx in _.rest(rows)
+              table.body.then (rows) ->
+                columns = _.first(rows)
+                expect(columns, "Imaging Profile table #{ tblNdx + 1 } body" +
+                                " row 0 has no columns")
+                  .to.exist.and.not.be.empty
+                # The percent change is in the third, fifth and seventh column.
+                # The percent changes of the first row are blank.
+                # The odd columns hold non-percent change values.
                 for colNdx in _.range(2, columns.length, 2)
                   value = columns[colNdx]
                   expect(value, "Imaging Profile table #{ tblNdx + 1 } body" +
-                                " row #{ rowNdx + 2 } percent change column" +
-                                " #{ colNdx + 1 } is blank").to.not.be.empty
+                                " row 0 percent change column #{ colNdx + 1 }" +
+                                " is not blank").to.be.empty
+
+
+          it 'should not have a blank percent value in the remaining rows', ->
+            for table, tblNdx in tables
+              table.body.then (rows) ->
+                for columns, rowNdx in _.rest(rows)
+                  for colNdx in _.range(2, columns.length, 2)
+                    value = columns[colNdx]
+                    expect(value, "Imaging Profile table #{ tblNdx + 1 } body" +
+                                  " row #{ rowNdx + 2 } percent change column" +
+                                  " #{ colNdx + 1 } is blank")
+                      .to.not.be.empty
+
 
     describe 'Clinical Profile', ->
       panel = null
@@ -381,7 +413,8 @@ describe 'E2E Testing Subject Detail', ->
             .to.eventually.exist
           # The panel is displayed.
           panel.isDisplayed().then (displayed) ->
-            expect(displayed, 'The clinical table panel is initially displayed')
+            expect(displayed, '
+            The clinical table panel is initially displayed')
               .to.be.true
 
       describe 'Demographics', ->
@@ -390,6 +423,7 @@ describe 'E2E Testing Subject Detail', ->
         before ->
           panel.demographics().then (elt) ->
             table = elt
+
 
         it 'should show the demographics table', ->
           expect(table, 'The demographics table is missing')

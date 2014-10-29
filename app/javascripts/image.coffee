@@ -1,4 +1,4 @@
-define ['angular', 'xtk', 'file'], (ng) ->
+define ['angular', 'underscore.string', 'xtk', 'file'], (ng, _s) ->
   image = ng.module 'qiprofile.image', ['qiprofile.file']
 
   image.factory 'Image', ['$rootScope', 'File', ($rootScope, File) ->
@@ -59,7 +59,7 @@ define ['angular', 'xtk', 'file'], (ng) ->
           @state.loading = false
           # Set the data property to the file content.
           @data = data
-      
+
       # Renders the image in the given parent element.
       #
       # @param element the Angular jQueryLite element
@@ -96,4 +96,24 @@ define ['angular', 'xtk', 'file'], (ng) ->
     # @returns the image objects
     imagesFor: (parent) ->
       cache(parent) or cache(parent, parent.files...)
+    
+    # Formats the image container title.
+    #
+    # Note: this formatting routine should be confined to the filter,
+    # but must be placed in this helper for use by the intensity
+    # chart configuration.
+    #
+    # @param container the container object
+    # @returns the display title for the container
+    containerTitle: (container) ->
+      if container._cls is 'Scan'
+        "#{ _s.capitalize(container.name) } #{ container._cls }"
+      else if  container._cls is 'Registration'
+        if not container.source?
+          throw new ReferenceError("The scan source name was not found")
+        reg_src = _s.capitalize(container.source)
+        "#{ reg_src } #{ container.type } #{ name }"
+      else
+        throw new TypeError("Unsupported image container type:" +
+                            " #{ container._cls }")
   ]

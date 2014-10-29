@@ -92,26 +92,44 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'router', 'uirout
                 templateUrl: '/partials/session-detail.html'
                 controller:  'SessionDetailCtrl'
 
-          # The image parent container state.
-          .state 'quip.subject.session.container',
+          # The scan state.
+          .state 'quip.subject.session.scan',
             abstract: true
-            url: '/:container?detail'
+            url: '/scan/:scan?detail'
             resolve:
-              container: (session, $stateParams, Router) ->
+              scan: (session, $stateParams, Router) ->
                 # The optional session detail query parameter.
                 session.detail = $stateParams.detail
-                # The container name query parameter, e.g. 'scan'.
-                name = $stateParams.container
-                # Obtain the image container.
-                Router.getImageContainer(session, name)
+                # Get the scan.
+                Router.getScan(session, $stateParams.scan)
 
-          # The image detail page.
-          .state 'quip.subject.session.container.image',
-            url: '/{timePoint:[1-9][0-9]*}'
+          # The registration state.
+          .state 'quip.subject.session.scan.registration',
+            abstract: true
+            url: '/registration/:registration'
             resolve:
-              image: (container, $stateParams, Router) ->
+              registration: (scan, $stateParams, Router) ->
+                Router.getRegistration(scan, $stateParams.registration)
+
+          # The scan image detail page.
+          .state 'quip.subject.session.scan.image',
+            url: '/image/{timePoint:[1-9][0-9]*}'
+            resolve:
+              image: (scan, $stateParams, Router) ->
                 timePoint = parseInt($stateParams.timePoint)
-                Router.getImageDetail(container, timePoint)
+                Router.getImageDetail(scan, timePoint)
+            views:
+              'main@':
+                templateUrl: '/partials/image-detail.html'
+                controller:  'ImageDetailCtrl'
+
+          # The registration image detail page.
+          .state 'quip.subject.session.scan.registration.image',
+            url: '/image/{timePoint:[1-9][0-9]*}'
+            resolve:
+              image: (registration, $stateParams, Router) ->
+                timePoint = parseInt($stateParams.timePoint)
+                Router.getImageDetail(registration, timePoint)
             views:
               'main@':
                 templateUrl: '/partials/image-detail.html'

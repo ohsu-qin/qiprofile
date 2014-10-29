@@ -1,9 +1,59 @@
 define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment) ->
   helpers = ng.module 'qiprofile.helpers', []
-    
+  
+  helpers.factory 'StringHelper', ->
+    # Improves on underscore.string dasherize by converting each
+    # sequence of two or more capital letters to lowercase without
+    # dashes, e.g.:
+    #     StringHelper.dasherize('TNM')
+    # returns 'tnm' rather than the underscore.string result '-t-n-m'.
+    # 
+    # @param s the input string
+    # @return the lowercase dashed conversion
+    dasherize: (s) ->
+      # Prepares the given match for underscore.string dasherize.
+      prep = (match) ->
+        first = match[0]
+        rest = match.substring(1)
+        last = match[match.length - 1]
+        if last == last.toUpperCase()
+          first + rest.toLowerCase()
+        else
+          first + rest[...-2].toLowerCase() + rest[-2..]
+
+      # Prepare the input string.
+      prepped = s.replace(/[A-Z]{2,}.?/g, prep)
+      # Delegate to underscore.string.
+      sdashed = _s.dasherize(prepped)
+      # Remove a bogus leading dash, if necessary.
+      if sdashed[0] == '-' and s[0] != '-'
+        sdashed.substring(1)
+      else
+        sdashed
+  
+  helpers.factory 'ArrayHelper', ->
+    # This function stands in for the missing lodash v2.4.1 findIndex function.
+    #
+    # TODO - replace with lodash findIndex when a lodash update includes the
+    # function. 
+    findIndex: (array, callback=_.identity) ->
+      for item, i in array
+        if callback(item, i, array) then return i
+      -1
+
+  
   helpers.factory 'ObjectHelper', ->
-    # Aliases the source object properties which are not
-    # already defined in the destination object.
+    # Pretty prints the given object in a readable format.
+    #
+    # @param obj the object to print
+    # @returns the string representation
+    prettyPrint: (obj) ->
+      # Stolen from
+      # http://stackoverflow.com/questions/957537/how-can-i-print-a-javascript-object.
+      JSON.stringify(obj, null, 4)
+    
+    # Aliases the source object properties which are not already
+    # defined in the destination object.
     #
     # @param source the copy source object
     # @param dest the copy destination object
@@ -32,7 +82,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
       # variable which will resolve to the last iteration value.
       for prop in aliasProps
         defineAlias(prop)
-      
+    
     # Aliases the source object properties which are not already
     # defined in the destination object and satisfy thew following
     # conditions:
@@ -43,8 +93,12 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
     # @param source the copy source object
     # @param dest the copy destination object
     aliasPublicDataProperties: (source, dest) ->
-      this.aliasProperties source, dest, (prop) ->
+      # Filters the given property to select only non-functions
+      # whose names do not begin with _ or $.
+      filter = (prop) ->
         prop[0] not in '_$' and not _.isFunction(source[prop])
+      # Delegate to aliasProperties with the property filter.
+      this.aliasProperties(source, dest, filter)
     
     # Parses the JSON data into a Javascript object and creates
     # camelCase property aliases for underscore property names.

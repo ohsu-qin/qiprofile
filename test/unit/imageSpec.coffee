@@ -10,8 +10,8 @@ define ['ngmocks', 'image'], ->
         data: 'test data'
       # The mock scan.
       scan:
-        id: 1
-        files: ['data/QIN/Breast008/Session01/series01.nii.gz']
+        name: 't1'
+        files: ['data/QIN_Test/arc001/Breast001_Session01/SCANS/11/NIFTI/series01_t1.nii.gz']
 
     # The encapsulated scan image object.
     image = null

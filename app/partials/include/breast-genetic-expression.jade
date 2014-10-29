@@ -1,0 +1,14 @@
+.qi-subtable-title Genetic Expression
+
+table.qi-table(
+  ng-show='pathology.her2NeuIhc != null || pathology.her2NeuFish != null || pathology.ki67 != null'
+)
+  tr(ng-show='pathology.her2NeuIhc != null')
+    th.col-md-2 HER2 NEU IHC
+    td.col-md-10 {{ pathology.her2NeuIhc }}
+  tr(ng-show='pathology.her2NeuFish != null')
+    th.col-md-2 HER2 NEU FISH
+    td.col-md-10 {{ pathology.her2NeuFish | boolean }}
+  tr(ng-show='pathology.ki67 != null')
+    th.col-md-2 KI67
+    td.col-md-10 {{ pathology.ki67 }}

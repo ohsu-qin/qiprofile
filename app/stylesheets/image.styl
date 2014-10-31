@@ -24,32 +24,34 @@
       color White
       background Chocolate
 
-
 .qi-image-ctl
-  display block
-  background-color White
-  border 1px solid SlateGray
-  border-radius 0.4em 0.4em 0.4em 0.4em
-  margin 0 0 0.2em 0
-  position absolute
-  top 8em
-  right 1.1em
-  width 21em
+  font-size smaller
+  float right
+  min-width 20em
+  // background-color White
+  // border 1px solid SlateGray
+  // border-radius 0.4em 0.4em 0.4em 0.4em
+  // margin 0
+  
+  // position absolute
+  // top 8em
+  // right 1.1em
+  // width 21em
+  & .row
+    vertical-align middle
+    margin 0.5em
 
-.qi-image-ctl-label
-  padding-top 1.2em
-
-
-// Source: http://prajwalkman.github.io/angular-slider/angular-slider/angular-slider.css
-// Modified the pointer width and height so they are not off-center.
-// Modified the pointer background colors for consistency with the app.
-slider
+// The slider style. This style is adapted from
+// http://prajwalkman.github.io/angular-slider/angular-slider/angular-slider.css
+// with the following modifications:
+// * The pointer width and height are aligned so they are not off-center
+// * The pointer background colors are consistent with the app
+.qi-slider
   display inline-block
   position relative
-  height 7px
+  height 1em
   width 100%
-  margin 25px 5px 25px 5px
-  vertical-align middle
+  margin 1em 0 1em 0
   span
     white-space nowrap
     position absolute
@@ -119,4 +121,3 @@ slider
         top 15px
       &.limit
         color #808080
-

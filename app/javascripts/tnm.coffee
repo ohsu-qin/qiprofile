@@ -56,7 +56,19 @@ define ['angular', 'lodash', 'helpers', 'breast', 'sarcoma'], (ng, _) ->
         if not size.tumorSize?
           throw new Error("The TNM tumor size is missing")
         prefix = size.prefix or ''
-        suffix = if size.inSitu then 'is' else size.suffix or ''
+        # The size suffix can be a, b, c or is.
+        # in situ (is) can be modified with the invasive
+        # type (ductal or lobular).
+        if size.inSitu?
+          suffix = 'is'
+          if size.inSitu.invasiveType is 'ductal' 
+            suffix += '(DCIS)'
+          else if size.inSitu.invasiveType is 'lobular'
+            suffix += '(LCIS)'
+        else if size.suffix?
+          size.suffix
+        else
+          ''
         "#{ prefix }#{ size.tumorSize }#{ suffix }"
 
       # Calculates the summary grade based on the cumulative grade

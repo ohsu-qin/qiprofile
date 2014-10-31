@@ -1,48 +1,7 @@
-define ['angular', 'underscore.string', 'xtk', 'file', 'slider'], (ng, _s) ->
-  image = ng.module 'qiprofile.image', ['qiprofile.file', 'vr.directives.slider']
+define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng, _, _s) ->
+  image = ng.module 'qiprofile.image', ['qiprofile.file', 'qiprofile.modeling', 'vr.directives.slider']
 
-  image.factory 'Image', ['$rootScope', '$q', 'File', ($rootScope, $q, File) ->
-
-    # The overlay and color table specification.
-    # Note that some label map and color LUT must be specified for the initial
-    # load even though by default no label map is shown. Otherwise the volume
-    # will not load. For this reason, an overlay and LUT are specified for
-    # the type "none".
-    #
-    # TODO - Replace hardcoded temp filepaths with proper references.
-    #
-    overlays =
-      none:
-        labelmap:
-          accessor: () -> 'data/QIN_Test/delta_k_trans_map.nii.gz'
-        colortable:
-          accessor: () -> 'data/QIN_Test/generic-colors.txt'
-      deltaKTrans:
-        labelmap:
-          accessor: () -> 'data/QIN_Test/delta_k_trans_map.nii.gz'
-        colortable:
-          accessor: () -> 'data/QIN_Test/generic-colors.txt'
-      fxlKTrans:
-        labelmap:
-          accessor: () -> 'data/QIN_Test/fxl_k_trans_map.nii.gz'
-        colortable:
-          accessor: () -> 'data/QIN_Test/generic-colors.txt'
-      fxrKTrans:
-        labelmap:
-          accessor: () -> 'data/QIN_Test/fxr_k_trans_map.nii.gz'
-        colortable:
-          accessor: () -> 'data/QIN_Test/generic-colors.txt'
-      v_e:
-        labelmap:
-          accessor: () -> 'data/QIN_Test/v_e_map.nii.gz'
-        colortable:
-          accessor: () -> 'data/QIN_Test/generic-colors.txt'
-      tau_i:
-        labelmap:
-          accessor: () -> 'data/QIN_Test/tau_i_map.nii.gz'
-        colortable:
-          accessor: () -> 'data/QIN_Test/generic-colors.txt'
-
+  image.factory 'Image', ['$rootScope', '$q', 'File', 'Modeling', ($rootScope, $q, File, Modeling) ->
     # The root scope {parent id: [Image objects]} cache.
     if not $rootScope.images
       $rootScope.images = {}
@@ -74,29 +33,84 @@ define ['angular', 'underscore.string', 'xtk', 'file', 'slider'], (ng, _s) ->
     # @param timePoint the series time point
     # @returns a new image object
     create = (parent, filename, timePoint) ->
+      # The valid states.
+      STATES =
+        UNLOADED: 'unloaded'
+        LOADING: 'loading'
+        LOADED: 'loaded'
+      
+      # Obtain the PK modeling result object.
+      #
+      # @param session the image parent session the session object
+      # @param name the modeling result name, or null to select the sole
+      #   modeling result
+      # @returns the image session PK modeling result, or an empty object
+      #    if there is no result
+      # @throws ReferenceError if the name is specified and there is no
+      #   such modeling result, or if the name argument is null and there
+      #   is more than one modeling result
+      modelingResult = (session, name=null) ->
+        modeling = session.modeling
+        if modeling? and modeling.length
+          if name?
+            _.find(modeling, (mdl) -> mdl.name is name) or
+              throw new ReferenceError("The modeling result was not found:" +
+                                       " #{ name }")
+          else
+            # Only one modeling result is supported.
+            if modeling.length > 1
+              throw new ReferenceError("The modeling result name was not" +
+                                       " specified and there is more than" +
+                                       " one modeling result")
+            modeling[0]
+        else if name?
+          throw new ReferenceError("The modeling result name #{ name } was" +
+                                   " specified but the session does not" +
+                                   " have modeling results")
+        else
+          null
 
-      # Assign the default label map and color LUT to the filename
-      # variables.
-      type = 'none'
-      labelmapFilename = overlays[type].labelmap.accessor()
-      colortableFilename = overlays[type].colortable.accessor()
+      # @param session the image parent session the session object
+      # @return the image overlays
+      #   {modeling result name: {modeling parameter name: overlay}}
+      #   object
+      overlays = (session) ->
+        # @param mdlResult the modeling result
+        # @returns the {param name: overlay} object
+        modelingResultOverlays = (mdlResult) ->
+          # @param mdlParam the PK modeling parameter object
+          # @returns whether the parameter object has a label map
+          #   with a color table
+          hasOverlay = (mdlParam) ->
+            mdlParam.labelMap? and mdlParam.labelMap.colorTable?
+          
+          # Filter the PK parameters on the presence of an overlay.
+          pkParams = _.pick(mdlResult, Modeling.PK_PARAMS, hasOverlay)
+          # Return the {param name: label map} object.
+          mdlOverlays = {}
+          for [key, mdlParam] in _.pairs(pkParams)
+            mdlOverlays[key] = mdlParam.labelMap
+          mdlOverlays
 
+        # The modeling results.
+        modeling = session.modeling
+        if not modeling?
+          return null
+        
+        # Collect the overlays.
+        imageOverlays = {}
+        for mdlResult in modeling
+          imageOverlays[mdlResult.name] = modelingResultOverlays(mdlResult)
+        
+        # Return the overlays.
+        imageOverlays
+
+      # Return the image object with the following data and
+      # function properties.
       parent: parent
-      filename: filename
-      labelmapFilename: labelmapFilename
-      colortableFilename: colortableFilename
       timePoint: timePoint
-
-      # The image state loading flag is true if the files are being
-      # loaded, false otherwise.
-      state:
-        loading: false
-        loaded: false
-
-      # The image, label map, and color table file content.
-      data: null
-      labelmapData: null
-      colortableData: null
+      overlays: overlays(parent.session)
+      state: STATES.UNLOADED
 
       # Transfers the file content to the data properties.
       # The image state loading flag is set to true while the
@@ -106,29 +120,19 @@ define ['angular', 'underscore.string', 'xtk', 'file', 'slider'], (ng, _s) ->
       #   are completed
       load: ->
         # Set the loading flag.
-        @state.loading = true
+        @state = STATES.LOADING
+        # The volume and label map to render.
+        @volume = new X.volume()
+        @volume.file = filename
 
-        # Read each file into an ArrayBuffer. The Coffeescript fat
+        # Read the file into an ArrayBuffer. The CoffeeScript fat
         # arrow (=>) binds the this variable to the image object
         # rather than the $http request.
-        scanFile = File.read(filename, responseType: 'arraybuffer').then (data) =>
+        File.readBinary(filename).then (data) =>
           # Set the data property to the scan file content.
-          @data = data
-        labelmapFile = File.read(labelmapFilename, responseType: 'arraybuffer').then (labelmapData) =>
-          # Set the data property to the label map file content.
-          @labelmapData = labelmapData
-        colortableFile = File.read(colortableFilename, responseType: 'arraybuffer').then (colortableData) =>
-          # Set the data property to the color table file content.
-          @colortableData = colortableData
-        # Combine the multiple promises into a single promise.
-        allImagesLoaded = $q.all(scanFile, labelmapFile, colortableFile)
-        allImagesLoaded.then =>
-          # Unset the loading flag.
-          @state.loading = false
-          # Set a flag indicating that all file reads are complete.
-          @allImagesLoaded = true
-          # Set the data property to the file content.
-          @data = data
+          @volume.filedata = data
+          # Set the state to loaded.
+          @state = STATES.LOADED
 
       # Renders the image in the given parent element.
       #
@@ -140,14 +144,6 @@ define ['angular', 'underscore.string', 'xtk', 'file', 'slider'], (ng, _s) ->
         renderer.container = element[0]
         # Build the renderer.
         renderer.init()
-        # The volume and label map to render.
-        @volume = new X.volume()
-        @volume.file = @filename
-        @volume.filedata = @data
-        @volume.labelmap.file = @labelmapFilename
-        @volume.labelmap.filedata = @labelmapData
-        @volume.labelmap.colortable.file = @colortableFilename
-        @volume.labelmap.colortable.filedata = @colortableData
         renderer.add(@volume)
 
         # Set the volume threshold levels to defaults.
@@ -155,14 +151,58 @@ define ['angular', 'underscore.string', 'xtk', 'file', 'slider'], (ng, _s) ->
         # correct values.
         @volume.lowerThreshold = 0
         @volume.upperThreshold = 445
-        # Hide the label map by default.
-        @volume.labelmap.visible = false
+
+        # TODO - verify the comment below.
+        # The overlay and color table specification.
+        # Note that some label map and color LUT must be specified for the initial
+        # load even though by default no label map is shown. Otherwise the volume
+        # will not load. For this reason, an overlay and LUT are specified for
+        # the type "none".
 
         # Adjust the camera position.
         renderer.camera.position = [0, 0, 240]
 
         # Render the image.
         renderer.render()
+      
+      # Deselects an existing overlay as follows:
+      # * If the image volume has a label map, then the label map visible
+      #  flag is set to false.
+      # Otherwise, this function is a no-op.
+      #
+      # @param image the selected PK modeling parameter name, or 'none' to 
+      #  remove an existing overlay
+      deselectOverlay: ->
+         @volume.labelmap.visible = false if @volume.labelmap?
+      
+      # Changes the overlay label map and color lookup table as follows:
+      # * Fetch the overlay files.
+      # * Set the volume label map properties.
+      # * Display the overlay.
+      #
+      # @param labelMap the selected label map {filename, colorTable}
+      #   object
+      selectOverlay: (labelMap) ->
+        # Set the volume label map file name property.
+        @volume.labelmap.file = labelMap.filename
+        # Set the volume color table file name property.
+        @volume.labelmap.colortable.file = labelMap.colorTable.filename
+
+        # Retrieve the overlay layer map and color table.
+        loadLabelMap = File.readBinary(labelMap.filename).then (data) =>
+          # Set the volume label map data property.
+          @volume.labelmap.filedata  = data
+        loadColorTable = File.readBinary(labelMap.colorTable.filename)
+          .then (data) =>
+            # Set the volume color table data property.
+            @volume.labelmap.colortable.filedata = data
+        
+        # Join the two promises into a single promise.
+        loaded = $q.all(loadLabelMap, loadColorTable)
+        loaded.then =>
+          # Turn on the label map. This triggers a redisplay of the volume
+          # with the new overlay.
+          @volume.labelmap.visible = true
 
     # Obtains image objects for the given ImageContainer. The image
     # object content is described in the create() function.
@@ -178,47 +218,7 @@ define ['angular', 'underscore.string', 'xtk', 'file', 'slider'], (ng, _s) ->
     # @returns the image objects
     imagesFor: (parent) ->
       cache(parent) or cache(parent, parent.files...)
-
-    # Changes the label map overlay and color lookup table. If the "No overlay"
-    # button on the image detail page was clicked, the label map is set to be
-    # not visible. If any of the buttons to view an overlay was clicked, the
-    # image volume is modified with the appropriate label map and color LUT.
-    # 
-    # @param type the selected overlay type
-    # @param volume the image volume
-    # @returns the modified image object
-    selectOverlay: (type, volume) ->
-      # If type 'none' is selected, turn the label map off...
-      if type == 'none'
-        volume.labelmap.visible = false
-      # ...and if an overlay type is selected, load the new label map
-      # and color table.
-      else
-        # Read each file into an ArrayBuffer. The Coffeescript fat
-        # arrow (=>) binds the this variable to the image object
-        # rather than the $http request.
-        newLabelmapFilename = overlays[type].labelmap.accessor()
-        @newLabelmapFilename = newLabelmapFilename
-        newColortableFilename = overlays[type].colortable.accessor()
-        @newColortableFilename = newColortableFilename
-        newLabelmapFile = File.read(newLabelmapFilename, responseType: 'arraybuffer').then (newLabelmapData) =>
-          # Set the data property to the label map file content.
-          @newLabelmapData = newLabelmapData
-        newColortableFile = File.read(newColortableFilename, responseType: 'arraybuffer').then (newColortableData) =>
-          # Set the data property to the color table file content.
-          @newColortableData = newColortableData
-        # Combine the promises into a single promise.
-        allNewFilesLoaded = $q.all(newLabelmapFile, newColortableFile)
-        allNewFilesLoaded.then =>
-          # Modify the volume with the newly selected overlay files. Then turn
-          # the label map on; this triggers a re-load of the volume with the
-          # overlay.
-          volume.labelmap.file = @newLabelmapFilename
-          volume.labelmap.filedata = @newLabelmapData
-          volume.labelmap.colortable.file = @newColortableFilename
-          volume.labelmap.colortable.filedata = @newColortableData
-          volume.labelmap.visible = true
-    
+  
     # Formats the image container title.
     #
     # Note: this formatting routine should be confined to the filter,

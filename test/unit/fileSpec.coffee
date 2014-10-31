@@ -1,5 +1,5 @@
 define ['lodash', 'expect', 'pako', 'encoding', 'ngmocks', 'file'], (_, expect, pako) ->
-  describe 'Unit Testing File Service', ->
+  describe.only 'Unit Testing File Service', ->
     # The mock Angular $http service provider.
     $httpBackend = null
   
@@ -43,8 +43,8 @@ define ['lodash', 'expect', 'pako', 'encoding', 'ngmocks', 'file'], (_, expect, 
         # Dispatch the backend request.
         $httpBackend.flush()
 
-      it 'should read the compressed file content', ->
-        data = File.read(mock.compressed.path, responseType: 'arraybuffer')
+      it 'should read the binary file content', ->
+        data = File.readBinary(mock.compressed.path)
         expect(data, "The compressed result is incorrect")
           .to.eventually.eql(mock.compressed.data)
         # Dispatch the backend request.

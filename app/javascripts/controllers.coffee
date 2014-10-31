@@ -75,6 +75,7 @@ define ['angular'], (ng) ->
   
       # Place the subject in scope.
       $scope.subject = subject
+      
       # If the project is the default, then remove it from the URL.
       ControllerHelper.cleanBrowserUrl($rootScope.project)
   ]
@@ -150,6 +151,7 @@ define ['angular'], (ng) ->
       $scope.openImage = (image) ->
         # The parent scan or registration image container.
         container = image.parent
+        
         # The common parameters.
         params =
           project: container.session.subject.project
@@ -157,6 +159,7 @@ define ['angular'], (ng) ->
           session: container.session.number
           detail: container.session.detail
           timePoint: image.timePoint
+        
         # The target route, a prefix for now.
         route = 'quip.subject.session.scan.'
         if container._cls == 'Scan'
@@ -169,6 +172,7 @@ define ['angular'], (ng) ->
         else
           throw new TypeError("Unsupported image container type:" +
                               " #{ container._cls }")
+        
         # Route to the image detail page.      
         $state.go(route, params)
   
@@ -176,6 +180,7 @@ define ['angular'], (ng) ->
       $rootScope.project = session.subject.project
       # Place the session in the scope.
       $scope.session = session
+      
       # If the project is the default, then remove it from the URL.
       ControllerHelper.cleanBrowserUrl($rootScope.project)
   ]
@@ -188,16 +193,47 @@ define ['angular'], (ng) ->
       $rootScope.project = image.parent.session.subject.project
       # Place the image in the scope.
       $scope.image = image
-      # Place the image control settings in the scope.
-      $scope.overlaySelect = 'none'
-      $scope.opacityOpen = true
-      $scope.axesOpen = true
-      $scope.threshOpen = true
-      # Calls the overlay selection function.
+      # The names of modeling results with an overlay.
+      $scope.overlayModelingResults = _.keys(image.overlays)
+      
+      # Selects the overlays for the modeling result with the given
+      # name.
       #
-      # @param type the selected overlay type
-      # @param image.volume the image volume
-      $scope.selectOverlay = (type) -> Image.selectOverlay(type, image.volume)
+      # @param the modeling result name
+      # @throws ReferenceError if there is no modeling result by that
+      #   name
+      $scope.selectModelingResult = (name) ->
+        $scope.overlays = image.overlays[name] or
+          throw new ReferenceError("The modeling result was not found:" +
+                                   " #{ name }")
+
+      # If there is only one overlay modeling result, then set the
+      # selected modeling result to that modeling result name.
+      if $scope.overlayModelingResults.length == 1
+        mdlResult = $scope.overlayModelingResults[0]
+        $scope.selectModelingResult(mdlResult.name)
+
+      # Delegate deselectOverlay to the image.
+      $scope.deselectOverlay = $scope.image.deselectOverlay
+
+      # Selects the current selected modeling result's label map object
+      # for the given PK parameter property name.
+      #
+      # @param paramName the PK modeling parameter property name
+      # @throws ReferenceError if there is no current scope modeling
+      #   result or the scope modeling result does not have a label map
+      #   for the given modeling parameter
+      $scope.selectOverlay = (paramName) ->
+        if not $scope.overlays?
+          throw new ReferenceError("There is no selected modeling result")
+        overlay = $scope.overlays[paramName]
+        # If no such overlay, then complain.
+        if not overlay?
+          throw new ReferenceError("The selected modeling parameter does" +
+                                   " not have an overlay: #{ paramName }")
+        # Show the overlay.
+        $scope.image.selectOverlay(overlay)
+      
       # If the project is the default, then remove it from the URL.
       ControllerHelper.cleanBrowserUrl($rootScope.project)
   ]

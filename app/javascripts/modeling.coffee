@@ -8,6 +8,10 @@ define ['angular', 'lodash', 'chart'], (ng, _) ->
       accessor: (session) -> session.acquisitionDate.valueOf()
 
     # The chart-specific y-axis specifications.
+    #
+    # TODO - support multiple modeling by replacing the session
+    #  arguments below with a modeling result.
+    #
     y =
       ktrans:
         label: 'Ktrans'
@@ -16,12 +20,12 @@ define ['angular', 'lodash', 'chart'], (ng, _) ->
             {
               label: 'FXL Ktrans'
               color: 'BurlyWood'
-              accessor: (session) -> session.modeling.fxlKTrans.average
+              accessor: (session) -> session.modeling[0].fxlKTrans.average
             }
             {
               label: 'FXR Ktrans'
               color: 'OliveDrab'
-              accessor: (session) -> session.modeling.fxrKTrans.average
+              accessor: (session) -> session.modeling[0].fxrKTrans.average
             }
           ]
       ve:
@@ -31,7 +35,7 @@ define ['angular', 'lodash', 'chart'], (ng, _) ->
             {
               label: 'v_e'
               color: 'MediumSeaGreen'
-              accessor: (session) -> session.modeling.vE.average
+              accessor: (session) -> session.modeling[0].vE.average
             }
           ]
       taui:
@@ -41,7 +45,7 @@ define ['angular', 'lodash', 'chart'], (ng, _) ->
             {
               label: 'tau_i'
               color: 'PaleVioletRed'
-              accessor: (session) -> session.modeling.tauI.average
+              accessor: (session) -> session.modeling[0].tauI.average
             }
           ]
   
@@ -50,6 +54,9 @@ define ['angular', 'lodash', 'chart'], (ng, _) ->
       ktrans: {x: x, y: y.ktrans}
       ve: {x: x, y: y.ve}
       taui: {x: x, y: y.taui}
+    
+    # The PK modeling paramater properties, including the delta Ktrans.
+    PK_PARAMS: ['fxlKTrans', 'fxrKTrans', 'deltaKTrans', 'vE', 'tauI']
   
     # @param sessions the session array 
     # @param chart the chart name
@@ -109,8 +116,12 @@ define ['angular', 'lodash', 'chart'], (ng, _) ->
         # The modeling objects extended with change properties.
         result = []
         # Extend all but the first modeling object with change properties.
+        #
+        # TODO - support multiple modeling by iterating over the modeling
+        # results, then the sessions in the loop below.
+        #
         for sess in sessions
-          curr = sess.modeling
+          curr = sess.modeling[0]
           if curr
             result.push addSessionChangeProperties(curr, prev)
             prev = curr
@@ -123,8 +134,4 @@ define ['angular', 'lodash', 'chart'], (ng, _) ->
       ktransOpen: true
       veOpen: true
       tauiOpen: true
-      # The table size.
-      ktransTableSize: "qi-full-width-table"
-      veTableSize: "qi-half-width-table"
-      tauiTableSize: "qi-half-width-table"
   ]

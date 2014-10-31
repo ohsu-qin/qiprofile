@@ -20,9 +20,6 @@ accordion(close-others="false")
           ng-class="{'glyphicon-chevron-down': config.#{ group }Open, 'glyphicon-chevron-up': !config.#{ group }Open}"
         )
 
-      // The controller determines whether the property table is half or
-      // full length. Ktrans is full length, since it has three properties.
-      // The others are half length.
       table.qi-table.qi-modeling-table
         // The visit date has its own column group.
         colgroup

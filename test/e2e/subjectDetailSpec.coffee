@@ -216,36 +216,9 @@ class SubjectDetailPage extends Page
 
 describe 'E2E Testing Subject Detail', ->
   page = null
-<<<<<<< HEAD
-  
-  # The header test cases.
-  describe 'Header', ->
-    beforeEach ->
-      page = new SubjectDetailPage '/quip/breast/subject/1?project=QIN_Test'
-  
-    it 'should display the billboard', ->
-      expect(page.billboard, 'The billboard is incorrect').to.eventually.equal('Breast Patient 1')
-  
-    it 'should have a home button', ->
-      pat = /.*\/quip\?project=QIN_Test$/
-      expect(page.home(), 'The home URL is incorrect').to.eventually.match(pat)
-  
-    it 'should have help text', ->
-      expect(page.help(), 'The help is missing').to.eventually.exist
-  
-    it 'should display a contact email link', ->
-      pat = /a href="mailto:\w+@ohsu.edu"/
-      expect(page.contact(), 'The email address is missing')
-        .to.eventually.match(pat)
-  
-  describe 'Imaging Profile', ->
-    # The imaging profile is collection-independent.
-    beforeEach ->
-=======
 
   describe 'Breast', ->
     before ->
->>>>>>> clinical_table
       page = new SubjectDetailPage '/quip/breast/subject/1?project=QIN_Test'
 
     # The page header test cases.
@@ -259,6 +232,11 @@ describe 'E2E Testing Subject Detail', ->
 
       it 'should have help text', ->
         expect(page.help, 'The help is missing').to.eventually.exist
+  
+      it 'should display a contact email link', ->
+        pat = /a href="mailto:\w+@ohsu.edu"/
+        expect(page.contact(), 'The email address is missing')
+          .to.eventually.match(pat)
 
     # The page main body test cases.
     describe 'Imaging Profile', ->
@@ -374,88 +352,6 @@ describe 'E2E Testing Subject Detail', ->
             table = _.first(tables)
             table.body.then (rows) ->
               for row, rowNdx in rows
-<<<<<<< HEAD
-                row.then (cols) ->
-                  # The first table is Ktrans with seven columns.
-                  # The other tables have three columns.
-                  # The first column is the visit date.
-                  if tblNdx == 0
-                    expect(cols.length, 'The Ktrans table column length is incorrect')
-                      .to.equal(7)
-                    cols[0].then (value) ->
-                      expectedVisitDate[rowNdx] = value
-                  else
-                    expect(cols.length, 'The non-Ktrans table column length is incorrect')
-                      .to.equal(3)
-                    visitDate = cols[0]
-                    expect(visitDate, 'The table visit date is incorrect')
-                      .to.eventually.equal(expectedVisitDate[rowNdx])
-                  # The percent change is in the third, fifth and seventh column.
-                  # The percent change of the first row is blank. All other columns
-                  # are non-blank.
-                  #
-                  # FIXME - the validation below is broken. All values are blank,
-                  # even though they show up in the browser.
-                  #
-                  for value, i in cols[1..-1]
-                    # Every other column is a percent change.
-                    if i % 2 == 1
-                      # A percent change column - the first row is blank, other rows
-                      # have a value.
-                      if rowNdx == 0
-                        expect(value, "The percent change in Imaging Profile table #{ tblNdx + 1 }" +
-                                      " row #{ rowNdx + 1 } column #{ i + 2 } is not blank: #{ value }")
-                          .to.eventually.equal('')
-                      else
-                        expect(value, "The percent change in Imaging Profile table #{ tblNdx + 1 }" +
-                                      " row #{ rowNdx + 1 } column #{ i + 2 } is blank")
-                          .to.eventually.not.be.empty
-                    else
-                      # Not a percent change column.
-                      expect(value, "Imaging Profile table #{ tblNdx + 1 }" +
-                                    " row #{ rowNdx + 1 } column #{ i + 2 } is blank")
-                        .to.eventually.not.be.empty
-
-  # describe 'Clinical Profile', ->
-  #   describe 'Demographics', ->
-  #     # Demographics is collection-independent.
-  #     beforeEach ->
-  #       page = new SubjectDetailPage '/quip/breast/subject/1?project=QIN_Test'
-  #     
-  #     it 'should show the demographics table', ->
-  #       page.clinicalProfileTables().then (tables) ->
-  #         # TODO - add test case.
-  #
-  #   describe 'Treatments', ->
-  #     beforeEach ->
-  #       page = new SubjectDetailPage '/quip/breast/subject/1?project=QIN_Test'
-  #     
-  #     it 'should show the treatments table', ->
-  #       # TODO - add test case.
-  # 
-  #   describe 'Outcomes', ->
-  #     describe 'Breast', ->
-  #       beforeEach ->
-  #         page = new SubjectDetailPage '/quip/breast/subject/1?project=QIN_Test'
-  # 
-  #       describe 'Biopsy', ->
-  #         # TODO - Add test cases for the date and every outcome table.
-  # 
-  #       describe 'Assessment', ->
-  #         # TODO - Add test cases for the date and every outcome table.
-  #     
-  #     describe 'Sarcoma', ->
-  #       beforeEach ->
-  #         page = new SubjectDetailPage '/quip/sarcoma/subject/1?project=QIN_Test'
-  # 
-  #       describe 'Biopsy', ->
-  #         # TODO - Add test cases for the date and every outcome table.
-  # 
-  #       describe 'Assessment', ->
-  #         # TODO - Add test cases for the date and every outcome table.
-  # 
-          
-=======
                 expect(row.length, "The Ktrans table row #{ rowNdx + 1 } column" +
                                    " count is incorrect").to.equal(7)
 
@@ -580,4 +476,3 @@ describe 'E2E Testing Subject Detail', ->
 
     describe 'Assessment', ->
       # TODO - Add test cases for the date and every outcome table.
->>>>>>> clinical_table

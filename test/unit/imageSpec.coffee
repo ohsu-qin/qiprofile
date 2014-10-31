@@ -41,9 +41,9 @@ define ['ngmocks', 'image'], ->
       it 'should encapsulate the image file', ->
         expect(image, "There is not an image object").to.exist
 
-      it 'should initialize the image state loading flag to false', ->
-        expect(image.state.loading, 'The image state loading flag is not false').
-          to.be.false
+      it 'should initialize the image state loading flag to unloaded', ->
+        expect(image.state, 'The image state loading flag is not set to unloaded').
+          to.not.equal('unloaded')
     
       it 'should have a parent property', ->
         expect(image.parent, 'The image parent is missing').

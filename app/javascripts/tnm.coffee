@@ -53,22 +53,29 @@ define ['angular', 'lodash', 'helpers', 'breast', 'sarcoma'], (ng, _) ->
       # @returns the standard size string, e.g. 'p2b'
       # @throws Error if the tumorSize property value is missing
       formatSize: (size) ->
+        sizeSuffix = ->
+          inSituSuffix = (inSitu) ->
+            if size.inSitu.invasiveType is 'ductal' 
+              'is(DCIS)'
+            else if size.inSitu.invasiveType is 'lobular'
+              'is(LCIS)'
+            else
+              'is'
+          
+          # The size suffix can be a, b, c or is.
+          # in situ (is) can be modified with the invasive
+          # type (ductal or lobular).
+          if size.inSitu?
+            inSituSuffix(size.inSitu)
+          else if size.suffix?
+            size.suffix
+          else
+            ''
+          
         if not size.tumorSize?
           throw new Error("The TNM tumor size is missing")
         prefix = size.prefix or ''
-        # The size suffix can be a, b, c or is.
-        # in situ (is) can be modified with the invasive
-        # type (ductal or lobular).
-        if size.inSitu?
-          suffix = 'is'
-          if size.inSitu.invasiveType is 'ductal' 
-            suffix += '(DCIS)'
-          else if size.inSitu.invasiveType is 'lobular'
-            suffix += '(LCIS)'
-        else if size.suffix?
-          size.suffix
-        else
-          ''
+        suffix  = sizeSuffix()
         "#{ prefix }#{ size.tumorSize }#{ suffix }"
 
       # Calculates the summary grade based on the cumulative grade

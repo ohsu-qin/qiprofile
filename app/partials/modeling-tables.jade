@@ -8,6 +8,13 @@
 - columns = { 'deltaKTrans': '&Delta;K<sup>trans</sup>', 'fxlKTrans': 'FXL K<sup>trans</sup>', 'fxrKTrans': 'FXR K<sup>trans</sup>', 'vE': 'v<sub>e</sub>', 'tauI': '&tau;<sub>i</sub>'}
 
 // Mark up accordian header and table content for each group.
+//
+// TODO - Support multiple modeling results. If more than
+// one result, then include outer accordion structure with
+// result name heading. Also include a property button to
+// display the result modeling technique, e.g. ANTS, and
+// input configuration.
+//
 accordion(close-others="false")
   each group in groups
     // The open flag set in the controller expands or collapses the group,
@@ -20,9 +27,6 @@ accordion(close-others="false")
           ng-class="{'glyphicon-chevron-down': config.#{ group }Open, 'glyphicon-chevron-up': !config.#{ group }Open}"
         )
 
-      // The controller determines whether the property table is half or
-      // full length. Ktrans is full length, since it has three properties.
-      // The others are half length.
       table.qi-table.qi-modeling-table
         // The visit date has its own column group.
         colgroup
@@ -52,6 +56,6 @@ accordion(close-others="false")
             td.qi-date= '{{ sess.acquisitionDate | moment }}'
             each prop in properties[group]
               // The property value with four decimals.
-              td.qi-number= '{{ sess.modeling.' + prop + '.average | number:4 }}'
+              td.qi-number= '{{ sess.modeling[0].' + prop + '.average | number:4 }}'
               // The percent change without decimals.
-              td.qi-pct= '{{ sess.modeling.' + prop + 'PctChange | number:0 }}'
+              td.qi-pct= '{{ sess.modeling[0].' + prop + 'PctChange | number:0 }}'

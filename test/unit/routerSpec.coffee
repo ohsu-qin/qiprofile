@@ -33,7 +33,7 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
               delta_k_trans:
                 average: 2.3
                 filename: 'data/Breast001/Session01/delta_k_trans.nii.gz'
-                colorization:
+                overlay:
                   filename: 'data/Breast001/Session01/delta_k_trans_color.nii.gz'
                   color_lut: 'etc/jet_colors.txt'
             ]
@@ -140,12 +140,12 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
             .to.equal(mock_mdl.delta_k_trans.average)
           expect(mdl.deltaKTrans.filename, "delta Ktrans filename is incorrect")
             .to.equal(mock_mdl.delta_k_trans.filename)
-          colorization = mdl.deltaKTrans.colorization
-          expect(colorization, "delta Ktrans is missing the colorization").to.exist
-          expect(colorization.filename, "delta Ktrans colorization filename is incorrect")
-            .to.equal(mock_mdl.delta_k_trans.colorization.filename)
-          expect(colorization.colorLut, "delta Ktrans colorization LUT is incorrect")
-            .to.equal(mock_mdl.delta_k_trans.colorization.color_lut)
+          overlay = mdl.deltaKTrans.overlay
+          expect(overlay, "delta Ktrans is missing the overlay").to.exist
+          expect(overlay.filename, "delta Ktrans overlay filename is incorrect")
+            .to.equal(mock_mdl.delta_k_trans.overlay.filename)
+          expect(overlay.colorLut, "delta Ktrans overlay LUT is incorrect")
+            .to.equal(mock_mdl.delta_k_trans.overlay.color_lut)
 
         it 'should fetch the detail with a detail property', ->
           subject = _.clone(mock.subject)

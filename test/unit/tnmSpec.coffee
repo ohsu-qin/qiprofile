@@ -32,8 +32,9 @@ define ['ngmocks', 'tnm', 'helpers'], (tnm) ->
           size =
             prefix: px
             tumorSize: ts
-            inSitu: ist
             suffix: sx
+          # An empty in situ object marks the presence of an in situ tumor.
+          size.inSitu = {} if ist
           actual = TNM.formatSize(size)
           expect(actual, "Formatted TNM size #{ ObjectHelper.prettyPrint(size) } is incorrect")
             .to.equal(expectedValue)

@@ -11,14 +11,14 @@
     openImage: '='
 button.btn.btn-default.btn-xs.qi-nav-btn.qi-image-btn(
   ng-click='$parent.$parent.openImage(image)'
-  ng-show='image.allImagesLoaded'
+  ng-show="image.state == 'loaded'"
 )
   .glyphicon.glyphicon-eye-open
 
 button.btn.btn-default.btn-xs.qi-nav-btn.qi-image-btn(
   ng-click='image.load()'
-  ng-hide='image.allImagesLoaded'
-  ng-disabled='image.state.loading'
-  qi-spin="image.state.loading"
+  ng-hide="image.state == 'loaded'"
+  ng-disabled="image.state == 'loading'"
+  qi-spin="image.state == 'loading'"
 )
   .glyphicon.glyphicon-download

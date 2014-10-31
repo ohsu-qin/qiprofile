@@ -57,12 +57,11 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
       addSessionDetailLinks = (sessions, xAxis, dy=0) ->
         # @returns the ui-sref link to detail page for the given session
         sessionDetailLink = (session) ->
-          "quip.subject.session.detail(" +
+          "quip.subject.session(" +
           "{project: '#{ session.subject.project }'," +
           " collection: '#{ session.subject.collection.toLowerCase() }'," +
           " subject: #{ session.subject.number }," +
-          " session: #{ session.number }," +
-          " detail: '#{ session.detail }'})"
+          " session: #{ session.number }})"
       
         # Makes a new ui-sref anchor element that hyperlinks to the given
         # session detail page.

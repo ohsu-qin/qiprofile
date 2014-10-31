@@ -57,8 +57,8 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
           # Note: this function modifies the input subject argument
           # content as described above. 
           #
-          # @param subject the parent subject
-          # @returns a promise which resolves to the subject detail
+          # @param subject the subject without detail
+          # @returns a promise which resolves to the subject with detail
           getSubjectDetail = (subject) ->
             # If the subject has no detail, then complain.
             if not subject.detail
@@ -97,7 +97,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
               subject
 
           if condition.detail?
-            getSessionDetail(condition)
+            getSubjectDetail(condition)
           else
             Subject.query(where(condition)).$promise.then (subjects) ->
               if not subjects.length
@@ -146,37 +146,19 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
             # Encapsulate the image files.
             container.images = Image.imagesFor(container)
   
-          if session.detail
-            Session.detail(id: session.detail).$promise.then (detail) =>
-              # Copy the fetched detail into the session.
-              ObjectHelper.aliasPublicDataProperties(detail, session)
-              for scan in _.values(session.scans)
-                addImageContainerContent(scan, session)
-                for reg in scan.registrations
-                  addImageContainerContent(reg, session)
-              # Resolve to the detail object.
-              detail
-          else if session.subject
-            subject = session.subject
-            # Get the subject detail.
-            this.getSubjectDetail(subject).then (detail) =>
-              # Find the session in the session list.
-              fetched = _.find detail.sessions, (other) ->
-                other.number == session.number
-              # If the session was not found, then complain.
-              if not fetched
-                throw new ReferenceError "Subject #{ subject.number }" +
-                                         " Session #{ session.number }" +
-                                         " does not reference a detail object"
-              # Copy the fetched id and detail reference.
-              session._id = fetched._id
-              session.detail = fetched.detail
-              # Recurse.
-              this.getSessionDetail(session)
-          else
-            throw new Error "The session detail cannot be fetched," +
-                            " since the session search object does" +
-                            " not reference a subject."
+          if not session.detail?
+            throw new ReferenceError "Subject #{ subject.number }" +
+                                     " Session #{ session.number }" +
+                                     " does not reference a detail object"
+          Session.detail(id: session.detail).$promise.then (detail) =>
+            # Copy the fetched detail into the session.
+            ObjectHelper.aliasPublicDataProperties(detail, session)
+            for scan in _.values(session.scans)
+              addImageContainerContent(scan, session)
+              for reg in scan.registrations
+                addImageContainerContent(reg, session)
+            # Resolve to the augmented session object.
+            session
 
         # @param session the session to search
         # @param name the scan name

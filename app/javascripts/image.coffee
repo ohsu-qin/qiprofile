@@ -143,7 +143,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
         # The image is rendered within the given element.
         renderer.container = element[0]
         # Build the renderer.
-        renderer.init()
+        renderer.init()        
         renderer.add(@volume)
 
         # Set the volume threshold levels to defaults.

@@ -50,6 +50,11 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'router', 'uirout
                 controller:  'SubjectListCtrl'
 
           # The subject state.
+          # TODO - child states always fetch the subject, even if
+          # called in a context with the fetched subject. Can this
+          # be avoided? Does the ui-router go function have an
+          # option to supply a subject argument and thereby forego
+          # the subject fetch resolution? 
           .state 'quip.subject',
             url: '/:collection/subject/{subject:[0-9]+}?subjectdetail'
             resolve:
@@ -58,11 +63,19 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'router', 'uirout
                   project: $stateParams.project or project
                   collection: _s.capitalize($stateParams.collection)
                   number: parseInt($stateParams.subject)
+                # If the subject detail id is available, then the router
+                # searches the subject detail collection directly.
+                # Otherwise, the router searches the subject collection
+                # to get the detail id, then searches the subject detail
+                # collection.
+                #
+                # TODO - fold the MongoDB subject detail into subject and
+                # change the subjects query to do a reduction search to
+                # return only the subject id, collection and number. 
                 if $stateParams.subjectdetail?
                   condition.detail = $stateParams.subjectdetail
-                  Router.getSubjectDetail(condition)
-                else
-                  Router.getSubject(condition)
+                # Fetch the subject.
+                Router.getSubject(condition)
             views:
               'main@':
                 templateUrl: '/partials/subject-detail.html'
@@ -70,29 +83,25 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'router', 'uirout
 
           # The session state.
           .state 'quip.subject.session',
-            abstract: true
             url: '/session/{session:[0-9]+}'
             resolve:
-              session: (subject, $stateParams) ->
+              session: (subject, $stateParams, Router) ->
                 number = parseInt($stateParams.session)
                 if number >= subject.sessions.length
-                  throw ReferenceError.new("Subject #{ subject.name } does not" +
+                  throw ReferenceError.new("Subject #{ subject.number } does not" +
                                            " have a session #{ number }")
                 # Grab the subject session embedded object.
                 sess = subject.sessions[number - 1]
-                # Augment the session with its subject and number.
-                sess.subject = subject
-                sess.number = number
+                # The session must have a detail foreign key.
+                if not sess.detail?
+                  throw ReferenceError.new("Subject #{ subject.number }" +
+                                           " Session #{ sess.number } does" +
+                                           " not have detail")
+                  
+                # Fetch the session detail.
+                Router.getSessionDetail(sess)
                 # Return the session.
                 sess
-
-          # The session detail page.
-          .state 'quip.subject.session.detail',
-            url: '?detail'
-            resolve:
-              detail: (session, $stateParams, Router) ->
-                session.detail = $stateParams.detail
-                Router.getSessionDetail(session)
             views:
               'main@':
                 templateUrl: '/partials/session-detail.html'

@@ -194,7 +194,7 @@ define ['angular'], (ng) ->
       # Place the image in the scope.
       $scope.image = image
       # The names of modeling results with an overlay.
-      $scope.overlayModelingResults = _.keys(image.overlays)
+      $scope.overlayModelingNames = _.keys(image.overlays)
       
       # Selects the overlays for the modeling result with the given
       # name.
@@ -209,9 +209,9 @@ define ['angular'], (ng) ->
 
       # If there is only one overlay modeling result, then set the
       # selected modeling result to that modeling result name.
-      if $scope.overlayModelingResults.length == 1
-        mdlResult = $scope.overlayModelingResults[0]
-        $scope.selectModelingResult(mdlResult.name)
+      if $scope.overlayModelingNames.length == 1
+        mdlResult = $scope.overlayModelingNames[0]
+        $scope.selectModelingResult(mdlResult)
 
       # Delegate deselectOverlay to the image.
       $scope.deselectOverlay = $scope.image.deselectOverlay

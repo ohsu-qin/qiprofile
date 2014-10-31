@@ -14,10 +14,10 @@ block content
   qi-series-image.qi-panel
   
   // The overlay selection radio button controls.
-  .qi-overlay-select(ng-show="overlayModelingResults.length > 1")
+  .qi-overlay-select(ng-show="overlayModelingNames.length > 1")
     h4 Modeling Result
     .btn-group
-      div(ng-repeat="name in overlayModelingResults")
+      div(ng-repeat="name in overlayModelingNames")
         button.btn.btn-primary(ng-model='modelSelect' btn-radio="name" ng-click="selectModelingResult(name)") {{ name }}
 
   .qi-overlay-select(ng-show="overlays")

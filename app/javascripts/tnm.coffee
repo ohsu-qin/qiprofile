@@ -1,5 +1,6 @@
 define ['angular', 'lodash', 'helpers', 'breast', 'sarcoma'], (ng, _) ->
-  tnm = ng.module 'qiprofile.tnm', ['qiprofile.helpers', 'qiprofile.breast', 'qiprofile.sarcoma']
+  tnm = ng.module 'qiprofile.tnm', ['qiprofile.helpers', 'qiprofile.breast',
+                                    'qiprofile.sarcoma']
 
   tnm.factory 'TNM', ['ArrayHelper', 'Breast', 'Sarcoma',
     (ArrayHelper, Breast, Sarcoma) ->
@@ -71,7 +72,7 @@ define ['angular', 'lodash', 'helpers', 'breast', 'sarcoma'], (ng, _) ->
             size.suffix
           else
             ''
-          
+        
         if not size.tumorSize?
           throw new Error("The TNM tumor size is missing")
         prefix = size.prefix or ''

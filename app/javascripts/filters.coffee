@@ -1,6 +1,9 @@
-define ['angular', 'moment', 'underscore.string', 'roman', 'helpers', 'demographics', 'image'],
+define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
+        'demographics', 'tnm', 'image'],
   (ng, moment, _s, roman) ->
-    filters = ng.module 'qiprofile.filters', ['qiprofile.helpers', 'qiprofile.demographics', 'qiprofile.image']
+    filters = ng.module 'qiprofile.filters',
+                        ['qiprofile.helpers', 'qiprofile.demographics',
+                         'qiprofile.tnm', 'qiprofile.image']
 
     filters.filter 'capitalize', ->
       (s) -> _s.capitalize(s)
@@ -45,7 +48,8 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers', 'demograph
       else if not value?
         'Not Specified'
       else
-        throw new TypeError("The input value is not boolean, null or undefined: #{ value }")
+        throw new TypeError("The input value is not boolean, null or" +
+                            " undefined: #{ value }")
 
     filters.filter 'boolean', ->
       # Returns the string representation of the given input value as follows:

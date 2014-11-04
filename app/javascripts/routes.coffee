@@ -88,8 +88,8 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'router', 'uirout
               session: (subject, $stateParams, Router) ->
                 number = parseInt($stateParams.session)
                 if number >= subject.sessions.length
-                  throw ReferenceError.new("Subject #{ subject.number } does not" +
-                                           " have a session #{ number }")
+                  throw ReferenceError.new("Subject #{ subject.number } does" +
+                                           " not have a session #{ number }")
                 # Grab the subject session embedded object.
                 sess = subject.sessions[number - 1]
                 # The session must have a detail foreign key.
@@ -97,7 +97,7 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'router', 'uirout
                   throw ReferenceError.new("Subject #{ subject.number }" +
                                            " Session #{ sess.number } does" +
                                            " not have detail")
-                  
+                
                 # Fetch the session detail.
                 Router.getSessionDetail(sess)
                 # Return the session.

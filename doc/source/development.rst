@@ -257,11 +257,13 @@ Coding Standards
         ...
 
 * CoffeeScript, Jade and Stylus string literals have double quotation
-  marks if they are interpolated, single quotation marks otherwise,
-  e.g.::
+  marks if they are evaluated or interpolated, single quotation marks
+  otherwise, e.g.::
   
       simpleString = 'A string'
       interpolatedString = "#{ anotherVariable } string"
+      evaluatedString = "data" # where data is an evaluated scope variable
+      evaluatedConstant = "'none'" # which evaluates to 'none'
   
   Interpolations are padded with a space.
 
@@ -570,11 +572,11 @@ examples:
 
 .. _jsdoc: http://usejsdoc.org/
 
-.. _ng-boilerplate: http://joshdmiller.github.io/ng-boilerplate/#/home
-
 .. _Karma: http://karma-runner.github.io/0.10/index.html
 
 .. _Mocha: http://visionmedia.github.io/mocha/
+
+.. _ng-boilerplate: http://joshdmiller.github.io/ng-boilerplate/#/home
 
 .. _ngMidwayTester: https://github.com/yearofmoo/ngMidwayTester
 

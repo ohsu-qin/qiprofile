@@ -39,13 +39,12 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
             ]
           ]
           encounters: [
-            encounter_type: 'Biopsy'
+            _cls: 'Biopsy'
             date: moment('July 12, 2013').valueOf()
-            outcomes: [
+            pathology:
               _cls: 'BreastPathology'
               tnm:
                 size: 'T3'
-            ]
           ]
           treatments: [
             treatment_type: 'neodjuvant'
@@ -107,8 +106,8 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
           expect(subject.encounters.length, "Subject encounters length is incorrect")
             .to.equal(1)
           enc = subject.encounters[0]
-          expect(enc.encounter_type, "Encounter type is incorrect")
-            .to.equal(mock.subject_detail.encounters[0].encounter_type)
+          expect(enc.encounter._cls, "Encounter type is incorrect")
+            .to.equal(mock.subject_detail.encounters[0]._cls)
           # There should be treatments.
           expect(subject.treatments, "Subject is missing treatments").to.exist
           expect(subject.treatments.length, "Subject encounters length is incorrect")

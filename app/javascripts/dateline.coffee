@@ -148,7 +148,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
           text = parent.insert('svg:text', -> xAxisNode)
           text.attr('x', Math.floor(offset) - 6)
           # Set the text style.
-          text.classed("qi-dateline-#{ enc.encounter_type.toLowerCase() }", true)
+          text.classed("qi-dateline-#{ enc._cls.toLowerCase() }", true)
           # Set the text content to a marker, specifically the HTML
           # nabla math special character (the wedge-like del operator).
           text.text(TREATMENT_SYMBOL)
@@ -204,7 +204,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
           # Sort by begin date.
           sorted = _.sortBy(subject.encounters, (enc) -> enc.date.valueOf())
           # The encounter labels.
-          labels = _.uniq(enc.encounter_type for enc in sorted)
+          labels = _.uniq(enc._cls for enc in sorted)
           for label in labels
             # Place the new span element.
             span = p.append('span')

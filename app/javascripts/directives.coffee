@@ -1,10 +1,10 @@
 define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
-        'dateline', 'intensity', 'modeling', 'clinical', 'tnm'],
-  (ng, _, _s, Spinner, ClinicalModels) ->
+        'dateline', 'intensity', 'modeling'],
+  (ng, _, _s, Spinner) ->
     directives = ng.module(
       'qiprofile.directives',
       ['qiprofile.helpers', 'qiprofile.dateline', 'qiprofile.intensity',
-       'qiprofile.modeling', 'qiprofile.clinical', 'qiprofile.tnm']
+       'qiprofile.modeling']
     )
 
     # Spinner directive.

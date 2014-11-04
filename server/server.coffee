@@ -5,6 +5,8 @@ express = require 'express'
 http = require 'http'
 path = require 'path'
 net = require 'net'
+fs = require 'fs'
+logger = require 'express-bunyan-logger'
 forever = require 'forever-monitor'
 authenticate = require 'authenticate'
 spawn = require './spawn'
@@ -18,6 +20,8 @@ MONGODB_PORT = 27017
 
 EVE_PORT = 5000
 
+LOG_FILE = '/var/log/qiprofile.log'
+
 # The grunt build tasks place all compiled and copied files within
 # the _public directory.
 root = path.join(__dirname, '..', '_public')
@@ -29,12 +33,20 @@ api = require './api'
 # Set the port.
 server.set 'port', process.env.PORT or PORT
 
+# The logger configuration.
+logLevel = if server.get('env') is 'development' then 'debug' else 'info'
+logConfig =
+  name: 'qiprofile'
+  streams: [
+    level: logLevel, path: LOG_FILE
+  ]
+
 # Enable the middleware.
-server.use express.logger('dev') if server.get('env') is 'development'
 server.use express.favicon()
 server.use express.json()
 server.use express.urlencoded()
 server.use express.methodOverride()
+server.use logger(logConfig)
 server.use express.static(root)
 server.use authenticate.middleware(
   encrypt_key: 'Pa2#a'
@@ -58,7 +70,7 @@ server.get '/static/*', (req, res) ->
   path = root + req.path.replace('/static', '')
   res.sendfile path
 
-  # Serve the partial HTML files.
+# Serve the partial HTML files.
 server.get '/partials/*', (req, res) ->
   res.sendfile "#{root}/#{req.path}.html"
 
@@ -68,6 +80,19 @@ server.get '/partials/*', (req, res) ->
 # and requests the partial.
 server.get '/quip*', (req, res) ->
   res.sendfile "#{root}/index.html"
+
+# Kludge to work around repeat requests. See the error.coffee FIXME.
+lastErrorMsg = null
+server.post '/error', (req, res) ->
+  # Print the error.
+  if req.body.message != lastErrorMsg
+    console.log("Client error: #{ req.body.message }")
+    console.log("See the log at #{ LOG_FILE }")
+    # Log the error.
+    req.log.info(req.body)
+    # Send default status code 200 with a 'Logged' message.
+  lastErrorMsg = req.body.message
+  res.send('Logged')
 
 # The run environment.
 env = server.get('env')

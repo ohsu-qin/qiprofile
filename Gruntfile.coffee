@@ -39,6 +39,7 @@ module.exports = (grunt) ->
           'nvd3/nv.d3.js'
           'requirejs/require.js'
           'spin.js/spin.js'
+          'stacktrace-js/stacktrace.js'
           'underscore.string/lib/*.js'
           'venturocket-angular-slider/build/*.js'
           'xtk/dist/xtk.js'

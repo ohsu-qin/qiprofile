@@ -67,6 +67,7 @@ requirejs.config
     nvd3: './lib/nv.d3'
     slider: './lib/angular-slider'
     spin: './lib/spin'
+    stacktrace: './lib/stacktrace'
     'underscore.string': './lib/underscore.string'
     touch: './lib/angular-touch'
     uirouter: './lib/angular-ui-router'

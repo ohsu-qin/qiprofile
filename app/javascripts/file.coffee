@@ -1,4 +1,4 @@
-define ['angular', 'ngresource'], (ng) ->
+define ['angular'], (ng) ->
   file = ng.module 'qiprofile.file', []
 
   file.factory 'File', ['$http', ($http) ->
@@ -31,7 +31,16 @@ define ['angular', 'ngresource'], (ng) ->
       readBinary: (path, config={}) ->
         config.responseType = 'arraybuffer'
         File.read(path, config)
-    
+      
+      # Enocodes and posts the given content. The input data parameter
+      # is an unencoded Javascript object.
+      #
+      # @param url the server URL to receive the object
+      # @param data the unencoded Javascript object to send
+      send: (url, data) ->
+        config = contentType: 'application/json'
+        $http.post(url, ng.toJson(data), config)
+
     # Return the File object.  
     File
   ]

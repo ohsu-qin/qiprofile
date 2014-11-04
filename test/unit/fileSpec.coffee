@@ -1,51 +1,76 @@
-define ['lodash', 'expect', 'pako', 'encoding', 'ngmocks', 'file'], (_, expect, pako) ->
-  describe.only 'Unit Testing File Service', ->
-    # The mock Angular $http service provider.
-    $httpBackend = null
+define ['angular', 'lodash', 'expect', 'pako', 'encoding', 'ngmocks', 'file'],
+  (ng, _, expect, pako) ->
+    describe 'Unit Testing File Service', ->
+      # The mock Angular $http service provider.
+      $httpBackend = null
   
-    # The file service.
-    File = null
-  
-    # The mock plaintext file.
-    mock =
-      plaintext:
-        path: 'test.txt'
-        data: 'test data'
+      # The file service.
+      File = null
 
-    # The mock compressed file.
-    mock.compressed = path: 'test.txt.gz'
-    encoder = TextEncoder('utf-8')
-    encoded = encoder.encode(mock.plaintext.data)
-    mock.compressed.data = pako.deflate(encoded)
+      beforeEach ->
+        # Fake the file service.
+        angular.mock.module('qiprofile.file')
+        # Enable the test services.
+        inject ['File', '$httpBackend', (_File_, _$httpBackend_) ->
+          File = _File_
+          $httpBackend = _$httpBackend_
+        ]
 
-    beforeEach ->
-      # Fake the file service.
-      angular.mock.module('qiprofile.file')
-      # Enable the test services.
-      inject ['File', '$httpBackend', (_File_, _$httpBackend_) ->
-        File = _File_
-        $httpBackend = _$httpBackend_
-        # The mock http gets.
-        for file in _.values(mock)
-          url = '/static/' + file.path
-          $httpBackend.whenGET(url).respond(file.data)
-      ]
+      afterEach ->
+        $httpBackend.verifyNoOutstandingExpectation()
+        $httpBackend.verifyNoOutstandingRequest()
 
-    afterEach ->
-      $httpBackend.verifyNoOutstandingExpectation()
-      $httpBackend.verifyNoOutstandingRequest()
+      describe 'Read', ->
+        describe 'Plaintext Content', ->
+          # The mock plaintext file.
+          mock =
+            path: 'test.txt'
+            data: 'test data'
 
-    describe 'Read', ->
-      it 'should read the plaintext file content', ->
-        data = File.read(mock.plaintext.path)
-        expect(data, "The plaintext result is incorrect")
-          .to.eventually.equal(mock.plaintext.data)
-        # Dispatch the backend request.
-        $httpBackend.flush()
+          beforeEach ->
+            # The mock http GET.
+            url = '/static/' + mock.path
+            $httpBackend.whenGET(url).respond(mock.data)
 
-      it 'should read the binary file content', ->
-        data = File.readBinary(mock.compressed.path)
-        expect(data, "The compressed result is incorrect")
-          .to.eventually.eql(mock.compressed.data)
-        # Dispatch the backend request.
-        $httpBackend.flush()
+          it 'should read the plaintext file content', ->
+            data = File.read(mock.path)
+            expect(data, "The plaintext result is incorrect")
+              .to.eventually.equal(mock.data)
+            # Dispatch the backend request.
+            $httpBackend.flush()
+      
+        describe 'Binary Content', ->
+          # The mock plaintext file.
+          encoder = TextEncoder('utf-8')
+          encoded = encoder.encode('test data')
+          mock =
+            path: 'test.txt.gz'
+            data: pako.deflate(encoded)
+
+          beforeEach ->
+            # The mock http GET.
+            url = '/static/' + mock.path
+            $httpBackend.whenGET(url).respond(mock.data)
+
+          it 'should read the binary file content', ->
+            data = File.readBinary(mock.path)
+            expect(data, "The compressed result is incorrect")
+              .to.eventually.eql(mock.data)
+            # Dispatch the backend request.
+            $httpBackend.flush()
+
+      describe 'Send', ->
+        mock =
+          url: '/test'
+          data: {payload: 'test data'}
+
+        beforeEach ->
+          # The mock http POST.
+          $httpBackend.expectPOST(mock.url, mock.data).respond('Received')
+      
+        it 'should encode and post an object', ->
+          response = File.send(mock.url, mock.data).then (r) -> r.data
+          expect(response, "The post status is incorrect")
+            .to.eventually.equal('Received')
+          # Dispatch the backend request.
+          $httpBackend.flush()

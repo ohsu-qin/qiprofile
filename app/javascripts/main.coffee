@@ -31,10 +31,10 @@ DOM_READY_LIB = CLOUDFLARE_LIBS + '/require-domReady/2.0.1'
 requirejs.config
   # The application root directory.
   appDir: '../..'
-  
+
   # The application Javascript base.
   baseUrl: '/javascripts'
-  
+
   waitSeconds: WAIT
 
   # The module paths.
@@ -62,7 +62,7 @@ requirejs.config
   config:
     moment:
       noGlobal: true
-  
+
   # The non-AMD module dependencies.
   shim:
     angular: exports : 'angular'
@@ -76,7 +76,7 @@ requirejs.config
     touch: deps: ['angular']
     uibootstrap: deps: ['angular']
     uirouter: deps: ['ngroute']
-  
+
   # Load the app after require is configured.
   deps: ['bootstrap']
 

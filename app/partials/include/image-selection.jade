@@ -4,18 +4,18 @@
   is entitled with the intensity data series key, e.g. 'Scan'
   or 'Realigned', followed by one image select button pair per
   series.
-  
+
   Note: the scan element context for the repeats below works
   around the following AngularJS bug:
-  
+
   * CSS justification doesn't work with AngularJS ng-repeat
-  
+
   AngularJS ng-repeat does not emit whitespace between the li
   elements, which is necessary for justification
   (cf http://stackoverflow.com/questions/23252601/angular-why-doesnt-css-justification-work-with-ng-repeat).
   The work-around is to set the repeat on a span which wraps
   the list element rather than the list itself.
-  
+
   As a result, the button "group" styles are added to each
   iterated button list item rather than the list repeat
   element itself. This is somewhat counter-intuitive, but is

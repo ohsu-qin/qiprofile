@@ -1,4 +1,10 @@
-define ['angular', 'lodash', 'moment'], (ng, _, moment) ->
+define ['angular', 'lodash', 'moment', 'd3'], (ng, _, moment) ->
+  # Note: The d3 convention is to set a global variable d3 used to
+  # build a chart. Consequently, the reference to d3 below is to this
+  # global variable. A better d3 implementation would package d3
+  # as an AMD module which we can bind to a d3 variable above. However,
+  # we adhere to the d3 convention in the implementation below.
+
   chart = ng.module 'qiprofile.chart', []
 
   chart.factory 'Chart', ->
@@ -75,14 +81,14 @@ define ['angular', 'lodash', 'moment'], (ng, _, moment) ->
           # @returns the graph [x, y] coordinates
           coordinates = (data, xAccessor, yAccessor) ->
             [xAccessor(rsc), yAccessor(rsc)] for rsc in data
-        
+
           key: y.label
           values: coordinates(data, x.accessor, y.accessor)
           color: y.color
 
         for y in dataSpec.y.data
          configureADataSeries(data, dataSpec.x, y)
-    
+
       # Adds padding to the give value range as follows:
       # * the the chart max is the next higher significant
       #   tick mark
@@ -111,7 +117,7 @@ define ['angular', 'lodash', 'moment'], (ng, _, moment) ->
         # Return the chart{max, min} range object.
         max: upper
         min: lower
-    
+
       # @param data the resource objects
       # @param dataSpec the data access specification
       # @returns the number of decimals to display on the y-axis
@@ -131,7 +137,7 @@ define ['angular', 'lodash', 'moment'], (ng, _, moment) ->
               0
             else
               1 + defaultValuePrecision(value * 10)
-        
+
           # The resource data series y values.
           values = resourceYValues(resource, dataSpec)
           # The precision for each value.
@@ -139,13 +145,13 @@ define ['angular', 'lodash', 'moment'], (ng, _, moment) ->
             defaultValuePrecision(value) for value in values
           # Return the largest precision.
           _.max(precisions)
-      
+
         # The precision for each resource.
         precisions =
           defaultResourcePrecision(rsc, dataSpec) for rsc in data
         # Return the largest precision.
         _.max(precisions)
-    
+
       # This function is a work-around for the following missing
       # nv3d feature:
       # * allow different dataSpecs for y ticks and y tooltip
@@ -163,7 +169,7 @@ define ['angular', 'lodash', 'moment'], (ng, _, moment) ->
         # The y-axis value format allows for more precision than
         # the tick mark.
         formatValue = d3.format('.' + (precision + 2) + 'f')
-      
+
         # @param value the value to format
         # @returns the d3 formatter function
         (value) ->
@@ -177,16 +183,16 @@ define ['angular', 'lodash', 'moment'], (ng, _, moment) ->
             formatTick(value)
           else
             formatValue(value)
-    
+
       # The y-axis value range.
       valueYRange = getYValueRange(data, dataSpec)
-    
+
       # Get the default precision, if necessary.
       if dataSpec.y.precision
         precision = dataSpec.y.precision
       else
         precision = defaultYPrecision(data, dataSpec)
-    
+
       # The chart y-axis range.
       chartYRange = padRange(valueYRange, precision)
 
@@ -195,7 +201,7 @@ define ['angular', 'lodash', 'moment'], (ng, _, moment) ->
       yFormat: decimalFormatter(precision)
       yLabel: dataSpec.y.label
       yMaxMin: _.values(chartYRange)
-  
+
     # @param date the moment date integer
     # @return the formatted date
     dateFormat: (date) ->

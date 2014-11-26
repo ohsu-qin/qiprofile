@@ -1,6 +1,6 @@
 define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment) ->
   helpers = ng.module 'qiprofile.helpers', []
-  
+
   helpers.factory 'StringHelper', ->
     # Improves on underscore.string dasherize by converting each
     # sequence of two or more capital letters to lowercase without
@@ -30,7 +30,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
         sdashed.substring(1)
       else
         sdashed
-  
+
   helpers.factory 'ArrayHelper', ->
     # This function stands in for the missing lodash v2.4.1 findIndex function.
     #
@@ -41,8 +41,13 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
         if callback(item, i, array) then return i
       -1
 
-  
   helpers.factory 'ObjectHelper', ->
+    # @param objects the delegate objects
+    # @returns a new object with properties from the given
+    #   objects
+    delegate: (objects...) ->
+      _.reduce(objects, _.defaults, {})
+
     # Pretty prints the given object in a readable format.
     #
     # @param obj the object to print
@@ -51,7 +56,18 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
       # Stolen from
       # http://stackoverflow.com/questions/957537/how-can-i-print-a-javascript-object.
       JSON.stringify(obj, null, 4)
-    
+
+    # @param obj the first object to compare
+    # @param other the second object to compare
+    # @returns whether both objects have the same properties and
+    #   the corresponding property values are equal
+    propertiesEqual: (obj, other) ->
+      # Group by property name.
+      props = _.unique(_.keys(obj).concat(_.keys(other)))
+      pairs = ([obj[prop], other[prop]] for prop in props)
+      # Return whether all value pairs are equal.
+      _.all(pairs, (pair) -> pair[0] == pair[1])
+
     # Aliases the source object properties which are not already
     # defined in the destination object.
     #
@@ -66,7 +82,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
           enumerable: true
           get: -> source[prop]
           set: (val) -> source[prop] = val
-      
+
       # The properties to alias.
       srcProps = Object.getOwnPropertyNames(source)
       destProps = Object.getOwnPropertyNames(dest)
@@ -76,13 +92,13 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
       # Make the virtual properties.
       # Note: each property must be defined in a call to the defineAlias
       # function. That function body cannot be inlined in the loop below
-      # since Coffeescript defines the iteration variable prop in a scope
+      # since CoffeeScript defines the iteration variable prop in a scope
       # outside of the loop, which in turn implies that the alias getter
       # and setter have a function closure which refers to a shared prop
       # variable which will resolve to the last iteration value.
       for prop in aliasProps
         defineAlias(prop)
-    
+
     # Aliases the source object properties which are not already
     # defined in the destination object and satisfy thew following
     # conditions:
@@ -98,8 +114,8 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
       filter = (prop) ->
         prop[0] not in '_$' and not _.isFunction(source[prop])
       # Delegate to aliasProperties with the property filter.
-      this.aliasProperties(source, dest, filter)
-    
+      @aliasProperties(source, dest, filter)
+
     # Parses the JSON data into a Javascript object and creates
     # camelCase property aliases for underscore property names.
     # If the input data is an array Eve REST result, signified
@@ -133,7 +149,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
               enumerable: false
               value: obj[prop]
               writable: true
-        
+
         # Only unvisited plain objects are wrapped.
         if obj and obj.constructor is Object and not visited[obj._id]
           # If the object has an id, then mark it as visited.

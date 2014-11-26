@@ -1,5 +1,5 @@
 define ['ngmocks', 'tnm', 'helpers'], (tnm) -> 
-  describe 'Unit Testing TNM Service', ->
+  describe 'Unit Testing the TNM Service', ->
     # The qiprofile TNM factory.
     TNM = null
     # The ObjectHelper factory.
@@ -15,7 +15,7 @@ define ['ngmocks', 'tnm', 'helpers'], (tnm) ->
         TNM = _TNM_
         ObjectHelper = _ObjectHelper_
       ]
-    
+
     describe 'Size', ->
       it 'formats the tumor size', ->
         expected = [
@@ -27,7 +27,7 @@ define ['ngmocks', 'tnm', 'helpers'], (tnm) ->
           [null, 1, false, 'b', '1b']
           ['p', 2, false, 'a', 'p2a']
         ]
-        
+
         for [px, ts, ist, sx, expectedValue] in expected
           size =
             prefix: px
@@ -41,7 +41,7 @@ define ['ngmocks', 'tnm', 'helpers'], (tnm) ->
 
     describe 'Breast', ->
       tumorType = 'Breast'
-      
+
       describe 'grade', ->
         # @param the grade composite object
         # @returns the expected summary grade
@@ -54,8 +54,8 @@ define ['ngmocks', 'tnm', 'helpers'], (tnm) ->
             2
           else
             3
-            
-        
+
+
         it 'should calcuate the summary grade', ->
           for tf in [1..3]
             for np in [1..3]
@@ -71,7 +71,7 @@ define ['ngmocks', 'tnm', 'helpers'], (tnm) ->
                 expect(actual, "The summary grade #{ ObjectHelper.prettyPrint(tnm.grade) }" +
                                " is incorrect")
                   .to.equal(expected)
-      
+
       describe 'stage', ->
         # The (t, n) -> expected stage map.
         expected =
@@ -100,7 +100,7 @@ define ['ngmocks', 'tnm', 'helpers'], (tnm) ->
             1: 'IIIB'
             2: 'IIIB'
             3: 'IIIC'
-      
+
         it 'should calculate the stage', ->
           for [t, [n, expectedStage]] in expected
             actual = TNM.stage(tumorType, t, n, 0)
@@ -110,7 +110,7 @@ define ['ngmocks', 'tnm', 'helpers'], (tnm) ->
 
     describe 'Sarcoma', ->
       tumorType = 'Sarcoma'
-      
+
       describe 'grade', ->
         # @param the grade composite object
         # @returns the expected summary grade
@@ -123,7 +123,7 @@ define ['ngmocks', 'tnm', 'helpers'], (tnm) ->
             2
           else
             3
-        
+
         it 'should calculate the summary grade', ->
           for df in [1..3]
             for mc in [1..3]
@@ -140,7 +140,7 @@ define ['ngmocks', 'tnm', 'helpers'], (tnm) ->
                                " #{ ObjectHelper.prettyPrint(tnm.grade) }" +
                                " is incorrect")
                   .to.equal(expected)
-      
+
       describe 'stage', ->
         # The (t, n) -> expected stage map.
         expected =
@@ -162,7 +162,7 @@ define ['ngmocks', 'tnm', 'helpers'], (tnm) ->
               1: 'III'
               2: 'III'
               3: 'III'
-        
+
         it 'should calculate the stage', ->
           for [t,  nMap] in expected
             for [n, expectedStage] in nMap

@@ -7,7 +7,7 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
 
     filters.filter 'capitalize', ->
       (s) -> _s.capitalize(s)
-  
+
 
     filters.filter 'romanize', ['StringHelper', (StringHelper) ->
       # @param value the input number or string
@@ -29,6 +29,34 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
       (value) ->
         if value? then value else 'Not Specified'
 
+
+    filters.filter 'relativeDifference', ->
+      (objects, index, property=null) ->
+        evaluate = (object, property) ->
+          apply = (object, property) ->
+            if property then object[property] else object
+
+          props = property.split('.')
+          _.reduce(props, apply, object)
+
+        current = objects[index]
+        if index
+          previous = objects[index - 1]
+          prevValue = evaluate(previous, property)
+          currValue = evaluate(current, property)
+          (currValue - prevValue) / prevValue
+
+
+    filters.filter 'percent', ->
+      (value) -> value * 100
+
+    filters.filter 'imageContainerTitle', ->
+      # If the image container name is 
+      (value) ->
+        if value.startsWith('reg')
+          'Registration ' + value
+        else
+          _s.capitalize(value) + ' scan'
 
     # Returns the string representation of the given input value as follows:
     # * true => 'True'
@@ -148,4 +176,3 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
       (tnm) ->
         TNM.stage(tnm)
     ]
-  

@@ -38,37 +38,6 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
         UNLOADED: 'unloaded'
         LOADING: 'loading'
         LOADED: 'loaded'
-      
-      # Obtain the PK modeling result object.
-      #
-      # @param session the image parent session the session object
-      # @param name the modeling result name, or null to select the sole
-      #   modeling result
-      # @returns the image session PK modeling result, or an empty object
-      #    if there is no result
-      # @throws ReferenceError if the name is specified and there is no
-      #   such modeling result, or if the name argument is null and there
-      #   is more than one modeling result
-      modelingResult = (session, name=null) ->
-        modeling = session.modeling
-        if modeling? and modeling.length
-          if name?
-            _.find(modeling, (mdl) -> mdl.name is name) or
-              throw new ReferenceError("The modeling result was not found:" +
-                                       " #{ name }")
-          else
-            # Only one modeling result is supported.
-            if modeling.length > 1
-              throw new ReferenceError("The modeling result name was not" +
-                                       " specified and there is more than" +
-                                       " one modeling result")
-            modeling[0]
-        else if name?
-          throw new ReferenceError("The modeling result name #{ name } was" +
-                                   " specified but the session does not" +
-                                   " have modeling results")
-        else
-          null
 
       # @param session the image parent session the session object
       # @return the image overlays
@@ -83,7 +52,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
           #   with a color table
           hasOverlay = (mdlParam) ->
             mdlParam.labelMap? and mdlParam.labelMap.colorTable?
-          
+
           # Filter the PK parameters on the presence of an overlay.
           pkParams = _.pick(mdlResult, Modeling.PK_PARAMS, hasOverlay)
           # Return the {param name: label map} object.
@@ -92,16 +61,19 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
             mdlOverlays[key] = mdlParam.labelMap
           mdlOverlays
 
+        # Validate the argument.
+        if not session?
+          throw new ReferenceError("The overlays session is missing.")
         # The modeling results.
         modeling = session.modeling
-        if not modeling?
+        if not modeling? or not modeling.length
           return null
-        
+
         # Collect the overlays.
         imageOverlays = {}
-        for mdlResult in modeling
-          imageOverlays[mdlResult.name] = modelingResultOverlays(mdlResult)
-        
+        for mdl in modeling
+          imageOverlays[mdl.name] = modelingResultOverlays(mdl)
+
         # Return the overlays.
         imageOverlays
 
@@ -121,7 +93,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
       load: ->
         # Set the loading flag.
         @state = STATES.LOADING
-        # The volume and label map to render.
+        # The volume to render.
         @volume = new X.volume()
         @volume.file = filename
 
@@ -164,7 +136,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
 
         # Render the image.
         renderer.render()
-      
+
       # Deselects an existing overlay as follows:
       # * If the image volume has a label map, then the label map visible
       #  flag is set to false.
@@ -174,7 +146,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
       #  remove an existing overlay
       deselectOverlay: ->
          @volume.labelmap.visible = false if @volume.labelmap?
-      
+
       # Changes the overlay label map and color lookup table as follows:
       # * Fetch the overlay files.
       # * Set the volume label map properties.
@@ -196,7 +168,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
           .then (data) =>
             # Set the volume color table data property.
             @volume.labelmap.colortable.filedata = data
-        
+
         # Join the two promises into a single promise.
         loaded = $q.all(loadLabelMap, loadColorTable)
         loaded.then =>
@@ -218,7 +190,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
     # @returns the image objects
     imagesFor: (parent) ->
       cache(parent) or cache(parent, parent.files...)
-  
+
     # Formats the image container title.
     #
     # Note: this formatting routine should be confined to the filter,

@@ -39,24 +39,24 @@ define ['lodash'], (_) ->
       throw new Error("The roman numeral generator is missing a ten character")
     if ten and not five
       throw new Error("The roman numeral generator is missing a five character")
-    
+
     [0..max].map(genRoman)
-  
+
   ONES = genRomans('I', 'V', 'X')
-  
+
   TENS = genRomans('X', 'L', 'C')
-  
+
   HUNDREDS = genRomans('C', 'D', 'M')
-  
+
   THOUSANDS = genRomans('M', '', '')
-  
+
   ROMANS = [ONES, TENS, HUNDREDS, THOUSANDS]
 
   # The maximum supported value.
   incrementMax = (sum, place) ->
     (sum * 10) + ROMANS[place].length - 1
   MAX = _.reduceRight([0...ROMANS.length], incrementMax, 0)
-  
+
   # @param s the input string or integer
   # @returns the roman numeral string
   # @throws TypeError if the input value is not a string consisting of
@@ -67,20 +67,20 @@ define ['lodash'], (_) ->
     if not n or n < 0
       throw new RangeError("The romanize input value cannot be converted" +
                           " to a positive integer: #{ s }")
-    
+
     if n > MAX
       throw new RangeError("The romanize input value exceeds the maximum" +
                       " supported value of #{ MAX }: #{ s }")
-    
+
     # The string digits.
     # Note: cannot use parseInt directly as the map argument, since the
     # second parseInt argument is incorrectly interpreted as a radix
     # (cf. http://stackoverflow.com/questions/262427/javascript-arraymap-and-parseint)
     digits = s.split('').map((n) -> parseInt(n))
-    
+
     # The place indexes.
     places = [0...digits.length]
-    
+
     # Prepends the roman numeral conversion of the right-most digit to the
     # given roman numeral. This function removes the right-most digit from
     # the digits array.

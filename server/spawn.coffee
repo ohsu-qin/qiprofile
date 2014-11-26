@@ -15,7 +15,7 @@ module.exports = (command, port, callback) ->
       console.log "The #{ command } server exited."
     child.on 'error', (error) ->
       console.error "Error executing #{ command }: #{ error }."
-    
+
     console.log "Starting #{ command }..."    
     child.start()
 
@@ -37,7 +37,7 @@ module.exports = (command, port, callback) ->
       .on 'timeout', ->
         console.error "Timeout accessing port #{port}"
       .connect port
-  
+
   # Checks the port after 200 milliseconds. If the port
   # is active, then call the callback. Otherwise, check
   # back again.

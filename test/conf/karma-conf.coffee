@@ -30,7 +30,7 @@ module.exports = (config) ->
       # Lastly, the requirejs main config.
       'test/unit/main.coffee'
     ]
-    
+
     # The requirejs configuration is given by test/unit/main.coffee,
     # not the application _public/javascripts/main.js file.
     exclude: [
@@ -44,12 +44,12 @@ module.exports = (config) ->
 
     # Flag indicating whether to display colors in the reporter and log output.
     colors: true
-    
+
     # The logging level. Possible values:
     # config.LOG_DISABLE, config.LOG_ERROR, config.LOG_WARN, config.LOG_INFO, config.LOG_DEBUG
     # The log level is set in the Grunt karma task.
-    #logLevel : config.LOG_DEBUG
-    
+    logLevel : config.LOG_DEBUG
+
     # Flag indicating whether to execute the tests whenever any file changes.
     autoWatch: false
 

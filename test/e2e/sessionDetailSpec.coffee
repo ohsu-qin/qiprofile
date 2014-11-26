@@ -15,14 +15,14 @@ class SessionDetailPage extends Page
     # Since the time point is one-based, the zero-based image
     # select index is one less than the time point.
     locator = By.repeater('image in session.scans.t1.images').row(time_point - 1)
-    
+
     # Find the image select button group element, then...
-    @select(locator).then (div) ->
+    @find(locator).then (div) ->
       # ...return the associative object which contains the
       # both button ElementFinders.
       download: div.element(By.css('.glyphicon-download'))
       open: div.element(By.css('.glyphicon-eye-open'))
-  
+
   # Loads the image by clicking the given download button.
   #
   # @param button the image download button
@@ -51,14 +51,14 @@ class SessionDetailPage extends Page
               # Note: this recursion is pushed onto the stack,
               # but no more times than the initial retry count.
               waitWhileVisible(button, retry - 1)
-    
+
     # Click the button and wait until it is hidden.
     button.click().then ->
       waitWhileVisible(button)
-  
+
   # @returns the line chart promise
   chart: ->
-    this.select('//qi-intensity-chart//nvd3-line-chart')
+    @find('//qi-intensity-chart//nvd3-line-chart')
 
 describe 'E2E Testing Session Detail', ->
   # The Sarcoma001 Session01 time point 20. This is the time point for
@@ -66,28 +66,32 @@ describe 'E2E Testing Session Detail', ->
   # function called from the protractor config links the test fixture
   # data directory to _public/data subdirectory.
   TEST_TIME_POINT = 20
-  
+
   page = null
 
   beforeEach ->
     page = new SessionDetailPage '/quip/sarcoma/subject/1/session/1?project=QIN_Test'
-  
+
+  it 'should load the page', ->
+    expect(page.content, 'The page was not loaded')
+      .to.eventually.exist
+
   it 'should display the billboard', ->
     expect(page.billboard, 'The billboard is incorrect')
       .to.eventually.equal('Sarcoma Patient 1 Session 1')
-  
+
   it 'should have a home button', ->
     pat = /.*\/quip\?project=QIN_Test$/
     expect(page.home, 'The home URL is incorrect').to.eventually.match(pat)
-  
+
   it 'should have help text', ->
     expect(page.help, 'The help is missing').to.eventually.exist
-  
+
   it 'should display a contact email link', ->
     pat = /a href="mailto:\w+@ohsu.edu"/
-    expect(page.contact(), 'The email address is missing')
+    expect(page.contactInfo, 'The email address is missing')
       .to.eventually.match(pat)
-  
+
   describe 'Intensity Chart', ->
     # Note: chart content is not testable. See the subjectDetailSpec note
     # for details.
@@ -101,12 +105,12 @@ describe 'E2E Testing Session Detail', ->
         download = btnGroup.download
         expect(download.isDisplayed(), 'The download button is initially hidden')
           .to.eventually.be.true
-        
+
         # The open button should be hidden.
         open = btnGroup.open
         expect(open.isDisplayed(), 'The open button is initially displayed')
           .to.eventually.be.false
-        
+
         # Click the download button, wait for the image to load, then...
         page.loadScanImage(download).then ->
           # The download button should now be hidden.

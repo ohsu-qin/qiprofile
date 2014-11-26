@@ -1,0 +1,9 @@
+qi-tnm(ng-show='!!pathology.tnm')
+
+div(ng-controller='EstrogenCtrl' ng-show='!!pathology.estrogen')
+  include hormone-receptor
+
+div(ng-controller='ProgestrogenCtrl' ng-show='!!pathology.progestrogen')
+  include hormone-receptor
+
+include breast-genetic-expression

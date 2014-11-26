@@ -1,35 +1,16 @@
-define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 'resources'],
-  (ng, _, _s, moment) ->
+define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
+        'image', 'resources'],
+  (ng, _, _s, moment, REST) ->
     router = ng.module 'qiprofile.router', ['qiprofile.resources',
-                                            'qiprofile.helpers', 'qiprofile.image']
+                                            'qiprofile.helpers',
+                                            'qiprofile.image']
 
-    router.factory 'Router', ['Subject', 'Session', 'Image', 'ObjectHelper', 'DateHelper',
+    router.factory 'Router', ['Subject', 'Session', 'Image', 'ObjectHelper',
+      'DateHelper',
       (Subject, Session, Image, ObjectHelper, DateHelper) ->
         # The Subject search fields.
         SUBJECT_SECONDARY_KEY_FIELDS = ['project', 'collection', 'number']
-        
-        # Formats the {where: condition} Eve REST query parameter.
-        # Each key in the condition parameters is quoted.
-        # The condition value is unquoted for numbers, quoted otherwise.
-        # This function is called for every REST request.
-        # @param params the input parameters
-        # @returns the REST condition query parameter
-        where = (params) ->
-          # @param key the request key
-          # @param value the request value
-          # @returns the formatted Eve parameter string
-          format_pair = (key, value) ->
-            if typeof value is 'number'
-               "\"#{ key }\":#{ value }"
-            else
-               "\"#{ key }\":\"#{ value }\""
 
-          # Quote keys and values.
-          paramStrs = (format_pair(pair...) for pair in _.pairs(params))
-          cond = paramStrs.join(',')
-          # Return the {where: condition} object.
-          where: "{#{ cond }}"
-        
         # @returns a collection/subject/session title string
         subjectTitle = (session) ->
           "#{ session.subject.collection }" +
@@ -60,11 +41,35 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
           # @param subject the subject without detail
           # @returns a promise which resolves to the subject with detail
           getSubjectDetail = (subject) ->
+            # Creates an array of {source, key, modeling} objects ordered
+            # by key within source type (scan followed by registration)
+            #
+            # @returns the [{source, key, modeling}] array
+            subjectModeling = (detail) ->
+              # The scan modeling objects.
+              scanSets = detail.scanSets
+              scanTypes = _.keys(scanSets).sort()
+              scanSetsSorted = (scanSets[key] for key in scanTypes)
+              scanMdls = (scanSet.modeling for scanSet in scanSetsSorted \
+                          when scanSet.modeling?)
+
+              # The registration modeling objects.
+              regCfgs = detail.registrationConfigurations
+              regKeys = _.keys(regCfgs).sort()
+              regCfgsSorted = (regCfgs[key] for key in regKeys)
+              regMdls = (regCfg.modeling for regCfg in regCfgsSorted \
+                          when regCfg.modeling?)
+
+              # Return the sorted scan modeling array followed by the sorted
+              # registration modeling array.
+              scanMdls.concat(regMdls)
+
             # If the subject has no detail, then complain.
             if not subject.detail
               throw new ReferenceError("#{ subject.collection }" +
                                        " Subject #{ subject.number }" +
                                        " does not reference a detail object")
+
             Subject.detail(id: subject.detail).$promise.then (detail) ->
               # Add the subject age property, if necessary.
               if detail.birthDate? and
@@ -80,26 +85,50 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
                 # Fix the acquisition date.
                 sess.acquisitionDate = DateHelper.asMoment(sess.acquisitionDate)
 
+              # Add the scan type and modeling source properties.
+              for scanType, scanSet of detail.scanSets
+                scanSet.scanType = scanType
+                if scanSet.modeling?
+                  scanSet.modeling.source = scanSet
+
+              # Add the registration modeling source property.
+              for key, regCfg of detail.registrationConfigurations
+                if regCfg.modeling?
+                  regCfg.modeling.source = regCfg
+
+              # Order the modeling objects by input type and key.
+              subject.modeling = subjectModeling(detail)
+
+              # Add the modeling results session reference.
+              for mdl in subject.modeling
+                for mdlResult, i in mdl.results
+                  mdlResult.session = detail.sessions[i]
+
               # Fix the encounter dates.
               for enc in detail.encounters
                 if enc.date?
                   enc.date = DateHelper.asMoment(enc.date)
+
               # Fix the treatment dates.
               for trt in detail.treatments
-                trt.begin_date = DateHelper.asMoment(trt.begin_date)
-                trt.end_date = DateHelper.asMoment(trt.end_date)
+                trt.beginDate = DateHelper.asMoment(trt.beginDate)
+                trt.endDate = DateHelper.asMoment(trt.endDate)
+
               # Copy the detail content into the subject.
               ObjectHelper.aliasPublicDataProperties(detail, subject)
+
               # Set a flag indicating whether there is more than one
               # session.
               subject.isMultiSession = subject.sessions.length > 1
+
               # Resolve to the subject.
               subject
 
           if condition.detail?
             getSubjectDetail(condition)
           else
-            Subject.query(where(condition)).$promise.then (subjects) ->
+            cond = REST.where(condition)
+            Subject.query(cond).$promise.then (subjects) ->
               if not subjects.length
                 throw new ReferenceError("#{ subject.collection }" +
                                          " Subject #{ subject.number }" +
@@ -138,67 +167,67 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'helpers', 'image', 
           # the given image container.
           #
           # @param container the image container
-          addImageContainerContent = (container) ->
-            # The unique container id for cacheing.
-            container.id = "#{ session.detail }.#{ container._cls }#{ container.name }"
+          # @param key the scan type or registration name
+          addImageContainerContent = (container, key) ->
+            # The unique container id for caching.
+            container.id = "#{ session.detail }.#{ container._cls }.#{ key }"
             # The container session property.
             container.session = session
             # Encapsulate the image files.
             container.images = Image.imagesFor(container)
-  
+
           if not session.detail?
-            throw new ReferenceError "Subject #{ subject.number }" +
+            throw new ReferenceError "Subject #{ session.subject.number }" +
                                      " Session #{ session.number }" +
                                      " does not reference a detail object"
           Session.detail(id: session.detail).$promise.then (detail) =>
             # Copy the fetched detail into the session.
             ObjectHelper.aliasPublicDataProperties(detail, session)
-            for scan in _.values(session.scans)
-              addImageContainerContent(scan, session)
-              for reg in scan.registrations
-                addImageContainerContent(reg, session)
+            for key, scan of session.scans
+              addImageContainerContent(scan, key)
+              for key, reg of scan.registrations
+                addImageContainerContent(reg, key)
             # Resolve to the augmented session object.
             session
 
         # @param session the session to search
-        # @param name the scan name
+        # @param scan_type the scan type, t1 or t2
         # @return the scan object or a promise which resolves
         #   to the scan object
-        getScan: (session, name) ->
-          # Every session detail has a scan property. When the detail
-          # is fetched, the detail properties are copied into the session
-          # object. Therefore, the presence of the session scan
-          # determines whether the session detail was loaded.
+        getScan: (session, scan_type) ->
+          # Every session detail has a scan property. When the detail is
+          # fetched, the detail properties are copied into the session object.
+          # Therefore, the presence of the session scan determines whether
+          # the session detail was loaded.
           #
           # @returns whether the session detail is loaded
           isSessionDetailLoaded = ->
             session.scans?
 
-          # If the session detail is loaded, then find the scan or
-          # registration container based on the name parameter,
-          # which is 'scan' or the registration name.
+          # If the session detail is loaded, then find the scan or registration
+          # container based on the name parameter.
           if isSessionDetailLoaded()
-            scan = session.scans[name]
+            scan = session.scans[scan_type]
             # If no such scan, then complain.
             if not scan
               throw new ReferenceError "#{ subjectTitle(session) }" +
-                                       " does not have a #{ name } scan."
+                                       " does not have a #{ scan_type } scan."
             scan
           else
             # Load the session detail...
-            this.getSessionDetail(session).then =>
+            @getSessionDetail(session).then =>
               if not session.scans
                 throw new ReferenceError "#{ subjectTitle(session) }" +
                                          " does not have any scans."
               # ...and recurse.
-              this.getScan(session, name)
+              @getScan(session, scan_type)
 
         # @param scan the scan to search
         # @param name the registration name
         # @return the registration object or a promise which resolves
         #   to the registration object
         getRegistration: (scan, name) ->
-          reg = _.find(scan.registrations, (reg) -> reg.name is name)
+          reg = scan.registrations[name]
           # If no such registrations, then complain.
           if not reg
             throw new ReferenceError "#{ subjectTitle(session) }" +

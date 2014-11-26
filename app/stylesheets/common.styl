@@ -35,6 +35,10 @@ ul.qi-clean-list
   // Make some room at the top.
   margin-top 0.5em
 
+.qi-left-buffer
+  // Make some room on the left.
+  margin-left 0.5em
+
 .qi-right-buffer
   // Make some room on the right.
   margin-right 0.5em
@@ -42,6 +46,22 @@ ul.qi-clean-list
 .qi-bottom-buffer
   // Make some room at the bottom.
   margin-bottom 0.5em
+
+.qi-inline-heading
+  display inline-block
+
+.qi-radio-row
+  & span, .col
+    float left
+    display block
+  & span
+    margin 2px 0.5em 0 0
+  & label
+    padding 2px 2px 0 0
+  & input[type=radio], input.radio
+    margin 2px 0 0 2px
+  & .col + .col
+    margin-left 2em
 
 .qi-panel
   border 1px solid SlateGray

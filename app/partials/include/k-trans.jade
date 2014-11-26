@@ -1,0 +1,13 @@
+include accordion-heading-mixin
+include modeling-parameter-mixin
+
++accordion-heading('Vascular Permeability Transfer Constant (K<sub>trans</sub>)')
+
+-var properties = ['deltaKTrans', 'fxlKTrans', 'fxrKTrans']
+
+-var headings = {deltaKTrans: '&Delta;K<sub>trans</sub>', fxlKTrans: 'FXL K<sub>trans</sub>', fxrKTrans: 'FXR K<sub>trans</sub>'}
+
+// The modeling chart or table.
+div(ng-controller='KTransCtrl')
+  // Delegate to the mixin.
+  +modeling-parameter(properties, headings)

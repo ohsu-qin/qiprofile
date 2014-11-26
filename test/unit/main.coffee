@@ -37,12 +37,12 @@ else
 requirejs.config
   # The application Javascript URL.
   baseUrl: rootUrl + '/_public/javascripts'
-  
+
   # Undocumented karama-requirejs magic added per
   # https://github.com/karma-runner/karma-requirejs/issues/6.
   # client:
   #   requireJsShowNoTimestampsError: false
-  
+
   # The test module paths replicates the web app main config paths, but
   # points only to the locally installed libraries and includes the test
   # specs.

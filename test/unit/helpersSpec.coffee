@@ -1,15 +1,18 @@
-define ['ngmocks', 'helpers', 'moment'], (mocks, helpers, moment) ->
-  describe 'Unit Testing Helpers', ->
+define ['ngmocks', 'moment', 'expect', 'helpers'], (ng, moment, expect) ->
+  describe 'Unit Testing the Helpers', ->
+    beforeEach ->
+      # Fake the Helpers service.
+      ng.module('qiprofile.helpers')
+
     describe 'StringHelper', ->
       StringHelper = null
-      
+
       beforeEach ->
         # Obtain the StringHelper service.
-        angular.mock.module('qiprofile.helpers')
         inject ['StringHelper', (_StringHelper_) ->
           StringHelper = _StringHelper_
         ]
-      
+
       describe 'dasherize', ->
         it 'should convert a sequence of more than one capital letter to a single dashed component', ->
           tests =
@@ -24,17 +27,16 @@ define ['ngmocks', 'helpers', 'moment'], (mocks, helpers, moment) ->
           for s, expected of tests
             result = StringHelper.dasherize(s)
             expect(result, "Dasherized #{ s } incorrect").to.equal(expected)
-    
+
     describe 'ObjectHelper', ->
       ObjectHelper = null
 
       beforeEach ->
         # Obtain the ObjectHelper service.
-        angular.mock.module('qiprofile.helpers')
         inject ['ObjectHelper', (_ObjectHelper_) ->
           ObjectHelper = _ObjectHelper_
         ]
-      
+
       describe 'fromJSON', ->
         mock =
           _id: 1
@@ -43,11 +45,11 @@ define ['ngmocks', 'helpers', 'moment'], (mocks, helpers, moment) ->
             an_obj:
               an_int: 3
         obj = null
-        
+
         beforeEach ->
           data = JSON.stringify(mock)
           obj = ObjectHelper.fromJson(data)
-        
+
         it 'should add camelCase aliases to underscore properties', ->
           expect('anInt' in Object.keys(obj), "the alias is not defined as an enumerable property")
             .to.be.true
@@ -119,7 +121,6 @@ define ['ngmocks', 'helpers', 'moment'], (mocks, helpers, moment) ->
 
       beforeEach ->
         # Obtain the DateHelper service.
-        angular.mock.module('qiprofile.helpers')
         inject ['DateHelper', (_DateHelper_) ->
           DateHelper = _DateHelper_
         ]

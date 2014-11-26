@@ -1,4 +1,4 @@
-h4.col-md-offset-1 Clinical Profile
+h4.qi-profile-heading Clinical Profile
 .qi-profile-panel
   accordion(close-others='false')
     // Contrary to expectation, the scope of the qi-demographics-table
@@ -9,9 +9,9 @@ h4.col-md-offset-1 Clinical Profile
     div(ng-controller='AccordionGroupCtrl')
       accordion-group(is-open="isOpen")
         qi-demographics
-    
+
     // Iterate over the encounters to include the encounter type
     // script fragment. See the leading comment above.
     div(ng-repeat="encounter in subject.encounters" ng-controller='AccordionGroupCtrl')
      accordion-group(is-open="isOpen")
-      qi-encounter
+       include encounter

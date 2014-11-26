@@ -20,7 +20,7 @@ define ['angular', 'stacktrace'], (ng, stacktrace) ->
   # trouble. The work-around to test this module is to introduce an error
   # in the qiprofile code and check that it is logged on the server. 
   error = ng.module 'qiprofile.error', []
-  
+
   # Augment the Angular exception handler to print them on both
   # the console (the default behavior) and the server.
   error.factory '$exceptionHandler', ['$log', '$window',

@@ -8,7 +8,7 @@ define ['angular', 'lodash', 'helpers', 'breast', 'sarcoma'], (ng, _) ->
       HELPERS =
         Breast: Breast
         Sarcoma: Sarcoma
-    
+
       # @param tumorType the tumor type name, e.g. 'Breast'
       # @returns the helper factory for that tumor type
       helper = (tumorType) ->
@@ -46,10 +46,10 @@ define ['angular', 'lodash', 'helpers', 'breast', 'sarcoma'], (ng, _) ->
         if index < 0
           throw new ReferenceError("Unsupported #{ tnm.tumorType }" +
                                    " cumulative grade: #{ cGrade }")
-        
+
         # Return the one-based summary grade value.
         1 + index
-      
+
       # @param size the size composite object
       # @returns the standard size string, e.g. 'p2b'
       # @throws Error if the tumorSize property value is missing
@@ -62,7 +62,7 @@ define ['angular', 'lodash', 'helpers', 'breast', 'sarcoma'], (ng, _) ->
               'is(LCIS)'
             else
               'is'
-          
+
           # The size suffix can be a, b, c or is.
           # in situ (is) can be modified with the invasive
           # type (ductal or lobular).
@@ -72,7 +72,7 @@ define ['angular', 'lodash', 'helpers', 'breast', 'sarcoma'], (ng, _) ->
             size.suffix
           else
             ''
-        
+
         if not size.tumorSize?
           throw new Error("The TNM tumor size is missing")
         prefix = size.prefix or ''

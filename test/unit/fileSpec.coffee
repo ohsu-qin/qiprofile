@@ -1,15 +1,15 @@
-define ['angular', 'lodash', 'expect', 'pako', 'encoding', 'ngmocks', 'file'],
+define ['ngmocks', 'lodash', 'expect', 'pako', 'encoding', 'file'],
   (ng, _, expect, pako) ->
-    describe 'Unit Testing File Service', ->
+    describe 'Unit Testing the File Service', ->
       # The mock Angular $http service provider.
       $httpBackend = null
-  
+
       # The file service.
       File = null
 
       beforeEach ->
         # Fake the file service.
-        angular.mock.module('qiprofile.file')
+        ng.module('qiprofile.file')
         # Enable the test services.
         inject ['File', '$httpBackend', (_File_, _$httpBackend_) ->
           File = _File_
@@ -38,7 +38,7 @@ define ['angular', 'lodash', 'expect', 'pako', 'encoding', 'ngmocks', 'file'],
               .to.eventually.equal(mock.data)
             # Dispatch the backend request.
             $httpBackend.flush()
-      
+
         describe 'Binary Content', ->
           # The mock plaintext file.
           encoder = TextEncoder('utf-8')
@@ -67,7 +67,7 @@ define ['angular', 'lodash', 'expect', 'pako', 'encoding', 'ngmocks', 'file'],
         beforeEach ->
           # The mock http POST.
           $httpBackend.expectPOST(mock.url, mock.data).respond('Received')
-      
+
         it 'should encode and post an object', ->
           response = File.send(mock.url, mock.data).then (r) -> r.data
           expect(response, "The post status is incorrect")

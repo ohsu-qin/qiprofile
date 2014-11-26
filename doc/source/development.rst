@@ -57,7 +57,7 @@ This command installs the necessary packages [#xtk_fork]_.
 
   The default Grunt task builds the project. The following command
   lists the available Grunt tasks::
-  
+
       grunt --help
 
 
@@ -167,7 +167,7 @@ Debugging a unit test case is performed as follows:
 * Run the grunt task with the ``--debug`` option, e.g.::
 
       grunt --debug test:unit
-  
+
   This starts a Chrome_ test runner but does not run the tests.
 
 * Press the ``DEBUG`` button on the launch page.
@@ -239,12 +239,12 @@ Coding Standards
   omit parentheses, e.g.::
 
       result = _.sortBy array, (a, b) -> a.priority - b.priority
-  
+
 * Function and array boundaries are not padded with a string, e.g.::
 
       module = angular.module('qiprofile')    # Good
       numbers = [1, 2, 3]
-  
+
   rather than::
 
       module = angular.module( 'qiprofile' )  # Bad
@@ -259,25 +259,25 @@ Coding Standards
 * CoffeeScript, Jade and Stylus string literals have double quotation
   marks if they are evaluated or interpolated, single quotation marks
   otherwise, e.g.::
-  
+
       simpleString = 'A string'
       interpolatedString = "#{ anotherVariable } string"
       evaluatedString = "data" # where data is an evaluated scope variable
       evaluatedConstant = "'none'" # which evaluates to 'none'
-  
+
   Interpolations are padded with a space.
 
 * CoffeeScript promise chain ``.then`` and AngularJS routeProvider
   ``.when`` clauses are indented, e.g.::
-  
+
       promise
         .then (result) ->
           ...
         .then (more) ->
           ...
-  
+
 * Single unchanined promise ``.then`` calls are on the same line, e.g.::
-  
+
       promise.then (result) ->
         ...
 
@@ -302,32 +302,40 @@ Coding Standards
   fixed and the comment deleted before a new version is tagged and
   released.
 
+* Edit forms conform to the REST data model. Specifically:
+
+  - Validate the data upon input as determined by the model
+    validation.
+
+  - Resolve conflicts between data capture and the model, e.g. the
+    default value or validation.
+
 * Changes are made in a git branch. Make a local git branch by executing
   the following command::
-  
+
       git checkout -b <branch>
-  
+
   The branch name is lower case underscore, e.g. ``image_detail``. A
   long-lived or jointly developed branched is pushed to master, e.g.
-  
+
       git push origin <branch>
-  
+
   Rebase the branch from time to time as follows:
-  
+
       git rebase master
-  
+
   This integrates the branch with the master, detects conflicts and
   facilitates subsequent merge.
-  
+
   Before merging the branch with the master, rebase and run all tests:
-  
+
       grunt test
-  
+
   The branch is merged into the master with the following commands:
-  
+
       git checkout master
       git merge --no-ff <branch>
-  
+
   Note the ``--no-ff`` option, which ensures that an audit trail of the
   merge is kept in a log commit, even if there are no merge conflicts.
 
@@ -339,48 +347,58 @@ Coding Standards
 * Commit git changes early and often. The commit message is a concise,
   meaningful, readable change description. The message begins with a
   capital letter and ends with a period, e.g.::
-  
+
       Add a bolus arrival bar to the intensity chart.
-  
+
   rather than::
-  
+
       change intensity chart
 
   If a git comment is longer than one sentence, then the commit probably
   should have been broken out into several commits.
 
 * Version numbers follow a one-based *major*\ .\ *minor*\ .\ *patch* format.
-  The version numbering scheme loosely follows the SemVer_ standard. The
-  major version is incremented at the initiation of a substantial new
-  public feature set. The minor version is incremented when there is a
-  backward-compatible functionality change. The patch version is
-  incremented when there is a backward-compatible refactoring or bug fix.
-  The major version number is 0 for proof-of-concept releases, 1 for
-  releases leading to initial public availability. Minor and patch
-  version numbers begin at 1 rather than 0.
+  The version numbering scheme loosely follows the SemVer_ standard, as
+  follows:
+
+  - The major version is incremented at the initiation of a substantial new
+    public feature set.
+
+  - The minor version is incremented when a complementary feature is
+    introduced or a non-backward-compatible change is made to an existing
+    feature.
+
+  - The patch version is incremented when there is a backward-compatible
+    refactoring or bug fix.
+
+  - The major version number is 0 for proof-of-concept releases, 1 for the
+    intial alpha review public release.
+
+  - Minor and patch version numbers begin at 1 rather than 0.
 
 * Add a new version as follows:
 
   * Add a short version theme description to ``History.rst``.
-  
+
   * Increment the ``package.json`` version attribute.
-  
+
   * Check in all tested changes.
 
   * Rebase, test and merge the branch as described above.
     You should now be on the ``master`` branch.
-  
+
   * Set a git tag with a ``v`` prefix, e.g.::
-  
+
         git tag v2.1.2
-  
+
   * Update the server::
-  
+
         git push --tags
 
   * Periodically delete unused local and remote branches. Exercise care
     when deleting a stale remote branch. See the
     `Pro Git Book`_ `Deleting Remote Branches`_ section for details.
+
 
 **********
 Deployment
@@ -390,7 +408,8 @@ The deployment targets are as follows:
 
 * ``quip5`` - the XNAT server
 
-* ``quip4`` - the Express_ and qiprofile-rest_ server
+* ``quip4`` - the qiprofile Express_, qiprofile-rest_ Eve and qiprofile-rest_
+  MongoDB servers
 
 Both ``quip5`` and ``quip4`` share a Direct Attached Storage (DAS) mounted
 at::
@@ -528,7 +547,7 @@ examples:
 
 * Yeoman_
 
-  
+
 .. rubric:: Footnotes
 
 .. [#xtk_fork]

@@ -20,7 +20,7 @@ APP = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'server.js')
 def main(argv=sys.argv):
     # Parse the command line arguments.
     opts = _parse_arguments()
-    
+
     # Start the server.
     return subprocess.call([CMD, APP])
 

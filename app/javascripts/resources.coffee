@@ -8,7 +8,25 @@ define ['angular', 'ngresource', 'helpers'], (ng) ->
       # Fetching a Subject is done by a query on the subject project,
       # collection and number, which returns a singleton or empty
       # array.
+      #
+      # The asynchronous $resource call should reference the $promise
+      # variable, e.g.:
+      #  Subject.query(id: id).$promise
+      # When called from a ui-route state resolve, the promise is
+      # automatically resolved to the database JSON result.
       $resource '/api/subjects/:id', null,
+        # The query request does not use the id parameter and returns
+        # an array of selected MongoDB documents. The request implicitly
+        # accepts an HTML request query parameter (not to be confused
+        # with the query method defined here) that includes the selection 
+        # and/or projection criterion. See the rest.coffee REST service
+        # for helper methods.
+        #
+        # Examples:
+        #   Subject.query(project: project).$promise
+        #
+        #   cond = REST.where({project: project, number: number})
+        #   Subject.query(cond).$promise
         query:
           method: 'GET'
           isArray: true

@@ -1,0 +1,13 @@
+include accordion-heading-mixin
+include modeling-parameter-mixin
+
++accordion-heading('Extravascular Extracellular Volume Fraction (v<sub>e</sub>)')
+
+-var properties = ['vE']
+
+-var headings = {vE: 'v<sub>e</sub>'}
+
+// The modeling chart or table.
+div(ng-controller='VeCtrl')
+  // Delegate to the mixin.
+  +modeling-parameter(properties, headings)

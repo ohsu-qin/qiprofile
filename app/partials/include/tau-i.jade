@@ -1,0 +1,13 @@
+include accordion-heading-mixin
+include modeling-parameter-mixin
+
++accordion-heading('Intracellular H<sub>2</sub>O Mean Lifetime (&tau;<sub>i</sub>)')
+
+-var properties = ['tauI']
+
+-var headings = {tauI: 'tau<sub>i</sub>'}
+
+// The modeling chart or table.
+div(ng-controller='TauICtrl')
+  // Delegate to the mixin.
+  +modeling-parameter(properties, headings)

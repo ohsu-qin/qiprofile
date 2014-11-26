@@ -1,0 +1,12 @@
+// Modeling result selection.
+form(name='modelingSelect')
+  .row.qi-radio-row.qi-modeling-select
+    span Input Parameters
+    .col(ng-repeat="subjectModeling in subject.modeling")
+      // If there is only one result, then there is nothing to select.
+      // In that case, the radio button is hidden, but the input
+      // properties button is still available.
+      input(type='radio', ng-model='modelingIndex' ng-value="{{ $index }}",
+            ng-show="subject.modeling.length > 1")
+      button.btn.btn-med.qi-profile-btn(ng-click="open()" ng-controller='ModelingInfoCtrl')
+        .glyphicon.glyphicon-info-sign()

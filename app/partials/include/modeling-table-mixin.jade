@@ -1,0 +1,48 @@
+// The column groups mixin.
+//
+// @param properties the modeling property in column index order,
+//   exclusive of the visit date
+// @param headings the modeling {property name: heading} associative
+//   object
+mixin modeling-table(properties, headings)
+  table.qi-table.qi-modeling-table
+    // The column groups.
+    // The visit date has its own column group.
+    colgroup
+      col
+    // There is one column group per property, consisting of one
+    // column for the property value and one column for the percent
+    // change.
+    for _ in properties
+      colgroup
+        col
+        col
+
+    // The column headings.
+    thead
+      // The visit date heading.
+      th Visit Date
+      // The modeling property headings.
+      for prop in properties
+        // The property heading without HTML escapes.
+        th!= headings[prop]
+        // The percent change heading.
+        th % Change
+
+    // There is one property value row per session.
+    tbody
+      tr(ng-repeat="modelingResult in modeling.results")
+        // The visit date.
+        td.qi-date {{ session.acquisitionDate | moment }}
+        // The modeling parameter property columns.
+        for prop in properties
+          // The average property value for the current modeling result.
+          - var avgProp = prop + '.average'
+          // The average property value has four decimals.
+          - var average = '{{ modelingResult.' + avgProp + ' | number:4 }}'
+          td.qi-number= average
+          // The first filter takes the difference between row values.
+          - var diff = "modeling.results | relativeDifference:$index:'" + avgProp + "'" 
+          // The percent change without decimals.
+          - var pctChange = '{{ ' + diff + ' | percent | number:0 }}'
+          td.qi-pct= pctChange

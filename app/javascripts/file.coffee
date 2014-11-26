@@ -20,7 +20,7 @@ define ['angular'], (ng) ->
         # Read the file and resolve to the content.
         $http(config).then (res) ->
           res.data
-      
+
       # A convenience function to read a binary file into
       # an ArrayBuffer.
       #
@@ -31,7 +31,7 @@ define ['angular'], (ng) ->
       readBinary: (path, config={}) ->
         config.responseType = 'arraybuffer'
         File.read(path, config)
-      
+
       # Enocodes and posts the given content. The input data parameter
       # is an unencoded Javascript object.
       #

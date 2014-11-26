@@ -1,6 +1,6 @@
 define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
   dateline = ng.module 'qiprofile.dateline', ['qiprofile.helpers', 'qiprofile.chart']
-  
+
   dateline.factory 'VisitDateline', ['ObjectHelper', 'Chart', (ObjectHelper, Chart) ->
     # A helper function to calculate the effective treatment dates.
     # If there is not a begin date, then this function returns an
@@ -20,7 +20,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
         [begin, end]
       else
         []
-    
+
     # Decorates the dateline as follows:
     # * Add the session hyperlinks, encounter dates and treatment
     #   begin-end bars.
@@ -39,11 +39,11 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
     decorate: (subject, chart, config, callback) ->
       # The treatment bar height, in em units
       TREATMENT_BAR_HEIGHT = 1
-      
+
       # A treatment is designated by the HTML nabla special character
       # (the wedge-like math del operator).
       TREATMENT_SYMBOL = '\u2207'
-      
+
       # Adds the session hyperlinks above the timeline. The template
       # sets the callback attribute to this function. The new anchor
       # elements are positioned dy em units above the timeline,
@@ -62,7 +62,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
           " collection: '#{ session.subject.collection.toLowerCase() }'," +
           " subject: #{ session.subject.number }," +
           " session: #{ session.number }})"
-      
+
         # Makes a new ui-sref anchor element that hyperlinks to the given
         # session detail page.
         #
@@ -82,13 +82,13 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
           sref = sessionDetailLink(session)
           # Wrap the text element in a hyperlink.
           Chart.d3Hyperlink(text.node(), sref)
-        
+
         # The tick elements.
         ticks = xAxis.selectAll('.tick')[0]
         for i in [0...ticks.length]
           a = createSessionDetailLink(ticks[i], sessions[i])
           callback(a) if callback
-  
+
       # Inserts an SVG bar for each treatment above the timeline.
       # The bar is added if and only if the treatment has a
       # begin date.
@@ -125,7 +125,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
             # Position the bar.
             bar.attr('x', left)
             bar.attr('y', "-#{ TREATMENT_BAR_HEIGHT }em")
-      
+
       # Inserts a marker for each encounter above the timeline.
       #
       # @param xAxisNode the chart SVG x axis element
@@ -152,7 +152,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
           # Set the text content to a marker, specifically the HTML
           # nabla math special character (the wedge-like del operator).
           text.text(TREATMENT_SYMBOL)
-      
+
       # Rotates the x-axis visit date tick labels by 45 degrees.
       #
       # @param chart the dateline chart
@@ -162,7 +162,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
         labels = xTicks.select('text')
         labels.attr 'transform', (d, i, j) ->
             'translate (-27, 18) rotate(-40, 0, 0)'
-    
+
       # Adds the treatment and encounter legend directly before the
       # SVG element.
       #
@@ -192,7 +192,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
             span.classed("qi-dateline-#{ label.toLowerCase() }", true)
             # The span content is the treatment type label.
             span.text(label)
-        
+
         addEncounterLegend = (parent, svgNode) ->
           # Bail if no encounters are displayed.
           if not subject.encounters.length
@@ -213,12 +213,12 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
             # The span content is the symbol which designates the encounter
             # followed by the encounter type.
             span.text(TREATMENT_SYMBOL + label)
-        
+
         # The legend is inserted directly before the svg element.
         parent = d3.select(svgNode.parentNode)
         addTreatmentLegend(parent, svgNode)
         addEncounterLegend(parent, svgNode)
-      
+
       # Select the SVG element.
       svg = d3.select(chart.container)
       # The x axis element.
@@ -234,7 +234,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
       addSessionDetailLinks(subject.sessions, xAxis, dy)
       rotateDateLabels(chart, xAxis)
       addLegend(svg.node())
-  
+
     # @param subject the subject to display
     # @returns the nvd3 chart configuration
     configureChart: (subject) ->
@@ -263,7 +263,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
           # There is one tri-partite data series. The y coordinate
           # for this data series is always zero.
           data: [ accessor: -> 0 ]
-  
+
       # Return the standard chart configuration extended
       # with the following:
       # * the xValues and xFormat properties

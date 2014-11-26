@@ -1,5 +1,6 @@
-define ['angular', 'lodash', 'underscore.string', 'resources', 'router', 'uirouter'],
-  (ng, _, _s) ->
+define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources',
+        'router'],
+  (ng, _, _s, REST) ->
     routes = ng.module 'qiprofile.routes', ['ui.router', 'qiprofile.resources',
                                             'qiprofile.router']
 
@@ -38,12 +39,17 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'router', 'uirout
             resolve:
               Subject: 'Subject'
               subjects: (Subject, project) ->
-                Subject.query(project: project).$promise
+                # The selection criterion is the project name.
+                cond = REST.where(project: project)
+                # Only the id and secondary key and fields are fetched.
+                fields = REST.pluck(['project', 'collection', 'number'])
+                # The HTML query parameter.
+                param = _.extend(_.clone(cond), fields)
+                # Delegate to the resource.
+                Subject.query(param).$promise
               collections: ($state, subjects) ->
-                _.uniq _.map(
-                  subjects,
-                  (subject) -> subject.collection
-                )
+                # The sorted collection names, with duplicates removed.
+                _.chain(subjects).pluck('collection').uniq().value().sort()
             views:
               'main@':
                 templateUrl: '/partials/subject-list.html'
@@ -97,7 +103,7 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'router', 'uirout
                   throw ReferenceError.new("Subject #{ subject.number }" +
                                            " Session #{ sess.number } does" +
                                            " not have detail")
-                
+
                 # Fetch the session detail.
                 Router.getSessionDetail(sess)
                 # Return the session.
@@ -110,12 +116,9 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'router', 'uirout
           # The scan state.
           .state 'quip.subject.session.scan',
             abstract: true
-            url: '/scan/:scan?detail'
+            url: '/scan/:scan'
             resolve:
               scan: (session, $stateParams, Router) ->
-                # The optional session detail query parameter.
-                session.detail = $stateParams.detail
-                # Get the scan.
                 Router.getScan(session, $stateParams.scan)
 
           # The registration state.

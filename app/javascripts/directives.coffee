@@ -42,34 +42,6 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
             scope.spinner.stop()
 
 
-    # Displays a discrete bar chart.
-    directives.directive 'qiModelingDiscreteChart', ['Modeling', (Modeling) ->
-      restrict: 'E'
-      scope:
-        data: '='   # the subject sessions
-        chart: '='  # the chart type, e.g. 'ktrans'
-      link: (scope, element, attrs) ->
-        scope.$watch 'data', (data) ->
-          if data
-            scope.config = Modeling.configureChart(data, attrs.chart)
-      templateUrl: '/partials/modeling-discrete-chart.html'
-    ]
-
-
-    # Displays a multi bar chart.
-    directives.directive 'qiModelingMultiChart', ['Modeling', (Modeling) ->
-      restrict: 'E'
-      scope:
-        data: '='   # the subject sessions
-        chart: '='  # the chart type, e.g. 'ktrans'
-      link: (scope, element, attrs) ->
-        scope.$watch 'data', (data) ->
-          if data
-            scope.config = Modeling.configureChart(data, attrs.chart)
-      templateUrl: '/partials/modeling-multi-chart.html'
-    ]
-
-
     # Displays the MR session visit dateline chart.
     directives.directive 'qiVisitDateline', ['VisitDateline', '$compile',
       (VisitDateline, $compile) ->
@@ -100,17 +72,9 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
     ]
 
 
-    # Displays the modeling tables.
-    directives.directive 'qiModelingTables', ['Modeling', (Modeling) ->
+    directives.directive 'qiKTrans', ->
       restrict: 'E'
-      scope:
-        sessions: '='   # the subject sessions
-      link: (scope, element, attrs) ->
-        scope.$watch 'sessions', (sessions) ->
-          if sessions
-            scope.config = Modeling.configureTable(sessions)
-      templateUrl: '/partials/modeling-tables.html'
-    ]
+      templateUrl: '/partials/k-trans.html'
 
 
     directives.directive 'qiDemographics', ->
@@ -121,21 +85,6 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
     directives.directive 'qiEncounter', ->
       restrict: 'E'
       templateUrl: '/partials/encounter.html'
-
-
-    directives.directive 'qiBreastPathology', ->
-      restrict: 'E'
-      templateUrl: '/partials/breast-pathology.html'
-
-
-    directives.directive 'qiSarcomaPathology', ->
-      restrict: 'E'
-      templateUrl: '/partials/sarcoma-pathology.html'
-
-
-    directives.directive 'qiGenericEvaluation', ->
-      restrict: 'E'
-      templateUrl: '/partials/generic-evaluation.html'
 
 
     directives.directive 'qiHormoneReceptor', ->

@@ -19,7 +19,7 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
       RANGES: [[3..5], [6..7], [8..9]]
       SCORES: ['tubularFormation', 'mitoticCount', 'nuclearPleomorphism']
 
-    
+
     # Returns the cancer stage.
     #
     # 1f metastasis exists (M1), then the stage is 4.

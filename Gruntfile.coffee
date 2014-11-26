@@ -1,13 +1,13 @@
 module.exports = (grunt) ->
   grunt.config.init(
     pkg: grunt.file.readJSON('package.json')
-    
+
     env:
       dev:
         NODE_ENV: 'development'
       prod:
         NODE_ENV: 'production'
-    
+
     preprocess:
       # Note: This 'preprocess' task is actually used to post-process
       # the Javascript in place after it is compiled from CoffeeScript.
@@ -15,9 +15,9 @@ module.exports = (grunt) ->
         src: '_public/javascripts/config.js'
       options:
         inline: true
-    
+
     clean: ['_build', '_public/*']
-    
+
     copy:
       js:
         expand: true
@@ -47,7 +47,7 @@ module.exports = (grunt) ->
           '!**/*.min.js'
         ]
         dest: '_public/javascripts/lib'
-        
+
       css:
         # Note: Since the non-minimized Bootstrap module
         # references the CSS map, the map must be colocated
@@ -57,7 +57,7 @@ module.exports = (grunt) ->
         cwd: 'bower_components/'
         src: ['bootstrap/dist/css/bootstrap.css.map']
         dest: '_public/stylesheets/'
-      
+
       fonts:
         expand: true
         flatten: true
@@ -123,7 +123,7 @@ module.exports = (grunt) ->
         command: 'netstat -lnp tcp 2>/dev/null | grep -q 4444 || ' +
                  './node_modules/selenium-standalone/bin/start-selenium' +
                   ' > /dev/null 2>&1 &'
-    
+
     protractor:
       e2e:
         configFile: 'test/conf/protractor-conf.coffee'
@@ -172,13 +172,13 @@ module.exports = (grunt) ->
       markdown:
         files: ['app/partials/**/*.md']
         tasks: ['markdown']
-    
+
     concurrent:
       options:
         logConcurrentOutput: true
       compile:
         tasks: ['compile:js', 'jade:compile', 'markdown', 'stylus']
-    
+
     # TODO - try this.
     requirejs:
       compile:
@@ -217,7 +217,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'vendor:app', ['copy:app', 'concat:app']
 
   grunt.registerTask 'compile:js', ['coffee:compile', 'preprocess']
-  
+
   grunt.registerTask 'compile', ['concurrent:compile']
 
   grunt.registerTask 'build:app', ['clean', 'vendor:app', 'compile']

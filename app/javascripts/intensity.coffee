@@ -124,7 +124,7 @@ define ['angular', 'chart', 'image'], (ng) ->
       # Flag indicating whether the T1 scan has more than one
       # realignment.
       hasMultipleRegs = scan.registrations.length > 1
-      
+
       # Makes the data series {key, color} format object for the
       # given registration.
       #
@@ -150,7 +150,7 @@ define ['angular', 'chart', 'image'], (ng) ->
         key: key
         color: COLORS[index % COLORS.length]
         values: coordinates(registration.intensity.intensities)
-      
+
         # The registration data series configuration.
       regData = ((registrationDataSeries(reg, i) for reg, i in scan.registrations))
 

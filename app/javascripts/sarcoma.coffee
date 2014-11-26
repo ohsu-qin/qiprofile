@@ -14,12 +14,12 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
         ['1B', '2B', '3']
         ['3', '3', '3']
       ]
-    
+
     Grade:
       RANGES: [[2..3], [4..5], [6..8]]
       SCORES: ['differentiation', 'mitoticCount', 'necrosis']
 
-    
+
     # Returns the cancer stage.
     #
     # If metastasis exists (M1), then the stage is IV.

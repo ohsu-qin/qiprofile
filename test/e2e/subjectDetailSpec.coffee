@@ -88,9 +88,10 @@ class SubjectDetailPage extends Page
     addComponentTables = (panel) ->
       componentTables =
         demographics:
-          selector: 'qi-demographics'
+          selector: '#demographics'
           bindings:
             age: 'birthDate'
+            weight: 'weight'
             races: 'races'
             ethnicity: 'ethnicity'
 
@@ -114,9 +115,9 @@ describe 'E2E Testing Subject Detail', ->
     before ->
       page = new SubjectDetailPage '/quip/breast/subject/1?project=QIN_Test'
 
-  it 'should load the page', ->
-    expect(page.content, 'The page was not loaded')
-      .to.eventually.exist
+    it 'should load the page', ->
+      expect(page.content, 'The page was not loaded')
+        .to.eventually.exist
 
     # The page header test cases.
     describe 'Header', ->
@@ -160,20 +161,20 @@ describe 'E2E Testing Subject Detail', ->
             # When the button is clicked, then the modeling tables
             # are displayed.
             button.click().then ->
-              expect(page.modelingCharts(), 'The modeling charts are visible after the' +
-                                            ' format button is clicked')
+              expect(page.modelingCharts(), 'The modeling charts are visible after' +
+                                            ' the format button is clicked')
                 .to.eventually.be.empty
-              expect(page.modelingTables(), 'The modeling tables are hidden after the' +
-                                            ' format button is clicked')
+              expect(page.modelingTables(), 'The modeling tables are hidden after' +
+                                            ' the format button is clicked')
                 .to.eventually.not.be.empty
               # When the button is clicked again, then the modeling charts
               # are displayed.
               button.click().then ->
-                expect(page.modelingCharts(), 'The modeling charts are hidden after the' +
-                                              ' format button is clicked twice')
+                expect(page.modelingCharts(), 'The modeling charts are hidden after' +
+                                              ' the format button is clicked twice')
                   .to.eventually.not.be.empty
-                expect(page.modelingTables(), 'The modeling tables are visible after the' +
-                                              ' format button is clicked twice')
+                expect(page.modelingTables(), 'The modeling tables are visible after' +
+                                              ' the format button is clicked twice')
                   .to.eventually.be.empty
 
       describe 'Chart', ->
@@ -255,8 +256,8 @@ describe 'E2E Testing Subject Detail', ->
               table = _.first(tables)
               table.body.then (rows) ->
                 for row, rowNdx in rows
-                  expect(row.length, "The Ktrans table row #{ rowNdx + 1 } column" +
-                                     " count is incorrect").to.equal(7)
+                  expect(row.length, "The Ktrans table row #{ rowNdx + 1 }" +
+                                     " column count is incorrect").to.equal(7)
                   
           it 'should have three non-Ktrans table columns', ->
             modelingTables.then (tables) ->
@@ -342,6 +343,14 @@ describe 'E2E Testing Subject Detail', ->
               expect(age, 'The age is not an integer').to.match(/^\d+$/)
               expect(parseInt(age), 'The age is not positive')
                 .to.be.greaterThan(0)
+        
+        it 'should show the weight', ->
+          demographics.then (table) ->
+            table.weight().then (weight) ->
+              expect(weight, 'The weight is missing').to.exist.and.to.not.be.empty
+              expect(weight, 'The weight is not an integer').to.match(/^\d+$/)
+              expect(parseInt(weight), 'The weight is not positive')
+                .to.be.greaterThan(0)
       
         it 'should show the race', ->
           demographics.then (table) ->
@@ -365,9 +374,8 @@ describe 'E2E Testing Subject Detail', ->
     beforeEach ->
       page = new SubjectDetailPage '/quip/sarcoma/subject/1?project=QIN_Test'
 
-  it 'should load the page', ->
-    expect(page.content, 'The page was not loaded')
-      .to.eventually.exist
+    it 'should load the page', ->
+      expect(page.content, 'The page was not loaded').to.eventually.exist
 
     # The Sarcoma-specific page header test cases.
     describe 'Header', ->

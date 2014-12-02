@@ -1,0 +1,99 @@
+// The image controls are organized into accordian groups.
+.qi-panel.qi-image-ctl
+  accordion(close-others='false')
+    div(ng-controller='AccordionGroupCtrl')
+      accordion-group(is-open="isOpen")
+        +accordion-heading('Opacity')
+        // The opacity controls.
+        .row
+          .col-md-3.qi-slider-label Image
+          .col-md-9
+            slider.qi-slider(ng-model='image.volume.opacity' floor='0' ceiling='1' step='0.1' precision='1')
+        // Note: the label map opacity control definition below works
+        // around the following XTK bug:
+        // * If the XTK volume labelmap property is accessed, then the XTK
+        //   parser fails with the error: 
+        //     TypeError: Cannot read property '_children' of undefined
+        //   XTK creates an incomplete labelmap object on demand in the
+        //   labelmap getter. The XTK hasLabelMap variable is then set to
+        //   true, and the parser assumes that the labelmap exists and is
+        //   well-formed with children objects. This causes the parser to fail.
+        //   The work-around is to reference @volume._labelmap rather than the
+        //   @volume.labelmap property. The Image object hasLabelMap function
+        //   checks whether the labelmap exists without accessing the labelmap
+        //   property. E.g., rather than calling the expression:
+        //     .row(ng-show="image.volume.labelmap.file")  # Bad!
+        //   call the following instead:
+        //     .row(ng-show="image.hasLabelMap()")
+        //
+        // Note: including the following row:
+        //   slider.qi-slider(ng-model='image.volume.labelmap.opacity' ...)
+        // results in the error described above, since it references the labelmap
+        // property.
+        //
+        // Note: including the following row:
+        //   slider.qi-slider(ng-model='image.volume._labelmap.opacity' ...)
+        // results in an empty image display but no error. This possibly results
+        // from Angular rather than XTK: if the model evaluates to null, then
+        // perhaps Angular chokes even if the show flag is false.
+        //
+        // Note: an alternative work-around is to define the slider model as:
+        //   slider.qi-slider(ng-model='image.labelMapOpacity' ...)
+        // where the Image service labelMapOpacity property is defined by:
+        //   Object.defineProperty image, 'labelMapOpacity',
+        //     get: ->
+        //       @volume._labelmap.opacity if @hasLabelMap()
+        //     set: (value) ->
+        //       @volume._labelmap.opacity = value if @hasLabelMap()
+        // However, this results in an infinite Angular digest loop. Referencing
+        // the labelMapOpacity property apparently triggers a redigest for an
+        // unknown reason.
+        //
+        // The work-around is to guard the row with a ng-switch hasLabelMap() test.
+        // If the image has a label map, then Angular inserts the row into the DOM.
+        // Otherwise, the row is not in the DOM. This differs from the ng-show
+        // behavior: whether or not the ng-show evaluates to true, the row is
+        // in the DOM and digested by Angular, resulting in the errors described
+        // above.
+        //
+        // Although the ng-show below is redundant, it is included since it is the
+        // preferred implementation if the XTK bug is ever fixed.
+        //
+        // TODO - revisit this work-around in late 2015 after XTK has hopefully
+        // matured.
+        //
+        div(ng-switch="image.hasLabelMap()")
+          div(ng-switch-when="true")
+            .row(ng-show="image.hasLabelMap()")
+              .col-md-3 Overlay
+              .col-md-9
+                slider.qi-slider(ng-model='image.volume.labelmap.opacity'
+                                 floor='0' ceiling='1' step='0.1' precision='1')
+    div(ng-controller='AccordionGroupCtrl')
+      accordion-group(is-open="isOpen")
+        +accordion-heading('Cross Section')
+        // The axis cross section (slice) controls.
+        .row
+          .col-md-3.qi-slider-label Sagittal
+          .col-md-9
+            slider.qi-slider(ng-model='image.volume.indexX' floor='0' ceiling='319' step='1')
+        .row   
+          .col-md-3.qi-slider-label Coronal
+          .col-md-9
+            slider.qi-slider(ng-model='image.volume.indexY' floor='0' ceiling='319' step='1')
+        .row
+          .col-md-3.qi-slider-label Axial
+          .col-md-9
+            slider.qi-slider(ng-model='image.volume.indexZ' floor='0' ceiling='118' step='1')
+    div(ng-controller='AccordionGroupCtrl')
+      accordion-group(is-open="isOpen")
+        +accordion-heading('Threshold')
+        // The thresholding controls.
+        .row   
+          .col-md-3.qi-slider-label Lower
+          .col-md-9
+            slider.qi-slider(ng-model='image.volume.lowerThreshold' floor='0' ceiling='445' step='1')
+        .row
+          .col-md-3.qi-slider-label Upper
+          .col-md-9
+            slider.qi-slider(ng-model='image.volume.upperThreshold' floor='0' ceiling='445' step='1')

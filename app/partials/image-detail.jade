@@ -10,69 +10,12 @@ block billboard
   | Time Point {{ image.timePoint }}
 
 block content
-  // Display the image.
-  qi-series-image.qi-panel
-
-  // The overlay selection radio button controls.
-  .qi-overlay-select(ng-show="overlayModelingNames.length > 1")
-    h4 Modeling Result
-    .btn-group
-      div(ng-repeat="name in overlayModelingNames")
-        button.btn.btn-primary(ng-model='modelSelect' btn-radio="name" ng-click="selectModelingResult(name)") {{ name }}
-
-  .qi-overlay-select(ng-show="overlays")
-    h4 Overlay
-    .btn-group
-      button.btn.btn-primary(ng-model='overlaySelect' btn-radio="'none'" ng-click="deselectOverlay()") No Overlay
-      button.btn.btn-primary(ng-model='overlaySelect' btn-radio="'deltaKTrans'" ng-click="selectOverlay('deltaKTrans')" ng-show="overlays.deltaKTrans") &Delta;K<sup>trans</sup>
-      button.btn.btn-primary(ng-model='overlaySelect' btn-radio="'fxlKTrans'" ng-click="selectOverlay('fxlKTrans')" ng-show="overlays.fxlKTrans") FXL K<sup>trans</sup>
-      button.btn.btn-primary(ng-model='overlaySelect' btn-radio="'fxrKTrans'" ng-click="selectOverlay('fxrKTrans')" ng-show="overlays.fxrKTrans") FXR K<sup>trans</sup>
-      button.btn.btn-primary(ng-model='overlaySelect' btn-radio="'vE'" ng-click="selectOverlay('vE')" ng-show="overlays.vE") v<sub>e</sub>
-      button.btn.btn-primary(ng-model='overlaySelect' btn-radio="'tauI'" ng-click="selectOverlay('tauI')" ng-show="overlays.tauI") &tau;<sub>i</sub>
-
-  // The image controls are organized into accordian groups.
-  .qi-panel.qi-image-ctl
-    accordion(close-others='false')
-      div(ng-controller='AccordionGroupCtrl')
-        accordion-group(is-open="isOpen")
-          +accordion-heading('Opacity')
-          // The opacity controls.
-          .row
-            .col-md-3 Image
-            .col-md-9
-              slider.qi-slider(ng-model='image.volume.opacity' floor='0' ceiling='1' step='0.1' precision='1')
-          .row(ng-show="image.volume.labelmap.file")
-            .col-md-3 Overlay
-            .col-md-9
-              slider.qi-slider(ng-model='image.volume.labelmap.opacity' floor='0' ceiling='1' step='0.1' precision='1')
-      div(ng-controller='AccordionGroupCtrl')
-        accordion-group(is-open="isOpen")
-          +accordion-heading('Cross Section')
-          // The axis cross section (slice) controls.
-          .row
-            .col-md-3 Sagittal
-            .col-md-9
-              slider.qi-slider(ng-model='image.volume.indexX' floor='0' ceiling='319' step='1')
-          .row   
-            .col-md-3 Coronal
-            .col-md-9
-              slider.qi-slider(ng-model='image.volume.indexY' floor='0' ceiling='319' step='1')
-          .row
-            .col-md-3 Axial
-            .col-md-9
-              slider.qi-slider(ng-model='image.volume.indexZ' floor='0' ceiling='118' step='1')
-      div(ng-controller='AccordionGroupCtrl')
-        accordion-group(is-open="isOpen")
-          +accordion-heading('Threshold')
-          // The thresholding controls.
-          .row   
-            .col-md-3 Lower
-            .col-md-9
-              slider.qi-slider(ng-model='image.volume.lowerThreshold' floor='0' ceiling='445' step='1')
-          .row
-            .col-md-3 Upper
-            .col-md-9
-              slider.qi-slider(ng-model='image.volume.upperThreshold' floor='0' ceiling='445' step='1')
+  // The modeling parameter overlay select.
+  include include/image-overlay-select
+  // The image display.
+  qi-image.qi-panel.qi-image
+    // The opacity, axis and threshold image controls.
+    include include/image-controls
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

@@ -115,27 +115,27 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
         # The image is rendered within the given element.
         renderer.container = element[0]
         # Build the renderer.
-        renderer.init()        
+        renderer.init()
         renderer.add(@volume)
-
+      
         # Set the volume threshold levels to defaults.
         # These must be set here for the slider controls to load with the
         # correct values.
         @volume.lowerThreshold = 0
         @volume.upperThreshold = 445
-
-        # TODO - verify the comment below.
-        # The overlay and color table specification.
-        # Note that some label map and color LUT must be specified for the initial
-        # load even though by default no label map is shown. Otherwise the volume
-        # will not load. For this reason, an overlay and LUT are specified for
-        # the type "none".
-
+      
         # Adjust the camera position.
         renderer.camera.position = [0, 0, 240]
 
         # Render the image.
         renderer.render()
+
+      # Returns whether the volume has a label map overlay.
+      # This function is required by the image-controls.jade work-around for
+      # a XTK bug.
+      hasLabelMap: ->
+        @volume._labelmap and @volume._labelmap._children and
+        @volume._labelmap._children.length
 
       # Deselects an existing overlay as follows:
       # * If the image volume has a label map, then the label map visible

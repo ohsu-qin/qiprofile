@@ -129,7 +129,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
 
 
     # Displays a scan or registration series 3D image.
-    directives.directive 'qiSeriesImage', ->
+    directives.directive 'qiImage', ->
       restrict: 'E'
       link: (scope, element) ->
         scope.$watch 'image.state', (state) ->

@@ -1,0 +1,20 @@
+include accordion-heading-mixin
+
++accordion-heading('Demographics')
+
+table#demographics.qi-table
+  tr(ng-show="subject.birthDate != null")
+    th.col-md-2 Age
+    td.col-md-10 {{ subject.birthDate | age }}
+  tr(ng-show="subject.gender != null")
+    th.col.col-md-2 Gender
+    td.col.col-md-10 {{ subject.gender }}
+  tr(ng-show="subject.weight != null")
+    th.col.col-md-2 Weight
+    td.col.col-md-10 {{ subject.weight }}
+  tr(ng-show="subject.races != null && subject.races.length > 0")
+    th.col.col-md-2 Race
+    td.col.col-md-10 {{ subject.races | races }}
+  tr(ng-show="subject.ethnicity != null")
+    th.col.col-md-2 Ethnicity
+    td.col.col-md-10 {{ subject.ethnicity | ethnicity }}

@@ -1,0 +1,9 @@
+// The overlay selection radio button controls.
+div(ng-show="overlayModelingNames.length > 1")
+  h4 Modeling Result
+  .btn-group
+    div(ng-repeat="modelingName in overlayModelingNames")
+      button.btn.btn-primary.qi-btn-select(
+        ng-model='modelSelect' btn-radio="modelingName"
+        ng-click="selectModelingResult(modelingName)"
+      ) {{ modelingName }}

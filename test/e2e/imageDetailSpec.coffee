@@ -6,7 +6,7 @@ Page = require './helpers/page'
 
 class ImageDetailPage extends Page
   displayPanel: ->
-    @find('qi-series-image')
+    @find('qi-image')
   
   overlaySelector: ->
     @find('.qi-overlay-select')
@@ -14,7 +14,7 @@ class ImageDetailPage extends Page
   imageCtlPanel: ->
     @find('.qi-image-ctl')
 
-describe.only 'E2E Testing Image Detail', ->
+describe 'E2E Testing Image Detail', ->
   page = null
 
   beforeEach ->
@@ -37,7 +37,7 @@ describe.only 'E2E Testing Image Detail', ->
 
   it 'should display a contact email link', ->
     pat = /a href="mailto:\w+@ohsu.edu"/
-    expect(page.contactInfo(), 'The email address is missing')
+    expect(page.contactInfo, 'The email address is missing')
       .to.eventually.match(pat)
 
   describe 'Image Display', ->
@@ -49,14 +49,15 @@ describe.only 'E2E Testing Image Detail', ->
     it 'should display the image', ->
       expect(panel, 'The image panel is missing').to.eventually.exist
 
-  describe 'Overlay Selection Buttons', ->
-    panel = null
-
-    beforeEach ->
-      panel = page.overlaySelector()
-
-    it 'should display the overlay selection buttons', ->
-      expect(panel, 'The overlay selection buttons are missing').to.eventually.exist
+  # TODO - enable when overlays are added to the test fixture.
+  # describe 'Overlay Selection Buttons', ->
+  #   panel = null
+  # 
+  #   beforeEach ->
+  #     panel = page.overlaySelector()
+  # 
+  #   it 'should display the overlay selection buttons', ->
+  #     expect(panel, 'The overlay selection buttons are missing').to.eventually.exist
 
   describe 'Image Control Panel', ->
     panel = null

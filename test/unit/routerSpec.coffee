@@ -25,30 +25,34 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
           birth_date: moment([1961, 6, 7]).valueOf()
           scan_sets:
             t1:
-              modeling:
+              modeling: [
                 results: [
                   delta_k_trans:
                     average: 2.6
                 ]
+              ]
             t2:
-              modeling:
+              modeling: [
                 results: [
                   delta_k_trans:
                     average: 2.4
                 ]
+              ]
           registration_configurations:
             reg_01:
-              modeling:
+              modeling: [
                 results: [
                   delta_k_trans:
                     average: 2.3
                 ]
+              ]
             reg_02:
-              modeling:
+              modeling: [
                 results: [
                   delta_k_trans:
                     average: 2.1
                 ]
+              ]
           sessions: [
             number: 1
             acquisition_date: moment('July 1, 2013').valueOf()
@@ -148,11 +152,11 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
           # The first modeling is for the T1 scan.
           mdl = subject.modeling[0]
           expect(mdl.source, "Modeling is missing a source").to.exist
-          expect(mdl.source.scanType, "Modeling source is missing the scan type")
+          expect(mdl.source.key, "Modeling source is missing the key")
             .to.exist
-          expect(mdl.source.scanType, "Modeling source scan type is incorrect")
+          expect(mdl.source.key, "Modeling source key is incorrect")
             .to.equal('t1')
-          mockMdl = mock.subject_detail.scan_sets.t1.modeling
+          mockMdl = mock.subject_detail.scan_sets.t1.modeling[0]
           expect(mdl.results, "Modeling is missing results").to.exist
           expect(mdl.results.length, "Modeling results count is incorrect").
             to.equal(1)
@@ -184,17 +188,17 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
           $httpBackend.flush()
 
       describe 'Session Detail', ->
-        mock_session = null
+        mockSession = null
 
         # Validates the resolved session.
         validate = (session) ->
           scan = session.scans.t1
           expect(scan, "Session is missing the T1 scan").to.exist
-          mock_scan = mock.session_detail.scans.t1
+          mockScan = mock.session_detail.scans.t1
           expect(scan.intensity, "Session scan is incorrect")
-            .to.deep.eql(mock_scan.intensity)
+            .to.deep.eql(mockScan.intensity)
           expect(scan.intensity, "Session scan is incorrect")
-            .to.deep.eql(mock_scan.intensity)
+            .to.deep.eql(mockScan.intensity)
           reg = scan.registrations[0]
           expect(reg, "Session is missing the T1 registration").to.exist
           mock_reg = mock.session_detail.scans.t1.registrations[0]
@@ -202,43 +206,43 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
             .to.deep.eql(mock_reg.intensity)
 
         beforeEach ->
-          mock_session = mock.subject_detail.sessions[0]
+          mockSession = mock.subject_detail.sessions[0]
           # The session subject reference is set in the routes
           # session resolution.
-          mock_session.subject = mock.subject
+          mockSession.subject = mock.subject
 
         it 'should fetch the session detail', ->
-          session = _.clone(mock_session)
+          session = _.clone(mockSession)
           Router.getSessionDetail(session).then ->
             validate(session)
           # Dispatch the backend request.
           $httpBackend.flush()
 
       describe 'Scan', ->
-        mock_session = null
+        mockSession = null
 
         beforeEach ->
-          mock_session = _.clone(mock.subject_detail.sessions[0])
+          mockSession = _.clone(mock.subject_detail.sessions[0])
           # The session subject reference is set in the routes
           # session resolution.
-          mock_session.subject = mock.subject
+          mockSession.subject = mock.subject
 
         it 'should find the scan container in a fetched session', ->
-          session = _.clone(mock_session)
+          session = _.clone(mockSession)
           session.scans = mock.session_detail.scans
-          mock_scan = mock.session_detail.scans.t1
-          actual = Router.getScan(session, mock_scan.name)
+          mockScan = mock.session_detail.scans.t1
+          actual = Router.getScan(session, mockScan.name)
           expect(actual, 'Image container missing').to.exist
           expect(actual, 'Image container incorrect')
             .to.equal(mock.session_detail.scans.t1)
 
         it 'should fetch a session if necessary to obtain the scan', ->
-          session = _.clone(mock_session)
-          mock_scan = mock.session_detail.scans.t1
-          Router.getScan(session, mock_scan.name).then (container) ->
+          session = _.clone(mockSession)
+          mockScan = mock.session_detail.scans.t1
+          Router.getScan(session, mockScan.name).then (container) ->
             expect(container, 'Image container missing').to.exist
             expect(container.intensity, 'Image container intensity incorrect').
-              to.eql(mock_scan.intensity)
+              to.eql(mockScan.intensity)
 
           # Dispatch the backend request.
           $httpBackend.flush()

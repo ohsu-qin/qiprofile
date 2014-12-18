@@ -146,13 +146,18 @@ define ['angular', 'chart', 'image'], (ng) ->
         registration.title = key
 
         # TODO - Wrap the key in a registration parameters pop-up hyperlink.
+        
         # Return the data series format object.
         key: key
         color: COLORS[index % COLORS.length]
         values: coordinates(registration.intensity.intensities)
 
-        # The registration data series configuration.
-      regData = ((registrationDataSeries(reg, i) for reg, i in scan.registrations))
+      # Sort the scan registrations by key.
+      regs = scan.registrations
+      regKeys = _.keys(regs).sort()
+      regsSorted = (regs[key] for key in regKeys)
+      # Collect the data series specifications.
+      regData = (registrationDataSeries(reg, i) for reg, i in regsSorted)
 
       # Return the chart configuration.
       data: [scanData].concat(regData)

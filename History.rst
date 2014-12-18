@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 (http://quip1:6060/qiprofile) for change details.
 
+1.1.1 / 2014-12-17
+------------------
+* Adapt for PyPI.
+
 0.9.2 / 2014-12-03
 ------------------
 * Support multiple overlays.

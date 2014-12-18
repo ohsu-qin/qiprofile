@@ -31,16 +31,6 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
       else
         sdashed
 
-  helpers.factory 'ArrayHelper', ->
-    # This function stands in for the missing lodash v2.4.1 findIndex function.
-    #
-    # TODO - replace with lodash findIndex when a lodash update includes the
-    # function. 
-    findIndex: (array, callback=_.identity) ->
-      for item, i in array
-        if callback(item, i, array) then return i
-      -1
-
   helpers.factory 'ObjectHelper', ->
     # @param objects the delegate objects
     # @returns a new object with properties from the given

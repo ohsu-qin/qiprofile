@@ -2,8 +2,8 @@ define ['angular', 'lodash', 'helpers', 'breast', 'sarcoma'], (ng, _) ->
   tnm = ng.module 'qiprofile.tnm', ['qiprofile.helpers', 'qiprofile.breast',
                                     'qiprofile.sarcoma']
 
-  tnm.factory 'TNM', ['ArrayHelper', 'Breast', 'Sarcoma',
-    (ArrayHelper, Breast, Sarcoma) ->
+  tnm.factory 'TNM', ['Breast', 'Sarcoma',
+    (Breast, Sarcoma) ->
       # The supported helper factories.
       HELPERS =
         Breast: Breast
@@ -42,7 +42,7 @@ define ['angular', 'lodash', 'helpers', 'breast', 'sarcoma'], (ng, _) ->
         # The tumor type grade ranges.
         ranges = helper(tnm.tumorType).Grade.RANGES
         inRange = (range) -> cGrade in range
-        index = ArrayHelper.findIndex(ranges, inRange)
+        index = _.findIndex(ranges, inRange)
         if index < 0
           throw new ReferenceError("Unsupported #{ tnm.tumorType }" +
                                    " cumulative grade: #{ cGrade }")

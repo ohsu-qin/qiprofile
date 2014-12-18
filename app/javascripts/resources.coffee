@@ -27,6 +27,17 @@ define ['angular', 'ngresource', 'helpers'], (ng) ->
         #
         #   cond = REST.where({project: project, number: number})
         #   Subject.query(cond).$promise
+        #
+        # TODO - when the REST detail object is embedded in subject,
+        # then:
+        # * the caller is responsible for adding the select
+        #   criterion for non-detail fields
+        # * detail restricts the select to the detail field and
+        #   returns the fetched detail object, i.e.:
+        #     detail:
+        #       method: 'GET'
+        #       url: '/api/subject/:id{select=...}'
+        #
         query:
           method: 'GET'
           isArray: true

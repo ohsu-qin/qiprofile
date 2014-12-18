@@ -42,7 +42,7 @@ requirejs.config
     angular: [NG_LIB + '/' + 'angular' + MIN, './lib/angular'] 
     d3: './lib/d3'
     domReady: [DOM_READY_LIB + '/domReady' + MIN, './lib/domReady']
-    lodash: './lib/lodash.underscore'
+    lodash: './lib/lodash'
     moment: './lib/moment'
     nganimate: [NG_LIB + '/' + 'angular-animate' + MIN, './lib/angular-animate']  
     ngresource: [NG_LIB + '/' + 'angular-resource' + MIN, './lib/angular-resource']  

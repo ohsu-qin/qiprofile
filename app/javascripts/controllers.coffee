@@ -262,7 +262,7 @@ define ['angular', 'modeling'], (ng) ->
         # The target route, a prefix for now.
         route = 'quip.subject.session.scan.'
         if container._cls == 'Scan'
-          params.scan = container.name
+          params.scan = container.scan_type
           route += 'image'
         else if container._cls == 'Registration'
           params.scan = container.scan.name

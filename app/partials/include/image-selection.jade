@@ -33,7 +33,9 @@
 .row(ng-repeat="reg in session.scans.t1.registrations")
   // The registration title is set by the Intensity service when
   // the intensity chart configuration is built.
-  .qi-image-selection-key {{ reg.title }}
+  // TODO - hyperlink to show reg info modal
+  .qi-image-selection-key
+    | {{ reg.title }}
   ul.qi-justified-list.qi-reg-image-btn-group
     span(ng-repeat="image in reg.images" tooltip="{{ $index + 1 }}")
       li.qi-justified-list-item

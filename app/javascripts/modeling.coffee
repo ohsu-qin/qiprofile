@@ -25,15 +25,16 @@ define ['angular', 'lodash', 'k-trans', 'v-e', 'tau-i', 'chart'], (ng, _, Ktrans
         "<b>#{ key }</b>: #{ y }"
 
       # The session date x values.
-      xValues = (X_DATA_SPEC.accessor(mdlResult) for mdlResult in modelingResults)
+      xValues = (
+        X_DATA_SPEC.accessor(mdlResult) for mdlResult in modelingResults
+      )
 
       # The chart data specification.
       spec =
         x: X_DATA_SPEC
         y: dataSeriesSpec
 
-      # Return the standard chart configuration extended
-      # with the following:
+      # Return the standard chart configuration extended with the following:
       # * the xValues and xFormat properties
       # * the tooltip function
       _.extend Chart.configureChart(modelingResults, spec),

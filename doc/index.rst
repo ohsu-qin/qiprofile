@@ -1,18 +1,19 @@
 .. _index:
 
-=====================================
-*QuIP* - Quantitative Imaging Profile
-=====================================
+===================================================================================
+qiprofile - The *Qu*\ antitative *I*\ maging *P*\ rofile (*QuIP*\ ) web application
+===================================================================================
 
 ********
 Synopsis
 ********
 
-The Quantitative Imaging Profile web application displays imaging and clinical
-data for the `OHSU QIN Sharepoint`_ study.
+The *Qu*\ antitative *I*\ maging *P*\ rofile (*QuIP*\ ) web application displays
+imaging and clinical data for the `OHSU QIN Sharepoint`_ study.
 
-:Git: git\@quip1.ohsu.edu:qiprofile
-      (`Browse <http://quip1.ohsu.edu:6060/qiprofile>`__)
+:API: https://readthedocs.org/projects/qiprofile/
+
+:Git: github.com/ohsu-qin/qiprofile
 
 
 ************

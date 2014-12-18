@@ -182,9 +182,9 @@ Debugging a unit test case is performed as follows:
 
 The end-to-end tests are run with the Protractor_ framework. The command::
 
-    grunt test:unit
+    grunt test:e2e
 
-runs the grunt protractor ``e2e`` task as follows:
+runs the grunt protractor ``e2e`` task. This task runs as follows:
 
 * Read the ``test/conf/protractor-conf.coffee`` configuration file
 
@@ -197,6 +197,9 @@ runs the grunt protractor ``e2e`` task as follows:
 * Exercise the ``test/e2e/`` test cases
 
 * Print the result to the console
+
+Note that the e2e task can because of Selenium startup timing issues.
+If the test results in a failed connection error, the rerun the task.
 
 A single end-to-end test spec can be run with the ``--specs`` option::
 

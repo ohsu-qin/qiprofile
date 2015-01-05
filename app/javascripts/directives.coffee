@@ -116,9 +116,9 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
       templateUrl: '/partials/grade.html'
 
 
-    directives.directive 'qiModifiedBloomRichardsonGrade', ->
+    directives.directive 'qiModifiedBRGrade', ->
       restrict: 'E'
-      templateUrl: '/partials/modified-br-grade.html'
+      templateUrl: '/partials/modified-b-r-grade.html'
 
 
     directives.directive 'qiFnclccGrade', ->

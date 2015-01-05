@@ -79,15 +79,17 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
                   sortByKey = _.partialRight(_.sortBy, 'key')
 
                   # The modelables with modeling.
-                  modeled = modelables.filter((mdlbl) -> mdlbl.modeling)
+                  modeled = modelables.filter (modelable) ->
+                    # Check for both existence and length > 0.
+                    modelable.modeling
                   # The modeled modelables sorted by key.
                   modelablesSorted = sortByKey(modeled)
                   # The sorted array of arrays of modeling objects.
-                  mdlArraysSorted = (
+                  mdlArrays = (
                     modelable.modeling for modelable in modelablesSorted
                   )
                   # Combine the sorted modeling object arrays.
-                  _.reduce(mdlArraysSorted, (a, b) -> a.concat(b))
+                  _.reduce(mdlArrays, (a, b) -> a.concat(b))
                 
                 # Extend the scan sets.
                 for scanType, scanSet of detail.scanSets
@@ -100,14 +102,16 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
                 # Add the subject modeling property.
                 Object.defineProperty detail, 'modeling',
                   enumerable: true
-                  # Returns the subject modeling objects sorted as follows:
-                  # * The scan modeling objects precede the registration
-                  #   modeling objects.
-                  # * The scan modeling objects are sorted by scan type.
+                  # Returns the subject modeling associative object
+                  # {scan: [modeling, ...] registration: [modeling, ...]
+                  #  all: scan + registration},
+                  # where:
+                  # * The scan set modeling objects are sorted by scan type.
                   # * The registration modeling objects are sorted by
                   #   the registration configuration key.
-                  #
-                  # @returns the sorted modeling objects
+                  # * all is the concatenation of scan and registration
+                  #   modeling objects
+                  # @returns the {scan, registration, all} object
                   get: ->
                     # Sort the scan modeling objects.
                     scanSets = _.values(detail.scanSets)
@@ -117,9 +121,21 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
                     regCfgs = _.values(detail.registrationConfigurations)
                     regMdlSorted = sortModeling(regCfgs)
                     
-                    # Return all of the modeling objects in sorted order,
-                    # scan before registration.
-                    scanMdlSorted.concat(regMdlSorted)
+                    # Build the {scan, registration, all} associative
+                    # object.
+                    sbjMdl = {}
+                    if scanMdlSorted
+                      sbjMdl.scan = scanMdlSorted
+                    if regMdlSorted
+                      sbjMdl.registration = regMdlSorted
+                    if scanMdlSorted or regMdlSorted
+                      sbjMdl.all = scanMdlSorted.concat(regMdlSorted)
+                    
+                    # Return the {scan, registration, all} associative
+                    # object.
+                    scan: scanMdlSorted
+                    registration: regMdlSorted
+                    all: scanMdlSorted.concat(regMdlSorted)
 
               # Fixes the detail date properties.
               fixDates = ->

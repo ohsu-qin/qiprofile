@@ -70,6 +70,19 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
 
         templateUrl: '/partials/visit-dateline-chart.html'
     ]
+    
+    
+    directives.directive 'qiFocus', ['$timeout',
+      ($timeout) ->
+        restrict: 'A'
+        scope:
+          focus: '@qiFocus'
+        link: (scope, element) ->
+          scope.$watch 'focus', (value) ->
+            if value is 'true' 
+              $timeout ->
+                element[0].focus()
+    ]
 
 
     directives.directive 'qiKTrans', ->

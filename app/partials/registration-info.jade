@@ -1,0 +1,16 @@
+// Display the registration properties sheet.
+.modal-header
+  h3.modal-title Registration Parameters
+  .modal-body
+    table.qi-table.qi-spaced-table
+      tr
+        th.col-md-2 Source
+        td.col-md-10
+          | TBD
+          // | {{ registration.source. ? }}
+          
+      //- tr(ng-repeat="(name, value) in modeling.inputParameters")
+      //-   th.col-md-2 {{ name | underscore }}
+      //-   td.col-md-10 {{ value }}
+  .modal-footer
+    button.btn.btn-warning.cancel(qi-focus='true' ng-click="close()") Close

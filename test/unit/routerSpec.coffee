@@ -112,7 +112,7 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
         $httpBackend.verifyNoOutstandingExpectation()
         $httpBackend.verifyNoOutstandingRequest()
 
-      describe 'Subject', ->
+      describe.only 'Subject', ->
         subject = null
 
         beforeEach ->
@@ -147,10 +147,21 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
 
           # Validate the modeling.
           expect(subject.modeling, "Subject is missing modeling").to.exist
-          expect(subject.modeling.length, "The subject modeling length is incorrect")
-            .to.equal(4)
-          # The first modeling is for the T1 scan.
-          mdl = subject.modeling[0]
+          # There are two registration modeling objects.
+          regMdl = subject.modeling.registration
+          expect(regMdl, "The subject modeling registration is missing")
+            .to.exist
+          expect(regMdl.length, "The subject modeling registration count" +
+                                " is incorrect")
+            .to.equal(2)
+          # There are two scan modeling objects.
+          scanMdl = subject.modeling.scan
+          expect(scanMdl, "The subject modeling scan is missing").to.exist
+          expect(scanMdl.length, "The subject modeling registration count" +
+                                 " is incorrect")
+            .to.equal(2)
+          # The scan modeling is for the T1 scan.
+          mdl = subject.modeling.scan[0]
           expect(mdl.source, "Modeling is missing a source").to.exist
           expect(mdl.source.key, "Modeling source is missing the key")
             .to.exist

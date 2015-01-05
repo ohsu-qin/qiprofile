@@ -90,70 +90,68 @@ define ['angular', 'modeling'], (ng) ->
       else
         $scope.modelingFormat = 'table'
 
+      # The scan modeling objects.
+      $scope.scanModeling = $scope.subject.modeling.scan
+      # The registration modeling objects.
+      $scope.regModeling = $scope.subject.modeling.registration
+      # All modeling objects.
+      $scope.allModeling = $scope.subject.modeling.all
       # The default modeling results index is the first.
       $scope.modelingIndex = 0
-      # Place the selection modeling results array in scope.
+      # Place the selected modeling in scope.
       $scope.$watch 'modelingIndex', (modelingIndex) ->
-        $scope.modeling = $scope.subject.modeling[modelingIndex]
+        $scope.selModeling = $scope.subject.modeling.all[modelingIndex]
+  ]
+
+
+  ctlrs.controller 'RegistrationInfoCtrl', ['$scope', '$modal'
+    ($scope, $modal) ->
+      # Open a modal window to display the registration properties.
+      $scope.open = ->
+        $modal.open
+          controller: 'RegistrationInfoModalCtrl'
+          templateUrl: '/partials/registration-info.html'
+          size: 'sm'
+          resolve:
+            regConfig: ->
+              $scope.regConfig
+  ]
+
+
+  ctlrs.controller 'RegistrationInfoModalCtrl', ['$scope', '$modalInstance', 'regConfig'
+    ($scope, $modalInstance, regConfig) ->
+      $scope.regConfig = regConfig
+      $scope.close = ->
+        $modalInstance.close()
   ]
 
 
   ctlrs.controller 'ModelingInfoCtrl', ['$scope', '$modal'
     ($scope, $modal) ->
-      mdl = $scope.subject.modeling[$scope.modelingIndex]
-      # The modeling info includes the source and the input properties.
-      modelingInfo =
-
-
-
-        # TODO - adapt to new data model.
-        # The modeling source is determined by the subject
-        # reg config or scan set.
-        # If a reg source, then the source is the reg title,
-        # which is 'Realigned' if only one reg,
-        # or the reg algorithm e.g. 'ANTS' if only one
-        # reg for the algorithm, or append index + 1 in
-        # reg key order, e.g. 'ANTS 1' .
-
-
-        source: mdl.source
-        inputProperties: mdl.inputProperties
-
       # Open a modal window to display the modeling input properties.
       $scope.open = ->
-        $modal.open(
+        $modal.open
           controller: 'ModelingInfoModalCtrl'
           templateUrl: '/partials/modeling-info.html'
           size: 'sm'
           resolve:
-            modelingInfo: -> modelingInfo
-        )
+            modeling: ->
+              $scope.modeling
   ]
 
 
-  ctlrs.controller 'ModelingInfoModalCtrl', ['$scope', '$modalInstance'
-    ($scope, $modalInstance, modelingInfo) ->
-      # Place the modeling input properties in scope.
-      $scope.modelingInfo = modelingInfo
-
-      # Open a modal window to display the modeling input properties.
-      $scope.open = ->
-        $modal.open(
-          controller: 'ModelingInfoModalCtrl'
-          templateUrl: 'partials/modeling-info.html'
-          size: 'sm'
-        )
-
-      $scope.ok = -> $modalInstance.close()
-
-      $scope.cancel = -> $modalInstance.dismiss('cancel')
+  ctlrs.controller 'ModelingInfoModalCtrl', ['$scope', '$modalInstance', 'modeling'
+    ($scope, $modalInstance, modeling) ->
+      $scope.modeling = modeling
+      $scope.close = ->
+        $modalInstance.close()
   ]
 
 
   ctlrs.controller 'ModelingChartCtrl', ['$scope', 'Modeling',
     ($scope, Modeling) ->
       # The d3 chart configuration.
-      $scope.config = Modeling.configureChart($scope.modeling.results,
+      $scope.config = Modeling.configureChart($scope.selModeling.results,
                                               $scope.dataSeriesConfig)
   ]
 

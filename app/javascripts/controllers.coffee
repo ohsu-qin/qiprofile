@@ -232,10 +232,10 @@ define ['angular', 'modeling'], (ng) ->
   ]
 
 
-  ctlrs.controller 'ProgestrogenCtrl', ['$scope',
+  ctlrs.controller 'ProgesteroneCtrl', ['$scope',
     ($scope) ->
-      $scope.hormone = 'Progestrogen'
-      $scope.receptorStatus = $scope.pathology.progestrogen
+      $scope.hormone = 'Progesterone'
+      $scope.receptorStatus = $scope.pathology.progesterone
   ]
 
 

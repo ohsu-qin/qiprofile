@@ -9,6 +9,10 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
       (s) -> _s.capitalize(s)
 
 
+    filters.filter 'underscore', ->
+      (s) -> _s.underscored(s)
+
+
     filters.filter 'romanize', ['StringHelper', (StringHelper) ->
       # @param value the input number or string
       # @returns a string with the leading digit sequence converted
@@ -130,6 +134,27 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
     filters.filter 'visitDates', ->
       (sessions) ->
         sess.acquisitionDate() for sess in sessions
+
+
+    filters.filter 'modelingSourceTitle', ->
+      # Formats the given modelable display title as follows:
+      # * If the modelable parent is a scan set with REST class
+      #   'ScanSet', then the title is the capitalized scan type,
+      #   manifested as the ScanSet key variable, followed by 'Scan',
+      #   e.g. 'T1 Scan'.
+      # * Otherwise, the modelable is a registration configuration
+      #   with REST class 'Registration.Configuration', manifested
+      #   by the _cls variable value 'Configuration', and the title
+      #   is 'Registration' followed by the registration key, e.g.
+      #  'Registration pY3x'.
+      (modelable) ->
+        if modelable._cls is 'ScanSet'
+          "#{ _s.capitalize(modelable.key) } Scan"
+        else if modelable._cls is 'Configuration'
+          "Registration #{ modelable.key }"
+        else
+          throw new ValueError("Modelable class is unrecognized:" +
+                               " #{ modelable._cls }")
 
 
     filters.filter 'imageContainerTitle', ['Image', (Image) ->

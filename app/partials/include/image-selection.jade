@@ -23,18 +23,25 @@
 
 // The scan image selection buttons.
 .row
-  .qi-image-selection-key Scan
+  .qi-image-selection-title Scan
   ul.qi-justified-list.qi-scan-image-btn-group
     span(ng-repeat="image in session.scans.t1.images" tooltip="{{ $index + 1 }}")
       li.qi-justified-list-item
         include ./image-select-btn-pair
 
 // The realigned image selection buttons.
-.row(ng-repeat="reg in session.scans.t1.registrations")
-  // The registration title is set by the Intensity service when
-  // the intensity chart configuration is built.
-  .qi-image-selection-key {{ reg.title }}
+.row
+  .qi-image-selection-title(show="Object.keys(session.scans.t1.registration)") Realigned:
+.row(ng-repeat="(_, registration) in session.scans.t1.registration" ng-controller='RegistrationImageSelectCtrl')
+  // RegistrationImageSelectCtrl places the registration configuration
+  // in scope.
+  // The ng-bind-html embeds a RegistrationInfo hyperlink in the selection
+  // title element. The HTML cannot be directly included here, since the
+  // hyperlink anchor element text is dynamically determined.
+  // The hyperlink click action displays the registration info.
+  a(href='' ng-click="open()" ng-controller='RegistrationInfoCtrl'
+    ng-bind-html="registrationTechnique(registration)")
   ul.qi-justified-list.qi-reg-image-btn-group
-    span(ng-repeat="image in reg.images" tooltip="{{ $index + 1 }}")
+    span(ng-repeat="image in registration.images" tooltip="{{ $index + 1 }}")
       li.qi-justified-list-item
         include ./image-select-btn-pair

@@ -1,24 +1,4 @@
 h4.qi-profile-heading Imaging Profile
 .panel-group.qi-profile-panel
-  // The session list formatted as a timeline.
-  .panel.panel-default
-    .panel-heading
-      h4.panel-title MR Visit Timeline
-    .panel-collapse
-      .panel-body
-        qi-visit-dateline(subject='subject')
-
-  // The modeling results.
-  .panel.panel-default(ng-controller='SubjectModelingCtrl')
-    .panel-heading
-      h4.panel-title Pharmokinetic Modeling
-        button#modeling-format-btn.btn.btn-med.qi-profile-btn(
-          ng-show='subject.isMultiSession'
-          ng-click='toggleModelingFormat()'
-        )
-          .glyphicon.glyphicon-list(ng-show="modelingFormat == 'chart'")
-          .glyphicon.glyphicon-stats(ng-show="modelingFormat == 'table'")
-    .panel-collapse
-      .panel-body
-        include modeling-result-selection
-        include modeling-parameters
+  include timeline-panel
+  include modeling-panel

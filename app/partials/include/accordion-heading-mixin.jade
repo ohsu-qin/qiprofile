@@ -1,15 +1,15 @@
-// The mixin for a standard accordion heading.
-//
-// Note: the heading is not HTML-escaped, e.g.:
-//   +accordion-heading('tau<sup>i</sup>')
-// displays the tau with a supscript. Consequently, the heading should
-// never include an Angular interpolation, e.g.:
-//   +accordion-heading("{{ drug.name }}") // Dangerous!
-// 
-// @param title the heading title text
+//- The mixin for a standard accordion heading.
+//-
+//- Note: the heading is not HTML-escaped, e.g.:
+//-   +accordion-heading('tau<sup>i</sup>')
+//- displays the tau with a supscript. Consequently, the heading should
+//- never include an Angular interpolation, e.g.:
+//-   +accordion-heading("{{ drug.name }}") // Dangerous!
+//-
+//- @param title the heading title text
 mixin accordion-heading(title)
   accordion-heading
-    // The heading title is set by the mixin caller.
+    //- The heading title is set by the mixin caller.
     !=title
     // The isOpen flag set in the controller expands or collapses the group.
     // The open status is reflected in the following icon, where:

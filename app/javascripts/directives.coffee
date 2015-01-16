@@ -67,50 +67,21 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
                 # encounter points. The callback compiles the ui-sref
                 # anchor hyperlinks after they are added to the DOM.
                 VisitDateline.decorate(subject, chart, scope.config, compileDetailLink)
-
         templateUrl: '/partials/visit-dateline-chart.html'
     ]
-
-
-    directives.directive 'qiKTrans', ->
-      restrict: 'E'
-      templateUrl: '/partials/k-trans.html'
-
-
-    directives.directive 'qiDemographics', ->
-      restrict: 'E'
-      templateUrl: '/partials/demographics.html'
-
-
-    directives.directive 'qiEncounter', ->
-      restrict: 'E'
-      templateUrl: '/partials/encounter.html'
-
-
-    directives.directive 'qiHormoneReceptor', ->
-      restrict: 'E'
-      templateUrl: '/partials/hormone-receptor.html'
-
-
-    directives.directive 'qiTnm', ['TNM', (tnm) ->
-      restrict: 'E'
-      templateUrl: '/partials/tnm.html'
+    
+    
+    directives.directive 'qiFocus', ['$timeout',
+      ($timeout) ->
+        restrict: 'A'
+        scope:
+          focus: '@qiFocus'
+        link: (scope, element) ->
+          scope.$watch 'focus', (value) ->
+            if value is 'true' 
+              $timeout ->
+                element[0].focus()
     ]
-
-
-    directives.directive 'qiGrade', ->
-      restrict: 'E'
-      templateUrl: '/partials/grade.html'
-
-
-    directives.directive 'qiNottinghamGrade', ->
-      restrict: 'E'
-      templateUrl: '/partials/nottingham-grade.html'
-
-
-    directives.directive 'qiFnclccGrade', ->
-      restrict: 'E'
-      templateUrl: '/partials/fnclcc-grade.html'
 
 
     # Displays the session intensity chart.

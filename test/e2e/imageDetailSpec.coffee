@@ -8,8 +8,10 @@ class ImageDetailPage extends Page
   displayPanel: ->
     @find('qi-image')
   
-  overlaySelector: ->
-    @find('.qi-overlay-select')
+  # TODO - Replace the CSS selector below with a selector for
+  # elements bound to the model modelSelect.
+  #overlaySelector: ->
+  #  @find('TODO')
   
   imageCtlPanel: ->
     @find('.qi-image-ctl')

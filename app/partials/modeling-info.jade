@@ -1,13 +1,25 @@
 // Display the input properties sheet.
-.modal-header
-  h3.modal-title Modeling Input Parameters
+.qi-modal
+  .modal-header
+    .modal-title Modeling {{ modeling.key }}
+
   .modal-body
-    | Source: {{ modelingInfo.source | expandRegistrationName }}
-    ul
-      li One
-      li Two
+    table.qi-table.qi-modal-table.qi-spaced-table
+      tr
+        th.col-md-2 Source
+        td.col-md-10
+          | {{ modeling.source | modelingSourceTitle }}
+          // If the modeling source is a registration configuration,
+          // then show a button that displays the registration
+          // parameters.
+          button.btn.btn-med.qi-profile-btn(ng-show="modeling.source._cls == 'Configuration'"
+                                            ng-click="open()"
+                                            ng-controller='RegistrationInfoCtrl')
+            .glyphicon.glyphicon-info-sign()
+        
+      tr(ng-repeat="(name, value) in modeling.inputParameters")
+        th.col-md-2 {{ name | underscore }}
+        td.col-md-10 {{ value }}
+
   .modal-footer
-     button.btn btn-primary(ng-click="ok()")
-      OK
-    button.btn.btn-warning(ng-click="cancel()")
-     Cancel
+    button.btn.btn-warning.cancel(qi-focus='true' ng-click="close()") Close

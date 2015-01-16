@@ -58,7 +58,7 @@ requirejs.config
     angular: './lib/angular'
     d3: './lib/d3'
     domReady: './lib/domReady'
-    lodash: './lib/lodash.underscore'
+    lodash: './lib/lodash'
     moment: './lib/moment'
     nganimate: './lib/angular-animate'
     ngresource: './lib/angular-resource'

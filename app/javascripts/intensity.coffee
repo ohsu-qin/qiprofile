@@ -123,7 +123,7 @@ define ['angular', 'chart', 'image'], (ng) ->
 
       # Flag indicating whether the T1 scan has more than one
       # realignment.
-      hasMultipleRegs = scan.registrations.length > 1
+      hasMultipleRegs = Object.keys(scan.registration).length > 1
 
       # Makes the data series {key, color} format object for the
       # given registration.
@@ -146,13 +146,17 @@ define ['angular', 'chart', 'image'], (ng) ->
         registration.title = key
 
         # TODO - Wrap the key in a registration parameters pop-up hyperlink.
+        
         # Return the data series format object.
         key: key
         color: COLORS[index % COLORS.length]
         values: coordinates(registration.intensity.intensities)
 
-        # The registration data series configuration.
-      regData = ((registrationDataSeries(reg, i) for reg, i in scan.registrations))
+      # Sort the scan registrations by key.
+      regKeys = Object.keys(scan.registration).sort()
+      regsSorted = (scan.registration[key] for key in regKeys)
+      # Collect the data series specifications.
+      regData = (registrationDataSeries(reg, i) for reg, i in regsSorted)
 
       # Return the chart configuration.
       data: [scanData].concat(regData)

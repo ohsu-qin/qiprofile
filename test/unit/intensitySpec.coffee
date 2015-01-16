@@ -10,12 +10,11 @@ define ['ngmocks', 'intensity'], ->
             intensity:
               # Max intensity is at session 10.
               intensities: (30 - Math.abs(10 - i) for i in [1..32])
-            registrations: [
-              name: 't1'
-              intensity:
-                # Dampen the registration intensity a bit.
-                intensities: (30 - (Math.abs(10 - i) * 1.2) for i in [1..32])
-            ]
+            registration:
+              reg_01:
+                intensity:
+                  # Dampen the registration intensity a bit.
+                  intensities: (30 - (Math.abs(10 - i) * 1.2) for i in [1..32])
 
     # The configuration.
     config = null
@@ -81,4 +80,4 @@ define ['ngmocks', 'intensity'], ->
           .to.eql(expectedX)
         regY = (coord[1] for coord in reg.values)
         expect(regY, "The registration Y coordinate is incorrect")
-          .to.eql(mock.session.scans.t1.registrations[0].intensity.intensities)
+          .to.eql(mock.session.scans.t1.registration.reg_01.intensity.intensities)

@@ -78,11 +78,10 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
               name: 't1'
               intensity:
                 intensities: [2.4]
-              registrations: [
-                name: 't1'
-                intensity:
-                  intensities: [3.1]
-              ]
+              registration:
+                reg_01:
+                  intensity:
+                    intensities: [3.1]
 
       beforeEach ->
         # Fake the router service module.
@@ -210,9 +209,12 @@ define ['angular', 'lodash', 'ngmocks', 'expect', 'moment', 'router'],
             .to.deep.eql(mockScan.intensity)
           expect(scan.intensity, "Session scan is incorrect")
             .to.deep.eql(mockScan.intensity)
-          reg = scan.registrations[0]
-          expect(reg, "Session is missing the T1 registration").to.exist
-          mock_reg = mock.session_detail.scans.t1.registrations[0]
+          regs = scan.registration
+          expect(scan.registration, "Session is missing the T1 registration")
+            .to.exist
+          reg = scan.registration.reg_01
+          expect(reg, "Session is missing the T1 reg_01 registration").to.exist
+          mock_reg = mock.session_detail.scans.t1.registration.reg_01
           expect(reg.intensity, "Session registration is incorrect")
             .to.deep.eql(mock_reg.intensity)
 

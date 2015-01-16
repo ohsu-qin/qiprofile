@@ -149,7 +149,7 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
       #  'Registration pY3x'.
       (modelable) ->
         if modelable._cls is 'ScanSet'
-          "#{ _s.capitalize(modelable.key) } Scan"
+          "#{ _s.capitalize(modelable.scanType) } Scan"
         else if modelable._cls is 'Configuration'
           "Registration #{ modelable.key }"
         else

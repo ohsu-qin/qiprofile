@@ -32,33 +32,31 @@ See the *Development* section below for adding a new dependency.
 Setup
 *****
 
-1. Clone the ``qiprofile`` Git project as described in the Installation
-   section.
+1. Follow the `qiprofile installation instructions`_, omitting the ``--production``
+   option.
 
-2. Install the `Node.js`_ npm_ package manager.
-
-3. Install the Grunt_ CLI command globally::
+2. Install the Grunt_ CLI command globally::
 
        npm install -g grunt-cli
 
-4. Install the PhantomJS_ headless web server globally::
+3. Install the PhantomJS_ headless web server globally::
 
        npm install -g phantomjs
 
-5. Run the following in a console from the ``qiprofile`` directory::
+4. Run the following in a console from the ``qiprofile`` directory::
 
        npm install
 
-This command installs the necessary packages [#xtk_fork]_.
+   This command installs the necessary packages [#xtk_fork]_.
 
-6. Run the following Grunt_ script::
+5. Run the following Grunt_ script::
 
        grunt
 
-  The default Grunt task builds the project. The following command
-  lists the available Grunt tasks::
+   The default Grunt task builds the project. The following command
+   lists the available Grunt tasks::
 
-      grunt --help
+       grunt --help
 
 
 ******
@@ -614,9 +612,9 @@ examples:
 
 .. _Protractor: https://github.com/angular/protractor
 
-.. _qipipe: http://quip1.ohsu.edu/8080/qipipe
+.. _qipipe: https://github.com/ohsu-qin/qipipe
 
-.. _qiprofile-rest: http://quip1.ohsu.edu/8080/qiprofile-rest
+.. _qiprofile-rest: https://github.com/ohsu-qin/qiprofile-rest
 
 .. _SemVer: http://semver.org/
 

@@ -33,24 +33,12 @@ Feature List
 Installation
 ************
 
-1. Install Git_ on your workstation.
+1. Download npm_.
 
-2. Contact the `OHSU QIN Git administrator`_ to obtain permission
-   to access the ``qiprofile`` Git repository.
-
-3. Clone the Git repository::
-
-       cd ~/workspace
-       git clone git@quip1:qiprofile
-
-4. Download npm_.
-
-5. Run the following in a console from the ``qiprofile`` directory
+2. Run the following in a console from the ``qiprofile`` directory
    (omit the ``--production`` flag for a development installation)::
 
        npm install --production
-
-6. Ensure that the file ``bin/qiprofile`` is executable.
 
 See the `Developer Guide`_ for installing a development project.
 
@@ -70,27 +58,22 @@ See the `Developer Guide`_ for starting a development server.
 .. container:: copyright
 
   Copyright (C) 2014 Oregon Health & Science University `Knight Cancer Institute`_.
-  All rights reserved.
-  ``qiprofile`` is confidential and may not be distributed in any form without authorization.
+  See the license_ for permissions.
 
 
 .. Targets:
 
-.. _Developer Guide: http://quip1.ohsu.edu:8080/qiprofile/development.html
+.. _Developer Guide: https://github.com/ohsu-qin/qiprofile/blob/master/development.rst
 
 .. _Git: http://www.git-scm.com
 
 .. _Knight Cancer Institute: http://www.ohsu.edu/xd/health/services/cancer
 
-.. _OHSU QIN Git administrator: loneyf@ohsu.edu
-
-.. _OHSU QIN Sharepoint: https://bridge.ohsu.edu/research/knight/projects/qin/SitePages/Home.aspx
+.. _license: https://github.com/ohsu-qin/qiprofile/blob/master/LICENSE.txt
 
 .. _npm: https://www.npmjs.org/
 
-.. _qipipe: http://quip1.ohsu.edu:8080/qipipe
-
-.. _qiprofile repository: http://quip1.ohsu.edu:6060/qiprofile
+.. _qipipe: https://github.com/ohsu-qin/qipipe
 
 
 .. toctree::

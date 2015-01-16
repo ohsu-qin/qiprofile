@@ -1,8 +1,10 @@
 // Display the input properties sheet.
-.modal-header
-  h3.modal-title Modeling Input Parameters
+.qi-modal
+  .modal-header
+    .modal-title Modeling {{ modeling.key }}
+
   .modal-body
-    table.qi-table.qi-spaced-table
+    table.qi-table.qi-modal-table.qi-spaced-table
       tr
         th.col-md-2 Source
         td.col-md-10
@@ -14,9 +16,10 @@
                                             ng-click="open()"
                                             ng-controller='RegistrationInfoCtrl')
             .glyphicon.glyphicon-info-sign()
-          
+        
       tr(ng-repeat="(name, value) in modeling.inputParameters")
         th.col-md-2 {{ name | underscore }}
         td.col-md-10 {{ value }}
+
   .modal-footer
     button.btn.btn-warning.cancel(qi-focus='true' ng-click="close()") Close

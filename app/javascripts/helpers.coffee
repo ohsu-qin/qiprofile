@@ -32,6 +32,16 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
         sdashed
 
   helpers.factory 'ObjectHelper', ->
+    # Define here for reuse below. 
+    _sortValuesByKey = (obj) ->
+      if obj?
+        # The sorted keys.
+        keys = _.keys(obj).sort()
+        # Return the values sorted by key.
+        (obj[key] for key in keys)
+      else
+        []
+    
     # @param objects the delegate objects
     # @returns a new object with properties from the given
     #   objects
@@ -46,6 +56,31 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
       # Stolen from
       # http://stackoverflow.com/questions/957537/how-can-i-print-a-javascript-object.
       JSON.stringify(obj, null, 4)
+
+    # @param obj the associative object
+    # @returns the concatenated values array
+    sortValuesByKey: _sortValuesByKey
+    
+    # @param objects the objects from which to collect the values
+    # @param accessor the associative object accessor callback or
+    #   property name
+    # @returns the concatenated value objects
+    collectValues: (objects, accessor) ->
+      # Concatenates the given current associative object
+      # values sorted by the associative keys to the given
+      # accumulator array.
+      # 
+      # @param accumulator the previous result array
+      # @param current the current associative object
+      # @returns the concatenated results array
+      concatValues = (accumulator, current) ->
+        values = _sortValuesByKey(current)
+        accumulator.concat(values)
+
+      # The associative objects.
+      assocObjs = _.map(objects, accessor)
+      # Accumulate the values.
+      assocObjs.reduce(concatValues, [])
 
     # @param obj the first object to compare
     # @param other the second object to compare

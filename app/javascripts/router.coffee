@@ -5,8 +5,8 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
                                             'qiprofile.helpers',
                                             'qiprofile.image']
 
-    router.factory 'Router', ['Subject', 'Session', 'Image', 'ObjectHelper',
-      'DateHelper',
+    router.factory 'Router', [
+      'Subject', 'Session', 'Image', 'ObjectHelper', 'DateHelper',
       (Subject, Session, Image, ObjectHelper, DateHelper) ->
         # The Subject search fields.
         SUBJECT_SECONDARY_KEY_FIELDS = ['project', 'collection', 'number']
@@ -46,96 +46,109 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
             # * fixes dates
             # * adds the subject modeling property
             extendDetail = (detail) ->
-              addModeling = ->
-                # Adds the subject reference to the given scan set or
-                # registration configuration modeling container. The modeling
-                # objects in the container are also extended with a
-                # container reference property.
+              # Extends the scan sets as follows:
+              # * adds the scan set subject reference property
+              # * adds the scan set key property
+              # * adds each scan set registration's source reference property
+              # * 
+              extendScanSets = ->
+                # Extends the modeling objects in the given modelable as follows:
+                # * adds the modeling key property
+                # * adds the modeling source reference property
+                # * adds the modeling results session reference properties
                 #
                 # @param modelable the scan set or registration configuration
-                # @param key the modelable sort key
                 # @returns the modeling results
-                extendModelable = (modelable, key) ->
-                  extendModeling = (modeling) ->
+                extendModelable = (modelable) ->
+                  extendModeling = (modeling, key) ->
+                    modeling.key = key
                     modeling.source = modelable
                     # Add the modeling results session reference.
                     for mdlResult, i in modeling.results
                       mdlResult.session = detail.sessions[i]
                 
-                  # Set the subject reference.
-                  modelable.subject = subject
-                  # Set the key.
-                  modelable.key = key
-                  # Set each modeling object container reference.
+                  # Extend the modeling objects.
                   if modelable.modeling?
-                    for mdl in modelable.modeling
-                      extendModeling(mdl)
-
-                # @param modelables the modeling parent objects
-                # @returns the modeling objects sorted by key
-                sortModeling = (modelables) ->
-                  # @param array the array to sort
-                  # @returns the array items sorted by the key property
-                  sortByKey = _.partialRight(_.sortBy, 'key')
-
-                  # The modelables with modeling.
-                  modeled = modelables.filter (modelable) ->
-                    # Check for both existence and length > 0.
-                    modelable.modeling
-                  # The modeled modelables sorted by key.
-                  modelablesSorted = sortByKey(modeled)
-                  # The sorted array of arrays of modeling objects.
-                  mdlArrays = (
-                    modelable.modeling for modelable in modelablesSorted
-                  )
-                  # Combine the sorted modeling object arrays.
-                  _.reduce(mdlArrays, (a, b) -> a.concat(b))
+                    for mdlKey, mdl of modelable.modeling
+                      extendModeling(mdl, mdlKey)
                 
-                # Extend the scan sets.
+                extendScanSet = (scanSet, scanType) ->
+                  # Set the subject reference.
+                  scanSet.subject = subject
+                  # Set the scan type.
+                  scanSet.scanType = scanType
+                  # Extend the modeling objects. 
+                  extendModelable(scanSet)
+                  # Extend the registration configurations
+                  for regKey, regCfg of scanSet.registration
+                    # Set the registration key.
+                    regCfg.key = regKey
+                    # Set the registration source.
+                    regCfg.source = scanSet
+                    # Extend the registration modeling objects.
+                    extendModelable(regCfg)
+                
+                # Extend each scan set.
                 for scanType, scanSet of detail.scanSets
-                  extendModelable(scanSet, scanType)
-                
-                # Extend the registration configurations.
-                for regKey, regCfg of detail.registrationConfigurations
-                  extendModelable(regCfg, regKey)
+                  extendScanSet(scanSet, scanType)
+                  
+              
+              addModeling = ->
+                # Returns the subject modeling associative object
+                # {
+                #   scan: [modeling, ...]
+                #   registration: [modeling, ...]
+                #   all: scan + registration
+                # },
+                # where:
+                # * The scan set modeling objects are sorted by scan type.
+                # * The registration modeling objects are sorted by
+                #   the registration configuration key within source
+                #   scan type.
+                # * all is the concatenation of scan and registration
+                #   modeling objects
+                #
+                # @returns the {scan, registration, all} object
+                subjectModeling = (detail) ->
+                  # @param scanSets the scan sets
+                  # @returns the registration configuration objects
+                  collectRegistration = _.partialRight(ObjectHelper.collectValues,
+                                                       'registration')
+
+                  # @param modelables the modelable objects
+                  # @returns the concatenated modeling objects
+                  collectModeling = _.partialRight(ObjectHelper.collectValues,
+                                                   'modeling')
+
+                  # The scan sets sorted by key.
+                  scanSetsSorted = ObjectHelper.sortValuesByKey(detail.scanSets)
+                  # The scan modeling objects.
+                  scanModeling = collectModeling(scanSetsSorted)
+                  
+                  # The registration configurations.
+                  regConfigs = collectRegistration(scanSetsSorted)
+                  # The registration modeling objects.
+                  regModeling = collectModeling(regConfigs)
+                  
+                  # Return the {scan, registration, all} associative object.
+                  scan: scanModeling
+                  registration: regModeling
+                  all: scanModeling.concat(regModeling)
                 
                 # Add the subject modeling property.
                 Object.defineProperty detail, 'modeling',
                   enumerable: true
-                  # Returns the subject modeling associative object
-                  # {scan: [modeling, ...] registration: [modeling, ...]
-                  #  all: scan + registration},
-                  # where:
-                  # * The scan set modeling objects are sorted by scan type.
-                  # * The registration modeling objects are sorted by
-                  #   the registration configuration key.
-                  # * all is the concatenation of scan and registration
-                  #   modeling objects
-                  # @returns the {scan, registration, all} object
                   get: ->
-                    # Sort the scan modeling objects.
-                    scanSets = _.values(detail.scanSets)
-                    scanMdlSorted = sortModeling(scanSets)
-                    
-                    # Sort the registration configurations.
-                    regCfgs = _.values(detail.registrationConfigurations)
-                    regMdlSorted = sortModeling(regCfgs)
-                    
-                    # Build the {scan, registration, all} associative
-                    # object.
-                    sbjMdl = {}
-                    if scanMdlSorted
-                      sbjMdl.scan = scanMdlSorted
-                    if regMdlSorted
-                      sbjMdl.registration = regMdlSorted
-                    if scanMdlSorted or regMdlSorted
-                      sbjMdl.all = scanMdlSorted.concat(regMdlSorted)
-                    
-                    # Return the {scan, registration, all} associative
-                    # object.
-                    scan: scanMdlSorted
-                    registration: regMdlSorted
-                    all: scanMdlSorted.concat(regMdlSorted)
+                    subjectModeling(detail)
+
+                # Add the subject registration property.
+                Object.defineProperty detail, 'registration',
+                  enumerable: true
+                  get: ->
+                    # @returns an associative object containing the subject
+                    #   registration configurations
+                    regs = _.map(subject.scanSets, 'registration')
+                    _.extend({}, regs...)
 
               # Fixes the detail date properties.
               fixDates = ->
@@ -167,7 +180,9 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
                 
               # Fix the detail dates.
               fixDates()
-              # Doctor the detail sessions.
+              # Doctor the scan sets.
+              extendScanSets()
+              # Doctor the sessions.
               extendSessions()
               # Add the detail modeling property.
               addModeling()
@@ -177,6 +192,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
                 # @returns whether there is more than one session
                 get: ->
                   isMultiSession = detail.sessions.length > 1
+              # End of extendDetail.
             
             # If the subject does not reference a detail object id,
             # then complain.
@@ -189,10 +205,8 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
             Subject.detail(id: subject.detail).$promise.then (detail) ->
               # Doctor the detail properties.
               extendDetail(detail)
-              
               # Copy the detail content into the subject.
               ObjectHelper.aliasPublicDataProperties(detail, subject)
-
               # Resolve to the subject.
               subject
 
@@ -235,78 +249,93 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
         # @param session the parent object
         # @returns a promise which resolves to the session detail
         getSessionDetail: (session) ->
-          # Adds the session, container type and images properties to
-          # the given image container.
-          #
-          # @param container the image container
-          # @param key the scan type or registration name
-          addImageContainerContent = (container, key) ->
-            # The unique container id for caching.
-            container.id = "#{ session.detail }.#{ container._cls }.#{ key }"
-            # The container session property.
-            container.session = session
-            # Encapsulate the image files.
-            container.images = Image.imagesFor(container)
+          extendScan = (scan, scanType) ->
+            # Adds the session, container type and images properties to
+            # the given image container.
+            #
+            # @param container the image container
+            # @param key the scan type or registration name
+            addImageContainerContent = (container, key) ->
+              # The unique container id for caching.
+              container.id = "#{ session.detail }.#{ container._cls }.#{ key }"
+              # Encapsulate the image files.
+              container.images = Image.imagesFor(container)
 
+            # Adds the scan, key, configuration and image content
+            # properties to the given registration.
+            #
+            # @param registration the registration to extend
+            # @param scan the source scan
+            # @param key the registration key
+            extendRegistration = (registration, key, scan) ->
+              # Set the source scan reference.
+              registration.scan = scan
+              # Set the key.
+              registration.key = key
+              # Set the registration configuration.
+              registration.configuration = session.subject.registration[key]
+              if not registration.configuration?
+                throw new ReferenceError "#{ subjectTitle(session) } does not have" +
+                                         " a #{ key } registration configuration."
+              # Define the session property required by the image factory.
+              # Image containers present a uniform interface, which includes
+              # a session reference.
+              Object.defineProperty registration, 'session',
+                get: ->
+                  scan.session
+              # Add the registration images.
+              addImageContainerContent(reg, key)
+            
+            # Set the session reference.
+            scan.session = session
+            # Set the scan type property.
+            scan.scanType = scanType
+            # Add the images.
+            addImageContainerContent(scan, scanType)
+            # Add registration properties.
+            for key, reg of scan.registration
+              extendRegistration(reg, key, scan)
+            
           if not session.detail?
             throw new ReferenceError "Subject #{ session.subject.number }" +
                                      " Session #{ session.number }" +
                                      " does not reference a detail object"
+          
           Session.detail(id: session.detail).$promise.then (detail) =>
             # Copy the fetched detail into the session.
             ObjectHelper.aliasPublicDataProperties(detail, session)
-            for key, scan of session.scans
-              addImageContainerContent(scan, key)
-              for key, reg of scan.registrations
-                addImageContainerContent(reg, key)
+            # Add properties to the scans and their registration.
+            for key, scan of detail.scans
+              extendScan(scan, key)
             # Resolve to the augmented session object.
             session
 
         # @param session the session to search
-        # @param scan_type the scan type, t1 or t2
-        # @return the scan object or a promise which resolves
+        # @param scanType the scan type, t1 or t2
+        # @returna the scan object or a promise which resolves
         #   to the scan object
-        getScan: (session, scan_type) ->
-          # Every session detail has a scan property. When the detail is
-          # fetched, the detail properties are copied into the session object.
-          # Therefore, the presence of the session scan determines whether
-          # the session detail was loaded.
-          #
-          # @returns whether the session detail is loaded
-          isSessionDetailLoaded = ->
-            session.scans?
-
-          # If the session detail is loaded, then find the scan or registration
-          # container based on the name parameter.
-          if isSessionDetailLoaded()
-            scan = session.scans[scan_type]
-            # If no such scan, then complain.
-            if not scan
-              throw new ReferenceError "#{ subjectTitle(session) }" +
-                                       " does not have a #{ scan_type } scan."
-            scan
-          else
-            # Load the session detail...
-            @getSessionDetail(session).then =>
-              if not session.scans
-                throw new ReferenceError "#{ subjectTitle(session) }" +
-                                         " does not have any scans."
-              # ...and recurse.
-              @getScan(session, scan_type)
+        # @throws ReferenceError if the session does not have the scan
+        getScan: (session, scanType) ->
+          scan = session.scans[scanType]
+          # If no such scan, then complain.
+          if not scan?
+            throw new ReferenceError "#{ subjectTitle(session) }" +
+                                     " does not have a #{ scanType } scan."
+          # Return the scan.
+          scan
 
         # @param scan the scan to search
         # @param key the registration key
-        # @return the registration object or a promise which resolves
+        # @returna the registration object or a promise which resolves
         #   to the registration object
+        # @throws ReferenceError if the scan does not have the registration
         getRegistration: (scan, key) ->
-          reg = scan.registrations[key]
-          # If no such registrations, then complain.
-          if not reg
+          reg = scan.registration[key]
+          # If no such registration, then complain.
+          if not reg?
             throw new ReferenceError "#{ subjectTitle(session) }" +
-                                     " #{ scan.scan_type } scan does not have" +
+                                     " #{ scan.scanType } scan does not have" +
                                      " a #{ key } registration."
-          # Set the parent reference.
-          reg.scan = scan
           # Return the registration.
           reg
 
@@ -315,18 +344,22 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
         # @returns the image object, if its data is loaded,
         #   otherwise a promise which resolves to the image object
         #   when the image content is loaded
+        # @throws ReferenceError if the parent container does not have
+        #   the image
         getImageDetail: (container, timePoint) ->
+          # timePoint is one-based.
           image = container.images[timePoint - 1]
-          if not image
+          if not image?
             throw new ReferenceError "Subject #{ subject.number }" + 
                                      " Session #{ session.number }" +
                                      " does not have an image at" +
                                      " #{ container.title } time point" +
                                      " #{ timePoint }"
+          # If the image has data, then return the image.
+          # Otherwise, return a promise to load the image.
           if image.data?
             image
           else
-            # Load the image.
             image.load().then ->
               image
     ]

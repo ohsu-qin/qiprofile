@@ -3,11 +3,16 @@ include modeling-parameter-mixin
 
 +accordion-heading('Vascular Permeability Transfer Constant (K<sub>trans</sub>)')
 
+//- The PK modeling parameters are statically defined below, as follows:
+//- * fxlKTrans - the Standard Model (FXL) Ktrans
+//- * fxrKTrans - the Shutter Speed Model (FXR) Ktrans
+//- * deltaKTrans - fxrKTrans - fxlKTrans
 -var properties = ['deltaKTrans', 'fxlKTrans', 'fxrKTrans']
 
+//- Each modeling parameter has a heading.
 -var headings = {deltaKTrans: '&Delta;K<sub>trans</sub>', fxlKTrans: 'FXL K<sub>trans</sub>', fxrKTrans: 'FXR K<sub>trans</sub>'}
 
 // The modeling chart or table.
 div(ng-controller='KTransCtrl')
-  // Delegate to the mixin.
+  //- Delegate to the modeling parameter mixin.
   +modeling-parameter(properties, headings)

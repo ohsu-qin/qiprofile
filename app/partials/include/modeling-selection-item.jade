@@ -1,9 +1,0 @@
-// If there is only one modeling object, then there is nothing to
-// select. In that case, the radio button is hidden, but the input
-// properties button is still shown.
-input(type='radio', ng-model='modelingIndex' ng-value="{{ $index }}"
-      ng-show="allModeling.length > 1")
-span {{ modeling.title }}
-button.btn.btn-med.qi-profile-btn(ng-click="open()"
-                                  ng-controller='ModelingInfoCtrl')
-  .glyphicon.glyphicon-info-sign()

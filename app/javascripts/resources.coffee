@@ -1,7 +1,8 @@
 define ['angular', 'ngresource', 'helpers'], (ng) ->
   rscs = ng.module 'qiprofile.resources', ['ngResource']
 
-  rscs.factory 'Subject', ['$q', '$resource', 'ObjectHelper',
+  rscs.factory 'Subject', [
+    '$q', '$resource', 'ObjectHelper',
     ($q, $resource, ObjectHelper) ->
       # The Subject resource recognizes a 'get' query method on the
       # subject id, but qiprofile does not call this in practice.
@@ -55,7 +56,8 @@ define ['angular', 'ngresource', 'helpers'], (ng) ->
   # is a SessionDetail get. The query and delete methods are not
   # meaningful. Session delete is accomplished by the parent
   # Subject delete, which cascades to its embedded sessions.
-  rscs.factory 'Session', ['$resource', 'ObjectHelper',
+  rscs.factory 'Session', [
+    '$resource', 'ObjectHelper',
     ($resource, ObjectHelper) ->
       $resource '/api/session-detail/:id/', null,
         detail:

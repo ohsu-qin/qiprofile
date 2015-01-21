@@ -1,6 +1,6 @@
 {
   "name": "qiprofile",
-  "version": "1.1.1",
+  "version": "0.10.1",
   "description": "Quantitative Imaging Profile (QuIP) web application",
   "repository": {
     "type": "git",

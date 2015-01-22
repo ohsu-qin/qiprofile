@@ -106,8 +106,6 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
 
                 # Fetch the session detail.
                 Router.getSessionDetail(sess)
-                # Return the session.
-                sess
             views:
               'main@':
                 templateUrl: '/partials/session-detail.html'

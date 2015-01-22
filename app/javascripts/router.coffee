@@ -272,19 +272,25 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
               registration.scan = scan
               # Set the key.
               registration.key = key
+              # The scan set.
+              scanSet = session.subject.scanSets[scan.scanType]
+              if not scanSet?
+                throw new ReferenceError "#{ subjectTitle(session) } does not have" +
+                                         " a #{ scan.scanType } scan set."
               # Set the registration configuration.
-              registration.configuration = session.subject.registration[key]
+              registration.configuration = scanSet.registration[key]
               if not registration.configuration?
                 throw new ReferenceError "#{ subjectTitle(session) } does not have" +
                                          " a #{ key } registration configuration."
+              
               # Define the session property required by the image factory.
               # Image containers present a uniform interface, which includes
               # a session reference.
               Object.defineProperty registration, 'session',
                 get: ->
-                  scan.session
+                  registration.scan.session
               # Add the registration images.
-              addImageContainerContent(reg, key)
+              addImageContainerContent(registration, key)
             
             # Set the session reference.
             scan.session = session
@@ -301,7 +307,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
                                      " Session #{ session.number }" +
                                      " does not reference a detail object"
           
-          Session.detail(id: session.detail).$promise.then (detail) =>
+          Session.detail(id: session.detail).$promise.then (detail) ->
             # Copy the fetched detail into the session.
             ObjectHelper.aliasPublicDataProperties(detail, session)
             # Add properties to the scans and their registration.

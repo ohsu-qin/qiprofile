@@ -1,5 +1,3 @@
-_ = require 'lodash'
-
 expect = require('./helpers/expect')()
 
 Page = require './helpers/page' 

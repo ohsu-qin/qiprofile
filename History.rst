@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 (http://quip1:6060/qiprofile) for change details.
 
+0.10.2 / 2015-01-22
+------------------
+* Correctly resolve the scan route.
+
 0.10.1 / 2015-01-16
 ------------------
 * Adapt for PyPI.

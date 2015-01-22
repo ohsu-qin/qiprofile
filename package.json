@@ -19,7 +19,9 @@
   "private": true,
   "bin": "./bin/qiprofile",
   "scripts": {
-    "postinstall": "./node_modules/.bin/bower install; ./node_modules/.bin/bower prune; ./node_modules/protractor/bin/webdriver-manager update"
+    "postinstall": "./node_modules/.bin/bower install; ./node_modules/.bin/bower prune; ./node_modules/protractor/bin/webdriver-manager update",
+    "start": "node server.js",
+    "test": "echo \"Error: No test specified\" && exit 1"
   },
   "homepage": "http://quip1:8080/qiprofile",
   "directories": {

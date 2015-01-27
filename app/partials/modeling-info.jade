@@ -6,8 +6,8 @@
   .modal-body
     table.qi-table.qi-modal-table.qi-spaced-table
       tr
-        th.col-md-2 Source
-        td.col-md-10
+        th Source
+        td
           | {{ modeling.source | modelingSourceTitle }}
           // If the modeling source is a registration configuration,
           // then show a button that displays the registration
@@ -18,8 +18,8 @@
             .glyphicon.glyphicon-info-sign()
         
       tr(ng-repeat="(name, value) in modeling.inputParameters")
-        th.col-md-2 {{ name | underscore }}
-        td.col-md-10 {{ value }}
+        th {{ name | underscore }}
+        td {{ value }}
 
   .modal-footer
     button.btn.btn-warning.cancel(qi-focus='true' ng-click="close()") Close

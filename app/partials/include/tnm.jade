@@ -3,19 +3,19 @@
 .qi-panel.qi-nested(ng-controller='TNMCtrl')
   table.qi-table
     tr
-      th.col-md-2 Stage
-      td.col-md-10 {{ tnm | tnmStage | romanize }}
+      th Stage
+      td {{ tnm | tnmStage | romanize }}
 
   .qi-bottom-buffer(ng-show='!!tnm.grade')
     include grade
 
   table.qi-table.qi-spaced-table
     tr
-      th.col-md-2 Size
-      td.col-md-10 {{ tnm.size | tnmSize }}
+      th Size
+      td {{ tnm.size | tnmSize }}
     tr
-      th.col-md-2 Lymph Status
-      td.col-md-10 {{ tnm.lymphStatus | notSpecified }}
+      th Lymph Status
+      td {{ tnm.lymphStatus | notSpecified }}
     tr
-      th.col-md-2 Metastasis
-      td.col-md-10 {{ tnm.metastasis | presentAbsent }}
+      th Metastasis
+      td {{ tnm.metastasis | presentAbsent }}

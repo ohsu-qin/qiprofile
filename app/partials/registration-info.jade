@@ -6,21 +6,21 @@
   .modal-body
     table.qi-table.qi-modal-table.qi-spaced-table
       tr
-        th.col-md-2 Source
-        td.col-md-10
+        th Source
+        td
           | {{ regConfig.source.subject.collection }}
           | Patient {{ regConfig.source.subject.number }}
           | {{ regConfig.source.scanType | capitalize }} Scans
       tr
-        th.col-md-2 Technique
-        td.col-md-10 {{ regConfig.technique }}
+        th Technique
+        td {{ regConfig.technique }}
   
     .qi-panel.qi-nested
       table.qi-table.qi-modal-table.qi-spaced-table
         caption.qi-inset-title Parameters
         tr(ng-repeat="(name, value) in regConfig.parameters")
-          th.col-md-2 {{ name | underscore }}
-          td.col-md-10 {{ value }}
+          th {{ name | underscore }}
+          td {{ value }}
 
   .modal-footer
     button.btn.btn-warning.cancel(qi-focus='true' ng-click="close()") Close

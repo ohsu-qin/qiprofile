@@ -7,10 +7,10 @@ include accordion-heading-mixin
 
 table.qi-table.qi-bottom-buffer
   tr
-    th.col-md-2 Date
-    td.col-md-10 {{ encounter.date | moment }}
+    th Date
+    td {{ encounter.date | moment }}
 
-div(ng-switch='encounter._cls')
+div(ng-switch="encounter._cls")
   div(ng-switch-when='Biopsy')
     include pathology
   div(ng-switch-when='Surgery')

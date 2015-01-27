@@ -1,4 +1,4 @@
-define ['ngmocks', 'tnm', 'helpers'], (tnm) -> 
+define ['ngmocks', 'tnm', 'helpers'], -> 
   describe 'Unit Testing the TNM Service', ->
     # The qiprofile TNM factory.
     TNM = null

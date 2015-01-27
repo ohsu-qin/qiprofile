@@ -1,10 +1,8 @@
-div(ng-show='!!pathology.tnm')
+div(ng-show="!!pathology.tnm")
   include tnm
 
-div(ng-controller='EstrogenCtrl' ng-show='!!pathology.estrogen')
-  include hormone-receptor
+div(ng-controller='BreastHormoneReceptorsCtrl' ng-show="!!pathology.hormoneReceptors")
+  include breast-hormone-receptors
 
-div(ng-controller='ProgesteroneCtrl' ng-show='!!pathology.progesterone')
-  include hormone-receptor
-
-include breast-genetic-expression
+div(ng-controller='BreastGeneticExpressionCtrl' ng-show="!!pathology.geneticExpression")
+  include breast-genetic-expression

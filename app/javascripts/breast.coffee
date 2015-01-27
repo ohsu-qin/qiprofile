@@ -47,4 +47,48 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
                                    " TNM: #{ ObjectHelper.prettyPrint(tnm) }")
 
       _.reduce([t, n], find, STAGES)
+    
+
+    # Returns the cancer recurrence score. This score is calculated from
+    # a genetic expression assay according to algorithm in Figure 1 of
+    # the following paper:
+    #
+    #   Paik, et al., 'A Multigene Assay to Predict Recurrence of
+    #   Tamoxifen-Treated, Node-Negative Breast Cancer',
+    #   N Engl J Med 2004; 351:2817-2826  
+    #   (http://www.nejm.org/doi/full/10.1056/NEJMoa041588)
+    #
+    # 1f metastasis exists (M1), then the stage is 4.
+    # Otherwise, the stage is determined by T and N scores as
+    # defined in the tumor type factory STAGES associative
+    # lookup table.
+    #
+    # @param tnm the TNM object
+    # @returns the cancer stage object, as described in tnm.coffee
+    #    stage
+    recurrenceScore: (assay) ->
+      her2Unscaled = (0.9 * assay.her2.grb7) + (0.1 * assay.her2.her2)
+      her2 = Math.max(8, her2Unscaled)
+      erUnscaled = (0.8 * assay.estrogen.er) + (1.2 * assay.estrogen.pgr) +
+                   assay.estrogen.bcl2 + assay.estrogen.scube2
+      er = erUnscaled / 4
+      proliferationUnscaled = (assay.proliferation.survivin + assay.proliferation.ki67 +
+                              assay.proliferation.mybl2 + assay.proliferation.ccnb1 +
+                              assay.proliferation.stk15) / 5
+      proliferation = Math.max(6.5, proliferationUnscaled)
+      invasion = (assay.invasion.ctsl2 + assay.invasion.mmp11) / 2
+
+      # The unscaled score.
+      recurrenceUnscaled = (0.47 * her2) - (0.34 * er) + (1.04 * proliferation) +
+                           (0.10 * invasion) + (0.05 * assay.cd68) -
+                           (0.08 * assay.gstm1) - (0.07 * assay.bag1)
+      
+      # Guard against missing values.
+      if isNaN(recurrenceUnscaled)
+        return null
+      
+      recurrenceScaled = Math.round(20 * (recurrenceUnscaled - 6.7))
+      
+      # Return the score fit to the range [0, 100].
+      Math.max(0, Math.min(recurrenceScaled, 100))
   ]

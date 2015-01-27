@@ -1,0 +1,81 @@
+.qi-subtable-title Normalized Assay
+
+.qi-panel.qi-nested
+  table.qi-table.qi-bottom-buffer(ng-show='recurrenceScore != null')
+    tr
+      th Recurrence Score
+      td {{ recurrenceScore }}
+      td.qi-row-help
+        button.btn.btn-med.qi-profile-btn(ng-controller='RecurrenceScoreHelpCtrl',
+          ng-click="open()"
+          )
+          .glyphicon.glyphicon-question-sign
+
+  table.qi-table.qi-spaced-table
+    tr(ng-show="assay.gstm1 != null")
+      th GSTM1
+      td {{ assay.gstm1 }}
+    tr(ng-show="assay.cd68 != null")
+      th CD68
+      td {{ assay.cd68 }}
+    tr(ng-show="assay.bag1 != null")
+      th BAG1
+      td {{ assay.bag1 }}
+
+  .qi-bottom-buffer(ng-show='!!assay.her2')
+    .qi-subtable-title HER2
+    table.qi-table
+      tr(ng-show="assay.her2.grb7 != null")
+        th GRB7
+        td {{ assay.her2.grb7 }}
+      tr(ng-show="assay.her2.her2 != null")
+        th HER2
+        td {{ assay.her2.her2 }}
+
+  .qi-bottom-buffer(ng-show='!!assay.estrogen')
+    .qi-subtable-title Estrogen
+    table.qi-table
+      tr(ng-show="assay.estrogen.er != null")
+        th ER
+        td {{ assay.estrogen.er }}
+      tr(ng-show="assay.estrogen.pgr != null")
+        th PGR
+        td {{ assay.estrogen.pgr }}
+      tr(ng-show="assay.estrogen.bcl2 != null")
+        th BCL2
+        td {{ assay.estrogen.bcl2 }}
+      tr(ng-show="assay.estrogen.scube2 != null")
+        th SCUBE2
+        td {{ assay.estrogen.scube2 }}
+
+  .qi-bottom-buffer(ng-show='!!assay.proliferation')
+    .qi-subtable-title Proliferation
+    table.qi-table
+      tr(ng-show="assay.proliferation.ki67 != null")
+        th Ki67
+        td {{ assay.proliferation.ki67 }}
+      tr(ng-show="assay.proliferation.stk15 != null")
+        th STK15
+        td {{ assay.proliferation.stk15 }}
+      tr(ng-show="assay.proliferation.survivin != null")
+        th Survivin
+        td {{ assay.proliferation.survivin }}
+      tr(ng-show="assay.proliferation.ccnb1 != null")
+        th CCNB1 (cyclin B1)
+        td {{ assay.proliferation.ccnb1 }}
+      tr(ng-show="assay.proliferation.mybl2 != null")
+        th MYBL2
+        td {{ assay.proliferation.mybl2 }}
+
+  .qi-bottom-buffer(ng-show='!!assay.invasion')
+    .qi-subtable-title Invasion
+    table.qi-table
+      tr(ng-show="assay.invasion.mmp11 != null")
+        th MMP11 (stromolysin 3)
+        td {{ assay.invasion.mmp11 }}
+      tr(ng-show="assay.invasion.pgr != null")
+        th PGR
+        td {{ assay.invasion.pgr }}
+      tr(ng-show="assay.invasion.ctsl2 != null")
+        th CTSL2 (cathepsin L2)
+        td {{ assay.estrogen.ctsl2 }}

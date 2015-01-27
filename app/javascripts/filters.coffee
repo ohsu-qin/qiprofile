@@ -201,3 +201,10 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
       (tnm) ->
         TNM.stage(tnm)
     ]
+
+
+    filters.filter 'breastRecurrenceScore', ['Breast', (Breast) ->
+      (assay) ->
+        Breast.recurrenceScore(assay)
+    ]
+

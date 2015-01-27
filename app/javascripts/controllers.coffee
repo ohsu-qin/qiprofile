@@ -1,5 +1,5 @@
-define ['angular', 'modeling'], (ng) ->
-  ctlrs = ng.module 'qiprofile.controllers', ['qiprofile.modeling']
+define ['angular', 'modeling', 'breast'], (ng) ->
+  ctlrs = ng.module 'qiprofile.controllers', ['qiprofile.modeling', 'qiprofile.breast']
 
   # The local controller helper methods.
   ctlrs.factory 'ControllerHelper', [
@@ -62,6 +62,8 @@ define ['angular', 'modeling'], (ng) ->
   ]
 
 
+  ## The Subject Detail page controllers.
+
   ctlrs.controller 'SubjectDetailCtrl', [
     '$rootScope', '$scope', 'subject', 'ControllerHelper',
     ($rootScope, $scope, subject, ControllerHelper) ->
@@ -73,40 +75,6 @@ define ['angular', 'modeling'], (ng) ->
 
       # If the project is the default, then remove it from the URL.
       ControllerHelper.cleanBrowserUrl($rootScope.project)
-  ]
-
-
-  ctlrs.controller 'SubjectModelingCtrl', [
-    '$scope',
-    ($scope) ->
-      # The format button action.
-      $scope.toggleModelingFormat = ->
-        if $scope.modelingFormat is 'chart'
-          $scope.modelingFormat = 'table'
-        else if $scope.modelingFormat is 'table'
-          $scope.modelingFormat = 'chart'
-        else
-          throw new Error "Modeling format is not recognized:" +
-                          " #{ $scope.modelingFormat }"
-
-      # The modeling format is 'chart' if the subject has
-      # more than one session, 'table' otherwise.
-      if $scope.subject.isMultiSession
-        $scope.modelingFormat = 'chart'
-      else
-        $scope.modelingFormat = 'table'
-
-      # The scan modeling objects.
-      $scope.scanModeling = $scope.subject.modeling.scan
-      # The registration modeling objects.
-      $scope.regModeling = $scope.subject.modeling.registration
-      # All modeling objects.
-      $scope.allModeling = $scope.subject.modeling.all
-      # The default modeling results index is the first.
-      $scope.modelingIndex = 0
-      # Place the selected modeling in scope.
-      $scope.$watch 'modelingIndex', (modelingIndex) ->
-        $scope.selModeling = $scope.subject.modeling.all[modelingIndex]
   ]
 
 
@@ -170,6 +138,42 @@ define ['angular', 'modeling'], (ng) ->
   ]
 
 
+  ## The Imaging Profile pane controllers.
+  
+  ctlrs.controller 'SubjectModelingCtrl', [
+    '$scope',
+    ($scope) ->
+      # The format button action.
+      $scope.toggleModelingFormat = ->
+        if $scope.modelingFormat is 'chart'
+          $scope.modelingFormat = 'table'
+        else if $scope.modelingFormat is 'table'
+          $scope.modelingFormat = 'chart'
+        else
+          throw new Error "Modeling format is not recognized:" +
+                          " #{ $scope.modelingFormat }"
+
+      # The modeling format is 'chart' if the subject has
+      # more than one session, 'table' otherwise.
+      if $scope.subject.isMultiSession
+        $scope.modelingFormat = 'chart'
+      else
+        $scope.modelingFormat = 'table'
+
+      # The scan modeling objects.
+      $scope.scanModeling = $scope.subject.modeling.scan
+      # The registration modeling objects.
+      $scope.regModeling = $scope.subject.modeling.registration
+      # All modeling objects.
+      $scope.allModeling = $scope.subject.modeling.all
+      # The default modeling results index is the first.
+      $scope.modelingIndex = 0
+      # Place the selected modeling in scope.
+      $scope.$watch 'modelingIndex', (modelingIndex) ->
+        $scope.selModeling = $scope.subject.modeling.all[modelingIndex]
+  ]
+
+
   ctlrs.controller 'ModelingInfoCtrl', [
     '$scope', '$modal',
     ($scope, $modal) ->
@@ -187,7 +191,7 @@ define ['angular', 'modeling'], (ng) ->
 
 
   ctlrs.controller 'ModelingInfoModalCtrl', [
-    '$scope', '$modalInstance','modeling',
+    '$scope', '$modalInstance', 'modeling',
     ($scope, $modalInstance, modeling) ->
       # Since the modal is not contained in the application page, this
       # modal controller scope does not inherit the application page
@@ -249,10 +253,54 @@ define ['angular', 'modeling'], (ng) ->
   ]
 
 
+  ## The Clinical Profile pane controllers. ##
+
   ctlrs.controller 'PathologyCtrl', [
     '$scope',
     ($scope) ->
       $scope.pathology = $scope.encounter.pathology
+  ]
+
+
+  ctlrs.controller 'BreastHormoneReceptorsCtrl', [
+    '$scope',
+    ($scope) ->
+      $scope.hormoneReceptors = $scope.pathology.hormoneReceptors
+  ]
+
+
+  ctlrs.controller 'BreastGeneticExpressionCtrl', [
+    '$scope',
+    ($scope) ->
+      $scope.geneticExpression = $scope.pathology.geneticExpression
+  ]
+
+
+  ctlrs.controller 'BreastGeneAssayCtrl', [
+    '$scope', 'Breast',
+    ($scope, Breast) ->
+      $scope.assay = $scope.geneticExpression.normalizedAssay
+      $scope.recurrenceScore = Breast.recurrenceScore($scope.assay)
+  ]
+
+
+  ctlrs.controller 'RecurrenceScoreHelpCtrl', [
+    '$scope', '$modal',
+    ($scope, $modal) ->
+      # Open a modal window to display the modeling input properties.
+      $scope.open = ->
+        $modal.open
+          controller: 'RecurrenceScoreHelpModalCtrl'
+          templateUrl: '/partials/recurrence-score-help.html'
+          size: 'sm'
+  ]
+
+
+  ctlrs.controller 'RecurrenceScoreHelpModalCtrl', [
+    '$scope', '$modalInstance',
+    ($scope, $modalInstance) ->
+      $scope.close = ->
+        $modalInstance.close()
   ]
 
 
@@ -266,8 +314,8 @@ define ['angular', 'modeling'], (ng) ->
   ctlrs.controller 'TNMCtrl', [
     '$scope',
     ($scope) ->
-      # The parent can either be a pathology evaluation or
-      # a generic evaluation outcome iterator.
+      # The parent can either be a pathology evaluation or a
+      # generic evaluation outcome iterator.
       path = $scope.pathology
       $scope.tnm = if path then path.tnm else $scope.outcome 
   ]
@@ -283,8 +331,8 @@ define ['angular', 'modeling'], (ng) ->
   ctlrs.controller 'HormoneReceptorCtrl', [
     '$scope',
     ($scope) ->
-      # The parent of a generic HormoneReceptor is a
-      # generic evaluation outcome iterator.
+      # The parent of a generic HormoneReceptor is a generic
+      # evaluation outcome iterator.
       $scope.receptorStatus = $scope.outcome
   ]
 
@@ -293,7 +341,7 @@ define ['angular', 'modeling'], (ng) ->
     '$scope',
     ($scope) ->
       $scope.hormone = 'Estrogen'
-      $scope.receptorStatus = $scope.pathology.estrogen
+      $scope.receptorStatus = $scope.hormoneReceptors.estrogen
   ]
 
 
@@ -301,10 +349,12 @@ define ['angular', 'modeling'], (ng) ->
     '$scope',
     ($scope) ->
       $scope.hormone = 'Progesterone'
-      $scope.receptorStatus = $scope.pathology.progesterone
+      $scope.receptorStatus = $scope.hormoneReceptors.progesterone
   ]
 
 
+  ## The Session Detail page controller. ##
+  
   ctlrs.controller 'SessionDetailCtrl', [
     '$rootScope', '$scope', '$state', 'session', 'ControllerHelper',
     ($rootScope, $scope, $state, session, ControllerHelper) ->
@@ -348,6 +398,8 @@ define ['angular', 'modeling'], (ng) ->
       ControllerHelper.cleanBrowserUrl($rootScope.project)
   ]
 
+
+  ## The Image Detail page controller. ##
 
   ctlrs.controller 'ImageDetailCtrl', [
     '$rootScope', '$scope', 'image', 'Image', 'ControllerHelper',

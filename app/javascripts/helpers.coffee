@@ -48,14 +48,32 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
     delegate: (objects...) ->
       _.reduce(objects, _.defaults, {})
 
-    # Pretty prints the given object in a readable format.
+    # Pretty prints the given object in a readable format. This function
+    # handles cycles by substituting an elipsis ('...') if a referenced
+    # object has already been visited.
     #
     # @param obj the object to print
     # @returns the string representation
     prettyPrint: (obj) ->
-      # Stolen from
-      # http://stackoverflow.com/questions/957537/how-can-i-print-a-javascript-object.
-      JSON.stringify(obj, null, 4)
+      # Adapted from
+      # http://stackoverflow.com/questions/957537/how-can-i-print-a-javascript-object
+      # and
+      # //http://stackoverflow.com/questions/9382167/serializing-object-that-contains-cyclic-object-value.
+      visited = []
+      replace = (key, val) ->
+        elideCycles = (val) ->
+          if _.isObject(val)
+            if val in visited
+              '...'
+            else
+              visited.push(val)
+              val
+          else
+            val
+
+        elideCycles(val)
+      
+      JSON.stringify(obj, replace, 4)
 
     # @param obj the associative object
     # @returns the concatenated values array
@@ -151,48 +169,52 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
     # @param data the REST JSON data
     # @returns the Javascript object
     fromJson: (data) ->
+      # Aliases the given underscore property. 
+      #
+      # @param obj the input object to modify
+      # @param property the input property to alias
+      camelizeProperty = (obj, property) ->
+        # The camelCase alias.
+        alias = property[0] + _s.camelize(property.substring(1))
+        # If the camelCase alias is not yet defined, then
+        # create the new property.
+        if not obj.hasOwnProperty(alias)
+          # Make the camelCase property.
+          Object.defineProperty obj, alias,
+            enumerable: true
+            get: -> obj[property]
+            set: (value) -> obj[property] = value
+          # Preserve the underscore property, but remove
+          # it from the enumerable list.
+          Object.defineProperty obj, property,
+            enumerable: false
+            value: obj[property]
+            writable: true
+
       # Aliases underscore properties with camelCase properties. 
       #
       # @param obj the input object to modify
       # @returns the input object
-      camelizeProperties = (obj, visited={}) ->
-        camelizeProperty = (obj, prop) ->
-          # The camelCase alias.
-          alias = prop[0] + _s.camelize(prop.substring(1))
-          # If the camelCase alias is not yet defined, then
-          # create the new property.
-          if not obj.hasOwnProperty(alias)
-            # Make the camelCase property.
-            Object.defineProperty obj, alias,
-              enumerable: true
-              get: -> obj[prop]
-              set: (value) -> obj[prop] = value
-            obj[alias] = obj[prop]
-            # Preserve the underscore property, but remove
-            # it from the enumerable list.
-            Object.defineProperty obj, prop,
-              enumerable: false
-              value: obj[prop]
-              writable: true
-
-        # Only unvisited plain objects are wrapped.
-        if obj and obj.constructor is Object and not visited[obj._id]
-          # If the object has an id, then mark it as visited.
-          visited[obj._id] = true if obj._id
-          # Add camelCase aliases to underscore properties.
-          for key of obj
+      camelizeProperties = (obj, visited=[]) ->
+        # Add camelCase aliases to underscore properties.
+        # Only unvisited plain objects are aliased.
+        if _.isObject(obj) and not (obj in visited)
+          # Mark the object as visited.
+          visited.push(obj)
+          for key, val of obj
             # If the key has a non-leading underscore, then
             # camelize the underscore property.
             if key.lastIndexOf('_') > 0
               camelizeProperty(obj, key)
             # Recurse.
-            val = obj[key]
             if _.isArray(val)
               camelizeProperties(item, visited) for item in val
             else
               camelizeProperties(val, visited)
+        
         # Return the input object.
         obj
+        # End of camelizeProperties.
 
       # The initial parsed Javascript object.
       obj = ng.fromJson(data)
@@ -200,7 +222,8 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
       # the camelized items. Otherwise, returns the camelized
       # object.
       if obj.hasOwnProperty('_items')
-        camelizeProperties(item) for item in obj._items
+        visited = []
+        camelizeProperties(item, visited) for item in obj._items
       else
         camelizeProperties(obj)
 

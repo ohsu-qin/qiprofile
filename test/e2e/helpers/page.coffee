@@ -287,7 +287,7 @@ Object.defineProperties Page.prototype,
         expect(elt.isDisplayed(), 'The help element is not initially hidden')
           .to.eventually.be.false
         # The help button is the parent of the question mark icon.
-        @find('button .glyphicon-question-sign', '..').then (button) ->
+        @find("[ng-controller='HelpCtrl']").then (button) ->
           expect(button, 'The help button is missing').to.exist
           # Open the help view...
           button.click().then =>

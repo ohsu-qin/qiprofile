@@ -14,7 +14,7 @@ define ['ngmocks', 'breast', 'helpers'], ->
         ObjectHelper = _ObjectHelper_
       ]
 
-    describe.only 'Recurrence Score', ->
+    describe 'Recurrence Score', ->
       it 'calculates the recurrence score', ->
         assayMin =
           gstm1: 15

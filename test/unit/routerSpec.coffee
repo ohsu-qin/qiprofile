@@ -106,7 +106,7 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
         $httpBackend.verifyNoOutstandingExpectation()
         $httpBackend.verifyNoOutstandingRequest()
 
-      describe.only 'Subject', ->
+      describe 'Subject', ->
         it 'should fetch the subject by id', ->
           condition = id: mock.subject._id
           subject = Router.getSubject(condition)

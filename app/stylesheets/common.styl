@@ -105,17 +105,24 @@ ul.qi-clean-list
   border 1px solid SlateGray
   border-radius: 0.4em 0.4em 0.4em 0.4em
 
+// The table panel style adds background color
+// to offset the table. Nested tables have
+// distinguishing colors.
 .qi-table-panel
   & .panel-body
     background-color DarkTurquoise
+    & .qi-nested
+      background-color PaleTurquoise
+      & > .qi-nested
+        background-color LightSeaGreen
+        & > .qi-nested
+          background-color Azure
+          & > .qi-nested
+            background-color DarkTurquoise
 
-// The nested panel style adds an offset and a
-// background.
+// The nested panel style adds an offset.
 .qi-nested
   padding 0.5em
-  background-color PaleTurquoise
-  & .qi-nested
-    background-color LightSeaGreen
 
 // The standard data table style.
 .qi-table

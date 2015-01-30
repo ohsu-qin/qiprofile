@@ -37,7 +37,7 @@ define ['ngmocks', 'moment', 'expect', 'helpers'], (ng, moment, expect) ->
           ObjectHelper = _ObjectHelper_
         ]
 
-      describe.only 'fromJSON', ->
+      describe 'fromJSON', ->
         mock =
           _id: 1
           an_int: 1
@@ -82,11 +82,11 @@ define ['ngmocks', 'moment', 'expect', 'helpers'], (ng, moment, expect) ->
             .to.eql(mock.inner.an_obj.an_int)
 
         it 'should add camelCase aliases to arrays', ->
-          expect('anArray' in Object.keys(obj.inner),
+          expect('anArray' in Object.keys(obj.inner.anObj),
                  "the inner underscore array property is not aliased").to.be.true
-          expect(obj.inner.anArray.length, "the inner array length is incorrect")
+          expect(obj.inner.anObj.anArray.length, "the inner array length is incorrect")
             .to.equal(1)
-          item = obj.inner.anArray[0]
+          item = obj.inner.anObj.anArray[0]
           expect('anInt' in Object.keys(item), "the inner array item scalar property" +
                                                " is not aliased").to.be.true
 

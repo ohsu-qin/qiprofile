@@ -41,7 +41,9 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
               subjects: (Subject, project) ->
                 # The selection criterion is the project name.
                 cond = REST.where(project: project)
-                # Only the id and secondary key and fields are fetched.
+                # The id is always fetched. In addition, the
+                # project/collection/number secondary key is fetched.
+                # No other fields are fetched.
                 fields = REST.pluck(['project', 'collection', 'number'])
                 # The HTML query parameter.
                 param = _.extend(_.clone(cond), fields)
@@ -62,24 +64,33 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
           # option to supply a subject argument and thereby forego
           # the subject fetch resolution? 
           .state 'quip.subject',
-            url: '/:collection/subject/{subject:[0-9]+}?subjectdetail'
+            url: '/:collection/subject/{subject:[0-9]+}?id'
             resolve:
               subject: ($stateParams, Router) ->
-                condition =
-                  project: $stateParams.project or project
-                  collection: _s.capitalize($stateParams.collection)
-                  number: parseInt($stateParams.subject)
-                # If the subject detail id is available, then the router
-                # searches the subject detail collection directly.
-                # Otherwise, the router searches the subject collection
-                # to get the detail id, then searches the subject detail
-                # collection.
-                #
-                # TODO - fold the MongoDB subject detail into subject and
-                # change the subjects query to do a reduction search to
-                # return only the subject id, collection and number. 
-                if $stateParams.subjectdetail?
-                  condition.detail = $stateParams.subjectdetail
+                # Returns the search condition object determnined as
+                # follows:
+                # * If the subject id is available, then the search
+                #   condition is the {id} primary key.
+                # * Otherwise, the search condition is the
+                #   {project, collection, number} secondary key.
+                searchCondition = ->
+                  if $stateParams.id?
+                    id: $stateParams.id
+                  else
+                    # Validate the secondary key parameters.
+                    if not $stateParams.collection?
+                      throw new ValueError("Subject search parameters is missing" +
+                                           " both an id and the subject collection")
+                    if not $stateParams.subject?
+                      throw new ValueError("Subject search parameters is missing" +
+                                           " both an id and the subject number")
+                    # Return the secondary key.
+                    project: $stateParams.project or project
+                    collection: _s.capitalize($stateParams.collection)
+                    number: parseInt($stateParams.subject)
+                
+                # Get the search condition.
+                condition = searchCondition()
                 # Fetch the subject.
                 Router.getSubject(condition)
             views:

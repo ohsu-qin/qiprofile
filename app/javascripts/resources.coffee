@@ -4,53 +4,41 @@ define ['angular', 'ngresource', 'helpers'], (ng) ->
   rscs.factory 'Subject', [
     '$q', '$resource', 'ObjectHelper',
     ($q, $resource, ObjectHelper) ->
-      # The Subject resource recognizes a 'get' query method on the
-      # subject id, but qiprofile does not call this in practice.
-      # Fetching a Subject is done by a query on the subject project,
-      # collection and number, which returns a singleton or empty
-      # array.
+      # The Subject resource has two functions:
+      # * *query*: fetch the REST Subject JSON objects which match
+      #   the request query parameter properties
+      # * *detail*: fetch the single REST Subject JSON object
+      #   which matches the request *id* property
       #
       # The asynchronous $resource call should reference the $promise
       # variable, e.g.:
-      #  Subject.query(id: id).$promise
-      # When called from a ui-route state resolve, the promise is
-      # automatically resolved to the database JSON result.
-      $resource '/api/subjects/:id', null,
-        # The query request does not use the id parameter and returns
-        # an array of selected MongoDB documents. The request implicitly
-        # accepts an HTML request query parameter (not to be confused
-        # with the query method defined here) that includes the selection 
-        # and/or projection criterion. See the rest.coffee REST service
-        # for helper methods.
+      #
+      #  Subject.find(condition).$promise
+      $resource '/api/subject/:id', null,
+        # The *query* function returns an array of selected JSON objects.
+        # The query request implicitly accepts an HTML request query
+        # parameter (not to be confused with the query method defined here)
+        # that includes the selection and/or projection criterion. 
+        # See the rest.coffee REST service for helper methods.
         #
         # Examples:
         #   Subject.query(project: project).$promise
         #
-        #   cond = REST.where({project: project, number: number})
+        #   REST = require('rest')
+        #   cond = REST.where({project: 'QIN', collection: 'Breast'})
         #   Subject.query(cond).$promise
-        #
-        # TODO - when the REST detail object is embedded in subject,
-        # then:
-        # * the caller is responsible for adding the select
-        #   criterion for non-detail fields
-        # * detail restricts the select to the detail field and
-        #   returns the fetched detail object, i.e.:
-        #     detail:
-        #       method: 'GET'
-        #       url: '/api/subject/:id{select=...}'
-        #
         query:
           method: 'GET'
           isArray: true
           transformResponse: (data) -> ObjectHelper.fromJson(data)
-        detail:
+        find:
           method: 'GET'
-          url: '/api/subject-detail/:id/'
+          isArray: false
           transformResponse: (data) -> ObjectHelper.fromJson(data)
   ]
 
 
-  # Since the REST Session objects are embedded in SubjectDetail,
+  # Since the REST Session objects are embedded in Subject,
   # this Session factory only operates on the session-detail
   # REST objects. The preferred access method is detail, which
   # is a SessionDetail get. The query and delete methods are not

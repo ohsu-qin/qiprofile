@@ -17,215 +17,223 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
           " Subject #{ session.subject.number }" +
           " Session #{ session.number }"
 
-        # Fetches the subject detail with the given search
-        # condition.
+        # Returns a promise which resolves to the subject database JSON
+        # object for the given search condition.
         #
-        # @param condition the subject search condition
-        # @returns a promise which resolves to the subject
+        # The subject object is fixed up as follows:
+        #
+        # * anonymize the birth date by setting it to July 7
+        #
+        # * add the age property
+        #
+        # * convert the session and encounter dates into moments
+        #
+        # * copy the detail properties into the subject
+        #
+        # * set the subject isMultiSession flag
+        #
+        # When this function is called from a ui-route state resolve,
+        # the promise is automatically resolved to the extended subject
+        # object.
+        #
+        # @param condition the primary or secondary key search
+        #   condition
+        # @returns a promise which resolves to the subject with detail
+        # @throws ValueError if the subject contains a null value
+        #   for both the id and the secondary key properties
         getSubject: (condition) ->
-          # Fetches the subject detail and fixes it up as follows:
-          # * anonymizes the birth date by setting it to July 7
-          # * adds the age property
-          # * converts the session and encounter dates into moments
-          # * copies the detail properties into the subject
-          # * sets the subject isMultiSession flag
-          #
-          # If the subject argument contains a detail property ObjectID
-          # reference value, then that id is used to fetch the subject
-          # detail. Otherwise, getSubject is called on the search object
-          # to obtain the detail property value.
-          #
-          # Note: this function modifies the input subject argument
-          # content as described above. 
-          #
-          # @param subject the subject without detail
-          # @returns a promise which resolves to the subject with detail
-          getSubjectDetail = (subject) ->
-            # Makes the following changes to the given subject detail object:
-            # * adds parent references
-            # * fixes dates
-            # * adds the subject modeling property
-            extendDetail = (detail) ->
-              # Extends the scan sets as follows:
-              # * adds the scan set subject reference property
-              # * adds the scan set key property
-              # * adds each scan set registration's source reference property
-              # * 
-              extendScanSets = ->
-                # Extends the modeling objects in the given modelable as follows:
-                # * adds the modeling key property
-                # * adds the modeling source reference property
-                # * adds the modeling results session reference properties
-                #
-                # @param modelable the scan set or registration configuration
-                # @returns the modeling results
-                extendModelable = (modelable) ->
-                  extendModeling = (modeling, key) ->
-                    modeling.key = key
-                    modeling.source = modelable
-                    # Add the modeling results session reference.
-                    for mdlResult, i in modeling.results
-                      mdlResult.session = detail.sessions[i]
-                
-                  # Extend the modeling objects.
-                  if modelable.modeling?
-                    for mdlKey, mdl of modelable.modeling
-                      extendModeling(mdl, mdlKey)
-                
-                extendScanSet = (scanSet, scanType) ->
-                  # Set the subject reference.
-                  scanSet.subject = subject
-                  # Set the scan type.
-                  scanSet.scanType = scanType
-                  # Extend the modeling objects. 
-                  extendModelable(scanSet)
-                  # Extend the registration configurations
-                  for regKey, regCfg of scanSet.registration
-                    # Set the registration key.
-                    regCfg.key = regKey
-                    # Set the registration source.
-                    regCfg.source = scanSet
-                    # Extend the registration modeling objects.
-                    extendModelable(regCfg)
-                
-                # Extend each scan set.
-                for scanType, scanSet of detail.scanSets
-                  extendScanSet(scanSet, scanType)
-                  
+          # Makes the following changes to the given subject object:
+          # * adds parent references
+          # * fixes dates
+          # * adds the subject modeling property
+          extendSubject = (subject) ->
+            # Extends the scan sets as follows:
+            # * adds the scan set subject reference property
+            # * adds the scan set key property
+            # * adds each scan set registration's source reference property
+            extendScanSets = ->
+              # Extends the modeling objects in the given modelable as follows:
+              # * adds the modeling key property
+              # * adds the modeling source reference property
+              # * adds the modeling results session reference properties
+              #
+              # @param modelable the scan set or registration configuration
+              # @returns the modeling results
+              extendModelable = (modelable) ->
+                extendModeling = (modeling, key) ->
+                  modeling.key = key
+                  modeling.source = modelable
+                  # Add the modeling results session reference.
+                  for mdlResult, i in modeling.results
+                    mdlResult.session = subject.sessions[i]
               
-              addModeling = ->
-                # Returns the subject modeling associative object
-                # {
-                #   scan: [modeling, ...]
-                #   registration: [modeling, ...]
-                #   all: scan + registration
-                # },
-                # where:
-                # * The scan set modeling objects are sorted by scan type.
-                # * The registration modeling objects are sorted by
-                #   the registration configuration key within source
-                #   scan type.
-                # * all is the concatenation of scan and registration
-                #   modeling objects
-                #
-                # @returns the {scan, registration, all} object
-                subjectModeling = (detail) ->
-                  # @param scanSets the scan sets
-                  # @returns the registration configuration objects
-                  collectRegistration = _.partialRight(ObjectHelper.collectValues,
-                                                       'registration')
-
-                  # @param modelables the modelable objects
-                  # @returns the concatenated modeling objects
-                  collectModeling = _.partialRight(ObjectHelper.collectValues,
-                                                   'modeling')
-
-                  # The scan sets sorted by key.
-                  scanSetsSorted = ObjectHelper.sortValuesByKey(detail.scanSets)
-                  # The scan modeling objects.
-                  scanModeling = collectModeling(scanSetsSorted)
-                  
-                  # The registration configurations.
-                  regConfigs = collectRegistration(scanSetsSorted)
-                  # The registration modeling objects.
-                  regModeling = collectModeling(regConfigs)
-                  
-                  # Return the {scan, registration, all} associative object.
-                  scan: scanModeling
-                  registration: regModeling
-                  all: scanModeling.concat(regModeling)
-                
-                # Add the subject modeling property.
-                Object.defineProperty detail, 'modeling',
-                  enumerable: true
-                  get: ->
-                    subjectModeling(detail)
-
-                # Add the subject registration property.
-                Object.defineProperty detail, 'registration',
-                  enumerable: true
-                  get: ->
-                    # @returns an associative object containing the subject
-                    #   registration configurations
-                    regs = _.map(subject.scanSets, 'registration')
-                    _.extend({}, regs...)
-
-              # Fixes the detail date properties.
-              fixDates = ->
-                # Fix the birth date.
-                if detail.birthDate?
-                  date = DateHelper.asMoment(detail.birthDate)
-                  # Anonymize the birth date.
-                  detail.birthDate = DateHelper.anonymize(date)
-                
-                # Fix the encounter dates.
-                for enc in detail.encounters
-                  if enc.date?
-                    enc.date = DateHelper.asMoment(enc.date)
-
-                # Fix the treatment dates.
-                for trt in detail.treatments
-                  trt.beginDate = DateHelper.asMoment(trt.beginDate)
-                  trt.endDate = DateHelper.asMoment(trt.endDate)
-
-              # Makes the following changes to the detail session objects:
-              # * adds the session subject reference
-              # * fixes the session acquisition date
-              extendSessions = ->
-                for sess in detail.sessions
-                  # Set the session subject property.
-                  sess.subject = subject
-                  # Fix the acquisition date.
-                  sess.acquisitionDate = DateHelper.asMoment(sess.acquisitionDate)
-                
-              # Fix the detail dates.
-              fixDates()
-              # Doctor the scan sets.
-              extendScanSets()
-              # Doctor the sessions.
-              extendSessions()
-              # Add the detail modeling property.
-              addModeling()
-              # Add the isMultiSession property.
-              Object.defineProperty detail, 'isMultiSession',
-                enumerable: true
-                # @returns whether there is more than one session
-                get: ->
-                  isMultiSession = detail.sessions.length > 1
-              # End of extendDetail.
+                # Extend the modeling objects.
+                if modelable.modeling?
+                  for mdlKey, mdl of modelable.modeling
+                    extendModeling(mdl, mdlKey)
+              
+              extendScanSet = (scanSet, scanType) ->
+                # Set the subject reference.
+                scanSet.subject = subject
+                # Set the scan type.
+                scanSet.scanType = scanType
+                # Extend the modeling objects. 
+                extendModelable(scanSet)
+                # Extend the registration configurations
+                for regKey, regCfg of scanSet.registration
+                  # Set the registration key.
+                  regCfg.key = regKey
+                  # Set the registration source.
+                  regCfg.source = scanSet
+                  # Extend the registration modeling objects.
+                  extendModelable(regCfg)
+              
+              # Extend each scan set.
+              for scanType, scanSet of subject.scanSets
+                extendScanSet(scanSet, scanType)
             
-            # If the subject does not reference a detail object id,
-            # then complain.
-            if not subject.detail
-              throw new ReferenceError("#{ subject.collection }" +
-                                       " Subject #{ subject.number }" +
-                                       " does not reference a detail object")
+            # Adds the modeling property to the fetched subject.
+            addModeling = ->
+              # Returns the subject modeling associative object
+              # {
+              #   scan: [modeling, ...]
+              #   registration: [modeling, ...]
+              #   all: scan + registration
+              # },
+              # where:
+              # * The scan set modeling objects are sorted by scan type.
+              # * The registration modeling objects are sorted by
+              #   the registration configuration key within source
+              #   scan type.
+              # * all is the concatenation of scan and registration
+              #   modeling objects
+              #
+              # @returns the {scan, registration, all} object
+              subjectModeling = ->
+                # @param scanSets the scan sets
+                # @returns the registration configuration objects
+                collectRegistration = _.partialRight(ObjectHelper.collectValues,
+                                                     'registration')
 
-            # Fetch the detail object.
-            Subject.detail(id: subject.detail).$promise.then (detail) ->
-              # Doctor the detail properties.
-              extendDetail(detail)
-              # Copy the detail content into the subject.
-              ObjectHelper.aliasPublicDataProperties(detail, subject)
-              # Resolve to the subject.
-              subject
+                # @param modelables the modelable objects
+                # @returns the concatenated modeling objects
+                collectModeling = _.partialRight(ObjectHelper.collectValues,
+                                                 'modeling')
 
-          if condition.detail?
-            getSubjectDetail(condition)
-          else
-            cond = REST.where(condition)
-            Subject.query(cond).$promise.then (subjects) ->
-              if not subjects.length
-                throw new ReferenceError("#{ subject.collection }" +
-                                         " Subject #{ subject.number }" +
-                                         " was not found")
-              else if subjects.length > 1
-                throw new ReferenceError("Subject query returned more than" +
-                                         " one subject: #{ _.pairs(condition) }")
-              # The unique subject that matches the query condition.
-              subject = subjects[0]
-              # Now get the detail.
-              getSubjectDetail(subject)
+                # The scan sets sorted by key.
+                scanSetsSorted = ObjectHelper.sortValuesByKey(subject.scanSets)
+                # The scan modeling objects.
+                scanModeling = collectModeling(scanSetsSorted)
+                
+                # The registration configurations.
+                regConfigs = collectRegistration(scanSetsSorted)
+                # The registration modeling objects.
+                regModeling = collectModeling(regConfigs)
+                
+                # Return the {scan, registration, all} associative object.
+                scan: scanModeling
+                registration: regModeling
+                all: scanModeling.concat(regModeling)
+              
+              # Add the subject modeling property.
+              Object.defineProperty subject, 'modeling',
+                enumerable: true
+                get: ->
+                  subjectModeling(subject)
+
+              # Add the subject registration property.
+              Object.defineProperty subject, 'registration',
+                enumerable: true
+                get: ->
+                  # @returns an associative object containing the subject
+                  #   registration configurations
+                  regs = _.map(subject.scanSets, 'registration')
+                  _.extend({}, regs...)
+
+            # Fixes the subject date properties.
+            fixDates = ->
+              # Fix the birth date.
+              if subject.birthDate?
+                date = DateHelper.asMoment(subject.birthDate)
+                # Anonymize the birth date.
+                subject.birthDate = DateHelper.anonymize(date)
+              
+              # Fix the encounter dates.
+              for enc in subject.encounters
+                if enc.date?
+                  enc.date = DateHelper.asMoment(enc.date)
+
+              # Fix the treatment dates.
+              for trt in subject.treatments
+                trt.beginDate = DateHelper.asMoment(trt.beginDate)
+                trt.endDate = DateHelper.asMoment(trt.endDate)
+
+            # Makes the following changes to the subject session objects:
+            # * adds the session subject reference
+            # * fixes the session acquisition date
+            extendSessions = ->
+              for sess in subject.sessions
+                # Set the session subject property.
+                sess.subject = subject
+                # Fix the acquisition date.
+                sess.acquisitionDate = DateHelper.asMoment(sess.acquisitionDate)
+              
+            # Fix the subject dates.
+            fixDates()
+            # Doctor the scan sets.
+            extendScanSets()
+            # Doctor the sessions.
+            extendSessions()
+            # Add the subject modeling property.
+            addModeling()
+            # Add the isMultiSession property.
+            Object.defineProperty subject, 'isMultiSession',
+              enumerable: true
+              # @returns whether there is more than one session
+              get: ->
+                isMultiSession = subject.sessions.length > 1
+            
+            # End of extendSubject.
+          
+          # @param condition the subject search condition
+          # @returns the subject database object
+          # @throws ValueError if the template does not have a
+          #  searchable key, either the id or the complete
+          #  secondary key
+          # @throws ReferenceError if no such subject was found
+          findSubject = ->
+            # The id search criterion is either the id or the _id
+            # property.
+            id = condition.id or condition._id
+            # If the search condition includes the id, then find
+            # the unique subject with that id. Otherwise, query
+            # the subjects on the secondary key.
+            if id?
+              Subject.find(id: id).$promise
+            else
+              criteria = _.pick(condition, SUBJECT_SECONDARY_KEY_FIELDS)
+              if not _.all(_.values(criteria))
+                throw new ValueError("The subject search condition is missing" +
+                                     " both an id value and a complete" +
+                                     " secondary key: #{ condition }")
+              select = REST.where(criteria)
+              Subject.query(select).$promise.then (subjects) ->
+                if not subjects.length
+                  throw new ReferenceError("Subject was not found:" +
+                                           " { _.pairs(template) }")
+                else if subjects.length > 1
+                  throw new ReferenceError("Subject query on the secondary key" +
+                                           " returned more than one subject:" +
+                                           " #{ _.pairs(template) }")
+                # The unique subject that matches the query condition.
+                subjects[0]
+          
+          # Fetch the detail object.
+          findSubject().then (subject) ->
+            # Doctor the subject properties.
+            extendSubject(subject)
+            # Resolve to the subject.
+            subject
 
         # Fetches the session detail for the given session object as
         # follows:

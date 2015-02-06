@@ -1,5 +1,5 @@
 This history lists major release themes. See the GitHub commits
-(http://quip1:6060/qiprofile) for change details.
+for change details.
 
 0.10.3 / 2015-01-27
 ------------------

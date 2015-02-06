@@ -23,7 +23,7 @@
     "start": "node server.js",
     "test": "echo \"Error: No test specified\" && exit 1"
   },
-  "homepage": "http://quip1:8080/qiprofile",
+  "homepage": "http://qiprofile.readthedocs.org/en/latest/",
   "directories": {
     "doc": "doc",
     "test": "test"

@@ -47,108 +47,113 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
           # * fixes dates
           # * adds the subject modeling property
           extendSubject = (subject) ->
-            # Extends the scan sets as follows:
-            # * adds the scan set subject reference property
-            # * adds the scan set key property
-            # * adds each scan set registration's source reference property
-            extendScanSets = ->
-              # Extends the modeling objects in the given modelable as follows:
-              # * adds the modeling key property
-              # * adds the modeling source reference property
-              # * adds the modeling results session reference properties
-              #
-              # @param modelable the scan set or registration configuration
-              # @returns the modeling results
-              extendModelable = (modelable) ->
-                extendModeling = (modeling, key) ->
-                  modeling.key = key
-                  modeling.source = modelable
-                  # Add the modeling results session reference.
-                  for mdlResult, i in modeling.results
-                    mdlResult.session = subject.sessions[i]
-              
-                # Extend the modeling objects.
-                if modelable.modeling?
-                  for mdlKey, mdl of modelable.modeling
-                    extendModeling(mdl, mdlKey)
-              
-              extendScanSet = (scanSet, scanType) ->
-                # Set the subject reference.
-                scanSet.subject = subject
-                # Set the scan type.
-                scanSet.scanType = scanType
-                # Extend the modeling objects. 
-                extendModelable(scanSet)
-                # Extend the registration configurations
-                for regKey, regCfg of scanSet.registration
-                  # Set the registration key.
-                  regCfg.key = regKey
-                  # Set the registration source.
-                  regCfg.source = scanSet
-                  # Extend the registration modeling objects.
-                  extendModelable(regCfg)
-              
-              # Extend each scan set.
-              for scanType, scanSet of subject.scanSets
-                extendScanSet(scanSet, scanType)
-            
+            # # Extends the scan sets as follows:
+            # # * adds the scan set subject reference property
+            # # * adds the scan set key property
+            # # * adds each scan set registration's source reference property
+            # extendScanSets = ->
+            #   # Extends the modeling objects in the given modelable as follows:
+            #   # * adds the modeling key property
+            #   # * adds the modeling source reference property
+            #   # * adds the modeling results session reference properties
+            #   #
+            #   # @param modelable the scan set or registration configuration
+            #   # @returns the modeling results
+            #   extendModelable = (modelable) ->
+            #     extendModeling = (modeling, key) ->
+            #       modeling.key = key
+            #       modeling.source = modelable
+            #       # Add the modeling results session reference.
+            #       for mdlResult, i in modeling.results
+            #         mdlResult.session = subject.sessions[i]
+            #   
+            #     # Extend the modeling objects.
+            #     if modelable.modeling?
+            #       for mdlKey, mdl of modelable.modeling
+            #         extendModeling(mdl, mdlKey)
+            #   
+            #   extendScanSet = (scanSet, scanType) ->
+            #     # Set the subject reference.
+            #     scanSet.subject = subject
+            #     # Set the scan type.
+            #     scanSet.scanType = scanType
+            #     # Extend the modeling objects. 
+            #     extendModelable(scanSet)
+            #     # Extend the registration configurations
+            #     for regKey, regCfg of scanSet.registration
+            #       # Set the registration key.
+            #       regCfg.key = regKey
+            #       # Set the registration source.
+            #       regCfg.source = scanSet
+            #       # Extend the registration modeling objects.
+            #       extendModelable(regCfg)
+            #   
+            #   # Extend each scan set.
+            #   for scanType, scanSet of subject.scanSets
+            #     extendScanSet(scanSet, scanType)
+            #
             # Adds the modeling property to the fetched subject.
             addModeling = ->
-              # Returns the subject modeling associative object
-              # {
-              #   scan: [modeling, ...]
-              #   registration: [modeling, ...]
-              #   all: scan + registration
-              # },
-              # where:
-              # * The scan set modeling objects are sorted by scan type.
-              # * The registration modeling objects are sorted by
-              #   the registration configuration key within source
-              #   scan type.
-              # * all is the concatenation of scan and registration
-              #   modeling objects
-              #
-              # @returns the {scan, registration, all} object
+              # Adds the subject modeling property.
               subjectModeling = ->
-                # @param scanSets the scan sets
-                # @returns the registration configuration objects
-                collectRegistration = _.partialRight(ObjectHelper.collectValues,
-                                                     'registration')
-
-                # @param modelables the modelable objects
-                # @returns the concatenated modeling objects
-                collectModeling = _.partialRight(ObjectHelper.collectValues,
-                                                 'modeling')
-
-                # The scan sets sorted by key.
-                scanSetsSorted = ObjectHelper.sortValuesByKey(subject.scanSets)
-                # The scan modeling objects.
-                scanModeling = collectModeling(scanSetsSorted)
+                # @returns the associative session {source: modeling}
+                #   objects list
+                sourceModeling = (session) ->
+                  # @returns whether the modeling source is a scan
+                  isScanModeling = (modeling) ->
+                    modeling.source.scan?
+                  
+                  # @returns the {source: modeling} associative object
+                  associateSource = (modeling) ->
+                    obj = {}
+                    obj[modeling.source] = modeling
+                    obj
+                  
+                  # Separate the scan modelings from the registration
+                  # modelings.
+                  [scanMdl, regMdl] = _.partition(session.modelings, isScanModeling)
+                  
+                  # Return the associative {scan, registration} object
+                  scan: [associateSource(modeling) for modeling in scanMdl]
+                  registration: [associateSource(modeling) for modeling in regMdl]
                 
-                # The registration configurations.
-                regConfigs = collectRegistration(scanSetsSorted)
-                # The registration modeling objects.
-                regModeling = collectModeling(regConfigs)
+                # @returns the destination array with the zero-based
+                #   session index value set to the given modeling object
+                mergeIntoSessionArray = (destArray, modeling) ->
+                  if not destArray?
+                    destArray = []
+                  destArray[modeling.session.number - 1] = modeling
+                  destArray
                 
-                # Return the {scan, registration, all} associative object.
-                scan: scanModeling
-                registration: regModeling
-                all: scanModeling.concat(regModeling)
+                # @param accumAssoc the accumulator scan or registration
+                #   {source: [modeling]} object, where the modeling array
+                #   is in session index order
+                # @param sessAssocArray the corresponding session scan
+                #   or registration [{source: modeling}] array
+                # @returns the combined {source: [modeling]} object
+                mergeModeling = (accumAssoc, sessAssocArray) ->
+                  _.merge(accumAssoc, sessAssocArray..., mergeIntoSessionArray)
+                
+                # @returns a {scan: map, registration: map} object where each
+                #   map {source: [modeling]} associates a modeling source
+                #   with the session modeling objects for that source 
+                associateModeling = (accum, session) ->
+                  # The {scan: [assoc], registration: [assoc]} object, where
+                  # each assoc is a {source: modeling} object.
+                  sessModeling = sourceModeling(session)
+                  # Return the {scan: map, registration: map} object, where
+                  # the map merges the modeling by source.
+                  _.merge(accum, sessModeling, mergeModeling)
+                
+                # Return the associative accumulator object.
+                accum = {scan: {}, registration: {}}
+                subject.sessions.reduce(associateModeling, accum)
               
               # Add the subject modeling property.
               Object.defineProperty subject, 'modeling',
                 enumerable: true
                 get: ->
                   subjectModeling(subject)
-
-              # Add the subject registration property.
-              Object.defineProperty subject, 'registration',
-                enumerable: true
-                get: ->
-                  # @returns an associative object containing the subject
-                  #   registration configurations
-                  regs = _.map(subject.scanSets, 'registration')
-                  _.extend({}, regs...)
 
             # Fixes the subject date properties.
             fixDates = ->
@@ -171,17 +176,20 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
             # Makes the following changes to the subject session objects:
             # * adds the session subject reference
             # * fixes the session acquisition date
+            # * adds the session parent property to the session
+            #   modeling objects
             extendSessions = ->
               for sess in subject.sessions
                 # Set the session subject property.
                 sess.subject = subject
                 # Fix the acquisition date.
                 sess.acquisitionDate = DateHelper.asMoment(sess.acquisitionDate)
-              
+                # Add the session parent property to the modeling objects.
+                for modeling in sess.modelings
+                  modeling.session = sess
+            
             # Fix the subject dates.
             fixDates()
-            # Doctor the scan sets.
-            extendScanSets()
             # Doctor the sessions.
             extendSessions()
             # Add the subject modeling property.
@@ -326,7 +334,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
 
         # @param session the session to search
         # @param scanType the scan type, t1 or t2
-        # @returna the scan object or a promise which resolves
+        # @returnsa the scan object or a promise which resolves
         #   to the scan object
         # @throws ReferenceError if the session does not have the scan
         getScan: (session, scanType) ->
@@ -340,7 +348,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
 
         # @param scan the scan to search
         # @param key the registration key
-        # @returna the registration object or a promise which resolves
+        # @returnsa the registration object or a promise which resolves
         #   to the registration object
         # @throws ReferenceError if the scan does not have the registration
         getRegistration: (scan, key) ->

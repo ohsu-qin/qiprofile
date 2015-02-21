@@ -112,7 +112,7 @@ define ['ngmocks', 'tnm', 'helpers'], ->
       tumorType = 'Sarcoma'
 
       describe 'grade', ->
-        # @param the grade composite object
+        # @param grade the composite grade object
         # @returns the expected summary grade
         expectedSummaryGrade = (grade) ->
           cumulativeGrade = grade.differentiation + grade.mitoticCount +

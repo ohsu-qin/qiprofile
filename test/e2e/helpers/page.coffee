@@ -243,7 +243,7 @@ Object.defineProperties Page.prototype,
   # Navigate to the home page by clicking the home button.
   #
   # @returns the home URL
-  # @throws an expectation error if the home button is missing
+  # @returns an expectation error if the home button is missing
   home:
     get: ->
       # Finds the home button.
@@ -253,7 +253,7 @@ Object.defineProperties Page.prototype,
 
       # Validates the home button.
       #
-      # @throws expectation error if the button is missing
+      # @returns expectation error if the button is missing
       validate = (button) ->
         expect(button, 'The home button is missing').to.exist
         button

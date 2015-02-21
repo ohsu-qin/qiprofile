@@ -24,7 +24,7 @@ class SessionDetailPage extends Page
   # Loads the image by clicking the given download button.
   #
   # @param button the image download button
-  # @return a promise that resolves when either the button is hidden
+  # @returns a promise that resolves when either the button is hidden
   #   or roughly one second has expired
   loadScanImage: (button) ->
     # Sleep 1/10 of a second and then invoke the async callback
@@ -37,7 +37,7 @@ class SessionDetailPage extends Page
     # @param button the scan image download button
     # @param retry the maximum number of times to reiterate
     #   until the image is loaded (default 10)
-    # @return a promise that resolves when either the button
+    # @returns a promise that resolves when either the button
     #   is hidden or the retry limit is reached
     waitWhileVisible = (button, retry=10) ->
       if retry

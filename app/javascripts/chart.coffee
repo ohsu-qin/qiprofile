@@ -203,7 +203,7 @@ define ['angular', 'lodash', 'moment', 'd3'], (ng, _, moment) ->
       yMaxMin: _.values(chartYRange)
 
     # @param date the moment date integer
-    # @return the formatted date
+    # @returns the formatted date
     dateFormat: (date) ->
       moment(date).format('MM/DD/YYYY')
 

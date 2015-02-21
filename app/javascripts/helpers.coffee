@@ -9,7 +9,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
     # returns 'tnm' rather than the underscore.string result '-t-n-m'.
     # 
     # @param s the input string
-    # @return the lowercase dashed conversion
+    # @returns the lowercase dashed conversion
     dasherize: (s) ->
       # Prepares the given match for underscore.string dasherize.
       prep = (match) ->

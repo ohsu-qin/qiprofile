@@ -28,7 +28,7 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
 
     filters.filter 'notSpecified', ->
       # @param value the input value
-      # @returns 'Not Specified' if the value is null,
+      # @throws 'Not Specified' if the value is null,
       #   otherwise the input value
       (value) ->
         if value? then value else 'Not Specified'
@@ -136,12 +136,15 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
         sess.acquisitionDate() for sess in sessions
 
 
+    filters.filter 'multiVolume', ->
+      (sequences) ->
+        [seq for seq in sequences when seq.volumes.count > 1]
+
+
     filters.filter 'modelingSourceTitle', ->
       # Formats the given modelable display title as follows:
-      # * If the modelable parent is a scan set with REST class
-      #   'ScanSet', then the title is the capitalized scan type,
-      #   manifested as the ScanSet key variable, followed by 'Scan',
-      #   e.g. 'T1 Scan'.
+      # * If the modelable parent is a scan, then the title is the
+      #   capitalized scan type and orientation, e.g. 'T1 axial'.
       # * Otherwise, the modelable is a registration configuration
       #   with REST class 'Registration.Configuration', manifested
       #   by the _cls variable value 'Configuration', and the title

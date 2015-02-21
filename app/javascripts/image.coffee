@@ -40,7 +40,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
         LOADED: 'loaded'
 
       # @param session the image parent session the session object
-      # @return the image overlays
+      # @returns the image overlays
       #   {modeling result name: {modeling parameter name: overlay}}
       #   object
       overlays = (session) ->

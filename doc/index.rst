@@ -11,8 +11,6 @@ Synopsis
 The *Qu*\ antitative *I*\ maging *P*\ rofile (*QuIP*\ ) web application displays
 imaging and clinical data for the `OHSU QIN Sharepoint`_ study.
 
-:API: https://readthedocs.org/projects/qiprofile/
-
 :Git: github.com/ohsu-qin/qiprofile
 
 

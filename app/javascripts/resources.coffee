@@ -53,3 +53,24 @@ define ['angular', 'ngresource', 'helpers'], (ng) ->
           url: '/api/session-detail/:id/'
           transformResponse: (data) -> ObjectHelper.fromJson(data)
   ]
+
+
+  rscs.factory 'ScanProtocol', [
+    '$resource', 'ObjectHelper',
+    ($resource, ObjectHelper) ->
+      $resource '/api/scan-protocol/:id/'
+  ]
+
+
+  rscs.factory 'RegistrationProtocol', [
+    '$resource', 'ObjectHelper',
+    ($resource, ObjectHelper) ->
+      $resource '/api/registration-protocol/:id/'
+  ]
+
+
+  rscs.factory 'ModelingProtocol', [
+    '$resource', 'ObjectHelper',
+    ($resource, ObjectHelper) ->
+      $resource '/api/modeling-protocol/:id/'
+  ]

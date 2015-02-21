@@ -1,0 +1,23 @@
+// Display the scan profile properties sheet.
+.qi-modal
+  .modal-header
+    .modal-title {{ profile.title }}
+
+  .modal-body
+    table.qi-table.qi-modal-table.qi-spaced-table
+      tr
+        th Scan Type
+        td {{ profile.scanType }}
+      tr
+        th Orientation
+        td {{ profile.orientation | capitalize }}
+      tr
+        th Technique
+        td {{ profile.technique }}
+      tr
+        th Description
+        td {{ profile.description }}
+
+  .modal-footer
+    button.btn.btn-warning.cancel(qi-focus='true' ng-click="close()") Close
+

@@ -2,13 +2,13 @@
 // If there is only one modeling object, then there is nothing to
 // select. In that case, only the modeling info button is displayed.
 // Otherwise, a modeling selection form is displayed.
-div(ng-switch="allModeling.length")
+div(ng-switch="modelings.length")
   div(ng-switch-when="1")
     // The repeat below only serves to place the modeling object in
     // scope for the modeling info modal pop-up. The repeat block
     // includes the title in order to display the button on the same
     // line as the title.
-    .qi-left-buffer.qi-bottom-buffer(ng-repeat="modeling in allModeling")
+    .qi-left-buffer.qi-bottom-buffer(ng-repeat="modeling in modelings")
       span.qi-inset-title Modeling Input Parameters:
       include modeling-info-btn
   div(ng-switch-default)

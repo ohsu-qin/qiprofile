@@ -22,26 +22,30 @@
   necessary to work around the AngularJS bug.
 
 // The scan image selection buttons.
-.row
-  .qi-image-selection-title Scan
-  ul.qi-justified-list.qi-scan-image-btn-group
-    span(ng-repeat="image in session.scans.t1.images" tooltip="{{ $index + 1 }}")
-      li.qi-justified-list-item
-        include ./image-select-btn-pair
-
-// The realigned image selection buttons.
-.row
-  .qi-image-selection-title(show="Object.keys(session.scans.t1.registration)") Realigned:
-.row(ng-repeat="(_, registration) in session.scans.t1.registration" ng-controller='RegistrationImageSelectCtrl')
-  // RegistrationImageSelectCtrl places the registration configuration
-  // in scope.
-  // The ng-bind-html embeds a RegistrationInfo hyperlink in the selection
+div(ng-repeat="(_, scan) in session.scans | multiVolume" ng-controller='ScanImageSelectCtrl')
+  // ScanImageSelectCtrl places the scan profile in scope.
+  // The ng-bind-html embeds a scan profile hyperlink in the selection
   // title element. The HTML cannot be directly included here, since the
   // hyperlink anchor element text is dynamically determined.
-  // The hyperlink click action displays the registration info.
-  a(href='' ng-click="open()" ng-controller='RegistrationInfoCtrl'
-    ng-bind-html="registrationTechnique(registration)")
-  ul.qi-justified-list.qi-reg-image-btn-group
-    span(ng-repeat="image in registration.images" tooltip="{{ $index + 1 }}")
-      li.qi-justified-list-item
-        include ./image-select-btn-pair
+  // The hyperlink click action displays the scan profile.
+  // The scan select buttons.
+  .row
+    .qi-image-selection-title {{ scanTitle }}
+    ul.qi-justified-list.qi-scan-image-btn-group
+      span(ng-repeat="image in scan.images" tooltip="{{ $index + 1 }}")
+        li.qi-justified-list-item
+          include ./image-select-btn-pair
+
+  // The realigned image selection buttons.
+  .row
+    // Nudge the title to the left to convey that the registration is
+    // performed on the current scan.
+    .qi-image-selection-title.qi-left-buffer(show="scan.registrations)") Realigned:
+  .row(ng-repeat="registration in registrations" ng-controller='RegistrationImageSelectCtrl')
+    // See the scan div above for the controller/hyperlink pattern.
+    a(href='' ng-click="open()" ng-controller='RegistrationProtocolCtrl'
+      ng-bind-html="registrationTechnique(registration)")
+    ul.qi-justified-list.qi-reg-image-btn-group
+      span(ng-repeat="image in registration.images" tooltip="{{ $index + 1 }}")
+        li.qi-justified-list-item
+          include ./image-select-btn-pair

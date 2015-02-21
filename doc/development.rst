@@ -288,8 +288,11 @@ Coding Standards
 * Every custom CSS style is dash-separated lower case preceded by ``qi``,
   e.g. ``qi-billboard``
 
-* Comments are readable English, usually beginning with 'The' and ending
-  in a period.
+* Comments are readable English on a separate line, usually beginning
+  with 'The' and ending in a period.
+  
+* Every public module, class and function is commented using the
+  `Writing AngularJS Documentation`_ guideline.[#docCaveat]_
 
 * Each function which is not nested within another function is documented
   using the jsdoc_ convention.
@@ -358,24 +361,8 @@ Coding Standards
   If a git comment is longer than one sentence, then the commit probably
   should have been broken out into several commits.
 
-* Version numbers follow a one-based *major*\ .\ *minor*\ .\ *patch* format.
-  The version numbering scheme loosely follows the SemVer_ standard, as
-  follows:
-
-  - The major version is incremented at the initiation of a substantial new
-    public feature set.
-
-  - The minor version is incremented when a complementary feature is
-    introduced or a non-backward-compatible change is made to an existing
-    feature.
-
-  - The patch version is incremented when there is a backward-compatible
-    refactoring or bug fix.
-
-  - The major version number is 0 for proof-of-concept releases, 1 for the
-    intial alpha review public release.
-
-  - Minor and patch version numbers begin at 1 rather than 0.
+* Version numbers follow the *major*\ .\ *minor*\ .\ *patch* scheme
+  described in the `Fast and Loose Versioning`_ gist.
 
 * Add a new version as follows:
 
@@ -394,6 +381,7 @@ Coding Standards
 
   * Update the server::
 
+        git push
         git push --tags
 
   * Periodically delete unused local and remote branches. Exercise care
@@ -562,6 +550,14 @@ examples:
    to unit and end-to-end testing. However, this package was evalutated
    and found to be faulty and poorly documented, supported and maintained. 
 
+.. [#docCaveat]
+   Unfortunately, there is not yet a known means of generating AngularJS
+   Coffeescript API documentation. `Dgeni`_ ngdoc parsing does not have a
+   Coffeescript adapter. `CoffeeDoc`_ Codo does not parse AngularJS modules.
+   The  `Comment passthrough workaround`_ is no help, since ngdoc does not
+   detect classes or functions in the compiled Javascript. The best solution
+   is the `Dgeni CoffeeScript documentation extractor`_ enhancement proposal.
+
 .. Targets:
 
 .. _frappe: https://github.com/dweldon/frappe
@@ -580,13 +576,17 @@ examples:
 
 .. _CoffeeScript Style Guide : https://github.com/polarmobile/coffeescript-style-guide
 
+.. _`Comment passthrough workaround`: http://stackoverflow.com/questions/7833021/how-to-document-coffeescript-source-code-with-jsdoc/9157241#9157241
+
+.. _Deleting Remote Branches: http://git-scm.com/book/en/Git-Branching-Remote-Branches#Deleting-Remote-Branches
+
 .. _DevTools: https://developer.chrome.com/devtools/index
+
+.. _Dgeni CoffeeScript documentation extractor: https://github.com/angular/dgeni/issues/69
 
 .. _Express: http://expressjs.com/
 
-.. _Pro Git Book: http://git-scm.com/book/en/
-
-.. _Deleting Remote Branches: http://git-scm.com/book/en/Git-Branching-Remote-Branches#Deleting-Remote-Branches
+.. _Fast and Loose Versioning: https://gist.github.com/FredLoney/6d946112e0b0f2fc4b57#file-flvr-rst
 
 .. _Grunt: http://www.gruntjs.com/
 
@@ -610,6 +610,8 @@ examples:
 
 .. _PhantomJS: http://phantomjs.org/
 
+.. _Pro Git Book: http://git-scm.com/book/en/
+
 .. _Protractor: https://github.com/angular/protractor
 
 .. _qipipe: https://github.com/ohsu-qin/qipipe
@@ -617,6 +619,8 @@ examples:
 .. _qiprofile-rest: https://github.com/ohsu-qin/qiprofile-rest
 
 .. _SemVer: http://semver.org/
+
+.. _Writing AngularJS Documentation: https://github.com/angular/angular.js/wiki/Writing-AngularJS-Documentation
 
 .. _XHR: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
 

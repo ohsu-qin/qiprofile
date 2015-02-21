@@ -97,7 +97,7 @@ define ['angular', 'modeling', 'breast'], (ng) ->
   ]
 
 
-  ctlrs.controller 'RegistrationInfoCtrl', [
+  ctlrs.controller 'RegistrationProtocolCtrl', [
     '$scope', '$sce', '$modal',
     ($scope, $sce, $modal) ->
       # Embeds a dynamically built registration technique text
@@ -114,25 +114,25 @@ define ['angular', 'modeling', 'breast'], (ng) ->
       # Open a modal window to display the registration properties.
       $scope.open = ->
         $modal.open
-          controller: 'RegistrationInfoModalCtrl'
-          templateUrl: '/partials/registration-info.html'
+          controller: 'RegistrationProtocolModalCtrl'
+          templateUrl: '/partials/registration-protocol.html'
           size: 'sm'
           resolve:
-            # Make the registration configuration injectable in the
+            # Make the registration profile injectable in the
             # modal controller.
-            regConfig: ->
-              $scope.regConfig
+            profile: ->
+              $scope.profile
   ]
 
 
-  ctlrs.controller 'RegistrationInfoModalCtrl', [
+  ctlrs.controller 'RegistrationProtocolModalCtrl', [
     '$scope', '$modalInstance', 'regConfig',
     ($scope, $modalInstance, regConfig) ->
       # Since the modal is not contained in the application page, this
       # modal controller scope does not inherit the application page
-      # scope. Therefore, place the registration configuration object
+      # scope. Therefore, place the registration profile object
       # in the modal scope.
-      $scope.regConfig = regConfig
+      $scope.profile = profile
       $scope.close = ->
         $modalInstance.close()
   ]

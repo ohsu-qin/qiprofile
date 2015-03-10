@@ -34,7 +34,7 @@ module.exports = (grunt) ->
           'angularjs-nvd3-directives/dist/*.js'
           'd3/*.js'
           'domready/ready.js'
-          'lodash/dist/lodash.js'
+          'lodash/lodash.js'
           'moment/*.js'
           'nvd3/nv.d3.js'
           'requirejs/require.js'
@@ -123,6 +123,15 @@ module.exports = (grunt) ->
         command: 'netstat -lnp tcp 2>/dev/null | grep -q 4444 || ' +
                  './node_modules/selenium-standalone/bin/start-selenium' +
                   ' > /dev/null 2>&1 &'
+        
+      bowerinstall:
+        command: './node_modules/.bin/bower update'
+        
+      bowerprune:
+        command: './node_modules/.bin/bower prune'
+      
+      updatewebdriver:
+        command: './node_modules/protractor/bin/webdriver-manager update'
 
     protractor:
       e2e:
@@ -138,7 +147,10 @@ module.exports = (grunt) ->
 
     stylus:
       options:
-        compress: false
+        use: [
+          require('autoprefixer-stylus')
+          require('csso-stylus')
+        ]
       compile:
         src: ['app/stylesheets/app.styl']
         dest: '_public/stylesheets/app.css'
@@ -208,7 +220,7 @@ module.exports = (grunt) ->
 
   require('load-grunt-tasks')(grunt)
 
-  grunt.registerTask 'default', ['dev']
+  grunt.registerTask 'default', ['build:dev']
 
   grunt.registerTask 'copy:app', ['copy:js', 'copy:css', 'copy:fonts', 'copy:static']
 
@@ -222,15 +234,18 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'build:app', ['clean', 'vendor:app', 'compile']
 
-  grunt.registerTask 'dev', ['env:dev', 'build:app']
+  grunt.registerTask 'build:dev', ['env:dev', 'build:app', 'exec:updatewebdriver']
 
-  grunt.registerTask 'prod', ['env:prod', 'build:app']
+  grunt.registerTask 'build:prod', ['env:prod', 'build:app']
+
+  # The npm postinstall task.
+  grunt.registerTask 'postinstall', ['exec:bowerinstall', 'exec:bowerprune', 'build:prod']
 
   grunt.registerTask 'start:dev', ['express:dev', 'watch']
 
   grunt.registerTask 'start:test', ['express:test', 'watch']
 
-  grunt.registerTask 'start:prod', ['express:prod', 'watch']
+  grunt.registerTask 'start:prod', ['express:prod']
 
   grunt.registerTask 'start', ['start:dev']
 
@@ -240,4 +255,4 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'test', ['test:unit', 'test:e2e']
 
-  grunt.registerTask 'release', ['build', 'requirejs', 'cssmin']
+  grunt.registerTask 'release', ['build:prod', 'requirejs', 'cssmin']

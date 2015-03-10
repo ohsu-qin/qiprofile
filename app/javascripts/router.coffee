@@ -1,5 +1,5 @@
-define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
-        'image', 'resources'],
+define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
+        'helpers', 'image', 'resources'],
   (ng, _, _s, moment, REST) ->
     router = ng.module 'qiprofile.router', ['qiprofile.resources',
                                             'qiprofile.helpers',
@@ -11,7 +11,10 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
         # The Subject search fields.
         SUBJECT_SECONDARY_KEY_FIELDS = ['project', 'collection', 'number']
 
-        # @returns a collection/subject/session title string
+        # @param session the session object
+        # @returns the session subject title string in the format
+        #   *collection* Subject *number* Session *number*, e.g.
+        #   'Breast Subject 1 Session 2'
         subjectTitle = (session) ->
           "#{ session.subject.collection }" +
           " Subject #{ session.subject.number }" +
@@ -46,114 +49,82 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
           # * adds parent references
           # * fixes dates
           # * adds the subject modeling property
+          #
+          # @param subject the subject object to augment
           extendSubject = (subject) ->
-            # # Extends the scan sets as follows:
-            # # * adds the scan set subject reference property
-            # # * adds the scan set key property
-            # # * adds each scan set registration's source reference property
-            # extendScanSets = ->
-            #   # Extends the modeling objects in the given modelable as follows:
-            #   # * adds the modeling key property
-            #   # * adds the modeling source reference property
-            #   # * adds the modeling results session reference properties
-            #   #
-            #   # @param modelable the scan set or registration configuration
-            #   # @returns the modeling results
-            #   extendModelable = (modelable) ->
-            #     extendModeling = (modeling, key) ->
-            #       modeling.key = key
-            #       modeling.source = modelable
-            #       # Add the modeling results session reference.
-            #       for mdlResult, i in modeling.results
-            #         mdlResult.session = subject.sessions[i]
-            #   
-            #     # Extend the modeling objects.
-            #     if modelable.modeling?
-            #       for mdlKey, mdl of modelable.modeling
-            #         extendModeling(mdl, mdlKey)
-            #   
-            #   extendScanSet = (scanSet, scanType) ->
-            #     # Set the subject reference.
-            #     scanSet.subject = subject
-            #     # Set the scan type.
-            #     scanSet.scanType = scanType
-            #     # Extend the modeling objects. 
-            #     extendModelable(scanSet)
-            #     # Extend the registration configurations
-            #     for regKey, regCfg of scanSet.registration
-            #       # Set the registration key.
-            #       regCfg.key = regKey
-            #       # Set the registration source.
-            #       regCfg.source = scanSet
-            #       # Extend the registration modeling objects.
-            #       extendModelable(regCfg)
-            #   
-            #   # Extend each scan set.
-            #   for scanType, scanSet of subject.scanSets
-            #     extendScanSet(scanSet, scanType)
-            #
             # Adds the modeling property to the fetched subject.
             addModeling = ->
-              # Adds the subject modeling property.
-              subjectModeling = ->
-                # @returns the associative session {source: modeling}
-                #   objects list
-                sourceModeling = (session) ->
-                  # @returns whether the modeling source is a scan
-                  isScanModeling = (modeling) ->
-                    modeling.source.scan?
+              # @returns the subject [{source, results}] array, where
+              #   each source value is a {source type: source id}
+              #   object and the results are the modeling results in
+              #   session number order.
+              subjectModelings = ->
+                # @param session the session object
+                # @returns the session {source type: {source id: result}}
+                #   object
+                associate = (accum, session) ->
+                  collect = (accum, modeling) ->
+                    assocPcl = accum[modeling.protocol]
+                    if not assocPcl?
+                      assocPcl = accum[modeling.protocol] = {}
+                    pairs = _.pairs(modeling.source)
+                    if pairs.length > 1
+                      throw ReferenceError("Modeling source cannot reference" +
+                                           "more than one source type:" +
+                                           " #{ Object.keys(modeling.source) }")
+                    [srcType, srcId] = pairs[0]
+                    assocSrc = assocPcl[srcType]
+                    if not assocSrc?
+                      assocSrc = assocPcl[srcType] = {}
+                    results = assocSrc[srcId]
+                    if not results?
+                      results = assocSrc[srcId] = []
+                    results[session.number - 1] = modeling.result
+                    accum
                   
-                  # @returns the {source: modeling} associative object
-                  associateSource = (modeling) ->
-                    obj = {}
-                    obj[modeling.source] = modeling
-                    obj
+                  session.modelings.reduce(collect, accum)
+                
+                create = (protocolId, sourceType, sourceId, results) ->
+                  protocol: protocolId
+                  source: ObjectHelper.associate(sourceType, sourceId)
+                  results: results
+                
+                flattenBySource = (protocolId, srcAssoc) ->
+                  flattenBySourceId = (srcType) ->
+                    sortCriterion = (modeling) ->
+                      modeling.source[srcType]
+                    
+                    modelings = []
+                    # Make the [{protocol, source, results}] array from
+                    # the {source type: {source id: results}} object.
+                    for srcId, results of srcAssoc[srcType]
+                      obj = create(protocolId, srcType, srcId, results)
+                      modelings.push(obj)
+                    # Return the modeling objects sorted by source id.
+                    _.sortBy(modelings, sortCriterion)
                   
-                  # Separate the scan modelings from the registration
-                  # modelings.
-                  [scanMdl, regMdl] = _.partition(session.modelings, isScanModeling)
-                  
-                  # Return the associative {scan, registration} object
-                  scan: [associateSource(modeling) for modeling in scanMdl]
-                  registration: [associateSource(modeling) for modeling in regMdl]
+                  srcTypes = ['scan', 'registration']
+                  modelingArrays = (
+                    flattenBySourceId(srcType) for srcType in srcTypes
+                  )
+                  _.flatten(modelingArrays)
                 
-                # @returns the destination array with the zero-based
-                #   session index value set to the given modeling object
-                mergeIntoSessionArray = (destArray, modeling) ->
-                  if not destArray?
-                    destArray = []
-                  destArray[modeling.session.number - 1] = modeling
-                  destArray
-                
-                # @param accumAssoc the accumulator scan or registration
-                #   {source: [modeling]} object, where the modeling array
-                #   is in session index order
-                # @param sessAssocArray the corresponding session scan
-                #   or registration [{source: modeling}] array
-                # @returns the combined {source: [modeling]} object
-                mergeModeling = (accumAssoc, sessAssocArray) ->
-                  _.merge(accumAssoc, sessAssocArray..., mergeIntoSessionArray)
-                
-                # @returns a {scan: map, registration: map} object where each
-                #   map {source: [modeling]} associates a modeling source
-                #   with the session modeling objects for that source 
-                associateModeling = (accum, session) ->
-                  # The {scan: [assoc], registration: [assoc]} object, where
-                  # each assoc is a {source: modeling} object.
-                  sessModeling = sourceModeling(session)
-                  # Return the {scan: map, registration: map} object, where
-                  # the map merges the modeling by source.
-                  _.merge(accum, sessModeling, mergeModeling)
-                
-                # Return the associative accumulator object.
-                accum = {scan: {}, registration: {}}
-                subject.sessions.reduce(associateModeling, accum)
-              
-              # Add the subject modeling property.
-              Object.defineProperty subject, 'modeling',
+                # Make the {protocol id: {source type: {source id: results}}}
+                # object.
+                assoc = subject.sessions.reduce(associate, {})
+                # Flatten into a [[{protocol, source, results}]]
+                # array of arrays partitioned by protocol id.
+                modelingArrays = (
+                  flattenBySource(pclId, srcAssoc) for pclId, srcAssoc of assoc
+                )
+                # Flatten into a [{protocol, source, results}] array.
+                _.flatten(modelingArrays)
+
+              # Add the subject modelings property.
+              Object.defineProperty subject, 'modelings',
                 enumerable: true
                 get: ->
-                  subjectModeling(subject)
+                  subjectModelings()
 
             # Fixes the subject date properties.
             fixDates = ->
@@ -173,20 +144,96 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
                 trt.beginDate = DateHelper.asMoment(trt.beginDate)
                 trt.endDate = DateHelper.asMoment(trt.endDate)
 
-            # Makes the following changes to the subject session objects:
-            # * adds the session subject reference
-            # * fixes the session acquisition date
-            # * adds the session parent property to the session
-            #   modeling objects
+            # Makes the changes to the subject session objects
+            # described in the extendModeling and extendSession
+            # functions below.
             extendSessions = ->
-              for sess in subject.sessions
+              # Adds the following modeling parameter result
+              # properties:
+              # * key - the parameter result access property name
+              # * modelingResult - the parent modeling result
+              #   reference 
+              # * overlay - the label map, if it exists and has a
+              #   color table
+              #  
+              # If there is a label map, then this function sets the
+              # label map parent modeling parameter reference.
+              #
+              # @param paramResult the object to extend
+              # @param modelingResult the parent modeling result object
+              # @param key the parameter result access property name
+              extendParameterResult = (paramResult, modelingResult, key) ->
+                # The parameter key property identifies the
+                # parameter, e.g. ktrans.
+                paramResult.key = key
+                # Set the parent modeling result reference.
+                paramResult.modelingResult = modelingResult
+                if paramResult.labelMap?
+                  # Set the label map parent reference.
+                  paramResult.labelMap.parameterResult = paramResult
+                  # If the label map has a color table, then set
+                  # the overlay property.
+                  if paramResult.labelMap.colorTable?
+                    Object.defineProperty paramResult, 'overlay',
+                      get: ->
+                        @labelMap
+              
+              # Adds the modeling result parent modeling object
+              # reference property and extends the parameter result
+              # objects as described in extendParameterResult.
+              #
+              # @param modelingResult the modeling result object to extend
+              # @param modeling the parent modeling object
+              extendModelingResult = (modelingResult, modeling) ->
+                # Set the modeling result parent reference.
+                modelingResult.modeling = modeling
+                # Extend each modeling parameter result object.
+                for key, paramResult of modelingResult
+                  extendParameterResult(paramResult, modelingResult, key)
+              
+              # Extends the modeling result as described in
+              # extendModelingResult and adds the following
+              # modeling object properties:
+              # * session - the parent session object reference
+              # * overlays - the modeling result overlays
+              #
+              # @param modeling the modeling object to extend
+              # @param session the parent session object
+              extendModeling = (modeling, session) ->
+                # Set the modeling parent session reference.
+                modeling.session = session
+                # Extend the modeling result object.
+                extendModelingResult(modeling.result, modeling)
+                # The modeling overlays property returns the label maps
+                # which have a color table.
+                Object.defineProperty modeling, 'overlays',
+                  get: ->
+                    (res.overlay for res in _.values(@result) when res.overlay?)
+                
+              # Fixes the session acquisition date and adds the following
+              # session properties:
+              # * number - the one-based session number in acquisition order
+              # * subject - the session parent subject reference
+              # * overlays - the label map objects with a color table
+              extendSession = (session, number) ->
                 # Set the session subject property.
-                sess.subject = subject
+                session.subject = subject
+                # Set the session number property.
+                session.number = number
                 # Fix the acquisition date.
-                sess.acquisitionDate = DateHelper.asMoment(sess.acquisitionDate)
-                # Add the session parent property to the modeling objects.
-                for modeling in sess.modelings
-                  modeling.session = sess
+                session.acquisitionDate = DateHelper.asMoment(session.acquisitionDate)
+                # Add the modeling properties.
+                for modeling in session.modelings
+                  extendModeling(modeling, session)
+                # The session overlays property returns the label map
+                # objects which have a color table.
+                Object.defineProperty session, 'overlays',
+                  get: ->
+                    _.flatten(_.pluck(@modelings, 'overlays'))
+              
+              # Extend each session.
+              for session, i in subject.sessions
+                extendSession(session, i+1)
             
             # Fix the subject dates.
             fixDates()
@@ -196,10 +243,9 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
             addModeling()
             # Add the isMultiSession property.
             Object.defineProperty subject, 'isMultiSession',
-              enumerable: true
               # @returns whether there is more than one session
               get: ->
-                isMultiSession = subject.sessions.length > 1
+                isMultiSession = this.sessions.length > 1
             
             # End of extendSubject.
           
@@ -221,18 +267,19 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
             else
               criteria = _.pick(condition, SUBJECT_SECONDARY_KEY_FIELDS)
               if not _.all(_.values(criteria))
-                throw new ValueError("The subject search condition is missing" +
-                                     " both an id value and a complete" +
-                                     " secondary key: #{ condition }")
+                throw new ValueError("The subject search condition is" +
+                                     " missing both an id value and a" +
+                                     " complete secondary key:" +
+                                     " #{ condition }")
               select = REST.where(criteria)
               Subject.query(select).$promise.then (subjects) ->
                 if not subjects.length
                   throw new ReferenceError("Subject was not found:" +
                                            " { _.pairs(template) }")
                 else if subjects.length > 1
-                  throw new ReferenceError("Subject query on the secondary key" +
-                                           " returned more than one subject:" +
-                                           " #{ _.pairs(template) }")
+                  throw new ReferenceError("Subject query on the secondary" +
+                                           " key returned more than one" +
+                                           " subject: #{ _.pairs(template) }")
                 # The unique subject that matches the query condition.
                 subjects[0]
           
@@ -265,118 +312,149 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest', 'helpers',
         # @param session the parent object
         # @returns a promise which resolves to the session detail
         getSessionDetail: (session) ->
-          extendScan = (scan, scanType) ->
-            # Adds the session, container type and images properties to
-            # the given image container.
-            #
-            # @param container the image container
-            # @param key the scan type or registration name
-            addImageContainerContent = (container, key) ->
-              # The unique container id for caching.
-              container.id = "#{ session.detail }.#{ container._cls }.#{ key }"
-              # Encapsulate the image files.
-              container.images = Image.imagesFor(container)
+          # Adds the following properties to the given volume object:
+          # * container - the volume parent scan or registration
+          # * image - the volume image object
+          #
+          # The image property creates and caches an image object
+          # on demand when it is first accessed. 
+          #
+          # @param volume the volume object to extend
+          # @param number the one-based volume number
+          # @param container the image scan or registration object
+          extendVolume = (volume, number, container) ->
+            # The parent reference.
+            if container._cls is 'Scan'
+              volume.scan = container
+            else if container._cls is 'Registration'
+              volume.registration = container
+            else
+              throw TypeError("The image container type is not recognized")
+            # The container alias.
+            Object.defineProperty volume, 'container',
+              get: ->
+                @scan or @registration
+            # Set the volume number property.
+            volume.number = number
+            # The volume image object is created and cached on demand.
+            Object.defineProperty volume, 'image',
+              get: ->
+                if not @_image?
+                  @_image = Image.forVolume(volume)
+                @_image
+          
+          # Extends the container volumes as described in extendVolume
+          # and adds the following properties to the given container:
+          # * session - the container parent session reference
+          #
+          # @param container the image scan or registration object
+          extendImageContainer = (container) ->
+            # Set the session property required by the image factory.
+            # Image containers present a uniform interface, which
+            # includes a session reference.
+            container.session = session
+            # Add the volume images.
+            for volume, index in container.volumes
+              extendVolume(volume, index + 1, container)
+          
+          # Extends the given registration object as described in
+          # extendImageContainer and adds the following properties:
+          # * scan - the registration source scan
+          #
+          # @param registration the registration to extend
+          # @param scan the source scan
+          extendRegistration = (registration, scan) ->
+            # Set the source scan reference.
+            registration.scan = scan
+            # Add the registration volume properties.
+            extendImageContainer(registration)
 
-            # Adds the scan, key, configuration and image content
-            # properties to the given registration.
-            #
-            # @param registration the registration to extend
-            # @param scan the source scan
-            # @param key the registration key
-            extendRegistration = (registration, key, scan) ->
-              # Set the source scan reference.
-              registration.scan = scan
-              # Set the key.
-              registration.key = key
-              # The scan set.
-              scanSet = session.subject.scanSets[scan.scanType]
-              if not scanSet?
-                throw new ReferenceError "#{ subjectTitle(session) } does not have" +
-                                         " a #{ scan.scanType } scan set."
-              # Set the registration configuration.
-              registration.configuration = scanSet.registration[key]
-              if not registration.configuration?
-                throw new ReferenceError "#{ subjectTitle(session) } does not have" +
-                                         " a #{ key } registration configuration."
-              
-              # Define the session property required by the image factory.
-              # Image containers present a uniform interface, which includes
-              # a session reference.
-              Object.defineProperty registration, 'session',
-                get: ->
-                  registration.scan.session
-              # Add the registration images.
-              addImageContainerContent(registration, key)
-            
+          # * Extends the scan registrations as described in
+          #   extendRegistration
+          # * Converts the scan number to an integer
+          # * Extends the scan object as described
+          #   in extendImageContainer
+          # * Adds the following properties:
+          #   * session - the source scan parent session
+          #
+          # @param scan the scan to extend
+          extendScan = (scan) ->
+            # The number is read as an integer, as with all JSON values.
+            # Convert it to an integer.
+            scan.number = parseInt(scan.number)
             # Set the session reference.
             scan.session = session
-            # Set the scan type property.
-            scan.scanType = scanType
-            # Add the images.
-            addImageContainerContent(scan, scanType)
-            # Add registration properties.
-            for key, reg of scan.registration
-              extendRegistration(reg, key, scan)
-            
+            # Add the scan volume properties.
+            extendImageContainer(scan)
+            # Add the scan registration properties.
+            for reg in scan.registrations
+              extendRegistration(reg, scan)
+          
+          # The session object must have a detail reference.
           if not session.detail?
             throw new ReferenceError "Subject #{ session.subject.number }" +
                                      " Session #{ session.number }" +
                                      " does not reference a detail object"
-          
+          # Fetch the session detail.
           Session.detail(id: session.detail).$promise.then (detail) ->
             # Copy the fetched detail into the session.
             ObjectHelper.aliasPublicDataProperties(detail, session)
             # Add properties to the scans and their registration.
-            for key, scan of detail.scans
-              extendScan(scan, key)
+            for scan in session.scans
+              # Add properties.
+              extendScan(scan)
             # Resolve to the augmented session object.
             session
 
         # @param session the session to search
-        # @param scanType the scan type, t1 or t2
-        # @returnsa the scan object or a promise which resolves
-        #   to the scan object
+        # @param scan the scan number
+        # @returns the scan object
         # @throws ReferenceError if the session does not have the scan
-        getScan: (session, scanType) ->
-          scan = session.scans[scanType]
+        getScan: (session, scanNumber) ->
+          # The matching scan (there is at most one).
+          scan = _.find(session.scans,
+                        (scan) -> scan.number is scanNumber)
           # If no such scan, then complain.
           if not scan?
-            throw new ReferenceError "#{ subjectTitle(session) }" +
-                                     " does not have a #{ scanType } scan."
+            for scan in session.scans
+              console.log(">> #{ scan.number } vs #{ scanNumber }")
+            throw new ReferenceError "#{ subjectTitle(session) } does not have" +
+                                     " a scan with number #{ scanNumber }"
           # Return the scan.
           scan
 
         # @param scan the scan to search
-        # @param key the registration key
-        # @returnsa the registration object or a promise which resolves
-        #   to the registration object
+        # @param resource the registration resource name
+        # @returns the registration object
         # @throws ReferenceError if the scan does not have the registration
-        getRegistration: (scan, key) ->
-          reg = scan.registration[key]
+        getRegistration: (scan, resource) ->
+          # The matching scan (there is at most one).
+          reg = _.find(scan.registrations,
+                       (reg) -> reg.resource is resource)
           # If no such registration, then complain.
           if not reg?
             throw new ReferenceError "#{ subjectTitle(session) }" +
-                                     " #{ scan.scanType } scan does not have" +
-                                     " a #{ key } registration."
+                                     " Scan #{ scan.number } does not have" +
+                                     " a registration with resource" +
+                                     " #{ resource }"
           # Return the registration.
           reg
 
         # @param container the image parent container object
-        # @param timePoint the one-based series time point
+        # @param number the one-based volume number
         # @returns the image object, if its data is loaded,
         #   otherwise a promise which resolves to the image object
-        #   when the image content is loaded
+        #   after the image content is loaded
         # @throws ReferenceError if the parent container does not have
         #   the image
-        getImageDetail: (container, timePoint) ->
+        getVolume: (container, number) ->
           # timePoint is one-based.
-          image = container.images[timePoint - 1]
+          image = container.images[number - 1]
           if not image?
             throw new ReferenceError "Subject #{ subject.number }" + 
                                      " Session #{ session.number }" +
-                                     " does not have an image at" +
-                                     " #{ container.title } time point" +
-                                     " #{ timePoint }"
+                                     " #{ container.title } Volume" +
+                                     " #{ number } was not found"
           # If the image has data, then return the image.
           # Otherwise, return a promise to load the image.
           if image.data?

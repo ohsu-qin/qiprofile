@@ -138,26 +138,7 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
 
     filters.filter 'multiVolume', ->
       (sequences) ->
-        [seq for seq in sequences when seq.volumes.count > 1]
-
-
-    filters.filter 'modelingSourceTitle', ->
-      # Formats the given modelable display title as follows:
-      # * If the modelable parent is a scan, then the title is the
-      #   capitalized scan type and orientation, e.g. 'T1 axial'.
-      # * Otherwise, the modelable is a registration configuration
-      #   with REST class 'Registration.Configuration', manifested
-      #   by the _cls variable value 'Configuration', and the title
-      #   is 'Registration' followed by the registration key, e.g.
-      #  'Registration pY3x'.
-      (modelable) ->
-        if modelable._cls is 'ScanSet'
-          "#{ _s.capitalize(modelable.scanType) } Scan"
-        else if modelable._cls is 'Configuration'
-          "Registration #{ modelable.key }"
-        else
-          throw new ValueError("Modelable class is unrecognized:" +
-                               " #{ modelable._cls }")
+        (seq for seq in sequences when seq.volumes.length > 1)
 
 
     filters.filter 'imageContainerTitle', ['Image', (Image) ->

@@ -3,11 +3,11 @@ extends ../layout/partial
 include include/accordion-heading-mixin
 
 block billboard
-  | {{ image.parent.session.subject.collection | capitalize }}
-  | Patient {{ image.parent.session.subject.number }}
-  | Session {{ image.parent.session.number }}
-  | {{ image.parent | imageContainerTitle }}
-  | Time Point {{ image.timePoint }}
+  | {{ volume.container.session.subject.collection | capitalize }}
+  | Patient {{ volume.container.session.subject.number }}
+  | Session {{ volume.container.session.number }}
+  | {{ volume.container._cls }}
+  | Volume {{ volume.number }}
 
 block content
   // The modeling parameter overlay select.

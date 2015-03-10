@@ -6,12 +6,11 @@ block billboard
   | Session {{ session.number }}
 
 block content
-  .qi-panel.qi-nested
+  .qi-panel.qi-nested(ng-repeat="scan in session.scans | multiVolume")
     .row
       h4.col-md-offset-1.col-md-3.qi-chart-title Average Signal Intensity
     qi-intensity-chart(session="session")
-    include include/image-selection
-
+    include include/volume-selection
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

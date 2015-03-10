@@ -3,13 +3,13 @@
   button which opens the image. Otherwise, the image selector
   is a button which loads the image.
 
-button.btn.btn-default.btn-xs.qi-nav-btn.qi-image-btn(
-  ng-click='openImage(image)'
+button.btn.btn-default.btn-xs.qi-nav-btn.qi-vol-btn(
+  ng-click='image.open()'
   ng-show="image.state == 'loaded'"
 )
   .glyphicon.glyphicon-eye-open
 
-button.btn.btn-default.btn-xs.qi-nav-btn.qi-image-btn(
+button.btn.btn-default.btn-xs.qi-nav-btn.qi-vol-btn(
   ng-click='image.load()'
   ng-hide="image.state == 'loaded'"
   ng-disabled="image.state == 'loading'"

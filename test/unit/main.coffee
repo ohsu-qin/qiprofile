@@ -86,7 +86,7 @@ requirejs.config
   # shim dependencies, extended with the test modules. See the
   # paths note above.
   shim:
-    angular: exports : 'angular'
+    angular: exports: 'angular'
     slider: deps: ['angular']
     lodash: exports: '_'
     nganimate: deps: ['angular']

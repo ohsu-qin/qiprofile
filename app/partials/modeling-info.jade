@@ -1,0 +1,31 @@
+// Display the modeling input properties sheet.
+.qi-modal
+  .modal-header
+    .modal-title Modeling Input
+
+  .modal-body
+    table.qi-table.qi-modal-table.qi-spaced-table
+      // ModelingSourceProtocolCtrl places the source protocol id in
+      // scope for the ScanProtocolCtrl or RegistrationProtocolCtrl.
+      tr(ng-controller='ModelingSourceProtocolCtrl')
+        th Source
+        td(ng-show="sourceType == 'scan'")
+          | Scan
+          button.btn.btn-med.qi-profile-btn(
+            ng-click="open()", ng-controller='ScanProtocolCtrl'
+          )
+            .glyphicon.glyphicon-info-sign()
+        td(ng-show="sourceType == 'registration'")
+          | Registration
+          button.btn.btn-med.qi-profile-btn(
+            ng-click="open()", ng-controller='RegistrationProtocolCtrl'
+          )
+            .glyphicon.glyphicon-info-sign()
+      
+      tr(ng-repeat="(name, value) in protocol.inputParameters")
+        th {{ name | underscore }}
+        td {{ value }}
+
+  .modal-footer
+    button.btn.btn-warning.cancel(qi-focus='true' ng-click="close()") Close
+

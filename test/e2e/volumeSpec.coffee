@@ -2,7 +2,7 @@ expect = require('./helpers/expect')()
 
 Page = require './helpers/page' 
 
-class ImageDetailPage extends Page
+class VolumePage extends Page
   displayPanel: ->
     @find('qi-image')
   
@@ -12,13 +12,13 @@ class ImageDetailPage extends Page
   #  @find('TODO')
   
   imageCtlPanel: ->
-    @find('.qi-image-ctl')
+    @find('.qi-vol-ctl')
 
-describe 'E2E Testing Image Detail', ->
+describe.only 'E2E Testing Volume', ->
   page = null
 
   beforeEach ->
-    page = new ImageDetailPage '/quip/sarcoma/subject/1/session/1/scan/t1/image/20?project=QIN_Test'
+    page = new VolumePage '/quip/sarcoma/subject/1/session/1/scan/1/volume/20?project=QIN_Test'
 
   it 'should load the page', ->
     expect(page.content, 'The page was not loaded')
@@ -26,7 +26,7 @@ describe 'E2E Testing Image Detail', ->
 
   it 'should display the billboard', ->
     expect(page.billboard, 'The billboard is incorrect')
-      .to.eventually.equal('Sarcoma Patient 1 Session 1 Scan Time Point 20')
+      .to.eventually.equal('Sarcoma Patient 1 Session 1 Scan 1 Volume 20')
 
   it 'should have a home button', ->
     pat = /.*\/quip\?project=QIN_Test$/

@@ -12,7 +12,7 @@ class SessionDetailPage extends Page
     # The locator for the image select button group element.
     # Since the time point is one-based, the zero-based image
     # select index is one less than the time point.
-    locator = By.repeater('image in session.scans.t1.images').row(time_point - 1)
+    locator = By.repeater('image in session.scans[0].images').row(time_point - 1)
 
     # Find the image select button group element, then...
     @find(locator).then (div) ->

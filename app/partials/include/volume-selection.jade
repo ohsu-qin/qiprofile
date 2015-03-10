@@ -1,0 +1,54 @@
+//
+  This volume selection panel consists of one row for the current
+  multi-volume scan and one row for each of its registrations.
+  The selection row is entitled with the intensity data series key,
+  'Scan' or 'Realigned', followed by one volume select button pair
+  per data series.
+
+  Note: the volume repeats below are scoped by a span HTML element
+  rather than a div element to work around the following AngularJS
+  bug:
+
+  * CSS justification doesn't work with AngularJS ng-repeat
+
+  AngularJS ng-repeat does not emit whitespace between the li
+  elements, which is necessary for justification
+  (cf http://stackoverflow.com/questions/23252601/angular-why-doesnt-css-justification-work-with-ng-repeat).
+  The work-around is to set the repeat on a span which wraps
+  the list element rather than the list itself.
+
+  As a result, the button "group" styles are added to each
+  iterated button list item rather than the list repeat
+  element itself. This is somewhat counter-intuitive, but is
+  necessary to work around the AngularJS bug.
+
+// The scan image selection buttons.
+.row
+  .qi-vol-selection-title Scan
+.row
+  .qi-vol-selection-title(ng-controller='ScanVolumeSelectCtrl')
+    button.btn.btn-med.qi-profile-btn(
+      ng-click="open()" ng-controller='ScanProtocolCtrl'
+    )
+      .glyphicon.glyphicon-info-sign()
+  ul.qi-hor-list.qi-scan-vol-btn-group
+    span(ng-repeat="volume in scan.volumes" tooltip="{{ $index + 1 }}"
+         ng-controller='VolumeImageCtrl')
+      li.qi-hor-list-item
+        include ./volume-select-btn-pair
+
+// The realigned image selection buttons.
+.row
+  .qi-vol-selection-title(show="scan.registrations.length > 1")
+    | Realigned
+.row(ng-repeat="registration in scan.registrations")
+  .qi-vol-selection-title(ng-controller='RegistrationVolumeSelectCtrl')
+    button.btn.btn-med.qi-profile-btn(
+      ng-click="open()" ng-controller='RegistrationProtocolCtrl'
+    )
+      .glyphicon.glyphicon-info-sign()
+  ul.qi-hor-list.qi-reg-vol-btn-group
+    span(ng-repeat="volume in registration.volumes" tooltip="{{ $index + 1 }}"
+         ng-controller='VolumeImageCtrl')
+      li.qi-hor-list-item
+        include ./volume-select-btn-pair

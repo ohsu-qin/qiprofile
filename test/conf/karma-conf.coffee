@@ -14,7 +14,9 @@ module.exports = (config) ->
     # to the requirejs loader. _public/javascripts/main.js is excluded
     # below, since that is the web app requirejs config. Testing uses
     # its own main config, which is the last file specified and is
-    # loaded immediately.
+    # loaded immediately. The pattern declarations below configure
+    # karma to recognize the libraries. The libraries are then loaded
+    # by test/unit/main.
     files: [
       # The web app libraries.
       {pattern: '_public/javascripts/**/*.js', included: false}
@@ -27,7 +29,7 @@ module.exports = (config) ->
       {pattern: 'test/unit/*Spec.coffee', included: false}
       # The chai eventually assertion helper.
       {pattern: 'test/unit/helpers/expect.coffee', included: false}
-      # Lastly, the requirejs main config.
+      # Lastly, the test requirejs main config.
       'test/unit/main.coffee'
     ]
 

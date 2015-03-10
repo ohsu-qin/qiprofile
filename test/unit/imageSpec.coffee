@@ -1,21 +1,27 @@
 define ['ngmocks', 'image'], (ng) ->
   describe 'Unit Testing the Image Service', ->
-    # The mock Angular $http service provider.
-    $httpBackend = null
-
     # The mock objects.
     mock =
       # The mock image file content.
       image:
         data: new Uint8Array(1)
-      # The mock scan.
-      scan:
-        # The Image service expects a scan session, which can be empty
-        # for our purposes.
-        session: {}
-        name: 't1'
-        files: ['data/QIN_Test/arc001/Breast001_Session01/SCANS/11/NIFTI/series01_t1.nii.gz']
+      # The mock volume. The volume filename comes from the database.
+      # The router getSessionDetail function adds the volume number
+      # and parent container reference properties. This is simulated
+      # in the mock object.
+      volume:
+        number: 1
+        container:
+          # The router getSessionDetail function adds the scan
+          # parent session reference property.
+          session:
+            number: 1
+        filename: 'path/to/volume001.nii.gz'
 
+    # The mock Angular $http service provider.
+    $httpBackend = null
+    # The image service.
+    Image = null
     # The encapsulated scan image object.
     image = null
 
@@ -26,39 +32,40 @@ define ['ngmocks', 'image'], (ng) ->
       inject ['Image', '$httpBackend', (_Image_, _$httpBackend_) ->
         Image = _Image_
         $httpBackend = _$httpBackend_
-        # The mock test scan object.
         # The mock file URL.
-        url = '/static/' + mock.scan.files[0]
+        url = '/static/' + mock.volume.filename
         # The mock http call.
         $httpBackend.whenGET(url).respond(mock.image.data)
-        # The encapsulated mock scan images.
-        images = Image.imagesFor(mock.scan)
-        image = images[0]
+        # The router getSessionDetail function creates the image object
+        # on demand when the volume image property is accessed. This test
+        # case bypasses that mechanism and create the image object directly.
+        image = Image.forVolume(mock.volume)
       ]
 
     afterEach ->
       $httpBackend.verifyNoOutstandingExpectation()
       $httpBackend.verifyNoOutstandingRequest()
 
+    it 'should expose the states in a STATES variable', ->
+      expect(Image.STATES, 'The STATES variable is missing').to.exist
+
     describe 'Pre-load', ->
       it 'should encapsulate the image file', ->
         expect(image, "There is not an image object").to.exist
 
+      it 'should reference the scan volume', ->
+        expect(image.volume,
+               "The image does not reference the parent scan volume").to.exist
+        expect(image.volume, "The image parent volume reference is incorrect")
+          .to.equal(mock.volume)
+
+      it 'should not create the XTK volume before the image is loaded', ->
+        expect(image.xtkVolume, "The image creates a XTK volume before load")
+          .to.not.exist
+
       it 'should initialize the image state flag to unloaded', ->
         expect(image.state, 'The image state flag is not set to unloaded').
-          to.equal('unloaded')
-
-      it 'should have a parent property', ->
-        expect(image.parent, 'The image parent is missing').
-          to.exist
-
-      it 'should set the parent property to the container', ->
-        expect(image.parent, 'The image parent is incorrect').
-          to.equal(mock.scan)
-
-      it 'should set the time point', ->
-        expect(image.timePoint, 'The image state time point is incorrect').
-          to.equal(1)
+          to.equal(Image.STATES.UNLOADED)
 
     # Note - calling image.load() in the tests below results in the
     # following error:
@@ -75,7 +82,7 @@ define ['ngmocks', 'image'], (ng) ->
     # module only declares the global inject when running tests in
     # jasmine or mocha.
     #
-    # Replicating the test cases below in the E2E imageDetailSpec is
+    # Replicating the test cases below in E2E volumeSpec.coffee is
     # awkward, since it entails validating the controller scope variable
     # image state property. The work-around is to visually inspect the
     # image state on load in the Chrome Developer Tools web debugger.

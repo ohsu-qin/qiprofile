@@ -4,6 +4,7 @@
 express = require 'express'
 http = require 'http'
 path = require 'path'
+mkdirp = require 'mkdirp'
 net = require 'net'
 fs = require 'fs'
 logger = require 'express-bunyan-logger'
@@ -11,16 +12,11 @@ forever = require 'forever-monitor'
 authenticate = require 'authenticate'
 spawn = require './spawn'
 
-server = express()
-
+# The port assignments.
 PORT = 3000
 PORT_TEST = PORT + 1
-
 MONGODB_PORT = 27017
-
 EVE_PORT = 5000
-
-LOG_FILE = '/var/log/qiprofile.log'
 
 # The grunt build tasks place all compiled and copied files within
 # the _public directory.
@@ -30,15 +26,42 @@ root = path.join(__dirname, '..', '_public')
 # on the default REST host and port.
 api = require './api'
 
+# The Express server.
+server = express()
 # Set the port.
 server.set 'port', process.env.PORT or PORT
+# The run environment.
+env = server.get('env') or 'production'
+
+# @returns /var/log/qiprofile.log, if it is writable,
+#   ./log/qiprofile.log otherwise
+defaultLogFile = ->
+  try
+    fd = fs.openSync('/var/log/qiprofile.log', 'w')
+    fs.closeSync(fd)
+    '/var/log/qiprofile.log'
+  catch err
+    './log/qiprofile.log'
+ 
+# The log file is either set in the environment or defaults to
+# log/qiprofile.log in the current directory.
+relLogFile = server.get('log') or defaultLogFile()
+logFile = path.resolve(relLogFile)
+logDir = path.dirname(logFile)
+mkdirp(logDir)
+
+# If the server has the debug flag set, then the log level is debug.
+# Otherwise, the log level is inferred from the environment.
+if server.get('debug') or env is not 'production'
+  logLevel = 'debug'
+else
+  logLevel = 'info'
 
 # The logger configuration.
-logLevel = if server.get('env') is 'development' then 'debug' else 'info'
 logConfig =
   name: 'qiprofile'
   streams: [
-    level: logLevel, path: LOG_FILE
+    level: logLevel, path: logFile
   ]
 
 # Enable the middleware.
@@ -54,11 +77,12 @@ server.use authenticate.middleware(
 )
 
 # Authenticate.
+# Note: authentication is not enabled by default.
 server.get '/login', (req, res) ->
-  # TODO - Authenticate against XNAT.
   res.writeHead 200, ContentType: 'application/json'
   res.write JSON.stringify(
-    'access_token': authenticate.serializeToken(req.data.client_id, req.data.user_id)
+    'access_token': authenticate.serializeToken(req.data.client_id,
+                                                req.data.user_id)
   )
   res.end
 
@@ -87,15 +111,12 @@ server.post '/error', (req, res) ->
   # Print the error.
   if req.body.message != lastErrorMsg
     console.log("Client error: #{ req.body.message }")
-    console.log("See the log at #{ LOG_FILE }")
+    console.log("See the log at #{ logFile }")
     # Log the error.
     req.log.info(req.body)
     # Send default status code 200 with a 'Logged' message.
   lastErrorMsg = req.body.message
   res.send('Logged')
-
-# The run environment.
-env = server.get('env')
 
 # Development error handling.
 if env is 'development'
@@ -109,12 +130,15 @@ if env is 'test'
 # Start MongoDB, if necessary...
 spawn 'mongod', MONGODB_PORT, ->
   # ...then the REST app...
-  cmd = if env then "qirest --#{ env }" else 'qirest'
+  restMode = if env is 'test' then 'development' else env
+  cmd = if restMode? then "qirest --#{ restMode }" else 'qirest'
+  
   spawn cmd, EVE_PORT, ->
     #...then the Express server.
     port = server.get 'port'
     http.createServer(server).listen port, ->
       env = server.settings.env
-      console.log "The qiprofile server is listening on port #{port} in #{env} mode."
+      console.log "The qiprofile server is listening on port #{port}" +
+                  " in #{env} mode."
 
 module.exports = server

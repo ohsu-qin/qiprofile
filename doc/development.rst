@@ -74,6 +74,8 @@ Update the ``qiprofile`` package as follows::
     npm prune
     grunt
 
+Check periodically for outdated package specifications by running npmedge_.
+
 
 ***********
 Development
@@ -605,6 +607,8 @@ examples:
 .. _nodejs-polling-app: http://www.ibm.com/developerworks/library/wa-nodejs-polling-app/
 
 .. _npm: https://www.npmjs.org/
+
+.. _npmedge: https://www.npmjs.com/package/npmedge#overview
 
 .. _ngdoc: https://github.com/angular/angular.js/wiki/Writing-AngularJS-Documentation
 

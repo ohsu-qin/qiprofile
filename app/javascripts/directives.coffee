@@ -108,4 +108,3 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
         scope.$watch 'image.state', (state) ->
           if state is 'loaded'
             scope.image.open(element)
-      templateUrl: '/partials/image-detail.html'

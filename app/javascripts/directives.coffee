@@ -89,12 +89,12 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
       (Intensity, ObjectHelper) ->
         restrict: 'E'
         scope:
-          session: '=' 
+          scan: '=' 
         link: (scope, element) ->
           # Wait for a session extended with detail to digest the scan.
-          scope.$watch 'session.scans.t1', (scan) ->
+          scope.$parent.$watch 'scan', (scan) ->
             if scan?
-              scope.config = Intensity.configureChart(scope.session, element)
+              scope.config = Intensity.configureChart(scan, element)
         templateUrl: '/partials/intensity-chart.html'
     ]
 

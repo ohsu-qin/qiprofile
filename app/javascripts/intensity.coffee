@@ -1,7 +1,7 @@
-define ['angular', 'chart', 'image'], (ng) ->
-  intensity = ng.module 'qiprofile.intensity', ['qiprofile.image']
+define ['angular', 'chart'], (ng) ->
+  intensity = ng.module 'qiprofile.intensity', []
 
-  intensity.factory 'Intensity', ['Image', (Image) ->
+  intensity.factory 'Intensity', ->
     # Highlights the bolus arrival tick mark. The bolus arrival is
     # only highlighted if it occurs after the first series.  
     #
@@ -108,60 +108,59 @@ define ['angular', 'chart', 'image'], (ng) ->
     # @param session the session object
     # @param element the chart Angular jQueryLite element
     # @returns the nvd3 chart configuration
-    configureChart: (session, element) ->
-      # @param intensities the intensity value array
+    configureChart: (scan, element) ->
+      # The scan data series and volume select color. This value must match
+      # the .qi-scan-vol-btn-group basic color.
+      SCAN_COLOR = 'Indigo'
+      
+      # The registration data series and volume select button colors. If
+      # there are more than four registrations per scan, which is highly
+      # unlikely, then the colors are reused. These values must match
+      # the .qi-reg-vol-btn-group basic colors.
+      REG_COLORS = ['LightGreen', 'LightYellow', 'LightCyan', 'LemonChiffon']
+
+      # @param volumes the scan or registration volumes
       # @returns the intensity chart [x, y] coordinates
-      coordinates = (intensities) ->
-        [i + 1, intensities[i]] for i in [0...intensities.length]
-
-      # The scan data series configuration.
-      scan = session.scans.t1
-      scanData =
-        key: 'Scan'
-        values: coordinates(scan.intensity.intensities)
-        color: 'Indigo'
-
-      # Flag indicating whether the T1 scan has more than one
-      # realignment.
-      hasMultipleRegs = Object.keys(scan.registration).length > 1
+      coordinates = (volumes) ->
+        ([i + 1, vol.averageIntensity] for vol, i in volumes)
+      
+      # @returns 'Realigned', followed by the one-based registration
+      #   number if there is more than one
+      dataSeriesKey = (index) ->
+        if scan.registrations.length == 1
+          'Realigned'
+        else
+          "Realigned #{ index + 1 }"
 
       # Makes the data series {key, color} format object for the
       # given registration.
       #
       # The key is 'Realigned' if there is exactly one registration,
-      # otherwise 'Reg' followed by the registration index, e.g.
-      # 'Reg 1'.
+      # otherwise 'Realigned' followed by the one-based registration
+      # number, e.g. 'Reg 1'.
       #
       # @param registration the registration object
       # @param index the index of the registration in the registrations
       #   array
       # @returns the data series {key, color, values} format object
       registrationDataSeries = (registration, index) ->
-        # The registration image select button colors.
-        COLORS = ['LightGreen', 'LightYellow', 'LightCyan', 'LemonChiffon']
-        # The registration data series key.
-        key = if hasMultipleRegs then "Reg #{ index }" else 'Realigned'
-        # Set the registration title property, since it is used in the
-        # image selection as well.
-        registration.title = key
-
-        # TODO - Wrap the key in a registration parameters pop-up hyperlink.
-        
         # Return the data series format object.
-        key: key
-        color: COLORS[index % COLORS.length]
-        values: coordinates(registration.intensity.intensities)
+        key: dataSeriesKey(index)
+        color: REG_COLORS[index % REG_COLORS.length]
+        values: coordinates(registration.volumes)
 
-      # Sort the scan registrations by key.
-      regKeys = Object.keys(scan.registration).sort()
-      regsSorted = (scan.registration[key] for key in regKeys)
+      # The scan data series configuration.
+      scanData =
+        key: 'Scan'
+        values: coordinates(scan.volumes)
+        color: SCAN_COLOR
+
       # Collect the data series specifications.
-      regData = (registrationDataSeries(reg, i) for reg, i in regsSorted)
+      regData = (registrationDataSeries(reg, i) for reg, i in scan.registrations)
 
       # Return the chart configuration.
       data: [scanData].concat(regData)
       xValues: (coord[0] for coord in scanData.values)
       yFormat: yFormat
       highlightBolusArrival: (chart) ->
-        highlightBolusArrival(session, chart)
-  ]
+        highlightBolusArrival(scan.session, chart)

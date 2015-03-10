@@ -1,21 +1,16 @@
-define ['ngmocks', 'moment', 'k-trans', 'v-e', 'tau-i', 'modeling'], (ng, moment, KTrans, VE, TauI) ->
-  describe 'Unit Testing the Modeling Service', ->
-    Modeling = null
+define ['ngmocks', 'moment', 'k-trans', 'v-e', 'tau-i', 'modeling'],
+  (ng, moment, KTrans, VE, TauI) ->
+    describe 'Unit Testing the Modeling Service', ->
+      # The mock Modeling service module.
+      Modeling = null
 
-    beforeEach ->
-      # Fake the modeling service.
-      ng.module('qiprofile.modeling')
-      # Enable the test service.
-      inject ['Modeling', (_Modeling_) ->
-        Modeling = _Modeling_
-      ]
-
-    describe 'Chart Configuration', ->
-      # The mock data.
+      # The mock modeling results. The router sets the modeling
+      # and modeling.session parent references, simulated here.
       mock = [
         {
-          session:
-            acquisitionDate: moment('April 1, 2014').valueOf()
+          modeling:
+            session:
+              acquisitionDate: moment('April 1, 2014').valueOf()
           fxlKTrans:
             average: 1.4
           fxrKTrans:
@@ -26,8 +21,9 @@ define ['ngmocks', 'moment', 'k-trans', 'v-e', 'tau-i', 'modeling'], (ng, moment
             average: 3.1
         }
         {
-          session:
-            acquisitionDate: moment('May 11, 2014').valueOf()
+          modeling:
+            session:
+              acquisitionDate: moment('May 11, 2014').valueOf()
           fxlKTrans:
             average: 1.3
           fxrKTrans:
@@ -39,53 +35,67 @@ define ['ngmocks', 'moment', 'k-trans', 'v-e', 'tau-i', 'modeling'], (ng, moment
         }
       ]
 
-      dates = null
-
       beforeEach ->
-        dates = mock.map (mdlResult) ->
-          mdlResult.session.acquisitionDate
+        # Fake the modeling service.
+        ng.module('qiprofile.modeling')
+        # Enable the test service.
+        inject ['Modeling', (_Modeling_) ->
+          Modeling = _Modeling_
+        ]
 
-      describe 'kTrans', ->
-        config = null
+      describe 'Chart Configuration', ->
 
-        beforeEach ->
-          config = Modeling.configureChart(mock, KTrans.CHART_DATA_SERIES_CONFIG)
-
-        it 'should configure two data series', ->
-          expect(config.data, "The configuration data is missing").to.exist
-          expect(config.data.length, "The configuration data series count is incorrect")
-            .to.equal(2)
-
-        it 'should set the X axis values to the session acquisition dates', ->
-          expect(config.xValues, "The configuration X values are incorrect")
-            .to.eql(dates)
-
-      describe 'vE', ->
-        config = null
+        dates = null
 
         beforeEach ->
-          config = Modeling.configureChart(mock, VE.CHART_DATA_SERIES_CONFIG)
+          dates = mock.map (mdlResult) ->
+            mdlResult.modeling.session.acquisitionDate
 
-        it 'should configure two data series', ->
-          expect(config.data, "The configuration data is missing").to.exist
-          expect(config.data.length, "The configuration data series count is incorrect")
-            .to.equal(1)
+        describe 'kTrans', ->
+          config = null
 
-        it 'should set the X axis values to the session acquisition dates', ->
-          expect(config.xValues, "The configuration X values are incorrect")
-            .to.eql(dates)
+          beforeEach ->
+            config = Modeling.configureChart(mock, KTrans.CHART_DATA_SERIES_CONFIG)
 
-      describe 'tauI', ->
-        config = null
+          it 'should configure two data series', ->
+            expect(config.data, "The configuration data is missing").to.exist
+            expect(config.data.length, "The configuration data series count is incorrect")
+              .to.equal(2)
 
-        beforeEach ->
-          config = Modeling.configureChart(mock, TauI.CHART_DATA_SERIES_CONFIG)
+          it 'should set the X axis values to the session acquisition dates', ->
+            expect(config.xValues, "The configuration X values are incorrect")
+              .to.eql(dates)
 
-        it 'should configure two data series', ->
-          expect(config.data, "The configuration data is missing").to.exist
-          expect(config.data.length, "The configuration data series count is incorrect")
-            .to.equal(1)
+          it 'should set the Y axis values to the Ktrans values', ->
+            expect(config.xValues, "The configuration Y values are incorrect")
+              .to.eql(dates)
 
-        it 'should set the X axis values to the session acquisition dates', ->
-          expect(config.xValues, "The configuration X values are incorrect")
-            .to.eql(dates)
+        describe 'vE', ->
+          config = null
+
+          beforeEach ->
+            config = Modeling.configureChart(mock, VE.CHART_DATA_SERIES_CONFIG)
+
+          it 'should configure two data series', ->
+            expect(config.data, "The configuration data is missing").to.exist
+            expect(config.data.length, "The configuration data series count is incorrect")
+              .to.equal(1)
+
+          it 'should set the X axis values to the session acquisition dates', ->
+            expect(config.xValues, "The configuration X values are incorrect")
+              .to.eql(dates)
+
+        describe 'tauI', ->
+          config = null
+
+          beforeEach ->
+            config = Modeling.configureChart(mock, TauI.CHART_DATA_SERIES_CONFIG)
+
+          it 'should configure two data series', ->
+            expect(config.data, "The configuration data is missing").to.exist
+            expect(config.data.length, "The configuration data series count is incorrect")
+              .to.equal(1)
+
+          it 'should set the X axis values to the session acquisition dates', ->
+            expect(config.xValues, "The configuration X values are incorrect")
+              .to.eql(dates)

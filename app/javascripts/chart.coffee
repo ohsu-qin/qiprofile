@@ -70,13 +70,12 @@ define ['angular', 'lodash', 'moment', 'd3'], (ng, _, moment) ->
 
       # @param data the input resource objects
       # @param dataSpec the dataSpec described in configureChart
-      # @returns the [{key: label, values: coordinates}, ...]
-      #   nvd3 configuration
+      # @returns the [{key, values, color}] nvd3 configuration
       configureAllDataSeries = (data, dataSpec) ->
         # @param data the input resource objects
         # @param x the x-xaxis {accessor: function} object
         # @param y the y-axis  {accessor: function} object
-        # @returns the {key, values} pair
+        # @returns the {key, values, color} object
         configureADataSeries = (data, x, y) ->
           # @returns the graph [x, y] coordinates
           coordinates = (data, xAccessor, yAccessor) ->
@@ -86,8 +85,7 @@ define ['angular', 'lodash', 'moment', 'd3'], (ng, _, moment) ->
           values: coordinates(data, x.accessor, y.accessor)
           color: y.color
 
-        for y in dataSpec.y.data
-         configureADataSeries(data, dataSpec.x, y)
+        (configureADataSeries(data, dataSpec.x, y) for y in dataSpec.y.data)
 
       # Adds padding to the give value range as follows:
       # * the the chart max is the next higher significant

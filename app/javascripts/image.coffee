@@ -6,84 +6,43 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
     if not $rootScope.images
       $rootScope.images = {}
 
-    # If there are file arguments, then this function
-    # caches the Image objects for the given parent object.
-    # Otherwise, this function returns the cached image objects,
-    # or undefined if there is no cache entry for the object.
-    cache = (parent, files...) ->
-      if files.length
-        $rootScope.images[parent.id] =
-          create(parent, filename, i+1) for filename, i in files
-      else
-        $rootScope.images[parent.id]
-
-    # Creates an object which encapsulates an image. The object has
-    # the following properties:
-    # * filename - the image file name
-    # * labelmapFilename - the label map (overlay) file name
-    # * colortableFilename - the color lookup table file name
-    # * state - contains the loading flag
-    # * data - the binary image content
-    # * labelmapData - the label map image content
-    # * colortableData - the color table content
-    # * load() - the function to read the image file
+    # The Image class encapsulates a volume image with the following properties:
+    # * volume - the image scan or registration volume object
+    # * number - the one-based image volume number 
+    # * state - one of 'unloaded', 'loading' or 'loaded'
+    # * xtkVolume - the XTK volume object
+    # * load() - read the image file
+    # * open(element) - render the image
+    # * hasLabelMap() - whether there is an associated label map file
+    # * selectOverlay() - show the overlay
+    # * deselectOverlay() - hide the overlay
     #
-    # @param parent the image parent container
-    # @param filename the image file path, relative to the web app root
-    # @param timePoint the series time point
-    # @returns a new image object
-    create = (parent, filename, timePoint) ->
-      # The valid states.
-      STATES =
+    # This class is private within the Image service scope.
+    class Image
+      # The valid image load states.
+      @STATES =
         UNLOADED: 'unloaded'
         LOADING: 'loading'
         LOADED: 'loaded'
 
-      # @param session the image parent session the session object
-      # @returns the image overlays
-      #   {modeling result name: {modeling parameter name: overlay}}
-      #   object
-      overlays = (session) ->
-        # @param mdlResult the modeling result
-        # @returns the {param name: overlay} object
-        modelingResultOverlays = (mdlResult) ->
-          # @param mdlParam the PK modeling parameter object
-          # @returns whether the parameter object has a label map
-          #   with a color table
-          hasOverlay = (mdlParam) ->
-            mdlParam.labelMap? and mdlParam.labelMap.colorTable?
-
-          # Filter the PK parameters on the presence of an overlay.
-          pkParams = _.pick(mdlResult, Modeling.PK_PARAMS, hasOverlay)
-          # Return the {param name: label map} object.
-          mdlOverlays = {}
-          for [key, mdlParam] in _.pairs(pkParams)
-            mdlOverlays[key] = mdlParam.labelMap
-          mdlOverlays
-
-        # Validate the argument.
-        if not session?
-          throw new ReferenceError("The overlays session is missing.")
-        # The modeling results.
-        modeling = session.modeling
-        if not modeling? or not modeling.length
-          return null
-
-        # Collect the overlays.
-        imageOverlays = {}
-        for mdl in modeling
-          imageOverlays[mdl.name] = modelingResultOverlays(mdl)
-
-        # Return the overlays.
-        imageOverlays
-
-      # Return the image object with the following data and
-      # function properties.
-      parent: parent
-      timePoint: timePoint
-      overlays: overlays(parent.session)
-      state: STATES.UNLOADED
-
+      # Creates an object which encapsulates an image.
+      #
+      # @param volume the image parent scan volume
+      #   (not the XTK volume)
+      # @param id the unique image id
+      # @returns a new image object
+      constructor: (@volume, @id) ->
+        # The initial state is unloaded.
+        @state = Image.STATES.UNLOADED
+        # The overlays convenience property delegates to the volume
+        # session.
+        #
+        # @returns the session modeling label map objects which have
+        #   a color table
+        Object.defineProperty this, 'overlays',
+          get: ->
+            @volume.session.overlays
+      
       # Transfers the file content to the data properties.
       # The image state loading flag is set to true while the
       # files are being read.
@@ -92,19 +51,19 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
       #   are completed
       load: ->
         # Set the loading flag.
-        @state = STATES.LOADING
+        @state = Image.STATES.LOADING
         # The volume to render.
-        @volume = new X.volume()
-        @volume.file = filename
+        @xtkVolume = new X.volume()
+        @xtkVolume.file = @volume.filename
 
         # Read the file into an ArrayBuffer. The CoffeeScript fat
         # arrow (=>) binds the this variable to the image object
         # rather than the $http request.
-        File.readBinary(filename).then (data) =>
+        File.readBinary(@volume.filename).then (data) =>
           # Set the data property to the scan file content.
-          @volume.filedata = data
+          @xtkVolume.filedata = data
           # Set the state to loaded.
-          @state = STATES.LOADED
+          @state = Image.STATES.LOADED
 
       # Renders the image in the given parent element.
       #
@@ -116,14 +75,14 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
         renderer.container = element[0]
         # Build the renderer.
         renderer.init()
-        renderer.add(@volume)
-      
+        renderer.add(@xtkVolume)
+    
         # Set the volume threshold levels to defaults.
         # These must be set here for the slider controls to load with the
         # correct values.
-        @volume.lowerThreshold = 0
-        @volume.upperThreshold = 445
-      
+        @xtkVolume.lowerThreshold = 0
+        @xtkVolume.upperThreshold = 445
+    
         # Adjust the camera position.
         renderer.camera.position = [0, 0, 240]
 
@@ -134,8 +93,8 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
       # This function is required by the image-controls.jade work-around for
       # a XTK bug.
       hasLabelMap: ->
-        @volume._labelmap and @volume._labelmap._children and
-        @volume._labelmap._children.length
+        @xtkVolume._labelmap and @xtkVolume._labelmap._children and
+        @xtkVolume._labelmap._children.length
 
       # Deselects an existing overlay as follows:
       # * If the image volume has a label map, then the label map visible
@@ -145,7 +104,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
       # @param image the selected PK modeling parameter name, or 'none' to 
       #  remove an existing overlay
       deselectOverlay: ->
-         @volume.labelmap.visible = false if @volume.labelmap?
+         @xtkVolume.labelmap.visible = false if @xtkVolume.labelmap?
 
       # Changes the overlay label map and color lookup table as follows:
       # * Fetch the overlay files.
@@ -156,40 +115,76 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
       #   object
       selectOverlay: (labelMap) ->
         # Set the volume label map file name property.
-        @volume.labelmap.file = labelMap.filename
+        @xtkVolume.labelmap.file = labelMap.filename
         # Set the volume color table file name property.
-        @volume.labelmap.colortable.file = labelMap.colorTable.filename
+        @xtkVolume.labelmap.colortable.file = labelMap.colorTable.filename
 
         # Retrieve the overlay layer map and color table.
         loadLabelMap = File.readBinary(labelMap.filename).then (data) =>
           # Set the volume label map data property.
-          @volume.labelmap.filedata  = data
+          @xtkVolume.labelmap.filedata  = data
         loadColorTable = File.readBinary(labelMap.colorTable.filename)
           .then (data) =>
             # Set the volume color table data property.
-            @volume.labelmap.colortable.filedata = data
+            @xtkVolume.labelmap.colortable.filedata = data
 
         # Join the two promises into a single promise.
         loaded = $q.all(loadLabelMap, loadColorTable)
         loaded.then =>
           # Turn on the label map. This triggers a redisplay of the volume
           # with the new overlay.
-          @volume.labelmap.visible = true
+          @xtkVolume.labelmap.visible = true
+    
+    # @param volume the scan or registration image volume
+    #   (not the XTK volume)
+    # @param id the unique image id
+    create = (volume, id) ->
+      new Image(volume, id)
+    
+    # Caches the image for the given volume on demand.
+    #
+    # @parent the image scan or registration volume object
+    # @returns the cached image object
+    cache = (volume) ->
+      # @param the image id, formatted as the session detail id,
+      #   image container protocol id and volume number separated
+      #   by periods
+      # @returns the cached image object with the given id,
+      #   or null if the image is not yet cached
+      get = (imageId) ->
+        $rootScope.images[imageId]
+      
+      # Adds the parent images to the cache.
+      #
+      # @param image the image object
+      # @returns the image object
+      add = (image) ->
+        $rootScope.images[image.id] = image
 
-    # Obtains image objects for the given ImageContainer. The image
+      # The unique image id for caching.
+      imageId = "#{ volume.container.session.detail }" +
+                ".#{ volume.container.protocol }" +
+                ".#{ volume.number }"
+      # Get the cached image object or add a new image object.
+      get(imageId) or add(create(volume, imageId))
+
+    # The image load states.
+    STATES: Image.STATES
+    
+    # Obtains image objects for the given volume object. The image
     # object content is described in the create() function.
     #
-    # This function caches the fetched image objects. If the image
-    # objects are already cached for the given image container,
+    # This function caches the volume object to preserve the fetched
+    # image content. If the image object is already cached,
     # then this function returns the cached objects. Otherwise, this
     # function creates, caches and returns new image objects. The
     # cached object image content data is not loaded until the image
     # object load() function is called.
     #
-    # @param parent the Scan or Registration object
-    # @returns the image objects
-    imagesFor: (parent) ->
-      cache(parent) or cache(parent, parent.files...)
+    # @param parent the scan or registration volume object
+    # @returns the image object
+    forVolume: (volume) ->
+      cache(volume)
 
     # Formats the image container title.
     #

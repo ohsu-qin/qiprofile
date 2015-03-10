@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+0.10.4 / 2015-03-10
+------------------
+* Add grunt build to postinstall.
+
 0.10.3 / 2015-01-27
 ------------------
 * Support the gene expression assay.

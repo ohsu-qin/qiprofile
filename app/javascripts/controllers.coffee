@@ -484,4 +484,6 @@ define ['angular', 'modeling', 'breast'], (ng) ->
     ($scope) ->
       # Create the image object on demand for the element scope.
       $scope.image = $scope.volume.image
+      $scope.openImage = (image) ->
+        # TBD
   ]

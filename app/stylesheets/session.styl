@@ -11,7 +11,7 @@
   height 22em
   width 100%
 
-.qi-image-selection-title
+.qi-vol-selection-title
   // The fixed width is necessary to right-align the text
   // under the intensity chart y axis.
   float left
@@ -20,19 +20,7 @@
   text-align right
   font-size smaller
 
-.qi-justified-list
-  // The negative bottom margin corrects for the
-  // spacing injected after the list.
-  margin-bottom -1.2em
-  text-align justify
-  list-style none
-  &:after
-    empty-line()
-
-.qi-justified-list-item
-  display inline-block
-
-qi-image-btn-group()
+qi-vol-btn-group()
   // The right margin compensates for the offset created by
   // nvd3 chart.
   margin-right 1em
@@ -45,25 +33,30 @@ qi-image-btn-group()
   & .tooltip.top .tooltip-arrow
     border-top-color IndianRed
 
-// TODO - set the scan and registration colors to the
-// data series color dynamically in the format function.
-// This allows for more than one registration.
-
-.qi-scan-image-btn-group
-  qi-image-btn-group()
+qi-vol-btn-color(basic, highlight)
   & button
-    background-color Thistle
-  & button:hover
-    background-color Indigo
+    background-color basic
+    &:hover
+      background-color highlight
 
-.qi-reg-image-btn-group
-  qi-image-btn-group()
-  & button
-    background-color PaleGreen
-  & button:hover
-    background-color DarkGreen
+// The scan basic color must match the intensity.coffee SCAN_COLOR value.
+.qi-scan-vol-btn-group
+  qi-vol-btn-group()
+  qi-vol-btn-color(Thistle, Indigo)
 
-.qi-image-btn
+// The registration basic color must match the intensity.coffee REG_COLORS
+// values.
+.qi-reg-vol-btn-group
+  qi-vol-btn-group()
+  qi-vol-btn-color(PaleGreen, DarkGreen)
+  & + .qi-reg-vol-btn-group
+    qi-vol-btn-color(LightYellow, SaddleBrown)
+    & + .qi-reg-vol-btn-group
+      qi-vol-btn-color(LightCyan, SlateBlue)
+      & + .qi-reg-vol-btn-group
+        qi-vol-btn-color(LemonChiffon, Brown)
+
+.qi-vol-btn
   font-size 9px
 
 .qi-bolus-legend

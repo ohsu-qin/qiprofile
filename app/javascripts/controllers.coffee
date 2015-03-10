@@ -1,5 +1,6 @@
 define ['angular', 'modeling', 'breast'], (ng) ->
-  ctlrs = ng.module 'qiprofile.controllers', ['qiprofile.modeling', 'qiprofile.breast']
+  ctlrs = ng.module 'qiprofile.controllers',
+                    ['qiprofile.modeling', 'qiprofile.resources', 'qiprofile.breast']
 
   # The local controller helper methods.
   ctlrs.factory 'ControllerHelper', [
@@ -69,70 +70,66 @@ define ['angular', 'modeling', 'breast'], (ng) ->
     ($rootScope, $scope, subject, ControllerHelper) ->
       # Capture the current project.
       $rootScope.project = subject.project
-
       # Place the subject in scope.
       $scope.subject = subject
-
       # If the project is the default, then remove it from the URL.
       ControllerHelper.cleanBrowserUrl($rootScope.project)
   ]
 
 
-  ctlrs.controller 'RegistrationImageSelectCtrl', [
-    '$scope', '$sce',
-    ($scope, $sce) ->
-      # Place the registration configuration in scope.
-      $scope.regConfig = $scope.registration.configuration
-      # # Embeds a dynamically built hyperlink into the image selection
-      # # row title element.
-      # #
-      # # This function is necessary since the hyperlink anchor element
-      # # text is dynamically determined.
-      # $scope.registrationInfoHyperlink = ->
-      #   # AngularJS guards against untrusted embedded HTML. The SCE
-      #   # (Strict Contextual Escaping) mode marks the HTML as safe.
-      #   $sce.trustAsHtml("<a href='' ng-click='open()'" +
-      #                    " ng-controller='RegistrationInfoCtrl'>" +
-      #                    "#{ $scope.regConfig.technique }</a>")
+  ctlrs.controller 'ScanVolumeSelectCtrl', [
+    '$scope',
+    ($scope) ->
+      # Place the scan protocol id in scope.
+      $scope.protocolId = $scope.scan.protocol
+  ]
+
+
+  ctlrs.controller 'RegistrationVolumeSelectCtrl', [
+    '$scope',
+    ($scope) ->
+      # Place the registration protocol id in scope.
+      $scope.protocolId = $scope.registration.protocol
+  ]
+
+
+  ctlrs.controller 'ScanProtocolCtrl', [
+    '$scope', '$modal', 'ScanProtocol',
+    ($scope, $modal, ScanProtocol) ->      
+      # Open a modal window to display the scan procedure properties.
+      $scope.open = ->
+        $modal.open
+          controller: 'ProtocolModalCtrl'
+          templateUrl: '/partials/scan-protocol.html'
+          size: 'sm'
+          resolve:
+            # Fetch the scan protocol.
+            protocol: ->
+              ScanProtocol.find(id: $scope.protocolId).$promise
   ]
 
 
   ctlrs.controller 'RegistrationProtocolCtrl', [
-    '$scope', '$sce', '$modal',
-    ($scope, $sce, $modal) ->
-      # Embeds a dynamically built registration technique text
-      # span element within a hyperlink anchor element.
-      #
-      # This function is necessary since AngularJS does not
-      # evaluate hyperlink anchor element text expressions.
-      $scope.registrationTechnique = ->
-        # AngularJS guards against untrusted embedded HTML. The SCE
-        # (Strict Contextual Escaping) mode marks the HTML as safe.
-        $sce.trustAsHtml("<span class='qi-image-selection-title'>" +
-                         "#{ $scope.regConfig.technique }</span>")
-      
+    '$scope', '$modal', 'RegistrationProtocol',
+    ($scope, $modal, RegistrationProtocol) ->      
       # Open a modal window to display the registration properties.
       $scope.open = ->
         $modal.open
-          controller: 'RegistrationProtocolModalCtrl'
+          controller: 'ProtocolModalCtrl'
           templateUrl: '/partials/registration-protocol.html'
           size: 'sm'
           resolve:
-            # Make the registration profile injectable in the
-            # modal controller.
-            profile: ->
-              $scope.profile
+            # Fetch the registration protocol.
+            protocol: ->
+              RegistrationProtocol.find(id: $scope.protocolId).$promise
   ]
 
 
-  ctlrs.controller 'RegistrationProtocolModalCtrl', [
-    '$scope', '$modalInstance', 'regConfig',
-    ($scope, $modalInstance, regConfig) ->
-      # Since the modal is not contained in the application page, this
-      # modal controller scope does not inherit the application page
-      # scope. Therefore, place the registration profile object
-      # in the modal scope.
-      $scope.profile = profile
+  ctlrs.controller 'ProtocolModalCtrl', [
+    '$scope', '$modalInstance', 'protocol',
+    ($scope, $modalInstance, protocol) ->
+      # Place the protocol object in the modal scope.
+      $scope.protocol = protocol
       $scope.close = ->
         $modalInstance.close()
   ]
@@ -143,6 +140,18 @@ define ['angular', 'modeling', 'breast'], (ng) ->
   ctlrs.controller 'SubjectModelingCtrl', [
     '$scope',
     ($scope) ->
+      # Place the modelings in scope.
+      # Note: modelings is a subject property that is calculated
+      # on the fly. Since the partials reference the modelings in
+      # ng-switch and ng-repeat models, AngularJS sets up hidden
+      # watches on this variable and redigests the partials whenever
+      # the property value is calculated. If subject.modelings were
+      # used instead of modelings, then AngularJS would enter an
+      # infinite digest cycle. Placing the modelings variable in
+      # scope here avoids this trap by fixing the value for the
+      # course of the AngularJS page formatting.
+      $scope.modelings = $scope.subject.modelings
+      
       # The format button action.
       $scope.toggleModelingFormat = ->
         if $scope.modelingFormat is 'chart'
@@ -160,23 +169,17 @@ define ['angular', 'modeling', 'breast'], (ng) ->
       else
         $scope.modelingFormat = 'table'
 
-      # The scan modeling objects.
-      $scope.scanModeling = $scope.subject.modeling.scan
-      # The registration modeling objects.
-      $scope.regModeling = $scope.subject.modeling.registration
-      # All modeling objects.
-      $scope.allModeling = $scope.subject.modeling.all
       # The default modeling results index is the first.
       $scope.modelingIndex = 0
       # Place the selected modeling in scope.
       $scope.$watch 'modelingIndex', (modelingIndex) ->
-        $scope.selModeling = $scope.subject.modeling.all[modelingIndex]
+        $scope.selModeling = $scope.modelings[modelingIndex]
   ]
 
 
   ctlrs.controller 'ModelingInfoCtrl', [
-    '$scope', '$modal',
-    ($scope, $modal) ->
+    '$scope', '$modal', 'ModelingProtocol',
+    ($scope, $modal, ModelingProtocol) ->
       # Open a modal window to display the modeling input properties.
       $scope.open = ->
         $modal.open
@@ -185,24 +188,46 @@ define ['angular', 'modeling', 'breast'], (ng) ->
           size: 'sm'
           resolve:
             # Make modeling injectable in the modal controller.
+            # See the ModelingInfoModalCtrl comment.
             modeling: ->
               $scope.modeling
+            # Fetch the modeling protocol.
+            protocol: ->
+              ModelingProtocol.find(id: $scope.modeling.protocol).$promise
   ]
 
 
   ctlrs.controller 'ModelingInfoModalCtrl', [
-    '$scope', '$modalInstance', 'modeling',
-    ($scope, $modalInstance, modeling) ->
+    '$scope', '$modalInstance', 'modeling', 'protocol',
+    ($scope, $modalInstance, modeling, protocol) ->
       # Since the modal is not contained in the application page, this
       # modal controller scope does not inherit the application page
-      # scope. Therefore, place the modeling object in the modal scope.
+      # scope. Therefore, the application scope modeling variable is
+      # not visible to the modal scope. Hence, it is necessary to
+      # transfer the modeling object as a $modal.open function resolve
+      # property into this controller's injection list.
+      # The assignment below then places the modeling object in the
+      # modal scope for use in the modal template partial.
       $scope.modeling = modeling
-      # Since a registration modeling info page has a registration info
-      # button, place the registration configuration in scope.
-      if $scope.modeling.source._cls is 'Configuration'
-        $scope.regConfig = $scope.modeling.source
+      $scope.protocol = protocol
       $scope.close = ->
         $modalInstance.close()
+  ]
+
+
+  ctlrs.controller 'ModelingSourceProtocolCtrl', [
+    '$scope',
+    ($scope) ->
+      # The modeling source is either a scan or registration protocol.
+      if $scope.modeling.source.scan?
+        $scope.sourceType = 'scan'
+        $scope.protocolId = $scope.modeling.source.scan
+      else if $scope.modeling.source.registration?
+        $scope.sourceType = 'registration'
+        $scope.protocolId = $scope.modeling.source.registration
+      else
+        throw new Error("The modeling source has neither a scan" +
+                        " nor a registration protocol reference")
   ]
 
 
@@ -371,7 +396,7 @@ define ['angular', 'modeling', 'breast'], (ng) ->
           subject: container.session.subject.number
           session: container.session.number
           detail: container.session.detail
-          timePoint: image.timePoint
+          volume: image.volume.number
 
         # The target route, a prefix for now.
         route = 'quip.subject.session.scan.'
@@ -386,7 +411,7 @@ define ['angular', 'modeling', 'breast'], (ng) ->
           throw new TypeError("Unsupported image container type:" +
                               " #{ container._cls }")
 
-        # Route to the image detail page.      
+        # Route to the volume page.      
         $state.go(route, params)
 
       # Capture the current project.
@@ -401,7 +426,7 @@ define ['angular', 'modeling', 'breast'], (ng) ->
 
   ## The Image Detail page controller. ##
 
-  ctlrs.controller 'ImageDetailCtrl', [
+  ctlrs.controller 'VolumeCtrl', [
     '$rootScope', '$scope', 'image', 'Image', 'ControllerHelper',
     ($rootScope, $scope, image, Image, ControllerHelper) ->
       # Capture the current project.
@@ -431,10 +456,10 @@ define ['angular', 'modeling', 'breast'], (ng) ->
       # Delegate deselectOverlay to the image.
       $scope.deselectOverlay = $scope.image.deselectOverlay
 
-      # Selects the current selected modeling result's label map object
-      # for the given PK parameter property name.
+      # Selects the current modeling result's label map object
+      # for the given modeling parameter property name.
       #
-      # @param paramName the PK modeling parameter property name
+      # @param paramName the modeling modeling parameter property name
       # @throws ReferenceError if there is no current scope modeling
       #   result or the scope modeling result does not have a label map
       #   for the given modeling parameter
@@ -453,3 +478,10 @@ define ['angular', 'modeling', 'breast'], (ng) ->
       ControllerHelper.cleanBrowserUrl($rootScope.project)
   ]
 
+
+  ctlrs.controller 'VolumeImageCtrl', [
+    '$scope',
+    ($scope) ->
+      # Create the image object on demand for the element scope.
+      $scope.image = $scope.volume.image
+  ]

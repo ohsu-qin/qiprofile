@@ -15,7 +15,7 @@
   elements, which is necessary for justification
   (cf http://stackoverflow.com/questions/23252601/angular-why-doesnt-css-justification-work-with-ng-repeat).
   The work-around is to set the repeat on a span which wraps
-  the list element rather than the list itself.
+  the li element rather than the li element itself.
 
   As a result, the button "group" styles are added to each
   iterated button list item rather than the list repeat
@@ -32,9 +32,11 @@
     )
       .glyphicon.glyphicon-info-sign()
   ul.qi-hor-list.qi-scan-vol-btn-group
+    // The artificial intermediate ul-li span element works around the
+    // AngularJS bug described in the leading comment above. 
     span(ng-repeat="volume in scan.volumes" tooltip="{{ $index + 1 }}"
          ng-controller='VolumeImageCtrl')
-      li.qi-hor-list-item
+      li
         include ./volume-select-btn-pair
 
 // The realigned image selection buttons.
@@ -48,7 +50,9 @@
     )
       .glyphicon.glyphicon-info-sign()
   ul.qi-hor-list.qi-reg-vol-btn-group
+    // The artificial intermediate ul-li span element works around the
+    // AngularJS bug described in the leading comment above. 
     span(ng-repeat="volume in registration.volumes" tooltip="{{ $index + 1 }}"
          ng-controller='VolumeImageCtrl')
-      li.qi-hor-list-item
+      li
         include ./volume-select-btn-pair

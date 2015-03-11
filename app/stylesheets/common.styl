@@ -162,14 +162,13 @@ ul.qi-clean-list
   margin-left 0.5 em
 
 // Horizontal list with justified items.
-.qi-hor-list
-  // The negative bottom margin corrects for the
-  // spacing injected after the list.
+ul.qi-hor-list
+  // The negative bottom margin corrects for the spacing
+  // injected after the list.
   margin-bottom -1.2em
   text-align justify
   list-style none
+  & li
+    display inline-block
   &:after
     empty-line()
-
-.qi-hor-list-item
-  display inline-block

@@ -378,17 +378,32 @@ define ['angular', 'modeling', 'breast'], (ng) ->
   ]
 
 
-  ## The Session Detail page controller. ##
+  ## The Session Detail page controllers. ##
   
   ctlrs.controller 'SessionDetailCtrl', [
     '$rootScope', '$scope', '$state', 'session', 'ControllerHelper',
     ($rootScope, $scope, $state, session, ControllerHelper) ->
+      # Capture the current project.
+      $rootScope.project = session.subject.project
+      # Place the session in the scope.
+      $scope.session = session
+      # If the project is the default, then remove it from the URL.
+      ControllerHelper.cleanBrowserUrl($rootScope.project)
+  ]
+
+
+  ctlrs.controller 'VolumeCtrl', [
+    '$scope', 'state',
+    ($scope, $state) ->
+      # Create the image object on demand.
+      $scope.image = $scope.volume.image
+      
       # Opens the series image display page.
       #
       # @param image the Image object
-      $scope.openImage = (image) ->
+      $scope.openImage = () ->
         # The parent scan or registration image container.
-        container = image.parent
+        container = $scope.image.container
 
         # The common parameters.
         params =
@@ -396,41 +411,34 @@ define ['angular', 'modeling', 'breast'], (ng) ->
           subject: container.session.subject.number
           session: container.session.number
           detail: container.session.detail
-          volume: image.volume.number
+          volume: $scope.image.volume.number
 
-        # The target route, a prefix for now.
+        # The target container route prefix.
         route = 'quip.subject.session.scan.'
         if container._cls == 'Scan'
-          params.scan = container.scan_type
-          route += 'image'
+          params.scan = container.number
         else if container._cls == 'Registration'
-          params.scan = container.scan.name
-          params.registration = container.name
-          route += 'registration.image'
+          params.scan = container.scan.number
+          params.registration = container.resource
+          route += 'registration.'
         else
           throw new TypeError("Unsupported image container type:" +
                               " #{ container._cls }")
+        # Finish off the route.
+        route += 'volume'
 
-        # Route to the volume page.      
+        # Go to the volume page.
         $state.go(route, params)
-
-      # Capture the current project.
-      $rootScope.project = session.subject.project
-      # Place the session in the scope.
-      $scope.session = session
-
-      # If the project is the default, then remove it from the URL.
-      ControllerHelper.cleanBrowserUrl($rootScope.project)
   ]
 
 
   ## The Image Detail page controller. ##
 
-  ctlrs.controller 'VolumeCtrl', [
+  ctlrs.controller 'ImageDetailCtrl', [
     '$rootScope', '$scope', 'image', 'Image', 'ControllerHelper',
     ($rootScope, $scope, image, Image, ControllerHelper) ->
       # Capture the current project.
-      $rootScope.project = image.parent.session.subject.project
+      $rootScope.project = image.container.session.subject.project
       # Place the image in the scope.
       $scope.image = image
       # The names of modeling results with an overlay.
@@ -476,14 +484,4 @@ define ['angular', 'modeling', 'breast'], (ng) ->
 
       # If the project is the default, then remove it from the URL.
       ControllerHelper.cleanBrowserUrl($rootScope.project)
-  ]
-
-
-  ctlrs.controller 'VolumeImageCtrl', [
-    '$scope', 'state',
-    ($scope, $state) ->
-      # Create the image object on demand for the element scope.
-      $scope.image = $scope.volume.image
-      $scope.openImage = ->
-        route = 'quip.subject.session.scan.'
   ]

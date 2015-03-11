@@ -165,8 +165,8 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
                 Router.getVolume(registration, number)
             views:
               'main@':
-                templateUrl: '/partials/volume.html'
-                controller:  'VolumeCtrl'
+                templateUrl: '/partials/image.html'
+                controller:  'ImageCtrl'
 
         # Redirect an URL with trailing slash to an URL without it.
         $urlRouterProvider.rule ($injector, $location) ->

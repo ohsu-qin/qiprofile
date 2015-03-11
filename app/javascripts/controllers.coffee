@@ -480,10 +480,10 @@ define ['angular', 'modeling', 'breast'], (ng) ->
 
 
   ctlrs.controller 'VolumeImageCtrl', [
-    '$scope',
-    ($scope) ->
+    '$scope', 'state',
+    ($scope, $state) ->
       # Create the image object on demand for the element scope.
       $scope.image = $scope.volume.image
-      $scope.openImage = (image) ->
-        # TBD
+      $scope.openImage = ->
+        route = 'quip.subject.session.scan.'
   ]

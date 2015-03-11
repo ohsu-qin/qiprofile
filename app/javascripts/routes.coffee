@@ -142,8 +142,8 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
                 Router.getVolume(scan, number)
             views:
               'main@':
-                templateUrl: '/partials/volume.html'
-                controller:  'VolumeCtrl'
+                templateUrl: '/partials/image-detail.html'
+                controller:  'ImageDetailCtrl'
 
           # The registration state.
           # The registration state parameter is the registration
@@ -165,8 +165,8 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
                 Router.getVolume(registration, number)
             views:
               'main@':
-                templateUrl: '/partials/image.html'
-                controller:  'ImageCtrl'
+                templateUrl: '/partials/image-detail.html'
+                controller:  'ImageDetailCtrl'
 
         # Redirect an URL with trailing slash to an URL without it.
         $urlRouterProvider.rule ($injector, $location) ->

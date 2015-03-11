@@ -448,18 +448,13 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
         # @throws ReferenceError if the parent container does not have
         #   the image
         getVolume: (container, number) ->
-          # timePoint is one-based.
-          image = container.images[number - 1]
-          if not image?
-            throw new ReferenceError "Subject #{ subject.number }" + 
+          # The volume number is one-based.
+          volume = container.volumes[number - 1]
+          if not volume?
+            throw new ReferenceError "Subject #{ subject.number }" +
                                      " Session #{ session.number }" +
-                                     " #{ container.title } Volume" +
-                                     " #{ number } was not found"
-          # If the image has data, then return the image.
-          # Otherwise, return a promise to load the image.
-          if image.data?
-            image
-          else
-            image.load().then ->
-              image
+                                     " #{ container._cls }" +
+                                     " Volume #{ number } was not found"
+          # Return the volume.
+          volume
     ]

@@ -25,6 +25,15 @@
 // with the following modifications:
 // * The pointer width and height are aligned so they are not off-center
 // * The pointer background colors are consistent with the app
+//
+// TODO - cull the styles as follows:
+// * Remove CSS attributes that are superfluous, e.g. width 100%,
+//   and visually confirm that the display is still correct
+// * autoprefixer-stylus should take care of the background variants
+// * change the px to comparable em
+// * color should be a name
+// * the pointer can probably be subsumed by common.styl .qi-btn
+// * Add comments, e.g. what is bubble?
 .qi-slider
   display inline-block
   position relative

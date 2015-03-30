@@ -226,6 +226,11 @@ define ['angular', 'lodash', 'moment', 'd3'], (ng, _, moment) ->
       a = p.append('svg:a')
       # Add the ui-sref.
       a.attr('ui-sref', sref)
+      # Failure to set href to a non-null, non-empty value results in
+      # an obscure AngularJS DOM insertion error and disables the link.
+      # The href is not used, since the ui-sref hyperlink target takes
+      # precedence.
+      a.attr('href', '#')
       # Reattach the text element to the anchor.
       # The D3 selection append method takes either a string,
       # in which case it creates a new element as in the above

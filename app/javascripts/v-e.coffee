@@ -7,3 +7,6 @@ define [], ->
       color: 'MediumSeaGreen'
       accessor: (modelingResult) -> modelingResult.vE.average
     ]
+  
+  HEADINGS:
+    vE: 'v<sub>e</sub>'

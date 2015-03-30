@@ -7,6 +7,10 @@ define ['angular', 'lodash', 'k-trans', 'v-e', 'tau-i', 'chart'], (ng, _, Ktrans
       label: 'Visit Date'
       accessor: (mdlResult) ->
         mdlResult.modeling.session.acquisitionDate.valueOf()
+    
+    # The modeling parameter HTML display headings.
+    PARAMETER_HEADINGS:
+      _.assign({}, Ktrans.HEADINGS, Ve.HEADINGS, TauI.HEADINGS)
 
     # Configures the d3 chart with the given format. The format is an
     # object in the form {label: string, data: array}

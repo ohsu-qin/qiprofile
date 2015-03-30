@@ -7,3 +7,6 @@ define [], ->
         color: 'PaleVioletRed'
         accessor: (modelingResult) -> modelingResult.tauI.average
     ]
+
+  HEADINGS:
+    tauI: '&tau;<sub>i</sub>'

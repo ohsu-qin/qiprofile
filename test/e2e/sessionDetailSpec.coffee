@@ -3,23 +3,25 @@ expect = require('./helpers/expect')()
 Page = require './helpers/page' 
 
 class SessionDetailPage extends Page
-  # @param time_point the time point
-  # @returns a promise resolving to the given time point
-  #   {download: ElementFinder, display: ElementFinder}
+  # Note: this function should return a promise, but for an unknown
+  # reason the return value is the resolved object instead.
+  #
+  # @param number the volume number
+  # @returns the {download: ElementFinder, display: ElementFinder}
   #   associative object, where each ElementFinder resolves
   #   to the respective button
-  scanImageButtons: (time_point) ->
+  scanImageButtons: (number) ->
     # The locator for the image select button group element.
-    # Since the time point is one-based, the zero-based image
-    # select index is one less than the time point.
-    locator = By.repeater('image in session.scans[0].images').row(time_point - 1)
-
+    # Since the tvolume number is one-based, the zero-based
+    # image select index is one less than the volume number.
+    locator = By.repeater('volume in scan.volumes').row(number - 1)
     # Find the image select button group element, then...
-    @find(locator).then (div) ->
-      # ...return the associative object which contains the
-      # both button ElementFinders.
-      download: div.element(By.css('.glyphicon-download'))
-      open: div.element(By.css('.glyphicon-eye-open'))
+    @find(locator).then (elt) ->
+      if elt
+        # ...make an associative object which references the
+        # button ElementFinders.
+        download: elt.element(By.css('.glyphicon-download'))
+        open: elt.element(By.css('.glyphicon-eye-open'))
 
   # Loads the image by clicking the given download button.
   #
@@ -58,12 +60,13 @@ class SessionDetailPage extends Page
   chart: ->
     @find('//qi-intensity-chart//nvd3-line-chart')
 
+
 describe 'E2E Testing Session Detail', ->
-  # The Sarcoma001 Session01 time point 20. This is the time point for
-  # which there is a test fixture scan image file. The seed helper
-  # function called from the protractor config links the test fixture
-  # data directory to _public/data subdirectory.
-  TEST_TIME_POINT = 20
+  # The Sarcoma001 Session01 volume number for which there is a test
+  # fixture scan image file. The seed helper function called from the
+  # protractor config links _public/data to the test fixture data
+  # directory.
+  TEST_VOL_NBR = 20
 
   page = null
 
@@ -98,7 +101,10 @@ describe 'E2E Testing Session Detail', ->
 
     it 'should load the image', ->
       # Find the download/display button pair, then...
-      page.scanImageButtons(TEST_TIME_POINT).then (btnGroup) ->
+      #
+      # Work around the anomaly described in the scanImageButtons function.
+      #page.scanImageButtons(TEST_VOL_NBR).then (btnGroup) ->
+        btnGroup = page.scanImageButtons(TEST_VOL_NBR)
         # The download button should be displayed.
         download = btnGroup.download
         expect(download.isDisplayed(), 'The download button is initially hidden')

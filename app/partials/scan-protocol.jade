@@ -1,22 +1,22 @@
-// Display the scan profile properties sheet.
+// Display the scan protocol properties sheet.
 .qi-modal
   .modal-header
-    .modal-title {{ profile.title }}
+    .modal-title Scan Protocol
 
   .modal-body
-    table.qi-table.qi-modal-table.qi-spaced-table
+    table.table.qi-table.qi-modal-table.qi-spaced-table
       tr
         th Scan Type
-        td {{ profile.scanType }}
-      tr
+        td {{ protocol.scanType }}
+      tr(ng-show="protocol.orientation")
         th Orientation
-        td {{ profile.orientation | capitalize }}
-      tr
+        td {{ protocol.orientation | capitalize }}
+      tr(ng-show="protocol.technique")
         th Technique
-        td {{ profile.technique }}
-      tr
+        td {{ protocol.technique }}
+      tr(ng-show="protocol.description")
         th Description
-        td {{ profile.description }}
+        td {{ protocol.description }}
 
   .modal-footer
     button.btn.btn-warning.cancel(qi-focus='true' ng-click="close()") Close

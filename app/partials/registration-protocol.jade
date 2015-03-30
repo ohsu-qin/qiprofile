@@ -1,27 +1,20 @@
 // Display the registration properties sheet.
 .qi-modal
   .modal-header
-    .modal-title Registration {{ regConfig.key }}
+    .modal-title Registration Protocol
 
   .modal-body
-    table.qi-table.qi-modal-table.qi-spaced-table
-      tr
-        th Source
-        td
-          | {{ regConfig.source.subject.collection }}
-          | Patient {{ regConfig.source.subject.number }}
-          | {{ regConfig.source.scanType | capitalize }} Scans
+    table.table.table.qi-table.qi-modal-table.qi-spaced-table
       tr
         th Technique
-        td {{ regConfig.technique }}
+        td {{ protocol.technique }}
   
     .qi-panel.qi-nested
-      table.qi-table.qi-modal-table.qi-spaced-table
+      table.table.table.qi-table.qi-modal-table.qi-spaced-table
         caption.qi-inset-title Parameters
-        tr(ng-repeat="(name, value) in regConfig.parameters")
+        tr(ng-repeat="(name, value) in protocol.parameters")
           th {{ name | underscore }}
           td {{ value }}
 
   .modal-footer
     button.btn.btn-warning.cancel(qi-focus='true' ng-click="close()") Close
-

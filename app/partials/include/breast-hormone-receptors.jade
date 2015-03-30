@@ -1,8 +1,10 @@
 .qi-subtable-title Receptor Status
 
 .qi-panel.qi-nested
-  div(ng-controller='EstrogenCtrl' ng-show='!!hormoneReceptors.estrogen')
+  .qi-ver-space(ng-controller='EstrogenCtrl'
+                ng-show='hormoneReceptors.estrogen != null')
     include hormone-receptor
 
-  div(ng-controller='ProgesteroneCtrl' ng-show='!!hormoneReceptors.progesterone')
+  .qi-ver-space(ng-controller='ProgesteroneCtrl'
+                ng-show='hormoneReceptors.progesterone != null')
     include hormone-receptor

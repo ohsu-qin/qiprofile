@@ -1,0 +1,18 @@
+//
+  If the image state is 'loaded', then the image selector is a
+  button which opens the image. Otherwise, the image selector
+  is a button which loads the image.
+
+button.btn.btn-default.btn-xs.qi-nav-btn.qi-vol-btn(
+  ng-click='openImage()'
+  ng-show="image.isLoaded()"
+)
+  .glyphicon.glyphicon-eye-open
+
+button.btn.btn-default.btn-xs.qi-nav-btn.qi-vol-btn(
+  ng-click='image.load()'
+  ng-hide="image.isLoaded()"
+  ng-disabled="image.isLoading()"
+  qi-spin="image.isLoading()"
+)
+  .glyphicon.glyphicon-download

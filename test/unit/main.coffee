@@ -63,6 +63,7 @@ requirejs.config
     nganimate: './lib/angular-animate'
     ngresource: './lib/angular-resource'
     ngroute: './lib/angular-route'
+    ngsanitize: './lib/angular-sanitize'
     ngnvd3: './lib/angularjs-nvd3-directives'
     nvd3: './lib/nv.d3'
     slider: './lib/angular-slider'
@@ -86,13 +87,14 @@ requirejs.config
   # shim dependencies, extended with the test modules. See the
   # paths note above.
   shim:
-    angular: exports : 'angular'
+    angular: exports: 'angular'
     slider: deps: ['angular']
     lodash: exports: '_'
     nganimate: deps: ['angular']
     ngnvd3: deps: ['angular', 'nvd3']
     ngresource: deps: ['angular']
     ngroute: deps: ['angular']
+    ngsanitize: deps: ['angular']
     nvd3: deps: ['d3']
     slider: deps: ['touch']
     touch: deps: ['angular']

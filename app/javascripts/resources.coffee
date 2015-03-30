@@ -47,10 +47,10 @@ define ['angular', 'ngresource', 'helpers'], (ng) ->
   rscs.factory 'Session', [
     '$resource', 'ObjectHelper',
     ($resource, ObjectHelper) ->
-      $resource '/api/session-detail/:id/', null,
+      $resource '/api/session-detail/:id', null,
         detail:
           method: 'GET'
-          url: '/api/session-detail/:id/'
+          url: '/api/session-detail/:id'
           transformResponse: (data) -> ObjectHelper.fromJson(data)
   ]
 
@@ -58,19 +58,31 @@ define ['angular', 'ngresource', 'helpers'], (ng) ->
   rscs.factory 'ScanProtocol', [
     '$resource', 'ObjectHelper',
     ($resource, ObjectHelper) ->
-      $resource '/api/scan-protocol/:id/'
+      $resource '/api/scan-protocol/:id', null,
+        find:
+          method: 'GET'
+          isArray: false
+          transformResponse: (data) -> ObjectHelper.fromJson(data)
   ]
 
 
   rscs.factory 'RegistrationProtocol', [
     '$resource', 'ObjectHelper',
     ($resource, ObjectHelper) ->
-      $resource '/api/registration-protocol/:id/'
+      $resource '/api/registration-protocol/:id', null,
+        find:
+          method: 'GET'
+          isArray: false
+          transformResponse: (data) -> ObjectHelper.fromJson(data)
   ]
 
 
   rscs.factory 'ModelingProtocol', [
     '$resource', 'ObjectHelper',
     ($resource, ObjectHelper) ->
-      $resource '/api/modeling-protocol/:id/'
+      $resource '/api/modeling-protocol/:id', null,
+        find:
+          method: 'GET'
+          isArray: false
+          transformResponse: (data) -> ObjectHelper.fromJson(data)
   ]

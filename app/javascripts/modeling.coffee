@@ -6,10 +6,11 @@ define ['angular', 'lodash', 'k-trans', 'v-e', 'tau-i', 'chart'], (ng, _, Ktrans
     X_DATA_SPEC =
       label: 'Visit Date'
       accessor: (mdlResult) ->
-        mdlResult.session.acquisitionDate.valueOf()
-
-    # The PK modeling paramater properties, including the delta Ktrans.
-    PK_PARAMS: ['fxlKTrans', 'fxrKTrans', 'deltaKTrans', 'vE', 'tauI']
+        mdlResult.modeling.session.acquisitionDate.valueOf()
+    
+    # The modeling parameter HTML display headings.
+    PARAMETER_HEADINGS:
+      _.assign({}, Ktrans.HEADINGS, Ve.HEADINGS, TauI.HEADINGS)
 
     # Configures the d3 chart with the given format. The format is an
     # object in the form {label: string, data: array}
@@ -42,12 +43,15 @@ define ['angular', 'lodash', 'k-trans', 'v-e', 'tau-i', 'chart'], (ng, _, Ktrans
         xFormat: Chart.dateFormat
         tooltip: tooltip
 
+    # The Ktrans d3 chart data series formatting configuration.
     kTrans:
       dataSeriesConfig: Ktrans.CHART_DATA_SERIES_CONFIG
 
+    # The v_e d3 chart data series formatting configuration.
     vE:
       dataSeriesConfig: Ve.CHART_DATA_SERIES_CONFIG
 
+    # The tau_i d3 chart data series formatting configuration.
     tauI:
       dataSeriesConfig: TauI.CHART_DATA_SERIES_CONFIG
   ]

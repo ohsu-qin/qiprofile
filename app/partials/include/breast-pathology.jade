@@ -1,8 +1,10 @@
-div(ng-show="!!pathology.tnm")
+.qi-ver-space(ng-show="!!pathology.tnm")
   include tnm
 
-div(ng-controller='BreastHormoneReceptorsCtrl' ng-show="!!pathology.hormoneReceptors")
+.qi-ver-space(ng-controller='BreastHormoneReceptorsCtrl'
+              ng-show="!!pathology.hormoneReceptors")
   include breast-hormone-receptors
 
-div(ng-controller='BreastGeneticExpressionCtrl' ng-show="!!pathology.geneticExpression")
+.qi-ver-space(ng-controller='BreastGeneticExpressionCtrl'
+              ng-show="!!pathology.geneticExpression")
   include breast-genetic-expression

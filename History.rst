@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+1.1.1 / 2015-03-30
+------------------
+* Initial public release.
+
 0.10.4 / 2015-03-10
 ------------------
 * Add grunt build to postinstall.

@@ -3,11 +3,11 @@ extends ../layout/partial
 include include/accordion-heading-mixin
 
 block billboard
-  | {{ image.parent.session.subject.collection | capitalize }}
-  | Patient {{ image.parent.session.subject.number }}
-  | Session {{ image.parent.session.number }}
-  | {{ image.parent | imageContainerTitle }}
-  | Time Point {{ image.timePoint }}
+  | {{ image.volume.container.session.subject.collection | capitalize }}
+  | Patient {{ image.volume.container.session.subject.number }}
+  | Session {{ image.volume.container.session.number }}
+  | {{ image.volume.container.title }}
+  | Volume {{ image.volume.number }}
 
 block content
   // The modeling parameter overlay select.
@@ -16,6 +16,9 @@ block content
   qi-image.qi-panel.qi-image
     // The opacity, axis and threshold image controls.
     include include/image-controls
+    // TODO - add an orientation button in the bottom right
+    // that restores the XTK volume to its original
+    // orientation. Use the glyphicon-record for the button.
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

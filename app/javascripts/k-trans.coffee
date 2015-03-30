@@ -17,3 +17,9 @@ define [], ->
             modelingResult.fxrKTrans.average
         }
       ]
+
+  HEADINGS:
+    deltaKTrans: '&Delta;K<sub>trans</sub>'
+    fxlKTrans: 'FXL K<sub>trans</sub>'
+    fxrKTrans: 'FXR K<sub>trans</sub>'
+  

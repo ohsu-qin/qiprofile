@@ -15,18 +15,26 @@
     "url": "git@quip1:qiprofile"
   },
   "private": true,
+  "//": [
+    "Note: The angular* dependency versions must be the same",
+    "  and must match main.coffee NG_VERSION.",
+    "Note: The dependency spin.js is correct. There is a separate",
+    "  spin project. We want spin.js.",
+    "Note: The nvd3 GitHub fork fixes a nvd3 bug.",
+    "Note: The xtk/X GitHub fork makes XTK a well-behaved bower module."
+  ],
   "dependencies": {
     "angular": "~1.2.21",
     "angular-animate": "~1.2.21",
-    "angular-bootstrap": "~0.10.0",
+    "angular-bootstrap": "~0.12.1",
     "angular-resource": "~1.2.21",
     "angular-route": "~1.2.21",
+    "angular-sanitize": "~1.2.21",
     "angular-slider": "~0.2.3",
     "angular-ui-router": "~0.2.8",
     "angular-ui-utils": "~0.0.3",
     "angularjs-nvd3-directives": "~0.0.5-beta",
-    "bootstrap": "~3.1.1",
-    "d3": "~3.3.11",
+    "bootstrap": "~3.3.2",
     "font-awesome": "~4.0.3",
     "json3": "~3.3.0",
     "lodash": "~3.3.0",
@@ -49,7 +57,7 @@
   },
   "resolutions": {
     "nvd3": "master",
-    "d3": "~3.3.11"
+    "d3": "~3.5.5"
   },
   "devDependencies": {
     "domready": "~1.0.5",

@@ -42,9 +42,16 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
       else
         []
     
+    # @param key the property name
+    # @param value the property value
+    # @returns the {key, value} object
+    associate: (key, value) ->
+      obj = {}
+      obj[key] = value
+      obj
+
     # @param objects the delegate objects
-    # @returns a new object with properties from the given
-    #   objects
+    # @returns a new object with properties from the given objects
     delegate: (objects...) ->
       _.reduce(objects, _.defaults, {})
 
@@ -63,7 +70,8 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
       replace = (key, val) ->
         elideCycles = (val) ->
           if _.isObject(val)
-            if val in visited
+
+            if  _.isFunction(val) or val in visited
               '...'
             else
               visited.push(val)
@@ -73,7 +81,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
 
         elideCycles(val)
       
-      JSON.stringify(obj, replace, 4)
+      JSON.stringify(obj, replace, 2)
 
     # @param obj the associative object
     # @returns the concatenated values array

@@ -58,11 +58,6 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
                 controller:  'SubjectListCtrl'
 
           # The subject state.
-          # TODO - child states always fetch the subject, even if
-          # called in a context with the fetched subject. Can this
-          # be avoided? Does the ui-router go function have an
-          # option to supply a subject argument and thereby forego
-          # the subject fetch resolution? 
           .state 'quip.subject',
             url: '/:collection/subject/{subject:[0-9]+}?id'
             resolve:
@@ -99,6 +94,7 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
                 controller:  'SubjectDetailCtrl'
 
           # The session state.
+          # The session state parameter is the session number.
           .state 'quip.subject.session',
             url: '/session/{session:[0-9]+}'
             resolve:
@@ -108,29 +104,52 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
                   throw ReferenceError.new("Subject #{ subject.number } does" +
                                            " not have a session #{ number }")
                 # Grab the subject session embedded object.
-                sess = subject.sessions[number - 1]
-                # The session must have a detail foreign key.
-                if not sess.detail?
-                  throw ReferenceError.new("Subject #{ subject.number }" +
-                                           " Session #{ sess.number } does" +
-                                           " not have detail")
-
-                # Fetch the session detail.
-                Router.getSessionDetail(sess)
+                session = subject.sessions[number - 1]
+                # If the session has a scans array, then the detail was already
+                # fetched and we are done. Otherwise, fetch the detail.
+                if session.scans?
+                  session
+                else
+                  # The session must have a detail foreign key.
+                  if not session.detail?
+                    throw ReferenceError.new("Subject #{ subject.number }" +
+                                             " Session #{ session.number } does" +
+                                             " not have detail")
+                  # Fetch the session detail.
+                  Router.getSessionDetail(session)
             views:
               'main@':
                 templateUrl: '/partials/session-detail.html'
                 controller:  'SessionDetailCtrl'
 
           # The scan state.
+          # The scan state parameter is the scan number.
           .state 'quip.subject.session.scan',
             abstract: true
             url: '/scan/:scan'
             resolve:
               scan: (session, $stateParams, Router) ->
-                Router.getScan(session, $stateParams.scan)
+                number = parseInt($stateParams.scan)
+                Router.getScan(session, number)
+
+          # The scan volume state.
+          # The volume state parameter is the volume number.
+          .state 'quip.subject.session.scan.volume',
+            url: '/volume/{volume:[1-9][0-9]*}'
+            resolve:
+              image: (scan, $stateParams, Router) ->
+                number = parseInt($stateParams.volume)
+                volume = Router.getVolume(scan, number)
+                image = volume.image
+                if image.isLoaded() then image else image.load() 
+            views:
+              'main@':
+                templateUrl: '/partials/image-detail.html'
+                controller:  'ImageDetailCtrl'
 
           # The registration state.
+          # The registration state parameter is the registration
+          # resource name.
           .state 'quip.subject.session.scan.registration',
             abstract: true
             url: '/registration/:registration'
@@ -138,25 +157,17 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
               registration: (scan, $stateParams, Router) ->
                 Router.getRegistration(scan, $stateParams.registration)
 
-          # The scan image detail page.
-          .state 'quip.subject.session.scan.image',
-            url: '/image/{timePoint:[1-9][0-9]*}'
+          # The registration volume state.
+          # The volume state parameter is the volume number.
+          .state 'quip.subject.session.scan.registration.volume',
+            url: '/volume/{volume:[1-9][0-9]*}'
             resolve:
-              image: (scan, $stateParams, Router) ->
-                timePoint = parseInt($stateParams.timePoint)
-                Router.getImageDetail(scan, timePoint)
-            views:
-              'main@':
-                templateUrl: '/partials/image-detail.html'
-                controller:  'ImageDetailCtrl'
-
-          # The registration image detail page.
-          .state 'quip.subject.session.scan.registration.image',
-            url: '/image/{timePoint:[1-9][0-9]*}'
-            resolve:
-              image: (registration, $stateParams, Router) ->
-                timePoint = parseInt($stateParams.timePoint)
-                Router.getImageDetail(registration, timePoint)
+              volume: (registration, $stateParams, Router) ->
+                number = parseInt($stateParams.volume)
+                Router.getVolume(registration, number)
+              image: (volume) ->
+                image = volume.image
+                if image.isLoaded() then image else image.load() 
             views:
               'main@':
                 templateUrl: '/partials/image-detail.html'

@@ -13,7 +13,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
     # * xtkVolume - the XTK volume object
     # * load() - read the image file
     # * open(element) - render the image
-    # * hasLabelMap() - whether there is an associated label map file
+    # * isOverlayVisible() - whether there is an associated label map file
     # * selectOverlay() - show the overlay
     # * deselectOverlay() - hide the overlay
     #
@@ -41,14 +41,14 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
         #   a color table
         Object.defineProperty this, 'overlays',
           get: ->
-            @volume.session.overlays
+            @volume.container.session.overlays
       
       # Transfers the file content to the data properties.
       # The image state loading flag is set to true while the
       # files are being read.
       #
-      # @returns a promise which resolves when the file reads
-      #   are completed
+      # @returns a promise which resolves to this image object
+      #   when the file is loaded 
       load: ->
         # Set the loading flag.
         @state = Image.STATES.LOADING
@@ -64,7 +64,15 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
           @xtkVolume.filedata = data
           # Set the state to loaded.
           @state = Image.STATES.LOADED
+          # Return the loaded image.
+          this
 
+      isLoaded: ->
+        @state == Image.STATES.LOADED
+
+      isLoading: ->
+        @state == Image.STATES.LOADING
+      
       # Renders the image in the given parent element.
       #
       # @param element the Angular jQueryLite element
@@ -89,12 +97,12 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
         # Render the image.
         renderer.render()
 
-      # Returns whether the volume has a label map overlay.
-      # This function is required by the image-controls.jade work-around for
-      # a XTK bug.
-      hasLabelMap: ->
-        @xtkVolume._labelmap and @xtkVolume._labelmap._children and
-        @xtkVolume._labelmap._children.length
+      # Returns whether the XTK volume has a visible label map. This
+      # function is required to work around the XTK bug described in
+      # image-controls.jade.
+      isOverlayVisible: ->
+        @xtkVolume._labelmap? and @xtkVolume._labelmap._children? and
+        @xtkVolume._labelmap._children.length and @xtkVolume._labelmap.visible
 
       # Deselects an existing overlay as follows:
       # * If the image volume has a label map, then the label map visible
@@ -104,7 +112,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
       # @param image the selected PK modeling parameter name, or 'none' to 
       #  remove an existing overlay
       deselectOverlay: ->
-         @xtkVolume.labelmap.visible = false if @xtkVolume.labelmap?
+        @xtkVolume.labelmap.visible = false if @isOverlayVisible()
 
       # Changes the overlay label map and color lookup table as follows:
       # * Fetch the overlay files.
@@ -114,23 +122,78 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
       # @param labelMap the selected label map {filename, colorTable}
       #   object
       selectOverlay: (labelMap) ->
+        # Note: XTK labelmaps are treacherous territory; proceed with caution.
+        # Specifically, XTK places the renderer in the browser event loop, so
+        # that XTK renders and rerenders continuously and asynchronously.
+        # Hopefully, the XTK render function checks for a state change and
+        # only schedules a browser paint if necessary. Whether this state
+        # change check is performed is unknown.
+        #
+        # Furthermore, XTK implicitly expects that its volume is complete and
+        # consistent when it is rendered. For a labelmap, XTK checks the XTK
+        # volume._labelmap. If it exists and the labelmap visible flag is set,
+        # then XTK expects the labelmap data to be fully loaded and renders
+        # the labelmap.
+        #
+        # However, simply checking the existing XTK volume.labelmap
+        # property automatically creates the XTK volume._labelmap object.
+        # Furthermore, the newly created empty XTK volume._labelmap.visible
+        # flag is set to true by default. Thus, a naive implementation that
+        # checks for an existing labelmap and then asynchronously loads the
+        # labelmap file results in the following XTK render error:
+        #
+        #   Uncaught TypeError: Cannot read property '_id' of null 
+        #
+        # The work-around is as follows:
+        # * If checking for an existing labelmap, bypass accessing the
+        #   XTK volume.labelmap property and check the XTK volume._labelmap
+        #   variable instead.
+        # * If an overlay is selected which differs from the existing overlay,
+        #   then set the XTK volume.labelmap.visible property to false before
+        #   anything else. Although referencing the XTK volume.labelmap property
+        #   creates the XTK volume._labelmap object with incomplete and
+        #   inconsistent content, the visible flag set to false prevents XTK
+        #   from attempting to render the incomplete labelmap.
+        # * Set the XTK volume.labelmap content as appropriate, e.g. the file
+        #   and colortable.file.
+        # * Load the label map and color table asynchronously.
+        # * When both are loaded, then finally set the XTK volume.labelmap.visible
+        #   property to true. Setting visible to true triggers a repaint with the
+        #   overlay.
+        
+        # The XTK volume labelmap file, or null if there is no labelmap.
+        xtkLabelMapFile = @xtkVolume._labelmap.file if @xtkVolume._labelmap?
+        # If the label map was not changed from the last value, then we only
+        # need to set the visible flag.
+        if xtkLabelMapFile is labelMap.filename
+          @xtkVolume.labelmap.visible = true
+          return
+        
+        # The label map must have a color table.
+        if not labelMap.colorTable?
+          throw new ValueError("The label map is missing a color table:" +
+                               " #{ labelMap.filename } ")
+
+        # Set the XTK volume labelmap visible flag to false.
+        # See the function Note comment above.
+        @xtkVolume.labelmap.visible = false
         # Set the volume label map file name property.
         @xtkVolume.labelmap.file = labelMap.filename
         # Set the volume color table file name property.
-        @xtkVolume.labelmap.colortable.file = labelMap.colorTable.filename
+        @xtkVolume.labelmap.colortable.file = labelMap.colorTable
+
 
         # Retrieve the overlay layer map and color table.
-        loadLabelMap = File.readBinary(labelMap.filename).then (data) =>
+        loadLabelMap = File.readBinary(labelMap.filename).then (data) ->
           # Set the volume label map data property.
-          @xtkVolume.labelmap.filedata  = data
-        loadColorTable = File.readBinary(labelMap.colorTable.filename)
-          .then (data) =>
-            # Set the volume color table data property.
-            @xtkVolume.labelmap.colortable.filedata = data
+          @xtkVolume.labelmap.filedata = data
+        loadColorTable = File.readBinary(labelMap.colorTable).then (data) ->
+          # Set the volume color table data property.
+          @xtkVolume.labelmap.colortable.filedata = data
 
         # Join the two promises into a single promise.
         loaded = $q.all(loadLabelMap, loadColorTable)
-        loaded.then =>
+        loaded.then ->
           # Turn on the label map. This triggers a redisplay of the volume
           # with the new overlay.
           @xtkVolume.labelmap.visible = true

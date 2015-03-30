@@ -148,8 +148,18 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
             # described in the extendModeling and extendSession
             # functions below.
             extendSessions = ->
-              # Adds the following modeling parameter result
-              # properties:
+              # Adds the following modeling label map properties:
+              # * parameterResult - the parent parameter result object
+              # * key - the parent parameterResult key
+              #
+              # @param labelMap the object to extend
+              # @param paramResult the parent parameter result
+              extendLabelMap = (labelMap, paramResult) ->
+                labelMap.parameterResult = paramResult
+                Object.defineProperty labelMap, 'key',
+                  get: ->
+                    @parameterResult.key
+              # Adds the following modeling parameter result properties:
               # * key - the parameter result access property name
               # * modelingResult - the parent modeling result
               #   reference 
@@ -205,16 +215,22 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
                 # Extend the modeling result object.
                 extendModelingResult(modeling.result, modeling)
                 # The modeling overlays property returns the label maps
-                # which have a color table.
+                # which have a color table. The overlays array is sorted
+                # in modeling parameter name order.
                 Object.defineProperty modeling, 'overlays',
                   get: ->
-                    (res.overlay for res in _.values(@result) when res.overlay?)
+                    overlayed = (
+                      res for res in _.values(@result) when res.overlay?
+                    )
+                    sorted = _.sortBy(overlayed, 'key')
+                    _.pluck(sorted, 'overlay')
                 
               # Fixes the session acquisition date and adds the following
               # session properties:
               # * number - the one-based session number in acquisition order
               # * subject - the session parent subject reference
-              # * overlays - the label map objects with a color table
+              # * overlays - the {modeling protocol id: [label map objects]}
+              #   for those label maps which have a color table
               extendSession = (session, number) ->
                 # Set the session subject property.
                 session.subject = subject
@@ -225,11 +241,14 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
                 # Add the modeling properties.
                 for modeling in session.modelings
                   extendModeling(modeling, session)
-                # The session overlays property returns the label map
-                # objects which have a color table.
+                # The session overlays property.
                 Object.defineProperty session, 'overlays',
                   get: ->
-                    _.flatten(_.pluck(@modelings, 'overlays'))
+                    associate = (accum, modeling) ->
+                      accum[modeling.protocol] = modeling.overlays
+                    modelings = (mdl for mdl in @modelings when mdl.overlays.length?)
+                    if modelings.length?
+                      _.reduce(modelings, associate, {})
               
               # Extend each session.
               for session, i in subject.sessions
@@ -362,33 +381,38 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
           # * scan - the registration source scan
           #
           # @param registration the registration to extend
+          # @param number the one-based registration index within the scan
           # @param scan the source scan
-          extendRegistration = (registration, scan) ->
+          extendRegistration = (registration, number, scan) ->
             # Set the source scan reference.
             registration.scan = scan
+            # Format the title.
+            registration.title = "Scan #{ scan.number } Registration" +
+                                 " #{ registration.number }"
             # Add the registration volume properties.
             extendImageContainer(registration)
 
           # * Extends the scan registrations as described in
           #   extendRegistration
           # * Converts the scan number to an integer
-          # * Extends the scan object as described
-          #   in extendImageContainer
+          # * Extends the scan object as described in extendImageContainer
           # * Adds the following properties:
           #   * session - the source scan parent session
           #
           # @param scan the scan to extend
           extendScan = (scan) ->
-            # The number is read as an integer, as with all JSON values.
+            # The number is read as a string, as with all JSON values.
             # Convert it to an integer.
             scan.number = parseInt(scan.number)
+            # The scan title.
+            scan.title = "Scan #{ scan.number }"
             # Set the session reference.
             scan.session = session
             # Add the scan volume properties.
             extendImageContainer(scan)
             # Add the scan registration properties.
-            for reg in scan.registrations
-              extendRegistration(reg, scan)
+            for reg, regNbr in scan.registrations
+              extendRegistration(reg, regNbr + 1, scan)
           
           # The session object must have a detail reference.
           if not session.detail?
@@ -416,8 +440,6 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
                         (scan) -> scan.number is scanNumber)
           # If no such scan, then complain.
           if not scan?
-            for scan in session.scans
-              console.log(">> #{ scan.number } vs #{ scanNumber }")
             throw new ReferenceError "#{ subjectTitle(session) } does not have" +
                                      " a scan with number #{ scanNumber }"
           # Return the scan.

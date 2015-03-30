@@ -152,6 +152,18 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
         Image.containerTitle(container)
     ]
 
+
+    filters.filter 'gender', ->
+      (gender) ->
+        # Expand a gender code.
+        if gender is 'F'
+          'Female'
+        else if gender is 'M'
+          'Male'
+        else
+          gender
+
+
     filters.filter 'age', ['DateHelper', (DateHelper) ->
       (birthDate) ->
         # July 7 of this year.

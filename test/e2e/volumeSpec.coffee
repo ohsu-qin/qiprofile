@@ -14,7 +14,7 @@ class VolumePage extends Page
   imageCtlPanel: ->
     @find('.qi-vol-ctl')
 
-describe.only 'E2E Testing Volume', ->
+describe 'E2E Testing Volume', ->
   page = null
 
   beforeEach ->

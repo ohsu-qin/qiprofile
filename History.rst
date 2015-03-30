@@ -1,9 +1,9 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
-1.1.1 / 2015-03-30
+0.11.1 / 2015-03-30
 ------------------
-* Initial public release.
+* Convert series to volume.
 
 0.10.4 / 2015-03-10
 ------------------

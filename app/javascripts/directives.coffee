@@ -102,9 +102,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
     # Displays a scan or registration series 3D image.
     directives.directive 'qiImage', ->
       restrict: 'E'
-      scope:
-        image: '='
       link: (scope, element) ->
-        scope.$watch 'image.state', (state) ->
-          if state is 'loaded'
+        scope.$watch 'image', (image) ->
+          if image.isLoaded()
             scope.image.open(element)

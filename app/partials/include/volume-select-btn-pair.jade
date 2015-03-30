@@ -5,14 +5,14 @@
 
 button.btn.btn-default.btn-xs.qi-nav-btn.qi-vol-btn(
   ng-click='openImage()'
-  ng-show="image.state == 'loaded'"
+  ng-show="image.isLoaded()"
 )
   .glyphicon.glyphicon-eye-open
 
 button.btn.btn-default.btn-xs.qi-nav-btn.qi-vol-btn(
   ng-click='image.load()'
-  ng-hide="image.state == 'loaded'"
-  ng-disabled="image.state == 'loading'"
-  qi-spin="image.state == 'loading'"
+  ng-hide="image.isLoaded()"
+  ng-disabled="image.isLoading()"
+  qi-spin="image.isLoading()"
 )
   .glyphicon.glyphicon-download

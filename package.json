@@ -1,6 +1,6 @@
 {
   "name": "qiprofile",
-  "version": "1.1.1",
+  "version": "0.11.2",
   "description": "Quantitative Imaging Profile (QuIP) web application",
   "repository": {
     "type": "git",
@@ -15,8 +15,7 @@
     "imaging"
   ],
   "author": "Fred Loney <loneyf@ohsu.edu>",
-  "license": "Proprietary",
-  "private": true,
+  "license": "MIT",
   "bin": "./bin/qiprofile",
   "scripts": {
     "postinstall": "./node_modules/grunt-cli/bin/grunt postinstall",

@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+0.11.2 / 2015-03-30
+------------------
+* Make package public.
+
 0.11.1 / 2015-03-30
 ------------------
 * Convert series to volume.

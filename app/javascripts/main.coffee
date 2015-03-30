@@ -16,7 +16,9 @@ else
 GOOGLE_LIBS = '//ajax.googleapis.com/ajax/libs'
 
 # The Angular version.
-NG_VERSION = '1.2.19'
+# Note: this version number must match the bower.json angularjs
+# version number.
+NG_VERSION = '1.2.21'
 
 # The Angular CDN location.
 NG_LIB = GOOGLE_LIBS + '/angularjs/' + NG_VERSION
@@ -47,6 +49,7 @@ requirejs.config
     nganimate: [NG_LIB + '/' + 'angular-animate' + MIN, './lib/angular-animate']  
     ngresource: [NG_LIB + '/' + 'angular-resource' + MIN, './lib/angular-resource']  
     ngroute: [NG_LIB + '/' + 'angular-route' + MIN, './lib/angular-route']
+    ngsanitize: [NG_LIB + '/' + 'angular-sanitize' + MIN, './lib/angular-sanitize']
     ngnvd3: './lib/angularjs-nvd3-directives'
     nvd3: './lib/nv.d3'
     slider: './lib/angular-slider'
@@ -71,6 +74,7 @@ requirejs.config
     ngnvd3: deps: ['angular', 'nvd3']
     ngresource: deps: ['angular']
     ngroute: deps: ['angular']
+    ngsanitize: deps: ['angular']
     nvd3: deps: ['d3']
     slider: deps: ['touch']
     touch: deps: ['angular']

@@ -17,7 +17,7 @@ class SubjectListPage extends Page
             repeat.isElementPresent(anchorLocator).then (exists) ->
               if exists
                 repeat.all(anchorLocator).then (hyperlinks) ->
-                  sbjs = ((hyperlink.getText() for hyperlink in hyperlinks))
+                  sbjs = (hyperlink.getText() for hyperlink in hyperlinks)
                   {name: coll, subjects: sbjs}  
               else
                 {name: coll, subjects: []}  

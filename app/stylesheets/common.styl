@@ -9,14 +9,28 @@
   font-size 75%
 
 .qi-text-right
-    text-align: right
+  text-align right
 
-.qi-date, .qi-number
+// Dates and numbers should be center-aligned.
+.qi-date, .qi-number, .qi-text-center
   text-align center
 
 .qi-pct
   padding-right 2em
   text-align right
+
+.qi-inline
+  display inline
+
+// Center an element. Use .qi-text-center to center text.
+.qi-center
+  margin-left auto
+  margin-right auto
+
+// Impart table cell mojo without the table structural cruft.
+.qi-cell
+  display table-cell
+  vertical-align middle
 
 // See the clean-list helper for a description.
 ul.qi-clean-list
@@ -31,38 +45,50 @@ ul.qi-clean-list
 .qi-separator-faint
   border 1px solid Lavender
 
+// Make some room at the top.
 .qi-top-buffer
-  // Make some room at the top.
   margin-top 0.5em
 
+// Make some room at the left.
 .qi-left-buffer
-  // Make some room on the left.
   margin-left 0.5em
 
+// Make some room at the right.
 .qi-right-buffer
-  // Make some room on the right.
   margin-right 0.5em
 
+// Make some room at the bottom.
 .qi-bottom-buffer
-  // Make some room at the bottom.
   margin-bottom 0.5em
+
+// Add some vertical space between
+// successive elements.
+.qi-ver-space
+  & + .qi-ver-space
+    margin-top 0.5em
 
 .qi-inline-heading
   display inline-block
 
-.qi-btn-select
-  color Peru
+// Override the bootstrap button as follows:
+// * add color
+// * change the padding from the bulky 6px 12px
+//   to the compact 2px 4px.
+.qi-btn
+  padding 2px 4px
+  background-color Moccasin
   &:hover
-    color Chocolate
+    background-color Peru
     cursor pointer
   &:focus, &.active
     border 1px solid Peru
     color White
-    background Chocolate
-// TODO - fold the style attributes below into this .qi-btn-select style.
+    background-color Chocolate
+// TODO - fold the style attributes below into this .qi-btn style.
 // The style below was defined in image.styl for the overlay demo.
 // Unnecessary attributes should be culled.
 // Confirm that all buttons which use this style display correctly.
+// See the image.styl .qi-slider TODO comments.
 //   & button
 //     width 7em
 //     padding 0.2em
@@ -78,6 +104,18 @@ ul.qi-clean-list
 //       border 1px solid Peru
 //       color White
 //       background Chocolate
+
+// Override .qi-btn to change the colors.
+.qi-btn-radio
+  background-color Aquamarine
+  &:hover
+    background-color DarkSeaGreen
+  &:focus, &.active
+    border 2px solid DarkSeaGreen
+    color White
+    background-color DarkOliveGreen
+  &.disabled
+    background-color Aquamarine
 
 .qi-radio-row
   display inline-block
@@ -124,14 +162,26 @@ ul.qi-clean-list
 .qi-nested
   padding 0.5em
 
-// The standard data table style.
+// The standard qiprofile data table style.
+// This style should be used in conjunction with the bootstrap
+// .table style on the table element , e.g.:
+//    table.table.qi-table
+// .qi-table augments and overrides the bootstrap .table style
+// as follows:
+// * width is auto rather than 100%
+// * there is no table border
+// * the bottom margin is removed (spacing is the table
+//   container responsibility instead)
+// * cells have a thin light brown border
+// * headings are bold against a background
+// * column groups are delineated by a thin silver line
 .qi-table
+  width auto
+  margin-bottom 0
   border 0
   & th, td
-    // Cells have a thin light brown border.
     border 1px solid BurlyWood
   & th
-    // The table headings are bold against a background.
     background-color Bisque
     font-weight bold
     text-align center
@@ -147,7 +197,6 @@ ul.qi-clean-list
       border 0
       background-color inherit
   & colgroup
-    // A column group is delineated by a thin silver line.
     border-left 0.2em solid Silver
 
 .qi-spaced-table
@@ -155,6 +204,26 @@ ul.qi-clean-list
   border 0
   border-collapse separate
   border-spacing 0 0.5em
+
+// Scrunch cells together even more than the bootstrap
+// .table-condensed style.
+table.table.qi-table-super-condensed
+  thead > tr > th
+    padding 0 2px 0 2px
+  tbody > tr > td
+    padding 2px
+
+// Remove table and cell borders when used in
+// conjunction with the bootstrap .table style.
+tbody.qi-tbody-borderless
+  & > tr > td
+    border 0
+
+// Underline table headings.
+thead.qi-thead-underlined
+  & > tr > th
+    border-bottom 0
+    text-decoration underline
 
 .qi-subtable-title
   font-size larger

@@ -2,13 +2,13 @@ include accordion-heading-mixin
 
 +accordion-heading('Demographics')
 
-table#demographics.qi-table
+table#demographics.table.qi-table
   tr(ng-show="subject.birthDate != null")
     th Age
     td {{ subject.birthDate | age }}
   tr(ng-show="subject.gender != null")
     th.col Gender
-    td.col {{ subject.gender }}
+    td.col {{ subject.gender | gender }}
   tr(ng-show="subject.weight != null")
     th.col Weight
     td.col {{ subject.weight }}

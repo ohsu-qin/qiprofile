@@ -4,13 +4,13 @@
     .modal-title Registration Protocol
 
   .modal-body
-    table.qi-table.qi-modal-table.qi-spaced-table
+    table.table.table.qi-table.qi-modal-table.qi-spaced-table
       tr
         th Technique
         td {{ protocol.technique }}
   
     .qi-panel.qi-nested
-      table.qi-table.qi-modal-table.qi-spaced-table
+      table.table.table.qi-table.qi-modal-table.qi-spaced-table
         caption.qi-inset-title Parameters
         tr(ng-repeat="(name, value) in protocol.parameters")
           th {{ name | underscore }}

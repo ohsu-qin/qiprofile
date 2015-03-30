@@ -4,7 +4,7 @@
     .modal-title Modeling Input
 
   .modal-body
-    table.qi-table.qi-modal-table.qi-spaced-table
+    table.table.qi-table.qi-modal-table.qi-spaced-table
       // ModelingSourceProtocolCtrl places the source protocol id in
       // scope for the ScanProtocolCtrl or RegistrationProtocolCtrl.
       tr(ng-controller='ModelingSourceProtocolCtrl')
@@ -28,4 +28,3 @@
 
   .modal-footer
     button.btn.btn-warning.cancel(qi-focus='true' ng-click="close()") Close
-

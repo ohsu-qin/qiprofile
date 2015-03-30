@@ -1,15 +1,15 @@
 .qi-subtable-title TNM
 
 .qi-panel.qi-nested(ng-controller='TNMCtrl')
-  table.qi-table
+  table.table.qi-table.qi-ver-space
     tr
       th Stage
       td {{ tnm | tnmStage | romanize }}
 
-  .qi-bottom-buffer(ng-show='!!tnm.grade')
+  .qi-ver-space(ng-show='!!tnm.grade')
     include grade
 
-  table.qi-table.qi-spaced-table
+  table.table.table.qi-table.qi-spaced-table.qi-ver-space
     tr
       th Size
       td {{ tnm.size | tnmSize }}

@@ -1,7 +1,7 @@
 .qi-subtable-title Genetic Expression
 
 .qi-panel.qi-nested
-  table.qi-table(
+  table.table.qi-table.qi-ver-space(
     ng-show="geneticExpression.her2NeuIhc != null || geneticExpression.her2NeuFish != null || geneticExpression.ki67 != null"
   )
     tr(ng-show="geneticExpression.her2NeuIhc != null")
@@ -14,5 +14,5 @@
       th Ki67
       td {{ geneticExpression.ki67 }}
 
-  div(ng-controller='BreastGeneAssayCtrl' ng-show="!!geneticExpression.normalizedAssay")
+  .qi-ver-space(ng-controller='BreastGeneAssayCtrl' ng-show="!!geneticExpression.normalizedAssay")
     include breast-gene-assay

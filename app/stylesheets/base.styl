@@ -22,7 +22,13 @@ a
     fill Chocolate
     text-decoration none
 
-// Overwrite the bootstrap accordian panel heading style
+// Override the bootstrap button to change the left margin
+// from the odd setting -1px to .5em.
+.btn-group
+  .btn + .btn
+    margin-left 0.5em
+
+// Override the bootstrap accordian panel heading style
 // to emulate the preceding hyperlink style.
 .panel-heading
   & a
@@ -31,11 +37,11 @@ a
       color Chocolate
       text-decoration none
 
-// Overwrite the bootstrap panel heading background color.
+// Override the bootstrap panel heading background color.
 .panel-default > .panel-heading
   background-color MintCream
 
-// Overwrite the bootstrap panel style to remove the superfluous
+// Override the bootstrap panel style to remove the superfluous
 // margin, but add a slightly larger border the same color as the
 // surrounding border.
 .panel-group
@@ -62,22 +68,41 @@ svg
 hr
   display none
 
-table
-  border-collapse collapse
-
-table, th, td
-  border 1px solid Black
-
-th
-  padding 0.5em
-  font-size 110%
-  vertical-align bottom
-
-td
-  padding 0 0.5em 0 0.5em
-
-ul, ol
-  margin-bottom 0.6em
+// TODO - Commenting out the settings below wraps the modal
+// Registration Protocol pop-up right column. Why is that?
+// No wrap should be the table default.
+//
+// TODO - for all tables, use:
+//   table.table.table.qi-table
+// and any other detailed CSS modifier styles as appropriate.
+// Then double-check that all tables format correctly.
+// If any of the settings below are useful as reasonable
+// defaults, then fold only those settings into the
+// common.styl .qi-table and delete the commented-out
+// lines below. The th settings are reasonable defaults,
+// the table border is reasonable, but setting it adds an
+// undesirable border to the Image Detail page overlay
+// selection. Try the changes on all tables, e.g. in the
+// Image Detail page, examine the Overlays table, modal
+// pop-up Modeling Info table and Registration Protocol
+// table all preserve their formatting.
+// 
+// table
+//   border-collapse collapse
+// 
+// table, th, td
+//   border 1px solid Black
+// 
+// th
+//   padding 0.5em
+//   font-size 110%
+//   vertical-align bottom
+// 
+// td
+//   padding 0 0.5em 0 0.5em
+// 
+// ul, ol
+//   margin-bottom 0.6em
 
 // Undo Bootstrap changing the color of a small
 // span in the heading.

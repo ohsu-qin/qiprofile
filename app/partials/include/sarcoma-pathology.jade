@@ -1,10 +1,9 @@
-.qi-top-buffer(ng-show='pathology.site != null')
-table.qi-table
+table.table.qi-table.qi-ver-space(ng-show='pathology.location != null')
   tr
     th Site
-    td {{ pathology.site }}
+    td {{ pathology.location }}
 
-div(ng-show='!!pathology.tnm')
+.qi-ver-space(ng-show='pathology.tnm != null')
  include tnm
 
 // TODO - finish the sarcoma pathology display.

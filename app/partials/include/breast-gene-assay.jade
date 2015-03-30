@@ -1,7 +1,7 @@
 .qi-subtable-title Normalized Assay
 
 .qi-panel.qi-nested
-  table.qi-table.qi-bottom-buffer(ng-show='recurrenceScore != null')
+  table.table.qi-table.qi-bottom-buffer(ng-show='recurrenceScore != null')
     tr
       th Recurrence Score
       td {{ recurrenceScore }}
@@ -11,7 +11,7 @@
           )
           .glyphicon.glyphicon-question-sign
 
-  table.qi-table.qi-spaced-table
+  table.table.qi-table.qi-spaced-table
     tr(ng-show="assay.gstm1 != null")
       th GSTM1
       td {{ assay.gstm1 }}
@@ -24,7 +24,7 @@
 
   .qi-bottom-buffer(ng-show='!!assay.her2')
     .qi-subtable-title HER2
-    table.qi-table
+    table.table.qi-table
       tr(ng-show="assay.her2.grb7 != null")
         th GRB7
         td {{ assay.her2.grb7 }}
@@ -34,7 +34,7 @@
 
   .qi-bottom-buffer(ng-show='!!assay.estrogen')
     .qi-subtable-title Estrogen
-    table.qi-table
+    table.table.qi-table
       tr(ng-show="assay.estrogen.er != null")
         th ER
         td {{ assay.estrogen.er }}
@@ -50,7 +50,7 @@
 
   .qi-bottom-buffer(ng-show='!!assay.proliferation')
     .qi-subtable-title Proliferation
-    table.qi-table
+    table.table.qi-table
       tr(ng-show="assay.proliferation.ki67 != null")
         th Ki67
         td {{ assay.proliferation.ki67 }}
@@ -69,7 +69,7 @@
 
   .qi-bottom-buffer(ng-show='!!assay.invasion')
     .qi-subtable-title Invasion
-    table.qi-table
+    table.table.qi-table
       tr(ng-show="assay.invasion.mmp11 != null")
         th MMP11 (stromolysin 3)
         td {{ assay.invasion.mmp11 }}

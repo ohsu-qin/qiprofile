@@ -29,6 +29,7 @@ module.exports = (grunt) ->
           'angular-bootstrap/ui-bootstrap-tpls.js'
           'angular-resource/angular-resource.js'
           'angular-route/angular-route.js'
+          'angular-sanitize/angular-sanitize.js'
           'angular-touch/angular-touch.js'
           'angular-ui-router/release/*.js'
           'angularjs-nvd3-directives/dist/*.js'
@@ -222,7 +223,8 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'default', ['build:dev']
 
-  grunt.registerTask 'copy:app', ['copy:js', 'copy:css', 'copy:fonts', 'copy:static']
+  grunt.registerTask 'copy:app', ['copy:js', 'copy:css', 'copy:fonts',
+                                  'copy:static']
 
   grunt.registerTask 'concat:app', ['concat:css']
 
@@ -234,12 +236,14 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'build:app', ['clean', 'vendor:app', 'compile']
 
-  grunt.registerTask 'build:dev', ['env:dev', 'build:app', 'exec:updatewebdriver']
+  grunt.registerTask 'build:dev', ['env:dev', 'build:app',
+                                   'exec:updatewebdriver']
 
   grunt.registerTask 'build:prod', ['env:prod', 'build:app']
 
   # The npm postinstall task.
-  grunt.registerTask 'postinstall', ['exec:bowerinstall', 'exec:bowerprune', 'build:prod']
+  grunt.registerTask 'postinstall', ['exec:bowerinstall', 'exec:bowerprune',
+                                     'build:prod']
 
   grunt.registerTask 'start:dev', ['express:dev', 'watch']
 
@@ -251,7 +255,8 @@ module.exports = (grunt) ->
 
   grunt.registerTask 'test:unit', ['karma:unit']
 
-  grunt.registerTask 'test:e2e', ['exec:selenium', 'express:test', 'protractor:e2e']
+  grunt.registerTask 'test:e2e', ['exec:selenium', 'express:test',
+                                  'protractor:e2e']
 
   grunt.registerTask 'test', ['test:unit', 'test:e2e']
 

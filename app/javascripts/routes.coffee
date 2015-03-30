@@ -137,9 +137,11 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
           .state 'quip.subject.session.scan.volume',
             url: '/volume/{volume:[1-9][0-9]*}'
             resolve:
-              volume: (scan, $stateParams, Router) ->
+              image: (scan, $stateParams, Router) ->
                 number = parseInt($stateParams.volume)
-                Router.getVolume(scan, number)
+                volume = Router.getVolume(scan, number)
+                image = volume.image
+                if image.isLoaded() then image else image.load() 
             views:
               'main@':
                 templateUrl: '/partials/image-detail.html'
@@ -163,6 +165,9 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
               volume: (registration, $stateParams, Router) ->
                 number = parseInt($stateParams.volume)
                 Router.getVolume(registration, number)
+              image: (volume) ->
+                image = volume.image
+                if image.isLoaded() then image else image.load() 
             views:
               'main@':
                 templateUrl: '/partials/image-detail.html'

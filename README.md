@@ -1,11 +1,5 @@
-=======================================
-qiprofile: Quantitative Imaging Profile
-=======================================
+# qiprofile: Quantitative Imaging Profile
 
-Displays the OHSU QIN images and annotations. See the
-`documentation <http://qiprofile.readthedocs.org/en/latest/>`_
+Displays medical imaging and clinical data. See the
+[documentation](https://github.com/ohsu-qin/qiprofile/blob/master/doc/index.rst)
 for more information.
-
-.. Targets:
-
-.. _documentation: http://qiprofile.readthedocs.org/en/latest/

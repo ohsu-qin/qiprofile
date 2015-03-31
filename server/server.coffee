@@ -87,7 +87,8 @@ server.get '/login', (req, res) ->
   res.end
 
 # The API route.
-server.use '/api', api()
+restUrl = process.env.QIREST_HOST or 'localhost'
+server.use '/api', api(restUrl)
 
 # Serve the static files from root.
 server.get '/static/*', (req, res) ->

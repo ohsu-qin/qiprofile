@@ -1,28 +1,32 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+0.11.3 / 2015-03-31
+-------------------
+* Move the exec library to dependencies.
+
 0.11.2 / 2015-03-30
-------------------
+-------------------
 * Make package public.
 
 0.11.1 / 2015-03-30
-------------------
+-------------------
 * Convert series to volume.
 
 0.10.4 / 2015-03-10
-------------------
+-------------------
 * Add grunt build to postinstall.
 
 0.10.3 / 2015-01-27
-------------------
+-------------------
 * Support the gene expression assay.
 
 0.10.2 / 2015-01-22
-------------------
+-------------------
 * Correctly resolve the scan route.
 
 0.10.1 / 2015-01-16
-------------------
+-------------------
 * Adapt for PyPI.
 
 0.9.1 / 2014-12-02

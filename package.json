@@ -1,6 +1,6 @@
 {
   "name": "qiprofile",
-  "version": "0.11.2",
+  "version": "0.11.3",
   "description": "Quantitative Imaging Profile (QuIP) web application",
   "repository": {
     "type": "git",
@@ -30,6 +30,17 @@
   "engines": {
     "node": "0.10.x"
   },
+  "//": [
+    "Note: The devDependencies consist of the test apparatus libraries,",
+    "  with the exception of the following test libraries which provide",
+    "  a grunt task:",
+    "  * grunt-contrib-watch",
+    "  * grunt-karma",
+    "  * grunt-protractor-runner",
+    "  These libraries are included in dependencies rather than",
+    "  devDependencies in order to avoid a npm install warning message.",
+    "  They are not used in production."
+  ],
   "dependencies": {
     "authenticate": "~0.1.5",
     "autoprefixer-stylus": "~0.5.0",
@@ -60,9 +71,13 @@
     "grunt-contrib-stylus": "~0.13.2",
     "grunt-contrib-uglify": "~0.2.0",
     "grunt-env": "~0.4.1",
+    "grunt-exec": "~0.4.6",
     "grunt-express-server": "~0.4.17",
     "grunt-markdown": "~0.5.0",
     "grunt-preprocess": "~4.0.0",
+    "grunt-contrib-watch": "~0.5.2",
+    "grunt-karma": "~0.8.3",
+    "grunt-protractor-runner": "~1.0.1",
     "load-grunt-tasks": "~0.3.0"
   },
   "devDependencies": {
@@ -86,10 +101,6 @@
     "protractor": "~2.0.0",
     "selenium-standalone": "~2.43.1-4",
     "text-encoding": "~0.1.0",
-    "grunt-contrib-watch": "~0.5.2",
-    "grunt-exec": "~0.4.6",
-    "grunt-karma": "~0.8.3",
-    "grunt-protractor-runner": "~1.0.1",
     "time-grunt": "~0.2.1"
   },
   "main": "server.js"

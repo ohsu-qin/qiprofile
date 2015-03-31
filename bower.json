@@ -18,7 +18,7 @@
   "//": [
     "Note: The angular* dependency versions must be the same",
     "  and must match main.coffee NG_VERSION.",
-    "Note: The dependency spin.js is correct. There is a separate",
+    "Note: The 'spin.js' dependency is correct. There is a separate",
     "  spin project. We want spin.js.",
     "Note: The nvd3 GitHub fork fixes a nvd3 bug.",
     "Note: The xtk/X GitHub fork makes XTK a well-behaved bower module."
@@ -47,20 +47,17 @@
     "venturocket-angular-slider": "~0.3.0",
     "xtk": "FredLoney/X"
   },
+  "devDependencies": {
+    "domready": "~1.0.5",
+    "requirejs": "~2.1.14"
+  },
   "overrides": {
-    "es5-shim": {
-      "main": "es5-shim.js"
-    },
     "font-awesome": {
       "main": "css/font-awesome.css"
     }
   },
   "resolutions": {
     "nvd3": "master",
-    "d3": "~3.5.5"
-  },
-  "devDependencies": {
-    "domready": "~1.0.5",
-    "requirejs": "~2.1.14"
+    "d3": "~3.4.13"
   }
 }

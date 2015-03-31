@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+0.11.4 / 2015-03-31
+-------------------
+* Specify the d3 version resolution.
+
 0.11.3 / 2015-03-31
 -------------------
 * Move the exec library to dependencies.

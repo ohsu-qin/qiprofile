@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+0.11.5 / 2015-03-31
+-------------------
+* Get REST host from the QIREST_HOST environment variable.
+
 0.11.4 / 2015-03-31
 -------------------
 * Specify the d3 version resolution.

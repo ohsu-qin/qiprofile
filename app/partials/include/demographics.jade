@@ -9,12 +9,19 @@ table#demographics.table.qi-table
   tr(ng-show="subject.gender != null")
     th.col Gender
     td.col {{ subject.gender | gender }}
-  tr(ng-show="subject.weight != null")
-    th.col Weight
-    td.col {{ subject.weight }}
   tr(ng-show="subject.races != null && subject.races.length > 0")
     th.col Race
     td.col {{ subject.races | races }}
   tr(ng-show="subject.ethnicity != null")
     th.col Ethnicity
     td.col {{ subject.ethnicity | ethnicity }}
+  // The subject weight is captured at each session.
+  tr(ng-show="subject.sessions.length > 0")
+    tr
+      th.col Subject
+    tr
+      td.col Weight
+      td.col
+        ul.qi-hor-list
+          li(ng-repeat="session in subject.sessions")
+            {{ session.subject_weight }}

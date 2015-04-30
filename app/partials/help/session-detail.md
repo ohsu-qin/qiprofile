@@ -1,7 +1,21 @@
-Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris
-nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in
-reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
-pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
-culpa qui officia deserunt mollit anim id est laborum.
+This page displays the MR session details for a patient visit.
+
+The graph displays the average signal intensity, or brightness, of
+scanned and realigned (i.e., motion-corrected) image volumes at each
+time point of the multi-volume scan. Hover over a line to view exact
+intensity values at a time point. Click on the purple and green dots
+above the graph at right to hide/show the scanned and realigned image
+data, respectively.
+
+The volume selection panel below the graph consists of one row for the
+current multi-volume scan and one row for each of its registrations.
+To begin loading a volume for viewing, click on its
+<span class="glyphicon glyphicon-download"></span> button. After
+completion, the button will change to
+<span class="glyphicon glyphicon-eye-open"></span>; click on it to open
+the image detail page.
+
+Click on the <span class="glyphicon glyphicon-info-sign"></span> buttons
+to the left of the volume selection rows to view details about the
+scan's type and orientation or the realigned volume's registration
+technique and parameters.

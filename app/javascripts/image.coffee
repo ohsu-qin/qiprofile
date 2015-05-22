@@ -24,6 +24,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
         UNLOADED: 'unloaded'
         LOADING: 'loading'
         LOADED: 'loaded'
+        NOT_FOUND: 'not found'
 
       # Creates an object which encapsulates an image.
       #
@@ -59,12 +60,18 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
         # Read the file into an ArrayBuffer. The CoffeeScript fat
         # arrow (=>) binds the this variable to the image object
         # rather than the $http request.
-        File.readBinary(@volume.filename).then (data) =>
-          # Set the data property to the scan file content.
-          @xtkVolume.filedata = data
-          # Set the state to loaded.
-          @state = Image.STATES.LOADED
-          # Return the loaded image.
+        File.readBinary(@volume.filename).then (res) =>
+          # If the file is not found, display an alert and set the
+          #   state to not found.
+          if res.status is 404
+            alert "Image volume not found."
+            @state = Image.STATES.NOT_FOUND
+          else
+            # Set the data property to the scan file content.
+            @xtkVolume.filedata = res.data
+            # Set the state to loaded.
+            @state = Image.STATES.LOADED
+            # Return the loaded image.
           this
 
       isLoaded: ->
@@ -72,7 +79,10 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
 
       isLoading: ->
         @state == Image.STATES.LOADING
-      
+
+      isNotFound: ->
+        @state == Image.STATES.NOT_FOUND
+
       # Renders the image in the given parent element.
       #
       # @param element the Angular jQueryLite element

@@ -15,11 +15,15 @@ define ['angular'], (ng) ->
         # Remove the leading slash, if necessary.
         if path[0] is '/'
           path = path[1..]
+        url = '/static/' + path
         config.method = 'GET'
-        config.url = '/static/' + path
-        # Read the file and resolve to the content.
-        $http(config).then (res) ->
-          res.data
+        config.url = url
+        
+        # Read the file. Catch the error if file is not found.
+        $http(config).then((res) ->
+            res
+        ).catch (res) ->
+          res
 
       # A convenience function to read a binary file into
       # an ArrayBuffer.

@@ -61,10 +61,12 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
         # arrow (=>) binds the this variable to the image object
         # rather than the $http request.
         File.readBinary(@volume.filename).then (res) =>
-          # If the file is not found, display an alert and set the
-          #   state to not found.
+          # Check the status code of the image resource. If the file
+          #   was not found - producing an HTTP 404 error - display
+          #   an alert.
           if res.status is 404
             alert "Image volume not found."
+            # Set the state to 'not found'.
             @state = Image.STATES.NOT_FOUND
           else
             # Set the data property to the scan file content.

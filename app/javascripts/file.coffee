@@ -19,9 +19,11 @@ define ['angular'], (ng) ->
         config.method = 'GET'
         config.url = url
         
-        # Read the file. Catch the error if file is not found.
+        # Read the file.
         $http(config).then((res) ->
             res
+        # If the file is not found, catch the http error. A response status
+        #   code will be returned with the resource object.
         ).catch (res) ->
           res
 

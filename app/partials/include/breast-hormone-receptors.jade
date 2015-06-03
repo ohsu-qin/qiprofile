@@ -2,9 +2,9 @@
 
 .qi-panel.qi-nested
   .qi-ver-space(ng-controller='EstrogenCtrl'
-                ng-show='hormoneReceptors.estrogen != null')
+                ng-show='receptorStatus != null')
     include hormone-receptor
 
   .qi-ver-space(ng-controller='ProgesteroneCtrl'
-                ng-show='hormoneReceptors.progesterone != null')
+                ng-show='receptorStatus != null')
     include hormone-receptor

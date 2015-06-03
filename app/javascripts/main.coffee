@@ -4,13 +4,18 @@
 # task conditionally assigns the min suffix and time-out variables.
 ENV = '/* @echo NODE_ENV */'
 
-# Set the module name suffix and module load timeout.
+# Set the module name suffix and load timeout.
+
+# Set the module.
 if ENV is 'production'
   MIN = '.min'  # the minimized file
-  WAIT = 3      # less than the default of 7
+  WAIT = 5        # less than the default of 7
 else
   MIN = ''      # the unminimized file
-  WAIT = 1      # go to the cache quickly
+  # TODO - deploy on Heroku in production mode, then set dev WAIT
+  # to 1.
+  #WAIT = 1      # fall back quickly in dev mode
+  WAIT = 5
 
 # The Google CDN.
 GOOGLE_LIBS = '//ajax.googleapis.com/ajax/libs'

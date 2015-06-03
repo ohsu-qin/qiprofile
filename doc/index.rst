@@ -17,13 +17,11 @@ imaging analysis biomarkers with clinical outcomes.
 Feature List
 ************
 
-1. OHSU QIN patient MR visualization.
+1. Side-by-side clinical and pharmokinetic modeling results display.
 
-2. ROI capture.
+2. Patient MR visualization.
 
-3. Clincial annotation editor.
-
-4. qipipe_ pharmokinetic modeling result display.
+3. ROI and modeling overlays.
 
 
 ************
@@ -44,7 +42,11 @@ See the `Developer Guide`_ for installing a development project.
 Usage
 *****
 
-Run the following command to start the production server::
+1. Populate the qiprofile database from the qipipe_ pipeline. 
+
+2. Start the REST_ server.
+
+3. Run the following command to start the web application server::
 
      ./bin/qiprofile
 
@@ -55,8 +57,8 @@ See the `Developer Guide`_ for starting a development server.
 .. container:: copyright
 
   Copyright (C) 2014 Oregon Health & Science University `Knight Cancer Institute`_.
-  See the license_ for permissions. Please note that qiprofile is research software
-  which is neither approved nor recommended for clinical use.
+  This software is released under the MIT license_. Please note that qiprofile is
+  research software which is neither approved nor recommended for clinical use.
 
 
 .. Targets:
@@ -71,7 +73,9 @@ See the `Developer Guide`_ for starting a development server.
 
 .. _npm: https://www.npmjs.org/
 
-.. _qipipe: https://github.com/ohsu-qin/qipipe
+.. _qipipe: http://qipipe.readthedocs.org/en/latest/
+
+.. _REST: http://qiprofile-rest.readthedocs.org/en/latest/
 
 
 .. toctree::

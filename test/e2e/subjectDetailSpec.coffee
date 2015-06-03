@@ -37,9 +37,9 @@ class SubjectDetailPage extends Page
         selector: '#demographics'
         bindings:
           age: 'subject.birthDate'
+          weight: 'subject.weight'
           races: 'subject.races'
           ethnicity: 'subject.ethnicity'
-          weights: 'session.subject_weight'
 
     @find('.qi-clinical-profile').then (profile) ->
       if profile?
@@ -306,6 +306,14 @@ describe 'E2E Testing Subject Detail', ->
               expect(age, 'The age is not an integer').to.match(/^\d+$/)
               expect(parseInt(age), 'The age is not positive')
                 .to.be.greaterThan(0)
+        
+        it 'should show the weight', ->
+          demographics.then (table) ->
+            table.weight.then (weight) ->
+              expect(weight, 'The weight is missing').to.exist.and.to.not.be.empty
+              expect(weight, 'The weight is not an integer').to.match(/^\d+$/)
+              expect(parseInt(weight), 'The weight is not positive')
+                .to.be.greaterThan(0)
               
         it 'should show the race', ->
           demographics.then (table) ->
@@ -314,14 +322,9 @@ describe 'E2E Testing Subject Detail', ->
               
         it 'should show the ethnicity', ->
           demographics.then (table) ->
-            table.ethnicity.then (ethnicity) ->
+            table.ethnicity
+            .then (ethnicity) ->
               expect(ethnicity, 'The ethnicity is missing')
-                .to.exist.and.to.not.be.empty
-              
-        it 'should show the weights', ->
-          demographics.then (table) ->
-            table.weights.then (weights) ->
-              expect(weights, 'The weights are missing')
                 .to.exist.and.to.not.be.empty
       
       describe 'Encounters', ->

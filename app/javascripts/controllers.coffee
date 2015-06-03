@@ -376,16 +376,16 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ctlrs.controller 'EstrogenCtrl', [
       '$scope',
       ($scope) ->
-        $scope.hormone = 'Estrogen'
-        $scope.receptorStatus = $scope.hormoneReceptors.estrogen
+        $scope.receptorStatus = _.find($scope.hormoneReceptors.estrogen,
+                                       (hr) -> hr.hormone == 'estrogen')
     ]
 
 
     ctlrs.controller 'ProgesteroneCtrl', [
       '$scope',
       ($scope) ->
-        $scope.hormone = 'Progesterone'
-        $scope.receptorStatus = $scope.hormoneReceptors.progesterone
+        $scope.receptorStatus = _.find($scope.hormoneReceptors.estrogen,
+                                       (hr) -> hr.hormone == 'progesterone')
     ]
 
 

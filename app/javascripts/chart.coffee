@@ -151,7 +151,7 @@ define ['angular', 'lodash', 'moment', 'd3'], (ng, _, moment) ->
         _.max(precisions)
 
       # This function is a work-around for the following missing
-      # nv3d feature:
+      # nvd3 feature:
       # * allow different dataSpecs for y ticks and y tooltip
       #   values
       # This function allows for displaying the y-axis values

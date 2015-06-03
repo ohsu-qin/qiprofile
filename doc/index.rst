@@ -42,23 +42,22 @@ See the `Developer Guide`_ for installing a development project.
 Usage
 *****
 
-1. Populate the qiprofile database from the qipipe_ pipeline. 
+1. Populate the qiprofile database. A test database is available
+   in the REST_ project, as described in the `REST Development`_
+   section. The production database is populated by the qipipe_
+   pipeline. 
 
-2. Start the REST_ server.
+2. Start the REST server, as described in the `REST Usage`_ section.
 
 3. Run the following command to start the web application server::
 
-     ./bin/qiprofile
+     qiprofile
 
 See the `Developer Guide`_ for starting a development server.
 
 ---------
 
 .. container:: copyright
-
-  Copyright (C) 2014 Oregon Health & Science University `Knight Cancer Institute`_.
-  This software is released under the MIT license_. Please note that qiprofile is
-  research software which is neither approved nor recommended for clinical use.
 
 
 .. Targets:
@@ -76,6 +75,10 @@ See the `Developer Guide`_ for starting a development server.
 .. _qipipe: http://qipipe.readthedocs.org/en/latest/
 
 .. _REST: http://qiprofile-rest.readthedocs.org/en/latest/
+
+.. _REST Development: http://qiprofile-rest.readthedocs.org/en/latest/#development
+
+.. _REST Usage: http://qiprofile-rest.readthedocs.org/en/latest/#usage
 
 
 .. toctree::

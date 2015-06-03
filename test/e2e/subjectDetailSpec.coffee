@@ -322,8 +322,7 @@ describe 'E2E Testing Subject Detail', ->
               
         it 'should show the ethnicity', ->
           demographics.then (table) ->
-            table.ethnicity
-            .then (ethnicity) ->
+            table.ethnicity.then (ethnicity) ->
               expect(ethnicity, 'The ethnicity is missing')
                 .to.exist.and.to.not.be.empty
       

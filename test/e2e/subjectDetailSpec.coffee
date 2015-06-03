@@ -37,7 +37,6 @@ class SubjectDetailPage extends Page
         selector: '#demographics'
         bindings:
           age: 'subject.birthDate'
-          weight: 'subject.weight'
           races: 'subject.races'
           ethnicity: 'subject.ethnicity'
 
@@ -306,14 +305,6 @@ describe 'E2E Testing Subject Detail', ->
               expect(age, 'The age is not an integer').to.match(/^\d+$/)
               expect(parseInt(age), 'The age is not positive')
                 .to.be.greaterThan(0)
-        
-        it 'should show the weight', ->
-          demographics.then (table) ->
-            table.weight.then (weight) ->
-              expect(weight, 'The weight is missing').to.exist.and.to.not.be.empty
-              expect(weight, 'The weight is not an integer').to.match(/^\d+$/)
-              expect(parseInt(weight), 'The weight is not positive')
-                .to.be.greaterThan(0)
               
         it 'should show the race', ->
           demographics.then (table) ->
@@ -328,10 +319,17 @@ describe 'E2E Testing Subject Detail', ->
       
       describe 'Encounters', ->
           describe 'Biopsy', ->
-            # TODO - Add test cases for the date and every outcome table.
+            # TODO - Add test cases for the date, weight and every outcome table.
+            # it 'should show the weight', ->
+            #   biopsy.then (table) ->
+            #     table.weight.then (weight) ->
+            #       expect(weight, 'The weight is missing').to.exist.and.to.not.be.empty
+            #       expect(weight, 'The weight is not an integer').to.match(/^\d+$/)
+            #       expect(parseInt(weight), 'The weight is not positive')
+            #         .to.be.greaterThan(0)
       
           describe 'Assessment', ->
-            # TODO - Add test cases for the date and every outcome table.
+            # TODO - Add test cases for the date, weight and every outcome table.
 
   describe 'Sarcoma', ->
     page = null

@@ -35,7 +35,7 @@ define ['ngmocks', 'lodash', 'expect', 'pako', 'encoding', 'file'],
           it 'should read the plaintext file content', ->
             data = File.read(mock.path)
             expect(data, "The plaintext result is incorrect")
-              .to.eventually.equal(mock.data)
+                .to.eventually.equal(mock.data)
             # Dispatch the backend request.
             $httpBackend.flush()
 
@@ -70,8 +70,8 @@ define ['ngmocks', 'lodash', 'expect', 'pako', 'encoding', 'file'],
           $httpBackend.expectPOST(mock.url, mock.data).respond('Received')
 
         it 'should encode and post an object', ->
-          response = File.send(mock.url, mock.data).then (r) -> r.data
-          expect(response, "The post status is incorrect")
+          data = File.send(mock.url, mock.data)
+          expect(data, "The post status is incorrect")
             .to.eventually.equal('Received')
           # Dispatch the backend request.
           $httpBackend.flush()

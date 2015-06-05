@@ -24,7 +24,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
         UNLOADED: 'unloaded'
         LOADING: 'loading'
         LOADED: 'loaded'
-        NOT_FOUND: 'not found'
+        ERROR: 'error'
 
       # Creates an object which encapsulates an image.
       #
@@ -60,21 +60,19 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
         # Read the file into an ArrayBuffer. The CoffeeScript fat
         # arrow (=>) binds the this variable to the image object
         # rather than the $http request.
-        File.readBinary(@volume.filename).then (res) =>
-          # Check the status code of the image resource. If the file
-          #   was not found - producing an HTTP 404 error - display
-          #   an alert.
-          if res.status is 404
-            alert "Image volume not found."
-            # Set the state to 'not found'.
-            @state = Image.STATES.NOT_FOUND
-          else
-            # Set the data property to the scan file content.
-            @xtkVolume.filedata = res.data
-            # Set the state to loaded.
-            @state = Image.STATES.LOADED
-            # Return the loaded image.
-          this
+        File.readBinary(@volume.filename).then (data) =>
+          # Set the data property to the scan file content.
+          @xtkVolume.filedata = data
+          # Set the state to loaded.
+          @state = Image.STATES.LOADED
+          # Return the loaded image.
+        .catch (res) =>
+          # Display an alert with the status text.
+          alert "The image volume file load was unsuccessful: #{ res.statusText }."
+          # Set the state to 'error'.
+          @state = Image.STATES.ERROR
+
+        this
 
       isLoaded: ->
         @state == Image.STATES.LOADED
@@ -82,8 +80,8 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
       isLoading: ->
         @state == Image.STATES.LOADING
 
-      isNotFound: ->
-        @state == Image.STATES.NOT_FOUND
+      isError: ->
+        @state == Image.STATES.ERROR
 
       # Renders the image in the given parent element.
       #

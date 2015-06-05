@@ -378,4 +378,3 @@ describe 'E2E Testing Subject Detail', ->
                 expect(site.isDisplayed(), 'The Sarcoma pathology site field' +
                                            ' is not displayed')
                   .to.eventually.be.true
-

@@ -96,6 +96,13 @@ describe 'E2E Testing Session Detail', ->
   describe 'Intensity Chart', ->
     # Note: chart content is not testable. See the subjectDetailSpec note
     # for details.
+    #
+    # Note: this test case results in the following benign error message:
+    #     Client error: Error: [$compile:tpload] Failed to load template: /partials/intensity-chart.html
+    # The log messages are not informative. However, the error is ignored
+    # and tests succeed. The error does not occur for a browser load.
+    # TODO - find a way to isolate and correct this problem.
+    # 
     it 'should display the chart', ->
       expect(page.chart(), 'The chart is not displayed').to.eventually.exist
 

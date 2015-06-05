@@ -55,7 +55,7 @@ describe 'E2E Testing Subject List', ->
   describe 'Collections', ->
     content = null
 
-    beforeEach ->
+    before ->
       content = page.collection_subjects()
 
     it 'should display the Breast and Sarcoma collections', ->

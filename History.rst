@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+0.11.6 / 2015-06-05
+-------------------
+* Catch resource get failure and post alert. 
+
 0.11.5 / 2015-03-31
 -------------------
 * Get REST host from the QIREST_HOST environment variable.

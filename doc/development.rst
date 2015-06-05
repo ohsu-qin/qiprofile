@@ -198,7 +198,7 @@ runs the grunt protractor ``e2e`` task. This task runs as follows:
 
 * Print the result to the console
 
-Note that the e2e task can because of Selenium startup timing issues.
+Note that the e2e task can fail because of Selenium startup timing issues.
 If the test results in a failed connection error, the rerun the task.
 
 A single end-to-end test spec can be run with the ``--specs`` option::

@@ -1,6 +1,31 @@
 End-to-end testing notes
 ========================
 
+* A Page can be instantiated in a before (once per suite) or a beforeEach
+  (once per test case). Sometimes the beforeEach page results in an error,
+  e.g. if volumeSpec were changed from before to beforeEach then the
+  volume resource fails to load. In those cases, use a before page.
+  Sometimes, the before page results in an error, e.g. if subjectListSpec
+  were changed from beforeEach to before then the following error is
+  raised:
+  
+      Error while waiting for Protractor to sync with the page
+  
+  In those cases, use a beforeEach page. The putative rationale for the
+  difference is the interaction of Protractor with Selenium on angular vs.
+  non-angular pages
+  (cf. http://stackoverflow.com/questions/23634648/getting-error-error-while-waiting-for-protractor-to-sync-with-the-page/23881721#23881721).
+
+  Briefly, the advice is to get the page as follows:
+  * browser.get on angular pages with the Protractor API
+  * browser.driver.get on non-angular pages with the Selenium API
+  
+  However, that rationale does not apply in the aforementioned examples.
+  The best, albeit terrible, approach is trial-and-error and cross your
+  fingers that it doesn't break over time.
+  
+  TODO - there must be a better answer!
+
 * Updating mocha from 1.20.1 to 1.21.1 results in the following error::
 
       Error: timeout of 2000ms exceeded

@@ -68,7 +68,8 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
           # Return the loaded image.
         .catch (res) =>
           # Display an alert with the status text.
-          alert "The image volume file load was unsuccessful: #{ res.statusText }."
+          alert("The image volume file load was unsuccessful: " + 
+                "#{ res.statusText } (#{ res.status }).")
           # Set the state to 'error'.
           @state = Image.STATES.ERROR
 

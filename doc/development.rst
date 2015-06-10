@@ -194,7 +194,10 @@ The end-to-end tests are run with the Protractor_ framework. The command::
 
     grunt test:e2e
 
-runs the grunt protractor ``e2e`` task. This task runs as follows:
+runs the grunt protractor ``e2e`` task. The Express server must be
+running when ``e2e`` is started.
+
+The ``e2e`` task executes as follows:
 
 * Read the ``test/conf/protractor-conf.coffee`` configuration file
 

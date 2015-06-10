@@ -139,7 +139,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
         [low, high] = config.xMaxMin
         # The scaling factor.
         factor = dateline.width / (high - low)
-        for enc in subject.encounters
+        for enc in subject.clinicalEncounters
           date = enc.date.valueOf()
           offset = (date - low) * factor
           # Place the new text element in the DOM before the
@@ -195,14 +195,14 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
 
         addEncounterLegend = (parent, svgNode) ->
           # Bail if no encounters are displayed.
-          if not subject.encounters.length
+          if _.any(subject.clinicalEncounters)
             return
           # Place the legend line.
           p = parent.insert('p', -> svgNode)
           p.text('Encounters: ')
           p.classed({'col-md-offset-5': true, 'font-size: small': true})
           # Sort by begin date.
-          sorted = _.sortBy(subject.encounters, (enc) -> enc.date.valueOf())
+          sorted = _.sortBy(subject.clinicalEncounters, (enc) -> enc.date.valueOf())
           # The encounter labels.
           labels = _.uniq(enc._cls for enc in sorted)
           for label in labels
@@ -224,7 +224,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
       # The x axis element.
       xAxis = svg.select('.nv-x')
       # The session hyperlink vertical offset.
-      if _.any(subject.treatments) or _any(subject.encounters.length)
+      if _.any(subject.treatments) or _.any(subject.clinicalEncounters)
         dy = TREATMENT_BAR_HEIGHT
       else
         dy = 0
@@ -248,17 +248,17 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
           trtSpan = treatmentSpan(trt)
           for value in trtSpan
             values.push(value)
-        for enc in subject.encounters
+        for enc in subject.clinicalEncounters
           values.push(enc.date.valueOf())
         for sess in subject.sessions
-          values.push(sess.acquisitionDate.valueOf())
+          values.push(sess.date.valueOf())
         # Return the min and max date.
         [_.min(values), _.max(values)]
 
       # The chart data specification.
       dataSpec =
         x:
-          accessor: (session) -> session.acquisitionDate.valueOf()
+          accessor: (session) -> session.date.valueOf()
         y:
           # There is one tri-partite data series. The y coordinate
           # for this data series is always zero.

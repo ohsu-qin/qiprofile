@@ -33,8 +33,9 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
           collection: 'Breast'
           number: 1
           birth_date: moment('August 21, 1986').valueOf()
-          sessions: [
+          encounters: [
             {
+              _cls: 'Session'
               number: 1
               acquisition_date: moment('July 1, 2013').valueOf()
               detail: 'sd1'
@@ -55,6 +56,7 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
               ]
             }
             {
+              _cls: 'Session'
               number: 2
               acquisition_date: moment('August 1, 2013').valueOf()
               detail: 'sd2'
@@ -74,14 +76,14 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
                 }
               ]
             }
-          ]
-          encounters: [
-            _cls: 'Biopsy'
-            date: moment('July 12, 2013').valueOf()
-            pathology:
-              _cls: 'BreastPathology'
-              tnm:
-                size: 'T3'
+            {
+              _cls: 'Biopsy'
+              date: moment('July 12, 2013').valueOf()
+              pathology:
+                _cls: 'BreastPathology'
+                tnm:
+                  size: 'T3'
+            }
           ]
           treatments: [
             treatment_type: 'neodjuvant'
@@ -189,7 +191,7 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
         $httpBackend.verifyNoOutstandingExpectation()
         $httpBackend.verifyNoOutstandingRequest()
 
-      describe 'Subject', ->
+      describe.only 'Subject', ->
         subject = null
 
         beforeEach ->
@@ -216,22 +218,28 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
           expect(subject, "Subject not fetched").to.eventually.exist
           $httpBackend.flush()
 
+        it 'should have subject encounters', ->
+          expect(subject.encounters, "Subject is missing encounters").to.exist
+          expect(subject.encounters.length,
+                "Subject encounters length is incorrect").to.equal(3)
+
         describe 'Demographics', ->
           # Validate the birth date.
           it 'should anonymize the subject birth date', ->
-            expect(subject.birthDate, "Subject is missing a birth date").to.exist
+            expect(subject.birthDate, "Subject is missing a birth date")
+              .to.exist
             expect(subject.birthDate.valueOf(), "Subject birth date is incorrect")
               .to.equal(moment('July 7, 1986').valueOf())
 
         describe 'Clinical', ->
-          # Validate the encounters.
-          it 'should set the subject encounters', ->
-            expect(subject.encounters, "Subject is missing encounters").to.exist
-            expect(subject.encounters.length, "Subject encounters length is" +
-                                              " incorrect").to.equal(1)
-            enc = subject.encounters[0]
-            expect(enc._cls, "Encounter type is incorrect")
-              .to.equal(mock.subject.encounters[0]._cls)
+          # Validate the clinical encounters.
+          it 'should set the clinical encounters', ->
+            expect(subject.clinicalEncounters,
+                   "Subject is missing clinical encounters")
+              .to.exist
+            expect(subject.clinicalEncounters.length,
+                   "Subject clinical encounters length is incorrect")
+              .to.equal(1)
 
           # Validate the treatments.
           it 'should extend the subject treatments', ->
@@ -305,7 +313,7 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
                 .to.exist
 
             it 'should reflect the session modeling delta Ktrans value', ->
-              mockResult = mock.subject.sessions[0].modelings[0].result
+              mockResult = mock.subject.encounters[0].modelings[0].result
               expect(result.delta_k_trans.average,
                      "Modeling delta Ktrans result is incorrect")
                 .to.equal(mockResult.delta_k_trans.average)            

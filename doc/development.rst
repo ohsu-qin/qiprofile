@@ -6,7 +6,8 @@ Developer Guide
 Overview
 ********
 
-The ``qiprofile`` module implements the Imaging Profile UI web application.
+The ``qiprofile`` module implements the Imaging Profile UI web
+application.
 
 
 ************
@@ -32,24 +33,33 @@ See the *Development* section below for adding a new dependency.
 Setup
 *****
 
-1. Follow the `qiprofile installation instructions`_, omitting the ``--production``
-   option.
+1. Follow the `qiprofile installation instructions`_, omitting the
+   ``--production`` option.
 
 2. Install the Grunt_ CLI command globally::
 
        npm install -g grunt-cli
 
-3. Install the PhantomJS_ headless web server globally::
-
-       npm install -g phantomjs
-
-4. Run the following in a console from the ``qiprofile`` directory::
+3. Run the following in a console from the ``qiprofile`` directory::
 
        npm install
 
    This command installs the necessary packages [#xtk_fork]_.
 
-5. Run the following Grunt_ script::
+4. Add the following line to the bash initialization script
+   (``$HOME/.bashrc`` or ``$HOME/.bash_profile``)::
+   
+       export PHANTOMJS_BIN=$HOME/workspace/qiprofile/node_modules/phantomjs/bin/phantomjs
+   
+   This step works around the phantomjs bug described in
+   ``test/unit/README.rst``.
+   
+5. Open a new console to refresh the environment.
+
+6. Read `test/unit/README.rst`` and `test/e2e/README.rst`` for additional
+   testing notes.
+
+7. Run the following Grunt_ script::
 
        grunt
 
@@ -212,6 +222,14 @@ helper encapsulates the page being tested.
 
 Coding Standards
 ----------------
+* All unit and end-to-end tests must run successfully before any
+  ``git push`` to the GitHub master branch.
+
+* Every new feature should be verified by a new test suite.
+
+* Every bug fix should be verified by a new test case that fails
+  before the bug fix and succeeds after the bug fix.
+
 * All application JavaScript is compiled from an ``app/javascripts``
   CoffeeScript file. If working from a JavaScript example, adapt it to an
   equivalent CoffeeScript, which has the added benefit of understanding
@@ -366,27 +384,37 @@ Coding Standards
 * Version numbers follow the *major*\ .\ *minor*\ .\ *patch* scheme
   described in the `Fast and Loose Versioning`_ gist.
 
-* Add a new version as follows:
+* Prepare to publish changes as follows:
 
-  * Add a short version theme description to ``History.rst``.
+  - Check in all tested changes.
 
-  * Increment the ``package.json`` version attribute.
-
-  * Check in all tested changes.
-
-  * Rebase, test and merge the branch as described above.
+  - Rebase, test and merge the branch as described above.
     You should now be on the ``master`` branch.
 
-  * Set a git tag with a ``v`` prefix, e.g.::
+* Contributors submit changes by pushing the changes to a
+  GitHub fork and sending a pull request to the main
+  qiprofile GitHub repository.
+
+* Committers add a new version as follows:
+
+  - Add a short version theme description to ``History.rst``.
+
+  - Increment the ``package.json`` version attribute.
+
+  - Set a git tag with a ``v`` prefix, e.g.::
 
         git tag v2.1.2
 
-  * Update the server::
+  - Update the server::
 
         git push
         git push --tags
 
-  * Periodically delete unused local and remote branches. Exercise care
+  - Publish the new module to NPM (cf. the `NPM Publishing Guide`_)::
+  
+        npm publish
+
+  - Periodically delete unused local and remote branches. Exercise care
     when deleting a stale remote branch. See the
     `Pro Git Book`_ `Deleting Remote Branches`_ section for details.
 
@@ -395,113 +423,90 @@ Coding Standards
 Deployment
 **********
 
-The deployment targets are as follows:
+The deployment targets requires two servers:
 
-* ``quip5`` - the XNAT server
+* the XNAT server
 
-* ``quip4`` - the qiprofile Express_, qiprofile-rest_ Eve and qiprofile-rest_
+* the qiprofile Express_, qiprofile-rest_ Eve and qiprofile-rest_
   MongoDB servers
 
-Both ``quip5`` and ``quip4`` share a Direct Attached Storage (DAS) mounted
-at::
+Both servers share a Direct Attached Storage (DAS) XNAT archive
+directory, e.g. if the DAS mount point is ``/home/groups/quip``
+then create the archive directory as follows::
 
-   /home/groups/quip/xnat
+    mkdir -p /home/groups/quip/xnat/archive
 
-The quip5 XNAT server is configured to place the image files on this DAS
-volume via a symbolic link::
+The XNAT server is configured to place the image files on this DAS
+volume via a symbolic link, e.g.::
 
-    /var/local/xnat -> /home/groups/quip/xnat
+    ln -s /home/groups/quip/xnat/archive /var/local/xnat 
 
 Thus, when XNAT archives an image file it places it in the standard XNAT
-location ``/var/local/xnat`` which in turn resolves the shared DAS volume
-location.
+location ``/var/local/xnat/archive``, which in turn resolves the shared
+DAS volume location.
 
 XNAT places the image files according to its own fixed hierarchy. For
-example, the sarcoma patient 1 visit 1 scan 50 file would be at::
+example, given the above DAS configuration, then the sarcoma patient 1
+visit 1 scan 50 file has the following location::
 
-    /home/groups/quip/xnat/
+    /home/groups/quip/xnat/archive/
       QIN/arc001/Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz
 
 The corresponding image file for the registration named ``reg_j3P9u``
 would be::
 
-    /home/groups/quip/xnat/
+    /home/groups/quip/xnat/archive/
       QIN/arc001/Sarcoma001_Session01/RESOURCES/reg_j3P9u/series050.nii.gz
 
-on the shared DAS volume of both quip4 and quip5.
+on the shared DAS volume of both servers.
 
-The quip4 Express server hosts the qiprofile web app at root directory::
+The Express server hosts the qiprofile web app at the following root
+directory::
 
     /var/local/express/webapps/qiprofile
 
-There is a ``data`` link in this root directory to the XNAT location::
+Express finds the image data in the ``data`` subdirectory. Create a
+symbolic link to the shared XNAT image location, e.g.::
 
-    /var/local/express/webapps/qiprofile/
-      data -> /home/groups/quip/xnat
+    ln -s /home/groups/quip/xnat/archive /var/local/express/webapps/qiprofile/data
 
-The qiprofile-rest data model has classes::
-
-    class SessionDetail(mongoengine.Document):
-        """The MR session detailed content."""
-        scan = fields.EmbeddedDocumentField('Scan')
-
-        registrations = fields.ListField(
-            field=fields.EmbeddedDocumentField('Registration')
-        )
-        ...
-
-    class ImageContainer(mongoengine.EmbeddedDocument):
-        """The patient scan or registration."""
-        files = fields.ListField(field=fields.StringField())
-        ...
-
-    class Scan(ImageContainer):
-        """The patient image scan."""
-        ...
-
-    class Registration(ImageContainer):
-    """The patient image registration that results from processing
-     the image scan."""
-        ...
-
-The session scan and registrations ``files`` consists of the XNAT series
-image file path for each series in the MR session.
-
-A qipipe_ pipeline task populates the MongoDB ``qiprofile`` database with
-new MR session data, filling in the files list with the series file paths
-relative to the parent location, e.g.::
+The qiprofile-rest data model ``Scan`` and ``Registration`` ``files``
+field consists of the image file path for each volume. A qipipe_ pipeline task
+populates the MongoDB ``qiprofile`` database with new MR session imaging fields,
+filling in the files list with the file paths relative to the parent project
+location, e.g.::
 
     Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz
 
-The qiprofile router reads this data into a Javascript Session object, e.g.::
+The qiprofile router reads this data into a Javascript session object,
+e.g.::
 
-    session = {
-      scan: {
-        files: […, 'Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz', ...]
-      }
+    scan: {
+      files: [..., 'Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz', ...]
     }
 
-When the QuIP Session Detail series scan or registration image download
-button is clicked, then QuIP builds the file location relative to the web
-app directory, e.g.::
+When the *QuIP* Session Detail scan or registration image download button
+is clicked, then *QuIP* builds the file location relative to the web app
+root directory, e.g.::
 
     data/QIN/arc001/Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz
 
-where ``QIN`` is the project name. QuIP then dispatches an HTTP XHR_ request
-for the static file at that location::
+where ``QIN`` is the project name. *QuIP* then dispatches an HTTP XHR_
+request for the static file at that location::
 
      HTTP GET /static/data/QIN/arc001/Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz
 
-The QuIP Express server recognizes the ``/static/`` prefix as a request for
+The *QuIP* Express server recognizes the ``/static/`` prefix as a request for
 a file relative to the web app root and returns the content of the server file,
 in this case the file at::
 
       /var/local/express/webapps/qiprofile/
         data/QIN/arc001/Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz
 
-When the file content is received by the QuIP client, the Session Detail image
-download button is hidden and the open button is shown. When the open button is
-clicked, then the Image Detail page is visited with the image file content.
+When the file content is received by the *QuIP* client, then the Session Detail
+image download button is hidden and the open button is shown. When the open
+button is clicked, then the Image Detail page is visited with the image file
+content.
 
 The ``qiprofile-rest`` ``test/helpers/seed.py`` script populates the
 ``ImageContainer`` ``files`` field described above for the 24 Breast and
@@ -511,7 +516,7 @@ web app build to the test image file fixtures location::
 
       _public/data -> ../test/fixtures/data
 
-There is a single test image file fixture::
+The test image files conform to the XNAT file location convention, e.g.::
 
       test/fixtures/data/
         QIN_Test/arc001/Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz
@@ -555,7 +560,7 @@ examples:
 .. [#docCaveat]
    Unfortunately, there is not yet a known means of generating AngularJS
    Coffeescript API documentation. `Dgeni`_ ngdoc parsing does not have a
-   Coffeescript adapter. `CoffeeDoc`_ Codo does not parse AngularJS modules.
+   Coffeescript adapter. `CoffeeDoc`_ `Codo`_ does not parse AngularJS modules.
    The  `Comment passthrough workaround`_ is no help, since ngdoc does not
    detect classes or functions in the compiled Javascript. The best solution
    is the `Dgeni CoffeeScript documentation extractor`_ enhancement proposal.
@@ -576,13 +581,19 @@ examples:
 
 .. _Chrome: https://www.google.com/intl/en_us/chrome/browser/
 
+.. _Codo: https://github.com/coffeedoc/codo
+
 .. _CoffeeScript Style Guide : https://github.com/polarmobile/coffeescript-style-guide
+
+.. _CoffeeDoc: http://coffeedoc.info/
 
 .. _`Comment passthrough workaround`: http://stackoverflow.com/questions/7833021/how-to-document-coffeescript-source-code-with-jsdoc/9157241#9157241
 
 .. _Deleting Remote Branches: http://git-scm.com/book/en/Git-Branching-Remote-Branches#Deleting-Remote-Branches
 
 .. _DevTools: https://developer.chrome.com/devtools/index
+
+.. _Dgeni: https://github.com/angular/dgeni
 
 .. _Dgeni CoffeeScript documentation extractor: https://github.com/angular/dgeni/issues/69
 
@@ -610,6 +621,8 @@ examples:
 
 .. _npmedge: https://www.npmjs.com/package/npmedge#overview
 
+.. _NPM Publishing Guide: https://docs.npmjs.com/getting-started/publishing-npm-packages
+
 .. _ngdoc: https://github.com/angular/angular.js/wiki/Writing-AngularJS-Documentation
 
 .. _PhantomJS: http://phantomjs.org/
@@ -619,6 +632,8 @@ examples:
 .. _Protractor: https://github.com/angular/protractor
 
 .. _qipipe: https://github.com/ohsu-qin/qipipe
+
+.. _qiprofile installation instructions: https://github.com/ohsu-qin/qiprofile/blob/master/doc/index.rst
 
 .. _qiprofile-rest: https://github.com/ohsu-qin/qiprofile-rest
 

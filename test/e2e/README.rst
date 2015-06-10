@@ -1,6 +1,19 @@
 End-to-end testing notes
 ========================
 
+* Running the tests can result in the following errors::
+
+      Client error: SyntaxError: Unexpected end of input
+      
+      Client error: Error: [$compile:tpload] Failed to load template: /partials/intensity-chart.html
+
+  The partial does load in the browser and it appears that the
+  tests are not affected. These messages began occuring after updating
+  test packages, but they cannot be isolated to a particular package.
+  Since the messages seem to be benign, it is ignored for now.
+  
+  TODO - revisit this after applying npmedge in late 2015.
+
 * A Page can be instantiated in a before (once per suite) or a beforeEach
   (once per test case). Sometimes the beforeEach page results in an error,
   e.g. if volumeSpec were changed from before to beforeEach then the
@@ -17,7 +30,9 @@ End-to-end testing notes
   (cf. http://stackoverflow.com/questions/23634648/getting-error-error-while-waiting-for-protractor-to-sync-with-the-page/23881721#23881721).
 
   Briefly, the advice is to get the page as follows:
+
   * browser.get on angular pages with the Protractor API
+
   * browser.driver.get on non-angular pages with the Selenium API
   
   However, that rationale does not apply in the aforementioned examples.
@@ -35,7 +50,7 @@ End-to-end testing notes
   suggestions have not corrected the problem. mocha is held back to 1.20.x
   for now.
 
-  TODO - retry updating mocha in 2015.
+  TODO - retry updating mocha in late 2015.
 
 * The ``it.only`` qualifier results in the following error::
 

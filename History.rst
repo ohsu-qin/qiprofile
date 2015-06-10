@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+0.11.7 / 2015-06-09
+-------------------
+* Session is an encounter.
+
 0.11.6 / 2015-06-05
 -------------------
 * Catch resource get failure and post alert. 

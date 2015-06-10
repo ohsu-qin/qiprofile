@@ -6,7 +6,7 @@ define ['angular', 'lodash', 'k-trans', 'v-e', 'tau-i', 'chart'], (ng, _, Ktrans
     X_DATA_SPEC =
       label: 'Visit Date'
       accessor: (mdlResult) ->
-        mdlResult.modeling.session.acquisitionDate.valueOf()
+        mdlResult.modeling.session.date.valueOf()
     
     # The modeling parameter HTML display headings.
     PARAMETER_HEADINGS:

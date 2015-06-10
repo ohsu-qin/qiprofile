@@ -133,7 +133,7 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
 
     filters.filter 'visitDates', ->
       (sessions) ->
-        sess.acquisitionDate() for sess in sessions
+        sess.date() for sess in sessions
 
 
     filters.filter 'multiVolume', ->

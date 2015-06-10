@@ -236,8 +236,6 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
                 session.subject = subject
                 # Set the session number property.
                 session.number = number
-                # Fix the acquisition date.
-                session.acquisitionDate = DateHelper.asMoment(session.acquisitionDate)
                 # Add the modeling properties.
                 for modeling in session.modelings
                   extendModeling(modeling, session)
@@ -254,17 +252,27 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
               for session, i in subject.sessions
                 extendSession(session, i+1)
             
+            # Fucntion which returns whether the given encounter is
+            # a session.
+            is_session = (encounter) -> encounter._cls == 'Session'
+            # Partition the encounters as imaging or clinical.
+            [sessions, clnEncs] = _.partition(subject.encounters, is_session)
+            # The sessions property.
+            subject.sessions = sessions
+            # The clinicalEncounters property.
+            subject.clinicalEncounters = clnEncs
             # Fix the subject dates.
             fixDates()
             # Doctor the sessions.
             extendSessions()
             # Add the subject modeling property.
             addModeling()
-            # Add the isMultiSession property.
-            Object.defineProperty subject, 'isMultiSession',
+            # The isMultiSession property.
+            Object.defineProperties subject,
               # @returns whether there is more than one session
-              get: ->
-                isMultiSession = this.sessions.length > 1
+              isMultiSession:
+                get: ->
+                  this.sessions.length > 1
             
             # End of extendSubject.
           

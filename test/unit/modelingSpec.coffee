@@ -10,7 +10,7 @@ define ['ngmocks', 'moment', 'k-trans', 'v-e', 'tau-i', 'modeling'],
         {
           modeling:
             session:
-              acquisitionDate: moment('April 1, 2014').valueOf()
+              date: moment('April 1, 2014').valueOf()
           fxlKTrans:
             average: 1.4
           fxrKTrans:
@@ -23,7 +23,7 @@ define ['ngmocks', 'moment', 'k-trans', 'v-e', 'tau-i', 'modeling'],
         {
           modeling:
             session:
-              acquisitionDate: moment('May 11, 2014').valueOf()
+              date: moment('May 11, 2014').valueOf()
           fxlKTrans:
             average: 1.3
           fxrKTrans:
@@ -49,7 +49,7 @@ define ['ngmocks', 'moment', 'k-trans', 'v-e', 'tau-i', 'modeling'],
 
         beforeEach ->
           dates = mock.map (mdlResult) ->
-            mdlResult.modeling.session.acquisitionDate
+            mdlResult.modeling.session.date
 
         describe 'kTrans', ->
           config = null

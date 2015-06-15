@@ -87,7 +87,7 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
           ]
           treatments: [
             treatment_type: 'neodjuvant'
-            begin_date: moment('June 4, 2013').valueOf()
+            start_date: moment('June 4, 2013').valueOf()
             end_date: moment('July 16, 2013').valueOf()
           ]
 
@@ -252,9 +252,9 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
             expect(trt.treatmentType, "Treatment type is missing").to.exist
             expect(trt.treatmentType, "Treatment type is incorrect")
               .to.equal(mockTrt.treatment_type)
-            expect(trt.begin_date.valueOf(),
+            expect(trt.start_date.valueOf(),
                    "Treatment begin date is incorrect")
-              .to.equal(mockTrt.begin_date)
+              .to.equal(mockTrt.start_date)
 
         describe 'Modeling', ->
           modeling = null

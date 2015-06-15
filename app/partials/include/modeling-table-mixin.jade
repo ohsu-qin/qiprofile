@@ -8,15 +8,12 @@ mixin modeling-table(properties, headings)
   table.table.qi-table.qi-modeling-table
     // The column groups.
     // The visit date has its own column group.
-    colgroup
-      col
+    colgroup(span=1)
     // There is one column group per property, consisting of one
     // column for the property value and one column for the percent
     // change.
     for _ in properties
-      colgroup
-        col
-        col
+      colgroup(span=2)
 
     // The column headings.
     thead

@@ -1,0 +1,24 @@
+include accordion-heading-mixin
+
+//- The heading mixin below parses to:
+//-   <accordion-heading>{{ treatment._cls }}
+//-
++accordion-heading('{{ treatment.treatment_type | capitalize }} Treatment')
+
+table.table.qi-table
+  // Show the start and end dates side by side.
+  colgroup(span=2)
+  colgroup(span=2)
+  tr
+    th Start Date
+    td {{ treatment.startDate | moment }}
+    th End Date
+    td {{ treatment.endDate | moment }}
+
+// The chemotherapy partial.
+div(ng-show="chemotherapy" ng-controller='ChemotherapyCtrl')
+  include chemotherapy
+
+// The radiotherapy partial.
+div(ng-show="radiotherapy" ng-controller='RadiotherapyCtrl')
+  include radiotherapy

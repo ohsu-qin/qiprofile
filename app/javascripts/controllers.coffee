@@ -389,6 +389,24 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ]
 
 
+    ctlrs.controller 'ChemotherapyCtrl', [
+      '$scope',
+      ($scope) ->
+        is_chemo = (dosage) -> dosage.agent._cls == 'Drug'
+        chemo = $scope.treatment.dosages.filter(is_chemo)
+        $scope.chemotherapy = {dosages: chemo} if chemo.length
+    ]
+
+
+    ctlrs.controller 'RadiotherapyCtrl', [
+      '$scope',
+      ($scope) ->
+        is_radio = (dosage) -> dosage.agent._cls == 'Drug'
+        radio = $scope.treatment.dosages.filter(is_radio)
+        $scope.radiotherapy = {dosages: radio} if radio.length
+    ]
+
+
     ## The Session Detail page controllers. ##
   
     ctlrs.controller 'SessionDetailCtrl', [

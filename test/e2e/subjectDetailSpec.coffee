@@ -318,18 +318,33 @@ describe 'E2E Testing Subject Detail', ->
                 .to.exist.and.to.not.be.empty
       
       describe 'Encounters', ->
-          describe 'Biopsy', ->
-            # TODO - Add test cases for the date, weight and every outcome table.
-            # it 'should show the weight', ->
-            #   biopsy.then (table) ->
-            #     table.weight.then (weight) ->
-            #       expect(weight, 'The weight is missing').to.exist.and.to.not.be.empty
-            #       expect(weight, 'The weight is not an integer').to.match(/^\d+$/)
-            #       expect(parseInt(weight), 'The weight is not positive')
-            #         .to.be.greaterThan(0)
+        describe 'Biopsy', ->
+          biopsy = null
       
-          describe 'Assessment', ->
-            # TODO - Add test cases for the date, weight and every outcome table.
+          before ->
+            biopsy = clinicalProfile.then (profile) ->
+              profile.find('div[ng-switch-when="Biopsy"]')
+
+          # TODO - Add test cases for the date, weight and every outcome, e.g.:
+          # it 'should show the weight', ->
+          #   biopsy.then (table) ->
+          #     table.weight.then (weight) ->
+          #       expect(weight, 'The weight is missing').to.exist.and.to.not.be.empty
+          #       expect(weight, 'The weight is not an integer').to.match(/^\d+$/)
+          #       expect(parseInt(weight), 'The weight is not positive')
+          #         .to.be.greaterThan(0)
+    
+        describe 'Assessment', ->
+          # TODO - Add test cases for the date, weight and every outcome table.
+      
+      describe 'Treatments', ->
+        # TODO - Add test cases for the treatment type, start and end dates.
+        
+        describe 'Chemotherapy', ->
+          # TODO - Add chemotherapy test cases.
+        
+        describe 'Radiotherapy', ->
+          # TODO - Add radiotherapy test cases.
 
   describe 'Sarcoma', ->
     page = null

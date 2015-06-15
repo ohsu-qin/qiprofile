@@ -13,8 +13,8 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
     # @param treatment the treatment object
     # @returns the [begin, end] array
     treatmentSpan = (treatment) ->
-      if treatment.begin_date?
-        begin = treatment.begin_date.valueOf()
+      if treatment.start_date?
+        begin = treatment.start_date.valueOf()
         endDate = treatment.end_date or moment()
         end = endDate.valueOf()
         [begin, end]
@@ -169,17 +169,15 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
       # @param svg the SVG element
       addLegend = (svgNode) ->
         addTreatmentLegend = (parent, svgNode) ->
-          # The displayed treatments have a begin date.
-          filtered = _.filter(subject.treatments, (trt) -> trt.begin_date?)
-          # Bail if no treatments are displayed.
-          if not filtered.length
-            return
+          # If there are no treatments, then bail out.
+          trts = subject.treatments
+          return if not trts.length
           # Place the legend line.
           p = parent.insert('p', -> svgNode)
           p.text('Treatments: ')
           p.classed({'col-md-offset-5': true, 'font-size: small': true})
           # Sort by begin date.
-          sorted = _.sortBy(filtered, (trt) -> trt.begin_date.valueOf())
+          sorted = _.sortBy(trts, (trt) -> trt.start_date.valueOf())
           # The treatment labels.
           labels = _.uniq(trt.treatment_type for trt in sorted)
           # The treatment label size.

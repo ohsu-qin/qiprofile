@@ -3,27 +3,24 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
 
   dateline.factory 'VisitDateline', ['ObjectHelper', 'Chart', (ObjectHelper, Chart) ->
     # A helper function to calculate the effective treatment dates.
-    # If there is not a begin date, then this function returns an
-    # empty array. Otherwise, this function returns a [begin, end]
-    # array, where:
-    # * begin is the moment begin date integer 
+    # This function returns a [start, end] array, where:
+    # * start is the moment start date integer 
     # * end is the moment end date integer
     # The default end date is today.
     #
+    # TODO - depict a treatment with no end date as an arrow.
+    #
     # @param treatment the treatment object
-    # @returns the [begin, end] array
+    # @returns the [start, end] array
     treatmentSpan = (treatment) ->
-      if treatment.begin_date?
-        begin = treatment.begin_date.valueOf()
-        endDate = treatment.end_date or moment()
-        end = endDate.valueOf()
-        [begin, end]
-      else
-        []
+      start = treatment.start_date.valueOf()
+      endDate = treatment.end_date or moment()
+      end = endDate.valueOf()
+      [start, end]
 
     # Decorates the dateline as follows:
     # * Add the session hyperlinks, encounter dates and treatment
-    #   begin-end bars.
+    #   start-end bars.
     # * Rotate the date x-axis tick labels
     #
     # Note: The session hyperlinks are ui-sref attributes. However,
@@ -90,8 +87,6 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
           callback(a) if callback
 
       # Inserts an SVG bar for each treatment above the timeline.
-      # The bar is added if and only if the treatment has a
-      # begin date.
       #
       # @param xAxisNode the chart SVG x axis element
       # @param config the chart configuration
@@ -105,26 +100,24 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
         # The scaling factor.
         factor = dateline.width / (high - low)
         for trt in subject.treatments
-          trtSpan = treatmentSpan(trt)
-          if _.any(trtSpan)
-            [begin, end] = trtSpan
-            left = (begin - low) * factor
-            width = (end - begin) * factor
-            # Allow for a 6-pixel minimum width.
-            if not width
-              left = left - 3
-              width = 6
-            # Place the new bar rectangle element in the DOM
-            # before the x axis element.
-            bar = parent.insert('svg:rect', -> xAxisNode)
-            # Set the bar dimensions.
-            bar.attr('height', "#{ TREATMENT_BAR_HEIGHT }em")
-            bar.attr('width', width)
-            # Set the bar style.
-            bar.classed("qi-dateline-#{ trt.treatment_type.toLowerCase() }", true)
-            # Position the bar.
-            bar.attr('x', left)
-            bar.attr('y', "-#{ TREATMENT_BAR_HEIGHT }em")
+          [start, end] = treatmentSpan(trt)
+          left = (start - low) * factor
+          width = (end - start) * factor
+          # Allow for a 6-pixel minimum width.
+          if not width
+            left = left - 3
+            width = 6
+          # Place the new bar rectangle element in the DOM
+          # before the x axis element.
+          bar = parent.insert('svg:rect', -> xAxisNode)
+          # Set the bar dimensions.
+          bar.attr('height', "#{ TREATMENT_BAR_HEIGHT }em")
+          bar.attr('width', width)
+          # Set the bar style.
+          bar.classed("qi-dateline-#{ trt.treatment_type.toLowerCase() }", true)
+          # Position the bar.
+          bar.attr('x', left)
+          bar.attr('y', "-#{ TREATMENT_BAR_HEIGHT }em")
 
       # Inserts a marker for each encounter above the timeline.
       #
@@ -169,17 +162,15 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
       # @param svg the SVG element
       addLegend = (svgNode) ->
         addTreatmentLegend = (parent, svgNode) ->
-          # The displayed treatments have a begin date.
-          filtered = _.filter(subject.treatments, (trt) -> trt.begin_date?)
-          # Bail if no treatments are displayed.
-          if not filtered.length
-            return
+          # If there are no treatments, then bail out.
+          trts = subject.treatments
+          return if not trts.length
           # Place the legend line.
           p = parent.insert('p', -> svgNode)
           p.text('Treatments: ')
           p.classed({'col-md-offset-5': true, 'font-size: small': true})
-          # Sort by begin date.
-          sorted = _.sortBy(filtered, (trt) -> trt.begin_date.valueOf())
+          # Sort by start date.
+          sorted = _.sortBy(trts, (trt) -> trt.start_date.valueOf())
           # The treatment labels.
           labels = _.uniq(trt.treatment_type for trt in sorted)
           # The treatment label size.
@@ -195,14 +186,14 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
 
         addEncounterLegend = (parent, svgNode) ->
           # Bail if no encounters are displayed.
-          if _.any(subject.clinicalEncounters)
-            return
+          encs = subject.clinicalEncounters
+          return if not encs.length
           # Place the legend line.
           p = parent.insert('p', -> svgNode)
           p.text('Encounters: ')
           p.classed({'col-md-offset-5': true, 'font-size: small': true})
-          # Sort by begin date.
-          sorted = _.sortBy(subject.clinicalEncounters, (enc) -> enc.date.valueOf())
+          # Sort by start date.
+          sorted = _.sortBy(encs, (enc) -> enc.date.valueOf())
           # The encounter labels.
           labels = _.uniq(enc._cls for enc in sorted)
           for label in labels

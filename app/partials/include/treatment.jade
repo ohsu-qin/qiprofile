@@ -6,12 +6,12 @@ include accordion-heading-mixin
 +accordion-heading('{{ treatment.treatment_type | capitalize }} Treatment')
 
 table.table.qi-table
-  // Show the start and end dates side by side.
-  colgroup(span=2)
-  colgroup(span=2)
+  // Vertically align the date (label, value) pairs with separation.
   tr
     th Start Date
     td {{ treatment.startDate | moment }}
+    // A spacer pseudo-column.
+    td.qi-transparent
     th End Date
     td {{ treatment.endDate | moment }}
 

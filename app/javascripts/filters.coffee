@@ -6,11 +6,11 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
                          'qiprofile.tnm', 'qiprofile.image']
 
     filters.filter 'capitalize', ->
-      (s) -> _s.capitalize(s)
+      (s) -> _s.capitalize(s) if s?
 
 
     filters.filter 'underscore', ->
-      (s) -> _s.underscored(s)
+      (s) -> _s.underscored(s) if s?
 
 
     filters.filter 'romanize', ['StringHelper', (StringHelper) ->
@@ -18,12 +18,12 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
       # @returns a string with the leading digit sequence converted
       #    to a roman numeral
       (value) ->
-        value.toString().replace(/^\d+/, roman.romanize)
+        value.toString().replace(/^\d+/, roman.romanize) if value?
     ]
 
 
     filters.filter 'moment', ->
-      (s) -> moment(s).format('MM/DD/YYYY')
+      (s) -> moment(s).format('MM/DD/YYYY') if s?
 
 
     filters.filter 'notSpecified', ->
@@ -52,10 +52,11 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
 
 
     filters.filter 'percent', ->
-      (value) -> value * 100
+      (value) -> value * 100 if value?
 
     filters.filter 'imageContainerTitle', ->
-      # If the image container name is 
+      # If the image container name ends with _reg, then it is a registation.
+      # Otherwise, it is a scan.
       (value) ->
         if value.startsWith('reg')
           'Registration ' + value

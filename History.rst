@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+0.11.8 / 2015-06-15
+-------------------
+* Fix clinicalEncounters existence check.
+
 0.11.7 / 2015-06-09
 -------------------
 * Session is an encounter.

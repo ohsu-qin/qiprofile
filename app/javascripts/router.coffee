@@ -141,7 +141,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
 
               # Fix the treatment dates.
               for trt in subject.treatments
-                trt.beginDate = DateHelper.asMoment(trt.beginDate)
+                trt.startDate = DateHelper.asMoment(trt.startDate)
                 trt.endDate = DateHelper.asMoment(trt.endDate)
 
             # Makes the changes to the subject session objects

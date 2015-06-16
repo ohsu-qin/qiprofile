@@ -340,10 +340,12 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ]
 
 
+    # TODO: 'assessment' is now 'evaluation' in data model, so should
+    #   controller name change as well?
     ctlrs.controller 'AssessmentCtrl', [
       '$scope',
       ($scope) ->
-        $scope.assessment = $scope.encounter.assessment
+        $scope.evaluation = $scope.encounter.evaluation
     ]
 
 

@@ -3,7 +3,25 @@ table.table.qi-table.qi-ver-space(ng-show='pathology.location != null')
     th Site
     td {{ pathology.location }}
 
-.qi-ver-space(ng-show='pathology.tnm != null')
- include tnm
+table.table.qi-table.qi-ver-space(ng-show='pathology.histology != null')
+  tr
+    th Histology
+    td {{ pathology.histology }}
 
-// TODO - finish the sarcoma pathology display.
+// TODO: Add a NecrosisPercent control. Add a switch when NecrosisPercent.
+table.table.qi-table.qi-ver-space
+  tr
+    th Necrosis Percent
+    td {{ pathology.necrosis_percent.value | percentSign }}
+
+// TODO: Add a switch when NecrosisPercentRange.
+table.table.qi-table.qi-ver-space
+  tr
+    th Necrosis Percent
+    td {{ pathology.necrosis_percent.start.inclusive | lowerBoundInclusive }}
+      | {{ pathology.necrosis_percent.start.value | percentSign }}
+      |and {{ pathology.necrosis_percent.stop.inclusive | upperBoundInclusive }}
+      | {{ pathology.necrosis_percent.stop.value | percentSign }}
+
+.qi-ver-space(ng-show='pathology.tnm != null')
+  include tnm

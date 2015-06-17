@@ -1,27 +1,17 @@
-table.table.qi-table.qi-ver-space(ng-show='pathology.location != null')
-  tr
+table.table.qi-table.qi-spaced-table.qi-ver-space
+  tr(ng-show='pathology.location != null')
     th Site
     td {{ pathology.location }}
 
-table.table.qi-table.qi-ver-space(ng-show='pathology.histology != null')
-  tr
+  tr(ng-show='pathology.histology != null')
     th Histology
     td {{ pathology.histology }}
 
-// TODO: Add a NecrosisPercent control. Add a switch when NecrosisPercent.
-table.table.qi-table.qi-ver-space
-  tr
-    th Necrosis Percent
-    td {{ pathology.necrosis_percent.value | percentSign }}
-
-// TODO: Add a switch when NecrosisPercentRange.
-table.table.qi-table.qi-ver-space
-  tr
-    th Necrosis Percent
-    td {{ pathology.necrosis_percent.start.inclusive | lowerBoundInclusive }}
-      | {{ pathology.necrosis_percent.start.value | percentSign }}
-      |and {{ pathology.necrosis_percent.stop.inclusive | upperBoundInclusive }}
-      | {{ pathology.necrosis_percent.stop.value | percentSign }}
-
 .qi-ver-space(ng-show='pathology.tnm != null')
   include tnm
+
+div.qi-ver-space(ng-controller='NecrosisPercentCtrl' ng-show="necrosis_percent" ng-switch="necrosis_percent._cls")
+  div(ng-switch-when='NecrosisPercentValue')
+    include necrosis-percent-value
+  div(ng-switch-when='NecrosisPercentRange')
+    include necrosis-percent-range

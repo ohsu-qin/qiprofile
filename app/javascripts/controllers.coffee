@@ -409,6 +409,13 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ]
 
 
+    ctlrs.controller 'NecrosisPercentCtrl', [
+      '$scope',
+      ($scope) ->
+        $scope.necrosis_percent = $scope.pathology.necrosis_percent
+    ]
+
+
     ## The Session Detail page controllers. ##
   
     ctlrs.controller 'SessionDetailCtrl', [

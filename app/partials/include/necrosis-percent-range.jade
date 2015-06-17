@@ -1,0 +1,11 @@
+.qi-subtable-title Necrosis Percent
+
+table.table.qi-table
+  tr
+    th Upper Bound
+    td {{ necrosis_percent.stop.inclusive | upperBoundInclusive }}
+      | {{ necrosis_percent.stop.value | percentSign }}
+  tr
+    th Lower Bound
+    td {{ necrosis_percent.start.inclusive | lowerBoundInclusive }}
+      | {{ necrosis_percent.start.value | percentSign }}

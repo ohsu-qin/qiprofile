@@ -55,7 +55,6 @@ define ['ngmocks', 'tnm', 'helpers'], ->
           else
             3
 
-
         it 'should calcuate the summary grade', ->
           for tf in [1..3]
             for np in [1..3]

@@ -328,7 +328,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
           $modal.open
             controller: 'RecurrenceScoreHelpModalCtrl'
             templateUrl: '/partials/recurrence-score-help.html'
-            size: 'sm'
+            size: 'med'
     ]
 
 

@@ -85,7 +85,7 @@ describe 'E2E Testing Subject Detail', ->
         expect(page.help, 'The help is missing').to.eventually.exist
 
       it 'should display a contact email link', ->
-        pat = /a href="mailto:\w+@ohsu.edu"/
+        pat = /a href="http:\/\/qiprofile\.idea\.informer\.com"/
         expect(page.contactInfo, 'The email address is missing')
           .to.eventually.match(pat)
 

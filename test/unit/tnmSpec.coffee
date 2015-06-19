@@ -115,7 +115,7 @@ define ['ngmocks', 'tnm', 'helpers'], ->
         # @returns the expected summary grade
         expectedSummaryGrade = (grade) ->
           cumulativeGrade = grade.differentiation + grade.mitoticCount +
-            grade.necrosis
+            grade.necrosis_score
           if cumulativeGrade < 4
             1
           else if cumulativeGrade < 6
@@ -132,7 +132,7 @@ define ['ngmocks', 'tnm', 'helpers'], ->
                   grade:
                     differentiation: df
                     mitoticCount: mc
-                    necrosis: nc
+                    necrosis_score: nc
                 expected = expectedSummaryGrade(tnm.grade)
                 actual = TNM.summaryGrade(tnm)
                 expect(actual, "The summary grade" +

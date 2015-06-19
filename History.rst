@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+0.11.10 / 2015-06-18
+-------------------
+* Sarcoma grade necrosis was renamed to necrosis_score.
+
 0.11.9 / 2015-06-18
 -------------------
 * Fix clinicalEncounters existence check.

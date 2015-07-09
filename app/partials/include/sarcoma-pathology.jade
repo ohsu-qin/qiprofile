@@ -7,11 +7,12 @@ table.table.qi-table.qi-spaced-table.qi-ver-space
     th Histology
     td {{ pathology.histology }}
 
-.qi-ver-space(ng-show='pathology.tnm != null')
-  include tnm
-
 div.qi-ver-space(ng-controller='NecrosisPercentCtrl' ng-show="necrosis_percent" ng-switch="necrosis_percent._cls")
   div(ng-switch-when='NecrosisPercentValue')
     include necrosis-percent-value
   div(ng-switch-when='NecrosisPercentRange')
     include necrosis-percent-range
+
+.qi-ver-space(ng-show='pathology.tnm != null')
+  include tnm
+  

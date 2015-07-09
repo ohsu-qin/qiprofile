@@ -132,30 +132,19 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
         if value? then value.toString().concat('%') else value
 
 
-    filters.filter 'lowerBoundInclusive', ->
-      # Returns the string representation of the given input value as follows:
-      # * true => '≥'
-      # * false => '>'
-      # * null or undefined => 'Not Specified'
+    filters.filter 'percentRange', ->
+      # If there is a percent range object, then separate the lower and
+      #   upper values with a hyphen and append the percent sign.
       #
-      # @param value the boolean or null input
-      # @returns the string representation
-      # @throws TypeError if the value is not boolean, null or undefined
-      (value) ->
-        booleanFilter(value, '≥', '>')
-
-
-    filters.filter 'upperBoundInclusive', ->
-      # Returns the string representation of the given input value as follows:
-      # * true => '≤'
-      # * false => '<'
-      # * null or undefined => 'Not Specified'
-      #
-      # @param value the boolean or null input
-      # @returns the string representation
-      # @throws TypeError if the value is not boolean, null or undefined
-      (value) ->
-        booleanFilter(value, '≤', '<')
+      # @param range the range object
+      # @returns the string representation of the percent range
+      (range) ->
+        if range?
+          start = range.start.value.toString()
+          stop = range.stop.value.toString()
+          "#{ start } - #{ stop }%"
+        else
+          range
 
 
     filters.filter 'visitDates', ->

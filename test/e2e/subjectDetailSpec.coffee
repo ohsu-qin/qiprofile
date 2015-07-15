@@ -390,14 +390,96 @@ describe 'E2E Testing Subject Detail', ->
             biopsy.then (table) ->
               table.find(By.binding('pathology.location')).then (site) ->
                 expect(site, 'The Sarcoma site table is missing').to.exist
-                expect(site.isDisplayed(), 'The Sarcoma pathology site field' +
-                                           ' is not displayed')
+                expect(site.isDisplayed(), 'The Sarcoma site field is not' +
+                                           ' displayed')
                   .to.eventually.be.true
 
           it 'should show the tumor histology', ->
             biopsy.then (table) ->
               table.find(By.binding('pathology.histology')).then (histology) ->
-                expect(histology, 'The Sarcoma histology table is missing').to.exist
-                expect(histology.isDisplayed(), 'The Sarcoma pathology histology field' +
-                                           ' is not displayed')
+                expect(histology, 'The Sarcoma histology table is' +
+                                  ' missing').to.exist
+                expect(histology.isDisplayed(), 'The Sarcoma histology field' +
+                                                ' is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the TNM stage', ->
+            biopsy.then (table) ->
+              table.find(By.binding('tnm')).then (stage) ->
+                expect(stage,
+                       'The Sarcoma TNM stage table is missing')
+                  .to.exist
+                expect(stage.isDisplayed(),
+                       'The Sarcoma TNM stage field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the FNCLCC differentiation', ->
+            biopsy.then (table) ->
+              table.find(By.binding('grade.differentiation')).then (diff) ->
+                expect(diff,
+                       'The FNCLCC differentiation table is missing')
+                  .to.exist
+                expect(diff.isDisplayed(),
+                       'The FNCLCC differentiation field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the FNCLCC mitotic count', ->
+            biopsy.then (table) ->
+              table.find(By.binding('grade.mitoticCount')).then (count) ->
+                expect(count,
+                       'The FNCLCC mitotic count table is missing')
+                  .to.exist
+                expect(count.isDisplayed(),
+                       'The FNCLCC mitotic count field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the FNCLCC necrosis score', ->
+            biopsy.then (table) ->
+              table.find(By.binding('grade.necrosis_score')).then (necrosis) ->
+                expect(necrosis,
+                       'The FNCLCC necrosis score is missing')
+                  .to.exist
+                expect(necrosis.isDisplayed(),
+                       'The FNCLCC necrosis score is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the TNM size', ->
+            biopsy.then (table) ->
+              table.find(By.binding('tnm.size')).then (size) ->
+                expect(size,
+                       'The Sarcoma TNM size table is missing')
+                  .to.exist
+                expect(size.isDisplayed(),
+                       'The Sarcoma TNM size field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the TNM lymph status', ->
+            biopsy.then (table) ->
+              table.find(By.binding('tnm.lymphStatus')).then (status) ->
+                expect(status,
+                       'The Sarcoma TNM lymph status table is missing')
+                  .to.exist
+                expect(status.isDisplayed(),
+                       'The Sarcoma TNM lymph status field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the TNM metastasis', ->
+            biopsy.then (table) ->
+              table.find(By.binding('tnm.metastasis')).then (metastasis) ->
+                expect(metastasis,
+                       'The Sarcoma TNM metastasis table is missing')
+                  .to.exist
+                expect(metastasis.isDisplayed(),
+                       'The Sarcoma TNM metastasis field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the necrosis percent range', ->
+            biopsy.then (table) ->
+              table.find(By.binding('necrosis_percent')).then (range) ->
+                expect(range,
+                       'The Sarcoma necrosis percent range table is missing')
+                  .to.exist
+                expect(range.isDisplayed(),
+                       'The Sarcoma necrosis percent range field is not' +
+                       ' displayed')
                   .to.eventually.be.true

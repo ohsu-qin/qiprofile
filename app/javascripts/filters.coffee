@@ -142,7 +142,7 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
         if range?
           start = range.start.value.toString()
           stop = range.stop.value.toString()
-          "#{ start } - #{ stop }%"
+          "#{ start }–#{ stop }"
         else
           range
 

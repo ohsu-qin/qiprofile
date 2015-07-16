@@ -8,8 +8,8 @@ class VolumePage extends Page
   
   # TODO - Replace the CSS selector below with a selector for
   # elements bound to the model modelSelect.
-  #overlaySelector: ->
-  #  @find('TODO')
+  overlaySelector: ->
+    @find('#overlay-select')
   
   imageCtlPanel: ->
     @find('.qi-vol-ctl')
@@ -49,15 +49,14 @@ describe 'E2E Testing Volume', ->
     it 'should display the image', ->
       expect(panel, 'The image panel is missing').to.eventually.exist
   
-  # TODO - enable when overlays are added to the test fixture.
-  # describe 'Overlay Selection Buttons', ->
-  #   panel = null
-  # 
-  #   beforeEach ->
-  #     panel = page.overlaySelector()
-  # 
-  #   it 'should display the overlay selection buttons', ->
-  #     expect(panel, 'The overlay selection buttons are missing').to.eventually.exist
+  describe 'Overlay Selection Buttons', ->
+    panel = null
+   
+    beforeEach ->
+      panel = page.overlaySelector()
+   
+    it 'should display the overlay selection buttons', ->
+      expect(panel, 'The overlay selection buttons are missing').to.eventually.exist
   
   describe 'Image Control Panel', ->
     panel = null

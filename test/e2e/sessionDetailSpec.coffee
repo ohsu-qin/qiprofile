@@ -22,6 +22,7 @@ class SessionDetailPage extends Page
         # button ElementFinders.
         download: elt.element(By.css('.glyphicon-download'))
         open: elt.element(By.css('.glyphicon-eye-open'))
+        failed: elt.element(By.css('.glyphicon-exclamation-sign'))
 
   # Loads the image by clicking the given download button.
   #
@@ -67,6 +68,9 @@ describe 'E2E Testing Session Detail', ->
   # protractor config links _public/data to the test fixture data
   # directory.
   TEST_VOL_NBR = 20
+  # A Sarcoma001 Session01 volume number for which a test fixture scan
+  # image file is missing.
+  MISSING_TEST_VOL_NBR = 1
 
   page = null
 
@@ -129,4 +133,21 @@ describe 'E2E Testing Session Detail', ->
             .to.eventually.be.false
           # The open button should be displayed.
           expect(open.isDisplayed(), 'The open button is hidden after download')
+            .to.eventually.be.true
+
+    it 'should display an alert box', ->
+      # Find the download/display button pair, then...
+      #
+      # Work around the anomaly described in the scanImageButtons function.
+      #page.scanImageButtons(MISSING_TEST_VOL_NBR).then (btnGroup) ->
+        btnGroup = page.scanImageButtons(MISSING_TEST_VOL_NBR)
+        download = btnGroup.download
+
+        # Click the download button, wait for the image to load, then...
+        page.loadScanImage(download).then ->
+          # The download button should now be hidden.
+          expect(download.isDisplayed(), 'The download button is displayed after download')
+            .to.eventually.be.false
+          # The unclickable exclamation sign button should be displayed after load failure.
+          expect(failed.isDisplayed(), 'The exclamation sign icon is hidden after download failed')
             .to.eventually.be.true

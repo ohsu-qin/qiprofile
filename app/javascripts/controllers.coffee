@@ -403,7 +403,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ctlrs.controller 'RadiotherapyCtrl', [
       '$scope',
       ($scope) ->
-        is_radio = (dosage) -> dosage.agent._cls == 'Drug'
+        is_radio = (dosage) -> dosage.agent._cls == 'Radiation'
         radio = $scope.treatment.dosages.filter(is_radio)
         $scope.radiotherapy = {dosages: radio} if radio.length
     ]

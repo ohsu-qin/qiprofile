@@ -56,7 +56,7 @@ class SubjectDetailPage extends Page
         for enc in ['Biopsy', 'Surgery', 'Assessment']
           profile[enc.toLowerCase()] =
             profile.find("div[ng-switch-when='#{ enc }']")
-      
+
       # Return the clinical profile.
       profile
 
@@ -338,13 +338,95 @@ describe 'E2E Testing Subject Detail', ->
           # TODO - Add test cases for the date, weight and every outcome table.
       
       describe 'Treatments', ->
-        # TODO - Add test cases for the treatment type, start and end dates.
+        describe 'Neoadjuvant Treatment', ->
+          treatment = null
+
+          # TODO - Find the first treatment element.
+          # before ->
+          #   treatment = clinicalProfile.then (profile) ->
+          #     profile.find(...)
+
+          it 'should show the treatment panel', ->
+            treatment.then (table) ->
+              expect(table, 'The treatment panel is missing').to.exist
+              expect(table.isDisplayed(), 'The treatment panel is not' +
+                                          ' displayed')
+                .to.eventually.be.true
+
+          it 'should show the treatment start date', ->
+            treatment.then (table) ->
+              table.find(By.binding('treatment.startDate')).then (start) ->
+                expect(start,
+                       'The treatment start date table is missing')
+                  .to.exist
+                expect(start.isDisplayed(),
+                       'The treatment start date field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the treatment end date', ->
+            treatment.then (table) ->
+              table.find(By.binding('treatment.endDate')).then (end) ->
+                expect(end,
+                       'The treatment end date table is missing')
+                  .to.exist
+                expect(end.isDisplayed(),
+                       'The treatment end date field is not displayed')
+                  .to.eventually.be.true
+
+          describe 'Chemotherapy', ->
+            chemo = null
+
+            # TODO - before ...
+
+            it 'should show the chemotherapy panel', ->
+              chemo.then (table) ->
+                expect(table, 'The chemotherapy panel is missing').to.exist
+                expect(table.isDisplayed(), 'The chemotherapy panel is not' +
+                                            ' displayed')
+                  .to.eventually.be.true
+
+            it 'should show the agent name', ->
+              chemo.then (table) ->
+                table.find(By.binding('dosage.agent.name')).then (name) ->
+                  expect(name,
+                         'The chemotherapy agent name table is missing')
+                    .to.exist
+                  expect(name.isDisplayed(),
+                         'The chemotherapy agent name field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the dosage amount', ->
+              chemo.then (table) ->
+                table.find(By.binding('dosage.amount')).then (amount) ->
+                  expect(amount,
+                         'The chemotherapy dosage amount table is missing')
+                    .to.exist
+                  expect(amount.isDisplayed(),
+                         'The chemotherapy dosage amount field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the dosage start date', ->
+              chemo.then (table) ->
+                table.find(By.binding('dosage.startDate')).then (start) ->
+                  expect(start,
+                         'The chemotherapy dosage start date table is missing')
+                    .to.exist
+                  expect(start.isDisplayed(),
+                         'The chemotherapy dosage start date field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the dosage duration', ->
+              chemo.then (table) ->
+                table.find(By.binding('dosage.duration')).then (duration) ->
+                  expect(duration,
+                         'The chemotherapy dosage duration table is missing')
+                    .to.exist
+                  expect(duration.isDisplayed(),
+                         'The chemotherapy dosage duration field is not displayed')
+                    .to.eventually.be.true
         
-        describe 'Chemotherapy', ->
-          # TODO - Add chemotherapy test cases.
-        
-        describe 'Radiotherapy', ->
-          # TODO - Add radiotherapy test cases.
+          describe 'Radiotherapy', ->
+            # TODO - Add radiotherapy test cases.
 
   describe 'Sarcoma', ->
     page = null

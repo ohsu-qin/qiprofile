@@ -1,2 +1,17 @@
-TODO
+.qi-subtable-title Chemotherapy
 
+.qi-panel.qi-nested
+  .qi-ver-space(ng-repeat="dosage in chemotherapy.dosages")
+    table.table.qi-table
+      tr
+        th Drug Name
+        td {{ dosage.agent.name | capitalize }}
+      tr
+        th Amount
+        td {{ dosage.amount | round }} mg/kg
+      tr
+        th Start Date
+        td {{ dosage.startDate | moment }}
+      tr
+        th Duration
+        td {{ dosage.duration }} days

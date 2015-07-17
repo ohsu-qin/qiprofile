@@ -1,1 +1,17 @@
-TODO
+.qi-subtable-title Radiotherapy
+
+.qi-panel.qi-nested
+  .qi-ver-space(ng-repeat="dosage in radiotherapy.dosages")
+    table.table.qi-table
+      tr
+        th Beam Type
+        td {{ dosage.agent.beam_type | capitalize }}
+      tr
+        th Amount
+        td {{ dosage.amount | round }} Gy/kg
+      tr
+        th Start Date
+        td {{ dosage.start_date | moment }}
+      tr
+        th Duration
+        td {{ dosage.duration }} days

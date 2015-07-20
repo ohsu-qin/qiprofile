@@ -333,10 +333,97 @@ describe 'E2E Testing Subject Detail', ->
           #       expect(weight, 'The weight is not an integer').to.match(/^\d+$/)
           #       expect(parseInt(weight), 'The weight is not positive')
           #         .to.be.greaterThan(0)
-    
+
+          it 'should show the TNM stage', ->
+            biopsy.then (table) ->
+              table.find(By.binding('tnm')).then (stage) ->
+                expect(stage,
+                       'The Breast TNM stage table is missing')
+                  .to.exist
+                expect(stage.isDisplayed(),
+                       'The Breast TNM stage field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the Modified B-R tubular formation', ->
+            biopsy.then (table) ->
+              table.find(By.binding('grade.tubularFormation')).then (diff) ->
+                expect(diff,
+                       'The Modified B-R tubular formation table is missing')
+                  .to.exist
+                expect(diff.isDisplayed(),
+                       'The Modified B-R tubular formation field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the Modified B-R nuclear pleomorphism', ->
+            biopsy.then (table) ->
+              table.find(By.binding('grade.nuclearPleomorphism')).then (count) ->
+                expect(count,
+                       'The Modified B-R nuclear pleomorphism table is missing')
+                  .to.exist
+                expect(count.isDisplayed(),
+                       'The Modified B-R nuclear pleomorphism field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the Modified B-R mitotic count', ->
+            biopsy.then (table) ->
+              table.find(By.binding('grade.mitoticCount')).then (necrosis) ->
+                expect(necrosis,
+                       'The Modified B-R mitotic count is missing')
+                  .to.exist
+                expect(necrosis.isDisplayed(),
+                       'The Modified B-R mitotic count is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the TNM size', ->
+            biopsy.then (table) ->
+              table.find(By.binding('tnm.size')).then (size) ->
+                expect(size,
+                       'The Breast TNM size table is missing')
+                  .to.exist
+                expect(size.isDisplayed(),
+                       'The Breast TNM size field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the TNM lymph status', ->
+            biopsy.then (table) ->
+              table.find(By.binding('tnm.lymphStatus')).then (status) ->
+                expect(status,
+                       'The Breast TNM lymph status table is missing')
+                  .to.exist
+                expect(status.isDisplayed(),
+                       'The Breast TNM lymph status field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the TNM metastasis', ->
+            biopsy.then (table) ->
+              table.find(By.binding('tnm.metastasis')).then (metastasis) ->
+                expect(metastasis,
+                       'The Breast TNM metastasis table is missing')
+                  .to.exist
+                expect(metastasis.isDisplayed(),
+                       'The Breast TNM metastasis field is not displayed')
+                  .to.eventually.be.true
+
+          # TODO - Test cases for receptor status.
+
+          # TODO - Test cases for genetic expression.
+
         describe 'Assessment', ->
-          # TODO - Add test cases for the date, weight and every outcome table.
+          assessment = null
       
+          before ->
+            assessment = clinicalProfile.then (profile) ->
+              profile.find('div[ng-switch-when="Assessment"]')
+          
+          it 'should show the assessment panel', ->
+            assessment.then (table) ->
+              expect(table, 'The Breast assessment panel is missing').to.exist
+              expect(table.isDisplayed(), 'The Breast assessment panel is not' +
+                                          ' displayed')
+                .to.eventually.be.true
+
+          # TODO - Test cases for TNM?
+
       describe 'Treatments', ->
         describe 'Neoadjuvant Treatment', ->
           treatment = null
@@ -467,7 +554,7 @@ describe 'E2E Testing Subject Detail', ->
               expect(table.isDisplayed(), 'The Sarcoma biopsy panel is not' +
                                           ' displayed')
                 .to.eventually.be.true
-          
+
           it 'should show the tumor site', ->
             biopsy.then (table) ->
               table.find(By.binding('pathology.location')).then (site) ->
@@ -565,3 +652,19 @@ describe 'E2E Testing Subject Detail', ->
                        'The Sarcoma necrosis percent range field is not' +
                        ' displayed')
                   .to.eventually.be.true
+
+        describe 'Assessment', ->
+          assessment = null
+      
+          before ->
+            assessment = clinicalProfile.then (profile) ->
+              profile.find('div[ng-switch-when="Assessment"]')
+          
+          it 'should show the assessment panel', ->
+            assessment.then (table) ->
+              expect(table, 'The Sarcoma assessment panel is missing').to.exist
+              expect(table.isDisplayed(), 'The Sarcoma assessment panel is not' +
+                                          ' displayed')
+                .to.eventually.be.true
+
+          # TODO - Test cases for TNM?

@@ -1,0 +1,5 @@
+div(ng-controller='NecrosisPercentCtrl' ng-switch="necrosis_percent._cls")
+  div(ng-switch-when='NecrosisPercentValue')
+    include necrosis-percent-value
+  div(ng-switch-when='NecrosisPercentRange')
+    include necrosis-percent-range

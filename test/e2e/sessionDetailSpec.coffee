@@ -135,19 +135,17 @@ describe 'E2E Testing Session Detail', ->
           expect(open.isDisplayed(), 'The open button is hidden after download')
             .to.eventually.be.true
 
-    it 'should display an alert box', ->
-      # Find the download/display button pair, then...
-      #
-      # Work around the anomaly described in the scanImageButtons function.
-      #page.scanImageButtons(MISSING_TEST_VOL_NBR).then (btnGroup) ->
-        btnGroup = page.scanImageButtons(MISSING_TEST_VOL_NBR)
-        download = btnGroup.download
-
-        # Click the download button, wait for the image to load, then...
-        page.loadScanImage(download).then ->
-          # The download button should now be hidden.
-          expect(download.isDisplayed(), 'The download button is displayed after download')
-            .to.eventually.be.false
-          # The unclickable exclamation sign button should be displayed after load failure.
-          expect(failed.isDisplayed(), 'The exclamation sign icon is hidden after download failed')
-            .to.eventually.be.true
+    # TODO - Add a test to verify that an alert box is opened when a link for
+    #   a missing image is clicked. Currently the opening of an alert box stops
+    #   Protractor, with no apparent easy workaround.
+    #
+    # it 'should display an alert box', ->
+    #   page.scanImageButtons(MISSING_TEST_VOL_NBR).then (btnGroup) ->
+    #     btnGroup = page.scanImageButtons(MISSING_TEST_VOL_NBR)
+    #     download = btnGroup.download
+    #
+    #     page.loadScanImage(download).then ->
+    #       expect(download.isDisplayed(), 'The download button is displayed after download')
+    #         .to.eventually.be.false
+    #       expect(failed.isDisplayed(), 'The exclamation sign icon is hidden after download failed')
+    #         .to.eventually.be.true

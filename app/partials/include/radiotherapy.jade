@@ -7,11 +7,16 @@
         th Beam Type
         td {{ dosage.agent.beam_type | capitalize }}
       tr
-        th Amount
-        td {{ dosage.amount | round }} Gy/kg
-      tr
         th Start Date
         td {{ dosage.start_date | moment }}
+      tr
+        th Amount
+        td {{ dosage.amount | number:1 }} Gy/kg
+        td.qi-transparent
+          button.btn.btn-med.qi-profile-btn(ng-controller='DosageAmountHelpCtrl',
+            ng-click="open()"
+            )
+            .glyphicon.glyphicon-question-sign
       tr
         th Duration
         td {{ dosage.duration }} days

@@ -340,8 +340,26 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ]
 
 
-    # TODO: 'assessment' is now 'evaluation' in data model, so should
-    #   controller name change as well?
+    ctlrs.controller 'DosageAmountHelpCtrl', [
+      '$scope', '$modal',
+      ($scope, $modal) ->
+        # Open a modal window to display the modeling input properties.
+        $scope.open = ->
+          $modal.open
+            controller: 'DosageAmountHelpModalCtrl'
+            templateUrl: '/partials/dosage-amount-help.html'
+            size: 'med'
+    ]
+
+
+    ctlrs.controller 'DosageAmountHelpModalCtrl', [
+      '$scope', '$modalInstance',
+      ($scope, $modalInstance) ->
+        $scope.close = ->
+          $modalInstance.close()
+    ]
+
+
     ctlrs.controller 'AssessmentCtrl', [
       '$scope',
       ($scope) ->

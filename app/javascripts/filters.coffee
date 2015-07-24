@@ -22,10 +22,6 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
     ]
 
 
-    filters.filter 'round', ->
-      (s) -> Math.round(s) if s?
-
-
     filters.filter 'moment', ->
       (s) -> moment(s).format('MM/DD/YYYY') if s?
 

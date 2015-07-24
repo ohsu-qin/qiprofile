@@ -1,0 +1,9 @@
+.qi-modal
+  .modal-header
+    .modal-title Dosage Amount
+
+  .modal-body
+    div(ng-include="'/partials/help/dosage-amount.html'")
+
+  .modal-footer
+    button.btn.btn-warning.cancel(qi-focus='true' ng-click="close()") Close

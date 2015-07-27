@@ -396,7 +396,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ctlrs.controller 'EstrogenCtrl', [
       '$scope',
       ($scope) ->
-        $scope.receptorStatus = _.find($scope.hormoneReceptors.estrogen,
+        $scope.receptorStatus = _.find($scope.hormoneReceptors,
                                        (hr) -> hr.hormone == 'estrogen')
     ]
 
@@ -404,7 +404,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ctlrs.controller 'ProgesteroneCtrl', [
       '$scope',
       ($scope) ->
-        $scope.receptorStatus = _.find($scope.hormoneReceptors.estrogen,
+        $scope.receptorStatus = _.find($scope.hormoneReceptors,
                                        (hr) -> hr.hormone == 'progesterone')
     ]
 

@@ -1,3 +1,4 @@
+// The tumor site and histology.
 table.table.qi-table.qi-spaced-table.qi-ver-space
   tr(ng-show='pathology.location != null')
     th Site
@@ -7,8 +8,10 @@ table.table.qi-table.qi-spaced-table.qi-ver-space
     th Histology
     td {{ pathology.histology }}
 
+// The TNM partial.
 .qi-ver-space(ng-show='pathology.tnm != null')
   include tnm
 
+// The necrosis percent partial.
 .qi-ver-space(ng-show='pathology.necrosis_percent != null')
   include necrosis-percent

@@ -134,7 +134,7 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
 
     filters.filter 'percentRange', ->
       # If there is a percent range object, then separate the lower and
-      #   upper values with a hyphen and append the percent sign.
+      #   upper values with an en dash.
       #
       # @param range the range object
       # @returns the string representation of the percent range

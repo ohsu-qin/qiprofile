@@ -496,10 +496,9 @@ describe 'E2E Testing Subject Detail', ->
         describe 'Neoadjuvant Treatment', ->
           treatment = null
 
-          # TODO - Find the first treatment element.
-          # before ->
-          #   treatment = clinicalProfile.then (profile) ->
-          #     profile.find(...)
+          before ->
+            treatment = clinicalProfile.then (profile) ->
+              profile.find(By.css('.treatment'))
 
           it 'should show the treatment panel', ->
             treatment.then (table) ->
@@ -531,7 +530,9 @@ describe 'E2E Testing Subject Detail', ->
           describe 'Chemotherapy', ->
             chemo = null
 
-            # TODO - before ...
+            before ->
+              chemo = clinicalProfile.then (profile) ->
+                profile.find(By.css('.dosage'))
 
             it 'should show the chemotherapy panel', ->
               chemo.then (table) ->
@@ -550,16 +551,6 @@ describe 'E2E Testing Subject Detail', ->
                          'The chemotherapy agent name field is not displayed')
                     .to.eventually.be.true
 
-            it 'should show the dosage amount', ->
-              chemo.then (table) ->
-                table.find(By.binding('dosage.amount')).then (amount) ->
-                  expect(amount,
-                         'The chemotherapy dosage amount table is missing')
-                    .to.exist
-                  expect(amount.isDisplayed(),
-                         'The chemotherapy dosage amount field is not displayed')
-                    .to.eventually.be.true
-
             it 'should show the dosage start date', ->
               chemo.then (table) ->
                 table.find(By.binding('dosage.startDate')).then (start) ->
@@ -568,6 +559,16 @@ describe 'E2E Testing Subject Detail', ->
                     .to.exist
                   expect(start.isDisplayed(),
                          'The chemotherapy dosage start date field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the dosage amount', ->
+              chemo.then (table) ->
+                table.find(By.binding('dosage.amount')).then (amount) ->
+                  expect(amount,
+                         'The chemotherapy dosage amount table is missing')
+                    .to.exist
+                  expect(amount.isDisplayed(),
+                         'The chemotherapy dosage amount field is not displayed')
                     .to.eventually.be.true
 
             it 'should show the dosage duration', ->

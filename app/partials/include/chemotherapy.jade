@@ -2,7 +2,7 @@
 
 .qi-panel.qi-nested
   .qi-ver-space(ng-repeat="dosage in chemotherapy.dosages")
-    table.table.qi-table
+    table.dosage.table.qi-table
       tr
         th Drug Name
         td {{ dosage.agent.name | capitalize }}

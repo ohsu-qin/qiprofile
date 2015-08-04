@@ -65,7 +65,6 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
           @xtkVolume.filedata = data
           # Set the state to loaded.
           @state = Image.STATES.LOADED
-          # Return the loaded image.
         .catch (res) =>
           # Display an alert with the status text.
           alert("The image volume file load was unsuccessful: " + 
@@ -73,6 +72,8 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
           # Set the state to 'error'.
           @state = Image.STATES.ERROR
 
+        # TODO - this load function should return the above promise,
+        #   which should resolve to the loaded image.
         this
 
       isLoaded: ->

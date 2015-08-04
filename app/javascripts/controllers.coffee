@@ -340,10 +340,30 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ]
 
 
+    ctlrs.controller 'DosageAmountHelpCtrl', [
+      '$scope', '$modal',
+      ($scope, $modal) ->
+        # Open a modal window to display the modeling input properties.
+        $scope.open = ->
+          $modal.open
+            controller: 'DosageAmountHelpModalCtrl'
+            templateUrl: '/partials/dosage-amount-help.html'
+            size: 'med'
+    ]
+
+
+    ctlrs.controller 'DosageAmountHelpModalCtrl', [
+      '$scope', '$modalInstance',
+      ($scope, $modalInstance) ->
+        $scope.close = ->
+          $modalInstance.close()
+    ]
+
+
     ctlrs.controller 'AssessmentCtrl', [
       '$scope',
       ($scope) ->
-        $scope.assessment = $scope.encounter.assessment
+        $scope.evaluation = $scope.encounter.evaluation
     ]
 
 
@@ -376,7 +396,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ctlrs.controller 'EstrogenCtrl', [
       '$scope',
       ($scope) ->
-        $scope.receptorStatus = _.find($scope.hormoneReceptors.estrogen,
+        $scope.receptorStatus = _.find($scope.hormoneReceptors,
                                        (hr) -> hr.hormone == 'estrogen')
     ]
 
@@ -384,7 +404,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ctlrs.controller 'ProgesteroneCtrl', [
       '$scope',
       ($scope) ->
-        $scope.receptorStatus = _.find($scope.hormoneReceptors.estrogen,
+        $scope.receptorStatus = _.find($scope.hormoneReceptors,
                                        (hr) -> hr.hormone == 'progesterone')
     ]
 
@@ -401,9 +421,16 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ctlrs.controller 'RadiotherapyCtrl', [
       '$scope',
       ($scope) ->
-        is_radio = (dosage) -> dosage.agent._cls == 'Drug'
+        is_radio = (dosage) -> dosage.agent._cls == 'Radiation'
         radio = $scope.treatment.dosages.filter(is_radio)
         $scope.radiotherapy = {dosages: radio} if radio.length
+    ]
+
+
+    ctlrs.controller 'NecrosisPercentCtrl', [
+      '$scope',
+      ($scope) ->
+        $scope.necrosis_percent = $scope.pathology.necrosis_percent
     ]
 
 

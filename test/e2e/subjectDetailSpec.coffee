@@ -56,7 +56,7 @@ class SubjectDetailPage extends Page
         for enc in ['Biopsy', 'Surgery', 'Assessment']
           profile[enc.toLowerCase()] =
             profile.find("div[ng-switch-when='#{ enc }']")
-      
+
       # Return the clinical profile.
       profile
 
@@ -333,18 +333,256 @@ describe 'E2E Testing Subject Detail', ->
           #       expect(weight, 'The weight is not an integer').to.match(/^\d+$/)
           #       expect(parseInt(weight), 'The weight is not positive')
           #         .to.be.greaterThan(0)
-    
+
+          # TODO - Test cases for receptor status.
+
+          # TODO - Test cases for genetic expression.
+
+          it 'should show the TNM stage', ->
+            biopsy.then (table) ->
+              table.find(By.binding('tnm')).then (stage) ->
+                expect(stage,
+                       'The Breast TNM stage table is missing')
+                  .to.exist
+                expect(stage.isDisplayed(),
+                       'The Breast TNM stage field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the Modified B-R tubular formation', ->
+            biopsy.then (table) ->
+              table.find(By.binding('grade.tubularFormation')).then (diff) ->
+                expect(diff,
+                       'The Modified B-R tubular formation table is missing')
+                  .to.exist
+                expect(diff.isDisplayed(),
+                       'The Modified B-R tubular formation field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the Modified B-R nuclear pleomorphism', ->
+            biopsy.then (table) ->
+              table.find(By.binding('grade.nuclearPleomorphism')).then (count) ->
+                expect(count,
+                       'The Modified B-R nuclear pleomorphism table is missing')
+                  .to.exist
+                expect(count.isDisplayed(),
+                       'The Modified B-R nuclear pleomorphism field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the Modified B-R mitotic count', ->
+            biopsy.then (table) ->
+              table.find(By.binding('grade.mitoticCount')).then (necrosis) ->
+                expect(necrosis,
+                       'The Modified B-R mitotic count is missing')
+                  .to.exist
+                expect(necrosis.isDisplayed(),
+                       'The Modified B-R mitotic count is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the TNM size', ->
+            biopsy.then (table) ->
+              table.find(By.binding('tnm.size')).then (size) ->
+                expect(size,
+                       'The Breast TNM size table is missing')
+                  .to.exist
+                expect(size.isDisplayed(),
+                       'The Breast TNM size field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the TNM lymph status', ->
+            biopsy.then (table) ->
+              table.find(By.binding('tnm.lymphStatus')).then (status) ->
+                expect(status,
+                       'The Breast TNM lymph status table is missing')
+                  .to.exist
+                expect(status.isDisplayed(),
+                       'The Breast TNM lymph status field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the TNM metastasis', ->
+            biopsy.then (table) ->
+              table.find(By.binding('tnm.metastasis')).then (metastasis) ->
+                expect(metastasis,
+                       'The Breast TNM metastasis table is missing')
+                  .to.exist
+                expect(metastasis.isDisplayed(),
+                       'The Breast TNM metastasis field is not displayed')
+                  .to.eventually.be.true
+
         describe 'Assessment', ->
-          # TODO - Add test cases for the date, weight and every outcome table.
+          assessment = null
       
+          before ->
+            assessment = clinicalProfile.then (profile) ->
+              profile.find('div[ng-switch-when="Assessment"]')
+          
+          it 'should show the assessment panel', ->
+            assessment.then (table) ->
+              expect(table, 'The Breast assessment panel is missing').to.exist
+              expect(table.isDisplayed(), 'The Breast assessment panel is not' +
+                                          ' displayed')
+                .to.eventually.be.true
+
+          it 'should show the TNM stage', ->
+            assessment.then (table) ->
+              table.find(By.binding('tnm')).then (stage) ->
+                expect(stage,
+                       'The Breast TNM stage table is missing')
+                  .to.exist
+                expect(stage.isDisplayed(),
+                       'The Breast TNM stage field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the Modified B-R tubular formation', ->
+            assessment.then (table) ->
+              table.find(By.binding('grade.tubularFormation')).then (diff) ->
+                expect(diff,
+                       'The Modified B-R tubular formation table is missing')
+                  .to.exist
+                expect(diff.isDisplayed(),
+                       'The Modified B-R tubular formation field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the Modified B-R nuclear pleomorphism', ->
+            assessment.then (table) ->
+              table.find(By.binding('grade.nuclearPleomorphism')).then (count) ->
+                expect(count,
+                       'The Modified B-R nuclear pleomorphism table is missing')
+                  .to.exist
+                expect(count.isDisplayed(),
+                       'The Modified B-R nuclear pleomorphism field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the Modified B-R mitotic count', ->
+            assessment.then (table) ->
+              table.find(By.binding('grade.mitoticCount')).then (necrosis) ->
+                expect(necrosis,
+                       'The Modified B-R mitotic count is missing')
+                  .to.exist
+                expect(necrosis.isDisplayed(),
+                       'The Modified B-R mitotic count is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the TNM size', ->
+            assessment.then (table) ->
+              table.find(By.binding('tnm.size')).then (size) ->
+                expect(size,
+                       'The Breast TNM size table is missing')
+                  .to.exist
+                expect(size.isDisplayed(),
+                       'The Breast TNM size field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the TNM lymph status', ->
+            assessment.then (table) ->
+              table.find(By.binding('tnm.lymphStatus')).then (status) ->
+                expect(status,
+                       'The Breast TNM lymph status table is missing')
+                  .to.exist
+                expect(status.isDisplayed(),
+                       'The Breast TNM lymph status field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the TNM metastasis', ->
+            assessment.then (table) ->
+              table.find(By.binding('tnm.metastasis')).then (metastasis) ->
+                expect(metastasis,
+                       'The Breast TNM metastasis table is missing')
+                  .to.exist
+                expect(metastasis.isDisplayed(),
+                       'The Breast TNM metastasis field is not displayed')
+                  .to.eventually.be.true
+
       describe 'Treatments', ->
-        # TODO - Add test cases for the treatment type, start and end dates.
+        describe 'Neoadjuvant Treatment', ->
+          treatment = null
+
+          before ->
+            treatment = clinicalProfile.then (profile) ->
+              profile.find(By.css('.treatment'))
+
+          it 'should show the treatment panel', ->
+            treatment.then (table) ->
+              expect(table, 'The treatment panel is missing').to.exist
+              expect(table.isDisplayed(), 'The treatment panel is not' +
+                                          ' displayed')
+                .to.eventually.be.true
+
+          it 'should show the treatment start date', ->
+            treatment.then (table) ->
+              table.find(By.binding('treatment.startDate')).then (start) ->
+                expect(start,
+                       'The treatment start date table is missing')
+                  .to.exist
+                expect(start.isDisplayed(),
+                       'The treatment start date field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the treatment end date', ->
+            treatment.then (table) ->
+              table.find(By.binding('treatment.endDate')).then (end) ->
+                expect(end,
+                       'The treatment end date table is missing')
+                  .to.exist
+                expect(end.isDisplayed(),
+                       'The treatment end date field is not displayed')
+                  .to.eventually.be.true
+
+          describe 'Chemotherapy', ->
+            chemo = null
+
+            before ->
+              chemo = clinicalProfile.then (profile) ->
+                profile.find(By.css('.dosage'))
+
+            it 'should show the chemotherapy panel', ->
+              chemo.then (table) ->
+                expect(table, 'The chemotherapy panel is missing').to.exist
+                expect(table.isDisplayed(), 'The chemotherapy panel is not' +
+                                            ' displayed')
+                  .to.eventually.be.true
+
+            it 'should show the agent name', ->
+              chemo.then (table) ->
+                table.find(By.binding('dosage.agent.name')).then (name) ->
+                  expect(name,
+                         'The chemotherapy agent name table is missing')
+                    .to.exist
+                  expect(name.isDisplayed(),
+                         'The chemotherapy agent name field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the dosage start date', ->
+              chemo.then (table) ->
+                table.find(By.binding('dosage.startDate')).then (start) ->
+                  expect(start,
+                         'The chemotherapy dosage start date table is missing')
+                    .to.exist
+                  expect(start.isDisplayed(),
+                         'The chemotherapy dosage start date field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the dosage amount', ->
+              chemo.then (table) ->
+                table.find(By.binding('dosage.amount')).then (amount) ->
+                  expect(amount,
+                         'The chemotherapy dosage amount table is missing')
+                    .to.exist
+                  expect(amount.isDisplayed(),
+                         'The chemotherapy dosage amount field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the dosage duration', ->
+              chemo.then (table) ->
+                table.find(By.binding('dosage.duration')).then (duration) ->
+                  expect(duration,
+                         'The chemotherapy dosage duration table is missing')
+                    .to.exist
+                  expect(duration.isDisplayed(),
+                         'The chemotherapy dosage duration field is not displayed')
+                    .to.eventually.be.true
         
-        describe 'Chemotherapy', ->
-          # TODO - Add chemotherapy test cases.
-        
-        describe 'Radiotherapy', ->
-          # TODO - Add radiotherapy test cases.
+          describe 'Radiotherapy', ->
+            # TODO - Add radiotherapy test cases.
 
   describe 'Sarcoma', ->
     page = null
@@ -385,11 +623,186 @@ describe 'E2E Testing Subject Detail', ->
               expect(table.isDisplayed(), 'The Sarcoma biopsy panel is not' +
                                           ' displayed')
                 .to.eventually.be.true
-          
+
           it 'should show the tumor site', ->
             biopsy.then (table) ->
               table.find(By.binding('pathology.location')).then (site) ->
                 expect(site, 'The Sarcoma site table is missing').to.exist
-                expect(site.isDisplayed(), 'The Sarcoma pathology site field' +
-                                           ' is not displayed')
+                expect(site.isDisplayed(), 'The Sarcoma site field is not' +
+                                           ' displayed')
+                  .to.eventually.be.true
+
+          it 'should show the tumor histology', ->
+            biopsy.then (table) ->
+              table.find(By.binding('pathology.histology')).then (histology) ->
+                expect(histology, 'The Sarcoma histology table is' +
+                                  ' missing').to.exist
+                expect(histology.isDisplayed(), 'The Sarcoma histology field' +
+                                                ' is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the TNM stage', ->
+            biopsy.then (table) ->
+              table.find(By.binding('tnm')).then (stage) ->
+                expect(stage,
+                       'The Sarcoma TNM stage table is missing')
+                  .to.exist
+                expect(stage.isDisplayed(),
+                       'The Sarcoma TNM stage field is not displayed')
+                  .to.eventually.be.true
+                expect(stage, 'The stage is undefined').not.to.equal("undefined")
+
+          it 'should show the FNCLCC differentiation', ->
+            biopsy.then (table) ->
+              table.find(By.binding('grade.differentiation')).then (diff) ->
+                expect(diff,
+                       'The FNCLCC differentiation table is missing')
+                  .to.exist
+                expect(diff.isDisplayed(),
+                       'The FNCLCC differentiation field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the FNCLCC mitotic count', ->
+            biopsy.then (table) ->
+              table.find(By.binding('grade.mitoticCount')).then (count) ->
+                expect(count,
+                       'The FNCLCC mitotic count table is missing')
+                  .to.exist
+                expect(count.isDisplayed(),
+                       'The FNCLCC mitotic count field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the FNCLCC necrosis score', ->
+            biopsy.then (table) ->
+              table.find(By.binding('grade.necrosis_score')).then (necrosis) ->
+                expect(necrosis,
+                       'The FNCLCC necrosis score is missing')
+                  .to.exist
+                expect(necrosis.isDisplayed(),
+                       'The FNCLCC necrosis score is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the TNM size', ->
+            biopsy.then (table) ->
+              table.find(By.binding('tnm.size')).then (size) ->
+                expect(size,
+                       'The Sarcoma TNM size table is missing')
+                  .to.exist
+                expect(size.isDisplayed(),
+                       'The Sarcoma TNM size field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the TNM lymph status', ->
+            biopsy.then (table) ->
+              table.find(By.binding('tnm.lymphStatus')).then (status) ->
+                expect(status,
+                       'The Sarcoma TNM lymph status table is missing')
+                  .to.exist
+                expect(status.isDisplayed(),
+                       'The Sarcoma TNM lymph status field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the TNM metastasis', ->
+            biopsy.then (table) ->
+              table.find(By.binding('tnm.metastasis')).then (metastasis) ->
+                expect(metastasis,
+                       'The Sarcoma TNM metastasis table is missing')
+                  .to.exist
+                expect(metastasis.isDisplayed(),
+                       'The Sarcoma TNM metastasis field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the necrosis percent range', ->
+            biopsy.then (table) ->
+              table.find(By.binding('necrosis_percent')).then (range) ->
+                expect(range,
+                       'The Sarcoma necrosis percent range table is missing')
+                  .to.exist
+                expect(range.isDisplayed(),
+                       'The Sarcoma necrosis percent range field is not' +
+                       ' displayed')
+                  .to.eventually.be.true
+
+        describe 'Assessment', ->
+          assessment = null
+      
+          before ->
+            assessment = clinicalProfile.then (profile) ->
+              profile.find('div[ng-switch-when="Assessment"]')
+          
+          it 'should show the assessment panel', ->
+            assessment.then (table) ->
+              expect(table, 'The Sarcoma assessment panel is missing').to.exist
+              expect(table.isDisplayed(), 'The Sarcoma assessment panel is not' +
+                                          ' displayed')
+                .to.eventually.be.true
+
+          it 'should show the TNM stage', ->
+            assessment.then (table) ->
+              table.find(By.binding('tnm')).then (stage) ->
+                expect(stage,
+                       'The Sarcoma TNM stage table is missing')
+                  .to.exist
+                expect(stage.isDisplayed(),
+                       'The Sarcoma TNM stage field is not displayed')
+                  .to.eventually.be.true 
+
+          it 'should show the FNCLCC differentiation', ->
+            assessment.then (table) ->
+              table.find(By.binding('grade.differentiation')).then (diff) ->
+                expect(diff,
+                       'The FNCLCC differentiation table is missing')
+                  .to.exist
+                expect(diff.isDisplayed(),
+                       'The FNCLCC differentiation field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the FNCLCC mitotic count', ->
+            assessment.then (table) ->
+              table.find(By.binding('grade.mitoticCount')).then (count) ->
+                expect(count,
+                       'The FNCLCC mitotic count table is missing')
+                  .to.exist
+                expect(count.isDisplayed(),
+                       'The FNCLCC mitotic count field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the FNCLCC necrosis score', ->
+            assessment.then (table) ->
+              table.find(By.binding('grade.necrosis_score')).then (necrosis) ->
+                expect(necrosis,
+                       'The FNCLCC necrosis score is missing')
+                  .to.exist
+                expect(necrosis.isDisplayed(),
+                       'The FNCLCC necrosis score is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the TNM size', ->
+            assessment.then (table) ->
+              table.find(By.binding('tnm.size')).then (size) ->
+                expect(size,
+                       'The Sarcoma TNM size table is missing')
+                  .to.exist
+                expect(size.isDisplayed(),
+                       'The Sarcoma TNM size field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the TNM lymph status', ->
+            assessment.then (table) ->
+              table.find(By.binding('tnm.lymphStatus')).then (status) ->
+                expect(status,
+                       'The Sarcoma TNM lymph status table is missing')
+                  .to.exist
+                expect(status.isDisplayed(),
+                       'The Sarcoma TNM lymph status field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the TNM metastasis', ->
+            assessment.then (table) ->
+              table.find(By.binding('tnm.metastasis')).then (metastasis) ->
+                expect(metastasis,
+                       'The Sarcoma TNM metastasis table is missing')
+                  .to.exist
+                expect(metastasis.isDisplayed(),
+                       'The Sarcoma TNM metastasis field is not displayed')
                   .to.eventually.be.true

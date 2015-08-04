@@ -1,4 +1,3 @@
-div(ng-controller='AssessmentCtrl'
-    ng-repeat="outcome in assessment.evaluation.outcomes"
-    ng-show="assessment")
-  | TODO
+div(ng-controller='AssessmentCtrl' ng-show="evaluation" ng-switch="evaluation._cls")
+  div(ng-switch-when='GenericEvaluation')
+    include generic-evaluation

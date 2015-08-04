@@ -17,7 +17,7 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
 
     Grade:
       RANGES: [[2..3], [4..5], [6..8]]
-      SCORES: ['differentiation', 'mitoticCount', 'necrosis']
+      SCORES: ['differentiation', 'mitoticCount', 'necrosisScore']
 
 
     # Returns the cancer stage.

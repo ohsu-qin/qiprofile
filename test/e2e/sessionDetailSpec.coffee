@@ -22,6 +22,7 @@ class SessionDetailPage extends Page
         # button ElementFinders.
         download: elt.element(By.css('.glyphicon-download'))
         open: elt.element(By.css('.glyphicon-eye-open'))
+        failed: elt.element(By.css('.glyphicon-exclamation-sign'))
 
   # Loads the image by clicking the given download button.
   #
@@ -67,6 +68,9 @@ describe 'E2E Testing Session Detail', ->
   # protractor config links _public/data to the test fixture data
   # directory.
   TEST_VOL_NBR = 20
+  # A Sarcoma001 Session01 volume number for which a test fixture scan
+  # image file is missing.
+  MISSING_TEST_VOL_NBR = 1
 
   page = null
 
@@ -130,3 +134,18 @@ describe 'E2E Testing Session Detail', ->
           # The open button should be displayed.
           expect(open.isDisplayed(), 'The open button is hidden after download')
             .to.eventually.be.true
+
+    # TODO - Add a test to verify that an alert box is opened when a link for
+    #   a missing image is clicked. Currently the opening of an alert box stops
+    #   Protractor, with no apparent easy workaround.
+    #
+    # it 'should display an alert box', ->
+    #   page.scanImageButtons(MISSING_TEST_VOL_NBR).then (btnGroup) ->
+    #     btnGroup = page.scanImageButtons(MISSING_TEST_VOL_NBR)
+    #     download = btnGroup.download
+    #
+    #     page.loadScanImage(download).then ->
+    #       expect(download.isDisplayed(), 'The download button is displayed after download')
+    #         .to.eventually.be.false
+    #       expect(failed.isDisplayed(), 'The exclamation sign icon is hidden after download failed')
+    #         .to.eventually.be.true

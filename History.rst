@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+0.12.1 / 2015-08-04
+-------------------
+* Add sarcoma and treatment clinical profile content.
+
 0.11.10 / 2015-06-18
 -------------------
 * Sarcoma grade necrosis was renamed to necrosis_score.

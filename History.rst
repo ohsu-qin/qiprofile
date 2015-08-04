@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+0.12.2 / 2015-08-04
+-------------------
+* Replace corrupted package.
+
 0.12.1 / 2015-08-04
 -------------------
 * Add sarcoma and treatment clinical profile content.

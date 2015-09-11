@@ -17,6 +17,8 @@ table.table.qi-table.qi-ver-space
 .qi-ver-space(ng-switch="encounter._cls")
   div(ng-switch-when='Biopsy')
     include pathology
+  div(ng-switch-when='BreastSurgery')
+    include pathology
   div(ng-switch-when='Surgery')
     include pathology
   div(ng-switch-when='Assessment')

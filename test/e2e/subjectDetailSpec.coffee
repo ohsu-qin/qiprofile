@@ -626,7 +626,7 @@ describe 'E2E Testing Subject Detail', ->
 
           it 'should show the tumor site', ->
             biopsy.then (table) ->
-              table.find(By.binding('pathology.location')).then (site) ->
+              table.find(By.binding('tumor.location')).then (site) ->
                 expect(site, 'The Sarcoma site table is missing').to.exist
                 expect(site.isDisplayed(), 'The Sarcoma site field is not' +
                                            ' displayed')
@@ -634,7 +634,7 @@ describe 'E2E Testing Subject Detail', ->
 
           it 'should show the tumor histology', ->
             biopsy.then (table) ->
-              table.find(By.binding('pathology.histology')).then (histology) ->
+              table.find(By.binding('tumor.histology')).then (histology) ->
                 expect(histology, 'The Sarcoma histology table is' +
                                   ' missing').to.exist
                 expect(histology.isDisplayed(), 'The Sarcoma histology field' +

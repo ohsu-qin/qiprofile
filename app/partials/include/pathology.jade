@@ -1,5 +1,3 @@
-div(ng-controller='PathologyCtrl' ng-show="pathology" ng-switch="pathology._cls")
-  div(ng-switch-when='BreastPathology')
-    include breast-pathology
-  div(ng-switch-when='SarcomaPathology')
-    include sarcoma-pathology
+div(ng-controller='PathologyCtrl' ng-show="pathology")
+  div(ng-repeat="tumor in pathology.tumors")
+    include tumor

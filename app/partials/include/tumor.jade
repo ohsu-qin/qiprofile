@@ -1,0 +1,5 @@
+div(ng-show="tumor" ng-switch="tumor._cls")
+  div(ng-switch-when='BreastPathology')
+    include breast-pathology
+  div(ng-switch-when='SarcomaPathology')
+    include sarcoma-pathology

@@ -320,7 +320,11 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ]
 
 
-    # TO DO - add ResidualCancerBurdenCtrl
+    ctlrs.controller 'ResidualCancerBurdenCtrl', [
+      '$scope', 'Breast',
+      ($scope, Breast) ->
+        $scope.rcb = Breast.residualCancerBurden($scope.tumor)
+    ]
 
 
     ctlrs.controller 'RecurrenceScoreHelpCtrl', [

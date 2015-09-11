@@ -91,4 +91,47 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
       
       # Return the score fit to the range [0, 100].
       Math.max(0, Math.min(recurrenceScaled, 100))
+
+
+    # Calculates the Residual Cancer Burden index and class as described in:
+    #   JCO 25:28 4414-4422 <http://jco.ascopubs.org/content/25/28/4414.full>
+    #
+    # @param tumor the tumor object
+    # @returns the RCB object extended with index and class properties
+    residualCancerBurden: (tumor) ->
+      # Returns the RCB index.
+      rcbIndex = (extent, rcb) ->
+        # The bidimensional tumor size metric.
+        size = Math.sqrt(extent.length * extent.width)
+        # The overall tumor cellularity.
+        overall = rcb.tumorCellDensity / 100
+        # The in situ cellularity.
+        inSitu = rcb.dcisCellDensity / 100
+        # The invasive carcinoma proportion.
+        invasion = (1 - inSitu) * overall
+        # Calculate and return the index value.
+        return (1.4 * Math.pow(invasion * size, 0.17)) + 
+                Math.pow(4 * ((1 - Math.pow(0.75, rcb.positiveNodeCount)) *
+                           rcb.largestNodalMetastasisLength),
+                         0.17)
+      # Returns the RCB class, which is based on RCB index cut-offs.
+      rcbClass = (rcbIndex) ->  
+        if rcbIndex == 0
+          return 0
+        else if rcbIndex < 1.36
+          return 1
+        else if rcbIndex < 3.28
+          return 2
+        else
+          return 3
+
+      # If the RCB object exists, return it extended with the index and class.
+      if tumor.rcb?
+        score = rcbIndex(tumor.extent, tumor.rcb)
+        _.extend tumor.rcb, 
+          rcbIndex: score
+          rcbClass: rcbClass(score)
+      else
+        return null
+
   ]

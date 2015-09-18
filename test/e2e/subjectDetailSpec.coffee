@@ -338,6 +338,36 @@ describe 'E2E Testing Subject Detail', ->
 
           # TODO - Test cases for genetic expression.
 
+          it 'should show the tumor length', ->
+            biopsy.then (table) ->
+              table.find(By.binding('extent.length')).then (length) ->
+                expect(length,
+                       'The Breast tumor length table is missing')
+                  .to.exist
+                expect(length.isDisplayed(),
+                       'The Breast tumor length field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the tumor width', ->
+            biopsy.then (table) ->
+              table.find(By.binding('extent.width')).then (width) ->
+                expect(width,
+                       'The Breast tumor width table is missing')
+                  .to.exist
+                expect(width.isDisplayed(),
+                       'The Breast tumor width field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the tumor depth', ->
+            biopsy.then (table) ->
+              table.find(By.binding('extent.depth')).then (depth) ->
+                expect(depth,
+                       'The Breast tumor depth table is missing')
+                  .to.exist
+                expect(depth.isDisplayed(),
+                       'The Breast tumor depth field is not displayed')
+                  .to.eventually.be.true
+
           it 'should show the TNM stage', ->
             biopsy.then (table) ->
               table.find(By.binding('tnm')).then (stage) ->

@@ -320,6 +320,13 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ]
 
 
+    ctlrs.controller 'TumorExtentCtrl', [
+      '$scope',
+      ($scope) ->
+        $scope.extent = $scope.tumor.extent
+    ]
+
+
     ctlrs.controller 'ResidualCancerBurdenCtrl', [
       '$scope', 'Breast',
       ($scope, Breast) ->

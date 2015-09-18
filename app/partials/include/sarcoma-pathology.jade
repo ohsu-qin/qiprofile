@@ -8,6 +8,10 @@ table.table.qi-table.qi-spaced-table.qi-ver-space
     th Histology
     td {{ tumor.histology }}
 
+// The tumor extent partial.
+.qi-ver-space(ng-show='tumor.extent != null')
+  include tumor-extent
+
 // The TNM partial.
 .qi-ver-space(ng-show='tumor.tnm != null')
   include tnm

@@ -57,6 +57,32 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
                 templateUrl: '/partials/subject-list.html'
                 controller:  'SubjectListCtrl'
 
+
+          # The breast subject page.
+          .state 'quip.breast',
+            url: '/breast'
+            resolve:
+              Subject: 'Subject'
+              subjects: (Subject, project) ->
+                # The selection criterion is the project name.
+                cond = REST.where(project: project)
+                # The id is always fetched. In addition, the
+                # project/collection/number secondary key is fetched.
+                # No other fields are fetched.
+                fields = REST.pluck(['project', 'collection', 'number'])
+                # The HTML query parameter.
+                param = _.extend(_.clone(cond), fields)
+                # Delegate to the resource.
+                Subject.query(param).$promise
+              collections: ($state, subjects) ->
+                # The sorted collection names, with duplicates removed.
+                _.chain(subjects).pluck('collection').uniq().value().sort()
+            views:
+              'main@':
+                templateUrl: '/partials/breast-subject-list.html'
+                controller:  'BreastSubjectListCtrl'
+
+
           # The subject state.
           .state 'quip.subject',
             url: '/:collection/subject/{subject:[0-9]+}?id'

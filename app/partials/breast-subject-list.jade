@@ -1,0 +1,22 @@
+extends ../layout/partial
+
+block billboard
+  | Breast Patients
+
+block content
+  div
+    .col-md-4
+      ul.qi-main-list
+        li
+          a Patient 1
+        li
+          a Patient 2
+        li
+          a Patient 3
+    .col-md-8
+      div Chart
+
+block help-text
+  // The nested quote ensures evaluation to a string rather than
+  // a scope variable.
+  .qi-help-text(ng-include="'/partials/help/subject-list.html'")

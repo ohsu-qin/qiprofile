@@ -1,11 +1,9 @@
 div(ng-controller='PathologyCtrl' ng-show="pathology")
   // If multiple tumors exist, display a title for each tumor and
   //   place its content in a nested panel.
-  div(ng-show="pathology.tumors.length > 1")
-    div(ng-repeat="tumor in pathology.tumors")
-      .qi-subtable-title Tumor {{ $index + 1 }}
-      .qi-panel.qi-nested
-        include tumor
-  div(ng-show="pathology.tumors.length == 1")
-    div(ng-init="tumor = pathology.tumors[0]")
+  div(ng-repeat="tumor in pathology.tumors" ng-show="pathology.tumors.length > 1")
+    .qi-subtable-title Tumor {{ $index + 1 }}
+    .qi-panel.qi-nested
       include tumor
+  div(ng-init="tumor = pathology.tumors[0]" ng-show="pathology.tumors.length == 1")
+    include tumor

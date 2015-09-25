@@ -3,12 +3,12 @@
 .qi-panel.qi-nested(ng-controller='TumorExtentCtrl')
   .qi-ver-space
     table.table.qi-table
-      tr
+      tr(ng-show="extent.length != null")
         th Length
         td {{ extent.length }} mm
-      tr
+      tr(ng-show="extent.width != null")
         th Width
         td {{ extent.width }} mm
-      tr
+      tr(ng-show="extent.depth != null")
         th Depth
         td {{ extent.depth }} mm

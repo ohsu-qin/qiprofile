@@ -1,9 +1,9 @@
 define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
-        'dateline', 'intensity', 'modeling'],
+        'summary', 'dateline', 'intensity', 'modeling'],
   (ng, _, _s, Spinner) ->
     directives = ng.module(
       'qiprofile.directives',
-      ['qiprofile.helpers', 'qiprofile.dateline', 'qiprofile.intensity',
+      ['qiprofile.helpers', 'qiprofile.summary', 'qiprofile.dateline', 'qiprofile.intensity',
        'qiprofile.modeling']
     )
 
@@ -40,6 +40,51 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
             scope.spinner.spin(element[0])
           else if scope.spinner
             scope.spinner.stop()
+
+
+    # Display the breast summary charts.
+    # TO DO - Consolidate into one directive.
+    # Note: Currently these charts are wireframes only.
+
+    directives.directive 'qiKtransSummaryChart', ['ktransSummary', '$compile',
+      (ktransSummary, $compile) ->
+        restrict: 'E'
+        scope:
+          subject: '='
+        link: (scope, element, attrs) ->
+          scope.config = ktransSummary.configureChart()
+        templateUrl: '/partials/ktrans-summary-chart.html'
+    ]
+
+    directives.directive 'qiDeltaKtransSummaryChart', ['deltaKtransSummary', '$compile',
+      (deltaKtransSummary, $compile) ->
+        restrict: 'E'
+        scope:
+          subject: '='
+        link: (scope, element, attrs) ->
+          scope.config = deltaKtransSummary.configureChart()
+        templateUrl: '/partials/delta-ktrans-summary-chart.html'
+    ]
+
+    directives.directive 'qiVeSummaryChart', ['veSummary', '$compile',
+      (veSummary, $compile) ->
+        restrict: 'E'
+        scope:
+          subject: '='
+        link: (scope, element, attrs) ->
+          scope.config = veSummary.configureChart()
+        templateUrl: '/partials/ve-summary-chart.html'
+    ]
+
+    directives.directive 'qiTauiSummaryChart', ['tauiSummary', '$compile',
+      (tauiSummary, $compile) ->
+        restrict: 'E'
+        scope:
+          subject: '='
+        link: (scope, element, attrs) ->
+          scope.config = tauiSummary.configureChart()
+        templateUrl: '/partials/taui-summary-chart.html'
+    ]
 
 
     # Displays the MR session visit dateline chart.

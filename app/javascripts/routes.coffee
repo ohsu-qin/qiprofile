@@ -59,6 +59,7 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
 
 
           # The breast subject page.
+          # TO DO - Resolve data for breast summary charts.
           .state 'quip.breast',
             url: '/breast'
             resolve:

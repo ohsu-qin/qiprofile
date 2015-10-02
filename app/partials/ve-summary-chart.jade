@@ -1,0 +1,16 @@
+// Breast summary chart wireframe.
+
+.row
+  // See the modeling-discrete-chart template for nvd3 quirks.
+  nvd3-scatter-chart.qi-ve-summary-chart(
+    data='config.data'
+    height='200'
+    showXAxis='true' showYAxis='true' showLegend='true'
+    forcex='$parent.config.forcex'
+    XAxisTickValues='$parent.config.xValues'
+    XAxisLabel='RCB Index'
+    forcey='$parent.config.forcey'
+    YAxisTickValues='$parent.config.yValues'
+    YAxisLabel='v_e'
+    YAxisLabelDistance='0'
+  )

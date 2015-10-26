@@ -1,10 +1,17 @@
-.qi-ver-space(ng-show="!!pathology.tnm")
+.qi-ver-space(ng-show="!!tumor.extent")
+  include tumor-extent
+
+.qi-ver-space(ng-show="!!tumor.tnm")
   include tnm
 
 .qi-ver-space(ng-controller='BreastHormoneReceptorsCtrl'
-              ng-show="!!pathology.hormoneReceptors")
+	          ng-show="!!tumor.geneticExpression")
   include breast-hormone-receptors
 
 .qi-ver-space(ng-controller='BreastGeneticExpressionCtrl'
-              ng-show="!!pathology.geneticExpression")
+	          ng-show="!!tumor.geneticExpression")
   include breast-genetic-expression
+
+.qi-ver-space(ng-controller='ResidualCancerBurdenCtrl'
+	          ng-show="!!tumor.rcb")
+  include breast-rcb

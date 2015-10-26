@@ -312,14 +312,14 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ctlrs.controller 'BreastHormoneReceptorsCtrl', [
       '$scope',
       ($scope) ->
-        $scope.hormoneReceptors = $scope.pathology.hormoneReceptors
+        $scope.hormoneReceptors = $scope.tumor.hormoneReceptors
     ]
 
 
     ctlrs.controller 'BreastGeneticExpressionCtrl', [
       '$scope',
       ($scope) ->
-        $scope.geneticExpression = $scope.pathology.geneticExpression
+        $scope.geneticExpression = $scope.tumor.geneticExpression
     ]
 
 
@@ -328,6 +328,20 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
       ($scope, Breast) ->
         $scope.assay = $scope.geneticExpression.normalizedAssay
         $scope.recurrenceScore = Breast.recurrenceScore($scope.assay)
+    ]
+
+
+    ctlrs.controller 'TumorExtentCtrl', [
+      '$scope',
+      ($scope) ->
+        $scope.extent = $scope.tumor.extent
+    ]
+
+
+    ctlrs.controller 'ResidualCancerBurdenCtrl', [
+      '$scope', 'Breast',
+      ($scope, Breast) ->
+        $scope.rcb = Breast.residualCancerBurden($scope.tumor)
     ]
 
 
@@ -383,7 +397,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
       ($scope) ->
         # The parent can either be a pathology evaluation or a
         # generic evaluation outcome iterator.
-        path = $scope.pathology
+        path = $scope.tumor
         $scope.tnm = if path then path.tnm else $scope.outcome 
     ]
 
@@ -441,7 +455,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ctlrs.controller 'NecrosisPercentCtrl', [
       '$scope',
       ($scope) ->
-        $scope.necrosis_percent = $scope.pathology.necrosis_percent
+        $scope.necrosis_percent = $scope.tumor.necrosis_percent
     ]
 
 

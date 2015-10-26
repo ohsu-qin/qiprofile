@@ -1,0 +1,28 @@
+.qi-subtable-title Residual Cancer Burden
+
+.qi-panel.qi-nested
+  // RCB index and class.
+  table.table.qi-table
+    tr
+      th Index
+      td {{ rcb.rcbIndex | number:2 }}
+    tr
+      th Class
+      td {{ rcb.rcbClass }}
+  // RBC parameters.
+  table.table.qi-table.qi-spaced-table
+    tr(ng-show="rcb.tumorCellDensity != null")
+      th Tumor Cell Density
+      td {{ rcb.tumorCellDensity }}
+    tr(ng-show="rcb.dcisCellDensity != null")
+      th DCIS Cell Density
+      td {{ rcb.dcisCellDensity }}
+    tr(ng-show="rcb.positiveNodeCount != null")
+      th Positive Node Count
+      td {{ rcb.positiveNodeCount }}
+    tr(ng-show="rcb.totalNodeCount != null")
+      th Total Node Count
+      td {{ rcb.totalNodeCount }}
+    tr(ng-show="rcb.largestNodalMetastasisLength != null")
+      th Largest Nodal Metastasis Length
+      td {{ rcb.largestNodalMetastasisLength }}

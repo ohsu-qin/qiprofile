@@ -53,7 +53,7 @@ class SubjectDetailPage extends Page
           profile[name] = getTable(name)
 
         # The encounter accessor properties.
-        for enc in ['Biopsy', 'Surgery', 'Assessment']
+        for enc in ['Biopsy', 'BreastSurgery', 'Surgery', 'Assessment']
           profile[enc.toLowerCase()] =
             profile.find("div[ng-switch-when='#{ enc }']")
 
@@ -338,6 +338,36 @@ describe 'E2E Testing Subject Detail', ->
 
           # TODO - Test cases for genetic expression.
 
+          it 'should show the tumor length', ->
+            biopsy.then (table) ->
+              table.find(By.binding('extent.length')).then (length) ->
+                expect(length,
+                       'The Breast tumor length table is missing')
+                  .to.exist
+                expect(length.isDisplayed(),
+                       'The Breast tumor length field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the tumor width', ->
+            biopsy.then (table) ->
+              table.find(By.binding('extent.width')).then (width) ->
+                expect(width,
+                       'The Breast tumor width table is missing')
+                  .to.exist
+                expect(width.isDisplayed(),
+                       'The Breast tumor width field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the tumor depth', ->
+            biopsy.then (table) ->
+              table.find(By.binding('extent.depth')).then (depth) ->
+                expect(depth,
+                       'The Breast tumor depth table is missing')
+                  .to.exist
+                expect(depth.isDisplayed(),
+                       'The Breast tumor depth field is not displayed')
+                  .to.eventually.be.true
+
           it 'should show the TNM stage', ->
             biopsy.then (table) ->
               table.find(By.binding('tnm')).then (stage) ->
@@ -406,6 +436,40 @@ describe 'E2E Testing Subject Detail', ->
                   .to.exist
                 expect(metastasis.isDisplayed(),
                        'The Breast TNM metastasis field is not displayed')
+                  .to.eventually.be.true
+
+        describe 'BreastSurgery', ->
+          surgery = null
+      
+          before ->
+            surgery = clinicalProfile.then (profile) ->
+              profile.find('div[ng-switch-when="BreastSurgery"]')
+          
+          it 'should show the surgery panel', ->
+            surgery.then (table) ->
+              expect(table, 'The Breast surgery panel is missing').to.exist
+              expect(table.isDisplayed(), 'The Breast surgery panel is not' +
+                                          ' displayed')
+                .to.eventually.be.true
+
+          it 'should show the residual cancer burden index', ->
+            surgery.then (table) ->
+              table.find(By.binding('rcb.rcbIndex')).then (score) ->
+                expect(score,
+                       'The RCB index table is missing')
+                  .to.exist
+                expect(score.isDisplayed(),
+                       'The RCB index field is not displayed')
+                  .to.eventually.be.true
+
+          it 'should show the residual cancer burden class', ->
+            surgery.then (table) ->
+              table.find(By.binding('rcb.rcbClass')).then (cls) ->
+                expect(cls,
+                       'The RCB class table is missing')
+                  .to.exist
+                expect(cls.isDisplayed(),
+                       'The RCB class field is not displayed')
                   .to.eventually.be.true
 
         describe 'Assessment', ->
@@ -626,7 +690,7 @@ describe 'E2E Testing Subject Detail', ->
 
           it 'should show the tumor site', ->
             biopsy.then (table) ->
-              table.find(By.binding('pathology.location')).then (site) ->
+              table.find(By.binding('tumor.location')).then (site) ->
                 expect(site, 'The Sarcoma site table is missing').to.exist
                 expect(site.isDisplayed(), 'The Sarcoma site field is not' +
                                            ' displayed')
@@ -634,7 +698,7 @@ describe 'E2E Testing Subject Detail', ->
 
           it 'should show the tumor histology', ->
             biopsy.then (table) ->
-              table.find(By.binding('pathology.histology')).then (histology) ->
+              table.find(By.binding('tumor.histology')).then (histology) ->
                 expect(histology, 'The Sarcoma histology table is' +
                                   ' missing').to.exist
                 expect(histology.isDisplayed(), 'The Sarcoma histology field' +

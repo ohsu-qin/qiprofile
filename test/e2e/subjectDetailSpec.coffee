@@ -470,7 +470,7 @@ describe 'E2E Testing Subject Detail', ->
       
           before ->
             surgery = clinicalProfile.then (profile) ->
-              profile.find('div[ng-switch-when="BreastSurgery"]')
+              profile.find('div[ng-switch-when="Surgery"]')
           
           it 'should show the surgery panel', ->
             surgery.then (table) ->

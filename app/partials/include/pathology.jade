@@ -1,9 +1,17 @@
 div(ng-controller='PathologyCtrl' ng-show="pathology")
   // If multiple tumors exist, display a title for each tumor and
   //   place its content in a nested panel.
-  div(ng-repeat="tumor in pathology.tumors" ng-show="pathology.tumors.length > 1")
-    .qi-subtable-title Tumor {{ $index + 1 }}
-    .qi-panel.qi-nested
-      include tumor
-  div(ng-init="tumor = pathology.tumors[0]" ng-show="pathology.tumors.length == 1")
-    include tumor
+  div(ng-repeat="tumor in pathology.tumors")
+    //- TODO - tumor.jade compiles to 400+ HTML lines. These lines are
+    //- repeated below in each switch branch. Compare:
+    //-   include tumor
+    //- with:
+    //-   div(ng-include="'/partials/tumor.html'")
+    //- where tumor.jade is moved from partials/include/ to partials/.
+    div(ng-switch="pathology.tumors.length")
+      div(ng-switch-when='1')
+        include tumor
+      div(ng-switch-default)
+        .qi-subtable-title Tumor {{ $index + 1 }}
+        .qi-panel.qi-nested
+          include tumor

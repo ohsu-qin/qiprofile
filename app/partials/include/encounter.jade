@@ -1,9 +1,11 @@
 include accordion-heading-mixin
 
-//- TODO - Display an encounter.heading rather than encounter._cls.
-//- The default is the encounter._cls, but a Surgery subclass
-//- delegates to the Surgery superclass, resulting in the display
-//- of 'Surgery' rather than 'BreastSurgery' or 'SarcomaSurgery'.
+//- TODO - Display by the encounter.type rather than encounter._cls,
+//- where encounter.type is a new scope variable that defaults to
+//- encounter._cls, but is overridden for a Surgery subclass to
+//- delegate to the Surgery superclass, resulting in 'Surgery'
+//- rather than 'BreastSurgery' or 'SarcomaSurgery'. See also
+//- the subjectDetail.spec and dateline.coffee TODO items.
 //-
 //- The heading mixin below parses to:
 //-   <accordion-heading>{{ encounter._cls }}
@@ -22,9 +24,8 @@ table.table.qi-table.qi-ver-space
 .qi-ver-space(ng-switch="encounter._cls")
   div(ng-switch-when='Biopsy')
     include pathology
+  //- TODO - 
   div(ng-switch-when='BreastSurgery')
     include pathology
-  div(ng-switch-when='Surgery')
+  div(ng-switch-when='SarcomaSurgery')
     include pathology
-  div(ng-switch-when='Assessment')
-    include assessment

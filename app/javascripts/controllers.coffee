@@ -385,13 +385,6 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ]
 
 
-    ctlrs.controller 'AssessmentCtrl', [
-      '$scope',
-      ($scope) ->
-        $scope.evaluation = $scope.encounter.evaluation
-    ]
-
-
     ctlrs.controller 'TNMCtrl', [
       '$scope',
       ($scope) ->

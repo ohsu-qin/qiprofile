@@ -251,8 +251,16 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
               # Extend each session.
               for session, i in subject.sessions
                 extendSession(session, i+1)
+
+            # Adds the clinical encounter title attribute.
+            extendEncounters = ->
+              for enc in subject.clinicalEncounters
+                if _s.endsWith(enc._cls, 'Surgery')
+                  enc.title = 'Surgery'
+                else
+                  enc.title = enc._cls
             
-            # Fucntion which returns whether the given encounter is
+            # Function which returns whether the given encounter is
             # a session.
             is_session = (encounter) -> encounter._cls == 'Session'
             # Partition the encounters as imaging or clinical.
@@ -261,6 +269,8 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
             subject.sessions = sessions
             # The clinicalEncounters property.
             subject.clinicalEncounters = clnEncs
+            # Doctor the encounters.
+            extendEncounters()
             # Fix the subject dates.
             fixDates()
             # Doctor the sessions.

@@ -7,6 +7,10 @@ module.exports = (config) ->
     # The karma adapter frameworks to use.
     frameworks: ['mocha', 'requirejs', 'chai']
 
+    # Print messages.
+    client:
+      captureConsole: true
+
     # The test specs can be written in coffescript.
     preprocessors: '**/*.coffee': 'coffee'
 

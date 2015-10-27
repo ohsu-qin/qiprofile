@@ -1,16 +1,9 @@
 include accordion-heading-mixin
 
-//- TODO - Display by the encounter.type rather than encounter._cls,
-//- where encounter.type is a new scope variable that defaults to
-//- encounter._cls, but is overridden for a Surgery subclass to
-//- delegate to the Surgery superclass, resulting in 'Surgery'
-//- rather than 'BreastSurgery' or 'SarcomaSurgery'. See also
-//- the subjectDetail.spec and dateline.coffee TODO items.
-//-
 //- The heading mixin below parses to:
-//-   <accordion-heading>{{ encounter._cls }}
+//-   <accordion-heading>{{ encounter.title }}
 //-
-+accordion-heading('{{ encounter._cls }}')
++accordion-heading('{{ encounter.title }}')
 
 table.table.qi-table.qi-ver-space
   tr
@@ -21,11 +14,8 @@ table.table.qi-table.qi-ver-space
     th Subject Weight
     td {{ encounter.weight }}
 
-.qi-ver-space(ng-switch="encounter._cls")
+.qi-ver-space(ng-switch="encounter.title")
   div(ng-switch-when='Biopsy')
     include pathology
-  //- TODO - 
-  div(ng-switch-when='BreastSurgery')
-    include pathology
-  div(ng-switch-when='SarcomaSurgery')
+  div(ng-switch-when='Surgery')
     include pathology

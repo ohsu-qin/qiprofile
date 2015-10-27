@@ -142,12 +142,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
           text.attr('x', Math.floor(offset) - 6)
           # Set the text style.
           #
-          # FIXME - Surgery subclasses don't resolve to the
-          # qi-dateline-surgery CSS class. The CSS class should
-          # be analogous to the encounter.jade heading
-          # (cf. encounter.jade TODO).
-          #
-          text.classed("qi-dateline-#{ enc._cls.toLowerCase() }", true)
+          text.classed("qi-dateline-#{ enc.title.toLowerCase() }", true)
           # Set the text content to a marker, specifically the HTML
           # nabla math special character (the wedge-like del operator).
           text.text(TREATMENT_SYMBOL)
@@ -201,7 +196,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
           # Sort by start date.
           sorted = _.sortBy(encs, (enc) -> enc.date.valueOf())
           # The encounter labels.
-          labels = _.uniq(enc._cls for enc in sorted)
+          labels = _.uniq(enc.title for enc in sorted)
           for label in labels
             # Place the new span element.
             span = p.append('span')

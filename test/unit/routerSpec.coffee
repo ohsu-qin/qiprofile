@@ -40,19 +40,17 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
               acquisition_date: moment('July 1, 2013').valueOf()
               detail: 'sd1'
               modelings: [
-                {
-                  resource: 'pk_01'
-                  protocol: 'mp1'
-                  source:
-                    registration: 'rp1'
-                  result:
-                    delta_k_trans:
-                      filename: "path/to/first/delta_k_trans.nii.gz"
-                      average: 2.3
-                      label_map:
-                        filename: "path/to/first/delta_k_trans_color.nii.gz"
-                        color_table: "path/to/color_table.txt"
-                }
+                resource: 'pk_01'
+                protocol: 'mp1'
+                source:
+                  registration: 'rp1'
+                result:
+                  delta_k_trans:
+                    filename: "path/to/first/delta_k_trans.nii.gz"
+                    average: 2.3
+                    label_map:
+                      filename: "path/to/first/delta_k_trans_color.nii.gz"
+                      color_table: "path/to/color_table.txt"
               ]
             }
             {
@@ -61,28 +59,31 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
               acquisition_date: moment('August 1, 2013').valueOf()
               detail: 'sd2'
               modelings: [
-                {
-                  resource: 'pk_02'
-                  protocol: 'mp1'
-                  source:
-                    registration: 'rp1'
-                  result:
-                    delta_k_trans:
-                      filename: "path/to/second/delta_k_trans.nii.gz"
-                      average: 2.4
-                      label_map:
-                        filename: "path/to/second/delta_k_trans_color.nii.gz"
-                        color_table: "path/to/color_table.txt"
-                }
+                resource: 'pk_02'
+                protocol: 'mp1'
+                source:
+                  registration: 'rp1'
+                result:
+                  delta_k_trans:
+                    filename: "path/to/second/delta_k_trans.nii.gz"
+                    average: 2.4
+                    label_map:
+                      filename: "path/to/second/delta_k_trans_color.nii.gz"
+                      color_table: "path/to/color_table.txt"
               ]
             }
             {
-              _cls: 'Biopsy'
+              _cls: 'BreastSurgery'
               date: moment('July 12, 2013').valueOf()
               pathology:
-                _cls: 'BreastPathology'
-                tnm:
-                  size: 'T3'
+                _cls: 'PathologyReport'
+                tumors: [
+                  _cls: 'BreastPathology'
+                  tnm:
+                    size:
+                      prefix: 'p'
+                      tumor_size: 3
+                ]
             }
           ]
           treatments: [
@@ -240,6 +241,10 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
             expect(subject.clinicalEncounters.length,
                    "Subject clinical encounters length is incorrect")
               .to.equal(1)
+          it 'should set the clinical encounter title', ->
+            enc = subject.clinicalEncounters[0]
+            expect(enc.title, "Encounter is missing a title").to.exist
+            expect(enc.title, "Encounter title is incorrect").to.equal('Surgery')
 
           # Validate the treatments.
           it 'should extend the subject treatments', ->

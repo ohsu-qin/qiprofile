@@ -2,12 +2,12 @@
 .qi-subtable-title {{ receptorStatus.hormone | capitalize }}
 
 table.table.qi-table
-  tr
+  tr(ng-show='receptorStatus.positive != null')
     th Result
     td {{ receptorStatus.positive | positiveNegative }}
-  tr
+  tr(ng-show='receptorStatus.intensity != null')
     th Intensity
     td {{ receptorStatus.intensity | percentSign }}
-  tr
+  tr(ng-show='receptorStatus.quickScore != null')
     th Quick Score
     td {{ receptorStatus.quickScore }}

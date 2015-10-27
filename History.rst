@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+0.13.1 / 2015-10-26
+-------------------
+* Support multiple tumors.
+
 0.12.2 / 2015-08-04
 -------------------
 * Replace corrupted package.

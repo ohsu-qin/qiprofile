@@ -141,6 +141,12 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
           text = parent.insert('svg:text', -> xAxisNode)
           text.attr('x', Math.floor(offset) - 6)
           # Set the text style.
+          #
+          # FIXME - Surgery subclasses don't resolve to the
+          # qi-dateline-surgery CSS class. The CSS class should
+          # be analogous to the encounter.jade heading
+          # (cf. encounter.jade TODO).
+          #
           text.classed("qi-dateline-#{ enc._cls.toLowerCase() }", true)
           # Set the text content to a marker, specifically the HTML
           # nabla math special character (the wedge-like del operator).

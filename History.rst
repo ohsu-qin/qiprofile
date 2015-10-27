@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+0.13.2 / 2015-10-27
+-------------------
+* Display encounter title rather than class.
+
 0.13.1 / 2015-10-26
 -------------------
 * Support multiple tumors.

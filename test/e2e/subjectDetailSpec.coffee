@@ -214,7 +214,7 @@ describe 'E2E Testing Subject Detail', ->
                 for date, rowNdx in expected
                   expect(date,
                          "The table 1 row #{ rowNdx + 1 } visit date is missing")
-                    .to.exist
+                    .to.exist.and.not.be.empty
                 # The date values for every remaining table should be
                 # consistent with those of the first table.
                 for table, tblNdx in _.rest(tables)

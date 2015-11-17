@@ -682,12 +682,28 @@ describe 'E2E Testing Subject Detail', ->
                                             ' displayed')
                   .to.eventually.be.true
 
-            it 'should show the tumor site', ->
+            it 'should show the tumor body part', ->
               pathology.then (table) ->
-                table.find(By.binding('tumor.location')).then (site) ->
-                  expect(site, 'The Sarcoma site table is missing').to.exist
-                  expect(site.isDisplayed(), 'The Sarcoma site field is not' +
+                table.find(By.binding('tumor.location.body_part')).then (part) ->
+                  expect(part, 'The Sarcoma body part table is missing').to.exist
+                  expect(part.isDisplayed(), 'The Sarcoma body part field is not' +
                                              ' displayed')
+                    .to.eventually.be.true
+
+            it 'should show the tumor sagittal location', ->
+              pathology.then (table) ->
+                table.find(By.binding('tumor.location.sagittal_location')).then (sag) ->
+                  expect(sag, 'The Sarcoma sagittal location table is missing').to.exist
+                  expect(sag.isDisplayed(), 'The Sarcoma sagittal location field is not' +
+                                            ' displayed')
+                    .to.eventually.be.true
+
+            it 'should show the tumor coronal location', ->
+              pathology.then (table) ->
+                table.find(By.binding('tumor.location.coronal_location')).then (cor) ->
+                  expect(cor, 'The Sarcoma coronal location table is missing').to.exist
+                  expect(cor.isDisplayed(), 'The Sarcoma coronal location field is not' +
+                                            ' displayed')
                     .to.eventually.be.true
 
             it 'should show the tumor histology', ->

@@ -58,8 +58,12 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
                 controller:  'SubjectListCtrl'
 
 
-          # The breast subject page.
-          # TO DO - Resolve data for breast summary charts.
+          # TO DO - Add a Collection Summary page with route /quip/collection,
+          #   where collection can be either 'breast' or 'sarcoma'. For now, the
+          #   Summary page consists of 4 empty DC correlation charts in a 2 x 2
+          #   layout. There are no data points, hard-coded or otherwise. Add an
+          #   e2e collectionSpec.coffee test that only verifies that the page
+          #   displays.
           .state 'quip.breast',
             url: '/breast'
             resolve:

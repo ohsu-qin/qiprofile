@@ -35,6 +35,8 @@
     "angular-ui-utils": "~0.0.3",
     "angularjs-nvd3-directives": "~0.0.5-beta",
     "bootstrap": "~3.3.2",
+    "crossfilter": "~1.3.0",
+    "dcjs": "2.0.0-beta.3",
     "font-awesome": "~4.0.3",
     "json3": "~3.3.0",
     "lodash": "~3.3.0",

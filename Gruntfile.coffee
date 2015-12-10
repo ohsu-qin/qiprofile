@@ -33,7 +33,9 @@ module.exports = (grunt) ->
           'angular-touch/angular-touch.js'
           'angular-ui-router/release/*.js'
           'angularjs-nvd3-directives/dist/*.js'
+          'crossfilter/*.js'
           'd3/*.js'
+          'dcjs/dc.js'
           'domready/ready.js'
           'lodash/lodash.js'
           'moment/*.js'
@@ -77,6 +79,7 @@ module.exports = (grunt) ->
       css:
         src: [
           'bower_components/bootstrap/dist/css/bootstrap.css'
+          'bower_components/dcjs/dc.css'
           'bower_components/font-awesome/css/font-awesome.css'
           'bower_components/nvd3/nv.d3.css'
         ]

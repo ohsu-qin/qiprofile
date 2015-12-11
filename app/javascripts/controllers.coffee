@@ -66,7 +66,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ]
 
 
-    ctlrs.controller 'BreastSubjectListCtrl', [
+    ctlrs.controller 'CollectionCtrl', [
       '$rootScope', '$scope', 'project', 'subjects', 'collections',
       ($rootScope, $scope, project, subjects, collections) ->
         # Capture the current project.

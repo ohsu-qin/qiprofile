@@ -9,49 +9,50 @@ block content
       li
         a(ui-sref="quip.subject({project: sbj.project, collection: sbj.collection.toLowerCase(), subject: sbj.number, subjectdetail: sbj.detail})")
           | Patient {{ sbj.number }}
-  // TO DO - Create an iterator to display charts.
-  // Note: Currently these charts are wireframes only.
-  div
-    .col-md-6.qi-summary-chart
-      div.dropdown
-        button.btn.btn-default.qi-dropdown
-          span.qi-dropdown-selected RCB Index
-          span.caret.qi-caret
-        span.qi-dropdown-separator vs.
-        button.btn.btn-default.qi-dropdown
-          span.qi-dropdown-selected Ktrans
-          span.caret.qi-caret
-      qi-ktrans-summary-chart
-    .col-md-6.qi-summary-chart
-      div.dropdown
-        button.btn.btn-default.qi-dropdown
-          span.qi-dropdown-selected RCB Index
-          span.caret.qi-caret
-        span.qi-dropdown-separator vs.
-        button.btn.btn-default.qi-dropdown
-          span.qi-dropdown-selected delta Ktrans
-          span.caret.qi-caret
-      qi-delta-ktrans-summary-chart
-    .col-md-6.qi-summary-chart
-      div.dropdown
-        button.btn.btn-default.qi-dropdown
-          span.qi-dropdown-selected RCB Index
-          span.caret.qi-caret
-        span.qi-dropdown-separator vs.
-        button.btn.btn-default.qi-dropdown
-          span.qi-dropdown-selected v_e
-          span.caret.qi-caret
-      qi-ve-summary-chart
-    .col-md-6.qi-summary-chart
-      div.dropdown
-        button.btn.btn-default.qi-dropdown
-          span.qi-dropdown-selected RCB Index
-          span.caret.qi-caret
-        span.qi-dropdown-separator vs.
-        button.btn.btn-default.qi-dropdown
-          span.qi-dropdown-selected tau_i
-          span.caret.qi-caret
-      qi-taui-summary-chart
+
+  div.qi-correlation-charts(qi-correlation-charts)
+  .row
+    .col-md-6
+      .col-md-12.dropdown
+        button.btn.btn-default
+          span.qi-dropdown-selected Undefined
+          span.caret
+        span vs.
+        button.btn.btn-default
+          span.qi-dropdown-selected Undefined
+          span.caret
+      .col-md-12.qi-correlation-chart(id="qi-correlation-chart-1")
+    .col-md-6
+      .col-md-12.dropdown
+        button.btn.btn-default
+          span.qi-dropdown-selected Undefined
+          span.caret
+        span vs.
+        button.btn.btn-default
+          span.qi-dropdown-selected Undefined
+          span.caret
+      .col-md-12.qi-correlation-chart(id="qi-correlation-chart-2")
+  .row
+    .col-md-6
+      .col-md-12.dropdown
+        button.btn.btn-default
+          span.qi-dropdown-selected Undefined
+          span.caret
+        span vs.
+        button.btn.btn-default
+          span.qi-dropdown-selected Undefined
+          span.caret
+      .col-md-12.qi-correlation-chart(id="qi-correlation-chart-3")
+    .col-md-6
+      .col-md-12.dropdown
+        button.btn.btn-default
+          span.qi-dropdown-selected Undefined
+          span.caret
+        span vs.
+        button.btn.btn-default
+          span.qi-dropdown-selected Undefined
+          span.caret
+      .col-md-12.qi-correlation-chart(id="qi-correlation-chart-4")
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

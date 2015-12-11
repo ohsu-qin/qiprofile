@@ -64,8 +64,8 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
           #   layout. There are no data points, hard-coded or otherwise. Add an
           #   e2e collectionSpec.coffee test that only verifies that the page
           #   displays.
-          .state 'quip.breast',
-            url: '/breast'
+          .state 'quip.collection',
+            url: '/:collection'
             resolve:
               Subject: 'Subject'
               subjects: (Subject, project) ->
@@ -84,8 +84,8 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
                 _.chain(subjects).pluck('collection').uniq().value().sort()
             views:
               'main@':
-                templateUrl: '/partials/breast-subject-list.html'
-                controller:  'BreastSubjectListCtrl'
+                templateUrl: '/partials/collection.html'
+                controller:  'CollectionCtrl'
 
 
           # The subject state.

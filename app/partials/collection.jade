@@ -1,11 +1,11 @@
 extends ../layout/partial
 
 block billboard
-  | Breast Patients
+  | {{ collection }} Patients
 
 block content
   div.qi-subject-list
-    ul.qi-main-list(ng-repeat="sbj in subjects | filter: {collection: 'Breast'} | orderBy:'number'")
+    ul.qi-main-list(ng-repeat="sbj in subjects | filter: {collection: collection} | orderBy:'number'")
       li
         a(ui-sref="quip.subject({project: sbj.project, collection: sbj.collection.toLowerCase(), subject: sbj.number, subjectdetail: sbj.detail})")
           | Patient {{ sbj.number }}

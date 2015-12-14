@@ -57,13 +57,7 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
                 templateUrl: '/partials/subject-list.html'
                 controller:  'SubjectListCtrl'
 
-
-          # TO DO - Add a Collection Summary page with route /quip/collection,
-          #   where collection can be either 'breast' or 'sarcoma'. For now, the
-          #   Summary page consists of 4 empty DC correlation charts in a 2 x 2
-          #   layout. There are no data points, hard-coded or otherwise. Add an
-          #   e2e collectionSpec.coffee test that only verifies that the page
-          #   displays.
+          # The collection state.
           .state 'quip.collection',
             url: '/:collection'
             resolve:
@@ -79,14 +73,12 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
                 param = _.extend(_.clone(cond), fields)
                 # Delegate to the resource.
                 Subject.query(param).$promise
-              collections: ($state, subjects) ->
-                # The sorted collection names, with duplicates removed.
-                _.chain(subjects).pluck('collection').uniq().value().sort()
+              collection: ($stateParams) ->
+                _s.capitalize($stateParams.collection)
             views:
               'main@':
                 templateUrl: '/partials/collection.html'
                 controller:  'CollectionCtrl'
-
 
           # The subject state.
           .state 'quip.subject',

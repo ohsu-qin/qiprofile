@@ -62,9 +62,9 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
             url: '/:collection'
             resolve:
               Subject: 'Subject'
-              subjects: (Subject, project) ->
+              subjects: (Subject, project, collection) ->
                 # The selection criterion is the project name.
-                cond = REST.where(project: project)
+                cond = REST.where(project: project, collection: collection)
                 # The id is always fetched. In addition, the
                 # project/collection/number secondary key is fetched.
                 # No other fields are fetched.

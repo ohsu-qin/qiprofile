@@ -66,14 +66,14 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ]
 
 
-    ctlrs.controller 'BreastSubjectListCtrl', [
-      '$rootScope', '$scope', 'project', 'subjects', 'collections',
-      ($rootScope, $scope, project, subjects, collections) ->
+    ctlrs.controller 'CollectionCtrl', [
+      '$rootScope', '$scope', 'project', 'subjects', 'collection',
+      ($rootScope, $scope, project, subjects, collection) ->
         # Capture the current project.
         $rootScope.project = project
         # Place the subjects and collections in the scope.
         $scope.subjects = subjects
-        $scope.collections = collections
+        $scope.collection = collection
     ]
 
 

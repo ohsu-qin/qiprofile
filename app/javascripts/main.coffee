@@ -47,7 +47,9 @@ requirejs.config
   # The module paths.
   paths:
     angular: [NG_LIB + '/' + 'angular' + MIN, './lib/angular'] 
+    crossfilter: './lib/crossfilter'
     d3: './lib/d3'
+    dc: './lib/dc'
     domReady: [DOM_READY_LIB + '/domReady' + MIN, './lib/domReady']
     lodash: './lib/lodash'
     moment: './lib/moment'
@@ -75,6 +77,7 @@ requirejs.config
   shim:
     angular: exports : 'angular'
     lodash: exports: '_'
+    dc: deps: ['crossfilter', 'd3']
     nganimate: deps: ['angular']
     ngnvd3: deps: ['angular', 'nvd3']
     ngresource: deps: ['angular']

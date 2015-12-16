@@ -1,0 +1,60 @@
+extends ../layout/partial
+
+block billboard
+  | {{ collection }} Patients
+
+block content
+  div.qi-subject-list
+    ul.qi-main-list(ng-repeat="sbj in subjects | orderBy:'number'")
+      li
+        a(ui-sref="quip.subject({project: sbj.project, collection: sbj.collection.toLowerCase(), subject: sbj.number, subjectdetail: sbj.detail})")
+          | Patient {{ sbj.number }}
+
+  div.qi-correlation-charts(qi-correlation-charts)
+  .row
+    .col-md-6
+      .col-md-12.dropdown
+        button.btn.btn-default
+          span.qi-dropdown-selected Undefined
+          span.caret
+        span vs.
+        button.btn.btn-default
+          span.qi-dropdown-selected Undefined
+          span.caret
+      .col-md-12.qi-correlation-chart(id="qi-correlation-chart-1")
+    .col-md-6
+      .col-md-12.dropdown
+        button.btn.btn-default
+          span.qi-dropdown-selected Undefined
+          span.caret
+        span vs.
+        button.btn.btn-default
+          span.qi-dropdown-selected Undefined
+          span.caret
+      .col-md-12.qi-correlation-chart(id="qi-correlation-chart-2")
+  .row
+    .col-md-6
+      .col-md-12.dropdown
+        button.btn.btn-default
+          span.qi-dropdown-selected Undefined
+          span.caret
+        span vs.
+        button.btn.btn-default
+          span.qi-dropdown-selected Undefined
+          span.caret
+      .col-md-12.qi-correlation-chart(id="qi-correlation-chart-3")
+    .col-md-6
+      .col-md-12.dropdown
+        button.btn.btn-default
+          span.qi-dropdown-selected Undefined
+          span.caret
+        span vs.
+        button.btn.btn-default
+          span.qi-dropdown-selected Undefined
+          span.caret
+      .col-md-12.qi-correlation-chart(id="qi-correlation-chart-4")
+
+block help-text
+  // The nested quote ensures evaluation to a string rather than
+  // a scope variable.
+  .qi-help-text(ng-include="'/partials/help/subject-list.html'")

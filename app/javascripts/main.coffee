@@ -46,7 +46,10 @@ requirejs.config
 
   # The module paths.
   paths:
-    angular: [NG_LIB + '/' + 'angular' + MIN, './lib/angular']
+    angular: [NG_LIB + '/' + 'angular' + MIN, './lib/angular'] 
+    cornerstone: './lib/cornerstone'
+    cornerstoneMath: './lib/cornerstoneMath'
+    cornerstoneTools: './lib/cornerstoneTools'
     crossfilter: './lib/crossfilter'
     d3: './lib/d3'
     dc: './lib/dc'

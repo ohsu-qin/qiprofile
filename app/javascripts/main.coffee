@@ -55,6 +55,8 @@ requirejs.config
     dc: './lib/dc'
     domReady: [DOM_READY_LIB + '/domReady' + MIN, './lib/domReady']
     'error-stack-parser': './lib/error-stack-parser'
+    exampleImageLoader: './temp/exampleImageLoader'
+    jquery: './lib/jquery'
     lodash: './lib/lodash'
     moment: './lib/moment'
     nganimate: [NG_LIB + '/' + 'angular-animate' + MIN, './lib/angular-animate']
@@ -68,6 +70,7 @@ requirejs.config
     spin: './lib/spin'
     'stack-generator': './lib/stack-generator'
     stackframe: './lib/stackframe'
+    stackScrollTool: './temp/stackScrollTool'
     stacktrace: './lib/stacktrace'
     'stacktrace-gps': './lib/stacktrace-gps'
     touch: './lib/angular-touch'
@@ -85,7 +88,11 @@ requirejs.config
   shim:
     angular: exports : 'angular'
     lodash: exports: '_'
+    cornerstone: deps: ['jquery']
+    cornerstoneMath: deps: ['cornerstone']
+    cornerstoneTools: deps: ['cornerstoneMath']
     dc: deps: ['crossfilter', 'd3']
+    exampleImageLoader: deps: ['stackScrollTool']
     nganimate: deps: ['angular']
     ngnvd3: deps: ['angular', 'nvd3']
     ngresource: deps: ['angular']
@@ -93,6 +100,7 @@ requirejs.config
     ngsanitize: deps: ['angular']
     nvd3: deps: ['d3']
     slider: deps: ['touch']
+    stackScrollTool: deps: ['cornerstone']
     touch: deps: ['angular']
     uibootstrap: deps: ['angular']
     uirouter: deps: ['ngroute']

@@ -46,6 +46,7 @@ module.exports = (grunt) ->
           'dcjs/dc.js'
           'domready/ready.js'
           'error-stack-parser/dist/error-stack-parser.js'
+          'jquery/dist/*.js'
           'lodash/lodash.js'
           'moment/*.js'
           'nvd3/nv.d3.js'

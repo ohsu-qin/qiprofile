@@ -3,8 +3,19 @@
 # and
 # http://stackoverflow.com/questions/18591966/inject-module-dynamically-only-if-required
 #
-define ['angular', 'lodash', 'underscore.string', 'file', 'slider', 'xtk'], (ng, _, _s) ->
+define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
+        'jquery', 'cornerstone', 'cornerstoneMath', 'cornerstoneTools',
+        'stackScrollTool', 'exampleImageLoader'], (ng, _, _s) ->
   image = ng.module 'qiprofile.image', ['qiprofile.file', 'qiprofile.modeling', 'vr.directives.slider']
+
+
+  # TO DO - Replace the Image Detail page renderer with the Cornerstone
+  #   (https://github.com/chafey/cornerstone) StackScroll example
+  #   (https://github.com/chafey/cornerstoneTools/blob/master/examples/stackScroll/index.html).
+  #   For now, add the #dicomImage id tag to the image-detail.jade qi-image element,
+  #   excise the example JavaScript into a static/javascripts file,
+  #   and replace only the image.coffee renderer.render() call with a call to the javascript.
+
 
   image.factory 'Image', ['$rootScope', '$q', 'File', 'Modeling', ($rootScope, $q, File, Modeling) ->
     # The root scope {parent id: [Image objects]} cache.
@@ -95,24 +106,25 @@ define ['angular', 'lodash', 'underscore.string', 'file', 'slider', 'xtk'], (ng,
       # @param element the Angular jQueryLite element
       open: (element) ->
         # The XTK renderer for this image.
-        renderer = new X.renderer3D()
+        #renderer = new X.renderer3D()
         # The image is rendered within the given element.
-        renderer.container = element[0]
+        #renderer.container = element[0]
         # Build the renderer.
-        renderer.init()
-        renderer.add(@xtkVolume)
+        #renderer.init()
+        #renderer.add(@xtkVolume)
     
         # Set the volume threshold levels to defaults.
         # These must be set here for the slider controls to load with the
         # correct values.
-        @xtkVolume.lowerThreshold = 0
-        @xtkVolume.upperThreshold = 445
+        #@xtkVolume.lowerThreshold = 0
+        #@xtkVolume.upperThreshold = 445
     
         # Adjust the camera position.
-        renderer.camera.position = [0, 0, 240]
+        #renderer.camera.position = [0, 0, 240]
 
         # Render the image.
-        renderer.render()
+        stackScroll()
+        #renderer.render()
 
       # Returns whether the XTK volume has a visible label map. This
       # function is required to work around the XTK bug described in

@@ -8,14 +8,17 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
         'stackScrollTool', 'exampleImageLoader'], (ng, _, _s) ->
   image = ng.module 'qiprofile.image', ['qiprofile.file', 'qiprofile.modeling', 'vr.directives.slider']
 
-
   # TO DO - Replace the Image Detail page renderer with the Cornerstone
   #   (https://github.com/chafey/cornerstone) StackScroll example
   #   (https://github.com/chafey/cornerstoneTools/blob/master/examples/stackScroll/index.html).
   #   For now, add the #dicomImage id tag to the image-detail.jade qi-image element,
   #   excise the example JavaScript into a static/javascripts file,
   #   and replace only the image.coffee renderer.render() call with a call to the javascript.
-
+  # FOLLOW UP TASKS:
+  #   1. Use Angular's jQuery Lite as the Cornerstone dependency. Post a message to Cornerstone if it does not work.
+  #   2. Implement a simpler Cornerstone example, e.g. display only one slice.
+  #   3. Convert to a simple CoffeeScript without the clip controls.
+  #   4. Create a Balsamiq demo user interaction model.
 
   image.factory 'Image', ['$rootScope', '$q', 'File', 'Modeling', ($rootScope, $q, File, Modeling) ->
     # The root scope {parent id: [Image objects]} cache.

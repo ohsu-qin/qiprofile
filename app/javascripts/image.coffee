@@ -4,21 +4,8 @@
 # http://stackoverflow.com/questions/18591966/inject-module-dynamically-only-if-required
 #
 define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
-        'jquery', 'cornerstone', 'cornerstoneMath', 'cornerstoneTools',
-        'stackScrollTool', 'exampleImageLoader'], (ng, _, _s) ->
+        'cornerstone', 'exampleImageIdLoader'], (ng, _, _s) ->
   image = ng.module 'qiprofile.image', ['qiprofile.file', 'qiprofile.modeling', 'vr.directives.slider']
-
-  # TO DO - Replace the Image Detail page renderer with the Cornerstone
-  #   (https://github.com/chafey/cornerstone) StackScroll example
-  #   (https://github.com/chafey/cornerstoneTools/blob/master/examples/stackScroll/index.html).
-  #   For now, add the #dicomImage id tag to the image-detail.jade qi-image element,
-  #   excise the example JavaScript into a static/javascripts file,
-  #   and replace only the image.coffee renderer.render() call with a call to the javascript.
-  # FOLLOW UP TASKS:
-  #   1. Use Angular's jQuery Lite as the Cornerstone dependency. Post a message to Cornerstone if it does not work.
-  #   2. Implement a simpler Cornerstone example, e.g. display only one slice.
-  #   3. Convert to a simple CoffeeScript without the clip controls.
-  #   4. Create a Balsamiq demo user interaction model.
 
   image.factory 'Image', ['$rootScope', '$q', 'File', 'Modeling', ($rootScope, $q, File, Modeling) ->
     # The root scope {parent id: [Image objects]} cache.
@@ -108,6 +95,10 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
       #
       # @param element the Angular jQueryLite element
       open: (element) ->
+        # Note: The XTK renderer is disabled here. A demo image is rendered
+        #   with Cornerstone instead.
+        #   https://github.com/chafey/cornerstone
+
         # The XTK renderer for this image.
         #renderer = new X.renderer3D()
         # The image is rendered within the given element.
@@ -126,7 +117,27 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
         #renderer.camera.position = [0, 0, 240]
 
         # Render the image.
-        stackScroll()
+        # A demo image is rendered with Cornerstone. The image data are
+        #   contained in exampleImageIdLoader.
+        $(document).ready ->
+          imageId = 'example://1'
+          element = document.getElementById('dicomImage')
+          cornerstone.enable element
+          cornerstone.loadImage(imageId).then (image) ->
+            cornerstone.displayImage element, image
+            return
+          return
+
+        # Call the Stack Scroll Tool function. This is in a static JavaScript
+        #   file and provides a different Cornerstone demo with controls that
+        #   play a clip of a series of images. It uses the exampleImageLoader
+        #   static file. Add these to the module paths and dependencies in the
+        #   main js file. The cornerstoneMath and cornerstoneTools modules are
+        #   required. Convert html code from the following page and add it to
+        #   the image-detail jade file.
+        #   https://github.com/chafey/cornerstoneTools/blob/master/examples/stackScroll/index.html
+        #stackScroll()
+
         #renderer.render()
 
       # Returns whether the XTK volume has a visible label map. This

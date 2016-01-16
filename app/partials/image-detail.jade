@@ -11,27 +11,11 @@ block billboard
 
 block content
   qi-image
-    .row
-      .col-xs-2
-        ul.list-group
-          a#playClip.list-group-item(href='#') Play Clip
-          a#stopClip.list-group-item(href='#') Stop Clip
-        label Loop
-        input#loop(type='checkbox', checked='')
-        input#slice-range(type='range')
-      .col-xs-6
-        .cornerstone-enabled-image(style='width:512px;height:512px;position:relative;display:inline-block;color:white;', oncontextmenu='return false', unselectable='on', onselectstart='return false;', onmousedown='return false;')
-          #dicomImage(style='width:512px;height:512px;top:0px;left:0px; position:absolute;')
-            #mrtopleft(style='position: absolute;top:3px; left:3px')
-              | Patient Name
-            #mrtopright(style='position: absolute;top:3px; right:3px')
-              | Hospital
-            #mrbottomright(style='position: absolute;bottom:6px; right:3px')
-              #frameRate
-              #zoomText Zoom: 
-              #sliceText Image: 
-            #mrbottomleft(style='position: absolute;bottom:3px; left:3px')
-              | WW/WC:
+    #dicomImage(style='width:512px;height:512px;')
+
+  // Note: The overlays and image controls are disabled here. A demo image is
+  //   rendered with Cornerstone instead.
+  
   // The modeling parameter overlay select.
   //include include/image-overlay-select
   // The image display.

@@ -55,7 +55,7 @@ requirejs.config
     dc: './lib/dc'
     domReady: [DOM_READY_LIB + '/domReady' + MIN, './lib/domReady']
     'error-stack-parser': './lib/error-stack-parser'
-    exampleImageLoader: './temp/exampleImageLoader'
+    exampleImageIdLoader: './temp/exampleImageIdLoader'
     jquery: './lib/jquery'
     lodash: './lib/lodash'
     moment: './lib/moment'
@@ -92,7 +92,7 @@ requirejs.config
     cornerstoneMath: deps: ['cornerstone']
     cornerstoneTools: deps: ['cornerstoneMath']
     dc: deps: ['crossfilter', 'd3']
-    exampleImageLoader: deps: ['stackScrollTool']
+    exampleImageIdLoader: deps: ['cornerstone']
     nganimate: deps: ['angular']
     ngnvd3: deps: ['angular', 'nvd3']
     ngresource: deps: ['angular']
@@ -100,7 +100,6 @@ requirejs.config
     ngsanitize: deps: ['angular']
     nvd3: deps: ['d3']
     slider: deps: ['touch']
-    stackScrollTool: deps: ['cornerstone']
     touch: deps: ['angular']
     uibootstrap: deps: ['angular']
     uirouter: deps: ['ngroute']

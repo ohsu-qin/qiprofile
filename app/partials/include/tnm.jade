@@ -5,6 +5,9 @@
     tr
       th Stage
       td {{ tnm | tnmStage | romanize }}
+      td.qi-transparent
+        button#tnm-stage-help-btn.btn.btn-med.qi-profile-btn
+          .glyphicon.glyphicon-question-sign
 
   .qi-ver-space(ng-show='!!tnm.grade')
     include grade

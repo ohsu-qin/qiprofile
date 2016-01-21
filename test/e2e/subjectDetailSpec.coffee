@@ -12,6 +12,16 @@ class SubjectDetailPage extends Page
   imageProfileFormatButton: ->
     @find('#modeling-format-btn')
 
+  # @returns a promise which resolves to the PK modeling help button
+  #   ElementFinder
+  pkModelingHelpButton: ->
+    @find('#pk-modeling-help-btn')
+
+  # @returns a promise which resolves to the TNM stage help button
+  #   ElementFinder
+  tnmStageHelpButton: ->
+    @find('#tnm-stage-help-btn')
+
   # Finds the modeling table WebElements.
   # See profileTables.
   #
@@ -130,6 +140,12 @@ describe 'E2E Testing Subject Detail', ->
                 expect(page.modelingTables(), 'The modeling tables are visible after' +
                                               ' the format button is clicked twice')
                   .to.eventually.be.empty
+
+      describe 'Help Button', ->
+        it 'should display the PK modeling help button', ->
+          page.pkModelingHelpButton().then (button) ->
+            expect(button.isDisplayed(), 'The PK modeling help button is not displayed')
+              .to.eventually.be.true
 
       describe 'Chart', ->
         it 'should display the imaging charts', ->
@@ -404,7 +420,12 @@ describe 'E2E Testing Subject Detail', ->
                   expect(stage.isDisplayed(),
                          'The Breast TNM stage field is not displayed')
                     .to.eventually.be.true
-            
+
+            it 'should display the TNM stage help button', ->
+              page.tnmStageHelpButton().then (button) ->
+                expect(button.isDisplayed(), 'The TNM stage help button is not displayed')
+                  .to.eventually.be.true
+
             it 'should show the Modified B-R tubular formation', ->
               pathology.then (table) ->
                 table.find(By.binding('grade.tubularFormation')).then (diff) ->

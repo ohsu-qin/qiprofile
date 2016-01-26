@@ -1,0 +1,9 @@
+.qi-modal
+  .modal-header
+    .modal-title TNM Stage
+
+  .modal-body
+    div(ng-include="'/partials/help/breast-tnm-stage.html'")
+
+  .modal-footer
+    button.btn.btn-warning.cancel(qi-focus='true' ng-click="close()") Close

@@ -191,6 +191,25 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ]
 
 
+    ctlrs.controller 'PkModelingHelpCtrl', [
+      '$scope', '$modal',
+      ($scope, $modal) ->
+        $scope.open = ->
+          $modal.open
+            controller: 'PkModelingHelpModalCtrl'
+            templateUrl: '/partials/pk-modeling-help.html'
+            size: 'med'
+    ]
+
+
+    ctlrs.controller 'PkModelingHelpModalCtrl', [
+      '$scope', '$modalInstance',
+      ($scope, $modalInstance) ->
+        $scope.close = ->
+          $modalInstance.close()
+    ]
+
+
     ctlrs.controller 'ModelingProtocolCtrl', [
       '$scope',
       ($scope) ->
@@ -348,7 +367,6 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ctlrs.controller 'RecurrenceScoreHelpCtrl', [
       '$scope', '$modal',
       ($scope, $modal) ->
-        # Open a modal window to display the modeling input properties.
         $scope.open = ->
           $modal.open
             controller: 'RecurrenceScoreHelpModalCtrl'
@@ -368,7 +386,6 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ctlrs.controller 'DosageAmountHelpCtrl', [
       '$scope', '$modal',
       ($scope, $modal) ->
-        # Open a modal window to display the modeling input properties.
         $scope.open = ->
           $modal.open
             controller: 'DosageAmountHelpModalCtrl'
@@ -392,6 +409,44 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
         # generic evaluation outcome iterator.
         path = $scope.tumor
         $scope.tnm = if path then path.tnm else $scope.outcome 
+    ]
+
+
+    ctlrs.controller 'BreastTNMStageHelpCtrl', [
+      '$scope', '$modal',
+      ($scope, $modal) ->
+        $scope.open = ->
+          $modal.open
+            controller: 'BreastTNMStageHelpModalCtrl'
+            templateUrl: '/partials/breast-tnm-stage-help.html'
+            size: 'med'
+    ]
+
+
+    ctlrs.controller 'BreastTNMStageHelpModalCtrl', [
+      '$scope', '$modalInstance',
+      ($scope, $modalInstance) ->
+        $scope.close = ->
+          $modalInstance.close()
+    ]
+
+
+    ctlrs.controller 'SarcomaTNMStageHelpCtrl', [
+      '$scope', '$modal',
+      ($scope, $modal) ->
+        $scope.open = ->
+          $modal.open
+            controller: 'SarcomaTNMStageHelpModalCtrl'
+            templateUrl: '/partials/sarcoma-tnm-stage-help.html'
+            size: 'med'
+    ]
+
+
+    ctlrs.controller 'SarcomaTNMStageHelpModalCtrl', [
+      '$scope', '$modalInstance',
+      ($scope, $modalInstance) ->
+        $scope.close = ->
+          $modalInstance.close()
     ]
 
 

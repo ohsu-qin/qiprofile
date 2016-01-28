@@ -20,7 +20,7 @@ class SubjectDetailPage extends Page
   # @returns a promise which resolves to the TNM stage help button
   #   ElementFinder
   tnmStageHelpButton: ->
-    @find('#tnm-stage-help-btn')
+    @findAll('.tnm-stage-help-btn')
 
   # Finds the modeling table WebElements.
   # See profileTables.
@@ -418,7 +418,8 @@ describe 'E2E Testing Subject Detail', ->
                     .to.eventually.be.true
 
             it 'should display the TNM stage help button', ->
-              page.tnmStageHelpButton().then (button) ->
+              page.tnmStageHelpButton().then (buttons) ->
+                button = buttons[0]
                 expect(button.isDisplayed(), 'The TNM stage help button is not displayed')
                   .to.eventually.be.true
 
@@ -482,34 +483,70 @@ describe 'E2E Testing Subject Detail', ->
                          'The Breast TNM metastasis field is not displayed')
                     .to.eventually.be.true
 
-            it 'should show the hormone receptor result', ->
+            it 'should show the estrogen receptor result', ->
               pathology.then (table) ->
-                table.find(By.binding('receptorStatus.positive')).then (result) ->
+                table.findAll(By.binding('receptorStatus.positive')).then (results) ->
+                  result = results[0]
                   expect(result,
-                         'The Breast hormone receptor result table is missing')
+                         'The Breast estrogen receptor result table is missing')
                     .to.exist
                   expect(result.isDisplayed(),
-                         'The Breast hormone receptor result field is not displayed')
+                         'The Breast estrogen receptor result field is not displayed')
                     .to.eventually.be.true
 
-            it 'should show the receptor status intensity', ->
+            it 'should show the estrogen receptor intensity', ->
               pathology.then (table) ->
-                table.find(By.binding('receptorStatus.intensity')).then (intensity) ->
+                table.findAll(By.binding('receptorStatus.intensity')).then (intensities) ->
+                  intensity = intensities[0]
                   expect(intensity,
-                         'The Breast hormone receptor intensity table is missing')
+                         'The Breast estrogen receptor intensity table is missing')
                     .to.exist
                   expect(intensity.isDisplayed(),
-                         'The Breast hormone receptor intensity field is not displayed')
+                         'The Breast estrogen receptor intensity field is not displayed')
                     .to.eventually.be.true
 
-            it 'should show the receptor status quick score', ->
+            it 'should show the estrogen receptor quick score', ->
               pathology.then (table) ->
-                table.find(By.binding('receptorStatus.quickScore')).then (score) ->
+                table.findAll(By.binding('receptorStatus.quickScore')).then (scores) ->
+                  score = scores[0]
                   expect(score,
-                         'The Breast hormone receptor quick score table is missing')
+                         'The Breast estrogen receptor quick score table is missing')
                     .to.exist
                   expect(score.isDisplayed(),
-                         'The Breast hormone receptor quick score field is not displayed')
+                         'The Breast estrogen receptor quick score field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the progesterone receptor result', ->
+              pathology.then (table) ->
+                table.findAll(By.binding('receptorStatus.positive')).then (results) ->
+                  result = results[1]
+                  expect(result,
+                         'The Breast progesterone receptor result table is missing')
+                    .to.exist
+                  expect(result.isDisplayed(),
+                         'The Breast progesterone receptor result field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the progesterone receptor intensity', ->
+              pathology.then (table) ->
+                table.findAll(By.binding('receptorStatus.intensity')).then (intensities) ->
+                  intensity = intensities[1]
+                  expect(intensity,
+                         'The Breast progesterone receptor intensity table is missing')
+                    .to.exist
+                  expect(intensity.isDisplayed(),
+                         'The Breast progesterone receptor intensity field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the progesterone receptor quick score', ->
+              pathology.then (table) ->
+                table.findAll(By.binding('receptorStatus.quickScore')).then (scores) ->
+                  score = scores[1]
+                  expect(score,
+                         'The Breast progesterone receptor quick score table is missing')
+                    .to.exist
+                  expect(score.isDisplayed(),
+                         'The Breast progesterone receptor quick score field is not displayed')
                     .to.eventually.be.true
 
             it 'should show the HER2 NEU IHC expression', ->
@@ -767,7 +804,8 @@ describe 'E2E Testing Subject Detail', ->
 
           before ->
             treatment = clinicalProfile.then (profile) ->
-              profile.find(By.css('.treatment'))
+              profile.findAll(By.css('.treatment')).then (treatments) ->
+                  treatments[0]
 
           it 'should show the treatment panel', ->
             treatment.then (table) ->
@@ -801,7 +839,8 @@ describe 'E2E Testing Subject Detail', ->
 
             before ->
               chemo = clinicalProfile.then (profile) ->
-                profile.find(By.css('.dosage'))
+                profile.findAll(By.css('.dosage')).then (dosages) ->
+                  dosages[0]
 
             it 'should show the chemotherapy panel', ->
               chemo.then (table) ->

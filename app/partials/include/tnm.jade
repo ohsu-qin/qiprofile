@@ -6,12 +6,12 @@
       th Stage
       td {{ tnm | tnmStage | romanize }}
       td.qi-transparent(ng-switch="subject.collection")
-        button#tnm-stage-help-btn.btn.btn-med.qi-profile-btn(ng-switch-when='Breast',
+        button.btn.btn-med.tnm-stage-help-btn.qi-profile-btn(ng-switch-when='Breast',
           ng-controller='BreastTNMStageHelpCtrl',
           ng-click="open()"
           )
           .glyphicon.glyphicon-question-sign
-        button#tnm-stage-help-btn.btn.btn-med.qi-profile-btn(ng-switch-when='Sarcoma',
+        button.btn.btn-med.tnm-stage-help-btn.qi-profile-btn(ng-switch-when='Sarcoma',
           ng-controller='SarcomaTNMStageHelpCtrl',
           ng-click="open()"
           )

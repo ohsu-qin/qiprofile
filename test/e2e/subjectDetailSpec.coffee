@@ -352,10 +352,6 @@ describe 'E2E Testing Subject Detail', ->
           #       expect(parseInt(weight), 'The weight is not positive')
           #         .to.be.greaterThan(0)
 
-          # TODO - Test cases for receptor status.
-
-          # TODO - Test cases for genetic expression.
-
           it 'should show the biopsy panel', ->
             expect(biopsy, 'The Breast Biopsy panel is missing')
               .to.eventually.exist
@@ -484,6 +480,36 @@ describe 'E2E Testing Subject Detail', ->
                     .to.exist
                   expect(metastasis.isDisplayed(),
                          'The Breast TNM metastasis field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the hormone receptor result', ->
+              pathology.then (table) ->
+                table.find(By.binding('receptorStatus.positive')).then (result) ->
+                  expect(result,
+                         'The Breast hormone receptor result table is missing')
+                    .to.exist
+                  expect(result.isDisplayed(),
+                         'The Breast hormone receptor result field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the receptor status intensity', ->
+              pathology.then (table) ->
+                table.find(By.binding('receptorStatus.intensity')).then (intensity) ->
+                  expect(intensity,
+                         'The Breast hormone receptor intensity table is missing')
+                    .to.exist
+                  expect(intensity.isDisplayed(),
+                         'The Breast hormone receptor intensity field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the receptor status quick score', ->
+              pathology.then (table) ->
+                table.find(By.binding('receptorStatus.quickScore')).then (score) ->
+                  expect(score,
+                         'The Breast hormone receptor quick score table is missing')
+                    .to.exist
+                  expect(score.isDisplayed(),
+                         'The Breast hormone receptor quick score field is not displayed')
                     .to.eventually.be.true
 
         describe 'Surgery', ->

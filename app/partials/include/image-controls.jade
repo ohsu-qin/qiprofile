@@ -2,17 +2,22 @@
 .qi-panel.qi-vol-ctl
   uib-accordion(close-others='false')
     div(ng-controller='AccordionGroupCtrl')
-      uib-accordion-group(is-open="isOpen")
-        +accordion-heading('Opacity')
-        // The opacity controls.
+      uib-accordian-group(is-open="isOpen")
+        +accordion-heading('Overlay')
+        // The overlay opacity control.
+        // Note: This control has been modified to interact with the
+        //   Cornerstone demo image overlay.
+        //
+        // TO DO - Adapt the controls for selecting slices.
+        //
+        // TO DO - Adapt the controls for selecting the time point.
         .row
           .col-md-3.qi-slider-label Opacity
-          .col-md-9.qi-slider-label {{ image.xtkVolume.opacity }}
-        .row
-          .col-md-3.qi-slider-label Image
           .col-md-9
-            slider.qi-slider(ng-model="image.xtkVolume.opacity" floor='0'
-                             ceiling='1' step='0.1' precision='1')
+            slider.qi-slider(ng-model='overlayOpacity.value'
+                             ng-change="overlayOpacityCss.value={'opacity':overlayOpacity.value}"
+                             floor='0' ceiling='1' step='0.1' precision='1')
+
         // Note: the label map opacity control definition below works
         // around the following XTK bug:
         // * If the XTK volume labelmap property is accessed, then the
@@ -72,16 +77,16 @@
         // TODO - revisit this work-around in late 2015 after XTK has
         // hopefully matured.
         //
-        div(ng-switch="image.isOverlaySelected()")
+        //div(ng-switch="image.isOverlaySelected()")
         // See the Note comments above for an explanation of the odd
         // switch-show redundancy below.
-          div(ng-switch-when="true")
-            .row(ng-show="image.isOverlaySelected()")
-              .col-md-3 Overlay
-              .col-md-9
-                slider.qi-slider(ng-model="image.xtkVolume.labelmap.opacity"
-                                 floor='0' ceiling='1' step='0.1'
-                                 precision='1')
+        //  div(ng-switch-when="true")
+        //    .row(ng-show="image.isOverlaySelected()")
+        //      .col-md-3 Overlay
+        //      .col-md-9
+        //        slider.qi-slider(ng-model="image.xtkVolume.labelmap.opacity"
+        //                         floor='0' ceiling='1' step='0.1'
+        //                         precision='1')
     div(ng-controller='AccordionGroupCtrl')
       uib-accordion-group(is-open="isOpen")
         +accordion-heading('Cross Section')

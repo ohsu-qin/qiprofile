@@ -95,8 +95,8 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
       #
       # @param element the Angular jQueryLite element
       open: (element) ->
-        # Note: The XTK renderer is disabled here. A demo image is rendered
-        #   with Cornerstone instead.
+        # Note: The XTK renderer is disabled here. A demo image and overlay is
+        #   rendered with Cornerstone instead. See:
         #   https://github.com/chafey/cornerstone
 
         # The XTK renderer for this image.
@@ -116,10 +116,13 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
         # Adjust the camera position.
         #renderer.camera.position = [0, 0, 240]
 
-        # Render the image.
-        # A demo image is rendered with Cornerstone. The image data are
-        #   contained in exampleImageIdLoader.
-
+        # Render the image. A demo image and overlay are rendered with
+        #   Cornerstone. The image data are contained in exampleImageIdLoader.
+        #   For the purposes of the demo, these are brain images freely
+        #   provided by the Cornerstone project.
+        #
+        # TO DO - Replace the Show Overlay checkbox with the Overlay selection
+        #   radio button control.
         $(document).ready ->
           `var i`
           # Create an inverting LUT.
@@ -142,7 +145,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
           while i < 256
             voiLUT.lut[i] = i / 2 + 127
             i++
-          # Load and display DICOM image and overlay.
+          # Load and display the DICOM image and overlay.
           dicomImage = cornerstone.enable(document.getElementById('qi-dicom-image'))
           overlay = cornerstone.enable(document.getElementById('qi-overlay'))
           cornerstone.loadAndCacheImage('example://1').then (image) ->
@@ -182,16 +185,6 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
             cornerstone.setViewport overlay, viewport
             return
           return
-
-        # Call the Stack Scroll Tool function. This is in a static JavaScript
-        #   file and provides a different Cornerstone demo with controls that
-        #   play a clip of a series of images. It uses the exampleImageLoader
-        #   static file. Add these to the module paths and dependencies in the
-        #   main js file. The cornerstoneMath and cornerstoneTools modules are
-        #   required. Convert html code from the following page and add it to
-        #   the image-detail jade file.
-        #   https://github.com/chafey/cornerstoneTools/blob/master/examples/stackScroll/index.html
-        #stackScroll()
 
         #renderer.render()
 

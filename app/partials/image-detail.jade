@@ -10,38 +10,32 @@ block billboard
   | Volume {{ image.volume.number }}
 
 block content
-  qi-image
-    body
-      div
-        input#toggle-overlay(type='checkbox')
-        | &nbsp;Show Overlay
-      .row#qi-slide
-        .col-md-1 Opacity
-        .col-md-1#opacityValue {{ overlayOpacity | percentRounded }}%
-        .col-md-2
-          input(type='range', min='0', max='1', step='0.01', ng-model='overlayOpacity', ng-change="overlayOpacityStyle={'opacity':overlayOpacity}")
-        .col-md-8
-      div
-        input#toggle-modality-lut(type='checkbox')
-        | &nbsp;Apply Modality LUT&nbsp;
-        input#toggle-voi-lut(type='checkbox')
-        | &nbsp;Apply VOI LUT
-      #qi-image-container
-        #qi-dicom-image.cornerstone-enabled-image(oncontextmenu='return false', unselectable='on', onselectstart='return false;', onmousedown='return false;')
-        #qi-overlay.cornerstone-enabled-image(ng-style='overlayOpacityStyle', oncontextmenu='return false', unselectable='on', onselectstart='return false;', onmousedown='return false;')
- 
-  // Note: The overlays and image controls are disabled here. A demo image is
-  //   rendered with Cornerstone instead.
-  
   // The modeling parameter overlay select.
-  //include include/image-overlay-select
-  // The image display.
-  //qi-image.qi-panel.qi-image
-    // The opacity, axis and threshold image controls.
-    //include include/image-controls
-    // TODO - add an orientation button in the bottom right
-    // that restores the XTK volume to its original
-    // orientation. Use the glyphicon-record for the button.
+  include include/image-overlay-select
+  // The opacity, axis and threshold image controls.
+  include include/image-controls
+  qi-image
+    div
+      // Temporary checkbox controls for the Cornerstone demo.
+      input#toggle-overlay(type='checkbox')
+      | Show Overlay
+      input#toggle-modality-lut(type='checkbox')
+      | Apply Modality LUT
+      input#toggle-voi-lut(type='checkbox')
+      | Apply VOI LUT
+    // The Cornerstone image viewports, one for the DICOM image and one for the
+    //   overlay. The overlay viewport is stacked on top of the DICOM viewport
+    //   using CSS.
+    //
+    // TO DO - Specify image width and height as percentages or use the
+    //   Bootstrap grip template, e.g. col-md-4.
+    #qi-image-container
+      #qi-dicom-image.cornerstone-enabled-image(oncontextmenu='return false'
+        unselectable='on' onselectstart='return false'
+        onmousedown='return false')
+      #qi-overlay.cornerstone-enabled-image(oncontextmenu='return false'
+        unselectable='on' onselectstart='return false'
+        onmousedown='return false' ng-style='overlayOpacityCss.value')
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

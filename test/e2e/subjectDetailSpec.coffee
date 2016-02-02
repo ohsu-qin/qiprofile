@@ -20,7 +20,7 @@ class SubjectDetailPage extends Page
   # @returns a promise which resolves to the TNM stage help button
   #   ElementFinder
   tnmStageHelpButton: ->
-    @find('#tnm-stage-help-btn')
+    @findAll('.tnm-stage-help-btn')
 
   # Finds the modeling table WebElements.
   # See profileTables.
@@ -214,7 +214,7 @@ describe 'E2E Testing Subject Detail', ->
                 for date, rowNdx in expected
                   expect(date,
                          "The table 1 row #{ rowNdx + 1 } visit date is missing")
-                    .to.exist
+                    .to.exist.and.not.be.empty
                 # The date values for every remaining table should be
                 # consistent with those of the first table.
                 for table, tblNdx in _.rest(tables)
@@ -352,10 +352,6 @@ describe 'E2E Testing Subject Detail', ->
           #       expect(parseInt(weight), 'The weight is not positive')
           #         .to.be.greaterThan(0)
 
-          # TODO - Test cases for receptor status.
-
-          # TODO - Test cases for genetic expression.
-
           it 'should show the biopsy panel', ->
             expect(biopsy, 'The Breast Biopsy panel is missing')
               .to.eventually.exist
@@ -422,7 +418,8 @@ describe 'E2E Testing Subject Detail', ->
                     .to.eventually.be.true
 
             it 'should display the TNM stage help button', ->
-              page.tnmStageHelpButton().then (button) ->
+              page.tnmStageHelpButton().then (buttons) ->
+                button = buttons[0]
                 expect(button.isDisplayed(), 'The TNM stage help button is not displayed')
                   .to.eventually.be.true
 
@@ -486,6 +483,272 @@ describe 'E2E Testing Subject Detail', ->
                          'The Breast TNM metastasis field is not displayed')
                     .to.eventually.be.true
 
+            it 'should show the estrogen receptor result', ->
+              pathology.then (table) ->
+                table.findAll(By.binding('receptorStatus.positive')).then (results) ->
+                  result = results[0]
+                  expect(result,
+                         'The Breast estrogen receptor result table is missing')
+                    .to.exist
+                  expect(result.isDisplayed(),
+                         'The Breast estrogen receptor result field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the estrogen receptor intensity', ->
+              pathology.then (table) ->
+                table.findAll(By.binding('receptorStatus.intensity')).then (intensities) ->
+                  intensity = intensities[0]
+                  expect(intensity,
+                         'The Breast estrogen receptor intensity table is missing')
+                    .to.exist
+                  expect(intensity.isDisplayed(),
+                         'The Breast estrogen receptor intensity field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the estrogen receptor quick score', ->
+              pathology.then (table) ->
+                table.findAll(By.binding('receptorStatus.quickScore')).then (scores) ->
+                  score = scores[0]
+                  expect(score,
+                         'The Breast estrogen receptor quick score table is missing')
+                    .to.exist
+                  expect(score.isDisplayed(),
+                         'The Breast estrogen receptor quick score field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the progesterone receptor result', ->
+              pathology.then (table) ->
+                table.findAll(By.binding('receptorStatus.positive')).then (results) ->
+                  result = results[1]
+                  expect(result,
+                         'The Breast progesterone receptor result table is missing')
+                    .to.exist
+                  expect(result.isDisplayed(),
+                         'The Breast progesterone receptor result field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the progesterone receptor intensity', ->
+              pathology.then (table) ->
+                table.findAll(By.binding('receptorStatus.intensity')).then (intensities) ->
+                  intensity = intensities[1]
+                  expect(intensity,
+                         'The Breast progesterone receptor intensity table is missing')
+                    .to.exist
+                  expect(intensity.isDisplayed(),
+                         'The Breast progesterone receptor intensity field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the progesterone receptor quick score', ->
+              pathology.then (table) ->
+                table.findAll(By.binding('receptorStatus.quickScore')).then (scores) ->
+                  score = scores[1]
+                  expect(score,
+                         'The Breast progesterone receptor quick score table is missing')
+                    .to.exist
+                  expect(score.isDisplayed(),
+                         'The Breast progesterone receptor quick score field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the HER2 NEU IHC expression', ->
+              pathology.then (table) ->
+                table.find(By.binding('geneticExpression.her2NeuIhc')).then (her2NeuIhc) ->
+                  expect(her2NeuIhc,
+                         'The Breast HER2 NEU IHC expression table is missing')
+                    .to.exist
+                  expect(her2NeuIhc.isDisplayed(),
+                         'The Breast HER2 NEU IHC expression field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the HER2 NEU FISH expression', ->
+              pathology.then (table) ->
+                table.find(By.binding('geneticExpression.her2NeuFish')).then (her2NeuFish) ->
+                  expect(her2NeuFish,
+                         'The Breast HER2 NEU FISH expression table is missing')
+                    .to.exist
+                  expect(her2NeuFish.isDisplayed(),
+                         'The Breast HER2 NEU FISH expression field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the Ki67 expression', ->
+              pathology.then (table) ->
+                table.find(By.binding('geneticExpression.ki67')).then (ki67) ->
+                  expect(ki67,
+                         'The Breast Ki67 expression table is missing')
+                    .to.exist
+                  expect(ki67.isDisplayed(),
+                         'The Breast Ki67 expression field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the recurrence score', ->
+              pathology.then (table) ->
+                table.find(By.binding('recurrenceScore')).then (recurrence) ->
+                  expect(recurrence,
+                         'The Breast recurrence score table is missing')
+                    .to.exist
+                  expect(recurrence.isDisplayed(),
+                         'The Breast recurrence score field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the GSTM1 assay', ->
+              pathology.then (table) ->
+                table.find(By.binding('assay.gstm1')).then (gstm1) ->
+                  expect(gstm1,
+                         'The Breast GSTM1 assay table is missing')
+                    .to.exist
+                  expect(gstm1.isDisplayed(),
+                         'The Breast GSTM1 assay field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the CD68 assay', ->
+              pathology.then (table) ->
+                table.find(By.binding('assay.cd68')).then (cd68) ->
+                  expect(cd68,
+                         'The Breast CD68 assay table is missing')
+                    .to.exist
+                  expect(cd68.isDisplayed(),
+                         'The Breast CD68 assay field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the BAG1 assay', ->
+              pathology.then (table) ->
+                table.find(By.binding('assay.bag1')).then (bag1) ->
+                  expect(bag1,
+                         'The Breast BAG1 assay table is missing')
+                    .to.exist
+                  expect(bag1.isDisplayed(),
+                         'The Breast BAG1 assay field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the GRB7 assay', ->
+              pathology.then (table) ->
+                table.find(By.binding('assay.her2.grb7')).then (grb7) ->
+                  expect(grb7,
+                         'The Breast GRB7 assay table is missing')
+                    .to.exist
+                  expect(grb7.isDisplayed(),
+                         'The Breast GRB7 assay field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the HER2 assay', ->
+              pathology.then (table) ->
+                table.find(By.binding('assay.her2.her2')).then (her2) ->
+                  expect(her2,
+                         'The Breast HER2 assay table is missing')
+                    .to.exist
+                  expect(her2.isDisplayed(),
+                         'The Breast HER2 assay field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the ER assay', ->
+              pathology.then (table) ->
+                table.find(By.binding('assay.estrogen.er')).then (er) ->
+                  expect(er,
+                         'The Breast ER assay table is missing')
+                    .to.exist
+                  expect(er.isDisplayed(),
+                         'The Breast ER assay field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the PGR assay', ->
+              pathology.then (table) ->
+                table.find(By.binding('assay.estrogen.pgr')).then (pgr) ->
+                  expect(pgr,
+                         'The Breast PGR assay table is missing')
+                    .to.exist
+                  expect(pgr.isDisplayed(),
+                         'The Breast PGR assay field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the BCL2 assay', ->
+              pathology.then (table) ->
+                table.find(By.binding('assay.estrogen.bcl2')).then (bcl2) ->
+                  expect(bcl2,
+                         'The Breast BCL2 assay table is missing')
+                    .to.exist
+                  expect(bcl2.isDisplayed(),
+                         'The Breast BCL2 assay field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the SCUBE2 assay', ->
+              pathology.then (table) ->
+                table.find(By.binding('assay.estrogen.scube2')).then (scube2) ->
+                  expect(scube2,
+                         'The Breast SCUBE2 assay table is missing')
+                    .to.exist
+                  expect(scube2.isDisplayed(),
+                         'The Breast SCUBE2 assay field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the Ki67 assay', ->
+              pathology.then (table) ->
+                table.find(By.binding('assay.proliferation.ki67')).then (ki67) ->
+                  expect(ki67,
+                         'The Breast Ki67 assay table is missing')
+                    .to.exist
+                  expect(ki67.isDisplayed(),
+                         'The Breast Ki67 assay field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the STK15 assay', ->
+              pathology.then (table) ->
+                table.find(By.binding('assay.proliferation.stk15')).then (stk15) ->
+                  expect(stk15,
+                         'The Breast STK15 assay table is missing')
+                    .to.exist
+                  expect(stk15.isDisplayed(),
+                         'The Breast STK15 assay field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the Survivin assay', ->
+              pathology.then (table) ->
+                table.find(By.binding('assay.proliferation.survivin')).then (survivin) ->
+                  expect(survivin,
+                         'The Breast Survivin assay table is missing')
+                    .to.exist
+                  expect(survivin.isDisplayed(),
+                         'The Breast Survivin assay field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the CCNB1 assay', ->
+              pathology.then (table) ->
+                table.find(By.binding('assay.proliferation.ccnb1')).then (ccnb1) ->
+                  expect(ccnb1,
+                         'The Breast CCNB1 assay table is missing')
+                    .to.exist
+                  expect(ccnb1.isDisplayed(),
+                         'The Breast CCNB1 assay field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the MYBL2 assay', ->
+              pathology.then (table) ->
+                table.find(By.binding('assay.proliferation.mybl2')).then (mybl2) ->
+                  expect(mybl2,
+                         'The Breast MYBL2 assay table is missing')
+                    .to.exist
+                  expect(mybl2.isDisplayed(),
+                         'The Breast MYBL2 assay field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the MMP11 assay', ->
+              pathology.then (table) ->
+                table.find(By.binding('assay.invasion.mmp11')).then (mmp11) ->
+                  expect(mmp11,
+                         'The Breast MMP11 assay table is missing')
+                    .to.exist
+                  expect(mmp11.isDisplayed(),
+                         'The Breast MMP11 assay field is not displayed')
+                    .to.eventually.be.true
+
+            it 'should show the CTSL2 assay', ->
+              pathology.then (table) ->
+                table.find(By.binding('assay.invasion.ctsl2')).then (ctsl2) ->
+                  expect(ctsl2,
+                         'The Breast CTSL2 assay table is missing')
+                    .to.exist
+                  expect(ctsl2.isDisplayed(),
+                         'The Breast CTSL2 assay field is not displayed')
+                    .to.eventually.be.true
+
         describe 'Surgery', ->
           surgery = null
       
@@ -541,7 +804,8 @@ describe 'E2E Testing Subject Detail', ->
 
           before ->
             treatment = clinicalProfile.then (profile) ->
-              profile.find(By.css('.treatment'))
+              profile.findAll(By.css('.treatment')).then (treatments) ->
+                  treatments[0]
 
           it 'should show the treatment panel', ->
             treatment.then (table) ->
@@ -575,7 +839,8 @@ describe 'E2E Testing Subject Detail', ->
 
             before ->
               chemo = clinicalProfile.then (profile) ->
-                profile.find(By.css('.dosage'))
+                profile.findAll(By.css('.dosage')).then (dosages) ->
+                  dosages[0]
 
             it 'should show the chemotherapy panel', ->
               chemo.then (table) ->
@@ -682,12 +947,28 @@ describe 'E2E Testing Subject Detail', ->
                                             ' displayed')
                   .to.eventually.be.true
 
-            it 'should show the tumor site', ->
+            it 'should show the tumor body part', ->
               pathology.then (table) ->
-                table.find(By.binding('tumor.location')).then (site) ->
-                  expect(site, 'The Sarcoma site table is missing').to.exist
-                  expect(site.isDisplayed(), 'The Sarcoma site field is not' +
+                table.find(By.binding('tumor.location.body_part')).then (part) ->
+                  expect(part, 'The Sarcoma body part table is missing').to.exist
+                  expect(part.isDisplayed(), 'The Sarcoma body part field is not' +
                                              ' displayed')
+                    .to.eventually.be.true
+
+            it 'should show the tumor sagittal location', ->
+              pathology.then (table) ->
+                table.find(By.binding('tumor.location.sagittal_location')).then (sag) ->
+                  expect(sag, 'The Sarcoma sagittal location table is missing').to.exist
+                  expect(sag.isDisplayed(), 'The Sarcoma sagittal location field is not' +
+                                            ' displayed')
+                    .to.eventually.be.true
+
+            it 'should show the tumor coronal location', ->
+              pathology.then (table) ->
+                table.find(By.binding('tumor.location.coronal_location')).then (cor) ->
+                  expect(cor, 'The Sarcoma coronal location table is missing').to.exist
+                  expect(cor.isDisplayed(), 'The Sarcoma coronal location field is not' +
+                                            ' displayed')
                     .to.eventually.be.true
 
             it 'should show the tumor histology', ->

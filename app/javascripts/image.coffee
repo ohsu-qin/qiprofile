@@ -119,12 +119,67 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
         # Render the image.
         # A demo image is rendered with Cornerstone. The image data are
         #   contained in exampleImageIdLoader.
+
         $(document).ready ->
-          imageId = 'example://1'
-          element = document.getElementById('dicomImage')
-          cornerstone.enable element
-          cornerstone.loadImage(imageId).then (image) ->
-            cornerstone.displayImage element, image
+          `var i`
+          # Create an inverting LUT.
+          modalityLUT = 
+            id: '1'
+            firstValueMapped: 0
+            numBitsPerEntry: 8
+            lut: []
+          i = 0
+          while i < 256
+            modalityLUT.lut[i] = 255 - i
+            i++
+          # Create a VOI LUT.
+          voiLUT = 
+            id: '1'
+            firstValueMapped: 0
+            numBitsPerEntry: 8
+            lut: []
+          i = 0
+          while i < 256
+            voiLUT.lut[i] = i / 2 + 127
+            i++
+          # Load and display DICOM image and overlay.
+          dicomImage = cornerstone.enable(document.getElementById('qi-dicom-image'))
+          overlay = cornerstone.enable(document.getElementById('qi-overlay'))
+          cornerstone.loadAndCacheImage('example://1').then (image) ->
+            cornerstone.displayImage dicomImage, image
+            return
+          cornerstone.loadAndCacheImage('example://2').then (image) ->
+            cornerstone.displayImage overlay, image
+            return
+          # Hide the overlay by default.
+          $('#qi-overlay').hide()
+          # Toggle the overlay.
+          $('#toggle-overlay').on 'click', ->
+            showOverlay = $('#toggle-overlay').is(':checked')
+            if showOverlay
+              $('#qi-overlay').show()
+            else
+              $('#qi-overlay').hide()
+            return
+          # Toggle the inverting LUT.
+          $('#toggle-modality-lut').on 'click', ->
+            applyModalityLUT = $('#toggle-modality-lut').is(':checked')
+            viewport = cornerstone.getViewport(overlay)
+            if applyModalityLUT
+              viewport.modalityLUT = modalityLUT
+            else
+              viewport.modalityLUT = undefined
+            cornerstone.setViewport overlay, viewport
+            return
+          # Toggle the VOI LUT.
+          $('#toggle-voi-lut').on 'click', ->
+            applyVOILUT = $('#toggle-voi-lut').is(':checked')
+            viewport = cornerstone.getViewport(overlay)
+            if applyVOILUT
+              viewport.voiLUT = voiLUT
+            else
+              viewport.voiLUT = undefined
+            cornerstone.setViewport overlay, viewport
             return
           return
 

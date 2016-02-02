@@ -587,7 +587,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
         $rootScope.project = session.subject.project
         # Place the image in scope.
         $scope.image = image
-      
+
         # @param key the modeling parameter key, e.g. 'deltaKTrans'
         # @returns the modeling parameter heading HTML span element,
         #   e.g. '<span>&Delta;K<sub>trans</sub></span>'
@@ -602,6 +602,9 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
         # The overlay selection.
         $scope.overlayIndex = null
         
+        # Initial overlay opacity value in the Cornerstone demo.
+        $scope.overlayOpacity = 1
+
         # The overlayIndex scope variable is the overlay radio input
         # selection value in the format *modeling index*.*overlay index*,
         # e.g. the value '0.1' is the second overlay of the first modeling.

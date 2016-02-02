@@ -59,6 +59,11 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
     filters.filter 'percent', ->
       (value) -> if value? then value * 100 else value
 
+
+    filters.filter 'percentRounded', ->
+      (value) -> Math.round(value * 100) if value?
+
+
     filters.filter 'imageContainerTitle', ->
       # If the image container name ends with _reg, then it is a registation.
       # Otherwise, it is a scan.

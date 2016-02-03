@@ -14,9 +14,10 @@
         .row
           .col-md-3.qi-slider-label Opacity
           .col-md-9
-            slider.qi-slider(ng-model='overlayOpacity.value'
-                             ng-change="overlayOpacityCss.value={'opacity':overlayOpacity.value}"
-                             floor='0' ceiling='1' step='0.1' precision='1')
+            slider.qi-slider(ng-model='overlayOpacity.setting'
+              ng-change="overlayOpacity.style={'opacity':overlayOpacity.setting}"
+              floor='0' ceiling='1' step='0.1' precision='1'
+            )
 
         // Note: the label map opacity control definition below works
         // around the following XTK bug:

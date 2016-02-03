@@ -601,13 +601,12 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
         )
         # The overlay selection.
         $scope.overlayIndex = null
-        
-        # The overlay opacity slider value in the Cornerstone demo.
+
+        # The overlay opacity setting and CSS style in the Cornerstone demo.
         $scope.overlayOpacity =
-          value: 1
-        # The overlay opacity CSS value in the Cornerstone demo.
-        $scope.overlayOpacityCss =
-          value: 1
+          setting: 1
+          style:
+            "opacity": 1
 
         # The overlayIndex scope variable is the overlay radio input
         # selection value in the format *modeling index*.*overlay index*,

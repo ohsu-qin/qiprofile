@@ -17,8 +17,6 @@ block content
   qi-image
     div
       // Temporary checkbox controls for the Cornerstone demo.
-      input#toggle-overlay(type='checkbox')
-      | Show Overlay
       input#toggle-modality-lut(type='checkbox')
       | Apply Modality LUT
       input#toggle-voi-lut(type='checkbox')
@@ -32,10 +30,12 @@ block content
     #qi-image-container
       #qi-dicom-image.cornerstone-enabled-image(oncontextmenu='return false'
         unselectable='on' onselectstart='return false'
-        onmousedown='return false')
+        onmousedown='return false'
+      )
       #qi-overlay.cornerstone-enabled-image(oncontextmenu='return false'
         unselectable='on' onselectstart='return false'
-        onmousedown='return false' ng-style='overlayOpacityCss.value')
+        onmousedown='return false' ng-style='overlayOpacity.style'
+      )
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

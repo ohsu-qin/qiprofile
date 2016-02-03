@@ -120,70 +120,53 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
         #   Cornerstone. The image data are contained in exampleImageIdLoader.
         #   For the purposes of the demo, these are brain images freely
         #   provided by the Cornerstone project.
-        #
-        # TO DO - Replace the Show Overlay checkbox with the Overlay selection
-        #   radio button control.
-        $(document).ready ->
-          `var i`
-          # Create an inverting LUT.
-          modalityLUT = 
-            id: '1'
-            firstValueMapped: 0
-            numBitsPerEntry: 8
-            lut: []
-          i = 0
-          while i < 256
-            modalityLUT.lut[i] = 255 - i
-            i++
-          # Create a VOI LUT.
-          voiLUT = 
-            id: '1'
-            firstValueMapped: 0
-            numBitsPerEntry: 8
-            lut: []
-          i = 0
-          while i < 256
-            voiLUT.lut[i] = i / 2 + 127
-            i++
-          # Load and display the DICOM image and overlay.
-          dicomImage = cornerstone.enable(document.getElementById('qi-dicom-image'))
-          overlay = cornerstone.enable(document.getElementById('qi-overlay'))
-          cornerstone.loadAndCacheImage('example://1').then (image) ->
-            cornerstone.displayImage dicomImage, image
-            return
-          cornerstone.loadAndCacheImage('example://2').then (image) ->
-            cornerstone.displayImage overlay, image
-            return
-          # Hide the overlay by default.
-          $('#qi-overlay').hide()
-          # Toggle the overlay.
-          $('#toggle-overlay').on 'click', ->
-            showOverlay = $('#toggle-overlay').is(':checked')
-            if showOverlay
-              $('#qi-overlay').show()
-            else
-              $('#qi-overlay').hide()
-            return
-          # Toggle the inverting LUT.
-          $('#toggle-modality-lut').on 'click', ->
-            applyModalityLUT = $('#toggle-modality-lut').is(':checked')
-            viewport = cornerstone.getViewport(overlay)
-            if applyModalityLUT
-              viewport.modalityLUT = modalityLUT
-            else
-              viewport.modalityLUT = undefined
-            cornerstone.setViewport overlay, viewport
-            return
-          # Toggle the VOI LUT.
-          $('#toggle-voi-lut').on 'click', ->
-            applyVOILUT = $('#toggle-voi-lut').is(':checked')
-            viewport = cornerstone.getViewport(overlay)
-            if applyVOILUT
-              viewport.voiLUT = voiLUT
-            else
-              viewport.voiLUT = undefined
-            cornerstone.setViewport overlay, viewport
-            return
+        dicomImage = cornerstone.enable(document.getElementById('qi-dicom-image'))
+        overlay = cornerstone.enable(document.getElementById('qi-overlay'))
+        cornerstone.loadAndCacheImage('example://1').then (image) ->
+          cornerstone.displayImage dicomImage, image
+          return
+
+        `var i`
+        # Create an inverting LUT.
+        modalityLUT = 
+          id: '1'
+          firstValueMapped: 0
+          numBitsPerEntry: 8
+          lut: []
+        i = 0
+        while i < 256
+          modalityLUT.lut[i] = 255 - i
+          i++
+        # Create a VOI LUT.
+        voiLUT = 
+          id: '1'
+          firstValueMapped: 0
+          numBitsPerEntry: 8
+          lut: []
+        i = 0
+        while i < 256
+          voiLUT.lut[i] = i / 2 + 127
+          i++
+
+        # Toggle the inverting LUT.
+        $('#toggle-modality-lut').on 'click', ->
+          applyModalityLUT = $('#toggle-modality-lut').is(':checked')
+          viewport = cornerstone.getViewport(overlay)
+          if applyModalityLUT
+            viewport.modalityLUT = modalityLUT
+          else
+            viewport.modalityLUT = undefined
+          cornerstone.setViewport overlay, viewport
+          return
+        # Toggle the VOI LUT.
+        $('#toggle-voi-lut').on 'click', ->
+          applyVOILUT = $('#toggle-voi-lut').is(':checked')
+          viewport = cornerstone.getViewport(overlay)
+          if applyVOILUT
+            viewport.voiLUT = voiLUT
+          else
+            viewport.voiLUT = undefined
+          cornerstone.setViewport overlay, viewport
           return
 
         #renderer.render()
@@ -213,6 +196,12 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
       # @param labelMap the selected label map {name, colorTable}
       #   object
       selectOverlay: (labelMap) ->
+        # Load and display the overlay in Cornerstone.
+        overlay = cornerstone.enable(document.getElementById('qi-overlay'))
+        cornerstone.loadAndCacheImage('example://2').then (image) ->
+          cornerstone.displayImage overlay, image
+          return
+
         # Note: XTK labelmaps are treacherous territory; proceed with caution.
         # Specifically, XTK places the renderer in the browser event loop, so
         # that XTK renders and rerenders continuously and asynchronously.
@@ -252,6 +241,8 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
         #   property to true. Setting visible to true triggers a repaint with the
         #   overlay.
         
+        ###
+
         # The XTK volume labelmap file, or null if there is no labelmap.
         xtkLabelMapFile = @xtkVolume._labelmap.file if @xtkVolume._labelmap?
         # If the label map was not changed from the last value, then we only
@@ -289,6 +280,8 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
           # with the new overlay.
           @xtkVolume.labelmap.visible = true
     
+        ###
+
     # @param volume the scan or registration image volume
     #   (not the XTK volume)
     # @param id the unique image id

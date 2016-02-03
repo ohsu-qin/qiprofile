@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+0.13.3 / 2016-02-02
+-------------------
+* Add clinical profile E2E test cases.
+
 0.13.2 / 2015-10-27
 -------------------
 * Display encounter title rather than class.

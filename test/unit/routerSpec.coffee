@@ -192,7 +192,7 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
         $httpBackend.verifyNoOutstandingExpectation()
         $httpBackend.verifyNoOutstandingRequest()
 
-      describe.only 'Subject', ->
+      describe 'Subject', ->
         subject = null
 
         beforeEach ->

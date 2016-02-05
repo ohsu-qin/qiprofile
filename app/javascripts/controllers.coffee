@@ -602,11 +602,35 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
         # The overlay selection.
         $scope.overlayIndex = null
 
-        # The overlay opacity setting and CSS style in the Cornerstone demo.
+
+        # Cornerstone image scope variables.
+        #
+        # The DICOM image and overlay image IDs. Data are provied in
+        #   exampleImageIdLoader.
+        $scope.imageIds = [
+          'example://1'
+          'example://2'
+        ]
+        $scope.overlayIds = [
+          'example://3'
+          'example://4'
+        ]
+
+        # The initial saggital slice. 
+        $scope.saggitalView =
+          slice: 0
+
+        # The overlay opacity setting and CSS style.
         $scope.overlayOpacity =
           setting: 1
           style:
             "opacity": 1
+
+        # Watches for a change in the saggital slice control setting. Updates
+        #   the image and overlay.
+        $scope.$watch 'saggitalView.slice', (index) ->
+          $scope.image.updateTheImage($scope.imageIds[index])
+          $scope.image.updateTheOverlay($scope.overlayIds[index])
 
         # The overlayIndex scope variable is the overlay radio input
         # selection value in the format *modeling index*.*overlay index*,

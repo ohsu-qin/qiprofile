@@ -15,12 +15,6 @@ block content
   // The opacity, axis and threshold image controls.
   include include/image-controls
   qi-image
-    div
-      // Temporary checkbox controls for the Cornerstone demo.
-      input#toggle-modality-lut(type='checkbox')
-      | Apply Modality LUT
-      input#toggle-voi-lut(type='checkbox')
-      | Apply VOI LUT
     // The Cornerstone image viewports, one for the DICOM image and one for the
     //   overlay. The overlay viewport is stacked on top of the DICOM viewport
     //   using CSS.
@@ -35,7 +29,7 @@ block content
       #qi-overlay.cornerstone-enabled-image(oncontextmenu='return false'
         unselectable='on' onselectstart='return false'
         onmousedown='return false' ng-style='overlayOpacity.style'
-      )
+)
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

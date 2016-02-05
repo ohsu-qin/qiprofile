@@ -3,16 +3,39 @@
   uib-accordion(close-others='false')
     div(ng-controller='AccordionGroupCtrl')
       uib-accordian-group(is-open="isOpen")
-        +accordion-heading('Overlay')
+        +accordion-heading('Time Series')
+        // The time series control.
+        .row
+          .col-md-12
+            slider.qi-slider(ng-model="timeSeries"
+                             floor='1' ceiling='32' step='1')
+    div(ng-controller='AccordionGroupCtrl')
+      uib-accordian-group(is-open="isOpen")
+        +accordion-heading('Slices')
+        // The axis cross section (slice) controls.
+        .row
+          .col-md-3.qi-slider-label Sagittal
+          .col-md-9
+            slider.qi-slider(ng-model="saggitalView.slice"
+                             floor='0' ceiling='1' step='1')
+        .row   
+          .col-md-3.qi-slider-label Coronal
+          .col-md-9
+            slider.qi-slider(ng-model="sliceY"
+                             floor='0' ceiling='319' step='1')
+        .row
+          .col-md-3.qi-slider-label Axial
+          .col-md-9
+            slider.qi-slider(ng-model="sliceZ"
+                             floor='0' ceiling='118' step='1')
+    div(ng-controller='AccordionGroupCtrl')
+      uib-accordian-group(is-open="isOpen")
+        +accordion-heading('Opacity')
         // The overlay opacity control.
         // Note: This control has been modified to interact with the
         //   Cornerstone demo image overlay.
-        //
-        // TO DO - Adapt the controls for selecting slices.
-        //
-        // TO DO - Adapt the controls for selecting the time point.
         .row
-          .col-md-3.qi-slider-label Opacity
+          .col-md-3.qi-slider-label Overlay
           .col-md-9
             slider.qi-slider(ng-model='overlayOpacity.setting'
               ng-change="overlayOpacity.style={'opacity':overlayOpacity.setting}"
@@ -88,36 +111,36 @@
         //        slider.qi-slider(ng-model="image.xtkVolume.labelmap.opacity"
         //                         floor='0' ceiling='1' step='0.1'
         //                         precision='1')
-    div(ng-controller='AccordionGroupCtrl')
-      uib-accordion-group(is-open="isOpen")
-        +accordion-heading('Cross Section')
-        // The axis cross section (slice) controls.
-        .row
-          .col-md-3.qi-slider-label Sagittal
-          .col-md-9
-            slider.qi-slider(ng-model="image.xtkVolume.indexX"
-                             floor='0' ceiling='319' step='1')
-        .row
-          .col-md-3.qi-slider-label Coronal
-          .col-md-9
-            slider.qi-slider(ng-model="image.xtkVolume.indexY"
-                             floor='0' ceiling='319' step='1')
-        .row
-          .col-md-3.qi-slider-label Axial
-          .col-md-9
-            slider.qi-slider(ng-model="image.xtkVolume.indexZ"
-                             floor='0' ceiling='118' step='1')
-    div(ng-controller='AccordionGroupCtrl')
-      uib-accordion-group(is-open="isOpen")
-        +accordion-heading('Threshold')
-        // The thresholding controls.
-        .row
-          .col-md-3.qi-slider-label Lower
-          .col-md-9
-            slider.qi-slider(ng-model="image.xtkVolume.lowerThreshold"
-                             floor='0' ceiling='445' step='1')
-        .row
-          .col-md-3.qi-slider-label Upper
-          .col-md-9
-            slider.qi-slider(ng-model="image.xtkVolume.upperThreshold"
-                             floor='0' ceiling='445' step='1')
+        //
+            div(ng-controller='AccordionGroupCtrl')
+              uib-accordian-group(is-open="isOpen")
+                +accordion-heading('Cross Section')
+                .row
+                  .col-md-3.qi-slider-label Sagittal
+                  .col-md-9
+                    slider.qi-slider(ng-model="image.xtkVolume.indexX"
+                                     floor='0' ceiling='319' step='1')
+                .row
+                  .col-md-3.qi-slider-label Coronal
+                  .col-md-9
+                    slider.qi-slider(ng-model="image.xtkVolume.indexY"
+                                     floor='0' ceiling='319' step='1')
+                .row
+                  .col-md-3.qi-slider-label Axial
+                  .col-md-9
+                    slider.qi-slider(ng-model="image.xtkVolume.indexZ"
+                                     floor='0' ceiling='118' step='1')
+            div(ng-controller='AccordionGroupCtrl')
+              uib-accordian-group(is-open="isOpen")
+                +accordion-heading('Threshold')
+                .row
+                  .col-md-3.qi-slider-label Lower
+                  .col-md-9
+                    slider.qi-slider(ng-model="image.xtkVolume.lowerThreshold"
+                                     floor='0' ceiling='445' step='1')
+                .row
+                  .col-md-3.qi-slider-label Upper
+                  .col-md-9
+                    slider.qi-slider(ng-model="image.xtkVolume.upperThreshold"
+                                     floor='0' ceiling='445' step='1')
+        //

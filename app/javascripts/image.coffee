@@ -91,6 +91,32 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
       isError: ->
         @state == Image.STATES.ERROR
 
+      # Cornerstone inversion LUT.
+      modalityLUT = 
+        id: '1'
+        firstValueMapped: 0
+        numBitsPerEntry: 8
+        lut: []
+      i = 0
+      while i < 256
+        modalityLUT.lut[i] = 255 - i
+        i++
+    
+      # Update the DICOM image in Cornerstone.
+      updateTheImage: (imageIndex) ->
+        dicomImage = cornerstone.enable(document.getElementById('qi-dicom-image'))
+        cornerstone.loadAndCacheImage(imageIndex).then (image) ->
+          cornerstone.displayImage dicomImage, image
+
+      # Update the overlay in Cornerstone.
+      updateTheOverlay: (imageIndex) ->
+        overlay = cornerstone.enable(document.getElementById('qi-overlay'))
+        cornerstone.loadAndCacheImage(imageIndex).then (image) ->
+          cornerstone.displayImage overlay, image
+        viewport = cornerstone.getViewport(overlay)
+        viewport.modalityLUT = modalityLUT
+        cornerstone.setViewport overlay, viewport
+
       # Renders the image in the given parent element.
       #
       # @param element the Angular jQueryLite element
@@ -116,60 +142,21 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
         # Adjust the camera position.
         #renderer.camera.position = [0, 0, 240]
 
-        # Render the image. A demo image and overlay are rendered with
-        #   Cornerstone. The image data are contained in exampleImageIdLoader.
-        #   For the purposes of the demo, these are brain images freely
-        #   provided by the Cornerstone project.
+        # Render the image.
+        #renderer.render()
+
+        # Load and display the DICOM image in Cornerstone.
         dicomImage = cornerstone.enable(document.getElementById('qi-dicom-image'))
-        overlay = cornerstone.enable(document.getElementById('qi-overlay'))
         cornerstone.loadAndCacheImage('example://1').then (image) ->
           cornerstone.displayImage dicomImage, image
-          return
-
-        `var i`
-        # Create an inverting LUT.
-        modalityLUT = 
-          id: '1'
-          firstValueMapped: 0
-          numBitsPerEntry: 8
-          lut: []
-        i = 0
-        while i < 256
-          modalityLUT.lut[i] = 255 - i
-          i++
-        # Create a VOI LUT.
-        voiLUT = 
-          id: '1'
-          firstValueMapped: 0
-          numBitsPerEntry: 8
-          lut: []
-        i = 0
-        while i < 256
-          voiLUT.lut[i] = i / 2 + 127
-          i++
-
-        # Toggle the inverting LUT.
-        $('#toggle-modality-lut').on 'click', ->
-          applyModalityLUT = $('#toggle-modality-lut').is(':checked')
-          viewport = cornerstone.getViewport(overlay)
-          if applyModalityLUT
-            viewport.modalityLUT = modalityLUT
-          else
-            viewport.modalityLUT = undefined
-          cornerstone.setViewport overlay, viewport
-          return
-        # Toggle the VOI LUT.
-        $('#toggle-voi-lut').on 'click', ->
-          applyVOILUT = $('#toggle-voi-lut').is(':checked')
-          viewport = cornerstone.getViewport(overlay)
-          if applyVOILUT
-            viewport.voiLUT = voiLUT
-          else
-            viewport.voiLUT = undefined
-          cornerstone.setViewport overlay, viewport
-          return
-
-        #renderer.render()
+        
+        # Load and display the overlay in Cornerstone.
+        overlay = cornerstone.enable(document.getElementById('qi-overlay'))
+        cornerstone.loadAndCacheImage('example://3').then (image) ->
+          cornerstone.displayImage overlay, image
+        viewport = cornerstone.getViewport(overlay)
+        viewport.modalityLUT = modalityLUT
+        cornerstone.setViewport overlay, viewport
 
       # Returns whether the XTK volume has a visible label map. This
       # function is required to work around the XTK bug described in
@@ -198,7 +185,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
       selectOverlay: (labelMap) ->
         # Load and display the overlay in Cornerstone.
         overlay = cornerstone.enable(document.getElementById('qi-overlay'))
-        cornerstone.loadAndCacheImage('example://2').then (image) ->
+        cornerstone.loadAndCacheImage('example://3').then (image) ->
           cornerstone.displayImage overlay, image
           return
 

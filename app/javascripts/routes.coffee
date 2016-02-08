@@ -177,8 +177,13 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
                 if image.isLoaded() then image else image.load()
             views:
               'main@':
-                templateUrl: '/partials/image-detail.html'
+                templateUrl: '/partials/imageproto-detail.html'
                 controller:  'ImageDetailCtrl'
+            # The Cornerstone prototype has been broken out into its own partial.
+            #views:
+            #  'main@':
+            #    templateUrl: '/partials/image-detail.html'
+            #    controller:  'ImageDetailCtrl'
 
           # The registration state.
           # The registration state parameter is the registration

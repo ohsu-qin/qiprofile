@@ -33,12 +33,12 @@
         +accordion-heading('Opacity')
         // The overlay opacity control.
         // Note: This control has been modified to interact with the
-        //   Cornerstone demo image overlay.
+        //   Cornerstone prototype image overlay.
         .row
           .col-md-3.qi-slider-label Overlay
           .col-md-9
-            slider.qi-slider(ng-model='overlayOpacity.setting'
-              ng-change="overlayOpacity.style={'opacity':overlayOpacity.setting}"
+            slider.qi-slider(ng-model='overlay.setting'
+              ng-change="overlay.style['opacity']=overlay.setting"
               floor='0' ceiling='1' step='0.1' precision='1'
             )
 

@@ -12,24 +12,13 @@ block billboard
 block content
   // The modeling parameter overlay select.
   include include/image-overlay-select
-  // The opacity, axis and threshold image controls.
-  include include/image-controls
-  qi-image
-    // The Cornerstone image viewports, one for the DICOM image and one for the
-    //   overlay. The overlay viewport is stacked on top of the DICOM viewport
-    //   using CSS.
-    //
-    // TO DO - Specify image width and height as percentages or use the
-    //   Bootstrap grip template, e.g. col-md-4.
-    #qi-image-container
-      #qi-dicom-image.cornerstone-enabled-image(oncontextmenu='return false'
-        unselectable='on' onselectstart='return false'
-        onmousedown='return false'
-      )
-      #qi-overlay.cornerstone-enabled-image(oncontextmenu='return false'
-        unselectable='on' onselectstart='return false'
-        onmousedown='return false' ng-style='overlayOpacity.style'
-)
+  // The image display.
+  qi-image.qi-panel.qi-image
+    // The opacity, axis and threshold image controls.
+    include include/image-controls
+    // TODO - add an orientation button in the bottom right
+    // that restores the XTK volume to its original
+    // orientation. Use the glyphicon-record for the button.
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

@@ -3,8 +3,7 @@
 # and
 # http://stackoverflow.com/questions/18591966/inject-module-dynamically-only-if-required
 #
-define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
-        'cornerstone', 'exampleImageIdLoader'], (ng, _, _s) ->
+define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng, _, _s) ->
   image = ng.module 'qiprofile.image', ['qiprofile.file', 'qiprofile.modeling', 'vr.directives.slider']
 
   image.factory 'Image', ['$rootScope', '$q', 'File', 'Modeling', ($rootScope, $q, File, Modeling) ->
@@ -91,72 +90,29 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
       isError: ->
         @state == Image.STATES.ERROR
 
-      # Cornerstone inversion LUT.
-      modalityLUT = 
-        id: '1'
-        firstValueMapped: 0
-        numBitsPerEntry: 8
-        lut: []
-      i = 0
-      while i < 256
-        modalityLUT.lut[i] = 255 - i
-        i++
-    
-      # Update the DICOM image in Cornerstone.
-      updateTheImage: (imageIndex) ->
-        dicomImage = cornerstone.enable(document.getElementById('qi-dicom-image'))
-        cornerstone.loadAndCacheImage(imageIndex).then (image) ->
-          cornerstone.displayImage dicomImage, image
-
-      # Update the overlay in Cornerstone.
-      updateTheOverlay: (imageIndex) ->
-        overlay = cornerstone.enable(document.getElementById('qi-overlay'))
-        cornerstone.loadAndCacheImage(imageIndex).then (image) ->
-          cornerstone.displayImage overlay, image
-        viewport = cornerstone.getViewport(overlay)
-        viewport.modalityLUT = modalityLUT
-        cornerstone.setViewport overlay, viewport
-
       # Renders the image in the given parent element.
       #
       # @param element the Angular jQueryLite element
       open: (element) ->
-        # Note: The XTK renderer is disabled here. A demo image and overlay is
-        #   rendered with Cornerstone instead. See:
-        #   https://github.com/chafey/cornerstone
-
         # The XTK renderer for this image.
-        #renderer = new X.renderer3D()
+        renderer = new X.renderer3D()
         # The image is rendered within the given element.
-        #renderer.container = element[0]
+        renderer.container = element[0]
         # Build the renderer.
-        #renderer.init()
-        #renderer.add(@xtkVolume)
+        renderer.init()
+        renderer.add(@xtkVolume)
     
         # Set the volume threshold levels to defaults.
         # These must be set here for the slider controls to load with the
         # correct values.
-        #@xtkVolume.lowerThreshold = 0
-        #@xtkVolume.upperThreshold = 445
+        @xtkVolume.lowerThreshold = 0
+        @xtkVolume.upperThreshold = 445
     
         # Adjust the camera position.
-        #renderer.camera.position = [0, 0, 240]
+        renderer.camera.position = [0, 0, 240]
 
         # Render the image.
-        #renderer.render()
-
-        # Load and display the DICOM image in Cornerstone.
-        dicomImage = cornerstone.enable(document.getElementById('qi-dicom-image'))
-        cornerstone.loadAndCacheImage('example://1').then (image) ->
-          cornerstone.displayImage dicomImage, image
-        
-        # Load and display the overlay in Cornerstone.
-        overlay = cornerstone.enable(document.getElementById('qi-overlay'))
-        cornerstone.loadAndCacheImage('example://3').then (image) ->
-          cornerstone.displayImage overlay, image
-        viewport = cornerstone.getViewport(overlay)
-        viewport.modalityLUT = modalityLUT
-        cornerstone.setViewport overlay, viewport
+        renderer.render()
 
       # Returns whether the XTK volume has a visible label map. This
       # function is required to work around the XTK bug described in
@@ -183,12 +139,6 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
       # @param labelMap the selected label map {name, colorTable}
       #   object
       selectOverlay: (labelMap) ->
-        # Load and display the overlay in Cornerstone.
-        overlay = cornerstone.enable(document.getElementById('qi-overlay'))
-        cornerstone.loadAndCacheImage('example://3').then (image) ->
-          cornerstone.displayImage overlay, image
-          return
-
         # Note: XTK labelmaps are treacherous territory; proceed with caution.
         # Specifically, XTK places the renderer in the browser event loop, so
         # that XTK renders and rerenders continuously and asynchronously.
@@ -228,8 +178,6 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
         #   property to true. Setting visible to true triggers a repaint with the
         #   overlay.
         
-        ###
-
         # The XTK volume labelmap file, or null if there is no labelmap.
         xtkLabelMapFile = @xtkVolume._labelmap.file if @xtkVolume._labelmap?
         # If the label map was not changed from the last value, then we only
@@ -267,8 +215,6 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider',
           # with the new overlay.
           @xtkVolume.labelmap.visible = true
     
-        ###
-
     # @param volume the scan or registration image volume
     #   (not the XTK volume)
     # @param id the unique image id

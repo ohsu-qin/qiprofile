@@ -1,10 +1,10 @@
 define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
-        'correlation', 'dateline', 'intensity', 'modeling'],
+        'correlation', 'dateline', 'intensity', 'modeling', 'imageproto'],
   (ng, _, _s, Spinner) ->
     directives = ng.module(
       'qiprofile.directives',
       ['qiprofile.helpers', 'qiprofile.correlation', 'qiprofile.dateline',
-       'qiprofile.intensity', 'qiprofile.modeling']
+       'qiprofile.intensity', 'qiprofile.modeling', 'qiprofile.imageproto']
     )
 
     # Spinner directive.
@@ -91,6 +91,17 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
         link: (scope, element) ->
           Correlation.renderCorrelationCharts()
           element.removeAttr 'qi-correlation-charts'
+          $compile(element)(scope)
+    ]
+
+
+    # Displays the image - Cornerstone prototype.
+    directives.directive 'qiImageProto', ['ImageProto', '$compile',
+      (ImageProto, $compile) ->
+        restrict: 'A'
+        link: (scope, element) ->
+          ImageProto.updateTheImage('example://1')
+          element.removeAttr 'qi-image-proto'
           $compile(element)(scope)
     ]
 

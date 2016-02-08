@@ -1,9 +1,9 @@
-define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
+define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast', 'imageproto'],
   (ng, _) ->
     ctlrs = ng.module(
       'qiprofile.controllers',
       ['ngSanitize', 'ui.bootstrap', 'qiprofile.modeling',
-       'qiprofile.resources', 'qiprofile.breast']
+       'qiprofile.resources', 'qiprofile.breast', 'qiprofile.imageproto']
     )
 
     # The local controller helper methods.
@@ -579,8 +579,8 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
 
     # The Image Detail page controller.
     ctlrs.controller 'ImageDetailCtrl', [
-      '$rootScope', '$scope', '$sce', 'Modeling', 'image', 'Image', 'ControllerHelper',
-      ($rootScope, $scope, $sce, Modeling, image, Image, ControllerHelper) ->
+      '$rootScope', '$scope', '$sce', 'Modeling', 'image', 'Image', 'ImageProto', 'ControllerHelper',
+      ($rootScope, $scope, $sce, Modeling, image, Image, ImageProto, ControllerHelper) ->
         # The session temp convenience variable.
         session = image.volume.container.session
         # Capture the current project.
@@ -602,11 +602,12 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
         # The overlay selection.
         $scope.overlayIndex = null
 
-
-        # Cornerstone image scope variables.
-        #
+        # Scope variables for the Cornerstone prototype.
+        $scope.imageProto = ImageProto
         # The DICOM image and overlay image IDs. Data are provied in
-        #   exampleImageIdLoader.
+        #   exampleImageIdLoader. The loader was modified to include two new
+        #   images (3 and 4) which are duplicates of images 1 and 2 and serve
+        #   as the overlays in the prototype.
         $scope.imageIds = [
           'example://1'
           'example://2'
@@ -615,22 +616,26 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
           'example://3'
           'example://4'
         ]
-
         # The initial saggital slice. 
         $scope.saggitalView =
           slice: 0
-
-        # The overlay opacity setting and CSS style.
-        $scope.overlayOpacity =
+        # The overlay opacity slider setting and CSS styles.
+        # Note: z-index is used to move the overlay viewport in front of or
+        #   behind the DICOM image depending on whether a user has elected to
+        #   display one. ng-show can't be used because the overlay image will
+        #   never appear in a viewport once its div is hidden that way (i.e.,
+        #   a 'display:none' style has been appplied to it).
+        $scope.overlay =
           setting: 1
           style:
             "opacity": 1
-
+            "z-index": -1
         # Watches for a change in the saggital slice control setting. Updates
         #   the image and overlay.
         $scope.$watch 'saggitalView.slice', (index) ->
-          $scope.image.updateTheImage($scope.imageIds[index])
-          $scope.image.updateTheOverlay($scope.overlayIds[index])
+          $scope.imageProto.updateTheImage($scope.imageIds[index])
+          # Update the overlay viewport only if an overlay has been selected.
+          $scope.imageProto.updateTheOverlay($scope.overlayIds[index]) if $scope.overlayIndex
 
         # The overlayIndex scope variable is the overlay radio input
         # selection value in the format *modeling index*.*overlay index*,
@@ -657,9 +662,19 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
             # The select overlay label map in the selected modeling object.
             overlay = modeling.overlays[ovrIndex]
             # Delegate to the image object.
-            $scope.image.selectOverlay(overlay)
+            #$scope.image.selectOverlay(overlay)
+            # Move the overlay viewport to the front and update it -
+            #   Cornerstone prototype.
+            $scope.overlay.style['z-index'] = 1
+            $scope.imageProto.updateTheOverlay($scope.overlayIds[$scope.saggitalView.slice])
           else
-            $scope.image.deselectOverlay()
+            #$scope.image.deselectOverlay()
+            # Move the overlay viewport to the back - Cornerstone prototype.
+            #
+            # TO DO - Is there a way to flush the image from the viewport when
+            #   it is not being seen?
+            $scope.overlay.style['z-index'] = -1
+
 
         # If the project is the default, then remove it from the URL.
         ControllerHelper.cleanBrowserUrl($rootScope.project)

@@ -1,0 +1,37 @@
+extends ../layout/partial
+
+include include/accordion-heading-mixin
+
+block billboard
+  | {{ image.volume.container.session.subject.collection | capitalize }}
+  | Patient {{ image.volume.container.session.subject.number }}
+  | Session {{ image.volume.container.session.number }}
+  | {{ image.volume.container.title }}
+  | Volume {{ image.volume.number }}
+
+block content
+  // The modeling parameter overlay select.
+  include include/image-overlay-select
+  // The opacity, axis and threshold image controls.
+  include include/image-controls
+  div.qi-image-proto(qi-image-proto)
+    // The Cornerstone image viewports, one for the DICOM image and one for the
+    //   overlay. The overlay viewport is placed in front of the DICOM viewport
+    //   using CSS.
+    //
+    // TO DO - Specify image width and height as percentages or use the
+    //   Bootstrap grip template, e.g. col-md-4.
+    #qi-image-container
+      #qi-dicom-image.cornerstone-enabled-image(oncontextmenu='return false'
+        unselectable='on' onselectstart='return false'
+        onmousedown='return false'
+      )
+      #qi-overlay.cornerstone-enabled-image(oncontextmenu='return false'
+        unselectable='on' onselectstart='return false'
+        onmousedown='return false' ng-style='overlay.style'
+      )
+
+block help-text
+  // The nested quote ensures evaluation to a string rather than
+  // a scope variable.
+  .qi-help-text(ng-include="'/partials/help/image-detail.html'")

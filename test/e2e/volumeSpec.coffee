@@ -3,9 +3,16 @@ expect = require('./helpers/expect')()
 Page = require './helpers/page'
 
 class VolumePage extends Page
-  displayPanel: ->
-    @find('qi-image')
-  
+  #displayPanel: ->
+  #  @find('qi-image')
+
+  # DICOM image and overlay - Cornerstone prototype.
+  displayImage: ->
+    @find('#qi-dicom-image')
+
+  displayOverlay: ->
+    @find('#qi-overlay')
+
   # TODO - Replace the CSS selector below with a selector for
   # elements bound to the model modelSelect.
   overlaySelector: ->
@@ -52,11 +59,21 @@ describe 'E2E Testing Volume', ->
     panel = null
   
     beforeEach ->
-      panel = page.displayPanel()
+    #  panel = page.displayPanel()
+      panel = page.displayImage()
   
     it 'should display the image', ->
       expect(panel, 'The image panel is missing').to.eventually.exist
+
+  describe 'Overlay', ->
+    panel = null
   
+    beforeEach ->
+      panel = page.displayOverlay()
+  
+    it 'should display the overlay', ->
+      expect(panel, 'The overlay panel is missing').to.eventually.exist
+
   describe 'Overlay Selection Buttons', ->
     panel = null
    

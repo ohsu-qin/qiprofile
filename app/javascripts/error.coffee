@@ -18,7 +18,7 @@ define ['angular', 'stacktrace'], (ng, stacktrace) ->
   # disabling the Mocha error trap don't work. ngMockE2E could be used to
   # build a pseudo-app and HTML test harness, but that is not worth the
   # trouble. The work-around to test this module is to introduce an error
-  # in the qiprofile code and check that it is logged on the server. 
+  # in the qiprofile code and check that it is logged on the server.
   error = ng.module 'qiprofile.error', []
 
   # Augment the Angular exception handler to print them on both

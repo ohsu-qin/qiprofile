@@ -101,7 +101,7 @@ The project is organized as follows::
       app/            # Source code
         app.coffee    # AngularJS application definition
         index.jade    # Landing page
-        javascripts/  # Application non-vendor CoffeeScript 
+        javascripts/  # Application non-vendor CoffeeScript
         layout/       # Common HTML layout
         partials/     # AngularJS partial Jade
           help/       # Help content, one per main view
@@ -443,7 +443,7 @@ then create the archive directory as follows::
 The XNAT server is configured to place the image files on this DAS
 volume via a symbolic link, e.g.::
 
-    ln -s /home/groups/quip/xnat/archive /var/local/xnat 
+    ln -s /home/groups/quip/xnat/archive /var/local/xnat
 
 Thus, when XNAT archives an image file it places it in the standard XNAT
 location ``/var/local/xnat/archive``, which in turn resolves the shared
@@ -559,7 +559,7 @@ examples:
 .. [#midway]
    The ngMidwayTester_ purports to offer a testing solution intermediate
    to unit and end-to-end testing. However, this package was evalutated
-   and found to be faulty and poorly documented, supported and maintained. 
+   and found to be faulty and poorly documented, supported and maintained.
 
 .. [#docCaveat]
    Unfortunately, there is not yet a known means of generating AngularJS

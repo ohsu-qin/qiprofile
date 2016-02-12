@@ -66,5 +66,5 @@ End-to-end testing notes
 
   The work-around is to confine use of ``only`` to ``describe``.
 
-  TODO - retry ``it.only`` in 2015. 
+  TODO - retry ``it.only`` in 2015.
 

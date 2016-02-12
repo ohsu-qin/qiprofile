@@ -2,7 +2,7 @@ define ['angular'], (ng) ->
   file = ng.module 'qiprofile.file', []
 
   file.factory 'File', ['$http', ($http) ->
-    # Define the service in a separate object, since it has a 
+    # Define the service in a separate object, since it has a
     # self-reference, which is not handled by the deficient
     # Angular service definition mechanism.
     File =
@@ -47,6 +47,6 @@ define ['angular'], (ng) ->
         $http.post(url, ng.toJson(data), config).then (res) ->
           res.data
 
-    # Return the File object.  
+    # Return the File object.
     File
   ]

@@ -16,7 +16,7 @@ module.exports = (command, port, callback) ->
     child.on 'error', (error) ->
       console.error "Error executing #{ command }: #{ error }."
 
-    console.log "Starting #{ command }..."    
+    console.log "Starting #{ command }..."
     child.start()
 
   # @param port the port to ping

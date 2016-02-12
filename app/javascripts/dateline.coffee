@@ -4,7 +4,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
   dateline.factory 'VisitDateline', ['ObjectHelper', 'Chart', (ObjectHelper, Chart) ->
     # A helper function to calculate the effective treatment dates.
     # This function returns a [start, end] array, where:
-    # * start is the moment start date integer 
+    # * start is the moment start date integer
     # * end is the moment end date integer
     # The default end date is today.
     #

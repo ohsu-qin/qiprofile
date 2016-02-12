@@ -167,7 +167,7 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
       # * If the container is a scan, then 'Scan' preceded by the
       #   scan name, e.g. 'T1 Scan'.
       # * If the container is a registration, then 'Registration'
-      #   preceded by the source scan name and followed by the 
+      #   preceded by the source scan name and followed by the
       #  registration name, e.g. 'T1 Registration pY3x'.
       (container) ->
         Image.containerTitle(container)

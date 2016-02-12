@@ -16,7 +16,7 @@
         // Note: the label map opacity control definition below works
         // around the following XTK bug:
         // * If the XTK volume labelmap property is accessed, then the
-        //   XTK parser fails with the error: 
+        //   XTK parser fails with the error:
         //     TypeError: Cannot read property '_children' of undefined
         //   XTK creates an incomplete labelmap object on demand in the
         //   labelmap getter. The XTK hasLabelMap variable is then set to
@@ -91,7 +91,7 @@
           .col-md-9
             slider.qi-slider(ng-model="image.xtkVolume.indexX"
                              floor='0' ceiling='319' step='1')
-        .row   
+        .row
           .col-md-3.qi-slider-label Coronal
           .col-md-9
             slider.qi-slider(ng-model="image.xtkVolume.indexY"

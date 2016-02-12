@@ -454,7 +454,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ctlrs.controller 'GradeCtrl', [
       '$scope',
       ($scope) ->
-        $scope.grade = $scope.tnm.grade 
+        $scope.grade = $scope.tnm.grade
     ]
 
 

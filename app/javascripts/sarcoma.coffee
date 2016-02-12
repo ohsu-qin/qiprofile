@@ -3,7 +3,7 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
 
   sarcoma.factory 'Sarcoma', ['ObjectHelper', (ObjectHelper) ->
     # The cancer stages correspond to TNM scores, assuming no
-    # metastasis (M0). Source: 
+    # metastasis (M0). Source:
     # http://www.cancer.gov/cancertopics/pdq/treatment/adult-soft-tissue-sarcoma/HealthProfessional/page3
     STAGES =
       1: [

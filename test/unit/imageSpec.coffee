@@ -98,7 +98,7 @@ define ['ngmocks', 'image'], (ng) ->
     #       .to.equal('loading')
     #     # Dispatch the backend request.
     #     $httpBackend.flush()
-    # 
+    #
     # describe 'Post-load', ->
     #   # When the image is loaded, then the state flag is set to 'loaded'.
     #   it 'should set the image state flag to loading', ->
@@ -107,7 +107,7 @@ define ['ngmocks', 'image'], (ng) ->
     #         .to.equal('loaded')
     #     # Dispatch the backend request.
     #     $httpBackend.flush()
-    # 
+    #
     #   # When the image is loaded, the image data property is
     #   # set to the file content.
     #   it 'should set the image data property to the file content', =>

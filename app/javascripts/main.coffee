@@ -46,7 +46,7 @@ requirejs.config
 
   # The module paths.
   paths:
-    angular: [NG_LIB + '/' + 'angular' + MIN, './lib/angular'] 
+    angular: [NG_LIB + '/' + 'angular' + MIN, './lib/angular']
     crossfilter: './lib/crossfilter'
     d3: './lib/d3'
     dc: './lib/dc'
@@ -54,8 +54,8 @@ requirejs.config
     'error-stack-parser': './lib/error-stack-parser'
     lodash: './lib/lodash'
     moment: './lib/moment'
-    nganimate: [NG_LIB + '/' + 'angular-animate' + MIN, './lib/angular-animate']  
-    ngresource: [NG_LIB + '/' + 'angular-resource' + MIN, './lib/angular-resource']  
+    nganimate: [NG_LIB + '/' + 'angular-animate' + MIN, './lib/angular-animate']
+    ngresource: [NG_LIB + '/' + 'angular-resource' + MIN, './lib/angular-resource']
     ngroute: [NG_LIB + '/' + 'angular-route' + MIN, './lib/angular-route']
     ngsanitize: [NG_LIB + '/' + 'angular-sanitize' + MIN, './lib/angular-sanitize']
     ngnvd3: './lib/angularjs-nvd3-directives'

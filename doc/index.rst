@@ -47,7 +47,7 @@ Usage
 1. Populate the qiprofile database. A test database is available
    in the REST_ project, as described in the `REST Development`_
    section. The production database is populated by the qipipe_
-   pipeline. 
+   pipeline.
 
 2. Start the REST server, as described in the `REST Usage`_ section.
 

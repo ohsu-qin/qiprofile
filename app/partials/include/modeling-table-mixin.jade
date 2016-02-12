@@ -39,7 +39,7 @@ mixin modeling-table(properties, headings)
           - var average = '{{ modelingResult.' + avgProp + ' | number:4 }}'
           td.qi-number= average
           // The first filter takes the difference between row values.
-          - var diff = "selModeling.results | relativeDifference:$index:'" + avgProp + "'" 
+          - var diff = "selModeling.results | relativeDifference:$index:'" + avgProp + "'"
           // The percent change without decimals.
           - var pctChange = '{{ ' + diff + ' | percent | number:0 }}'
           td.qi-pct= pctChange

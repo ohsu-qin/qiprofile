@@ -168,10 +168,10 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
               # Adds the following modeling parameter result properties:
               # * key - the parameter result access property name
               # * modelingResult - the parent modeling result
-              #   reference 
+              #   reference
               # * overlay - the label map, if it exists and has a
               #   color table
-              #  
+              #
               # If there is a label map, then this function sets the
               # label map parent modeling parameter reference.
               #
@@ -337,7 +337,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
         # follows:
         # * If the session object contains a detail property ObjectID
         #   reference value, then the detail is fetched using that
-        #   value. 
+        #   value.
         # * Otherwise, if the session object references a subject,
         #   then that subject is fetched using getSubject and the
         #   fetched subject session which matches the session
@@ -350,7 +350,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
         # object.
         #
         # Note: this function modifies the input session argument
-        # content as described above. 
+        # content as described above.
         #
         # @param session the parent object
         # @returns a promise which resolves to the session detail
@@ -360,7 +360,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
           # * image - the volume image object
           #
           # The image property creates and caches an image object
-          # on demand when it is first accessed. 
+          # on demand when it is first accessed.
           #
           # @param volume the volume object to extend
           # @param number the one-based volume number

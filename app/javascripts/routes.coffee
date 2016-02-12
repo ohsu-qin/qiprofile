@@ -165,7 +165,7 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
                 number = parseInt($stateParams.volume)
                 volume = Router.getVolume(scan, number)
                 image = volume.image
-                if image.isLoaded() then image else image.load() 
+                if image.isLoaded() then image else image.load()
             views:
               'main@':
                 templateUrl: '/partials/image-detail.html'
@@ -191,7 +191,7 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
                 Router.getVolume(registration, number)
               image: (volume) ->
                 image = volume.image
-                if image.isLoaded() then image else image.load() 
+                if image.isLoaded() then image else image.load()
             views:
               'main@':
                 templateUrl: '/partials/image-detail.html'

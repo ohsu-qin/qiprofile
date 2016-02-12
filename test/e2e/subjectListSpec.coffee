@@ -1,6 +1,6 @@
 expect = require('./helpers/expect')()
 
-Page = require './helpers/page' 
+Page = require './helpers/page'
 
 class SubjectListPage extends Page
   # Subheading locator.
@@ -20,9 +20,9 @@ class SubjectListPage extends Page
             if exists
               repeat.all(anchorLocator).then (hyperlinks) ->
                 sbjs = (hyperlink.getText() for hyperlink in hyperlinks)
-                {name: coll, subjects: sbjs}  
+                {name: coll, subjects: sbjs}
             else
-              {name: coll, subjects: []}  
+              {name: coll, subjects: []}
         else
           []
 

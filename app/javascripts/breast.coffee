@@ -55,7 +55,7 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
     #
     #   Paik, et al., 'A Multigene Assay to Predict Recurrence of
     #   Tamoxifen-Treated, Node-Negative Breast Cancer',
-    #   N Engl J Med 2004; 351:2817-2826  
+    #   N Engl J Med 2004; 351:2817-2826
     #   (http://www.nejm.org/doi/full/10.1056/NEJMoa041588)
     #
     # 1f metastasis exists (M1), then the stage is 4.
@@ -110,12 +110,12 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
         # The invasive carcinoma proportion.
         invasion = (1 - inSitu) * overall
         # Calculate and return the index value.
-        return (1.4 * Math.pow(invasion * size, 0.17)) + 
+        return (1.4 * Math.pow(invasion * size, 0.17)) +
                 Math.pow(4 * ((1 - Math.pow(0.75, rcb.positiveNodeCount)) *
                            rcb.largestNodalMetastasisLength),
                          0.17)
       # Returns the RCB class, which is based on RCB index cut-offs.
-      rcbClass = (rcbIndex) ->  
+      rcbClass = (rcbIndex) ->
         if rcbIndex == 0
           return 0
         else if rcbIndex < 1.36
@@ -128,7 +128,7 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
       # If the RCB object exists, return it extended with the index and class.
       if tumor.rcb?
         score = rcbIndex(tumor.extent, tumor.rcb)
-        _.extend tumor.rcb, 
+        _.extend tumor.rcb,
           rcbIndex: score
           rcbClass: rcbClass(score)
       else

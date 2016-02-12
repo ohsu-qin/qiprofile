@@ -26,7 +26,7 @@ define [], ->
       else
         condValue = "\"#{ value }\""
       # Return the field condition.
-      "\"#{ field }\":#{ condValue }" 
+      "\"#{ field }\":#{ condValue }"
 
     # Format the field conditions.
     fieldConds = (formatFieldCondition(pair...) for pair in _.toPairs(params))
@@ -40,7 +40,7 @@ define [], ->
   # field names.
   #
   # @param fields the Javascript camelCase data properties to select
-  # @returns the formatted Eve {projection: critierion} 
+  # @returns the formatted Eve {projection: critierion}
   map: (fields) ->
     # The input can be a single field name.
     if _.isString(fields)
@@ -55,7 +55,7 @@ define [], ->
   # Formats the {field: flag} Eve REST query projection parameter.
   #
   # @param fields the Javascript camelCase data properties to exclude
-  # @returns the formatted Eve {projection: critierion} 
+  # @returns the formatted Eve {projection: critierion}
   omit: (fields) ->
     # Format the field name: flag entries.
     flags = fields.map (field) -> "\"#{ field }\": 0"

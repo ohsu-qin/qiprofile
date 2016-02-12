@@ -1,4 +1,4 @@
-define ['ngmocks', 'breast', 'helpers'], -> 
+define ['ngmocks', 'breast', 'helpers'], ->
   describe 'Unit Testing the Breast Service', ->
     # The qiprofile Breast factory.
     Breast = null

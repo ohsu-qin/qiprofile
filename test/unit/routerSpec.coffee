@@ -121,7 +121,7 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
                 volumes: [
                     name: 'path/to/first/scan/volume001.nii.gz'
                     average_intensity: 2.4
-                ]  
+                ]
                 registrations: [
                   _cls: 'Registration'
                   resource: 'reg_01'
@@ -142,7 +142,7 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
               volumes: [
                 name: 'path/to/second/scan/volume001.nii.gz'
                 average_intensity: 2.5
-              ]  
+              ]
               registrations: [
                 _cls: 'Registration'
                 resource: 'reg_02'
@@ -338,7 +338,7 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
               mockResult = mock.subject.encounters[0].modelings[0].result
               expect(result.delta_k_trans.average,
                      "Modeling delta Ktrans result is incorrect")
-                .to.equal(mockResult.delta_k_trans.average)            
+                .to.equal(mockResult.delta_k_trans.average)
 
         describe 'Session', ->
           session = null

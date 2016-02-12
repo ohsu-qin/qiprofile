@@ -26,7 +26,7 @@ dest = "#{ root }/data"
 # Link the source images.
 # Note: contrary to the Node.js API
 # (http://nodejs.org/api/fs.html#fs_class_fs_stats),
-# this is a proper use case for the exists method. 
+# this is a proper use case for the exists method.
 unless fs.existsSync(dest)
   if not fs.existsSync(root)
     throw new Error "Web app root not found: #{ root }"

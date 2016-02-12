@@ -13,7 +13,7 @@ define ['angular', 'lodash', 'moment', 'd3'], (ng, _, moment) ->
     #
     # The input data is the resource objects which contain the
     # values to graph. The chart values are obtained by calling
-    # the input format x-axis accessor for each chart data series. 
+    # the input format x-axis accessor for each chart data series.
     #
     # The input dataSpec contains the following x and y attributes:
     # * x is the x-axis {label, accessor}
@@ -162,7 +162,7 @@ define ['angular', 'lodash', 'moment', 'd3'], (ng, _, moment) ->
       decimalFormatter = (precision) ->
         # The multiplicative factor.
         factor = Math.pow(10, precision)
-        # The y-axis tick format. 
+        # The y-axis tick format.
         formatTick = d3.format('.' + precision + 'f')
         # The y-axis value format allows for more precision than
         # the tick mark.
@@ -235,7 +235,7 @@ define ['angular', 'lodash', 'moment', 'd3'], (ng, _, moment) ->
       # The D3 selection append method takes either a string,
       # in which case it creates a new element as in the above
       # svg:a append, or a function which returns a DOM element.
-      # In the call below, the text element is appended. 
+      # In the call below, the text element is appended.
       a.append(-> text)
       # Return the anchor element
       a.node()

@@ -7,7 +7,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
     # dashes, e.g.:
     #     StringHelper.dasherize('TNM')
     # returns 'tnm' rather than the underscore.string result '-t-n-m'.
-    # 
+    #
     # @param s the input string
     # @returns the lowercase dashed conversion
     dasherize: (s) ->
@@ -32,7 +32,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
         sdashed
 
   helpers.factory 'ObjectHelper', ->
-    # Define here for reuse below. 
+    # Define here for reuse below.
     _sortValuesByKey = (obj) ->
       if obj?
         # The sorted keys.
@@ -95,7 +95,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
       # Concatenates the given current associative object
       # values sorted by the associative keys to the given
       # accumulator array.
-      # 
+      #
       # @param accumulator the previous result array
       # @param current the current associative object
       # @returns the concatenated results array
@@ -177,7 +177,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
     # @param data the REST JSON data
     # @returns the Javascript object
     fromJson: (data) ->
-      # Aliases the given underscore property. 
+      # Aliases the given underscore property.
       #
       # @param obj the input object to modify
       # @param property the input property to alias
@@ -199,7 +199,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
             value: obj[property]
             writable: true
 
-      # Aliases underscore properties with camelCase properties. 
+      # Aliases underscore properties with camelCase properties.
       #
       # @param obj the input object to modify
       # @returns the input object

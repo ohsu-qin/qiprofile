@@ -78,7 +78,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
           focus: '@qiFocus'
         link: (scope, element) ->
           scope.$watch 'focus', (value) ->
-            if value is 'true' 
+            if value is 'true'
               $timeout ->
                 element[0].focus()
     ]
@@ -100,7 +100,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
       (Intensity, ObjectHelper) ->
         restrict: 'E'
         scope:
-          scan: '=' 
+          scan: '='
         link: (scope, element) ->
           # Wait for a session extended with detail to digest the scan.
           scope.$parent.$watch 'scan', (scan) ->

@@ -15,7 +15,7 @@ define ['angular', 'lodash', 'helpers', 'breast', 'sarcoma'], (ng, _) ->
         HELPERS[tumorType] or
           throw new ReferenceError("Unsupported tumor type: #{ tumorType }")
 
-      # Define here for reuse below. 
+      # Define here for reuse below.
       _summaryGrade = (tnm) ->
         # Calculates the cumulative grade as the sum of the component
         # tumor type factory SCORES property values.
@@ -56,7 +56,7 @@ define ['angular', 'lodash', 'helpers', 'breast', 'sarcoma'], (ng, _) ->
       formatSize: (size) ->
         sizeSuffix = ->
           inSituSuffix = (inSitu) ->
-            if size.inSitu.invasiveType is 'ductal' 
+            if size.inSitu.invasiveType is 'ductal'
               'is(DCIS)'
             else if size.inSitu.invasiveType is 'lobular'
               'is(LCIS)'

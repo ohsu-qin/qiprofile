@@ -92,5 +92,5 @@ define ['lodash'], (_) ->
       digit = digits.pop()
       ROMANS[place][digit] + roman
 
-    # Make the roman numeral by converting each digit from right to left. 
+    # Make the roman numeral by converting each digit from right to left.
     _.reduce(places, prepend, '')

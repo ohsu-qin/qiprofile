@@ -2,7 +2,7 @@
 # http://www.bennadel.com/blog/2554-loading-angularjs-components-with-requirejs-after-application-bootstrap.htm
 # and
 # http://stackoverflow.com/questions/18591966/inject-module-dynamically-only-if-required
-# 
+#
 define ['angular', 'lodash', 'underscore.string', 'file', 'slider', 'xtk'], (ng, _, _s) ->
   image = ng.module 'qiprofile.image', ['qiprofile.file', 'qiprofile.modeling', 'vr.directives.slider']
 
@@ -13,7 +13,7 @@ define ['angular', 'lodash', 'underscore.string', 'file', 'slider', 'xtk'], (ng,
 
     # The Image class encapsulates a volume image with the following properties:
     # * volume - the image scan or registration volume object
-    # * number - the one-based image volume number 
+    # * number - the one-based image volume number
     # * state - one of 'unloaded', 'loading' or 'loaded'
     # * xtkVolume - the XTK volume object
     # * load() - read the image file
@@ -54,7 +54,7 @@ define ['angular', 'lodash', 'underscore.string', 'file', 'slider', 'xtk'], (ng,
       # files are being read.
       #
       # @returns a promise which resolves to this image object
-      #   when the file is loaded 
+      #   when the file is loaded
       load: ->
         # Set the loading flag.
         @state = Image.STATES.LOADING
@@ -72,7 +72,7 @@ define ['angular', 'lodash', 'underscore.string', 'file', 'slider', 'xtk'], (ng,
           @state = Image.STATES.LOADED
         .catch (res) =>
           # Display an alert with the status text.
-          alert("The image volume file load was unsuccessful: " + 
+          alert("The image volume file load was unsuccessful: " +
                 "#{ res.statusText } (#{ res.status }).")
           # Set the state to 'error'.
           @state = Image.STATES.ERROR
@@ -126,7 +126,7 @@ define ['angular', 'lodash', 'underscore.string', 'file', 'slider', 'xtk'], (ng,
       #  flag is set to false.
       # Otherwise, this function is a no-op.
       #
-      # @param image the selected PK modeling parameter name, or 'none' to 
+      # @param image the selected PK modeling parameter name, or 'none' to
       #  remove an existing overlay
       deselectOverlay: ->
         @xtkVolume.labelmap.visible = false if @isOverlayVisible()
@@ -159,7 +159,7 @@ define ['angular', 'lodash', 'underscore.string', 'file', 'slider', 'xtk'], (ng,
         # checks for an existing labelmap and then asynchronously loads the
         # labelmap file results in the following XTK render error:
         #
-        #   Uncaught TypeError: Cannot read property '_id' of null 
+        #   Uncaught TypeError: Cannot read property '_id' of null
         #
         # The work-around is as follows:
         # * If checking for an existing labelmap, bypass accessing the

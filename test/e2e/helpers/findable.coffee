@@ -225,7 +225,7 @@ class Table extends Findable
   #
   # @param bindings the {field: binding} object, where *binding*
   #   is the AngularJS expression to which the field element is
-  #   bound 
+  #   bound
   # @returns this table WebElement
   addBindings: (bindings) ->
     for field, binding of bindings
@@ -283,7 +283,7 @@ addTableMixin = _.partialRight(_.extend, new Table)
 
 # @param selector the search condition
 # @returns the By locator object
-locatorFor = (selector) -> 
+locatorFor = (selector) ->
   # If the selector is a string, then make a By locator.
   # Otherwise, the selector is assumed to already be a
   # By locator.

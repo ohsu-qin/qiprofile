@@ -67,14 +67,14 @@ define ['ngmocks', 'moment', 'expect', 'helpers'], (ng, moment, expect) ->
 
         it 'should make the camelCase alias enumerable', ->
           expect('anInt' in Object.keys(obj),
-                 "The underscore property is still enumerable").to.be.true   
+                 "The underscore property is still enumerable").to.be.true
 
         it 'should make the underscore property non-enumerable', ->
           expect('an_int' in Object.keys(obj),
-                 "The underscore property is still enumerable").to.be.false   
+                 "The underscore property is still enumerable").to.be.false
 
         it 'should make the underscore property nonenumerable', ->
-          expect(obj.an_int, "an_int is incorrect").to.equal(mock.an_int)   
+          expect(obj.an_int, "an_int is incorrect").to.equal(mock.an_int)
 
         it 'should add camelCase aliases to inner objects', ->
           expect('anObj' in Object.keys(obj.inner),

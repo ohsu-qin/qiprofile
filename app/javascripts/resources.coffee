@@ -18,7 +18,7 @@ define ['angular', 'ngresource', 'helpers'], (ng) ->
         # The *query* function returns an array of selected JSON objects.
         # The query request implicitly accepts an HTML request query
         # parameter (not to be confused with the query method defined here)
-        # that includes the selection and/or projection criterion. 
+        # that includes the selection and/or projection criterion.
         # See the rest.coffee REST service for helper methods.
         #
         # Examples:

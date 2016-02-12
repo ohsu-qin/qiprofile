@@ -220,7 +220,7 @@ module.exports = (grunt) ->
             angular: 'empty:'
             domReady: 'empty:'
             nganimate: 'empty:'
-            ngresource: 'empty:' 
+            ngresource: 'empty:'
             ngroute: 'empty:'
           modules: [ name:'qiprofile' ]
           findNestedDependencies: true

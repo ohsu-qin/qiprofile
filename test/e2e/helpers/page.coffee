@@ -86,7 +86,7 @@ class Page extends Findable
       expect(btn, 'The home button is missing').to.exist
       # Capture the current location.
       browser.getLocationAbsUrl().then (url) ->
-        # Click the button and resolve to the home page. 
+        # Click the button and resolve to the home page.
         btn.click().then -> restore(url)
 
   # @returns the help text

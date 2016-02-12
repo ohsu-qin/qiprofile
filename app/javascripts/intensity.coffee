@@ -3,7 +3,7 @@ define ['angular', 'chart'], (ng) ->
 
   intensity.factory 'Intensity', ->
     # Highlights the bolus arrival tick mark. The bolus arrival is
-    # only highlighted if it occurs after the first series.  
+    # only highlighted if it occurs after the first series.
     #
     # @param session the session object
     # @param chart the intensity chart
@@ -57,7 +57,7 @@ define ['angular', 'chart'], (ng) ->
       bolusGroup.attr('transform', 'translate(-25, 5)')
       # The legend text.
       text = 'Bolus Arrival'
-      # The SVG text size in em units. 
+      # The SVG text size in em units.
       textScale = 0.32
       # The legend length.
       textWidth = textScale * text.length
@@ -79,7 +79,7 @@ define ['angular', 'chart'], (ng) ->
 
     # The y-axis format function. If the given intensity value
     # is integral, then this function returns the integer.
-    # Otherwise, the value is truncated to two decimal places. 
+    # Otherwise, the value is truncated to two decimal places.
     #
     # nvd3 unfortunately uses this function to format both the tick
     # values and the tooltip y values. Therefore, this function

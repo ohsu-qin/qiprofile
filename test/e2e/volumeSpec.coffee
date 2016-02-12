@@ -1,6 +1,6 @@
 expect = require('./helpers/expect')()
 
-Page = require './helpers/page' 
+Page = require './helpers/page'
 
 class VolumePage extends Page
   displayPanel: ->

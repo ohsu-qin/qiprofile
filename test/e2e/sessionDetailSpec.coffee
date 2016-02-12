@@ -1,6 +1,6 @@
 expect = require('./helpers/expect')()
 
-Page = require './helpers/page' 
+Page = require './helpers/page'
 
 class SessionDetailPage extends Page
   # @param number the volume number
@@ -119,7 +119,7 @@ describe 'E2E Testing Session Detail', ->
     # The log messages are not informative. However, the error is ignored
     # and tests succeed. The error does not occur for a browser load.
     # TODO - find a way to isolate and correct this problem.
-    # 
+    #
     it 'should display the chart', ->
       expect(page.chart(), 'The chart is not displayed').to.eventually.exist
 

@@ -21,24 +21,32 @@ describe 'E2E Testing Volume', ->
     page = new VolumePage '/quip/sarcoma/subject/1/session/1/scan/1/volume/20?project=QIN_Test'
 
   it 'should load the page', ->
-    expect(page.content, 'The page was not loaded')
+    expect(page.content(), 'The page was not loaded')
       .to.eventually.exist
   
-  it 'should display the billboard', ->
-    expect(page.billboard, 'The billboard is incorrect')
-      .to.eventually.equal('Sarcoma Patient 1 Session 1 Scan 1 Volume 20')
+  # The page header test cases.
+  describe 'Header', ->
+    it 'should display the billboard', ->
+      expect(page.billboard(), 'The billboard is incorrect')
+        .to.eventually.equal('Sarcoma Patient 1 Session 1 Scan 1 Volume 20')
   
-  it 'should have a home button', ->
-    pat = /.*\/quip\?project=QIN_Test$/
-    expect(page.home, 'The home URL is incorrect').to.eventually.match(pat)
+    it 'should have a home button', ->
+      expect(page.home(), 'The home URL is incorrect')
+        .to.eventually.match(Page.HOME_URL_PAT)
   
-  it 'should have help text', ->
-    expect(page.help, 'The help is missing').to.eventually.exist
-  
-  it 'should display a contact email link', ->
-    pat = /a href="http:\/\/qiprofile\.idea\.informer\.com"/
-    expect(page.contactInfo, 'The email address is missing')
-      .to.eventually.match(pat)
+    describe 'Help', ->
+      help = null
+    
+      before ->
+        help = page.help()
+
+      it 'should have help text', ->
+        expect(help, 'The help text is missing')
+          .to.eventually.exist.and.not.be.empty
+
+      it 'should display a {qu,sugg}estion box hyperlink', ->
+        expect(help, 'The {qu,sugg}estion box hyperlink is missing')
+          .to.eventually.include(Page.SUGGESTION_BOX_URL)
   
   describe 'Image Display', ->
     panel = null

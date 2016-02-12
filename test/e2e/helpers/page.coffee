@@ -41,89 +41,80 @@ class Page extends Findable
   # Search from the document root.
   all: element.all
 
-# Add the virtual properties.
-Object.defineProperties Page.prototype,
   # @returns the title text
-  title:
-    get: ->
-      browser.getTitle()
+  title: ->
+    browser.getTitle()
 
   # @returns the billboard text
-  billboard:
-    get: ->
-      @text('.qi-billboard', 'h3')
+  billboard: ->
+    @text('.qi-billboard', 'h3')
 
   # Find the partial content. The page is loaded if and and only if
   # the return value is not null.
   #
   # @returns the qi-content WebElement holding the partial content
-  content:
-    get: ->
-      @find('.qi-content')
+  content: ->
+    @find('.qi-content')
 
   # Navigate to the home page by clicking the home button.
   #
   # @returns the home URL
-  # @returns an expectation error if the home button is missing
-  home:
-    get: ->
-      # Finds the home button.
-      findButton = =>
-        # The home button is the parent of the home icon.
-        @find('button .glyphicon-home', '..')
+  # @throws an expectation error if the home button is missing
+  home: ->
+    # @returns the Home button
+    findHomeButton = =>
+      # The home button is the parent of the home icon.
+      @find('button .glyphicon-home', '..')
 
-      # Validates the home button.
-      #
-      # @returns expectation error if the button is missing
-      validate = (button) ->
-        expect(button, 'The home button is missing').to.exist
-        button
+    # Navigates to the previous page, if necessary.
+    #
+    # @param prev_url the previous location
+    # @returns the page navigated from
+    restore = (prev_url) ->
+      # The current URL.
+      browser.getLocationAbsUrl().then (curr_url) ->
+        # If the location changed, then navigate back to
+        # the previous page.
+        if curr_url == prev_url
+          curr_url
+        else
+          browser.navigate().back().then ->
+            # Resolve to the page navigated from.
+            curr_url
 
-      # Clicks the given button.
-      click = (button) ->
-        button.click()
+    findHomeButton().then (btn) ->
+      expect(btn, 'The home button is missing').to.exist
+      # Capture the current location.
+      browser.getLocationAbsUrl().then (url) ->
+        # Click the button and resolve to the home page. 
+        btn.click().then -> restore(url)
 
-      # Navigates to the previous page.
-      #
-      # @returns the page navigated from
-      pop = ->
-        # Grab the URL.
-        home_url = browser.getLocationAbsUrl()
-        # Go back.
-        browser.navigate().back().then ->
-          # Resolve to the URL.
-          home_url
+  # @returns the help text
+  help: ->
+    # Finds the help button.
+    findButton = =>
+      @find("[ng-controller='HelpCtrl']")
+    
+    @find('.qi-help').then (elt) ->
+      expect(elt, 'The help element is missing').to.exist
+      # Help is initially hidden.
+      expect(elt.isDisplayed(), 'The help element is not initially hidden')
+        .to.eventually.be.false
+      findButton().then (btn) ->
+        expect(btn, 'The help button is missing').to.exist
+        # Open the help view...
+        btn.click().then ->
+          # Verify that the help is displayed.
+          expect(elt.isDisplayed(), 'The help element is hidden after click')
+            .to.eventually.be.true
+          # Click again to hide the help.
+          btn.click().then ->
+            elt.getInnerHtml()
 
-      findButton()
-        .then(validate)
-        .then(click)
-        .then(pop)
+# The help suggestion box hyperlink constant.
+Page.SUGGESTION_BOX_URL = 'http://qiprofile.idea.informer.com'
 
-  # @returns the help content
-  help:
-    get: ->
-      @find('.qi-help').then (elt) =>
-        # Help is initially hidden.
-        expect(elt, 'The help element is missing').to.exist
-        expect(elt.isDisplayed(), 'The help element is not initially hidden')
-          .to.eventually.be.false
-        # The help button is the parent of the question mark icon.
-        @find("[ng-controller='HelpCtrl']").then (button) ->
-          expect(button, 'The help button is missing').to.exist
-          # Open the help view...
-          button.click().then =>
-            # ...verify that the help is displayed...
-            expect(elt.isDisplayed(), 'The help element is hidden after click')
-              .to.eventually.be.true
-            # ...find the help text element...
-            elt.find('.qi-help-text').then (content) ->
-              # ...resolve to the formatted help content.
-              content.getInnerHtml() if content?
-
-  # @returns the contact information
-  contactInfo:
-    get: ->
-      @find('.qi-contact-info').then (content) ->
-        content.getInnerHtml() if content?
+# The home page hyperlink pattern.
+Page.HOME_URL_PAT = /.*\/quip\?project=QIN_Test$/
 
 module.exports = Page

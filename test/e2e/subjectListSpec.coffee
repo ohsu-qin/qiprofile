@@ -3,8 +3,10 @@ expect = require('./helpers/expect')()
 Page = require './helpers/page' 
 
 class SubjectListPage extends Page
+  # Subheading locator.
   h3Locator = By.tagName('h3')
 
+  # Hyperlink locator.
   anchorLocator = By.tagName('a')
 
   # @returns the collection {name, subjects} array promise
@@ -12,15 +14,15 @@ class SubjectListPage extends Page
     element.all(By.repeater('coll in collections')).map (repeat) ->
       repeat.isElementPresent(h3Locator).then (exists) ->
         if exists
-          repeat.element(h3Locator).then (h3) ->
-            coll = h3.getText()
-            repeat.isElementPresent(anchorLocator).then (exists) ->
-              if exists
-                repeat.all(anchorLocator).then (hyperlinks) ->
-                  sbjs = (hyperlink.getText() for hyperlink in hyperlinks)
-                  {name: coll, subjects: sbjs}  
-              else
-                {name: coll, subjects: []}  
+          h3 = repeat.element(h3Locator)
+          coll = h3.getText()
+          repeat.isElementPresent(anchorLocator).then (exists) ->
+            if exists
+              repeat.all(anchorLocator).then (hyperlinks) ->
+                sbjs = (hyperlink.getText() for hyperlink in hyperlinks)
+                {name: coll, subjects: sbjs}  
+            else
+              {name: coll, subjects: []}  
         else
           []
 
@@ -31,26 +33,32 @@ describe 'E2E Testing Subject List', ->
     page = new SubjectListPage '/quip?project=QIN_Test'
 
   it 'should load the page', ->
-    expect(page.content, 'The page was not loaded')
+    expect(page.content(), 'The page was not loaded')
       .to.eventually.exist
 
-  it 'should display the billboard', ->
-    expect(true).to.be.true
-    expect(page.billboard, 'The billboard is incorrect')
-      .to.eventually.equal('Patients')
+   # The page header test cases.
+  describe 'Header', ->
+    it 'should display the billboard', ->
+      expect(page.billboard(), 'The billboard is incorrect')
+        .to.eventually.equal('Patients')
 
-  it 'should have a home button', ->
-    pat = /.*\/quip\?project=QIN_Test$/
-    expect(page.home, 'The home URL is incorrect')
-      .to.eventually.match(pat)
+    it 'should have a home button', ->
+      expect(page.home(), 'The home URL is incorrect')
+        .to.eventually.match(Page.HOME_URL_PAT)
 
-  it 'should have help text', ->
-    expect(page.help, 'The help is missing').to.eventually.exist
+    describe 'Help', ->
+      help = null
+    
+      before ->
+        help = page.help()
 
-  it 'should display a contact email link', ->
-    pat = /a href="http:\/\/qiprofile\.idea\.informer\.com"/
-    expect(page.contactInfo, 'The email address is missing')
-      .to.eventually.match(pat)
+      it 'should have help text', ->
+        expect(help, 'The help text is missing')
+          .to.eventually.exist.and.not.be.empty
+
+      it 'should display a {qu,sugg}estion box hyperlink', ->
+        expect(help, 'The {qu,sugg}estion box hyperlink is missing')
+          .to.eventually.include(Page.SUGGESTION_BOX_URL)
 
   describe 'Collections', ->
     content = null
@@ -68,7 +76,7 @@ describe 'E2E Testing Subject List', ->
 
     it 'should display the subjects', ->
       subjects = content.then (assns) ->
-        assns.map (assn) -> assn.subjects 
+          assns.map (assn) -> assn.subjects
       expected = (("Patient #{ n }" for n in [1, 2, 3]) for i in [1, 2])
       expect(subjects, 'The subjects are incorrect')
         .to.eventually.eql(expected)

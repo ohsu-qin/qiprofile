@@ -37,13 +37,18 @@ module.exports = (grunt) ->
           'd3/*.js'
           'dcjs/dc.js'
           'domready/ready.js'
+          'error-stack-parser/dist/error-stack-parser.js'
           'lodash/lodash.js'
           'moment/*.js'
           'nvd3/nv.d3.js'
           'requirejs/require.js'
+          'source-map/dist/source-map.js'
           'spin.js/spin.js'
+          'stackframe/dist/stackframe.js'
+          'stack-generator/dist/stack-generator.js'
+          'stacktrace-gps/dist/stacktrace-gps.js'
           'stacktrace-js/stacktrace.js'
-          'underscore.string/lib/*.js'
+          'underscore.string/dist/*.js'
           'venturocket-angular-slider/build/*.js'
           'xtk/dist/xtk.js'
           # Exclude minimized files.
@@ -120,14 +125,21 @@ module.exports = (grunt) ->
         # session. The command pseudo-code is as follows:
         # * Check for a process which listens on port 4444
         # * Start the selenium server as a background process
-        # * Suppress all output
-        # The selenium server can be killed by getting the process id
-        # using the netstat command and issuing a kill command on that pid.
-        # This command runs in Mac and Linux, but not Windows.
-        command: 'netstat -lnp tcp 2>/dev/null | grep -q 4444 || ' +
-                 './node_modules/selenium-standalone/bin/start-selenium' +
-                  ' > /dev/null 2>&1 &'
-        
+        # * Suppress non-error output
+        #
+        # The lsof command checks whether a process (hopefully the selenium
+        # server) is already running on port 4444. The server can be killed
+        # by the following command:
+        #
+        #   pkill -f selenium-standalone
+        #
+        # The sleep command pauses one second to allow the server to start.
+        command: 'lsof -i :4444 >/dev/null 2>&1 || ' +
+                 '(./node_modules/selenium-standalone/bin/selenium-standalone' +
+                 '   install --silent && ' +
+                 ' ((./node_modules/selenium-standalone/bin/selenium-standalone' +
+                 '   start >/dev/null 2>&1 &) && sleep 1))'
+
       bowerinstall:
         command: './node_modules/.bin/bower update'
         

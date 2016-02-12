@@ -23,7 +23,7 @@ GOOGLE_LIBS = '//ajax.googleapis.com/ajax/libs'
 # The Angular version.
 # Note: this version number must match the bower.json angularjs
 # version number.
-NG_VERSION = '1.2.21'
+NG_VERSION = '#1.4.9'
 
 # The Angular CDN location.
 NG_LIB = GOOGLE_LIBS + '/angularjs/' + NG_VERSION
@@ -51,6 +51,7 @@ requirejs.config
     d3: './lib/d3'
     dc: './lib/dc'
     domReady: [DOM_READY_LIB + '/domReady' + MIN, './lib/domReady']
+    'error-stack-parser': './lib/error-stack-parser'
     lodash: './lib/lodash'
     moment: './lib/moment'
     nganimate: [NG_LIB + '/' + 'angular-animate' + MIN, './lib/angular-animate']  
@@ -60,8 +61,12 @@ requirejs.config
     ngnvd3: './lib/angularjs-nvd3-directives'
     nvd3: './lib/nv.d3'
     slider: './lib/angular-slider'
+    'source-map': './lib/source-map'
     spin: './lib/spin'
+    'stack-generator': './lib/stack-generator'
+    stackframe: './lib/stackframe'
     stacktrace: './lib/stacktrace'
+    'stacktrace-gps': './lib/stacktrace-gps'
     touch: './lib/angular-touch'
     'underscore.string': './lib/underscore.string'
     uirouter: './lib/angular-ui-router'

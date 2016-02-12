@@ -44,14 +44,14 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
                 # The id is always fetched. In addition, the
                 # project/collection/number secondary key is fetched.
                 # No other fields are fetched.
-                fields = REST.pluck(['project', 'collection', 'number'])
+                fields = REST.map(['project', 'collection', 'number'])
                 # The HTML query parameter.
                 param = _.extend(_.clone(cond), fields)
                 # Delegate to the resource.
                 Subject.query(param).$promise
               collections: ($state, subjects) ->
                 # The sorted collection names, with duplicates removed.
-                _.chain(subjects).pluck('collection').uniq().value().sort()
+                _.chain(subjects).map('collection').uniq().value().sort()
             views:
               'main@':
                 templateUrl: '/partials/subject-list.html'
@@ -68,7 +68,7 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
                 # The id is always fetched. In addition, the
                 # project/collection/number secondary key is fetched.
                 # No other fields are fetched.
-                fields = REST.pluck(['project', 'collection', 'number'])
+                fields = REST.map(['project', 'collection', 'number'])
                 # The HTML query parameter.
                 param = _.extend(_.clone(cond), fields)
                 # Delegate to the resource.
@@ -124,8 +124,9 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
               session: (subject, $stateParams, Router) ->
                 number = parseInt($stateParams.session)
                 if number >= subject.sessions.length
-                  throw ReferenceError.new("Subject #{ subject.number } does" +
-                                           " not have a session #{ number }")
+                  throw new ReferenceError.new("Subject #{ subject.number }" +
+                                           " does not have a session" +
+                                           " #{ number }")
                 # Grab the subject session embedded object.
                 session = subject.sessions[number - 1]
                 # If the session has a scans array, then the detail was already
@@ -135,9 +136,9 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
                 else
                   # The session must have a detail foreign key.
                   if not session.detail?
-                    throw ReferenceError.new("Subject #{ subject.number }" +
-                                             " Session #{ session.number } does" +
-                                             " not have detail")
+                    throw new ReferenceError.new("Subject #{ subject.number }" +
+                                             " Session #{ session.number }" +
+                                             " does not have detail")
                   # Fetch the session detail.
                   Router.getSessionDetail(session)
             views:
@@ -202,10 +203,10 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
           search = $location.search()
           if _s.endsWith(path, '/')
             path = path[0...-1]
-          params = ["#{ k }=#{ v}" for [k, v] in _.pairs(search)]
+          params = ["#{ k }=#{ v}" for [k, v] in _.toPairs(search)]
           paramStr = params.join('&')
           [path, paramStr].join('?')
 
         # HTML5 mode enables the back button to work properly.
-        $locationProvider.html5Mode(true)
+        $locationProvider.html5Mode(enabled: true, requireBase: false)
     ]

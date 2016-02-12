@@ -29,17 +29,22 @@ define [], ->
       "\"#{ field }\":#{ condValue }" 
 
     # Format the field conditions.
-    fieldConds = (formatFieldCondition(pair...) for pair in _.pairs(params))
+    fieldConds = (formatFieldCondition(pair...) for pair in _.toPairs(params))
     cond = fieldConds.join(',')
 
     # Return the {where: condition} object.
     where: "{#{ cond }}"
 
   # Formats the {field: flag} Eve REST query projection parameter.
+  # The fields argument can be a single field name or an array of
+  # field names.
   #
   # @param fields the Javascript camelCase data properties to select
   # @returns the formatted Eve {projection: critierion} 
-  pluck: (fields) ->
+  map: (fields) ->
+    # The input can be a single field name.
+    if _.isString(fields)
+      fields = [fields]
     # Format the field name: flag entries.
     flags = fields.map (field) -> "\"#{ field }\": 1"
     critierion = flags.join(',')

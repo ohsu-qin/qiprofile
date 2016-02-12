@@ -67,11 +67,15 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
                     assocPcl = accum[modeling.protocol]
                     if not assocPcl?
                       assocPcl = accum[modeling.protocol] = {}
-                    pairs = _.pairs(modeling.source)
+                    if not modeling.source?
+                      throw new ReferenceError("Modeling does not have a source" +
+                                               " attribute:" +
+                                               " #{ Object.keys(modeling) }")
+                    pairs = _.toPairs(modeling.source)
                     if pairs.length > 1
-                      throw ReferenceError("Modeling source cannot reference" +
-                                           "more than one source type:" +
-                                           " #{ Object.keys(modeling.source) }")
+                      throw new ReferenceError("Modeling source cannot reference" +
+                                               " more than one source type:" +
+                                               " #{ Object.keys(modeling.source) }")
                     [srcType, srcId] = pairs[0]
                     assocSrc = assocPcl[srcType]
                     if not assocSrc?
@@ -143,6 +147,8 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
               for trt in subject.treatments
                 trt.startDate = DateHelper.asMoment(trt.startDate)
                 trt.endDate = DateHelper.asMoment(trt.endDate)
+                for dosage in trt.dosages
+                  dosage.startDate = DateHelper.asMoment(trt.startDate)
 
             # Makes the changes to the subject session objects
             # described in the extendModeling and extendSession
@@ -223,8 +229,8 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
                       res for res in _.values(@result) when res.overlay?
                     )
                     sorted = _.sortBy(overlayed, 'key')
-                    _.pluck(sorted, 'overlay')
-                
+                    _.map(sorted, 'overlay')
+              
               # Fixes the session acquisition date and adds the following
               # session properties:
               # * number - the one-based session number in acquisition order
@@ -303,7 +309,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
               Subject.find(id: id).$promise
             else
               criteria = _.pick(condition, SUBJECT_SECONDARY_KEY_FIELDS)
-              if not _.all(_.values(criteria))
+              if not _.every(_.values(criteria))
                 throw new ValueError("The subject search condition is" +
                                      " missing both an id value and a" +
                                      " complete secondary key:" +
@@ -312,11 +318,11 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
               Subject.query(select).$promise.then (subjects) ->
                 if not subjects.length
                   throw new ReferenceError("Subject was not found:" +
-                                           " { _.pairs(template) }")
+                                           " { _.toPairs(template) }")
                 else if subjects.length > 1
                   throw new ReferenceError("Subject query on the secondary" +
                                            " key returned more than one" +
-                                           " subject: #{ _.pairs(template) }")
+                                           " subject: #{ _.toPairs(template) }")
                 # The unique subject that matches the query condition.
                 subjects[0]
           
@@ -366,7 +372,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
             else if container._cls is 'Registration'
               volume.registration = container
             else
-              throw TypeError("The image container type is not recognized")
+              throw new TypeError("The image container type is not recognized")
             # The container alias.
             Object.defineProperty volume, 'container',
               get: ->

@@ -5,7 +5,7 @@ define ['ngmocks', 'image'], (ng) ->
       # The mock image file content.
       image:
         data: new Uint8Array(1)
-      # The mock volume. The volume filename comes from the database.
+      # The mock volume. The volume name comes from the database.
       # The router getSessionDetail function adds the volume number
       # and parent container reference properties. This is simulated
       # in the mock object.
@@ -16,7 +16,7 @@ define ['ngmocks', 'image'], (ng) ->
           # parent session reference property.
           session:
             number: 1
-        filename: 'path/to/volume001.nii.gz'
+        name: 'path/to/volume001.nii.gz'
 
     # The mock Angular $http service provider.
     $httpBackend = null
@@ -33,7 +33,7 @@ define ['ngmocks', 'image'], (ng) ->
         Image = _Image_
         $httpBackend = _$httpBackend_
         # The mock file URL.
-        url = '/static/' + mock.volume.filename
+        url = '/static/' + mock.volume.name
         # The mock http call.
         $httpBackend.whenGET(url).respond(mock.image.data)
         # The router getSessionDetail function creates the image object

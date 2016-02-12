@@ -6,11 +6,11 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
                          'qiprofile.tnm', 'qiprofile.image']
 
     filters.filter 'capitalize', ->
-      (s) -> _s.capitalize(s) if s?
+      (s) -> if s? then _s.capitalize(s) else s
 
 
     filters.filter 'underscore', ->
-      (s) -> _s.underscored(s) if s?
+      (s) -> if s? then _s.underscored(s) else s
 
 
     filters.filter 'romanize', ['StringHelper', (StringHelper) ->
@@ -18,12 +18,17 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
       # @returns a string with the leading digit sequence converted
       #    to a roman numeral
       (value) ->
-        value.toString().replace(/^\d+/, roman.romanize) if value?
+        if value? then value.toString().replace(/^\d+/, roman.romanize) else value
     ]
 
 
     filters.filter 'moment', ->
-      (s) -> moment(s).format('MM/DD/YYYY') if s?
+      (date) ->
+        # Preferably, every REST date string is already converted
+        # to a moment in the router, but convert a string here just
+        # in case.
+        date = DateHelper.asMoment(date) if _.isString(date)
+        if date? then date.format('MM/DD/YYYY') else date
 
 
     filters.filter 'notSpecified', ->
@@ -52,7 +57,7 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
 
 
     filters.filter 'percent', ->
-      (value) -> value * 100 if value?
+      (value) -> if value? then value * 100 else value
 
     filters.filter 'imageContainerTitle', ->
       # If the image container name ends with _reg, then it is a registation.

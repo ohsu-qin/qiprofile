@@ -135,7 +135,7 @@ define ['ngmocks', 'tnm', 'helpers'], ->
                     necrosis_score: nc
                 expected = expectedSummaryGrade(tnm.grade)
                 actual = TNM.summaryGrade(tnm)
-                expect(actual, "The summary grade" +
+                expect(actual, "The summary grade for" +
                                " #{ ObjectHelper.prettyPrint(tnm.grade) }" +
                                " is incorrect")
                   .to.equal(expected)

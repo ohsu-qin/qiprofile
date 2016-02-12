@@ -11,6 +11,11 @@ logger = require 'express-bunyan-logger'
 forever = require 'forever-monitor'
 authenticate = require 'authenticate'
 spawn = require './spawn'
+favicon = require 'serve-favicon'
+bodyParser = require 'body-parser'
+serveStatic = require 'serve-static'
+methodOverride = require 'method-override'
+errorHandler = require 'errorhandler'
 
 # The port assignments.
 PORT = 3000
@@ -65,12 +70,12 @@ logConfig =
   ]
 
 # Enable the middleware.
-server.use express.favicon()
-server.use express.json()
-server.use express.urlencoded()
-server.use express.methodOverride()
+server.use favicon(root + '/media/favicon.ico')
+server.use bodyParser.json()
+server.use bodyParser.urlencoded(extended: true)
+server.use methodOverride()
 server.use logger(logConfig)
-server.use express.static(root)
+server.use serveStatic(root)
 server.use authenticate.middleware(
   encrypt_key: 'Pa2#a'
   validate_key: 'Fir@n2e'
@@ -93,18 +98,18 @@ server.use '/api', api(restUrl)
 # Serve the static files from root.
 server.get '/static/*', (req, res) ->
   path = root + req.path.replace('/static', '')
-  res.sendfile path
+  res.sendFile path
 
 # Serve the partial HTML files.
 server.get '/partials/*', (req, res) ->
-  res.sendfile "#{root}/#{req.path}.html"
+  res.sendFile "#{root}/#{req.path}.html"
 
 # Since qiprofile is an Angular Single-Page Application,
 # serve index for all quip routes. The qiprofile
 # application then resolves the URL on the client
 # and requests the partial.
 server.get '/quip*', (req, res) ->
-  res.sendfile "#{root}/index.html"
+  res.sendFile "#{root}/index.html"
 
 # Kludge to work around repeat requests. See the error.coffee FIXME.
 lastErrorMsg = null
@@ -121,7 +126,7 @@ server.post '/error', (req, res) ->
 
 # Development error handling.
 if env is 'development'
-  server.use express.errorHandler()
+  server.use errorHandler()
   server.set 'pretty', true
 
 # The test port.
@@ -131,7 +136,7 @@ if env is 'test'
 # Start MongoDB, if necessary...
 spawn 'mongod', MONGODB_PORT, ->
   # ...then the REST app...
-  restMode = if env is 'test' then 'development' else env
+  restMode = env is 'test' ? 'development' : env
   cmd = if restMode? then "qirest --#{ restMode }" else 'qirest'
   
   spawn cmd, EVE_PORT, ->

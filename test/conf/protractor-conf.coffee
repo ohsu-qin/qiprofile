@@ -14,7 +14,7 @@ exports.config =
   # The coding standard that all expectations include a string
   # failure message facilitates tracing the error without resorting
   # to a compile. 
-  plugins: ['protractor-coffee-preprocessor']  
+  plugins: [package: 'protractor-coffee-preprocessor']  
 
   # If the selenium address is not specified, then protractor
   # issues the following error message:

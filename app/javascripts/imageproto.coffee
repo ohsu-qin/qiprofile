@@ -4,7 +4,7 @@ define ['angular', 'cornerstone', 'exampleImageIdLoader', 'slider'], (ng) ->
   imageproto.factory 'ImageProto', ->
 
     # Create an inversion LUT.
-  	modalityLUT = 
+  	modalityLUT =
       id: '1'
       firstValueMapped: 0
       numBitsPerEntry: 8
@@ -14,31 +14,35 @@ define ['angular', 'cornerstone', 'exampleImageIdLoader', 'slider'], (ng) ->
       modalityLUT.lut[i] = 255 - i
       i++
 
-    # Displays images in the DICOM image and/or overlay viewports.
+    # Enable the Cornerstone viewports.
+    dicomImage = cornerstone.enable(document.getElementById('qi-dicom-image'))
+    overlay = cornerstone.enable(document.getElementById('qi-overlay'))
+
+    # Loads and displays an image in a viewport. The binary data contained in
+    #   exampleImageIdLoader.js are referenced by the imageId.
     #
-    # @param image the image and overlay ID object
-    # @param updateDicom the update DICOM image flag (Boolean)
-    # @param ovrIndex the overlay index
-    updateViewports: (image, updateDicom, ovrIndex) ->
-      # Loads the images with Cornerstone.
-      #
-      # @param imageId the image ID
-      # @param imageElem the enabled viewport
-      loadAndDisplayImage = (imageId, imageElem) ->
-        cornerstone.loadAndCacheImage(imageId).then (img) ->
-          cornerstone.displayImage imageElem, img
+    # @param imageId the image ID
+    # @param imageElem the enabled viewport
+    loadAndDisplayImage = (imageId, imageElem) ->
+      cornerstone.loadAndCacheImage(imageId).then (img) ->
+        cornerstone.displayImage imageElem, img
 
-      # Update the DICOM image viewport if the flag set to true.
-      if updateDicom
-        # TO DO - "Angularize" the getElementById.
-        dicomImage = cornerstone.enable(document.getElementById('qi-dicom-image'))
-        loadAndDisplayImage(image.dicomImageId, dicomImage)
+    # Updates the DICOM image.
+    #
+    # @param imageId the image ID
+    updateDicomImage: (imageId) ->
+      loadAndDisplayImage(imageId, dicomImage)
 
-      # Update the overlay image viewport if there is one.
-      if ovrIndex?
-        overlay = cornerstone.enable(document.getElementById('qi-overlay'))
-        loadAndDisplayImage(image.overlayIds[ovrIndex], overlay)
-        # Apply the LUT.
-        viewport = cornerstone.getViewport(overlay)
-        viewport.modalityLUT = modalityLUT
-        cornerstone.setViewport overlay, viewport
+    # Updates the overlay image.
+    #
+    # @param overlayIds the overlay IDs
+    # @param ovrIndex the overlay index value
+    updateOverlay: (overlayIds, ovrIndex) ->
+      # Parse and disaggregate the composite index.
+      #   Note: See the explanation in the Image Detail controller.
+      index = ovrIndex.split('.').map(Number)[1]
+      loadAndDisplayImage(overlayIds[index], overlay)
+      # Apply the LUT.
+      viewport = cornerstone.getViewport(overlay)
+      viewport.modalityLUT = modalityLUT
+      cornerstone.setViewport overlay, viewport

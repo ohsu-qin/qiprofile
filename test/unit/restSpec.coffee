@@ -12,11 +12,11 @@ define ['rest'], (REST) ->
         actual = REST.where(input)
         expect(actual, "The numeric condition is incorrect").to.deep.equal(expected)
 
-    describe 'pluck', ->
+    describe 'map', ->
       it 'should project the fields', ->
         input = ['a', 'b']
         expected = projection: '{"a": 1,"b": 1}'
-        actual = REST.pluck(input)
+        actual = REST.map(input)
         expect(actual, "The string condition is incorrect").to.deep.equal(expected)
 
     describe 'omit', ->

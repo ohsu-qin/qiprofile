@@ -30,7 +30,7 @@ mixin modeling-table(properties, headings)
     tbody
       tr(ng-repeat="modelingResult in selModeling.results")
         // The visit date.
-        td.qi-date {{ session.date | moment }}
+        td.qi-date {{ modelingResult.modeling.session.date | moment }}
         // The modeling parameter property columns.
         for prop in properties
           // The average property value for the current modeling result.

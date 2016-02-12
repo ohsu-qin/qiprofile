@@ -6,7 +6,7 @@ define ['angular', 'stacktrace'], (ng, stacktrace) ->
   # http://stackoverflow.com/a/22218280/674326.
   window.onerror = (errorMsg, url, lineNumber, columnNumber, errorObject) ->
     # Check the errorObject as IE and FF don't pass it through (yet).
-    if (errorObject && errorObject != undefined)
+    if errorObject?
       errMsg = errorObject.message
     else
       errMsg = errorMsg
@@ -31,7 +31,14 @@ define ['angular', 'stacktrace'], (ng, stacktrace) ->
         # Send the error to the server.
         try
           message = "#{ exception }"
-          stackTrace = stacktrace(e: exception)
+          # FIXME - stacktrace.fromError returns an empty string in
+          # E2E Session Detail testing when the download.isDisplayed
+          # function is not found, with the following message:
+          #   Client error: TypeError: download.isDisplayed is not a function.
+          # Don't know if that is always the case. Induce an
+          # error by replacing download.isDisplayed with download.fooBar
+          # and isolate the problem.
+          stackTrace = stacktrace.fromError(exception)
           # The object to send.
           payload =
             url: $window.location.href

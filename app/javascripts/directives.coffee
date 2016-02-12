@@ -50,7 +50,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
           subject: '='
         link: (scope, element, attrs) ->
           scope.$watch 'subject', (subject) ->
-            if _.any(subject.sessions)
+            if _.some(subject.sessions)
               scope.config = VisitDateline.configureChart(subject)
               # This function is called by D3 after the chart DOM is built.
               #

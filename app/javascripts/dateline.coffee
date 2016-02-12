@@ -216,7 +216,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
       # The x axis element.
       xAxis = svg.select('.nv-x')
       # The session hyperlink vertical offset.
-      if _.any(subject.treatments) or _.any(subject.clinicalEncounters)
+      if _.some(subject.treatments) or _.some(subject.clinicalEncounters)
         dy = TREATMENT_BAR_HEIGHT
       else
         dy = 0

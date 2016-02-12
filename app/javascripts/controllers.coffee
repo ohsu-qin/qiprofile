@@ -604,38 +604,41 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast', 'imageproto'],
 
         # Scope variables for the Cornerstone prototype.
         $scope.imageProto = ImageProto
+
         # The DICOM image and overlay image IDs. Data are provied in
         #   exampleImageIdLoader. The loader was modified to include two new
-        #   images (3 and 4) which are duplicates of images 1 and 2 and serve
+        #   images - 3 and 4 - which are duplicates of images 1 and 2 and serve
         #   as the overlays in the prototype.
         $scope.imageIds = [
-          'example://1'
-          'example://2'
+          {
+            dicomImageId: 'example://1'
+            overlayIds: ['example://3']
+          }
+          {
+            dicomImageId: 'example://2'
+            overlayIds: ['example://4']
+          }
         ]
-        $scope.overlayIds = [
-          'example://3'
-          'example://4'
-        ]
+
         # The initial saggital slice. 
         $scope.saggitalView =
           slice: 0
+
         # The overlay opacity slider setting and CSS styles.
-        # Note: z-index is used to move the overlay viewport in front of or
-        #   behind the DICOM image depending on whether a user has elected to
-        #   display one. ng-show can't be used because the overlay image will
-        #   never appear in a viewport once its div is hidden that way (i.e.,
-        #   a 'display:none' style has been appplied to it).
         $scope.overlay =
           setting: 1
           style:
             "opacity": 1
             "z-index": -1
+
         # Watches for a change in the saggital slice control setting. Updates
         #   the image and overlay.
         $scope.$watch 'saggitalView.slice', (index) ->
-          $scope.imageProto.updateTheImage($scope.imageIds[index])
-          # Update the overlay viewport only if an overlay has been selected.
-          $scope.imageProto.updateTheOverlay($scope.overlayIds[index]) if $scope.overlayIndex
+          if $scope.overlayIndex?
+            # Parse and disaggregate the composite overlay index. See the 
+            #   explanation below.
+            [mdlIndex, ovrIndex] = $scope.overlayIndex.split('.').map(Number)
+          $scope.imageProto.updateViewports($scope.imageIds[index], true, ovrIndex)
 
         # The overlayIndex scope variable is the overlay radio input
         # selection value in the format *modeling index*.*overlay index*,
@@ -663,12 +666,17 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast', 'imageproto'],
             overlay = modeling.overlays[ovrIndex]
             # Delegate to the image object.
             #$scope.image.selectOverlay(overlay)
+
             # Move the overlay viewport to the front and update it -
-            #   Cornerstone prototype.
+            #   Cornerstone prototype. Set the update DICOM flag to false as
+            #   there is no need to update it.
             $scope.overlay.style['z-index'] = 1
-            $scope.imageProto.updateTheOverlay($scope.overlayIds[$scope.saggitalView.slice])
+            slice = $scope.saggitalView.slice
+            $scope.imageProto.updateViewports($scope.imageIds[slice], false, ovrIndex)
+
           else
             #$scope.image.deselectOverlay()
+
             # Move the overlay viewport to the back - Cornerstone prototype.
             #
             # TO DO - Is there a way to flush the image from the viewport when

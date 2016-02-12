@@ -100,7 +100,11 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
       (ImageProto, $compile) ->
         restrict: 'A'
         link: (scope, element) ->
-          ImageProto.updateTheImage('example://1')
+          initImage = {
+            dicomImageId: 'example://1'
+            overlayIds: ['example://3']
+          }
+          ImageProto.updateViewports(initImage, true)
           element.removeAttr 'qi-image-proto'
           $compile(element)(scope)
     ]

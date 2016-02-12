@@ -23,7 +23,7 @@ module.exports = (host='localhost', port=5000) ->
       .query(req.query)
       .accept('json')
       .send(req.body)
-      .end (restRes) ->
+      .end (err, restRes) ->
         if restRes.ok
           res.json restRes.body
         else

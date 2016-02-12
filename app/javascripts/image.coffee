@@ -1,4 +1,9 @@
-define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng, _, _s) ->
+# TODO - dynamically load XTK. See, e.g.,
+# http://www.bennadel.com/blog/2554-loading-angularjs-components-with-requirejs-after-application-bootstrap.htm
+# and
+# http://stackoverflow.com/questions/18591966/inject-module-dynamically-only-if-required
+# 
+define ['angular', 'lodash', 'underscore.string', 'file', 'slider', 'xtk'], (ng, _, _s) ->
   image = ng.module 'qiprofile.image', ['qiprofile.file', 'qiprofile.modeling', 'vr.directives.slider']
 
   image.factory 'Image', ['$rootScope', '$q', 'File', 'Modeling', ($rootScope, $q, File, Modeling) ->
@@ -55,12 +60,12 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
         @state = Image.STATES.LOADING
         # The volume to render.
         @xtkVolume = new X.volume()
-        @xtkVolume.file = @volume.filename
+        @xtkVolume.file = @volume.name
 
         # Read the file into an ArrayBuffer. The CoffeeScript fat
         # arrow (=>) binds the this variable to the image object
         # rather than the $http request.
-        File.readBinary(@volume.filename).then (data) =>
+        File.readBinary(@volume.name).then (data) =>
           # Set the data property to the scan file content.
           @xtkVolume.filedata = data
           # Set the state to loaded.
@@ -131,7 +136,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
       # * Set the volume label map properties.
       # * Display the overlay.
       #
-      # @param labelMap the selected label map {filename, colorTable}
+      # @param labelMap the selected label map {name, colorTable}
       #   object
       selectOverlay: (labelMap) ->
         # Note: XTK labelmaps are treacherous territory; proceed with caution.
@@ -177,26 +182,26 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
         xtkLabelMapFile = @xtkVolume._labelmap.file if @xtkVolume._labelmap?
         # If the label map was not changed from the last value, then we only
         # need to set the visible flag.
-        if xtkLabelMapFile is labelMap.filename
+        if xtkLabelMapFile is labelMap.name
           @xtkVolume.labelmap.visible = true
           return
         
         # The label map must have a color table.
         if not labelMap.colorTable?
           throw new ValueError("The label map is missing a color table:" +
-                               " #{ labelMap.filename } ")
+                               " #{ labelMap.name } ")
 
         # Set the XTK volume labelmap visible flag to false.
         # See the function Note comment above.
         @xtkVolume.labelmap.visible = false
         # Set the volume label map file name property.
-        @xtkVolume.labelmap.file = labelMap.filename
+        @xtkVolume.labelmap.file = labelMap.name
         # Set the volume color table file name property.
         @xtkVolume.labelmap.colortable.file = labelMap.colorTable
 
 
         # Retrieve the overlay layer map and color table.
-        loadLabelMap = File.readBinary(labelMap.filename).then (data) ->
+        loadLabelMap = File.readBinary(labelMap.name).then (data) ->
           # Set the volume label map data property.
           @xtkVolume.labelmap.filedata = data
         loadColorTable = File.readBinary(labelMap.colorTable).then (data) ->

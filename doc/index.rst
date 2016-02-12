@@ -28,9 +28,11 @@ Feature List
 Installation
 ************
 
-1. Download npm_.
+1. Install a REST_ server, if necessary.
 
-2. Run the following in a console from the ``qiprofile`` directory
+2. Download npm_.
+
+3. Run the following in a console from the ``qiprofile`` directory
    (omit the ``--production`` flag for a development installation)::
 
        npm install --production

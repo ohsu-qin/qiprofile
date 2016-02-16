@@ -136,7 +136,7 @@ if env is 'test'
 # Start MongoDB, if necessary...
 spawn 'mongod', MONGODB_PORT, ->
   # ...then the REST app...
-  restMode = env is 'test' ? 'development' : env
+  restMode = if env is 'test' then 'development' else env
   cmd = if restMode? then "qirest --#{ restMode }" else 'qirest'
   
   spawn cmd, EVE_PORT, ->

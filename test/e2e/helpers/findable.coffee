@@ -1,5 +1,7 @@
 _ = require 'lodash'
 
+require './object'
+
 # The WebElement extension for finding subelts.
 class Findable
   # Finds the elt with the given search selection chain.
@@ -121,7 +123,6 @@ class Findable
     @find_(selectors...).then (table) ->
       # Add the Table methods to the elt.
       if table? then addTableMixin(table) else table
-      
 
   # Finds the table WebElements for the given Page.findAll()
   # selector. The return value is an array of table promises.
@@ -208,14 +209,14 @@ class Findable
 #  _ =  require 'lodash'
 #  element(By.id('t01')).then (table) ->
 #    _.assign(table, Tablelttype)
-#    expect(table.header().length, 'The header count is incorrect')
+#    expect(table.header.length, 'The header count is incorrect')
 #      .to.equal(1)
-#    expect(table.header()[1],
+#    expect(table.header[1],
 #           'The second column heading is incorrect')
 #      .to.equal('Gender')
-#    expect(table.body().length, 'The row count is incorrect')
+#    expect(table.body.length, 'The row count is incorrect')
 #      .to.equal(1)
-#    expect(table.body()[0][1],
+#    expect(table.body[0][1],
 #           'The second column of the first row is incorrect')
 #      .to.equal('Male')
 class Table extends Findable
@@ -229,18 +230,25 @@ class Table extends Findable
   # @returns this table WebElement
   addBindings: (bindings) ->
     for field, binding of bindings
-      this[field] = text(@find(By.binding(binding)))
+      locator = By.binding(binding)
+      this[field] = @find(locator).then (elt) ->
+        if elt? then text(elt) else elt
     this
 
   # Note: it would be preferable to define body and header as
   # properties consistent with Page, but usage of such a property
-  # results in the following error:
+  # results in several cryptic errors, e.g.:
   #   TypeError: this.find is not a function
+  # and:
+  #   TypeError: current.element is not a function
   # Many variations on the arcane and ridiculous Javascript
-  # class as object as function farrago have not resolved this
-  # anomaly.
+  # prototype/property funhouse have not resolved this anomaly.
+  
+  # @returns a promise which resolves to the [[cell, ...], ...]
+  #   row x column array, or to null if there is no tbody tag
   body: ->
-    @find(By.tagName('tbody')).then(mapRows)
+    @find(By.tagName('tbody')).then (elt) ->
+      if elt? then mapRows(elt) else elt
   
   header: ->
     @findAll(By.tagName('th')).then (headings) ->
@@ -252,18 +260,17 @@ class Table extends Findable
 
 mapRows = (body) ->
   body.findAll(By.tagName('tr')).then (rows) ->
-    protractor.promise.all(rows.map(mapColumns))
+    mapped = rows.map(mapColumns)
+    protractor.promise.all(mapped)
 
 mapColumns = (row) ->
-  row.findAll(By.tagName('td')).then (cols) ->
-    protractor.promise.all(cols.map(text))
+  row.findAll(By.tagName('td')).then (cells) ->
+    mapped = cells.map(text)
+    protractor.promise.all(mapped)
 
-text = (element) ->
-  if element?
-    element.isDisplayed().then (shown) ->
-      element.getText() if shown
-  else
-    element
+text = (elt) ->
+  elt.isDisplayed().then (shown) ->
+    elt.getText() if shown
 
 #
 # Findable utility functions.
@@ -297,7 +304,9 @@ locatorFor = (selector) ->
       By.id(selector[1..-1])
     else
       By.css(selector)
-  else
+  else if selector?
     selector
+  else
+    throw new Error("The selector is not defined")
 
 module.exports = Findable

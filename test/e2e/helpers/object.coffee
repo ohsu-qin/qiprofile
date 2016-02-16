@@ -33,10 +33,10 @@ Function::property = (definition) ->
                     ' property definition')
   name = Object.keys(definition)[0]
   descriptor = definition[name]
-  if 'get' not in descriptor
+  if 'get' not of descriptor
     descriptor = get: descriptor
   # The property is enumerable by default.
-  if 'enumerable' not in descriptor
+  if 'enumerable' not of descriptor
     descriptor.enumerable = true
   # Make the new property.
   Object.defineProperty @prototype, name, descriptor

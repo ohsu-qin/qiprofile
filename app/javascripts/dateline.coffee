@@ -4,7 +4,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
   dateline.factory 'VisitDateline', ['ObjectHelper', 'Chart', (ObjectHelper, Chart) ->
     # A helper function to calculate the effective treatment dates.
     # This function returns a [start, end] array, where:
-    # * start is the moment start date integer 
+    # * start is the moment start date integer
     # * end is the moment end date integer
     # The default end date is today.
     #
@@ -216,7 +216,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
       # The x axis element.
       xAxis = svg.select('.nv-x')
       # The session hyperlink vertical offset.
-      if _.any(subject.treatments) or _.any(subject.clinicalEncounters)
+      if _.some(subject.treatments) or _.some(subject.clinicalEncounters)
         dy = TREATMENT_BAR_HEIGHT
       else
         dy = 0

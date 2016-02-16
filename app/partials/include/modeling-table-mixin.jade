@@ -30,7 +30,7 @@ mixin modeling-table(properties, headings)
     tbody
       tr(ng-repeat="modelingResult in selModeling.results")
         // The visit date.
-        td.qi-date {{ session.date | moment }}
+        td.qi-date {{ modelingResult.modeling.session.date | moment }}
         // The modeling parameter property columns.
         for prop in properties
           // The average property value for the current modeling result.
@@ -39,7 +39,7 @@ mixin modeling-table(properties, headings)
           - var average = '{{ modelingResult.' + avgProp + ' | number:4 }}'
           td.qi-number= average
           // The first filter takes the difference between row values.
-          - var diff = "selModeling.results | relativeDifference:$index:'" + avgProp + "'" 
+          - var diff = "selModeling.results | relativeDifference:$index:'" + avgProp + "'"
           // The percent change without decimals.
           - var pctChange = '{{ ' + diff + ' | percent | number:0 }}'
           td.qi-pct= pctChange

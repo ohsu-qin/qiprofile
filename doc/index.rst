@@ -28,9 +28,11 @@ Feature List
 Installation
 ************
 
-1. Download npm_.
+1. Install a REST_ server, if necessary.
 
-2. Run the following in a console from the ``qiprofile`` directory
+2. Download npm_.
+
+3. Run the following in a console from the ``qiprofile`` directory
    (omit the ``--production`` flag for a development installation)::
 
        npm install --production
@@ -45,7 +47,7 @@ Usage
 1. Populate the qiprofile database. A test database is available
    in the REST_ project, as described in the `REST Development`_
    section. The production database is populated by the qipipe_
-   pipeline. 
+   pipeline.
 
 2. Start the REST server, as described in the `REST Usage`_ section.
 

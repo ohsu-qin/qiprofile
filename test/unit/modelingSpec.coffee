@@ -10,7 +10,7 @@ define ['ngmocks', 'moment', 'k-trans', 'v-e', 'tau-i', 'modeling'],
         {
           modeling:
             session:
-              date: moment('April 1, 2014').valueOf()
+              date: moment('Apr 1, 2014', 'MMM DD, YYYY').valueOf()
           fxlKTrans:
             average: 1.4
           fxrKTrans:
@@ -23,7 +23,7 @@ define ['ngmocks', 'moment', 'k-trans', 'v-e', 'tau-i', 'modeling'],
         {
           modeling:
             session:
-              date: moment('May 11, 2014').valueOf()
+              date: moment('May 11, 2014', 'MMM DD, YYYY').valueOf()
           fxlKTrans:
             average: 1.3
           fxrKTrans:

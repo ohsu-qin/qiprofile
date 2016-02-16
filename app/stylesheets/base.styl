@@ -86,23 +86,29 @@ hr
 // Image Detail page, examine the Overlays table, modal
 // pop-up Modeling Info table and Registration Protocol
 // table all preserve their formatting.
-// 
+//
 // table
 //   border-collapse collapse
-// 
+//
 // table, th, td
 //   border 1px solid Black
-// 
+//
 // th
 //   padding 0.5em
 //   font-size 110%
 //   vertical-align bottom
-// 
+//
 // td
 //   padding 0 0.5em 0 0.5em
-// 
+//
 // ul, ol
 //   margin-bottom 0.6em
+
+// The following style is necessary per
+// https://angular-ui.github.io/bootstrap/
+.nav, .pagination, .carousel, .panel-title a
+  cursor: pointer
+
 
 // Undo Bootstrap changing the color of a small
 // span in the heading.

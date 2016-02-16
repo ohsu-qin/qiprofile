@@ -32,24 +32,24 @@ fast-transition = 0.2s
 //
 // @param duration the transition duration
 fade-transition(duration)
-  -webkit-transition -webkit-transform duration ease-in, opacity duration ease-in 
-  -moz-transition -moz-transform duration ease-in, opacity duration ease-in 
-  -o-transition -o-transform duration ease-in, opacity duration ease-in 
-  transition transform duration ease-in, opacity duration ease-in 
+  -webkit-transition -webkit-transform duration ease-in, opacity duration ease-in
+  -moz-transition -moz-transform duration ease-in, opacity duration ease-in
+  -o-transition -o-transform duration ease-in, opacity duration ease-in
+  transition transform duration ease-in, opacity duration ease-in
 
 // The visible state.
 transition-show()
-  -webkit-transform scaleX(1) 
-  -o-transform scaleX(1) 
-  transform scaleX(1) 
-  opacity 1 
+  -webkit-transform scaleX(1)
+  -o-transform scaleX(1)
+  transform scaleX(1)
+  opacity 1
 
 // The hidden state.
 transition-hide()
-  -webkit-transform scaleX(0.0001) 
-  -o-transform scaleX(0.0001) 
-  transform scaleX(0.0001) 
-  opacity 0 
+  -webkit-transform scaleX(0.0001)
+  -o-transform scaleX(0.0001)
+  transform scaleX(0.0001)
+  opacity 0
 
 // Slide into and out of view.
 .qi-slide
@@ -57,11 +57,11 @@ transition-hide()
     // Start hidden, End shown.
     fade-transition(fast-transition)
     transition-hide()
-    position absolute 
+    position absolute
     &.ng-enter-active
       transition-show()
   &.ng-leave
     fade-transition(fast-transition)
-    position relative 
+    position relative
     &.ng-leave-active
       transition-hide()

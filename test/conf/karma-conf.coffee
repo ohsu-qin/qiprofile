@@ -60,7 +60,7 @@ module.exports = (config) ->
     autoWatch: false
 
     # The browsers to start.
-    # 
+    #
     # Possible values:
     # - Chrome
     # - ChromeCanary

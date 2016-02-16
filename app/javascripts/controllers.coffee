@@ -2,7 +2,8 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
   (ng, _) ->
     ctlrs = ng.module(
       'qiprofile.controllers',
-      ['ngSanitize', 'qiprofile.modeling', 'qiprofile.resources', 'qiprofile.breast']
+      ['ngSanitize', 'ui.bootstrap', 'qiprofile.modeling',
+       'qiprofile.resources', 'qiprofile.breast']
     )
 
     # The local controller helper methods.
@@ -108,11 +109,11 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
 
 
     ctlrs.controller 'ScanProtocolCtrl', [
-      '$scope', '$modal', 'ScanProtocol',
-      ($scope, $modal, ScanProtocol) ->      
+      '$scope', '$uibModal', 'ScanProtocol',
+      ($scope, $uibModal, ScanProtocol) ->
         # Open a modal window to display the scan procedure properties.
         $scope.open = ->
-          $modal.open
+          $uibModal.open
             controller: 'ProtocolModalCtrl'
             templateUrl: '/partials/scan-protocol.html'
             size: 'sm'
@@ -124,11 +125,11 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
 
 
     ctlrs.controller 'RegistrationProtocolCtrl', [
-      '$scope', '$modal', 'RegistrationProtocol',
-      ($scope, $modal, RegistrationProtocol) ->      
+      '$scope', '$uibModal', 'RegistrationProtocol',
+      ($scope, $uibModal, RegistrationProtocol) ->
         # Open a modal window to display the registration properties.
         $scope.open = ->
-          $modal.open
+          $uibModal.open
             controller: 'ProtocolModalCtrl'
             templateUrl: '/partials/registration-protocol.html'
             size: 'sm'
@@ -140,12 +141,12 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
 
 
     ctlrs.controller 'ProtocolModalCtrl', [
-      '$scope', '$modalInstance', 'protocol',
-      ($scope, $modalInstance, protocol) ->
+      '$scope', '$uibModalInstance', 'protocol',
+      ($scope, $uibModalInstance, protocol) ->
         # Place the protocol object in the modal scope.
         $scope.protocol = protocol
         $scope.close = ->
-          $modalInstance.close()
+          $uibModalInstance.close()
     ]
 
 
@@ -192,10 +193,10 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
 
 
     ctlrs.controller 'PkModelingHelpCtrl', [
-      '$scope', '$modal',
-      ($scope, $modal) ->
+      '$scope', '$uibModal',
+      ($scope, $uibModal) ->
         $scope.open = ->
-          $modal.open
+          $uibModal.open
             controller: 'PkModelingHelpModalCtrl'
             templateUrl: '/partials/pk-modeling-help.html'
             size: 'med'
@@ -203,10 +204,10 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
 
 
     ctlrs.controller 'PkModelingHelpModalCtrl', [
-      '$scope', '$modalInstance',
-      ($scope, $modalInstance) ->
+      '$scope', '$uibModalInstance',
+      ($scope, $uibModalInstance) ->
         $scope.close = ->
-          $modalInstance.close()
+          $uibModalInstance.close()
     ]
 
 
@@ -219,11 +220,11 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
 
 
     ctlrs.controller 'ModelingInfoCtrl', [
-      '$scope', '$modal', 'ModelingProtocol',
-      ($scope, $modal, ModelingProtocol) ->
+      '$scope', '$uibModal', 'ModelingProtocol',
+      ($scope, $uibModal, ModelingProtocol) ->
         # Open a modal window to display the modeling input properties.
         $scope.open = ->
-          $modal.open
+          $uibModal.open
             controller: 'ModelingInfoModalCtrl'
             templateUrl: '/partials/modeling-info.html'
             size: 'sm'
@@ -239,20 +240,20 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
 
 
     ctlrs.controller 'ModelingInfoModalCtrl', [
-      '$scope', '$modalInstance', 'modeling', 'protocol',
-      ($scope, $modalInstance, modeling, protocol) ->
+      '$scope', '$uibModalInstance', 'modeling', 'protocol',
+      ($scope, $uibModalInstance, modeling, protocol) ->
         # Since the modal is not contained in the application page, this
         # modal controller scope does not inherit the application page
         # scope. Therefore, the application scope modeling variable is
         # not visible to the modal scope. Hence, it is necessary to
-        # transfer the modeling object as a $modal.open function resolve
+        # transfer the modeling object as a $uibModal.open function resolve
         # property into this controller's injection list.
         # The assignment below then places the modeling object in the
         # modal scope for use in the modal template partial.
         $scope.modeling = modeling
         $scope.protocol = protocol
         $scope.close = ->
-          $modalInstance.close()
+          $uibModalInstance.close()
     ]
 
 
@@ -365,10 +366,10 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
 
 
     ctlrs.controller 'RecurrenceScoreHelpCtrl', [
-      '$scope', '$modal',
-      ($scope, $modal) ->
+      '$scope', '$uibModal',
+      ($scope, $uibModal) ->
         $scope.open = ->
-          $modal.open
+          $uibModal.open
             controller: 'RecurrenceScoreHelpModalCtrl'
             templateUrl: '/partials/recurrence-score-help.html'
             size: 'med'
@@ -376,18 +377,18 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
 
 
     ctlrs.controller 'RecurrenceScoreHelpModalCtrl', [
-      '$scope', '$modalInstance',
-      ($scope, $modalInstance) ->
+      '$scope', '$uibModalInstance',
+      ($scope, $uibModalInstance) ->
         $scope.close = ->
-          $modalInstance.close()
+          $uibModalInstance.close()
     ]
 
 
     ctlrs.controller 'DosageAmountHelpCtrl', [
-      '$scope', '$modal',
-      ($scope, $modal) ->
+      '$scope', '$uibModal',
+      ($scope, $uibModal) ->
         $scope.open = ->
-          $modal.open
+          $uibModal.open
             controller: 'DosageAmountHelpModalCtrl'
             templateUrl: '/partials/dosage-amount-help.html'
             size: 'med'
@@ -395,10 +396,10 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
 
 
     ctlrs.controller 'DosageAmountHelpModalCtrl', [
-      '$scope', '$modalInstance',
-      ($scope, $modalInstance) ->
+      '$scope', '$uibModalInstance',
+      ($scope, $uibModalInstance) ->
         $scope.close = ->
-          $modalInstance.close()
+          $uibModalInstance.close()
     ]
 
 
@@ -408,15 +409,15 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
         # The parent can either be a pathology evaluation or a
         # generic evaluation outcome iterator.
         path = $scope.tumor
-        $scope.tnm = if path then path.tnm else $scope.outcome 
+        $scope.tnm = if path then path.tnm else $scope.outcome
     ]
 
 
     ctlrs.controller 'BreastTNMStageHelpCtrl', [
-      '$scope', '$modal',
-      ($scope, $modal) ->
+      '$scope', '$uibModal',
+      ($scope, $uibModal) ->
         $scope.open = ->
-          $modal.open
+          $uibModal.open
             controller: 'BreastTNMStageHelpModalCtrl'
             templateUrl: '/partials/breast-tnm-stage-help.html'
             size: 'med'
@@ -424,18 +425,18 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
 
 
     ctlrs.controller 'BreastTNMStageHelpModalCtrl', [
-      '$scope', '$modalInstance',
-      ($scope, $modalInstance) ->
+      '$scope', '$uibModalInstance',
+      ($scope, $uibModalInstance) ->
         $scope.close = ->
-          $modalInstance.close()
+          $uibModalInstance.close()
     ]
 
 
     ctlrs.controller 'SarcomaTNMStageHelpCtrl', [
-      '$scope', '$modal',
-      ($scope, $modal) ->
+      '$scope', '$uibModal',
+      ($scope, $uibModal) ->
         $scope.open = ->
-          $modal.open
+          $uibModal.open
             controller: 'SarcomaTNMStageHelpModalCtrl'
             templateUrl: '/partials/sarcoma-tnm-stage-help.html'
             size: 'med'
@@ -443,17 +444,17 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
 
 
     ctlrs.controller 'SarcomaTNMStageHelpModalCtrl', [
-      '$scope', '$modalInstance',
-      ($scope, $modalInstance) ->
+      '$scope', '$uibModalInstance',
+      ($scope, $uibModalInstance) ->
         $scope.close = ->
-          $modalInstance.close()
+          $uibModalInstance.close()
     ]
 
 
     ctlrs.controller 'GradeCtrl', [
       '$scope',
       ($scope) ->
-        $scope.grade = $scope.tnm.grade 
+        $scope.grade = $scope.tnm.grade
     ]
 
 

@@ -7,7 +7,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
     # dashes, e.g.:
     #     StringHelper.dasherize('TNM')
     # returns 'tnm' rather than the underscore.string result '-t-n-m'.
-    # 
+    #
     # @param s the input string
     # @returns the lowercase dashed conversion
     dasherize: (s) ->
@@ -32,7 +32,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
         sdashed
 
   helpers.factory 'ObjectHelper', ->
-    # Define here for reuse below. 
+    # Define here for reuse below.
     _sortValuesByKey = (obj) ->
       if obj?
         # The sorted keys.
@@ -95,7 +95,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
       # Concatenates the given current associative object
       # values sorted by the associative keys to the given
       # accumulator array.
-      # 
+      #
       # @param accumulator the previous result array
       # @param current the current associative object
       # @returns the concatenated results array
@@ -117,7 +117,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
       props = _.unique(_.keys(obj).concat(_.keys(other)))
       pairs = ([obj[prop], other[prop]] for prop in props)
       # Return whether all value pairs are equal.
-      _.all(pairs, (pair) -> pair[0] == pair[1])
+      _.every(pairs, (pair) -> pair[0] == pair[1])
 
     # Aliases the source object properties which are not already
     # defined in the destination object.
@@ -177,7 +177,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
     # @param data the REST JSON data
     # @returns the Javascript object
     fromJson: (data) ->
-      # Aliases the given underscore property. 
+      # Aliases the given underscore property.
       #
       # @param obj the input object to modify
       # @param property the input property to alias
@@ -186,7 +186,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
         alias = property[0] + _s.camelize(property.substring(1))
         # If the camelCase alias is not yet defined, then
         # create the new property.
-        if not obj.hasOwnProperty(alias)
+        if _.isObject(obj) and not obj.hasOwnProperty(alias)
           # Make the camelCase property.
           Object.defineProperty obj, alias,
             enumerable: true
@@ -199,14 +199,14 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
             value: obj[property]
             writable: true
 
-      # Aliases underscore properties with camelCase properties. 
+      # Aliases underscore properties with camelCase properties.
       #
       # @param obj the input object to modify
       # @returns the input object
       camelizeProperties = (obj, visited=[]) ->
         # Add camelCase aliases to underscore properties.
         # Only unvisited plain objects are aliased.
-        if _.isObject(obj) and not (obj in visited)
+        if _.isObject(obj) and obj not in visited
           # Mark the object as visited.
           visited.push(obj)
           for key, val of obj
@@ -238,29 +238,42 @@ define ['angular', 'lodash', 'underscore.string', 'moment'], (ng, _, _s, moment)
 
   helpers.factory 'DateHelper', ['ObjectHelper', (ObjectHelper) ->
     # Converts the input to a moment. The input can be a date string,
-    # e.g. 'September 7, 1986', or the number of milliseconds since
+    # e.g. '07 Sep 1986', or the number of milliseconds since
     # the Unix Epoch (Jan 1 1970 12AM UTC).
+    #
+    # A string input must contain the date in the format
+    # DD MMM YYYY, e.g. 'Tue, 03 Feb 2012 00:00:00 GMT'.
+    # Otherwise, an error is thrown. Note that the time in
+    # the example input is ignored.
     #
     # @param date the date integer or string
     # @returns the parsed moment date, or the input date
     #    if the input date is undefined or null
     asMoment: (date) ->
       if date?
-        moment(date)
+        if _.isString(date)
+          match = /(\d{2}) ([A-Z][a-z]{2}) (\d{4})/.exec(date)
+          if match
+            moment(match[1..3].join(' '), 'DD MMM YYYY')
+          else
+            throw new Error("Input string does not contain a date" +
+                            " formatted as DD MMM YYYY: #{ date }")
+        else
+          moment(date)
       else
         date
 
-    # Anonymizes the given date by changing the month and
-    # the day of the month to 7, i.e. July 7.
+    # Anonymizes the given date by changing the month and day to
+    # July 7.
     #
     # @param date the date to anonymize
-    # @returns the new anonymized date, or the input date
+    # @returns the new anonymized date, or undefined
     #    if the input date is undefined or null
     anonymize: (date) ->
+      # The quirky Javascript Date month is zero-based but the
+      # day of month ('date' in Javascript Date's equally quirky
+      # naming convention) is one-based.
       if date?
-        # The quirky Javascript Date month is zero-based but the
-        # day of month ('date' in Javascript Date's equally quirky
-        # naming convention) is one-based.
         moment([date.year(), 6, 7])
       else
         date

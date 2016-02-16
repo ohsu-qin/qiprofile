@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+0.14.1 / 2016-02-16
+-------------------
+* Upgrade to AngularJS 1.4.9.
+
 0.13.3 / 2016-02-02
 -------------------
 * Add clinical profile E2E test cases.
@@ -39,7 +43,7 @@ for change details.
 
 0.11.6 / 2015-06-05
 -------------------
-* Catch resource get failure and post alert. 
+* Catch resource get failure and post alert.
 
 0.11.5 / 2015-03-31
 -------------------

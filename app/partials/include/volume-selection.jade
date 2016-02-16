@@ -33,7 +33,7 @@
       .glyphicon.glyphicon-info-sign()
   ul.qi-hor-list.qi-scan-vol-btn-group
     // The artificial intermediate ul-li span element works around the
-    // AngularJS bug described in the leading comment above. 
+    // AngularJS bug described in the leading comment above.
     span(ng-repeat="volume in scan.volumes" tooltip="{{ $index + 1 }}"
          ng-controller='VolumeCtrl')
       li
@@ -51,7 +51,7 @@
       .glyphicon.glyphicon-info-sign()
   ul.qi-hor-list.qi-reg-vol-btn-group
     // The artificial intermediate ul-li span element works around the
-    // AngularJS bug described in the leading comment above. 
+    // AngularJS bug described in the leading comment above.
     span(ng-repeat="volume in registration.volumes" tooltip="{{ $index + 1 }}"
          ng-controller='VolumeCtrl')
       li

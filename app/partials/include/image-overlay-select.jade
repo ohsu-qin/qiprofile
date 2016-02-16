@@ -14,7 +14,7 @@ div(ng-show='overlayModelings.length')
           label.btn.qi-btn.qi-btn-radio(
             ng-repeat="overlay in modeling.overlays | orderBy:'key'"
             ng-model="$parent.$parent.overlayIndex"
-            btn-radio="'{{ $parent.$index }}.{{ $index }}'"
+            uib-btn-radio="'{{ $parent.$index }}.{{ $index }}'"
             uncheckable
           )
             span(ng-bind-html="parameterHeading(overlay.parameterResult.key)")

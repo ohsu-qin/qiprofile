@@ -5,7 +5,7 @@ Unit testing notes
   when run by grunt test:unit::
 
       /Users/loneyf/workspace/qiprofile/node_modules/phantomjs/lib/location.js:1
-      (function (exports, require, module, __filename, __dirname) { 
+      (function (exports, require, module, __filename, __dirname) {
 
   The cause is perhaps a corrupted location.js
   (cf. https://github.com/Medium/phantomjs/issues/279). The line

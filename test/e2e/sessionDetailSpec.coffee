@@ -1,11 +1,12 @@
 expect = require('./helpers/expect')()
 
-Page = require './helpers/page' 
+Page = require './helpers/page'
 
 class SessionDetailPage extends Page
-  # Note: this function should return a promise, but for an unknown
-  # reason the return value is the resolved object instead.
-  #
+  # @returns the line chart promise
+  @property chart: ->
+    @find('//qi-intensity-chart//nvd3-line-chart')
+
   # @param number the volume number
   # @returns the {download: ElementFinder, display: ElementFinder}
   #   associative object, where each ElementFinder resolves
@@ -17,18 +18,21 @@ class SessionDetailPage extends Page
     locator = By.repeater('volume in scan.volumes').row(number - 1)
     # Find the image select button group element, then...
     @find(locator).then (elt) ->
-      if elt
+      if elt?
         # ...make an associative object which references the
         # button ElementFinders.
-        download: elt.element(By.css('.glyphicon-download'))
-        open: elt.element(By.css('.glyphicon-eye-open'))
-        failed: elt.element(By.css('.glyphicon-exclamation-sign'))
+        download: elt.find('.glyphicon-download')
+        open: elt.find('.glyphicon-eye-open')
+        failed: elt.find('.glyphicon-exclamation-sign')
+      else
+        elt
 
   # Loads the image by clicking the given download button.
   #
   # @param button the image download button
-  # @returns a promise that resolves when either the button is hidden
-  #   or roughly one second has expired
+  # @returns a promise that resolves to true if the button
+  #   is eventually hidden on image load or false if roughly
+  #   one second has expired
   loadScanImage: (button) ->
     # Sleep 1/10 of a second and then invoke the async callback
     # (cf. https://github.com/angular/protractor/blob/master/docs/api.md#api-webdriver-webdriver-prototype-executeasyncscript).
@@ -40,26 +44,27 @@ class SessionDetailPage extends Page
     # @param button the scan image download button
     # @param retry the maximum number of times to reiterate
     #   until the image is loaded (default 10)
-    # @returns a promise that resolves when either the button
-    #   is hidden or the retry limit is reached
+    # @returns a promise that resolves to true if the button
+    #   is hidden or false if the retry limit is reached
     waitWhileVisible = (button, retry=10) ->
-      if retry
-        # Wait a while, then check if the button is visible.
-        browser.executeAsyncScript(SLEEP).then ->
-          button.isDisplayed().then (visible) ->
-            if visible
-              # Decrement the retry count and try again.
-              # Note: this recursion is pushed onto the stack,
-              # but no more times than the initial retry count.
+      # Wait a while, then check if the button is visible.
+      browser.executeAsyncScript(SLEEP).then ->
+        button.isDisplayed().then (visible) ->
+          if visible
+            # Decrement the retry count and try again.
+            # Note: this recursion is pushed onto the stack,
+            # but no more times than the initial retry count.
+            if retry
               waitWhileVisible(button, retry - 1)
+            else
+              false
+          else
+            true
+
 
     # Click the button and wait until it is hidden.
     button.click().then ->
       waitWhileVisible(button)
-
-  # @returns the line chart promise
-  chart: ->
-    @find('//qi-intensity-chart//nvd3-line-chart')
 
 
 describe 'E2E Testing Session Detail', ->
@@ -81,21 +86,29 @@ describe 'E2E Testing Session Detail', ->
     expect(page.content, 'The page was not loaded')
       .to.eventually.exist
 
-  it 'should display the billboard', ->
-    expect(page.billboard, 'The billboard is incorrect')
-      .to.eventually.equal('Sarcoma Patient 1 Session 1')
+  # The page header test cases.
+  describe 'Header', ->
+    it 'should display the billboard', ->
+      expect(page.billboard, 'The billboard is incorrect')
+        .to.eventually.equal('Sarcoma Patient 1 Session 1')
 
-  it 'should have a home button', ->
-    pat = /.*\/quip\?project=QIN_Test$/
-    expect(page.home, 'The home URL is incorrect').to.eventually.match(pat)
+    it 'should have a home button', ->
+      expect(page.home, 'The home URL is incorrect')
+        .to.eventually.match(Page.HOME_URL_PAT)
 
-  it 'should have help text', ->
-    expect(page.help, 'The help is missing').to.eventually.exist
+    describe 'Help', ->
+      help = null
+    
+      before ->
+        help = page.help
 
-  it 'should display a contact email link', ->
-    pat = /a href="http:\/\/qiprofile\.idea\.informer\.com"/
-    expect(page.contactInfo, 'The email address is missing')
-      .to.eventually.match(pat)
+      it 'should have help text', ->
+        expect(help, 'The help text is missing')
+          .to.eventually.exist.and.not.be.empty
+
+      it 'should display a {qu,sugg}estion box hyperlink', ->
+        expect(help, 'The {qu,sugg}estion box hyperlink is missing')
+          .to.eventually.include(Page.SUGGESTION_BOX_URL)
 
   describe 'Intensity Chart', ->
     # Note: chart content is not testable. See the subjectDetailSpec note
@@ -106,34 +119,38 @@ describe 'E2E Testing Session Detail', ->
     # The log messages are not informative. However, the error is ignored
     # and tests succeed. The error does not occur for a browser load.
     # TODO - find a way to isolate and correct this problem.
-    # 
+    #
     it 'should display the chart', ->
-      expect(page.chart(), 'The chart is not displayed').to.eventually.exist
+      expect(page.chart, 'The chart is not displayed').to.eventually.exist
 
     it 'should load the image', ->
       # Find the download/display button pair, then...
-      #
-      # Work around the anomaly described in the scanImageButtons function.
-      #page.scanImageButtons(TEST_VOL_NBR).then (btnGroup) ->
-        btnGroup = page.scanImageButtons(TEST_VOL_NBR)
+      page.scanImageButtons(TEST_VOL_NBR).then (btnGroup) ->
         # The download button should be displayed.
-        download = btnGroup.download
-        expect(download.isDisplayed(), 'The download button is initially hidden')
-          .to.eventually.be.true
+        btnGroup.download.then (download) ->
+          expect(download, 'The Download button is missing').to.exist
+          expect(download.isDisplayed(), 'The Download button is initially' +
+                                         ' hidden')
+            .to.eventually.be.true
 
         # The open button should be hidden.
-        open = btnGroup.open
-        expect(open.isDisplayed(), 'The open button is initially displayed')
-          .to.eventually.be.false
-
-        # Click the download button, wait for the image to load, then...
-        page.loadScanImage(download).then ->
-          # The download button should now be hidden.
-          expect(download.isDisplayed(), 'The download button is displayed after download')
+        btnGroup.open.then (open) ->
+          expect(open, 'The Open button is missing').to.exist
+          expect(open.isDisplayed(), 'The Open button is initially displayed')
             .to.eventually.be.false
-          # The open button should be displayed.
-          expect(open.isDisplayed(), 'The open button is hidden after download')
-            .to.eventually.be.true
+
+        # Get the download button, then...
+        btnGroup.download.then (download) ->
+          # Click the download button and wait for the image to load, then...
+          page.loadScanImage(download).then (loaded) ->
+            expect(loaded, 'The Download button is still displayed a second' +
+                           ' after being clicked')
+              .to.be.true
+            # The open button should be displayed.
+            btnGroup.open.then (open) ->
+              expect(open.isDisplayed(), 'The Open button is hidden after' +
+                                         ' download')
+                .to.eventually.be.true
 
     # TODO - Add a test to verify that an alert box is opened when a link for
     #   a missing image is clicked. Currently the opening of an alert box stops

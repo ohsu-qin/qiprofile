@@ -1,8 +1,8 @@
 // The image controls are organized into accordian groups.
 .qi-panel.qi-vol-ctl
-  accordion(close-others='false')
+  uib-accordian(close-others='false')
     div(ng-controller='AccordionGroupCtrl')
-      accordion-group(is-open="isOpen")
+      uib-accordian-group(is-open="isOpen")
         +accordion-heading('Opacity')
         // The opacity controls.
         .row
@@ -16,7 +16,7 @@
         // Note: the label map opacity control definition below works
         // around the following XTK bug:
         // * If the XTK volume labelmap property is accessed, then the
-        //   XTK parser fails with the error: 
+        //   XTK parser fails with the error:
         //     TypeError: Cannot read property '_children' of undefined
         //   XTK creates an incomplete labelmap object on demand in the
         //   labelmap getter. The XTK hasLabelMap variable is then set to
@@ -83,7 +83,7 @@
                                  floor='0' ceiling='1' step='0.1'
                                  precision='1')
     div(ng-controller='AccordionGroupCtrl')
-      accordion-group(is-open="isOpen")
+      uib-accordian-group(is-open="isOpen")
         +accordion-heading('Cross Section')
         // The axis cross section (slice) controls.
         .row
@@ -91,7 +91,7 @@
           .col-md-9
             slider.qi-slider(ng-model="image.xtkVolume.indexX"
                              floor='0' ceiling='319' step='1')
-        .row   
+        .row
           .col-md-3.qi-slider-label Coronal
           .col-md-9
             slider.qi-slider(ng-model="image.xtkVolume.indexY"
@@ -102,7 +102,7 @@
             slider.qi-slider(ng-model="image.xtkVolume.indexZ"
                              floor='0' ceiling='118' step='1')
     div(ng-controller='AccordionGroupCtrl')
-      accordion-group(is-open="isOpen")
+      uib-accordian-group(is-open="isOpen")
         +accordion-heading('Threshold')
         // The thresholding controls.
         .row

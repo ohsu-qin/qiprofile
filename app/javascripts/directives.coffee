@@ -50,7 +50,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
           subject: '='
         link: (scope, element, attrs) ->
           scope.$watch 'subject', (subject) ->
-            if _.any(subject.sessions)
+            if _.some(subject.sessions)
               scope.config = VisitDateline.configureChart(subject)
               # This function is called by D3 after the chart DOM is built.
               #
@@ -78,7 +78,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
           focus: '@qiFocus'
         link: (scope, element) ->
           scope.$watch 'focus', (value) ->
-            if value is 'true' 
+            if value is 'true'
               $timeout ->
                 element[0].focus()
     ]
@@ -100,7 +100,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
       (Intensity, ObjectHelper) ->
         restrict: 'E'
         scope:
-          scan: '=' 
+          scan: '='
         link: (scope, element) ->
           # Wait for a session extended with detail to digest the scan.
           scope.$parent.$watch 'scan', (scan) ->

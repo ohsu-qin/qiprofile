@@ -15,9 +15,12 @@ End-to-end testing notes
   TODO - revisit this after applying npmedge in late 2015.
 
 * A Page can be instantiated in a before (once per suite) or a beforeEach
-  (once per test case). Sometimes the beforeEach page results in an error,
+  (once per test case).
+  
+  Sometimes the beforeEach page results in an error,
   e.g. if volumeSpec were changed from before to beforeEach then the
   volume resource fails to load. In those cases, use a before page.
+  
   Sometimes, the before page results in an error, e.g. if subjectListSpec
   were changed from beforeEach to before then the following error is
   raised:
@@ -41,17 +44,6 @@ End-to-end testing notes
   
   TODO - there must be a better answer!
 
-* Updating mocha from 1.20.1 to 1.21.1 results in the following error::
-
-      Error: timeout of 2000ms exceeded
-
-  protractor ignores the mocha timeout and times out in two seconds instead
-  (cf. https://github.com/angular/protractor/issues/1109). Work-around
-  suggestions have not corrected the problem. mocha is held back to 1.20.x
-  for now.
-
-  TODO - retry updating mocha in late 2015.
-
 * The ``it.only`` qualifier results in the following error::
 
       /Users/loneyf/workspace/qiprofile/node_modules/mocha/lib/interfaces/bdd.js:124
@@ -66,5 +58,13 @@ End-to-end testing notes
 
   The work-around is to confine use of ``only`` to ``describe``.
 
-  TODO - retry ``it.only`` in 2015. 
+  TODO - retry ``it.only`` in 2016.
 
+* An inner before which depends on a DOM element defined in an outer beforeEach
+  results in the following error::
+
+      StaleElementReferenceError: stale element reference: element is not attached to the page document
+  
+  This error is caused by resetting the parent DOM element with each test case,
+  but not refreshing the child DOM element. The resolution is to ensure that
+  the inner and outer contexts are either both beforeEach or both before clauses.

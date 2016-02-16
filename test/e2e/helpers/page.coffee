@@ -4,6 +4,8 @@ expect = require('./expect')()
 
 Findable = require './findable'
 
+require './object'
+
 # Page is the PageObject pattern
 # (https://code.google.com/p/selenium/wiki/PageObjects)
 # base class. If the Page is instantiated with an url argument,
@@ -42,25 +44,25 @@ class Page extends Findable
   all: element.all
 
   # @returns the title text
-  title: ->
+  @property title: ->
     browser.getTitle()
 
   # @returns the billboard text
-  billboard: ->
+  @property billboard: ->
     @text('.qi-billboard', 'h3')
 
   # Find the partial content. The page is loaded if and and only if
   # the return value is not null.
   #
   # @returns the qi-content WebElement holding the partial content
-  content: ->
+  @property content: ->
     @find('.qi-content')
 
   # Navigate to the home page by clicking the home button.
   #
   # @returns the home URL
   # @throws an expectation error if the home button is missing
-  home: ->
+  @property home: ->
     # @returns the Home button
     findHomeButton = =>
       # The home button is the parent of the home icon.
@@ -90,7 +92,7 @@ class Page extends Findable
         btn.click().then -> restore(url)
 
   # @returns the help text
-  help: ->
+  @property help: ->
     # Finds the help button.
     findButton = =>
       @find("[ng-controller='HelpCtrl']")

@@ -4,21 +4,21 @@ Page = require './helpers/page'
 
 class SubjectListPage extends Page
   # Subheading locator.
-  h3Locator = By.tagName('h3')
+  H3_LOCATOR = By.tagName('h3')
 
   # Hyperlink locator.
-  anchorLocator = By.tagName('a')
+  ANCHOR_LOCATOR = By.tagName('a')
 
   # @returns the collection {name, subjects} array promise
   collection_subjects: ->
     element.all(By.repeater('coll in collections')).map (repeat) ->
-      repeat.isElementPresent(h3Locator).then (exists) ->
+      repeat.isElementPresent(H3_LOCATOR).then (exists) ->
         if exists
-          h3 = repeat.element(h3Locator)
+          h3 = repeat.element(H3_LOCATOR)
           coll = h3.getText()
-          repeat.isElementPresent(anchorLocator).then (exists) ->
+          repeat.isElementPresent(ANCHOR_LOCATOR).then (exists) ->
             if exists
-              repeat.all(anchorLocator).then (hyperlinks) ->
+              repeat.all(ANCHOR_LOCATOR).then (hyperlinks) ->
                 sbjs = (hyperlink.getText() for hyperlink in hyperlinks)
                 {name: coll, subjects: sbjs}
             else
@@ -32,25 +32,32 @@ describe 'E2E Testing Subject List', ->
   beforeEach ->
     page = new SubjectListPage '/quip?project=QIN_Test'
 
+  # FIXME - before the tests, Protractor displays the following message:
+  #   Client error: TypeError: Cannot read property 'hasOwnProperty' of null
+  #   See the log at /var/log/qiprofile.log
+  # However, the tests then run successfully.
+  # Find out why this error occurs and why, unlike other errors, it is
+  # ignored.
+
   it 'should load the page', ->
-    expect(page.content(), 'The page was not loaded')
+    expect(page.content, 'The page was not loaded')
       .to.eventually.exist
 
    # The page header test cases.
   describe 'Header', ->
     it 'should display the billboard', ->
-      expect(page.billboard(), 'The billboard is incorrect')
+      expect(page.billboard, 'The billboard is incorrect')
         .to.eventually.equal('Patients')
 
     it 'should have a home button', ->
-      expect(page.home(), 'The home URL is incorrect')
+      expect(page.home, 'The home URL is incorrect')
         .to.eventually.match(Page.HOME_URL_PAT)
 
     describe 'Help', ->
       help = null
     
       before ->
-        help = page.help()
+        help = page.help
 
       it 'should have help text', ->
         expect(help, 'The help text is missing')

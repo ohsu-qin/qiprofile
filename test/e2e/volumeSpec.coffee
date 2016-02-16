@@ -21,24 +21,24 @@ describe 'E2E Testing Volume', ->
     page = new VolumePage '/quip/sarcoma/subject/1/session/1/scan/1/volume/20?project=QIN_Test'
 
   it 'should load the page', ->
-    expect(page.content(), 'The page was not loaded')
+    expect(page.content, 'The page was not loaded')
       .to.eventually.exist
   
   # The page header test cases.
   describe 'Header', ->
     it 'should display the billboard', ->
-      expect(page.billboard(), 'The billboard is incorrect')
+      expect(page.billboard, 'The billboard is incorrect')
         .to.eventually.equal('Sarcoma Patient 1 Session 1 Scan 1 Volume 20')
   
     it 'should have a home button', ->
-      expect(page.home(), 'The home URL is incorrect')
+      expect(page.home, 'The home URL is incorrect')
         .to.eventually.match(Page.HOME_URL_PAT)
   
     describe 'Help', ->
       help = null
     
       before ->
-        help = page.help()
+        help = page.help
 
       it 'should have help text', ->
         expect(help, 'The help text is missing')

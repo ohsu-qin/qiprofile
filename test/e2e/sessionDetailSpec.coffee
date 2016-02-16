@@ -3,6 +3,10 @@ expect = require('./helpers/expect')()
 Page = require './helpers/page'
 
 class SessionDetailPage extends Page
+  # @returns the line chart promise
+  @property chart: ->
+    @find('//qi-intensity-chart//nvd3-line-chart')
+
   # @param number the volume number
   # @returns the {download: ElementFinder, display: ElementFinder}
   #   associative object, where each ElementFinder resolves
@@ -62,10 +66,6 @@ class SessionDetailPage extends Page
     button.click().then ->
       waitWhileVisible(button)
 
-  # @returns the line chart promise
-  chart: ->
-    @find('//qi-intensity-chart//nvd3-line-chart')
-
 
 describe 'E2E Testing Session Detail', ->
   # The Sarcoma001 Session01 volume number for which there is a test
@@ -83,24 +83,24 @@ describe 'E2E Testing Session Detail', ->
     page = new SessionDetailPage '/quip/sarcoma/subject/1/session/1?project=QIN_Test'
 
   it 'should load the page', ->
-    expect(page.content(), 'The page was not loaded')
+    expect(page.content, 'The page was not loaded')
       .to.eventually.exist
 
   # The page header test cases.
   describe 'Header', ->
     it 'should display the billboard', ->
-      expect(page.billboard(), 'The billboard is incorrect')
+      expect(page.billboard, 'The billboard is incorrect')
         .to.eventually.equal('Sarcoma Patient 1 Session 1')
 
     it 'should have a home button', ->
-      expect(page.home(), 'The home URL is incorrect')
+      expect(page.home, 'The home URL is incorrect')
         .to.eventually.match(Page.HOME_URL_PAT)
 
     describe 'Help', ->
       help = null
     
       before ->
-        help = page.help()
+        help = page.help
 
       it 'should have help text', ->
         expect(help, 'The help text is missing')
@@ -121,7 +121,7 @@ describe 'E2E Testing Session Detail', ->
     # TODO - find a way to isolate and correct this problem.
     #
     it 'should display the chart', ->
-      expect(page.chart(), 'The chart is not displayed').to.eventually.exist
+      expect(page.chart, 'The chart is not displayed').to.eventually.exist
 
     it 'should load the image', ->
       # Find the download/display button pair, then...

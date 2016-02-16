@@ -225,3 +225,11 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
         Breast.recurrenceScore(assay)
     ]
 
+
+    # @returns [<Saggital> ][<Coronal> ]<Body Part>
+    filters.filter 'sarcomaTumorLocation', ->
+      # The REST histology fields.
+      fields = ['saggitalLocation', 'coronalLocation', 'bodyPart']
+      (histology) ->
+        words = (histology[prop] for prop in fields when histology[prop])
+        words.join(' ')

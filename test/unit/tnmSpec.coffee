@@ -115,7 +115,7 @@ define ['ngmocks', 'tnm', 'helpers'], ->
         # @returns the expected summary grade
         expectedSummaryGrade = (grade) ->
           cumulativeGrade = grade.differentiation + grade.mitoticCount +
-            grade.necrosis_score
+            grade.necrosisScore
           if cumulativeGrade < 4
             1
           else if cumulativeGrade < 6
@@ -123,10 +123,7 @@ define ['ngmocks', 'tnm', 'helpers'], ->
           else
             3
 
-        # FIXME - the test case below once passed but now fails.
-        # The test is disabled by using xit rather than it.
-        # Change xit to it, fix the problem and remove this comment.
-        xit 'should calculate the summary grade', ->
+        it 'should calculate the summary grade', ->
           for df in [1..3]
             for mc in [1..3]
               for nc in [1..2]
@@ -135,7 +132,7 @@ define ['ngmocks', 'tnm', 'helpers'], ->
                   grade:
                     differentiation: df
                     mitoticCount: mc
-                    necrosis_score: nc
+                    necrosisScore: nc
                 expected = expectedSummaryGrade(tnm.grade)
                 actual = TNM.summaryGrade(tnm)
                 expect(actual, "The summary grade for" +

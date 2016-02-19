@@ -2,7 +2,7 @@
 .qi-panel.qi-vol-ctl
   uib-accordion(close-others='false')
     div(ng-controller='AccordionGroupCtrl')
-      uib-accordian-group(is-open="isOpen")
+      uib-accordion-group(is-open="isOpen")
         +accordion-heading('Time Series')
         // The time series control.
         .row
@@ -10,7 +10,7 @@
             slider.qi-slider(ng-model="timeSeries"
                              floor='1' ceiling='32' step='1')
     div(ng-controller='AccordionGroupCtrl')
-      uib-accordian-group(is-open="isOpen")
+      uib-accordion-group(is-open="isOpen")
         +accordion-heading('Slices')
         // The axis cross section (slice) controls.
         .row
@@ -29,7 +29,7 @@
             slider.qi-slider(ng-model="sliceZ"
                              floor='0' ceiling='118' step='1')
     div(ng-controller='AccordionGroupCtrl')
-      uib-accordian-group(is-open="isOpen")
+      uib-accordion-group(is-open="isOpen")
         +accordion-heading('Opacity')
         // The overlay opacity control.
         // Note: This control has been modified to interact with the
@@ -113,7 +113,7 @@
         //                         precision='1')
         //
             div(ng-controller='AccordionGroupCtrl')
-              uib-accordian-group(is-open="isOpen")
+              uib-accordion-group(is-open="isOpen")
                 +accordion-heading('Cross Section')
                 .row
                   .col-md-3.qi-slider-label Sagittal
@@ -131,7 +131,7 @@
                     slider.qi-slider(ng-model="image.xtkVolume.indexZ"
                                      floor='0' ceiling='118' step='1')
             div(ng-controller='AccordionGroupCtrl')
-              uib-accordian-group(is-open="isOpen")
+              uib-accordion-group(is-open="isOpen")
                 +accordion-heading('Threshold')
                 .row
                   .col-md-3.qi-slider-label Lower

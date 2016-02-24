@@ -82,13 +82,14 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
 
 
     ctlrs.controller 'CollectionDetailCtrl', [
-      '$rootScope', '$scope', 'project', 'subjects', 'collection',
-      ($rootScope, $scope, project, subjects, collection) ->
+      '$rootScope', '$scope', 'project', 'subjects', 'collection', 'charting',
+      ($rootScope, $scope, project, subjects, collection, charting) ->
         # Capture the current project.
         $rootScope.project = project
         # Place the subjects and collections in the scope.
         $scope.subjects = subjects
         $scope.collection = collection
+        $scope.charting = charting
     ]
 
 

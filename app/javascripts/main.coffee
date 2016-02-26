@@ -23,7 +23,7 @@ GOOGLE_LIBS = '//ajax.googleapis.com/ajax/libs'
 # The Angular version.
 # Note: this version number must match the bower.json angularjs
 # version number.
-NG_VERSION = '#1.4.9'
+NG_VERSION = '1.4.9'
 
 # The Angular CDN location.
 NG_LIB = GOOGLE_LIBS + '/angularjs/' + NG_VERSION

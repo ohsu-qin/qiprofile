@@ -92,9 +92,14 @@ define ['angular', 'lodash', 'underscore.string', 'uirouter', 'resources',
             url: ''
             resolve:
               Subject: 'Subject'
-              subjects: (Subject, project, collection) ->
-                # The selection criterion is the project name.
+              collection: ($stateParams) ->
+                _s.capitalize($stateParams.collection)
+              charting: (Subject, project, collection) ->
+                # The selection criterion is the project and collection.
                 condition = {project: project, collection: collection}
+                # The id is always fetched. In addition, the number and encounters
+                # are fetched. No other field is fetched.
+                fields = REST.map(['number', 'encounters'])
                 # Delegate to the resource.
                 Subject.query(condition)
               collection: ($stateParams) ->

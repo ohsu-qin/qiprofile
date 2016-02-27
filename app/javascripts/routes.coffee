@@ -77,44 +77,19 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
             url: '/:collection'
             resolve:
               Subject: 'Subject'
-              subjects: (Subject, project, collection) ->
-                # The selection criterion is the project name.
-                cond = REST.where(project: project, collection: collection)
-                # Delegate to the resource.
-                Subject.query(cond).$promise
               collection: ($stateParams) ->
                 _s.capitalize($stateParams.collection)
-              charting: () ->
-                # x is RCB index
-                # y is deltaKtrans
-                # z is v_e
-                # a is tau_i
-                dat = [
-                  {
-                    subject: 1
-                    visit: 1
-                    x: 2.76
-                    y: -0.098
-                    z: 0.698
-                    a: 0.485
-                  }
-                  {
-                    subject: 2
-                    visit: 1
-                    x: 1.50
-                    y: -0.060
-                    z: 0.659
-                    a: 0.419
-                  }
-                  {
-                    subject: 3
-                    visit: 1
-                    x: 1.90
-                    y: -0.053
-                    z: 0.594
-                    a: 0.481
-                  }
-                ]
+              charting: (Subject, project, collection) ->
+                # The selection criterion is the project name.
+                cond = REST.where(project: project, collection: collection)
+                # The id is always fetched. In addition, the
+                # project/collection/number secondary key is fetched.
+                # No other fields are fetched.
+                fields = REST.map(['number', 'encounters'])
+                # The HTML query parameter.
+                param = _.extend(_.clone(cond), fields)
+                # Delegate to the resource.
+                Subject.query(param).$promise
             views:
               'main@':
                 templateUrl: '/partials/collection-detail.html'

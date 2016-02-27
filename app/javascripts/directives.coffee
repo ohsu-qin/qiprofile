@@ -89,9 +89,9 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
       (Correlation, $compile) ->
         restrict: 'A'
         link: (scope, element) ->
-          scope.$watch 'charting', (charting) ->
-            if charting?
-              Correlation.renderCorrelationCharts(charting)
+          scope.$watch 'config', (config) ->
+            if config?
+              Correlation.renderCharts(config)
               element.removeAttr 'qi-correlation-charts'
               $compile(element)(scope)
     ]

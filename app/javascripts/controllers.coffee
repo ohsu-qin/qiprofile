@@ -1,9 +1,9 @@
-define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
+define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast', 'correlation'],
   (ng, _) ->
     ctlrs = ng.module(
       'qiprofile.controllers',
       ['ngSanitize', 'ui.bootstrap', 'qiprofile.modeling',
-       'qiprofile.resources', 'qiprofile.breast']
+       'qiprofile.resources', 'qiprofile.breast', 'qiprofile.correlation']
     )
 
     # The local controller helper methods.
@@ -82,14 +82,22 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
 
 
     ctlrs.controller 'CollectionDetailCtrl', [
-      '$rootScope', '$scope', 'project', 'subjects', 'collection', 'charting',
-      ($rootScope, $scope, project, subjects, collection, charting) ->
+      '$rootScope', '$scope', 'project', 'subjects', 'collection', 'charting', 'Correlation',
+      ($rootScope, $scope, project, subjects, collection, charting, Correlation) ->
         # Capture the current project.
         $rootScope.project = project
         # Place the subjects and collections in the scope.
         $scope.subjects = subjects
         $scope.collection = collection
-        $scope.charting = charting
+        chartData = Correlation.prepareChartData(charting)
+        # Place the chart configuration in the scope.
+        $scope.config = Correlation.configureCharts(chartData)
+        #
+        # TO DO - Set a watch for user selection of X and Y axes and then
+        #   re-render the charts, e.g.:
+        #   $scope.$watch 'userSelections', (userSelections) ->
+        #     $scope.config = Correlation.configureCharts(chartData, userSelections)
+        #     Correlation.renderCharts($scope.config)
     ]
 
 

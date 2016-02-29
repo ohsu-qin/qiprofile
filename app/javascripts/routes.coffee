@@ -37,6 +37,21 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
           .state 'quip.home',
             url: ''
             resolve:
+              ImagingCollection: 'ImagingCollection'
+              collections: (ImagingCollection, project) ->
+                # The selection criterion is the project name.
+                cond = REST.where(project: project)
+                # Delegate to the resource.
+                ImagingCollection.query(cond).$promise
+            views:
+              'main@':
+                templateUrl: '/partials/collection-list.html'
+                controller:  'CollectionListCtrl'
+
+          # The subject list page.
+          .state 'quip.subjects',
+            url: '/subjects'
+            resolve:
               Subject: 'Subject'
               subjects: (Subject, project) ->
                 # The selection criterion is the project name.
@@ -65,20 +80,14 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
               subjects: (Subject, project, collection) ->
                 # The selection criterion is the project name.
                 cond = REST.where(project: project, collection: collection)
-                # The id is always fetched. In addition, the
-                # project/collection/number secondary key is fetched.
-                # No other fields are fetched.
-                fields = REST.map(['project', 'collection', 'number'])
-                # The HTML query parameter.
-                param = _.extend(_.clone(cond), fields)
                 # Delegate to the resource.
-                Subject.query(param).$promise
+                Subject.query(cond).$promise
               collection: ($stateParams) ->
                 _s.capitalize($stateParams.collection)
             views:
               'main@':
-                templateUrl: '/partials/collection.html'
-                controller:  'CollectionCtrl'
+                templateUrl: '/partials/collection-detail.html'
+                controller:  'CollectionDetailCtrl'
 
           # The subject state.
           .state 'quip.subject',

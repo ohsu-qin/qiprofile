@@ -56,6 +56,20 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ]
 
 
+    ctlrs.controller 'CollectionListCtrl', [
+      '$rootScope', '$scope', 'project', 'collections', '$window',
+      ($rootScope, $scope, project, collections, $window) ->
+        # Capture the current project.
+        $rootScope.project = project
+        # Place the collections in the scope.
+        $scope.collections = collections
+        $scope.open = (url) ->
+          $window.location.href = url
+        # The help is always open to start with on this landing page.
+        $rootScope.showHelp = true
+    ]
+
+
     ctlrs.controller 'SubjectListCtrl', [
       '$rootScope', '$scope', 'project', 'subjects', 'collections',
       ($rootScope, $scope, project, subjects, collections) ->
@@ -67,7 +81,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ]
 
 
-    ctlrs.controller 'CollectionCtrl', [
+    ctlrs.controller 'CollectionDetailCtrl', [
       '$rootScope', '$scope', 'project', 'subjects', 'collection',
       ($rootScope, $scope, project, subjects, collection) ->
         # Capture the current project.

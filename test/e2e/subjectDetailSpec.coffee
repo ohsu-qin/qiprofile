@@ -1,5 +1,7 @@
 _ = require 'lodash'
 
+webdriver = require 'selenium-webdriver'
+
 expect = require('./helpers/expect')()
 
 Page = require './helpers/page'
@@ -198,14 +200,14 @@ describe 'E2E Testing Subject Detail', ->
           it 'should display the column headers', ->
             modelingTablesFinder.then (tables) ->
               for table, tblNdx in tables
-                header = table.header()
-                expect(header, "Table #{ tblNdx + 1 } is missing a header")
-                  .to.eventually.exist.and.not.be.empty
-                header.then (headings) ->
+                table.header().then (headings) ->
+                  expect(headings, "Table #{ tblNdx + 1 } is missing" +
+                                   " a header")
+                    .to.not.be.empty
                   for heading, hdgNdx in headings
                     expect(heading, "Table #{ tblNdx + 1 } is missing" +
                                     " column heading #{ hdgNdx + 1 }")
-                      .to.eventually.exist.and.not.be.empty
+                      .to.exist
 
           it 'should have four Breast patient visits', ->
             modelingTablesFinder.then (tables) ->
@@ -220,42 +222,43 @@ describe 'E2E Testing Subject Detail', ->
 
           it 'should show the visit dates', ->
             modelingTablesFinder.then (tables) ->
-              # The expected visit dates are the first column of the first
-              # table.
-              referenceTable = _.first(tables)
-              expect(referenceTable, 'The reference modeling Table 1 is' +
-                                     ' missing')
-                .to.exist
-              expected = null
-              referenceTable.body().then (rows) ->
-                expected = (_.first(columns) for columns in rows)
+              expect(tables.length, 'The reference modeling table count' +
+                                     ' is incorrect')
+                .to.equal(3)
+              allRows = (table.body() for table in tables)
+              # The 2D table x visit date array.
+              allDateCols = (_.first(col) for col in rows for rows in allRows)
+              dateFinders = (col.text() for col in rows for rows in allDateCols)
+              webdriver.promise.all(dateFinders).then (allDates) ->
+                # The expected visit dates are the first column of the first
+                # table.
+                expected = _.first(allDates)
                 for date, rowNdx in expected
                   expect(date, "The table 1 row #{ rowNdx + 1 } visit" +
                                " date is missing")
                     .to.exist.and.not.be.empty
                 # The date values for every remaining table should be
                 # consistent with those of the first table.
-                for table, tblNdx in _.tail(tables)
-                  table.body().then (rows) ->
-                    for columns, rowNdx in rows
-                      date = _.first(columns)
-                      expect(date, "The table #{ tblNdx + 2 } row" +
-                                   " #{ rowNdx + 1 } visit date is missing")
-                        .to.exist
-                      expect(date, "The table #{ tblNdx + 2 } row" +
-                                   " #{ rowNdx + 1 } visit date is incorrect")
-                        .to.equal(expected[rowNdx])
+                for dates, tblNdx in _.tail(allDates)
+                  for date, rowNdx in dates
+                    expect(date, "The table #{ tblNdx + 2 } row" +
+                                 " #{ rowNdx + 1 } visit date is missing")
+                      .to.exist
+                    expect(date, "The table #{ tblNdx + 2 } row" +
+                                 " #{ rowNdx + 1 } visit date is incorrect")
+                      .to.equal(expected[rowNdx])
 
-          it 'should have seven Ktrans table columns', ->
+          it 'should have seven Ktrans table row', ->
             modelingTablesFinder.then (tables) ->
               # The KTrans table is the first table.
               table = _.first(tables)
               table.body().then (rows) ->
                 for row, rowNdx in rows
                   expect(row.length, "The Ktrans table row #{ rowNdx + 1 }" +
-                                     " column count is incorrect").to.equal(7)
+                                     " column count is incorrect")
+                    .to.equal(7)
 
-          it 'should have three non-Ktrans table columns', ->
+          it 'should have three non-Ktrans table row', ->
             modelingTablesFinder.then (tables) ->
               # The KTrans table is the first table.
               tables = _.tail(tables)
@@ -264,49 +267,53 @@ describe 'E2E Testing Subject Detail', ->
                   for row, rowNdx in rows
                     expect(row.length,
                            "The table #{ tblNdx + 2 } row #{ rowNdx + 1 }" +
-                           " column count is incorrect").to.equal(3)
+                           " column count is incorrect"
+                    ).to.equal(3)
 
           it 'should not have a blank non-percent change value', ->
             modelingTablesFinder.then (tables) ->
               for table, tblNdx in tables
                 table.body().then (rows) ->
-                  for columns, rowNdx in rows
-                    # The odd columns hold non-percent change values.
-                    for colNdx in _.range(1, columns.length, 2)
-                      value = columns[colNdx]
-                      expect(value, "Imaging Profile table #{ tblNdx + 1 } body" +
-                                    " row #{ rowNdx + 1 } percent change column" +
-                                    " #{ colNdx + 1 } is not blank")
-                        .to.not.be.empty
+                  for row, rowNdx in rows
+                    # The odd row hold non-percent change values.
+                    for colNdx in _.range(1, row.length, 2)
+                      cell = row[colNdx]
+                      expect(cell.text(),
+                             "Imaging Profile table #{ tblNdx + 1 } body" +
+                             " row #{ rowNdx + 1 } percent change column" +
+                             " #{ colNdx + 1 } is not blank"
+                      ).to.eventually.exist.and.not.be.empty
 
           it 'should have blank percent values in the first row', ->
             modelingTablesFinder.then (tables) ->
               for table, tblNdx in tables
                 table.body().then (rows) ->
-                  columns = _.first(rows)
-                  expect(columns, "Imaging Profile table #{ tblNdx + 1 } body" +
-                                  " row 0 has no columns")
+                  row = _.first(rows)
+                  expect(row, "Imaging Profile table #{ tblNdx + 1 } body" +
+                              " row 0 has no row")
                     .to.exist.and.not.be.empty
-                  # The percent change is in the third, fifth and seventh column.
+                  # The percent change is in columns 3, 5, 7, ....
                   # The percent changes of the first row are blank.
-                  # The odd columns hold non-percent change values.
-                  for colNdx in _.range(2, columns.length, 2)
-                    value = columns[colNdx]
-                    expect(value, "Imaging Profile table #{ tblNdx + 1 } body" +
-                                  " row 0 percent change column #{ colNdx + 1 }" +
-                                  " is not blank").to.be.empty
+                  for colNdx in _.range(2, row.length, 2)
+                    cell = row[colNdx]
+                    expect(cell.text(),
+                           "Imaging Profile table #{ tblNdx + 1 } body row" +
+                           " 1 percent change column #{ colNdx + 1 } is not" +
+                           " blank"
+                    ).to.eventually.not.exist
 
           it 'should not have a blank percent value in the remaining rows', ->
             modelingTablesFinder.then (tables) ->
               for table, tblNdx in tables
                 table.body().then (rows) ->
-                  for columns, rowNdx in _.tail(rows)
-                    for colNdx in _.range(2, columns.length, 2)
-                      value = columns[colNdx]
-                      expect(value, "Imaging Profile table #{ tblNdx + 1 } body" +
-                                    " row #{ rowNdx + 2 } percent change column" +
-                                    " #{ colNdx + 1 } is blank")
-                        .to.not.be.empty
+                  for row, rowNdx in _.tail(rows)
+                    for colNdx in _.range(2, row.length, 2)
+                      cell = row[colNdx]
+                      expect(cell.text(),
+                             "Imaging Profile table #{ tblNdx + 1 } body row" +
+                             " #{ rowNdx + 2 } percent change column" +
+                             " #{ colNdx + 1 } is blank"
+                      ).to.eventually.exist
 
     describe 'Clinical Profile', ->
       profileFinder = null

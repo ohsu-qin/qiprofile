@@ -46,20 +46,10 @@ Setup
 
    This command installs the necessary packages [#xtk_fork]_.
 
-4. Add the following line to the bash initialization script
-   (``$HOME/.bashrc`` or ``$HOME/.bash_profile``)::
-   
-       export PHANTOMJS_BIN=$HOME/workspace/qiprofile/node_modules/phantomjs/bin/phantomjs
-   
-   This step works around the phantomjs bug described in
-   ``test/unit/README.rst``.
-   
-5. Open a new console to refresh the environment.
-
-6. Read `test/unit/README.rst`` and `test/e2e/README.rst`` for additional
+4. Read ``test/e2e/README.rst`` for additional
    testing notes.
 
-7. Run the following Grunt_ script::
+5. Run the following Grunt_ script::
 
        grunt
 

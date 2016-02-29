@@ -30,7 +30,7 @@ describe 'E2E Testing Subject List', ->
   page = null
 
   beforeEach ->
-    page = new SubjectListPage '/quip?project=QIN_Test'
+    page = new SubjectListPage '/quip/subjects?project=QIN_Test'
 
   # FIXME - before the tests, Protractor displays the following message:
   #   Client error: TypeError: Cannot read property 'hasOwnProperty' of null
@@ -68,22 +68,22 @@ describe 'E2E Testing Subject List', ->
           .to.eventually.include(Page.SUGGESTION_BOX_URL)
 
   describe 'Collections', ->
-    content = null
+    collectionSubjectsFinder = null
 
     before ->
-      content = page.collection_subjects()
+      collectionSubjectsFinder = page.collection_subjects()
 
     it 'should display the Breast and Sarcoma collections', ->
-      collections = content.then (assns) ->
-        assns.map (assn) -> assn.name
+      collectionsFinder = collectionSubjectsFinder.then (colls) ->
+        colls.map (coll) -> coll.name
       # The collections are sorted. The comparison is the Chai
       # deep equals operator eql rather than equal.
-      expect(collections, 'The collections are incorrect')
+      expect(collectionsFinder, 'The collections are incorrect')
         .to.eventually.eql(['Breast', 'Sarcoma'])
 
     it 'should display the subjects', ->
-      subjects = content.then (assns) ->
-          assns.map (assn) -> assn.subjects
+      subjectsFinder = collectionSubjectsFinder.then (collections) ->
+          collections.map (coll) -> coll.subjects
       expected = (("Patient #{ n }" for n in [1, 2, 3]) for i in [1, 2])
-      expect(subjects, 'The subjects are incorrect')
+      expect(subjectsFinder, 'The subjects are incorrect')
         .to.eventually.eql(expected)

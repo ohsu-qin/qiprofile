@@ -43,7 +43,7 @@ define ['ngmocks', 'lodash', 'expect', 'pako', 'encoding', 'file'],
           mock = null
           
           beforeEach ->
-            encoder = TextEncoder('utf-8')
+            encoder = new TextEncoder('utf-8')
             # The mock plaintext file.
             encoded = encoder.encode('test data')
             mock =

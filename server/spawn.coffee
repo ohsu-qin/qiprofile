@@ -5,12 +5,13 @@ forever = require 'forever-monitor'
 #
 # @param command the server command to spawn
 # @param port the server port
-# @callback the function to call after the port is active
-module.exports = (command, port, callback) ->
+# @param callback the function to call after the port is active
+# @param options additional foverver-monitor Monitor options,
+#   e.g. {silent: true} to suppress output 
+module.exports = (command, port, callback, options={}) ->
   # @param command the execution command
   start = (command) ->
-    # Try the command once.
-    child = new forever.Monitor([command], max: 1)
+    child = new forever.Monitor([command], options)
     child.on 'exit', ->
       console.log "The #{ command } server exited."
     child.on 'error', (error) ->

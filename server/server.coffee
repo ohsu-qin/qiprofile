@@ -111,7 +111,8 @@ server.get '/partials/*', (req, res) ->
 server.get '/quip*', (req, res) ->
   res.sendFile "#{root}/index.html"
 
-# Kludge to work around repeat requests. See the error.coffee FIXME.
+# Kludge to work around repeat requests. See the app
+# error.coffee FIXME.
 lastErrorMsg = null
 server.post '/error', (req, res) ->
   # Print the error.
@@ -138,13 +139,16 @@ spawn 'mongod', MONGODB_PORT, ->
   # ...then the REST app...
   restMode = if env is 'test' then 'development' else env
   cmd = if restMode? then "qirest --#{ restMode }" else 'qirest'
-  
-  spawn cmd, EVE_PORT, ->
+  # The callback after the REST server is started.
+  callback = ->
     #...then the Express server.
     port = server.get 'port'
     http.createServer(server).listen port, ->
       env = server.settings.env
       console.log "The qiprofile server is listening on port #{port}" +
                   " in #{env} mode."
+
+  # Start the REST app without logging to the console.
+  spawn(cmd, EVE_PORT, callback, {silent: true})
 
 module.exports = server

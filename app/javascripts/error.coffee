@@ -12,7 +12,6 @@ define ['angular', 'stacktrace'], (ng, stacktrace) ->
       errMsg = errorMsg
     alert('Error: ' + errMsg)
 
-
   # The error handler module.
   # Note: testing this module is prohibitively difficult. Suggestions for
   # disabling the Mocha error trap don't work. ngMockE2E could be used to

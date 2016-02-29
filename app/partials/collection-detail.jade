@@ -1,16 +1,10 @@
 extends ../layout/partial
 
 block billboard
-  | {{ collection }} Patients
+  | {{ collection }} Profile
 
 block content
-  div.qi-subject-list
-    ul.qi-main-list(ng-repeat="sbj in subjects | orderBy:'number'")
-      li
-        a(ui-sref="quip.subject({project: sbj.project, collection: sbj.collection.toLowerCase(), subject: sbj.number, subjectdetail: sbj.detail})")
-          | Patient {{ sbj.number }}
-
-  div.qi-correlation-charts(qi-correlation-charts)
+  // TODO - wrap these charts in a panel? 
   .row
     .col-md-6
       .col-md-12.dropdown

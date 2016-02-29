@@ -6,16 +6,6 @@ exports.config =
   # Run under the mocha framework rather than the default jasmine.
   framework: 'mocha'
 
-  # Although protractor can run CoffeeScript tests, stack trace line
-  # numbers are for the compiled Javascript rather than the source
-  # CoffeeScript. StackOverflow has some posts on this, but as of
-  # 9/10/2014 no solution was forthcoming. Work-around is to compile
-  # the error test spec and go to the line number in that file.
-  # The coding standard that all expectations include a string
-  # failure message facilitates tracing the error without resorting
-  # to a compile.
-  plugins: [package: 'protractor-coffee-preprocessor']
-
   # If the selenium address is not specified, then protractor
   # issues the following error message:
   #    Could not find chromedriver

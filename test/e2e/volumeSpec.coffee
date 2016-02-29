@@ -64,7 +64,8 @@ describe 'E2E Testing Volume', ->
       panel = page.overlaySelector()
    
     it 'should display the overlay selection buttons', ->
-      expect(panel, 'The overlay selection buttons are missing').to.eventually.exist
+      expect(panel, 'The overlay selection buttons are missing')
+        .to.eventually.exist
   
   describe 'Image Control Panel', ->
     panel = null

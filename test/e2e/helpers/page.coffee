@@ -4,7 +4,10 @@ expect = require('./expect')()
 
 Findable = require './findable'
 
+require 'coffee-errors'
+
 require './object'
+
 
 # Page is the PageObject pattern
 # (https://code.google.com/p/selenium/wiki/PageObjects)
@@ -21,19 +24,24 @@ require './object'
 # clauses.
 #
 # Example:
-#   Page = require('../helpers/page')()
+#   Page = require '../helpers/page'
 #   class LoginPage extends Page
+#     constructor: ->
+#       super('/login.html')
 #     ...
-#   login = LoginPage('/login')
-#   expect(login.billboard).to.evantually.equal('Login')
+#   login = new LoginPage()
+#   expect(login.billboard).to.eventually.equal('Login')
 class Page extends Findable
   # @param url the page request URL
-  constructor: (url) ->
+  # @param helpShown flag indicating whether the help box is
+  #   initially shown (default false)
+  constructor: (url, @helpShown=false) ->
     # Call the Findable superclass initializer. Findable wraps
     # a node which responds to the methods element and all.
     # Thus, Finder can wrap both this Page object as well as
     # any WebElement search result.
-    super this
+    super()
+    
     # Fire off the browser request.
     browser.get(url)
 
@@ -97,21 +105,24 @@ class Page extends Findable
     findButton = =>
       @find("[ng-controller='HelpCtrl']")
     
-    @find('.qi-help').then (elt) ->
-      expect(elt, 'The help element is missing').to.exist
-      # Help is initially hidden.
-      expect(elt.isDisplayed(), 'The help element is not initially hidden')
-        .to.eventually.be.false
+    @find('.qi-help').then (helpBox) =>
+      expect(helpBox, 'The help box is missing').to.exist
+      # Help is initially hidden or shown, depending on the
+      # helpShown property.
+      state = if @helpShown then 'shown' else 'hidden'
+      expect(helpBox.isDisplayed(), "The help box is initially #{ state }")
+        .to.eventually.equal(@helpShown)
       findButton().then (btn) ->
         expect(btn, 'The help button is missing').to.exist
-        # Open the help view...
-        btn.click().then ->
-          # Verify that the help is displayed.
-          expect(elt.isDisplayed(), 'The help element is hidden after click')
-            .to.eventually.be.true
-          # Click again to hide the help.
+        # Open the help box...
+        btn.click().then =>
+          # Verify that the help is toggled.
+          state = if @helpShown then 'hidden' else 'shown'
+          expect(helpBox.isDisplayed(), "The help box is #{ state } after click")
+            .to.eventually.not.equal(@helpShown)
+          # Click again to restore the initial state.
           btn.click().then ->
-            elt.getInnerHtml()
+            helpBox.getInnerHtml()
 
 # The help suggestion box hyperlink constant.
 Page.SUGGESTION_BOX_URL = 'http://qiprofile.idea.informer.com'

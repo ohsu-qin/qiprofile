@@ -1,18 +1,18 @@
 h4.qi-profile-heading Clinical Profile
 .qi-profile-panel.qi-table-panel
-  uib-accordian(close-others='false')
+  uib-accordion(close-others='false')
     div(ng-controller='AccordionGroupCtrl')
-      uib-accordian-group(is-open="isOpen")
+      uib-accordion-group(is-open="isOpen")
         include demographics
 
     // Iterate over the encounters to include the encounter partial.
     div(ng-repeat="encounter in subject.clinicalEncounters"
         ng-controller='AccordionGroupCtrl')
-      uib-accordian-group(is-open="isOpen")
+      uib-accordion-group(is-open="isOpen")
         include encounter
 
     // Iterate over the treatments to include the treatment partial.
     div(ng-repeat="treatment in subject.treatments"
         ng-controller='AccordionGroupCtrl')
-      uib-accordian-group(is-open="isOpen")
+      uib-accordion-group(is-open="isOpen")
         include treatment

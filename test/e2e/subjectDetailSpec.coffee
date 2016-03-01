@@ -7,6 +7,9 @@ expect = require('./helpers/expect')()
 Page = require './helpers/page'
 
 class SubjectDetailPage extends Page
+  constructor: (collection) ->
+    super("/quip/#{ collection }/subject/1?project=QIN_Test")
+
   # @returns a promise which resolves to the image profile button
   #   ElementFinder
   @property imageProfileFormatButton: ->
@@ -77,7 +80,7 @@ describe 'E2E Testing Subject Detail', ->
 
   describe 'Breast', ->
     before ->
-      page = new SubjectDetailPage '/quip/breast/subject/1?project=QIN_Test'
+      page = new SubjectDetailPage('breast')
 
     it 'should load the page', ->
       expect(page.content, 'The page was not loaded')
@@ -200,7 +203,7 @@ describe 'E2E Testing Subject Detail', ->
           it 'should display the column headers', ->
             modelingTablesFinder.then (tables) ->
               for table, tblNdx in tables
-                table.header().then (headings) ->
+                table.header.then (headings) ->
                   expect(headings, "Table #{ tblNdx + 1 } is missing" +
                                    " a header")
                     .to.not.be.empty
@@ -212,7 +215,7 @@ describe 'E2E Testing Subject Detail', ->
           it 'should have four Breast patient visits', ->
             modelingTablesFinder.then (tables) ->
               for table, tblNdx in tables
-                body = table.body()
+                body = table.rows
                 # expect(body, "Table #{ tblNdx + 1 } is missing a body")
                 #   .to.eventually.exist
                 body.then (rows) ->
@@ -225,7 +228,7 @@ describe 'E2E Testing Subject Detail', ->
               expect(tables.length, 'The reference modeling table count' +
                                      ' is incorrect')
                 .to.equal(3)
-              allRows = (table.body() for table in tables)
+              allRows = (table.rows for table in tables)
               # The 2D table x visit date array.
               allDateCols = (_.first(col) for col in rows for rows in allRows)
               dateFinders = (col.text() for col in rows for rows in allDateCols)
@@ -252,7 +255,7 @@ describe 'E2E Testing Subject Detail', ->
             modelingTablesFinder.then (tables) ->
               # The KTrans table is the first table.
               table = _.first(tables)
-              table.body().then (rows) ->
+              table.rows.then (rows) ->
                 for row, rowNdx in rows
                   expect(row.length, "The Ktrans table row #{ rowNdx + 1 }" +
                                      " column count is incorrect")
@@ -263,7 +266,7 @@ describe 'E2E Testing Subject Detail', ->
               # The KTrans table is the first table.
               tables = _.tail(tables)
               for table, tblNdx in tables
-                table.body().then (rows) ->
+                table.rows.then (rows) ->
                   for row, rowNdx in rows
                     expect(row.length,
                            "The table #{ tblNdx + 2 } row #{ rowNdx + 1 }" +
@@ -273,7 +276,7 @@ describe 'E2E Testing Subject Detail', ->
           it 'should not have a blank non-percent change value', ->
             modelingTablesFinder.then (tables) ->
               for table, tblNdx in tables
-                table.body().then (rows) ->
+                table.rows.then (rows) ->
                   for row, rowNdx in rows
                     # The odd row hold non-percent change values.
                     for colNdx in _.range(1, row.length, 2)
@@ -287,7 +290,7 @@ describe 'E2E Testing Subject Detail', ->
           it 'should have blank percent values in the first row', ->
             modelingTablesFinder.then (tables) ->
               for table, tblNdx in tables
-                table.body().then (rows) ->
+                table.rows.then (rows) ->
                   row = _.first(rows)
                   expect(row, "Imaging Profile table #{ tblNdx + 1 } body" +
                               " row 0 has no row")
@@ -305,7 +308,7 @@ describe 'E2E Testing Subject Detail', ->
           it 'should not have a blank percent value in the remaining rows', ->
             modelingTablesFinder.then (tables) ->
               for table, tblNdx in tables
-                table.body().then (rows) ->
+                table.rows.then (rows) ->
                   for row, rowNdx in _.tail(rows)
                     for colNdx in _.range(2, row.length, 2)
                       cell = row[colNdx]
@@ -896,7 +899,7 @@ describe 'E2E Testing Subject Detail', ->
     page = null
 
     before ->
-      page = new SubjectDetailPage '/quip/sarcoma/subject/1?project=QIN_Test'
+      page = new SubjectDetailPage('sarcoma')
 
     it 'should load the page', ->
       expect(page.content, 'The page was not loaded').to.eventually.exist

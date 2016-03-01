@@ -1,43 +1,57 @@
+_ = require 'lodash'
+
+webdriver = require 'selenium-webdriver'
+
 expect = require('./helpers/expect')()
 
 Page = require './helpers/page'
 
 class SubjectListPage extends Page
-  # Subheading locator.
-  H3_LOCATOR = By.tagName('h3')
+  constructor: ->
+    super('/quip/subjects?project=QIN_Test')
 
   # Hyperlink locator.
   ANCHOR_LOCATOR = By.tagName('a')
 
-  # @returns the collection {name, subjects} array promise
-  collection_subjects: ->
-    element.all(By.repeater('coll in collections')).map (repeat) ->
-      repeat.isElementPresent(H3_LOCATOR).then (exists) ->
-        if exists
-          h3 = repeat.element(H3_LOCATOR)
-          coll = h3.getText()
-          repeat.isElementPresent(ANCHOR_LOCATOR).then (exists) ->
-            if exists
-              repeat.all(ANCHOR_LOCATOR).then (hyperlinks) ->
-                sbjs = (hyperlink.getText() for hyperlink in hyperlinks)
-                {name: coll, subjects: sbjs}
-            else
-              {name: coll, subjects: []}
-        else
-          []
+  # @returns a promise resolving to the asssociative collection
+  #   {name: subjects} object
+  @property collection_subjects: ->
+    # @param assoc the associate accumulator object
+    # @param pair the [name, subjects] array
+    # @returns the accumulator object
+    merge = (assoc, pair) ->
+      [name, subjects] = pair
+      assoc[name] = subjects
+      assoc
+
+    @findAll('collection in collections')
+      .then (lists) ->
+        lists.map (list) ->
+          name = list.text(By.binding('collection'))
+          subjects = list.findAll('a')
+            .then (anchors) ->
+              anchors.map (anchor) -> anchor.text()
+            .then (text) ->
+              webdriver.promise.all(text)
+          pair = [name, subjects]
+          webdriver.promise.all(pair)
+      .then (pairs) ->
+        webdriver.promise.all(pairs)
+      .then (pairs) ->
+        pairs.reduce(merge, {})
 
 describe 'E2E Testing Subject List', ->
   page = null
 
   beforeEach ->
-    page = new SubjectListPage '/quip/subjects?project=QIN_Test'
+    page = new SubjectListPage()
 
   # FIXME - before the tests, Protractor displays the following message:
-  #   Client error: TypeError: Cannot read property 'hasOwnProperty' of null
-  #   See the log at /var/log/qiprofile.log
-  # However, the tests then run successfully.
-  # Find out why this error occurs and why, unlike other errors, it is
-  # ignored.
+  #     Client error: TypeError: Cannot read property 'hasOwnProperty' of null
+  #     See the log at /var/log/qiprofile.log
+  #   However, the tests then run successfully.
+  #   Find out why this error occurs and why, unlike other errors, it is
+  #   ignored.
 
   it 'should load the page', ->
     expect(page.content, 'The page was not loaded')
@@ -68,22 +82,19 @@ describe 'E2E Testing Subject List', ->
           .to.eventually.include(Page.SUGGESTION_BOX_URL)
 
   describe 'Collections', ->
-    collectionSubjectsFinder = null
+    assocFinder = null
 
     before ->
-      collectionSubjectsFinder = page.collection_subjects()
+      assocFinder = page.collection_subjects
 
     it 'should display the Breast and Sarcoma collections', ->
-      collectionsFinder = collectionSubjectsFinder.then (colls) ->
-        colls.map (coll) -> coll.name
-      # The collections are sorted. The comparison is the Chai
-      # deep equals operator eql rather than equal.
-      expect(collectionsFinder, 'The collections are incorrect')
-        .to.eventually.eql(['Breast', 'Sarcoma'])
+      expect(assocFinder, 'The collections are incorrect')
+        .to.eventually.have.all.keys(['Breast', 'Sarcoma'])
 
     it 'should display the subjects', ->
-      subjectsFinder = collectionSubjectsFinder.then (collections) ->
-          collections.map (coll) -> coll.subjects
-      expected = (("Patient #{ n }" for n in [1, 2, 3]) for i in [1, 2])
-      expect(subjectsFinder, 'The subjects are incorrect')
-        .to.eventually.eql(expected)
+      expected = ("Patient #{ n }" for n in [1, 2, 3])
+      assocFinder.then (assoc) ->
+        expect(assoc.Breast, 'The Breast subjects are incorrect')
+          .to.eql(expected)
+        expect(assoc.Sarcoma, 'The Sarcoma subjects are incorrect')
+          .to.eql(expected)

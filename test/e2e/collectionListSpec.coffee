@@ -8,9 +8,10 @@ _ = require 'lodash'
 
 
 class CollectionListPage extends Page
-  # @param url the page request URL
   constructor: ->
-    # Call the Page superclass initializer. The 
+    # Call the Page superclass initializer with the helpShown
+    # flag set to true, since the help box is displayed on
+    # this landing page. 
     super('/quip?project=QIN_Test',  true)
 
   # @returns the collection {name, description, url} object
@@ -32,10 +33,6 @@ class CollectionListPage extends Page
     webdriver.promise.all(finders).then (resolved) ->
       [name, desc, info] = resolved
       {name: name, description: desc, info: info}
-
-
-# Hyperlink locator.
-ANCHOR_LOCATOR = By.tagName('a')
 
 
 describe 'E2E Testing Collection List', ->

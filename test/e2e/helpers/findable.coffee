@@ -124,8 +124,18 @@ class Findable
   # @param selectors the search condition
   # @returns a promise which resolves to the hyperlink URL
   hyperlink: (selectors...) ->
-    @_find(selectors..., 'a').then (elt) ->
-      elt.getAttribute('href')
+    @_find(selectors..., 'a').then (anchor) ->
+      anchor.getAttribute('href')
+  
+  # Finds all nested hyperlinks.
+  # See the hyperlink method.
+  #
+  # @param selectors the search condition
+  # @returns a promise which resolves to the hyperlink URLs
+  hyperlinks: (selectors...) ->
+    @_findAll(selectors..., 'a').then (anchors) ->
+      anchors.map (anchor) ->
+        anchor.getAttribute('href')
 
   # Finds the table WebElement for the given find() selector.
   # The return value is a promisr resolving to a Table object.
@@ -185,6 +195,8 @@ class Findable
         By.xpath(selector)
       else if selector[0] == '#' and not ' ' in selector
         By.id(selector[1..-1])
+      else if selector.match('in ')
+        By.repeater(selector)
       else if selector.match(/^\w[\w-]*$/)
         By.tagName(selector)
       else
@@ -197,28 +209,21 @@ class Findable
 
 
 #
-# Note - it would be preferable to define the following Table
-# class in it's own file, but that causes a circular require
-# dependency.
+# Note - The Table class defined below is not defined
+#   in it's own file because there is a cyclical Findable
+#   dependency.
 #
 
-# The Table class represents a table WebElement as the
+# The Table class represents a table WebElement with the
 # following properties:
 #
-# * header - a promise resolving to the array of *th*
+# * header - a promise resolving to the array of <th/>
 #     WebElement text values
 #
-# * body - a promise resolving to the two-dimensional
-#     tbody cell value array
+# * rows - a promise resolving to the two-dimensional
+#     <tr/> x <td/> cell value array
 #
-# The body resolves to an array [[<cell promise>], ...],
-# where TBD.
-#
-#
-# The body captures the cell values if and only if they
-# are contained in a *tbody* group.
-#
-# The header values can either be in a separate *thead*
+# The header values can be either in a separate *thead*
 # row or as the leading *th* element in each *tbody* row,
 # e.g.:
 #
@@ -254,23 +259,24 @@ class Findable
 #
 # In the both cases, the Table *heading* resolves to
 # ['Name', 'Gender']. In the first case, the Table
-# *body* resolves to [['John', 'Male]]. In the second
-# case, the Table *body* resolves to [['John'], ['Male]].
+# *rows* resolves to [['John', 'Male]]. In the second
+# case, the Table *rows* resolves to [['John'], ['Male]].
 #
-# Example:
-#  _ =  require 'lodash'
-#  element(By.id('t01')).then (table) ->
-#    _.assign(table, Tablelttype)
-#    expect(table.header.length, 'The header count is incorrect')
-#      .to.equal(1)
-#    expect(table.header[1],
-#           'The second column heading is incorrect')
-#      .to.equal('Gender')
-#    expect(table.body.length, 'The row count is incorrect')
-#      .to.equal(1)
-#    expect(table.body[0][1],
-#           'The second column of the first row is incorrect')
-#      .to.equal('Male')
+# If this table contains a <tbody/> subelement, then this
+# property includes the rows in the first such body
+# subelement. Otherwise, this methods returns all <tr/>
+# rows contained in the table.
+#
+# Note - If there are multiple <tbody/> elements in the
+#   table, only the rows of the first <tbody> are returned.
+#
+# Note - The rows of nested <table/> elements are returned
+#   along with the parent rows.
+#
+# TODO - address the above two notes by adding a Table
+#   subTables property for subtables and include only the
+#   direct rows in a parent Table.
+#
 class Table extends Findable
   # Adds *field* properties to this table which resolve to the
   # the value given by the corresponding AngularJS binding
@@ -287,18 +293,9 @@ class Table extends Findable
         if elt? then elt.text() else elt
     this
 
-  # Note: it would be preferable to define body and header as
-  # properties consistent with Page, but usage of such a property
-  # results in several cryptic errors, e.g.:
-  #   TypeError: this.find is not a function
-  # and:
-  #   TypeError: current.element is not a function
-  # Many variations on the arcane and ridiculous Javascript
-  # prototype/property funhouse have not resolved this anomaly.
-  
   # @returns a promise which resolves to the [[cell, ...], ...]
   #   row x column Finder array
-  body: ->
+  @property rows: ->
     # Chain the finder to preferably look for rows in a tbody tag,
     # otherwise look in the table itself.
     @find(By.tagName('tbody'))
@@ -317,7 +314,7 @@ class Table extends Findable
         webdriver.promise.all(rows)
 
   # @returns a promise which resolves to a header text array
-  header: ->
+  @property header: ->
     @findAll(By.tagName('th'))
       .then (headings) ->
         headings.map (heading) ->
@@ -344,10 +341,10 @@ class Table extends Findable
 addMixin = (mixin, obj) ->
   _.extend(new mixin(), obj)
 
-  # Adds Findable methods to the given WebElement.
+# Adds Findable methods to the given WebElement.
 addFindableMixin = _.partial(addMixin, Findable)
 
-# Adds Findable methods to the given WebElement.
+# Adds Table methods to the given WebElement.
 addTableMixin = _.partial(addMixin, Table)
 
 module.exports = Findable

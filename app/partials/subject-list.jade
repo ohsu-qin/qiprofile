@@ -4,12 +4,12 @@ block billboard
   | Patients
 
 block content
-  div(ng-repeat='coll in collections')
-    h3 {{ coll }}
-    ul.qi-main-list(ng-repeat="sbj in subjects | filter: {collection: coll} | orderBy:'number'")
-      li
-        a(ui-sref="quip.subject({project: sbj.project, collection: sbj.collection.toLowerCase(), subject: sbj.number, subjectdetail: sbj.detail})")
-          | Patient {{ sbj.number }}
+  div(ng-repeat='collection in collections')
+    h3 {{ collection }}
+    ul.qi-main-list
+      li(ng-repeat="subject in subjects | filter: {collection: collection} | orderBy:'number'")
+        a(ui-sref="quip.subject({project: subject.project, collection: subject.collection.toLowerCase(), subject: subject.number, subjectdetail: subject.detail})")
+          | Patient {{ subject.number }}
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

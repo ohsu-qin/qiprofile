@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+0.14.2 / 2016-03-01
+-------------------
+* Change Table functions to properties.
+
 0.14.1 / 2016-02-16
 -------------------
 * Upgrade to AngularJS 1.4.9.

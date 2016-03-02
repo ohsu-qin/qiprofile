@@ -89,14 +89,37 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast', 'correlation'],
         # Place the subjects and collections in the scope.
         $scope.subjects = subjects
         $scope.collection = collection
-        chartData = Correlation.prepareChartData(charting)
-        # Place the chart configuration in the scope.
-        $scope.config = Correlation.configureCharts(chartData)
+        # Prepare the scatterplot data.
+        data = Correlation.prepareChartData(charting)
+        # Obtain the data value ranges.
+        ranges = Correlation.calculateValueRanges(data)
+        # The default X and Y axes.
+        $scope.axes = [
+          {
+            x: 'rcbIndex'
+            y: 'deltaKtrans'
+          }
+          {
+            x: 'rcbIndex'
+            y: 've'
+          }
+          {
+            x: 'rcbIndex'
+            y: 'taui'
+          }
+          {
+            x: 'deltaKtrans'
+            y: 've'
+          }
+        ]
+        # Place the chart configuration object in the scope.
+        $scope.config =
+          data: data
+          ranges: ranges
+          axes: Correlation.addAxisLabels($scope.axes)
         #
-        # TO DO - Set a watch for user selection of X and Y axes and then
-        #   re-render the charts, e.g.:
-        #   $scope.$watch 'userSelections', (userSelections) ->
-        #     $scope.config = Correlation.configureCharts(chartData, userSelections)
+        # TO DO - Set a watch for user selection of X and Y axes, update the
+        #   chart configuration, and re-render with:
         #     Correlation.renderCharts($scope.config)
     ]
 

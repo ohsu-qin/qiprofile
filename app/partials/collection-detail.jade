@@ -3,7 +3,6 @@ extends ../layout/partial
 block billboard
   | {{ collection }} Profile
 
-// TO DO - Use an iterator to generate the charts instead of hard coding them.
 block content
   // TODO - wrap these charts in a panel?
   div.qi-correlation-charts(qi-correlation-charts)
@@ -11,44 +10,43 @@ block content
       .col-md-6
         .col-md-12.dropdown
           button.btn.btn-default
-            span.qi-dropdown-selected {{ config.axes[0].xLabel }}
+            span.qi-dropdown-selected {{ axes[0].xLabel }}
             span.caret
           span vs.
           button.btn.btn-default
-            span.qi-dropdown-selected {{ config.axes[0].yLabel }}
+            span.qi-dropdown-selected {{ axes[0].yLabel }}
+            span.caret
+        .col-md-12.qi-correlation-chart(id="qi-correlation-chart-0")
+      .col-md-6
+        .col-md-12.dropdown
+          button.btn.btn-default
+            span.qi-dropdown-selected {{ axes[1].xLabel }}
+            span.caret
+          span vs.
+          button.btn.btn-default
+            span.qi-dropdown-selected {{ axes[1].yLabel }}
             span.caret
         .col-md-12.qi-correlation-chart(id="qi-correlation-chart-1")
       .col-md-6
         .col-md-12.dropdown
           button.btn.btn-default
-            span.qi-dropdown-selected {{ config.axes[1].xLabel }}
+            span.qi-dropdown-selected {{ axes[2].xLabel }}
             span.caret
           span vs.
           button.btn.btn-default
-            span.qi-dropdown-selected {{ config.axes[1].yLabel }}
+            span.qi-dropdown-selected {{ axes[2].yLabel }}
             span.caret
         .col-md-12.qi-correlation-chart(id="qi-correlation-chart-2")
-    .row
       .col-md-6
         .col-md-12.dropdown
           button.btn.btn-default
-            span.qi-dropdown-selected {{ config.axes[2].xLabel }}
+            span.qi-dropdown-selected {{ axes[3].xLabel }}
             span.caret
           span vs.
           button.btn.btn-default
-            span.qi-dropdown-selected {{ config.axes[2].yLabel }}
+            span.qi-dropdown-selected {{ axes[3].yLabel }}
             span.caret
         .col-md-12.qi-correlation-chart(id="qi-correlation-chart-3")
-      .col-md-6
-        .col-md-12.dropdown
-          button.btn.btn-default
-            span.qi-dropdown-selected {{ config.axes[3].xLabel }}
-            span.caret
-          span vs.
-          button.btn.btn-default
-            span.qi-dropdown-selected {{ config.axes[3].yLabel }}
-            span.caret
-        .col-md-12.qi-correlation-chart(id="qi-correlation-chart-4")
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

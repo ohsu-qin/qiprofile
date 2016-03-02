@@ -1,63 +1,90 @@
-define ['angular', 'dc', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
+define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
   correlation = ng.module 'qiprofile.correlation', ['qiprofile.breast']
 
   correlation.factory 'Correlation', ['Breast', (Breast) ->
+    # The charting configuration object.
+    CHART_CONFIG =
+      'rcbIndex':
+          axisLabel: 'RCB Index'
+          type: 'pathology'
+          accessor: (path) ->
+            rcb = Breast.residualCancerBurden(path.tumors[0])
+            rcb.rcbIndex
+      'deltaKtrans':
+          axisLabel: 'delta Ktrans'
+          type: 'modeling'
+          accessor: (mod) ->
+            mod.result.delta_k_trans.average
+      've':
+          axisLabel: 'v_e'
+          type: 'modeling'
+          accessor: (mod) ->
+            mod.result.v_e.average
+      'taui':
+          axisLabel: 'tau_i'
+          type: 'modeling'
+          accessor: (mod) ->
+            mod.result.tau_i.average
+
+    # The list of X and Y axis options.
+    AXES = _.keys CHART_CONFIG
+    # Map the axis options to their display labels.
+    LABELS = _.mapValues(CHART_CONFIG, (o) ->
+      o.axisLabel
+    )
+
     prepareChartData: (charting) ->
-      # From the data that was obtained via the REST query...
-      #   subject?projection={"number": 1, "encounters": 1}&where={"project": "QIN_Test", "collection": "Breast"}
-      #   ...extract the data that will be shown in the correlation charts.
-      #
-      # TO DO - Needs refactoring along with the configureCharts function in
-      #   order to enable user selection of X and Y axes.
-      chartData = []
+      # Extract the plot data from the data obtained via REST query, and prepare
+      #   the list of data objects that will be sent to the rendering function.
+      data = []
       for subj in charting
-        rcb = null
         for enc in subj.encounters
           if enc._cls == 'BreastSurgery'
-            rcb = Breast.residualCancerBurden(enc.pathology.tumors[0])
+            path = enc.pathology
         for enc, index in subj.encounters
-          if enc.modelings?
-            chartObj = {
-              subject: subj.number
-              visit: index + 1
-              x: rcb.rcbIndex
-              y: enc.modelings[0].result.delta_k_trans.average
-              z: enc.modelings[0].result.v_e.average
-              a: enc.modelings[0].result.tau_i.average
-            }
-            chartData.push chartObj
-      chartData
+          if enc.modelings
+            mod = enc.modelings[0]
+            dataObj =
+              'subject': subj.number
+              'visit': index + 1
+            for axis in AXES
+              if CHART_CONFIG[axis].type is 'modeling'
+                dataObj[axis] = CHART_CONFIG[axis].accessor(mod)
+              else
+                dataObj[axis] = CHART_CONFIG[axis].accessor(path)
+            data.push dataObj
+      data
 
-    configureCharts: (chartData) ->
-      # Configure the correlation charts.
-      #
-      # TO DO - Assign data to the various charts and assign axis labels
-      #   according to user menu selections. Hard coded for now.
-      axes = [
-        {
-          xLabel: 'RCB Index'
-          yLabel: 'delta Ktrans'
-        }
-        {
-          xLabel: 'RCB Index'
-          yLabel: 'v_e'
-        }
-        {
-          xLabel: 'RCB Index'
-          yLabel: 'tau_i'
-        }
-        {
-          xLabel: 'delta Ktrans'
-          yLabel: 'v_e'
-        }
-      ]
-      config =
-        data: chartData
-        axes: axes
+    calculateValueRanges: (data) ->
+      # Calculate the min and max values for each category.
+      # 
+      # TO DO - Write a script to calculate these. See the Chart module.
+      ranges =
+        'rcbIndex':
+          min: 1.5
+          max: 3
+        'deltaKtrans':
+          min: -0.15
+          max: 0
+        've':
+          min: 0.4
+          max: 0.8
+        'taui':
+          min: 0.3
+          max: 0.7
+
+    addAxisLabels: (axes) ->
+      # Provide the charts' X and Y axis labels.
+      assignLabels = (chart) ->
+        _.extend chart,
+          xLabel: LABELS[chart.x]
+          yLabel: LABELS[chart.y]
+      axesWithLabels = assignLabels(chart) for chart in axes
 
     renderCharts: (config) ->
       # Render the correlation charts.
       dat = config.data
+      ranges = config.ranges
       axes = config.axes
       d3.selection::moveToFront = ->
         # Enables a specified D3 element to be moved to the
@@ -77,91 +104,49 @@ define ['angular', 'dc', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
       symbolSize = 10
 
       # Set up the scatterplots.
-      chart1 = dc.scatterPlot('#qi-correlation-chart-1')
-      chart2 = dc.scatterPlot('#qi-correlation-chart-2')
-      chart3 = dc.scatterPlot('#qi-correlation-chart-3')
-      chart4 = dc.scatterPlot('#qi-correlation-chart-4')
+      charts = [
+        dc.scatterPlot('#qi-correlation-chart-0')
+        dc.scatterPlot('#qi-correlation-chart-1')
+        dc.scatterPlot('#qi-correlation-chart-2')
+        dc.scatterPlot('#qi-correlation-chart-3')
+      ]
       ndx = crossfilter(dat)
-      dim1 = ndx.dimension((d) ->
-        [
-          +d.x
-          +d.y
+      for chart, index in charts
+        dim = ndx.dimension((d) ->
+          props = [
+            d.rcbIndex
+            d.deltaKtrans
+            d.ve
+            d.taui
+          ]
+          [
+            props[AXES.indexOf(axes[index].x)]
+            props[AXES.indexOf(axes[index].y)]
+          ]
+        )
+        group = dim.group()
+        rangeX = [
+          ranges[axes[index].x].min
+          ranges[axes[index].x].max
         ]
-      )
-      dim2 = ndx.dimension((d) ->
-        [
-          +d.x
-          +d.z
+        rangeY = [
+          ranges[axes[index].y].min
+          ranges[axes[index].y].max
         ]
-      )
-      dim3 = ndx.dimension((d) ->
-        [
-          +d.x
-          +d.a
-        ]
-      )
-      dim4 = ndx.dimension((d) ->
-        [
-          +d.y
-          +d.z
-        ]
-      )
-      group1 = dim1.group()
-      group2 = dim2.group()
-      group3 = dim3.group()
-      group4 = dim4.group()
-      chart1.width(width)
-        .height(height)
-        .x(d3.scale.linear().domain([0, 4]))
-        .y(d3.scale.linear().domain([-0.15, 0]))
-        .yAxisLabel(axes[0].yLabel)
-        .xAxisLabel(axes[0].xLabel)
-        .renderVerticalGridLines(gridLines)
-        .renderHorizontalGridLines(gridLines)
-        .symbolSize(symbolSize)
-        .dimension(dim1)
-        .group(group1)
-      chart1.xAxis().ticks(ticks)
-      chart1.yAxis().ticks(ticks)
-      chart2.width(width)
-        .height(height)
-        .x(d3.scale.linear().domain([0, 4]))
-        .y(d3.scale.linear().domain([0.2, 0.8]))
-        .yAxisLabel(axes[1].yLabel)
-        .xAxisLabel(axes[1].xLabel)
-        .renderVerticalGridLines(gridLines)
-        .renderHorizontalGridLines(gridLines)
-        .symbolSize(symbolSize)
-        .dimension(dim2)
-        .group(group2)
-      chart2.xAxis().ticks(ticks)
-      chart2.yAxis().ticks(ticks)
-      chart3.width(width)
-        .height(height)
-        .x(d3.scale.linear().domain([0, 4]))
-        .y(d3.scale.linear().domain([0.2, 0.8]))
-        .yAxisLabel(axes[2].yLabel)
-        .xAxisLabel(axes[2].xLabel)
-        .renderVerticalGridLines(gridLines)
-        .renderHorizontalGridLines(gridLines)
-        .symbolSize(symbolSize)
-        .dimension(dim3)
-        .group(group3)
-      chart3.xAxis().ticks(ticks)
-      chart3.yAxis().ticks(ticks)
-      chart4.width(width)
-        .height(height)
-        .x(d3.scale.linear().domain([-0.15, 0]))
-        .y(d3.scale.linear().domain([0.2, 0.8]))
-        .yAxisLabel(axes[3].yLabel)
-        .xAxisLabel(axes[3].xLabel)
-        .renderVerticalGridLines(gridLines)
-        .renderHorizontalGridLines(gridLines)
-        .symbolSize(symbolSize)
-        .dimension(dim4)
-        .group(group4)
-      chart4.xAxis().ticks(ticks)
-      chart4.yAxis().ticks(ticks)
+        chart.width(width)
+          .height(height)
+          .x(d3.scale.linear().domain(rangeX))
+          .y(d3.scale.linear().domain(rangeY))
+          .xAxisLabel(axes[index].xLabel)
+          .yAxisLabel(axes[index].yLabel)
+          .renderVerticalGridLines(gridLines)
+          .renderHorizontalGridLines(gridLines)
+          .symbolSize(symbolSize)
+          .dimension(dim)
+          .group(group)
+        chart.xAxis().ticks(ticks)
+        chart.yAxis().ticks(ticks)
+
       dc.renderAll()
 
       # Move the chart data points to the front layer of the
@@ -176,49 +161,18 @@ define ['angular', 'dc', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
       #   listener to specify the content of the tooltips after each rendering
       #   of the chart, including the initial rendering and any re-renderings
       #   after a brush gesture has been made.
-      chart1.on 'renderlet', (chart1) ->
-        chart1.selectAll('.symbol')
-          .data(dat)
-          .on('mouseover', (d) ->
-            div.transition().duration(20).style 'opacity', .9
-            div.html('Subject: ' + d.subject + '<br/>' + 'Visit: ' + d.visit).style('left', d3.event.pageX + 5 + 'px').style 'top', d3.event.pageY - 35 + 'px'
-            return
-          ).on('mouseout', (d) ->
-            div.transition().duration(50).style 'opacity', 0
-            return
-          )
-      chart2.on 'renderlet', (chart2) ->
-        chart2.selectAll('.symbol')
-          .data(dat)
-          .on('mouseover', (d) ->
-            div.transition().duration(20).style 'opacity', .9
-            div.html('Subject: ' + d.subject + '<br/>' + 'Visit: ' + d.visit).style('left', d3.event.pageX + 5 + 'px').style 'top', d3.event.pageY - 35 + 'px'
-            return
-          ).on('mouseout', (d) ->
-            div.transition().duration(50).style 'opacity', 0
-            return
-          )
-      chart3.on 'renderlet', (chart3) ->
-        chart3.selectAll('.symbol')
-          .data(dat)
-          .on('mouseover', (d) ->
-            div.transition().duration(20).style 'opacity', .9
-            div.html('Subject: ' + d.subject + '<br/>' + 'Visit: ' + d.visit).style('left', d3.event.pageX + 5 + 'px').style 'top', d3.event.pageY - 35 + 'px'
-            return
-          ).on('mouseout', (d) ->
-            div.transition().duration(50).style 'opacity', 0
-            return
-          )
-      chart4.on 'renderlet', (chart4) ->
-        chart4.selectAll('.symbol')
-          .data(dat)
-          .on('mouseover', (d) ->
-            div.transition().duration(20).style 'opacity', .9
-            div.html('Subject: ' + d.subject + '<br/>' + 'Visit: ' + d.visit).style('left', d3.event.pageX + 5 + 'px').style 'top', d3.event.pageY - 35 + 'px'
-            return
-          ).on('mouseout', (d) ->
-            div.transition().duration(50).style 'opacity', 0
-            return
-          )
+
+      for chart in charts
+        chart.on 'renderlet', (chart) ->
+          chart.selectAll('.symbol')
+            .data(dat)
+            .on('mouseover', (d) ->
+              div.transition().duration(20).style 'opacity', .9
+              div.html('Subject: ' + d.subject + '<br/>' + 'Visit: ' + d.visit).style('left', d3.event.pageX + 5 + 'px').style 'top', d3.event.pageY - 35 + 'px'
+              return
+            ).on('mouseout', (d) ->
+              div.transition().duration(50).style 'opacity', 0
+              return
+            )
 
   ]

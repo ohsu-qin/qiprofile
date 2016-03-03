@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+0.14.3 / 2016-03-03
+-------------------
+* Work around grunt.file bug.
+
 0.14.2 / 2016-03-01
 -------------------
 * Change Table functions to properties.

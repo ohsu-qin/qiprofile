@@ -134,21 +134,24 @@ if env is 'development'
 if env is 'test'
   server.set 'port', PORT_TEST
 
-# Start MongoDB, if necessary...
-spawn 'mongod', MONGODB_PORT, ->
-  # ...then the REST app...
+# Callback invoked after MongoDB is started.
+mongod_callback = ->
+  # The REST server start mode, production or development.
   restMode = if env is 'test' then 'development' else env
+  # The REST server command.
   cmd = if restMode? then "qirest --#{ restMode }" else 'qirest'
   # The callback after the REST server is started.
-  callback = ->
+  eve_callback = ->
     #...then the Express server.
     port = server.get 'port'
     http.createServer(server).listen port, ->
       env = server.settings.env
       console.log "The qiprofile server is listening on port #{port}" +
                   " in #{env} mode."
-
   # Start the REST app without logging to the console.
-  spawn(cmd, EVE_PORT, callback, {silent: true})
+  spawn(cmd, EVE_PORT, eve_callback, {silent: true})
+
+# Start MongoDB, if necessary, and forward to the callback.
+spawn('mongod', MONGODB_PORT, mongod_callback, {silent: true})
 
 module.exports = server

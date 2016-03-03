@@ -3,25 +3,39 @@
 .qi-collection-name
   font-size larger
 
-// TO DO - Fix the menu styles.
-.dropdown
-  margin-bottom 1em
-
-.dropdown > button
-  width 10em
-  padding 0.1em
-  font-size smaller
-  background-color SeaShell
-
-.qi-dropdown-separator
-  margin-left 0.3em
-  font-size smaller
+.qi-dropbtn
+  width 160px
+  text-align left
+  background-color #3e8e41
+  color white
+  padding 3px 8px
+  border none
+  border-radius 6px
+  cursor pointer
 
 .qi-dropdown
-  text-align left
+  position relative
+  display inline-block
+  z-index 100
+  &:hover
+    .qi-dropdown-content
+      display block
+    .qi-dropbtn
+      background-color #3e8e41
 
-.qi-dropdown-selected
-  margin-left 0.8em
+.qi-dropdown-content
+  display none
+  position absolute
+  background-color #f9f9f9
+  min-width 160px
+  box-shadow 0px 8px 16px 0px rgba(0,0,0,0.2)
+  a
+    color black
+    padding 3px 8px
+    text-decoration none
+    display block
+    &:hover
+      background-color #f1f1f1
 
 .qi-caret
   margin 0.5em 0.4em 0em 0em

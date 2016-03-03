@@ -55,23 +55,19 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
             data.push dataObj
       data
 
-    calculateValueRanges: (data) ->
-      # Calculate the min and max values for each category.
-      # 
-      # TO DO - Write a script to calculate these. See the Chart module.
-      ranges =
-        'rcbIndex':
-          min: 1.5
-          max: 3
-        'deltaKtrans':
-          min: -0.15
-          max: 0
-        've':
-          min: 0.4
-          max: 0.8
-        'taui':
-          min: 0.3
-          max: 0.7
+    calculateScales: (data) ->
+      # For each axis, calculate the range and the chart padding.
+      scales = {}
+      for axis in AXES
+        allValues =
+          dat[axis] for dat in data
+        max = _.max allValues
+        min = _.min allValues
+        padding = Math.abs(max - min) * .2
+        scales[axis] =
+          range: [min, max]
+          padding: Number(padding.toPrecision(2))
+      scales
 
     addAxisLabels: (axes) ->
       # Provide the charts' X and Y axis labels.
@@ -84,7 +80,7 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
     renderCharts: (config) ->
       # Render the correlation charts.
       dat = config.data
-      ranges = config.ranges
+      scales = config.scales
       axes = config.axes
       d3.selection::moveToFront = ->
         # Enables a specified D3 element to be moved to the
@@ -98,7 +94,6 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
       # The scatterplot layout parameters.
       height = 250
       width = 600
-      scale = [0, 1]
       ticks = 4
       gridLines = true
       symbolSize = 10
@@ -112,6 +107,8 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
       ]
       ndx = crossfilter(dat)
       for chart, index in charts
+        xAxis = axes[index].x
+        yAxis = axes[index].y
         dim = ndx.dimension((d) ->
           props = [
             d.rcbIndex
@@ -120,23 +117,19 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
             d.taui
           ]
           [
-            props[AXES.indexOf(axes[index].x)]
+            props[AXES.indexOf(xAxis)]
             props[AXES.indexOf(axes[index].y)]
           ]
         )
         group = dim.group()
-        rangeX = [
-          ranges[axes[index].x].min
-          ranges[axes[index].x].max
-        ]
-        rangeY = [
-          ranges[axes[index].y].min
-          ranges[axes[index].y].max
-        ]
         chart.width(width)
           .height(height)
-          .x(d3.scale.linear().domain(rangeX))
-          .y(d3.scale.linear().domain(rangeY))
+          .x(d3.scale.linear().domain(scales[xAxis].range))
+          .y(d3.scale.linear().domain(scales[yAxis].range))
+          .elasticX(true)
+          .elasticY(true)
+          .xAxisPadding(scales[xAxis].padding)
+          .yAxisPadding(scales[yAxis].padding)
           .xAxisLabel(axes[index].xLabel)
           .yAxisLabel(axes[index].yLabel)
           .renderVerticalGridLines(gridLines)

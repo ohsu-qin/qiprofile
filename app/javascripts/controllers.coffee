@@ -93,8 +93,8 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
         $scope.collection = collection
         # Prepare the scatterplot data.
         data = Correlation.prepareChartData(charting)
-        # Obtain the data value ranges.
-        ranges = Correlation.calculateValueRanges(data)
+        # Obtain the X and Y scale values.
+        scales = Correlation.calculateScales(data)
         # The default X and Y axes.
         $scope.axes = [
           {
@@ -117,7 +117,7 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
         # Place the chart configuration object in the scope.
         $scope.config =
           data: data
-          ranges: ranges
+          scales: scales
           axes: Correlation.addAxisLabels($scope.axes)
         #
         # TO DO - Set a watch for user selection of X and Y axes, update the

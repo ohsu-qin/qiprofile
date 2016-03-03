@@ -16,7 +16,12 @@ module.exports = (grunt) ->
       options:
         inline: true
 
-    clean: ['_build', '_public/*']
+    clean:
+      # Note: Grunt 0.4.5 file.js has an invalid test for whether the
+      # target is contained in the cwd. Work-around is the force option.
+      derived: ['_build', '_public/*']
+      options:
+        force: true
 
     copy:
       js:

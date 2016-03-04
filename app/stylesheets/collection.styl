@@ -3,43 +3,60 @@
 .qi-collection-name
   font-size larger
 
+.qi-correlation-charts
+  margin-top 0.8em
+
 .qi-dropbtn
   width 160px
+  font-size smaller
   text-align left
-  background-color #3e8e41
+  background-color Teal
   color white
-  padding 3px 8px
+  padding 2px 8px
   border none
-  border-radius 6px
+  border-radius 4px
   cursor pointer
+  z-index 99
 
 .qi-dropdown
   position relative
   display inline-block
-  z-index 100
   &:hover
     .qi-dropdown-content
       display block
     .qi-dropbtn
-      background-color #3e8e41
+      background-color SeaGreen
 
 .qi-dropdown-content
   display none
   position absolute
-  background-color #f9f9f9
+  z-index 100
+  background-color GhostWhite
   min-width 160px
+  font-size smaller
   box-shadow 0px 8px 16px 0px rgba(0,0,0,0.2)
   a
     color black
-    padding 3px 8px
+    padding 2px 8px
     text-decoration none
     display block
     &:hover
-      background-color #f1f1f1
+      background-color OldLace
+
+.qi-xy
+  margin-right 0.8em
+  border-radius 4px
+  padding 1px 4px
+  font-size smaller
+  color Teal
+  background-color SeaShell
 
 .qi-caret
   margin 0.5em 0.4em 0em 0em
   float right
+
+.qi-axis-dropdowns
+  margin-bottom 0.5em
 
 
 /* Corellation chart tooltips. */

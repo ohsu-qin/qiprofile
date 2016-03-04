@@ -91,9 +91,11 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
         link: (scope, element) ->
           scope.$watch 'config', (config) ->
             if config?
-              Correlation.renderCharts(config)
-              element.removeAttr 'qi-correlation-charts'
-              $compile(element)(scope)
+              # The page must load before the charts can be rendered.
+              element.ready ->
+                Correlation.renderCharts(config)
+                element.removeAttr 'qi-correlation-charts'
+                $compile(element)(scope)
     ]
 
 

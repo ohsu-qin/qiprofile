@@ -577,16 +577,18 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast', 'imageproto'],
     ]
 
 
-    # The Image Detail page controller.
-    ctlrs.controller 'ImageDetailCtrl', [
-      '$rootScope', '$scope', '$sce', 'Modeling', 'image', 'Image', 'ImageProto', 'ControllerHelper',
-      ($rootScope, $scope, $sce, Modeling, image, Image, ImageProto, ControllerHelper) ->
+    # The Image Slice Display page controller.
+    ctlrs.controller 'SliceDisplayCtrl', [
+      '$rootScope', '$scope', '$sce', 'Modeling', 'volume', 'slice', 'imageSequence',
+      'SliceDisplay', 'ControllerHelper',
+      ($rootScope, $scope, $sce, Modeling, volume, slice, imageSequence,
+       SliceDisplay, ControllerHelper) ->
         # The session temp convenience variable.
-        session = image.volume.container.session
+        session = imageSequence.session
         # Capture the current project.
         $rootScope.project = session.subject.project
-        # Place the image in scope.
-        $scope.image = image
+        # Place the image sequence in scope.
+        $scope.imageSequence = imageSequence
 
         # @param key the modeling parameter key, e.g. 'deltaKTrans'
         # @returns the modeling parameter heading HTML span element,
@@ -594,7 +596,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast', 'imageproto'],
         $scope.parameterHeading = (key) ->
           html = "<span>#{ Modeling.PARAMETER_HEADINGS[key] }</span>"
           $sce.trustAsHtml(html)
-      
+        
         # The session modelings which have an overlay.
         $scope.overlayModelings = (
           mdl for mdl in session.modelings when mdl.overlays.length?
@@ -602,34 +604,12 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast', 'imageproto'],
         # The overlay selection.
         $scope.overlayIndex = null
 
-        # Scope variables for the Cornerstone prototype.
-        $scope.imageProto = ImageProto
-
-        # The DICOM image and overlay image IDs. Binary data are provided in
-        #   exampleImageIdLoader.js. The loader was modified to include two new
-        #   images - 3 and 4 - which are duplicates of images 1 and 2 and serve
-        #   as the overlays in the prototype.
-        $scope.imageIds = [
-          {
-            dicomImageId: 'example://1'
-            overlayIds: [
-              'example://3'
-            ]
-          }
-          {
-            dicomImageId: 'example://2'
-            overlayIds: [
-              'example://4'
-            ]
-          }
-        ]
-
         # The initial saggital slice. 
         $scope.saggitalView =
-          slice: 0
+          slice: slice
 
         # The overlay opacity slider setting and CSS styles.
-        $scope.overlay =
+        $scope.overlayConfig =
           setting: 1
           style:
             "opacity": 1
@@ -638,9 +618,9 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast', 'imageproto'],
         # Watches for a change in the saggital slice control setting. Updates
         #   the image and, if selected, the overlay.
         $scope.$watch 'saggitalView.slice', (index) ->
-          $scope.imageProto.updateDicomImage($scope.imageIds[index].dicomImageId)
+          SliceDisplay.updateSlice($scope.imageIds[index].dicomImageId)
           if $scope.overlayIndex?
-            $scope.imageProto.updateOverlay($scope.imageIds[index].overlayIds,
+            SliceDisplay.updateOverlay($scope.imageIds[index].overlayIds,
                                             $scope.overlayIndex)
 
         # The overlayIndex scope variable is the overlay radio input
@@ -672,16 +652,16 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast', 'imageproto'],
 
             # Move the overlay viewport to the front and update it -
             #   Cornerstone prototype.
-            $scope.overlay.style['z-index'] = 1
+            $scope.overlayConfig.style['z-index'] = 1
             slice = $scope.saggitalView.slice
-            $scope.imageProto.updateOverlay($scope.imageIds[slice].overlayIds,
+            $scope.sliceDisplay.updateOverlay($scope.imageIds[slice].overlayIds,
                                             index)
 
           else
             #$scope.image.deselectOverlay()
 
             # Move the overlay viewport to the back - Cornerstone prototype.
-            $scope.overlay.style['z-index'] = -1
+            $scope.overlayConfig.style['z-index'] = -1
 
 
         # If the project is the default, then remove it from the URL.

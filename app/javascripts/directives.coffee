@@ -95,9 +95,9 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
     ]
 
 
-    # Displays the image - Cornerstone prototype.
-    directives.directive 'qiImageProto', ['ImageProto', '$compile',
-      (ImageProto, $compile) ->
+    # Displays the slice.
+    directives.directive 'qiSliceDisplay', ['SliceDisplay', '$compile',
+      (SliceDisplay, $compile) ->
         restrict: 'A'
         link: (scope, element) ->
           initImage = {
@@ -106,8 +106,8 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
               'example://3'
             ]
           }
-          ImageProto.updateDicomImage(initImage.dicomImageId)
-          element.removeAttr 'qi-image-proto'
+          SliceDisplay.updateDicomImage(initImage.dicomImageId)
+          element.removeAttr 'qi-slice-display'
           $compile(element)(scope)
     ]
 

@@ -21,6 +21,7 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
               # The Routers service is injected into all child states.
               Router: 'Router'
               # The project is shared by all states.
+              # TODO - determine the default in a property.
               project: ($stateParams) ->
                 $stateParams.project or 'QIN'
             views:
@@ -165,25 +166,18 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
                 number = parseInt($stateParams.scan)
                 Router.getScan(session, number)
 
-          # The scan volume state.
-          # The volume state parameter is the volume number.
-          .state 'quip.subject.session.scan.volume',
-            url: '/volume/{volume:[1-9][0-9]*}'
+          # The scan time series image display.
+          .state 'quip.subject.session.scan.display',
+            url: ''
             resolve:
-              image: (scan, $stateParams, Router) ->
-                number = parseInt($stateParams.volume)
-                volume = Router.getVolume(scan, number)
-                image = volume.image
-                if image.isLoaded() then image else image.load()
+              volume: ($stateParams) -> parseInt($stateParams.volume)
+              slice: ($stateParams) -> parseInt($stateParams.volume)
+              imageSequence: (scan) ->
+                if scan.isLoaded() then scan else scan.load()
             views:
               'main@':
-                templateUrl: '/partials/imageproto-detail.html'
-                controller:  'ImageDetailCtrl'
-            # The Cornerstone prototype has been broken out into its own partial.
-            #views:
-            #  'main@':
-            #    templateUrl: '/partials/image-detail.html'
-            #    controller:  'ImageDetailCtrl'
+                templateUrl: '/partials/slice-display.html'
+                controller:  'SliceDisplayCtrl'
 
           # The registration state.
           # The registration state parameter is the registration
@@ -195,21 +189,20 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
               registration: (scan, $stateParams, Router) ->
                 Router.getRegistration(scan, $stateParams.registration)
 
-          # The registration volume state.
+          # The registration time series image display.
           # The volume state parameter is the volume number.
-          .state 'quip.subject.session.scan.registration.volume',
-            url: '/volume/{volume:[1-9][0-9]*}'
+          .state 'quip.subject.session.scan.registration.display',
+            url: ''
             resolve:
-              volume: (registration, $stateParams, Router) ->
-                number = parseInt($stateParams.volume)
-                Router.getVolume(registration, number)
-              image: (volume) ->
-                image = volume.image
-                if image.isLoaded() then image else image.load()
+              volume: ($stateParams) -> parseInt($stateParams.volume)
+              slice: ($stateParams) -> parseInt($stateParams.volume)
+              imageSequence: (registration) ->
+                reg = registration
+                if reg.isLoaded() then reg else reg.load()
             views:
               'main@':
-                templateUrl: '/partials/image-detail.html'
-                controller:  'ImageDetailCtrl'
+                templateUrl: '/partials/slice-display.html'
+                controller:  'SliceDisplayCtrl'
 
         # Redirect an URL with trailing slash to an URL without it.
         $urlRouterProvider.rule ($injector, $location) ->

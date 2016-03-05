@@ -3,14 +3,14 @@ expect = require('./helpers/expect')()
 Page = require './helpers/page'
 
 class VolumePage extends Page
-  #displayPanel: ->
-  #  @find('qi-image')
+  constructor: ->
+    super('/quip/sarcoma/subject/1/session/1/scan/1/volume/20?project=QIN_Test')
 
-  # DICOM image and overlay - Cornerstone prototype.
-  displayImage: ->
-    @find('#qi-dicom-image')
+  # Volume display panel.
+  sliceDisplayPanel: ->
+    @find('#qi-volume')
 
-  displayOverlay: ->
+  overlayPanel: ->
     @find('#qi-overlay')
 
   # TODO - Replace the CSS selector below with a selector for
@@ -18,14 +18,14 @@ class VolumePage extends Page
   overlaySelector: ->
     @find('#overlay-select')
   
-  imageCtlPanel: ->
-    @find('.qi-vol-ctl')
+  imageControlPanel: ->
+    @find('.qi-volume-ctrl')
 
 describe 'E2E Testing Volume', ->
   page = null
 
   before ->
-    page = new VolumePage '/quip/sarcoma/subject/1/session/1/scan/1/volume/20?project=QIN_Test'
+    page = new VolumePage()
 
   it 'should load the page', ->
     expect(page.content, 'The page was not loaded')
@@ -60,7 +60,7 @@ describe 'E2E Testing Volume', ->
   
     beforeEach ->
     #  panel = page.displayPanel()
-      panel = page.displayImage()
+      panel = page.sliceDisplayPanel()
   
     it 'should display the image', ->
       expect(panel, 'The image panel is missing').to.eventually.exist
@@ -69,7 +69,7 @@ describe 'E2E Testing Volume', ->
     panel = null
   
     beforeEach ->
-      panel = page.displayOverlay()
+      panel = page.overlayPanel()
   
     it 'should display the overlay', ->
       expect(panel, 'The overlay panel is missing').to.eventually.exist
@@ -88,7 +88,7 @@ describe 'E2E Testing Volume', ->
     panel = null
   
     beforeEach ->
-      panel = page.imageCtlPanel()
+      panel = page.imageControlPanel()
   
     it 'should display the image control panel', ->
       expect(panel, 'The image control panel is missing').to.eventually.exist

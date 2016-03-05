@@ -1,6 +1,6 @@
-define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
+define ['angular', 'lodash', 'underscore.string', 'sprintf', 'moment', 'rest',
         'helpers', 'image', 'resources'],
-  (ng, _, _s, moment, REST) ->
+  (ng, _, _s, sprintf, moment, REST) ->
     router = ng.module 'qiprofile.router', ['qiprofile.resources',
                                             'qiprofile.helpers',
                                             'qiprofile.image']
@@ -10,6 +10,17 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
       (Subject, Session, Image, ObjectHelper, DateHelper) ->
         # The Subject search fields.
         SUBJECT_SECONDARY_KEY_FIELDS = ['project', 'collection', 'number']
+
+        # The image store location relative to the web app root.
+        # This is a symbolic link to the image store root directory
+        # on the server.
+        IMAGE_STORE_ROOT = '/data'
+
+        # @param project the project name
+        # @returns the image store project directory
+        projectLocation = (project) ->
+          # TODO - replace this XNAT-specific value with a config property.
+          "#{ IMAGE_STORE_ROOT }/#{ project }/arc001"
 
         # @param session the session object
         # @returns the session subject title string in the format
@@ -245,15 +256,24 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
                 # Add the modeling properties.
                 for modeling in session.modelings
                   extendModeling(modeling, session)
-                # The session overlays property.
-                Object.defineProperty session, 'overlays',
-                  get: ->
-                    associate = (accum, modeling) ->
-                      accum[modeling.protocol] = modeling.overlays
-                    modelings = (mdl for mdl in @modelings when mdl.overlays.length?)
-                    if modelings.length?
-                      _.reduce(modelings, associate, {})
-              
+                Object.defineProperties session,
+                  # @returns the modeling overlays
+                  overlays:
+                    get: ->
+                      associate = (accum, modeling) ->
+                        accum[modeling.protocol] = modeling.overlays
+                      modelings = (mdl for mdl in @modelings when mdl.overlays.length?)
+                      if modelings.length?
+                        _.reduce(modelings, associate, {})
+
+                  # @returns the session image store directory
+                  location:
+                    get: ->
+                      # TODO - replace the format with a config property.
+                      subjectPrefix = "#{ collection }#{ sprintf("%03d", subject.number) }"
+                      sessionLabel = "#{ subjectPrefix }_Session#{ sprintf("%03d", @number) }"
+                      "#{ projectLocation(@project) }/#{ sessionLabel }"
+
               # Extend each session.
               for session, i in subject.sessions
                 extendSession(session, i+1)
@@ -288,7 +308,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
               # @returns whether there is more than one session
               isMultiSession:
                 get: ->
-                  this.sessions.length > 1
+                  @sessions.length > 1
             
             # End of extendSubject.
           
@@ -355,53 +375,48 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
         # @param session the parent object
         # @returns a promise which resolves to the session detail
         getSessionDetail: (session) ->
-          # Adds the following properties to the given volume object:
-          # * container - the volume parent scan or registration
-          # * image - the volume image object
-          #
-          # The image property creates and caches an image object
-          # on demand when it is first accessed.
+          # Adds the following property to the given volume object:
+          # * scan, if the volume parent is a scan, or
+          # * registration, if the volume parent is a registration
           #
           # @param volume the volume object to extend
           # @param number the one-based volume number
-          # @param container the image scan or registration object
-          extendVolume = (volume, number, container) ->
+          # @param imageSequence the image scan or registration object
+          extendVolume = (volume, number, imageSequence) ->
             # The parent reference.
-            if container._cls is 'Scan'
-              volume.scan = container
-            else if container._cls is 'Registration'
-              volume.registration = container
+            if imageSequence._cls is 'Scan'
+              volume.scan = imageSequence
+            else if imageSequence._cls is 'Registration'
+              volume.registration = imageSequence
             else
-              throw new TypeError("The image container type is not recognized")
-            # The container alias.
+              throw new TypeError("The image sequence type is not recognized")
+            # The image sequence alias.
             Object.defineProperty volume, 'container',
               get: ->
                 @scan or @registration
             # Set the volume number property.
             volume.number = number
-            # The volume image object is created and cached on demand.
-            Object.defineProperty volume, 'image',
-              get: ->
-                if not @_image?
-                  @_image = Image.forVolume(volume)
-                @_image
           
-          # Extends the container volumes as described in extendVolume
-          # and adds the following properties to the given container:
-          # * session - the container parent session reference
+          # Extends the scan or registration as described in ImageSequence.extend
+          # and adds the following property:
+          # * session - the image sequence parent session reference
           #
-          # @param container the image scan or registration object
-          extendImageContainer = (container) ->
-            # Set the session property required by the image factory.
-            # Image containers present a uniform interface, which
+          # @param imageSequence the image scan or registration object
+          extendImageSequence = (imageSequence) ->
+            # Set the session property required by the ImageSequence factory.
+            # An image sequence present a uniform interface, which
             # includes a session reference.
-            container.session = session
-            # Add the volume images.
-            for volume, index in container.volumes
-              extendVolume(volume, index + 1, container)
+            imageSequence.session = session
+            # Add the to each volume.
+            for volume, index in imageSequence.volumes
+              extendVolume(volume, index + 1, imageSequence)
+            # Add the service helper methods.
+            # TODO - this extend pattern should be replicated with
+            #   other objects in this router.
+            ImageSequence.extend(imageSequence)
           
           # Extends the given registration object as described in
-          # extendImageContainer and adds the following properties:
+          # extendImageSequence and adds the following properties:
           # * scan - the registration source scan
           #
           # @param registration the registration to extend
@@ -414,12 +429,12 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
             registration.title = "Scan #{ scan.number } Registration" +
                                  " #{ registration.number }"
             # Add the registration volume properties.
-            extendImageContainer(registration)
+            extendImageSequence(registration)
 
           # * Extends the scan registrations as described in
           #   extendRegistration
           # * Converts the scan number to an integer
-          # * Extends the scan object as described in extendImageContainer
+          # * Extends the scan object as described in extendImageSequence
           # * Adds the following properties:
           #   * session - the source scan parent session
           #
@@ -433,7 +448,7 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
             # Set the session reference.
             scan.session = session
             # Add the scan volume properties.
-            extendImageContainer(scan)
+            extendImageSequence(scan)
             # Add the scan registration properties.
             for reg, regNbr in scan.registrations
               extendRegistration(reg, regNbr + 1, scan)
@@ -486,12 +501,12 @@ define ['angular', 'lodash', 'underscore.string', 'moment', 'rest',
           # Return the registration.
           reg
 
-        # @param container the image parent container object
+        # @param image sequence the image parent image sequence object
         # @param number the one-based volume number
         # @returns the image object, if its data is loaded,
         #   otherwise a promise which resolves to the image object
         #   after the image content is loaded
-        # @throws ReferenceError if the parent container does not have
+        # @throws ReferenceError if the parent image sequence does not have
         #   the image
         getVolume: (container, number) ->
           # The volume number is one-based.

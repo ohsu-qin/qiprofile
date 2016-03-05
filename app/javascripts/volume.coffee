@@ -15,7 +15,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
     # * volume - the image scan or registration volume object
     # * number - the one-based image volume number
     # * state - one of 'unloaded', 'loading' or 'loaded'
-    # * xtkVolume - the XTK volume object
+    # * volume - the XTK volume object
     # * load() - read the image file
     # * open(element) - render the image
     # * isOverlayVisible() - whether there is an associated label map file
@@ -33,8 +33,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
 
       # Creates an object which encapsulates an image.
       #
-      # @param volume the image parent scan volume
-      #   (not the XTK volume)
+      # @param volume the REST volume object
       # @param id the unique image id
       # @returns a new image object
       constructor: (@volume, @id) ->
@@ -198,7 +197,6 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
         @xtkVolume.labelmap.file = labelMap.name
         # Set the volume color table file name property.
         @xtkVolume.labelmap.colortable.file = labelMap.colorTable
-
 
         # Retrieve the overlay layer map and color table.
         loadLabelMap = File.readBinary(labelMap.name).then (data) ->

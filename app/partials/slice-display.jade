@@ -1,3 +1,4 @@
+
 extends ../layout/partial
 
 include include/accordion-heading-mixin
@@ -11,25 +12,25 @@ block billboard
 
 block content
   // The modeling parameter overlay select.
-  include include/image-overlay-select
+  include include/overlay-select
   // The opacity, axis and threshold image controls.
   include include/image-controls
-  div.qi-image-proto(qi-image-proto)
-    // The Cornerstone image viewports, one for the DICOM image and one for the
-    //   overlay. The overlay viewport is placed in front of the DICOM viewport
+  #qi-slice-display.qi-slice-display
+    // The Cornerstone image viewports, one for the slice and one for the
+    //   overlay. The overlay viewport is placed in front of the slice viewport
     //   using CSS.
     //
     // TO DO - Specify image width and height as percentages or use the
     //   Bootstrap grip template, e.g. col-md-4.
-    #qi-image-container
-      #qi-dicom-image.cornerstone-enabled-image(oncontextmenu='return false'
-        unselectable='on' onselectstart='return false'
-        onmousedown='return false'
-      )
-      #qi-overlay.cornerstone-enabled-image(oncontextmenu='return false'
-        unselectable='on' onselectstart='return false'
-        onmousedown='return false' ng-style='overlay.style'
-      )
+    #qi-slice.cornerstone-enabled-image(
+      oncontextmenu='return false' unselectable='on'
+      onselectstart='return false' onmousedown='return false'
+    )
+    #qi-overlay.cornerstone-enabled-image(
+      oncontextmenu='return false' unselectable='on'
+      onselectstart='return false' onmousedown='return false'
+      ng-style='overlayConfig.style'
+    )
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

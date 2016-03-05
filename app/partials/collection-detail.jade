@@ -7,13 +7,13 @@ block content
   // TODO - wrap these charts in a panel?
   div.qi-correlation-charts(qi-correlation-charts)
   .row
-    .col-md-6(ng-repeat="axis in displayAxes track by $index")
+    .col-md-6(ng-repeat="chart in charts track by $index")
       .row.qi-axis-dropdowns
         .col-md-3.col-md-offset-2
           .qi-dropdown.qi-x-axis-dropdown
             button.qi-dropbtn
               span.qi-xy X
-              span {{ axis.xLabel }}
+              span {{ chart.xLabel }}
               span.qi-caret.caret
             .qi-dropdown-content
               a(ng-repeat="choice in choices") {{ choice }}
@@ -21,7 +21,7 @@ block content
           .qi-dropdown.qi-y-axis-dropdown
             button.qi-dropbtn
               span.qi-xy Y
-              span {{ axis.yLabel }}
+              span {{ chart.yLabel }}
               span.qi-caret.caret
             .qi-dropdown-content
               a(ng-repeat="choice in choices") {{ choice }}

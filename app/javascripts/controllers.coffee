@@ -91,19 +91,21 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
         # Place the subjects and collections in the scope.
         $scope.subjects = subjects
         $scope.collection = collection
-        # Put the valid chart menu selections in the scope.
-        $scope.choices = Correlation.getMenuChoices(collection)
-        # Put the default X and Y axes in the scope.
-        $scope.displayAxes = Correlation.DEFAULT_AXES[collection]
-        # Obtain the data.
+        # Obtain the scatterplot data.
         data = Correlation.prepareChartData(charting, collection)
-        # Obtain the X and Y axis scales.
+        # Obtain the axis scales for each data type.
         scales = Correlation.calculateScales(data)
+        # Put the valid datatype user selection choices in the scope.
+        $scope.choices = Correlation.dataTypeChoices(collection)
+        # Put the default X and Y axes in the scope.
+        $scope.axes = Correlation.DEFAULT_AXES[collection]
+        # Put the X and Y axis labels in the scope.
+        $scope.charts = Correlation.getLabels($scope.axes)
         # Place the chart configuration object in the scope.
         $scope.config =
           data: data
           scales: scales
-          axes: Correlation.addAxisLabels($scope.displayAxes)
+          axes: $scope.axes
         #
         # TO DO - Set a watch for user selection of X and Y axes, update the
         #   chart configuration, and re-render with:

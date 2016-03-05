@@ -2,7 +2,7 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
   correlation = ng.module 'qiprofile.correlation', ['qiprofile.breast']
 
   correlation.factory 'Correlation', ['Breast', (Breast) ->
-    # The charting configuration object.
+    # The charting data types.
     CHART_DATA_CONFIG =
       'fxlKTrans':
           label: 'FXL Ktrans'
@@ -88,9 +88,10 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
             else
               null
 
-    # The list of X and Y axis options.
-    AXES = _.keys CHART_DATA_CONFIG
-    # Map the axis options to their display labels.
+    # The list of data types.
+    DATA_TYPES = _.keys CHART_DATA_CONFIG
+
+    # Map the data types to their display labels.
     LABELS = _.mapValues(CHART_DATA_CONFIG, (o) ->
       o.label
     )
@@ -162,51 +163,55 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
             dataObj =
               'subject': subj.number
               'visit': index + 1
-            for axis in AXES
-              config = CHART_DATA_CONFIG[axis]
+            for dt in DATA_TYPES
+              config = CHART_DATA_CONFIG[dt]
               if config.coll == 'all' or config.coll == coll
                 if config.isImaging
-                  dataObj[axis] = config.accessor(modelingResult)
+                  dataObj[dt] = config.accessor(modelingResult)
                 else
                   if tumors?
                     tumor = tumors[0]
-                    dataObj[axis] = config.accessor(tumor)
+                    dataObj[dt] = config.accessor(tumor)
             data.push dataObj
       data
 
-    getMenuChoices: (coll) ->
-      choices = {}
-      for axis in AXES
-        config = CHART_DATA_CONFIG[axis]
-        if config.coll == 'all' or config.coll == coll
-          choices[axis] = config.label
-      choices
-
     calculateScales: (data) ->
-      # For each axis, calculate the range and the chart padding.
+      # For each data type, calculate the range and the chart padding.
+      #
+      # TO DO - Pass in the collection type and perform the function only on
+      #   valid data types.
       scales = {}
-      for axis in AXES
+      for dt in DATA_TYPES
         allValues =
-          dat[axis] for dat in data
+          dat[dt] for dat in data
         max = _.max allValues
         min = _.min allValues
         diff = max - min
+        # TO DO - Calculate a padding where diff is zero.
         if diff != 0
           padding = Math.abs(diff) * CHART_LAYOUT_PARAMS.axisPadding
         else
           padding = 1
-        scales[axis] =
+        scales[dt] =
           range: [min, max]
           padding: Number(padding.toPrecision(2))
       scales
 
-    addAxisLabels: (axes) ->
-      # Provide the charts' X and Y axis labels.
-      assignLabels = (chart) ->
-        _.extend chart,
+    dataTypeChoices: (coll) ->
+      choices = {}
+      for dt in DATA_TYPES
+        config = CHART_DATA_CONFIG[dt]
+        if config.coll == 'all' or config.coll == coll
+          choices[dt] = config.label
+      choices
+
+    getLabels: (axes) ->
+      # Make a chart object containing X and Y display labels.
+      labelProps = (chart) ->
+        chartObj =
           xLabel: LABELS[chart.x]
           yLabel: LABELS[chart.y]
-      axesWithLabels = assignLabels(chart) for chart in axes
+      charts = labelProps(chart) for chart in axes
 
     renderCharts: (config) ->
       # Render the correlation charts.
@@ -234,7 +239,7 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
         xAxis = axes[index].x
         yAxis = axes[index].y
         dim = ndx.dimension((d) ->
-          # The properties must match the CHART_DATA_CONFIG objects.
+          # The properties must correspond to the CHART_DATA_CONFIG objects.
           props = [
             d.fxlKTrans
             d.fxrKTrans
@@ -250,8 +255,8 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
           ]
           # Return the properties corresponding to the user selections.
           [
-            props[AXES.indexOf(xAxis)]
-            props[AXES.indexOf(yAxis)]
+            props[DATA_TYPES.indexOf(xAxis)]
+            props[DATA_TYPES.indexOf(yAxis)]
           ]
         )
         group = dim.group()
@@ -261,8 +266,8 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
           .y(d3.scale.linear().domain(scales[yAxis].range))
           .elasticX(true)
           .elasticY(true)
-          .xAxisLabel(axes[index].xLabel)
-          .yAxisLabel(axes[index].yLabel)
+          .xAxisLabel(LABELS[xAxis])
+          .yAxisLabel(LABELS[yAxis])
           .xAxisPadding(scales[xAxis].padding)
           .yAxisPadding(scales[yAxis].padding)
           .renderVerticalGridLines(true)

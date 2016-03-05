@@ -57,6 +57,7 @@
     "nvd3": "FredLoney/nvd3#master",
     "requirejs": "^2.1.22",
     "spin.js": "^2.3.2",
+    "sprintf": "^1.0.3",
     "stacktrace-js": "^1.0.1",
     "underscore.string": "^3.2.3",
     "venturocket-angular-slider": "^0.3.2",

@@ -63,11 +63,13 @@ requirejs.config
     ngresource: [NG_LIB + '/' + 'angular-resource' + MIN, './lib/angular-resource']
     ngroute: [NG_LIB + '/' + 'angular-route' + MIN, './lib/angular-route']
     ngsanitize: [NG_LIB + '/' + 'angular-sanitize' + MIN, './lib/angular-sanitize']
+    ngsprintf: './lib/angular-sprintf'
     ngnvd3: './lib/angularjs-nvd3-directives'
     nvd3: './lib/nv.d3'
     slider: './lib/angular-slider'
     'source-map': './lib/source-map'
     spin: './lib/spin'
+    sprintf: './lib/sprintf'
     'stack-generator': './lib/stack-generator'
     stackframe: './lib/stackframe'
     stackScrollTool: './temp/stackScrollTool'

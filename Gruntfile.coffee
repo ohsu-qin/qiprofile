@@ -53,6 +53,7 @@ module.exports = (grunt) ->
           'requirejs/require.js'
           'source-map/dist/source-map.js'
           'spin.js/spin.js'
+          'sprintf/src/*.js'
           'stackframe/dist/stackframe.js'
           'stack-generator/dist/stack-generator.js'
           'stacktrace-gps/dist/stacktrace-gps.js'

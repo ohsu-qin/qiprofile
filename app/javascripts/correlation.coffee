@@ -102,7 +102,7 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
       width: 600
       ticks: 4
       axisPadding: .2
-      symbolSize: 10
+      symbolSize: 8
       symbolFill: ['red', 'blue', 'green']
 
     # The default display data types.
@@ -204,14 +204,6 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
         if config.coll == 'all' or config.coll == coll
           choices[dt] = config.label
       choices
-
-    getLabels: (axes) ->
-      # Make a chart object containing X and Y display labels.
-      labelProps = (chart) ->
-        chartObj =
-          xLabel: LABELS[chart.x]
-          yLabel: LABELS[chart.y]
-      charts = labelProps(chart) for chart in axes
 
     renderCharts: (config) ->
       # Render the correlation charts.

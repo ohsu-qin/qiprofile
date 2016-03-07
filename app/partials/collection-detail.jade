@@ -1,30 +1,52 @@
 extends ../layout/partial
 
 block billboard
-  | {{ collection }} Collection
+  | {{ collection }} Summary
 
 block content
   // TODO - wrap these charts in a panel?
   div.qi-correlation-charts(qi-correlation-charts)
   .row
-    .col-md-6(ng-repeat="chart in charts track by $index")
+    .col-md-6(ng-repeat="axis in axes")
       .row.qi-axis-dropdowns
-        .col-md-3.col-md-offset-2
+        .col-md-4.col-md-offset-1
           .qi-dropdown.qi-x-axis-dropdown
             button.qi-dropbtn
-              span.qi-xy X
-              span {{ chart.xLabel }}
+              span.qi-dropdown-icon.qi-xy X
+              span {{ choices[axis.x] }}
               span.qi-caret.caret
             .qi-dropdown-content
-              a(ng-repeat="choice in choices") {{ choice }}
-        .col-md-3
+              .qi-dropdown-choice(
+                ng-repeat="(key,val) in choices"
+                ng-model="axes[$parent.$index].x"
+                ng-click="axes[$parent.$index].x=key"
+                )
+                span.qi-dropdown-icon.qi-check-hide(
+                  ng-show="val!=choices[axis.x]"
+                  ) &#10003;
+                span.qi-dropdown-icon.qi-check-show(
+                  ng-show="val==choices[axis.x]"
+                  ) &#10003;
+                span.qi-dropdown-text {{ val }}
+        .col-md-4
           .qi-dropdown.qi-y-axis-dropdown
             button.qi-dropbtn
-              span.qi-xy Y
-              span {{ chart.yLabel }}
+              span.qi-dropdown-icon.qi-xy Y
+              span {{ choices[axis.y] }}
               span.qi-caret.caret
             .qi-dropdown-content
-              a(ng-repeat="choice in choices") {{ choice }}
+              .qi-dropdown-choice(
+                ng-repeat="(key,val) in choices"
+                ng-model="axes[$parent.$index].y"
+                ng-click="axes[$parent.$index].y=key"
+                )
+                span.qi-dropdown-icon.qi-check-hide(
+                  ng-show="val!=choices[axis.y]"
+                  ) &#10003;
+                span.qi-dropdown-icon.qi-check-show(
+                  ng-show="val==choices[axis.y]"
+                  ) &#10003;
+                span.qi-dropdown-text {{ val }}
       .row   
         .col-md-12.qi-correlation-chart(id="qi-correlation-chart-{{ $index }}")
 

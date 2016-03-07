@@ -91,7 +91,8 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
         link: (scope, element) ->
           scope.$watch 'config', (config) ->
             if config?
-              # The page must load before the chart rendering call can be made.
+              # The page must completely load before the chart rendering call
+              #   can be made.
               element.ready ->
                 Correlation.renderCharts(config)
                 element.removeAttr 'qi-correlation-charts'

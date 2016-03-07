@@ -97,17 +97,25 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast', 'correlation'],
         $scope.choices = Correlation.dataTypeChoices(collection)
         # Put the default X and Y axes in the scope.
         $scope.axes = Correlation.DEFAULT_AXES[collection]
-        # Put the X and Y axis labels in the scope.
-        $scope.charts = Correlation.getLabels($scope.axes)
         # Place the chart configuration object in the scope.
         $scope.config =
           data: data
           scales: scales
           axes: $scope.axes
-        #
-        # TO DO - Set a watch for user selection of X and Y axes, update the
-        #   chart configuration, and re-render with:
-        #     Correlation.renderCharts($scope.config)
+        # The initial load flag.
+        $scope.initLoad = true
+        # If any X or Y axis selection is changed, re-render the charts and set
+        #   the initial load flag to false. The initial load flag prevents a
+        #   chart rendering call from taking place on the initial page load,
+        #   which will fail. The first chart rendering must take place after
+        #   the collection detail page has fully loaded (see the correlation
+        #   charts directive).
+        $scope.$watch 'axes', ((sel) ->
+          if not $scope.initLoad
+            Correlation.renderCharts($scope.config)
+          else
+            $scope.initLoad = false
+        ), true
     ]
 
 

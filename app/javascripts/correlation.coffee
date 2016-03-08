@@ -105,8 +105,8 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
       symbolSize: 8
       symbolFill: ['red', 'blue', 'green']
 
-    # The default display data types.
-    DEFAULT_AXES:
+    # The default charts to be displayed.
+    DEFAULT_CHARTS:
       'Breast':
         [
           {
@@ -146,70 +146,69 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
           }
         ]
 
-    prepareChartData: (charting, coll) ->
+    dataTypeChoices: (coll) ->
+      choices = LABELS
+      for key of LABELS
+        config = CHART_DATA_CONFIG[key]
+        if config.coll != 'all' and config.coll != coll
+          delete choices[key]
+      choices
+
+    prepareChartData: (charting, choices) ->
       # Extract the plot data from the data obtained via REST query, and prepare
       #   the list of data objects that will be sent to the rendering function.
-      data = []
+      data = new Array
       for subj in charting
+        tumors = null
         for enc in subj.encounters
-          if enc._cls == 'BreastSurgery' or enc._cls == 'Surgery'
-            if enc.pathology.tumors?
-              tumors = enc.pathology.tumors
-            else
-              tumors = null
+          if _.endsWith(enc._cls, 'Surgery')
+            if enc.pathology.tumors? then tumors = enc.pathology.tumors
         for enc, index in subj.encounters
           if enc.modelings
-            modelingResult = enc.modelings[0].result
-            dataObj =
-              'subject': subj.number
-              'visit': index + 1
-            for dt in DATA_TYPES
-              config = CHART_DATA_CONFIG[dt]
-              if config.coll == 'all' or config.coll == coll
+            for mod in enc.modelings
+              modelingResult = mod.result
+              dataObj =
+                'subject': subj.number
+                'visit': index + 1
+              for key of choices
+                config = CHART_DATA_CONFIG[key]
                 if config.isImaging
-                  dataObj[dt] = config.accessor(modelingResult)
-                else
-                  if tumors?
-                    tumor = tumors[0]
-                    dataObj[dt] = config.accessor(tumor)
-            data.push dataObj
+                  dataObj[key] = config.accessor(modelingResult)
+                else if tumors?
+                  tumor = tumors[0]
+                  dataObj[key] = config.accessor(tumor)
+              data.push dataObj
+
+      # Return the data objects
       data
 
-    calculateScales: (data) ->
-      # For each data type, calculate the range and the chart padding.
-      #
-      # TO DO - Pass in the collection type and perform the function only on
-      #   valid data types.
-      scales = {}
-      for dt in DATA_TYPES
+    calculateScales: (data, choices) ->
+      # For each valid data type, calculate the range and the chart padding.
+      scales = new Object
+      for key of choices
         allValues =
-          dat[dt] for dat in data
+          dat[key] for dat in data
         max = _.max allValues
         min = _.min allValues
         diff = max - min
-        # TO DO - Calculate a padding where diff is zero.
         if diff != 0
-          padding = Math.abs(diff) * CHART_LAYOUT_PARAMS.axisPadding
+          result = diff * CHART_LAYOUT_PARAMS.axisPadding
+          pad = Number(result.toPrecision(2))
         else
-          padding = 1
-        scales[dt] =
+          max = Math.abs(max)
+          result = Math.ceil(Math.log(max) / Math.log(10))
+          if Math.abs(result) is Infinity then result = 0
+          pad = CHART_LAYOUT_PARAMS.ticks / 2 * Math.pow(10, result - 1)
+        scales[key] =
           range: [min, max]
-          padding: Number(padding.toPrecision(2))
+          padding: pad
       scales
-
-    dataTypeChoices: (coll) ->
-      choices = {}
-      for dt in DATA_TYPES
-        config = CHART_DATA_CONFIG[dt]
-        if config.coll == 'all' or config.coll == coll
-          choices[dt] = config.label
-      choices
 
     renderCharts: (config) ->
       # Render the correlation charts.
       dat = config.data
       scales = config.scales
-      axes = config.axes
+      chartsToDisplay = config.charts
       d3.selection::moveToFront = ->
         # Enables a specified D3 element to be moved to the
         #   "front" layer of the visualization, which is
@@ -220,16 +219,12 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
           return
 
       # Set up the scatterplots.
-      charts = [
-        dc.scatterPlot('#qi-correlation-chart-0')
-        dc.scatterPlot('#qi-correlation-chart-1')
-        dc.scatterPlot('#qi-correlation-chart-2')
-        dc.scatterPlot('#qi-correlation-chart-3')
-      ]
+      charts =
+        dc.scatterPlot('#qi-correlation-chart-' + i) for i in [0...4]
       ndx = crossfilter(dat)
       for chart, index in charts
-        xAxis = axes[index].x
-        yAxis = axes[index].y
+        xAxis = chartsToDisplay[index].x
+        yAxis = chartsToDisplay[index].y
         dim = ndx.dimension((d) ->
           # The properties must correspond to the CHART_DATA_CONFIG objects.
           props = [
@@ -272,9 +267,8 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
 
       dc.renderAll()
 
-      # Move the chart data points to the front layer of the
-      #   visualization so they can be bound to the tooltip
-      #   mouseover events...
+      # Move the chart data points to the front layer of the visualization so
+      #   they can be bound to the tooltip mouseover events.
       d3.selectAll('.chart-body').moveToFront()
 
       # Append a tooltip div to the document.

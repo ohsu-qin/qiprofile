@@ -1,13 +1,13 @@
 define ['angular', 'lodash', 'underscore.string', 'sprintf', 'moment', 'rest',
-        'helpers', 'image', 'resources'],
+        'helpers', 'imageSequence', 'resources'],
   (ng, _, _s, sprintf, moment, REST) ->
     router = ng.module 'qiprofile.router', ['qiprofile.resources',
                                             'qiprofile.helpers',
-                                            'qiprofile.image']
+                                            'qiprofile.imagesequence']
 
     router.factory 'Router', [
-      'Subject', 'Session', 'Image', 'ObjectHelper', 'DateHelper',
-      (Subject, Session, Image, ObjectHelper, DateHelper) ->
+      'Subject', 'Session', 'ImageSequence', 'ObjectHelper', 'DateHelper',
+      (Subject, Session, ImageSequence, ObjectHelper, DateHelper) ->
         # The Subject search fields.
         SUBJECT_SECONDARY_KEY_FIELDS = ['project', 'collection', 'number']
 
@@ -269,7 +269,8 @@ define ['angular', 'lodash', 'underscore.string', 'sprintf', 'moment', 'rest',
                   # @returns the session image store directory
                   location:
                     get: ->
-                      # TODO - replace the format with a config property.
+                      # TODO - replace the format with an ImageStore
+                      #   config property.
                       subjectPrefix = "#{ collection }#{ sprintf("%03d", subject.number) }"
                       sessionLabel = "#{ subjectPrefix }_Session#{ sprintf("%03d", @number) }"
                       "#{ projectLocation(@project) }/#{ sessionLabel }"
@@ -373,7 +374,7 @@ define ['angular', 'lodash', 'underscore.string', 'sprintf', 'moment', 'rest',
         # content as described above.
         #
         # @param session the parent object
-        # @returns a promise which resolves to the session detail
+        # @returns a promise which resolves to the augmented session
         getSessionDetail: (session) ->
           # Adds the following property to the given volume object:
           # * scan, if the volume parent is a scan, or
@@ -383,15 +384,13 @@ define ['angular', 'lodash', 'underscore.string', 'sprintf', 'moment', 'rest',
           # @param number the one-based volume number
           # @param imageSequence the image scan or registration object
           extendVolume = (volume, number, imageSequence) ->
-            # The parent reference.
-            if imageSequence._cls is 'Scan'
-              volume.scan = imageSequence
-            else if imageSequence._cls is 'Registration'
-              volume.registration = imageSequence
-            else
-              throw new TypeError("The image sequence type is not recognized")
+            # TODO - if volume is resurrected, then move this code to the
+            #   volume.coffee VolumeMixin.
+            # The parent reference property.
+            attr = _s.decapitalize(imageSequence._cls)
+            volume[attr] = imageSequence
             # The image sequence alias.
-            Object.defineProperty volume, 'container',
+            Object.defineProperty volume, 'imageSequence',
               get: ->
                 @scan or @registration
             # Set the volume number property.
@@ -407,12 +406,10 @@ define ['angular', 'lodash', 'underscore.string', 'sprintf', 'moment', 'rest',
             # An image sequence present a uniform interface, which
             # includes a session reference.
             imageSequence.session = session
-            # Add the to each volume.
-            for volume, index in imageSequence.volumes
+            # Extend each volume.
+            for volume, index in imageSequence.volumes.images
               extendVolume(volume, index + 1, imageSequence)
             # Add the service helper methods.
-            # TODO - this extend pattern should be replicated with
-            #   other objects in this router.
             ImageSequence.extend(imageSequence)
           
           # Extends the given registration object as described in
@@ -423,10 +420,11 @@ define ['angular', 'lodash', 'underscore.string', 'sprintf', 'moment', 'rest',
           # @param number the one-based registration index within the scan
           # @param scan the source scan
           extendRegistration = (registration, number, scan) ->
-            # Set the source scan reference.
+            # TODO - delegate to a registration.coffee RegistrationMixin.
             registration.scan = scan
             # Format the title.
-            registration.title = "Scan #{ scan.number } Registration" +
+            # TODO - make title a virtual property.
+            registration.title = "#{ scan.title } Registration" +
                                  " #{ registration.number }"
             # Add the registration volume properties.
             extendImageSequence(registration)
@@ -440,10 +438,13 @@ define ['angular', 'lodash', 'underscore.string', 'sprintf', 'moment', 'rest',
           #
           # @param scan the scan to extend
           extendScan = (scan) ->
+            # TODO - delegate to a scan.coffee ScanMixin.
             # The number is read as a string, as with all JSON values.
             # Convert it to an integer.
             scan.number = parseInt(scan.number)
             # The scan title.
+            # TODO - replace by "#{ protocol.technique } Scan",
+            #   where the scan protocol is fetched and cached.
             scan.title = "Scan #{ scan.number }"
             # Set the session reference.
             scan.session = session
@@ -485,21 +486,19 @@ define ['angular', 'lodash', 'underscore.string', 'sprintf', 'moment', 'rest',
           scan
 
         # @param scan the scan to search
-        # @param resource the registration resource name
+        # @param name the registration name
         # @returns the registration object
         # @throws ReferenceError if the scan does not have the registration
-        getRegistration: (scan, resource) ->
+        getRegistration: (scan, name) ->
           # The matching scan (there is at most one).
-          reg = _.find(scan.registrations,
-                       (reg) -> reg.resource is resource)
+          target = _.find(scan.registrations, (reg) -> reg.volumes.name is name)
           # If no such registration, then complain.
-          if not reg?
+          if not target?
             throw new ReferenceError "#{ subjectTitle(session) }" +
                                      " Scan #{ scan.number } does not have" +
-                                     " a registration with resource" +
-                                     " #{ resource }"
+                                     " a registration with resource #{ name }"
           # Return the registration.
-          reg
+          target
 
         # @param image sequence the image parent image sequence object
         # @param number the one-based volume number
@@ -508,13 +507,19 @@ define ['angular', 'lodash', 'underscore.string', 'sprintf', 'moment', 'rest',
         #   after the image content is loaded
         # @throws ReferenceError if the parent image sequence does not have
         #   the image
-        getVolume: (container, number) ->
+        getVolume: (imageSequence, number) ->
           # The volume number is one-based.
-          volume = container.volumes[number - 1]
+          volumes = imageSequence.volumes
+          if not volumes?
+            throw new ReferenceError "Subject #{ subject.number }" +
+                                     " Session #{ session.number }" +
+                                     " #{ imageSequence._cls }" +
+                                     " volumes were not found"
+          volume = volumes.images[number - 1]
           if not volume?
             throw new ReferenceError "Subject #{ subject.number }" +
                                      " Session #{ session.number }" +
-                                     " #{ container._cls }" +
+                                     " #{ imageSequence._cls }" +
                                      " Volume #{ number } was not found"
           # Return the volume.
           volume

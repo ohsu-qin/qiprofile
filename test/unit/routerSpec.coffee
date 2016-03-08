@@ -13,6 +13,8 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
       $httpBackend = null
 
       $rootScope = null
+      
+      $timeout = null
 
       # The mock objects.
       mock =
@@ -118,18 +120,27 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
                 _cls: 'Scan'
                 number: 1
                 protocol: 'sp1'
-                volumes: [
-                    name: 'path/to/first/scan/volume001.nii.gz'
+                time_series:
+                  name: 'scan_ts'
+                  image: 'scan_ts.nii.gz'
+                volumes:
+                  name: 'NIFTI'
+                  images: [
+                    name: 'volume001.nii.gz'
                     average_intensity: 2.4
-                ]
+                  ]
                 registrations: [
                   _cls: 'Registration'
-                  resource: 'reg_01'
                   protocol: 'rp1'
-                  volumes: [
-                    name: 'path/to/first/registration/volume001.nii.gz'
-                    average_intensity: 3.1
-                  ]
+                  time_series:
+                    name: 'reg_01'
+                    image: 'reg_01_ts.nii.gz'
+                  volumes:
+                    name: 'reg_01'
+                    images:  [
+                      name: 'volume001.nii.gz'
+                      average_intensity: 3.1
+                    ]
                 ]
               }
             ]
@@ -139,18 +150,27 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
               _cls: 'Scan'
               number: 1
               protocol: 'sp1'
-              volumes: [
-                name: 'path/to/second/scan/volume001.nii.gz'
-                average_intensity: 2.5
-              ]
+              time_series:
+                name: 'scan_ts'
+                image: 'scan_ts.nii.gz'
+              volumes:
+                name: 'NIFTI'
+                images:   [
+                  name: 'volume001.nii.gz'
+                  average_intensity: 2.5
+                ]
               registrations: [
                 _cls: 'Registration'
-                resource: 'reg_02'
                 protocol: 'rp1'
-                volumes: [
-                  name: 'path/to/second/registration/volume001.nii.gz'
-                  average_intensity: 2.7
-                ]
+                time_series:
+                  name: 'reg_02'
+                  image: 'reg_02_ts.nii.gz'
+                volumes:
+                  name: 'reg_02'
+                  images: [
+                    name: 'volume001.nii.gz'
+                    average_intensity: 2.7
+                  ]
               ]
             ]
 
@@ -158,11 +178,12 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
         # Fake the router service module.
         ng.module('qiprofile.router')
 
-        inject ['Router', '$httpBackend', '$rootScope',
-          (_Router_, _$httpBackend_, _$rootScope_) ->
+        inject ['Router', '$httpBackend', '$rootScope', '$timeout',
+          (_Router_, _$httpBackend_, _$rootScope_, _timeout_) ->
             Router = _Router_
             $httpBackend = _$httpBackend_
             $rootScope = _$rootScope_
+            $timeout = _timeout_
 
             # The mock subjects http call.
             url = encodeURI('/api/subject?where=' +
@@ -193,7 +214,9 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
         ]
 
       afterEach ->
-        $httpBackend.verifyNoOutstandingExpectation()
+        # Note: Angular 1.2.5 and after issue a 'Digest in progress' message
+        # unless the digest argment is set to false as shown below.
+        $httpBackend.verifyNoOutstandingExpectation(false)
         $httpBackend.verifyNoOutstandingRequest()
 
       describe 'Subject', ->
@@ -447,18 +470,22 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
 
                       .to.equal(paramResult)
 
-
           describe 'Detail', ->
             session = null
 
             beforeEach ->
-              session = _.clone(subject.sessions[0])
+              unfetched = _.clone(subject.sessions[0])
               try
-                Router.getSessionDetail(session)
+                Router.getSessionDetail(unfetched).then (fetched) ->
+                  session = fetched
                 $httpBackend.flush()
               catch ReferenceError
                 # Router couldn't fetch the session detail.
+                # The first test will fail.
 
+            it 'should fetch the session detail', ->
+              expect(session, "The session detail was not fetched")
+                .to.exist
             it 'should set the session subject reference', ->
               expect(session.subject, "Session is missing a subject reference")
                 .to.exist
@@ -486,17 +513,17 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
 
               describe 'Volume', ->
                 volume = null
-                mockVolume = mockScan.volumes[0]
+                mockVolume = mockScan.volumes.images[0]
 
                 beforeEach ->
                   try
-                    volume = scan.volumes[0]
+                    volume = scan.volumes.images[0]
                   catch TypeError
                     # There is not a volumes array.
 
                 it 'should have a scan volume', ->
                   expect(scan.volumes, "The scan is missing volumes").to.exist
-                  expect(scan.volumes.length,
+                  expect(scan.volumes.images.length,
                          "The scan volumes length is incorrect").to.equal(1)
 
                 it 'should reference the scan', ->
@@ -505,11 +532,11 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
                   expect(volume.scan, "The volume scan reference is incorrect")
                      .to.equal(scan)
 
-                it 'should alias the container reference to the scan', ->
-                  expect(volume.container,
-                         "The volume is missing the container alias").to.exist
-                  expect(volume.container,
-                         "The volume container alias is incorrect").to.equal(scan)
+                it 'should alias the imageSequence reference to the scan', ->
+                  expect(volume.imageSequence,
+                         "The volume is missing the imageSequence alias").to.exist
+                  expect(volume.imageSequence,
+                         "The volume imageSequence alias is incorrect").to.equal(scan)
 
                 it 'should have a volume number', ->
                   expect(volume.number, "The volume number is missing").to.exist
@@ -526,11 +553,6 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
                     .to.exist
                   expect(volume.averageIntensity, "The scan intensity is incorrect")
                     .to.equal(mockVolume.average_intensity)
-
-                it 'should create the scan volume image object on demand', ->
-                  expect(volume.image, "The scan volume image object is missing")
-                    .to.exist
-                  # Note: the image object content is tested in imageSpec.coffee.
 
               describe 'Registration', ->
                 registration = null
@@ -553,18 +575,18 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
 
                 describe 'Volume', ->
                   volume = null
-                  mockVolume = mockScan.registrations[0].volumes[0]
+                  mockVolume = mockScan.registrations[0].volumes.images[0]
 
                   beforeEach ->
                     try
-                      volume = registration.volumes[0]
+                      volume = registration.volumes.images[0]
                     catch TypeError
                       # There is not a volumes array.
 
                   it 'should have a registration volume', ->
                     expect(registration.volumes, "The registration is missing volumes")
                       .to.exist
-                    expect(registration.volumes.length,
+                    expect(registration.volumes.images.length,
                            "The registration volumes length is incorrect").to.equal(1)
 
                   it 'should reference the registration', ->
@@ -574,11 +596,11 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
                            "The volume registration reference is incorrect")
                       .to.equal(registration)
 
-                  it 'should alias the container reference to the registration', ->
-                    expect(volume.container,
-                           "The volume is missing the container alias").to.exist
-                    expect(volume.container,
-                           "The volume container alias is incorrect")
+                  it 'should alias the imageSequence reference to the registration', ->
+                    expect(volume.imageSequence,
+                           "The volume is missing the imageSequence alias").to.exist
+                    expect(volume.imageSequence,
+                           "The volume imageSequence alias is incorrect")
                        .to.equal(registration)
 
                   it 'should have a volume number', ->
@@ -597,8 +619,3 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
                     expect(volume.averageIntensity,
                            "The registration intensity is incorrect")
                       .to.equal(mockVolume.average_intensity)
-
-                  it 'should create the scan volume image object on demand', ->
-                    expect(volume.image, "The scan volume image object is missing")
-                      .to.exist
-                    # Note: the image object content is tested in imageSpec.coffee.

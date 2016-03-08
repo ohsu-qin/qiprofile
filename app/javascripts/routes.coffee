@@ -4,8 +4,15 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
     routes = ng.module 'qiprofile.routes', ['ui.router', 'qiprofile.resources',
                                             'qiprofile.router']
 
-    routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
-      ($stateProvider, $urlRouterProvider, $locationProvider) ->
+    routes.config ['$stateProvider', '$urlMatcherFactoryProvider',
+                   '$urlRouterProvider', '$locationProvider',
+      ($stateProvider, $urlMatcherFactoryProvider, $urlRouterProvider, $locationProvider) ->
+        
+        # Match optional trailing slash. Cf.
+        # https://github.com/angular-ui/ui-router/wiki/Frequently-Asked-Questions\
+        # #how-to-make-a-trailing-slash-optional-for-all-routes
+        $urlMatcherFactoryProvider.strictMode(false)
+        
         $stateProvider
           # The top-level state. This abstract state is the ancestor
           # of all other states. It holds the url prefix. There are
@@ -177,7 +184,7 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
             views:
               'main@':
                 templateUrl: '/partials/slice-display.html'
-                controller:  'SliceDisplayCtrl'
+                controller:  'SliceCtrl'
 
           # The registration state.
           # The registration state parameter is the registration
@@ -202,7 +209,7 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
             views:
               'main@':
                 templateUrl: '/partials/slice-display.html'
-                controller:  'SliceDisplayCtrl'
+                controller:  'SliceCtrl'
 
         # Redirect an URL with trailing slash to an URL without it.
         $urlRouterProvider.rule ($injector, $location) ->

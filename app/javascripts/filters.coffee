@@ -1,9 +1,9 @@
 define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
-        'demographics', 'tnm', 'image'],
+        'demographics', 'tnm', 'imageSequence'],
   (ng, moment, _s, roman) ->
     filters = ng.module 'qiprofile.filters',
                         ['qiprofile.helpers', 'qiprofile.demographics',
-                         'qiprofile.tnm', 'qiprofile.image']
+                         'qiprofile.tnm', 'qiprofile.imagesequence']
 
     filters.filter 'capitalize', ->
       (s) -> if s? then _s.capitalize(s) else s
@@ -65,7 +65,7 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
 
 
     filters.filter 'imageContainerTitle', ->
-      # If the image container name ends with _reg, then it is a registation.
+      # If the image sequence name ends with _reg, then it is a registation.
       # Otherwise, it is a scan.
       (value) ->
         if value.startsWith('reg')

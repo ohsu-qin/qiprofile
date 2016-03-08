@@ -1,9 +1,9 @@
-define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast', 'imageproto'],
+define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
   (ng, _) ->
     ctlrs = ng.module(
       'qiprofile.controllers',
       ['ngSanitize', 'ui.bootstrap', 'qiprofile.modeling',
-       'qiprofile.resources', 'qiprofile.breast', 'qiprofile.imageproto']
+       'qiprofile.resources', 'qiprofile.breast']
     )
 
     # The local controller helper methods.
@@ -546,29 +546,29 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast', 'imageproto'],
         #
         # @param image the Image object
         $scope.openImage = () ->
-          # The parent scan or registration image container.
-          container = $scope.volume.container
+          # The parent scan or registration image sequence.
+          imageSequence = $scope.slice.imageSequence
 
           # The common parameters.
           params =
-            project: container.session.subject.project
-            subject: container.session.subject.number
-            session: container.session.number
-            detail: container.session.detail
+            project: imageSequence.session.subject.project
+            subject: imageSequence.session.subject.number
+            session: imageSequence.session.number
+            detail: imageSequence.session.detail
             volume: $scope.volume.number
 
-          # The target container route prefix.
+          # The target imageSequence route prefix.
           route = 'quip.subject.session.scan.'
-          # Add to the parameters and route based on the container type.
-          if container._cls == 'Scan'
-            params.scan = container.number
-          else if container._cls == 'Registration'
-            params.scan = container.scan.number
-            params.registration = container.resource
+          # Add to the parameters and route based on the imageSequence type.
+          if imageSequence._cls == 'Scan'
+            params.scan = imageSequence.number
+          else if imageSequence._cls == 'Registration'
+            params.scan = imageSequence.scan.number
+            params.registration = imageSequence.resource
             route += 'registration.'
           else
-            throw new TypeError("Unsupported image container type:" +
-                                " #{ container._cls }")
+            throw new TypeError("Unsupported image sequence type:" +
+                                " #{ imageSequence._cls }")
           # Finish off the route.
           route += 'volume'
 
@@ -577,12 +577,12 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast', 'imageproto'],
     ]
 
 
-    # The Image Slice Display page controller.
-    ctlrs.controller 'SliceDisplayCtrl', [
+    # The Image Slice display controller.
+    ctlrs.controller 'SliceCtrl', [
       '$rootScope', '$scope', '$sce', 'Modeling', 'volume', 'slice', 'imageSequence',
-      'SliceDisplay', 'ControllerHelper',
+      'Slice', 'ControllerHelper',
       ($rootScope, $scope, $sce, Modeling, volume, slice, imageSequence,
-       SliceDisplay, ControllerHelper) ->
+       Slice, ControllerHelper) ->
         # The session temp convenience variable.
         session = imageSequence.session
         # Capture the current project.
@@ -618,9 +618,9 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast', 'imageproto'],
         # Watches for a change in the saggital slice control setting. Updates
         #   the image and, if selected, the overlay.
         $scope.$watch 'saggitalView.slice', (index) ->
-          SliceDisplay.updateSlice($scope.imageIds[index].dicomImageId)
+          Slice.updateSlice($scope.imageIds[index].dicomImageId)
           if $scope.overlayIndex?
-            SliceDisplay.updateOverlay($scope.imageIds[index].overlayIds,
+            Slice.updateOverlay($scope.imageIds[index].overlayIds,
                                             $scope.overlayIndex)
 
         # The overlayIndex scope variable is the overlay radio input
@@ -648,17 +648,17 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast', 'imageproto'],
             # The select overlay label map in the selected modeling object.
             #overlay = modeling.overlays[ovrIndex]
             # Delegate to the image object.
-            #$scope.image.selectOverlay(overlay)
+            #$scope.volume.selectOverlay(overlay)
 
             # Move the overlay viewport to the front and update it -
             #   Cornerstone prototype.
             $scope.overlayConfig.style['z-index'] = 1
             slice = $scope.saggitalView.slice
-            $scope.sliceDisplay.updateOverlay($scope.imageIds[slice].overlayIds,
+            $scope.slice.updateOverlay($scope.imageIds[slice].overlayIds,
                                             index)
 
           else
-            #$scope.image.deselectOverlay()
+            #$scope.volume.deselectOverlay()
 
             # Move the overlay viewport to the back - Cornerstone prototype.
             $scope.overlayConfig.style['z-index'] = -1

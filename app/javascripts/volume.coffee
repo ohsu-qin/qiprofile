@@ -4,14 +4,66 @@
 # http://stackoverflow.com/questions/18591966/inject-module-dynamically-only-if-required
 #
 define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng, _, _s) ->
-  image = ng.module 'qiprofile.image', ['qiprofile.file', 'qiprofile.modeling', 'vr.directives.slider']
+  volume = ng.module 'qiprofile.volume', ['qiprofile.file', 'qiprofile.modeling', 'vr.directives.slider']
 
-  image.factory 'Image', ['$rootScope', '$q', 'File', 'Modeling', ($rootScope, $q, File, Modeling) ->
-    # The root scope {parent id: [Image objects]} cache.
-    if not $rootScope.images
-      $rootScope.images = {}
+  volume.factory 'Volume', ['$rootScope', '$q', 'File', 'Modeling', ($rootScope, $q, File, Modeling) ->
+    class Image extends Loader
+      # @param volume the REST Volume object
+      constructor: (@volume) ->
 
-    # The Image class encapsulates a volume image with the following properties:
+      # Transfers the NiFTI file image data to the data property.
+      # The state loading flag is set to true while the
+      # file is being read.
+      #
+      # @returns a promise which resolves to this time series
+      #   when the file is loaded
+      load: ->
+        super @location
+
+    # @returns the image store time series file path
+    Object.defineProperties Image.prototype,
+      location:
+        get: ->
+          parent_dir = @volume.location
+          if @imageSequence._cls is 'Scan'
+            "#{ @volume.location }/scan_ts/scan_ts.nii.gz"
+          else if  @imageSequence._cls is 'Registration'
+            "#{ parent_dir }/#{ @imageSequence.resource }_ts.nii.gz"
+
+    # The ImageSequenceMixin class adds helper properties to an
+    # image collection 4D scan or registration object.
+    #
+    # This class is private within the ImageSequence service scope.
+    class ImageSequenceMixin
+      # @param source the REST Scan or Registration object
+      # @returns a new ImageSequence extension object
+      constructor: ->
+        # The encapsulated 4D time series image.
+        @timeSeries = new TimeSeries(this)
+
+    Object.defineProperties ImageSequenceMixin.prototype,
+      # The image sequence location is the XNAT image store archive
+      # directory. The scan location relative to the parent session is
+      # SCANS/<scan number>. The registration location relative to the
+      # parent scan is the registration resource.
+      #
+      # TODO - generalize this by delegating to an ImageStore service.
+      #
+      # @returns the image store directory for this image sequence
+      location: ->
+        get: ->
+          if @_cls is 'Scan'
+            "#{ @session.location }/SCANS/#{ @number }"
+          else if  @_cls is 'Registration'
+            "#{ @scan.session.location }/SCANS/#{ @scan.number }/#{ @resource }/"
+          else
+            throw new TypeError("Unsupported ImageSequence type:" +
+                                " #{ @_cls }")
+    #
+    # This class is broken after the imageSequence and slice changes.
+    # TODO - adapt to the ImageSequence mixin pattern.
+    #
+    # The Volume class encapsulates a volume with the following properties:
     # * volume - the image scan or registration volume object
     # * number - the one-based image volume number
     # * state - one of 'unloaded', 'loading' or 'loaded'
@@ -23,31 +75,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
     # * deselectOverlay() - hide the overlay
     #
     # This class is private within the Image service scope.
-    class Image
-      # The valid image load states.
-      @STATES =
-        UNLOADED: 'unloaded'
-        LOADING: 'loading'
-        LOADED: 'loaded'
-        ERROR: 'error'
-
-      # Creates an object which encapsulates an image.
-      #
-      # @param volume the REST volume object
-      # @param id the unique image id
-      # @returns a new image object
-      constructor: (@volume, @id) ->
-        # The initial state is unloaded.
-        @state = Image.STATES.UNLOADED
-        # The overlays convenience property delegates to the volume
-        # session.
-        #
-        # @returns the session modeling label map objects which have
-        #   a color table
-        Object.defineProperty this, 'overlays',
-          get: ->
-            @volume.container.session.overlays
-      
+    class VolumeMixin
       # Transfers the file content to the data properties.
       # The image state loading flag is set to true while the
       # files are being read.
@@ -55,45 +83,18 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
       # @returns a promise which resolves to this image object
       #   when the file is loaded
       load: ->
-        # Set the loading flag.
-        @state = Image.STATES.LOADING
-        # The volume to render.
-        @xtkVolume = new X.volume()
-        @xtkVolume.file = @volume.name
-
-        # Read the file into an ArrayBuffer. The CoffeeScript fat
-        # arrow (=>) binds the this variable to the image object
-        # rather than the $http request.
-        File.readBinary(@volume.name).then (data) =>
-          # Set the data property to the scan file content.
+        super().then (data) ->
+          # The XTK image to render.
+          @xtkVolume = new X.volume()
+          @xtkVolume.file = @location
           @xtkVolume.filedata = data
-          # Set the state to loaded.
-          @state = Image.STATES.LOADED
-        .catch (res) =>
-          # Display an alert with the status text.
-          alert("The image volume file load was unsuccessful: " +
-                "#{ res.statusText } (#{ res.status }).")
-          # Set the state to 'error'.
-          @state = Image.STATES.ERROR
-
-        # TODO - this load function should return the above promise,
-        #   which should resolve to the loaded image.
-        this
-
-      isLoaded: ->
-        @state == Image.STATES.LOADED
-
-      isLoading: ->
-        @state == Image.STATES.LOADING
-
-      isError: ->
-        @state == Image.STATES.ERROR
+          data
 
       # Renders the image in the given parent element.
       #
-      # @param element the Angular jQueryLite element
+      # @param element the Angular jqLite element
       open: (element) ->
-        # The XTK renderer for this image.
+        # The XTK renderer for this volume.
         renderer = new X.renderer3D()
         # The image is rendered within the given element.
         renderer.container = element[0]
@@ -110,7 +111,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
         # Adjust the camera position.
         renderer.camera.position = [0, 0, 240]
 
-        # Render the image.
+        # Render the volume.
         renderer.render()
 
       # Returns whether the XTK volume has a visible label map. This
@@ -225,7 +226,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
     # @returns the cached image object
     cache = (volume) ->
       # @param the image id, formatted as the session detail id,
-      #   image container protocol id and volume number separated
+      #   image sequence protocol id and volume number separated
       #   by periods
       # @returns the cached image object with the given id,
       #   or null if the image is not yet cached
@@ -237,17 +238,14 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
       # @param image the image object
       # @returns the image object
       add = (image) ->
-        $rootScope.images[image.id] = image
+        $rootScope.images[volume.id] = image
 
       # The unique image id for caching.
-      imageId = "#{ volume.container.session.detail }" +
-                ".#{ volume.container.protocol }" +
+      imageId = "#{ imageSequence.session.detail }" +
+                ".#{ imageSequence.protocol }" +
                 ".#{ volume.number }"
       # Get the cached image object or add a new image object.
       get(imageId) or add(create(volume, imageId))
-
-    # The image load states.
-    STATES: Image.STATES
     
     # Obtains image objects for the given volume object. The image
     # object content is described in the create() function.
@@ -264,23 +262,23 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
     forVolume: (volume) ->
       cache(volume)
 
-    # Formats the image container title.
+    # Formats the image sequence title.
     #
     # Note: this formatting routine should be confined to the filter,
     # but must be placed in this helper for use by the intensity
     # chart configuration.
     #
-    # @param container the container object
-    # @returns the display title for the container
-    containerTitle: (container) ->
-      if container._cls is 'Scan'
-        "#{ _s.capitalize(container.name) } #{ container._cls }"
-      else if  container._cls is 'Registration'
-        if not container.source?
+    # @param imageSequence the imageSequence object
+    # @returns the display title for the imageSequence
+    imageSequenceTitle: (imageSequence) ->
+      if imageSequence._cls is 'Scan'
+        "#{ _s.capitalize(imageSequence.name) } #{ imageSequence._cls }"
+      else if  imageSequence._cls is 'Registration'
+        if not imageSequence.source?
           throw new ReferenceError("The scan source name was not found")
-        reg_src = _s.capitalize(container.source)
-        "#{ reg_src } #{ container.type } #{ name }"
+        reg_src = _s.capitalize(imageSequence.source)
+        "#{ reg_src } #{ imageSequence.type } #{ name }"
       else
-        throw new TypeError("Unsupported image container type:" +
-                            " #{ container._cls }")
+        throw new TypeError("Unsupported image imageSequence type:" +
+                            " #{ imageSequence._cls }")
   ]

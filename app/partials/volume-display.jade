@@ -1,22 +1,25 @@
+// TODO - following successful introduction of the Slice Display,
+// create a volume-display branch to preserve the XTK variant and
+// delete all volume files and references from the master branch.
 
 extends ../layout/partial
 
 include include/accordion-heading-mixin
 
 block billboard
-  | {{ image.volume.container.session.subject.collection | capitalize }}
-  | Patient {{ image.volume.container.session.subject.number }}
-  | Session {{ image.volume.container.session.number }}
-  | {{ image.volume.container.title }}
-  | Volume {{ image.volume.number }}
+  | {{ imageSequence.session.subject.collection | capitalize }}
+  | Patient {{ imageSequence.session.subject.number }}
+  | Session {{ imageSequence.session.number }}
+  | {{ imageSequence.title }}
+  | Volume {{ volume.number }}
 
 block content
   // The modeling parameter overlay select.
   include include/overlay-select
   // The image display.
-  qi-image.qi-panel.qi-image
+  qi-volume.qi-panel.qi-image
     // The opacity, axis and threshold image controls.
-    include include/image-controls
+    include include/volume-controls
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

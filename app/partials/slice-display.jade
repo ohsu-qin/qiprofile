@@ -4,18 +4,21 @@ extends ../layout/partial
 include include/accordion-heading-mixin
 
 block billboard
-  | {{ image.volume.container.session.subject.collection | capitalize }}
-  | Patient {{ image.volume.container.session.subject.number }}
-  | Session {{ image.volume.container.session.number }}
-  | {{ image.volume.container.title }}
-  | Volume {{ image.volume.number }}
+  | {{ imageSequence.session.subject.collection | capitalize }}
+  | Patient {{ imageSequence.session.subject.number }}
+  | Session {{ imageSequence.session.number }}
+  | {{ imageSequence.title }}
+  | Volume {{ volume.number }}
 
 block content
   // The modeling parameter overlay select.
   include include/overlay-select
-  // The opacity, axis and threshold image controls.
-  include include/image-controls
-  #qi-slice-display.qi-slice-display
+  // TODO - create volume and slice axis sliders in a new file slice-controls.jade,
+  //   perhaps using volume-controls.jade as a basis., then uncomment the lines
+  //   below.
+  //- // The opacity, axis and threshold image controls.
+  //- include include/image-controls
+  .qi-slice-display
     // The Cornerstone image viewports, one for the slice and one for the
     //   overlay. The overlay viewport is placed in front of the slice viewport
     //   using CSS.

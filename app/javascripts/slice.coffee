@@ -1,8 +1,8 @@
 define ['angular', 'lodash', 'cornerstone', 'exampleImageIdLoader', 'slider'],
        (ng, _, cornerstone) ->
-  sliceDisplay = ng.module 'qiprofile.sliceDisplay', ['vr.directives.slider']
+  slice = ng.module 'qiprofile.slice', ['vr.directives.slider']
 
-  sliceDisplay.factory 'SliceDisplay', ->
+  slice.factory 'Slice', ->
     # The image inversion color LUT flips the colors.
   	INVERSION_LUT =
       id: '1'
@@ -12,8 +12,8 @@ define ['angular', 'lodash', 'cornerstone', 'exampleImageIdLoader', 'slider'],
       lut: _.range(255, 0, -1)
 
     # Enable the Cornerstone viewports.
-    slice = cornerstone.enable(document.getElementById('qi-slice'))
-    overlay = cornerstone.enable(document.getElementById('qi-overlay'))
+    sliceViewport = cornerstone.enable(document.getElementById('qi-slice'))
+    overlayViewport = cornerstone.enable(document.getElementById('qi-overlay'))
 
     # Loads and displays an image in a viewport. The binary data served
     # up by ImageSequence.load() are referenced by the imageId.
@@ -28,7 +28,7 @@ define ['angular', 'lodash', 'cornerstone', 'exampleImageIdLoader', 'slider'],
     #
     # @param imageId the image ID
     updateSlice: (imageId) ->
-      loadAndDisplayImage(imageId, slice)
+      loadAndDisplayImage(imageId, sliceViewport)
 
     # Updates the overlay image.
     #
@@ -36,10 +36,10 @@ define ['angular', 'lodash', 'cornerstone', 'exampleImageIdLoader', 'slider'],
     # @param overlayIndex the overlay index value
     updateOverlay: (overlayIds, overlayIndex) ->
       # Parse and disaggregate the composite index.
-      #   Note: See the explanation in the SliceDisplay controller.
+      # Note: See the explanation in the Slice controller.
       index = overlayIndex.split('.').map(Number)[1]
-      loadAndDisplayImage(overlayIds[index], overlay)
+      loadAndDisplayImage(overlayIds[index], overlayViewport)
       # Apply the LUT.
-      viewport = cornerstone.getViewport(overlay)
+      viewport = cornerstone.getViewport(overlayViewport)
       viewport.modalityLUT = INVERSION_LUT
       cornerstone.setViewport(overlay, viewport)

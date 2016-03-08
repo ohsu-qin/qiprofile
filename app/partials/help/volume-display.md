@@ -1,11 +1,11 @@
 This page displays the 3D MR image volume and PK modeling color maps.
 
 Rotate the image about its three axes by clicking and dragging on the
-image. Zoom in or out using your mouse scrollwheel or with touchpad
+volume. Zoom in or out using your mouse scrollwheel or with touchpad
 pinching gestures.
 
 The buttons above the image at left let you display a map of PK modeling
-results over the 3D image. Color maps are turned off when the image is
+results over the 3D volume. Color maps are turned off when the image is
 initially loaded. The following overlay options may be included:
 
 * &Delta;K<sub>trans</sub>: the measure of the shutter speed effect on
@@ -29,7 +29,7 @@ and registration (motion correction).
 On the right, the image control panel lets you adjust the appearance of
 the 3D image and overlay. The following controls are available:
 
-* Opacity: Drag the slider to adjust the transparency of the image.
+* Opacity: Drag the slider to adjust the transparency of the volume.
 
 * Cross Section: Drag these sliders to control the cross sectional
   slicing of the image along the sagittal, coronal, and axial planes.

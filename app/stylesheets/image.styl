@@ -1,13 +1,18 @@
 //**  The Image Display styles. **//
 
+// TODO - is the following style useful? If not, then delete it.
 //.qi-image
 //  position relative
 //  display inline-block
 //  height 44em
 //  width 100%
 
-
-// Volume display styles.
+// TODO - try to avoid absolute size and convert 512px to %
+//   in the following two styles.
+//
+// TODO - convert occurences of px >= 10 to em in all style files.
+//
+// The volume rendering styles.
 .qi-volume-display
   position relative
   width 512px
@@ -15,16 +20,13 @@
   margin-top 10px
   margin-bottom 10px
 
-.qi-slice, #qi-overlay
+// The slice rendering styles.
+.qi-slice-viewport
   position absolute
   top 0
   left 0
   width 512px
   height 512px
-
-#qi-dicom-image
-  z-index: 0
-
 
 .qi-volume-ctrl
   position absolute

@@ -7,7 +7,7 @@ class VolumePage extends Page
     super('/quip/sarcoma/subject/1/session/1/scan/1/volume/20?project=QIN_Test')
 
   # Volume display panel.
-  sliceDisplayPanel: ->
+  slicePanel: ->
     @find('#qi-volume')
 
   overlayPanel: ->
@@ -60,7 +60,7 @@ describe 'E2E Testing Volume', ->
   
     beforeEach ->
     #  panel = page.displayPanel()
-      panel = page.sliceDisplayPanel()
+      panel = page.slicePanel()
   
     it 'should display the image', ->
       expect(panel, 'The image panel is missing').to.eventually.exist

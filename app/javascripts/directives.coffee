@@ -1,10 +1,10 @@
 define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
-        'correlation', 'dateline', 'intensity', 'modeling', 'imageproto'],
+        'correlation', 'dateline', 'intensity', 'modeling'],
   (ng, _, _s, Spinner) ->
     directives = ng.module(
       'qiprofile.directives',
       ['qiprofile.helpers', 'qiprofile.correlation', 'qiprofile.dateline',
-       'qiprofile.intensity', 'qiprofile.modeling', 'qiprofile.imageproto']
+       'qiprofile.intensity', 'qiprofile.modeling']
     )
 
     # Spinner directive.
@@ -96,17 +96,13 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
 
 
     # Displays the slice.
-    directives.directive 'qiSliceDisplay', ['SliceDisplay', '$compile',
-      (SliceDisplay, $compile) ->
+    directives.directive 'qiSlice', ['Slice', '$compile',
+      (Slice, $compile) ->
         restrict: 'A'
         link: (scope, element) ->
-          initImage = {
-            dicomImageId: 'example://1'
-            overlayIds: [
-              'example://3'
-            ]
-          }
-          SliceDisplay.updateDicomImage(initImage.dicomImageId)
+          # TODO - obtain the updateImage argument.
+          # Slice.updateImage(???)
+          # TODO - what does the following line do? Document or remove.
           element.removeAttr 'qi-slice-display'
           $compile(element)(scope)
     ]
@@ -127,10 +123,10 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
     ]
 
 
-    # Displays a scan or registration series 3D image.
-    directives.directive 'qiImage', ->
+    # Displays a scan or registration series 3D volume.
+    directives.directive 'qiVolume', ->
       restrict: 'E'
       link: (scope, element) ->
-        scope.$watch 'image', (image) ->
-          if image.isLoaded()
-            scope.image.open(element)
+        scope.$watch 'volume', (image) ->
+          if volume.isLoaded()
+            scope.volume.open(element)

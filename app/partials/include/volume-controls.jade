@@ -59,17 +59,17 @@
         //   isOverlaySelected function checks whether the labelmap exists
         //   without accessing the labelmap property. E.g., rather than
         //   calling the expression:
-        //     .row(ng-show="image.xtkVolume.labelmap.file")  # Bad!
+        //     .row(ng-show="volume.xtkVolume.labelmap.file")  # Bad!
         //   call the following instead:
-        //     .row(ng-show="image.isOverlaySelected()")
+        //     .row(ng-show="volume.isOverlaySelected()")
         //
         // Note: including the following row:
-        //   slider.qi-slider(ng-model='image.xtkVolume.labelmap.opacity' ...)
+        //   slider.qi-slider(ng-model='volume.xtkVolume.labelmap.opacity' ...)
         // results in the error described above, since it references the
         // labelmap property.
         //
         // Note: including the following row:
-        //   slider.qi-slider(ng-model='image.xtkVolume._labelmap.opacity' ...)
+        //   slider.qi-slider(ng-model='volume.xtkVolume._labelmap.opacity' ...)
         // results in an empty image display but no error. This possibly
         // results from Angular rather than XTK: if the model evaluates
         // to null, then perhaps Angular chokes even if the show flag is
@@ -77,7 +77,7 @@
         //
         // Note: an alternative work-around is to define the slider model
         // as:
-        //   slider.qi-slider(ng-model='image.labelMapOpacity' ...)
+        //   slider.qi-slider(ng-model='volume.labelMapOpacity' ...)
         // where the Image service labelMapOpacity property is defined by:
         //   Object.defineProperty image, 'labelMapOpacity',
         //     get: ->
@@ -102,14 +102,14 @@
         // TODO - revisit this work-around in late 2015 after XTK has
         // hopefully matured.
         //
-        //div(ng-switch="image.isOverlaySelected()")
+        //div(ng-switch="volume.isOverlaySelected()")
         // See the Note comments above for an explanation of the odd
         // switch-show redundancy below.
         //  div(ng-switch-when="true")
-        //    .row(ng-show="image.isOverlaySelected()")
+        //    .row(ng-show="volume.isOverlaySelected()")
         //      .col-md-3 Overlay
         //      .col-md-9
-        //        slider.qi-slider(ng-model="image.xtkVolume.labelmap.opacity"
+        //        slider.qi-slider(ng-model="volume.xtkVolume.labelmap.opacity"
         //                         floor='0' ceiling='1' step='0.1'
         //                         precision='1')
         //
@@ -119,17 +119,17 @@
                 .row
                   .col-md-3.qi-slider-label Sagittal
                   .col-md-9
-                    slider.qi-slider(ng-model="image.xtkVolume.indexX"
+                    slider.qi-slider(ng-model="volume.xtkVolume.indexX"
                                      floor='0' ceiling='319' step='1')
                 .row
                   .col-md-3.qi-slider-label Coronal
                   .col-md-9
-                    slider.qi-slider(ng-model="image.xtkVolume.indexY"
+                    slider.qi-slider(ng-model="volume.xtkVolume.indexY"
                                      floor='0' ceiling='319' step='1')
                 .row
                   .col-md-3.qi-slider-label Axial
                   .col-md-9
-                    slider.qi-slider(ng-model="image.xtkVolume.indexZ"
+                    slider.qi-slider(ng-model="volume.xtkVolume.indexZ"
                                      floor='0' ceiling='118' step='1')
             div(ng-controller='AccordionGroupCtrl')
               uib-accordion-group(is-open="isOpen")
@@ -137,11 +137,11 @@
                 .row
                   .col-md-3.qi-slider-label Lower
                   .col-md-9
-                    slider.qi-slider(ng-model="image.xtkVolume.lowerThreshold"
+                    slider.qi-slider(ng-model="volume.xtkVolume.lowerThreshold"
                                      floor='0' ceiling='445' step='1')
                 .row
                   .col-md-3.qi-slider-label Upper
                   .col-md-9
-                    slider.qi-slider(ng-model="image.xtkVolume.upperThreshold"
+                    slider.qi-slider(ng-model="volume.xtkVolume.upperThreshold"
                                      floor='0' ceiling='445' step='1')
         //

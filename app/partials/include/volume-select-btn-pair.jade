@@ -3,25 +3,25 @@
   * If the image state is 'loaded', then the image selector button
     opens the image when clicked.
   * Otherwise, if a previous load attempt failed, indicated by
-    image.isError() returning true, then the image selector button
+    volume.isError() returning true, then the image selector button
     is an unclickable exclamation mark.
   * Otherwise, the image selector button loads the image when clicked.
 
 button.btn.btn-default.btn-xs.qi-nav-btn.qi-vol-btn(
   ng-click='openImage()'
-  ng-show="image.isLoaded()"
+  ng-show="volume.isLoaded()"
 )
   .glyphicon.glyphicon-eye-open
 
 button.btn.btn-default.btn-xs.qi-nav-btn.qi-vol-btn(
-  ng-show="image.isError()"
+  ng-show="volume.isError()"
 )
   .glyphicon.glyphicon-exclamation-sign
 
 button.btn.btn-default.btn-xs.qi-nav-btn.qi-vol-btn(
-  ng-click='image.load()'
-  ng-hide="image.isLoaded() || image.isError()"
-  ng-disabled="image.isLoading()"
-  qi-spin="image.isLoading()"
+  ng-click='volume.load()'
+  ng-hide="volume.isLoaded() || volume.isError()"
+  ng-disabled="volume.isLoading()"
+  qi-spin="volume.isLoading()"
 )
   .glyphicon.glyphicon-download

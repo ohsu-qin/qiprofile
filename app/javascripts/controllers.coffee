@@ -89,19 +89,21 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast', 'correlation'],
         # Place the subjects and collections in the scope.
         $scope.subjects = subjects
         $scope.collection = collection
-        # Obtain the scatterplot data.
-        data = Correlation.prepareChartData(charting, collection)
-        # Obtain the axis scales for each data type.
-        scales = Correlation.calculateScales(data)
-        # Put the valid datatype user selection choices in the scope.
+        # Obtain the valid data types for the given collection and
+        #   put them in the scope. These comprise the X/Y-axis dropdown
+        #   choices.
         $scope.choices = Correlation.dataTypeChoices(collection)
-        # Put the default X and Y axes in the scope.
-        $scope.axes = Correlation.DEFAULT_AXES[collection]
+        # Obtain the scatterplot data.
+        data = Correlation.prepareChartData(charting, $scope.choices)
+        # Obtain the axis scales for each valid data type.
+        scales = Correlation.calculateScales(data, $scope.choices)
+        # Put the default charts (X and Y axes) in the scope.
+        $scope.charts = Correlation.DEFAULT_CHARTS[collection]
         # Place the chart configuration object in the scope.
         $scope.config =
           data: data
           scales: scales
-          axes: $scope.axes
+          charts: $scope.charts
         # The initial load flag.
         $scope.initLoad = true
         # If any X or Y axis selection is changed, re-render the charts and set
@@ -110,7 +112,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast', 'correlation'],
         #   which will fail. The first chart rendering must take place after
         #   the collection detail page has fully loaded (see the correlation
         #   charts directive).
-        $scope.$watch 'axes', ((sel) ->
+        $scope.$watch 'charts', ((sel) ->
           if not $scope.initLoad
             Correlation.renderCharts($scope.config)
           else

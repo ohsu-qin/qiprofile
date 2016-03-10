@@ -4,8 +4,12 @@ block billboard
   | {{ collection }} Summary
 
 block content
-  // TODO - wrap these charts in a panel?
   div.qi-correlation-charts(qi-correlation-charts)
+  // For each chart, construct the X and Y axis data type dropdowns and create
+  //   a container for the chart. The 'choices' object contains the valid data
+  //   types for the current collection. For each data type, the key value is
+  //   the data type handle and the value is the text label that is displayed
+  //   in the dropdowns.
   .row
     .col-md-6(ng-repeat="chart in charts")
       .row.qi-axis-dropdowns
@@ -18,15 +22,15 @@ block content
             .qi-dropdown-content
               .qi-dropdown-choice(
                 ng-repeat="(key,val) in choices"
-                ng-model="charts[$parent.$index].x"
-                ng-click="charts[$parent.$index].x=key"
-                )
+                ng-model="chart.x"
+                ng-click="chart.x=key"
+              )
                 span.qi-dropdown-icon.qi-check-hide(
                   ng-show="val!=choices[chart.x]"
-                  ) &#10003;
+                ) &#10003;
                 span.qi-dropdown-icon.qi-check-show(
                   ng-show="val==choices[chart.x]"
-                  ) &#10003;
+                ) &#10003;
                 span.qi-dropdown-text {{ val }}
         .col-md-4
           .qi-dropdown.qi-y-axis-dropdown
@@ -37,15 +41,15 @@ block content
             .qi-dropdown-content
               .qi-dropdown-choice(
                 ng-repeat="(key,val) in choices"
-                ng-model="charts[$parent.$index].y"
-                ng-click="charts[$parent.$index].y=key"
-                )
+                ng-model="chart.y"
+                ng-click="chart.y=key"
+              )
                 span.qi-dropdown-icon.qi-check-hide(
                   ng-show="val!=choices[chart.y]"
-                  ) &#10003;
+                ) &#10003;
                 span.qi-dropdown-icon.qi-check-show(
                   ng-show="val==choices[chart.y]"
-                  ) &#10003;
+                ) &#10003;
                 span.qi-dropdown-text {{ val }}
       .row   
         .col-md-12.qi-correlation-chart(id="qi-correlation-chart-{{ $index }}")

@@ -84,12 +84,9 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
 
 
     ctlrs.controller 'CollectionDetailCtrl', [
-      '$rootScope', '$scope', 'project', 'subjects', 'collection', 'charting', 'Correlation',
-      ($rootScope, $scope, project, subjects, collection, charting, Correlation) ->
-        # Capture the current project.
-        $rootScope.project = project
-        # Place the subjects and collections in the scope.
-        $scope.subjects = subjects
+      '$rootScope', '$scope', 'collection', 'charting', 'Correlation',
+      ($rootScope, $scope, collection, charting, Correlation) ->
+        # Place the collection in the scope.
         $scope.collection = collection
         # Obtain the valid data types for the given collection and put them in
         #   the scope. These comprise the X/Y-axis dropdown choices.
@@ -108,11 +105,11 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
         # The initial load flag.
         $scope.initLoad = true
         # If any X or Y axis selection is changed, re-render the charts and set
-        #   the initial load flag to false. The initial load flag prevents a
-        #   chart rendering call from taking place on the initial page load,
-        #   which will fail. The first chart rendering must take place after
-        #   the collection detail page has fully loaded (see the correlation
-        #   charts directive).
+        #   the initial load flag to false. The flag prevents a chart rendering
+        #   call from taking place while the initial collection detail page
+        #   load is taking place, causing the rendering to fail. The page must
+        #   first fully load, at which point the first chart rendering will be
+        #   triggered by the collection detail directive.
         $scope.$watch 'charts', (() ->
           if not $scope.initLoad
             Correlation.renderCharts($scope.config)

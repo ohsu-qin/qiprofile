@@ -2,73 +2,155 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
   correlation = ng.module 'qiprofile.correlation', ['qiprofile.breast']
 
   correlation.factory 'Correlation', ['Breast', (Breast) ->
-    # The charting data types.
+    # The charting data types. They are in the order in which they appear in
+    #   the X/Y axis selection dropdowns. The key value is the handle for each
+    #   data type. Each has the following properties:
+    #     * label - Appears in the dropdown picklists and as chart axis labels.
+    #     * coll - The collection(s) for which the data type is valid. May be
+    #         'all' or a list of specific collections.
+    #     * accessor - The data accessor.
+    #
+    #   The order of the data types and their handles must be exactly
+    #   consistent with the property list in the dimension constructor in the
+    #   renderCharts function.
+    #
+    #   Note that necrosis percent can exist either as a single value or a
+    #   range. In the latter case, the mean of the upper and lower values is
+    #   obtained and passed on to the charts.
     CHART_DATA_CONFIG =
       'fxlKTrans':
           label: 'FXL Ktrans'
-          isImaging: true
-          coll: 'all'
+          coll: [
+            'all'
+          ]
           accessor: (modelingResult) -> modelingResult.fxlKTrans.average
       'fxrKTrans':
           label: 'FXR Ktrans'
-          isImaging: true
-          coll: 'all'
+          coll: [
+            'all'
+          ]
           accessor: (modelingResult) -> modelingResult.fxrKTrans.average
       'deltaKTrans':
           label: 'delta Ktrans'
-          isImaging: true
-          coll: 'all'
+          coll: [
+            'all'
+          ]
           accessor: (modelingResult) -> modelingResult.deltaKTrans.average
       'vE':
           label: 'v_e'
-          isImaging: true
-          coll: 'all'
+          coll: [
+            'all'
+          ]
           accessor: (modelingResult) -> modelingResult.vE.average
       'tauI':
           label: 'tau_i'
-          isImaging: true
-          coll: 'all'
+          coll: [
+            'all'
+          ]
           accessor: (modelingResult) -> modelingResult.tauI.average
       'tumorLength':
           label: 'Tumor Length (mm)'
-          isImaging: false
-          coll: 'all'
+          coll: [
+            'all'
+          ]
           accessor: (tumor) ->
-            if tumor.extent?
-              if tumor.extent.length? then tumor.extent.length else null
-            else
-              null
+            return null unless tumor.extent?
+            if tumor.extent.length? then tumor.extent.length else null
       'tumorWidth':
           label: 'Tumor Width (mm)'
-          isImaging: false
-          coll: 'all'
+          coll: [
+            'all'
+          ]
           accessor: (tumor) ->
-            if tumor.extent?
-              if tumor.extent.width? then tumor.extent.width else null
-            else
-              null
+            return null unless tumor.extent?
+            if tumor.extent.width? then tumor.extent.width else null
       'tumorDepth':
           label: 'Tumor Depth (mm)'
-          isImaging: false
-          coll: 'all'
+          coll: [
+            'all'
+          ]
           accessor: (tumor) ->
-            if tumor.extent?
-              if tumor.extent.depth? then tumor.extent.depth else null
-            else
-              null
+            return null unless tumor.extent?
+            if tumor.extent.depth? then tumor.extent.depth else null
       'recurrenceScore':
           label: 'Recurrence Score'
-          isImaging: false
-          coll: 'Breast'
+          coll: [
+            'Breast'
+          ]
           accessor: (tumor) ->
-            if tumor.geneticExpression.normalizedAssay?
-              Breast.recurrenceScore(tumor.geneticExpression.normalizedAssay)
+            return null unless tumor.geneticExpression.normalizedAssay?
+            Breast.recurrenceScore(tumor.geneticExpression.normalizedAssay)
+      'ki67':
+          label: 'Ki67 Expression'
+          coll: [
+            'Breast'
+          ]
+          accessor: (tumor) ->
+            return null unless tumor.geneticExpression?
+            if tumor.geneticExpression.ki67?
+              tumor.geneticExpression.ki67
+            else
+              null
+      'gstm1':
+          label: 'GSTM1 Normalized Assay'
+          coll: [
+            'Breast'
+          ]
+          accessor: (tumor) ->
+            return null unless tumor.geneticExpression.normalizedAssay?
+            if tumor.geneticExpression.normalizedAssay.gstm1?
+              tumor.geneticExpression.normalizedAssay.gstm1
+            else
+              null
+      'cd68':
+          label: 'CD68 Normalized Assay'
+          coll: [
+            'Breast'
+          ]
+          accessor: (tumor) ->
+            return null unless tumor.geneticExpression.normalizedAssay?
+            if tumor.geneticExpression.normalizedAssay.cd68?
+              tumor.geneticExpression.normalizedAssay.cd68
+            else
+              null
+      'bag1':
+          label: 'BAG1 Normalized Assay'
+          coll: [
+            'Breast'
+          ]
+          accessor: (tumor) ->
+            return null unless tumor.geneticExpression.normalizedAssay?
+            if tumor.geneticExpression.normalizedAssay.bag1?
+              tumor.geneticExpression.normalizedAssay.bag1
+            else
+              null
+      'grb7':
+          label: 'GRB7 Normalized Assay'
+          coll: [
+            'Breast'
+          ]
+          accessor: (tumor) ->
+            return null unless tumor.geneticExpression.normalizedAssay?
+            if tumor.geneticExpression.normalizedAssay.her2?
+              tumor.geneticExpression.normalizedAssay.her2.grb7
+            else
+              null
+      'her2':
+          label: 'HER2 Normalized Assay'
+          coll: [
+            'Breast'
+          ]
+          accessor: (tumor) ->
+            return null unless tumor.geneticExpression.normalizedAssay?
+            if tumor.geneticExpression.normalizedAssay.her2?
+              tumor.geneticExpression.normalizedAssay.her2.her2
             else
               null
       'rcbIndex':
           label: 'RCB Index'
-          isImaging: false
-          coll: 'Breast'
+          coll: [
+            'Breast'
+          ]
           accessor: (tumor) ->
             if tumor.rcb?
               rcb = Breast.residualCancerBurden(tumor)
@@ -77,24 +159,39 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
                 null
       'necrosisPercent':
           label: 'Necrosis Percent'
-          isImaging: false
-          coll: 'Sarcoma'
+          coll: [
+            'Sarcoma'
+          ]
           accessor: (tumor) ->
             if tumor.necrosisPercent?
               if tumor.necrosisPercent._cls == 'NecrosisPercentValue'
                 tumor.necrosisPercent.value
+              else if tumor.necrosisPercent._cls == 'NecrosisPercentRange'
+                _.mean [
+                  tumor.necrosisPercent.start.value
+                  tumor.necrosisPercent.stop.value
+                ]
               else
-                _.mean [tumor.necrosisPercent.start.value, tumor.necrosisPercent.stop.value]
+                null
             else
               null
 
-    # The list of data types.
+    # The complete list of data types.
     DATA_TYPES = _.keys CHART_DATA_CONFIG
 
-    # Map the data types to their display labels.
+    # Map the data type handles to their display labels.
     LABELS = _.mapValues(CHART_DATA_CONFIG, (o) ->
       o.label
     )
+
+    # The imaging data types.
+    IMAGING_DATA_TYPES = [
+      "fxlKTrans"
+      "fxrKTrans"
+      "deltaKTrans"
+      "vE"
+      "tauI"
+    ]
 
     # The chart layout parameters.
     CHART_LAYOUT_PARAMS =
@@ -103,9 +200,8 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
       ticks: 4
       axisPadding: .2
       symbolSize: 8
-      symbolFill: ['red', 'blue', 'green']
 
-    # The default charts to be displayed.
+    # The default chart data types to be displayed, by collection.
     DEFAULT_CHARTS:
       'Breast':
         [
@@ -146,87 +242,161 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
           }
         ]
 
+    # Creates an object containing only those data types that are valid for the
+    #   current collection. These are the choices that will appear in the X/Y
+    #   axis selection dropdowns.
+    #
+    # @param coll the collection
+    # @returns the valid data types for the current collection
     dataTypeChoices: (coll) ->
-      choices = LABELS
+      choices = new Object
       for key of LABELS
         config = CHART_DATA_CONFIG[key]
-        if config.coll != 'all' and config.coll != coll
-          delete choices[key]
+        if 'all' in config.coll or coll in config.coll
+          choices[key] = LABELS[key]
       choices
 
-    prepareChartData: (charting, choices) ->
-      # Extract the plot data from the data obtained via REST query, and prepare
-      #   the list of data objects that will be sent to the rendering function.
+    # Obtains and formats the scatterplot data for display in the charts. The
+    #   data consist of an array of objects where each object contains the
+    #   subject and visit numbers followed by the valid data types for the
+    #   current collection, e.g.:
+    #     {
+    #       'subject': 1
+    #       'visit': 1
+    #       'fxlKTrans': 0.19331708519426527
+    #       ...
+    #       'recurrenceScore': null
+    #       'rcbIndex': 1.746018789130012
+    #     }
+    #   The DC charts require each object to contain all the same keys. If data
+    #   is not available for a data type, it must be assigned the value 'null'.
+    #
+    # @param charting the REST query result
+    # @param choices the valid data types for the current collection
+    # @returns the scatterplot data
+    prepareScatterPlotData: (charting, choices) ->
+      # @param s the subject number
+      # @param v the visit number
+      # @param modResult the modeling result
+      # @param tumor the tumor pathology
+      # @returns a complete scatterplot data object
+      constructDCObject = (s, v, modResult, tumor) ->
+        # Create a new data object with core properties.
+        dcObject =
+            'subject': s
+            'visit': v
+        # Iterate over the valid data types and add data to the object.
+        for key of choices
+          config = CHART_DATA_CONFIG[key]
+          if key in IMAGING_DATA_TYPES
+            dcObject[key] = config.accessor(modResult)
+          else if tumor?
+            dcObject[key] = config.accessor(tumor)
+          else
+            dcObject[key] = null
+        # Return the data object.
+        dcObject
+
+      # Initialize the data object array.
       data = new Array
+      # Iterate over the subjects.
       for subj in charting
+        # Obtain the tumor pathology data from the Surgery encounter.
         tumors = null
         for enc in subj.encounters
-          if _.endsWith(enc._cls, 'Surgery')
-            if enc.pathology.tumors? then tumors = enc.pathology.tumors
-        for enc, index in subj.encounters
-          if enc.modelings
+          if _.endsWith(enc._cls, 'Surgery') and enc.pathology.tumors?
+            tumors = enc.pathology.tumors
+        # Iterate over the subject encounters. If an encounter is a modeling
+        #   session, construct a data object with the modeling and, if
+        #   available, tumor pathology data.
+        for enc, i in subj.encounters
+          if enc._cls == 'Session'
             for mod in enc.modelings
-              modelingResult = mod.result
-              dataObj =
-                'subject': subj.number
-                'visit': index + 1
-              for key of choices
-                config = CHART_DATA_CONFIG[key]
-                if config.isImaging
-                  dataObj[key] = config.accessor(modelingResult)
-                else if tumors?
-                  tumor = tumors[0]
-                  dataObj[key] = config.accessor(tumor)
-              data.push dataObj
-
-      # Return the data objects
+              if not tumors
+                dcObject = constructDCObject(
+                  subj.number, i + 1, mod.result, null
+                )
+              else
+                for tumor in tumors
+                  dcObject = constructDCObject(
+                    subj.number, i + 1, mod.result, tumor
+                  )
+              data.push dcObject
+      # Return the scatterplot data.
       data
 
+    # Calculates the chart axis scale for each data type. The value ranges for
+    #   plotted data types must be provided to the chart configuration in the
+    #   rendering function. A padding value is calculated based on the range.
+    #   In DC charts, the padding must be expressed in the same unit domains as
+    #   the data being charted.
+    #
+    # @param data the scatterplot data
+    # @param choices the valid data types for the current collection
+    # @returns the range and padding for each data type
     calculateScales: (data, choices) ->
-      # For each valid data type, calculate the range and the chart padding.
       scales = new Object
+      # Iterate over the valid data types.
       for key of choices
-        allValues =
-          dat[key] for dat in data
+        # Make a list of all values for the data type and obtain the max
+        #   and min values.
+        allValues = (dat[key] for dat in data)
         max = _.max allValues
         min = _.min allValues
         diff = max - min
+        # If the values are not all the same, calculate a padding value based
+        #   the chart layout parameter setting, e.g. a setting of .2 will
+        #   give the chart 20% padding.
+        # If the values are all the same, calculate a padding value of an
+        #   appropriate resolution for that value. The initial "result" value
+        #   reflects the number of digits or decimal places of the scatterplot
+        #   values. Each chart tick mark above and below that value is then set
+        #   to 10 to the power of the result reduced by 1.
         if diff != 0
-          result = diff * CHART_LAYOUT_PARAMS.axisPadding
-          pad = Number(result.toPrecision(2))
+          pad = diff * CHART_LAYOUT_PARAMS.axisPadding
         else
           max = Math.abs(max)
           result = Math.ceil(Math.log(max) / Math.log(10))
           if Math.abs(result) is Infinity then result = 0
           pad = CHART_LAYOUT_PARAMS.ticks / 2 * Math.pow(10, result - 1)
+        # Add the range and padding for the data type to the scales object.
         scales[key] =
           range: [min, max]
           padding: pad
+      # Return the scales object.
       scales
 
+    # The dimensional charting (DC) rendering function.
+    #
+    # @param config the chart configuration
     renderCharts: (config) ->
-      # Render the correlation charts.
-      dat = config.data
-      scales = config.scales
-      chartsToDisplay = config.charts
       d3.selection::moveToFront = ->
-        # Enables a specified D3 element to be moved to the
-        #   "front" layer of the visualization, which is
-        #   necessary if that element is to be bound to
-        #   mouseover events (e.g. tooltips).
+        # Enables a specified D3 element to be moved to the "front" layer of
+        #   the visualization, which is necessary if that element is to be
+        #   bound to mouseover events (e.g. tooltips).
         @each ->
           @parentNode.appendChild this
           return
 
+      dat = config.data
+      scales = config.scales
+      chartsToDisplay = config.charts
+
+      # TODO - Suppress charts where all the values for either of the data
+      #   types are null.
+      #
       # Set up the scatterplots.
-      charts =
-        dc.scatterPlot('#qi-correlation-chart-' + i) for i in [0...4]
+      charts = (dc.scatterPlot('#qi-correlation-chart-' + i) for i in [0...4])
+      # Set up the crossfilter.
       ndx = crossfilter(dat)
+      # Iterate over the charts.
       for chart, index in charts
         xAxis = chartsToDisplay[index].x
         yAxis = chartsToDisplay[index].y
+        # Set up the dimension based on the X/Y axis user selections.
         dim = ndx.dimension((d) ->
-          # The properties must correspond to the CHART_DATA_CONFIG objects.
+          # The properties list must correspond exactly to the
+          #   CHART_DATA_CONFIG object keys.
           props = [
             d.fxlKTrans
             d.fxrKTrans
@@ -237,6 +407,12 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
             d.tumorWidth
             d.tumorDepth
             d.recurrenceScore
+            d.ki67
+            d.gstm1
+            d.cd68
+            d.bag1
+            d.grb7
+            d.her2
             d.rcbIndex
             d.necrosisPercent
           ]
@@ -246,7 +422,9 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
             props[DATA_TYPES.indexOf(yAxis)]
           ]
         )
+        # Set up the group.
         group = dim.group()
+        # The chart configuration.
         chart.width(CHART_LAYOUT_PARAMS.width)
           .height(CHART_LAYOUT_PARAMS.height)
           .x(d3.scale.linear().domain(scales[xAxis].range))
@@ -260,37 +438,19 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
           .renderVerticalGridLines(true)
           .renderHorizontalGridLines(true)
           .symbolSize(CHART_LAYOUT_PARAMS.symbolSize)
+          .colors(d3.scale.category20b())
+          .colorAccessor((d) -> return 1)
           .dimension(dim)
           .group(group)
         chart.xAxis().ticks(CHART_LAYOUT_PARAMS.ticks)
         chart.yAxis().ticks(CHART_LAYOUT_PARAMS.ticks)
+        chart.margins().left += 6;
 
+      # Render all the charts.
       dc.renderAll()
 
       # Move the chart data points to the front layer of the visualization so
-      #   they can be bound to the tooltip mouseover events.
+      #   they can be bound to mouse events.
       d3.selectAll('.chart-body').moveToFront()
-
-      # Append a tooltip div to the document.
-      div = d3.select('body').append('div').attr('class', 'tooltip').style('opacity', 0)
-      
-      # Specify tooltips for the data points. Use the "renderlet"
-      #   listener to specify the content of the tooltips after each rendering
-      #   of the chart, including the initial rendering and any re-renderings
-      #   after a brush gesture has been made.
-
-      for chart in charts
-        chart.on 'renderlet', (chart) ->
-          chart.selectAll('.symbol')
-            .data(dat)
-            .attr('fill', (d) -> CHART_LAYOUT_PARAMS.symbolFill[d.subject - 1])
-            .on('mouseover', (d) ->
-              div.transition().duration(20).style 'opacity', .9
-              div.html('Subject: ' + d.subject + '<br/>' + 'Visit: ' + d.visit).style('left', d3.event.pageX + 5 + 'px').style 'top', d3.event.pageY - 35 + 'px'
-              return
-            ).on('mouseout', (d) ->
-              div.transition().duration(50).style 'opacity', 0
-              return
-            )
 
   ]

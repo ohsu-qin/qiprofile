@@ -91,12 +91,11 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
         # Place the subjects and collections in the scope.
         $scope.subjects = subjects
         $scope.collection = collection
-        # Obtain the valid data types for the given collection and
-        #   put them in the scope. These comprise the X/Y-axis dropdown
-        #   choices.
+        # Obtain the valid data types for the given collection and put them in
+        #   the scope. These comprise the X/Y-axis dropdown choices.
         $scope.choices = Correlation.dataTypeChoices(collection)
-        # Obtain the scatterplot data.
-        data = Correlation.prepareChartData(charting, $scope.choices)
+        # Obtain the formatted scatterplot data.
+        data = Correlation.prepareScatterPlotData(charting, $scope.choices)
         # Obtain the axis scales for each valid data type.
         scales = Correlation.calculateScales(data, $scope.choices)
         # Put the default charts (X and Y axes) in the scope.
@@ -114,12 +113,13 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
         #   which will fail. The first chart rendering must take place after
         #   the collection detail page has fully loaded (see the correlation
         #   charts directive).
-        $scope.$watch 'charts', ((sel) ->
+        $scope.$watch 'charts', (() ->
           if not $scope.initLoad
             Correlation.renderCharts($scope.config)
           else
             $scope.initLoad = false
-        ), true
+        ),
+        true
     ]
 
 

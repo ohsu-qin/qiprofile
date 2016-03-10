@@ -77,17 +77,6 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
             url: '/:collection'
             resolve:
               Subject: 'Subject'
-              subjects: (Subject, project) ->
-                # The selection criterion is the project name.
-                cond = REST.where(project: project)
-                # The id is always fetched. In addition, the
-                # project/collection/number secondary key is fetched.
-                # No other fields are fetched.
-                fields = REST.map(['project', 'collection', 'number'])
-                # The HTML query parameter.
-                param = _.extend(_.clone(cond), fields)
-                # Delegate to the resource.
-                Subject.query(param).$promise
               collection: ($stateParams) ->
                 _s.capitalize($stateParams.collection)
               charting: (Subject, project, collection) ->

@@ -6,8 +6,9 @@ block billboard
 block content
    ul.qi-main-list(ng-repeat="collection in collections | orderBy:'name'")
      li
-      // TODO - link the name to the Collection Detail page
-      .qi-inline-heading.qi-collection-name {{ collection.name }}
+      .qi-inline-heading.qi-collection-name
+        a(ui-sref="quip.collection({collection: collection.name.toLowerCase()})")
+          | {{ collection.name }}
       span : {{ collection.description }}
       button.btn.btn-med.qi-profile-btn(
           ng-click="open(collection.url)"

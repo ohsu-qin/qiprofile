@@ -197,9 +197,10 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
     CHART_LAYOUT_PARAMS =
       height: 280
       width: 600
-      ticks: 4
       axisPadding: .2
       symbolSize: 8
+      ticks: 4
+      leftMargin: 6
 
     # The default chart data types to be displayed, by collection.
     DEFAULT_CHARTS:
@@ -444,7 +445,7 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
           .group(group)
         chart.xAxis().ticks(CHART_LAYOUT_PARAMS.ticks)
         chart.yAxis().ticks(CHART_LAYOUT_PARAMS.ticks)
-        chart.margins().left += 6;
+        chart.margins().left += CHART_LAYOUT_PARAMS.leftMargin;
 
       # Render all the charts.
       dc.renderAll()

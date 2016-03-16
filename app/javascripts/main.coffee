@@ -44,7 +44,11 @@ requirejs.config
 
   waitSeconds: WAIT
 
-  # The module paths.
+  # The module paths. The preferred module source is a CND,
+  # if available. The backup is the server ./javascripts/lib
+  # file. Each CDN module should also have an empty path
+  # entry in the Gruntfile.coffee requirejs task.
+  #
   paths:
     angular: [NG_LIB + '/' + 'angular' + MIN, './lib/angular'] 
     cornerstone: './lib/cornerstone'
@@ -66,6 +70,7 @@ requirejs.config
     ngsprintf: './lib/angular-sprintf'
     ngnvd3: './lib/angularjs-nvd3-directives'
     nvd3: './lib/nv.d3'
+    pako: './lib/pako_inflate'
     slider: './lib/angular-slider'
     'source-map': './lib/source-map'
     spin: './lib/spin'
@@ -79,7 +84,8 @@ requirejs.config
     'underscore.string': './lib/underscore.string'
     uirouter: './lib/angular-ui-router'
     uibootstrap: './lib/ui-bootstrap-tpls'
-    xtk: './lib/xtk'
+    # Uncomment to enable XTK.
+    #xtk: './lib/xtk'
 
   # The module configurations.
   config:

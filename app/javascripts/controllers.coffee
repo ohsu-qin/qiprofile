@@ -2,7 +2,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
   (ng, _) ->
     ctlrs = ng.module(
       'qiprofile.controllers',
-      ['ngSanitize', 'ui.bootstrap', 'qiprofile.modeling',
+      ['ngSanitize', 'ui.bootstrap', 'qiprofile.modelingchart',
        'qiprofile.resources', 'qiprofile.breast']
     )
 
@@ -15,6 +15,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
         # redundant.
         cleanBrowserUrl: (project) ->
           searchParams = {}
+          # TODO - get the default project from a config file.
           if project != 'QIN'
             searchParams.project = project
           $location.search(searchParams)
@@ -123,8 +124,8 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
 
 
     ctlrs.controller 'ScanProtocolCtrl', [
-      '$scope', '$uibModal', 'ScanProtocol',
-      ($scope, $uibModal, ScanProtocol) ->
+      '$scope', '$uibModal', 'Resources',
+      ($scope, $uibModal, Resources) ->
         # Open a modal window to display the scan procedure properties.
         $scope.open = ->
           $uibModal.open
@@ -134,13 +135,13 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
             resolve:
               # Fetch the scan protocol.
               protocol: ->
-                ScanProtocol.find(id: $scope.protocolId).$promise
+                Resources.ScanProtocol.find(id: $scope.protocolId)
     ]
 
 
     ctlrs.controller 'RegistrationProtocolCtrl', [
-      '$scope', '$uibModal', 'RegistrationProtocol',
-      ($scope, $uibModal, RegistrationProtocol) ->
+      '$scope', '$uibModal', 'Resources',
+      ($scope, $uibModal, Resources) ->
         # Open a modal window to display the registration properties.
         $scope.open = ->
           $uibModal.open
@@ -150,7 +151,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
             resolve:
               # Fetch the registration protocol.
               protocol: ->
-                RegistrationProtocol.find(id: $scope.protocolId).$promise
+                Resources.RegistrationProtocol.find(id: $scope.protocolId)
     ]
 
 
@@ -234,8 +235,8 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
 
 
     ctlrs.controller 'ModelingInfoCtrl', [
-      '$scope', '$uibModal', 'ModelingProtocol',
-      ($scope, $uibModal, ModelingProtocol) ->
+      '$scope', '$uibModal', 'Resources',
+      ($scope, $uibModal, Resources) ->
         # Open a modal window to display the modeling input properties.
         $scope.open = ->
           $uibModal.open
@@ -249,7 +250,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
                 $scope.modeling
               # Fetch the modeling protocol.
               protocol: ->
-                ModelingProtocol.find(id: $scope.modeling.protocol).$promise
+                Resources.ModelingProtocol.find(id: $scope.modeling.protocol)
     ]
 
 
@@ -288,11 +289,11 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
 
 
     ctlrs.controller 'ModelingChartCtrl', [
-      '$scope', 'Modeling',
-      ($scope, Modeling) ->
+      '$scope', 'ModelingChart',
+      ($scope, ModelingChart) ->
         # The d3 chart configuration.
         if $scope.selModeling?
-          $scope.config = Modeling.configureChart($scope.selModeling.results,
+          $scope.config = ModelingChart.configure($scope.selModelingChart.results,
                                                   $scope.dataSeriesConfig)
     ]
 
@@ -300,7 +301,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ## The modeling parameter controllers. ##
     #
     # Each controller is required to set the following scope variable:
-    # * dataSeriesConfig - the Modeling.configureChart dataSeriesSpec
+    # * dataSeriesConfig - the ModelingChart.configure dataSeriesSpec
     #     argument
     #
     # Note: The modeling parameter controllers defined below somewhat abuse
@@ -314,23 +315,23 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     # component.
 
     ctlrs.controller 'KTransCtrl', [
-      '$scope', 'Modeling',
-      ($scope, Modeling) ->
-        $scope.dataSeriesConfig = Modeling.kTrans.dataSeriesConfig
+      '$scope', 'ModelingChart',
+      ($scope, ModelingChart) ->
+        $scope.dataSeriesConfig = ModelingChart.kTrans.dataSeriesConfig
     ]
 
 
     ctlrs.controller 'VeCtrl', [
-      '$scope', 'Modeling',
-      ($scope, Modeling) ->
-        $scope.dataSeriesConfig = Modeling.vE.dataSeriesConfig
+      '$scope', 'ModelingChart',
+      ($scope, ModelingChart) ->
+        $scope.dataSeriesConfig = ModelingChart.vE.dataSeriesConfig
     ]
 
 
     ctlrs.controller 'TauICtrl', [
-      '$scope', 'Modeling',
-      ($scope, Modeling) ->
-        $scope.dataSeriesConfig = Modeling.tauI.dataSeriesConfig
+      '$scope', 'ModelingChart',
+      ($scope, ModelingChart) ->
+        $scope.dataSeriesConfig = ModelingChart.tauI.dataSeriesConfig
     ]
 
 
@@ -500,8 +501,8 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ctlrs.controller 'ChemotherapyCtrl', [
       '$scope',
       ($scope) ->
-        is_chemo = (dosage) -> dosage.agent._cls == 'Drug'
-        chemo = $scope.treatment.dosages.filter(is_chemo)
+        isChemo = (dosage) -> dosage.agent._cls == 'Drug'
+        chemo = $scope.treatment.dosages.filter(isChemo)
         $scope.chemotherapy = {dosages: chemo} if chemo.length
     ]
 
@@ -509,8 +510,8 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
     ctlrs.controller 'RadiotherapyCtrl', [
       '$scope',
       ($scope) ->
-        is_radio = (dosage) -> dosage.agent._cls == 'Radiation'
-        radio = $scope.treatment.dosages.filter(is_radio)
+        isRadio = (dosage) -> dosage.agent._cls == 'Radiation'
+        radio = $scope.treatment.dosages.filter(isRadio)
         $scope.radiotherapy = {dosages: radio} if radio.length
     ]
 
@@ -579,24 +580,21 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
 
     # The Image Slice display controller.
     ctlrs.controller 'SliceCtrl', [
-      '$rootScope', '$scope', '$sce', 'Modeling', 'volume', 'slice', 'imageSequence',
-      'Slice', 'ControllerHelper',
-      ($rootScope, $scope, $sce, Modeling, volume, slice, imageSequence,
-       Slice, ControllerHelper) ->
-        # The session temp convenience variable.
-        session = imageSequence.session
+      '$rootScope', '$scope', '$sce', 'ModelingChart', 'Slice', 'ControllerHelper',
+      'session', 'imageSequence', 'volume', 'slice',
+      ($rootScope, $scope, $sce, ModelingChart,  Slice, ControllerHelper,
+       session, volume, slice, imageSequence
+      ) ->
         # Capture the current project.
         $rootScope.project = session.subject.project
-        # Place the image sequence in scope.
-        $scope.imageSequence = imageSequence
 
         # @param key the modeling parameter key, e.g. 'deltaKTrans'
         # @returns the modeling parameter heading HTML span element,
         #   e.g. '<span>&Delta;K<sub>trans</sub></span>'
         $scope.parameterHeading = (key) ->
-          html = "<span>#{ Modeling.PARAMETER_HEADINGS[key] }</span>"
+          html = "<span>#{ ModelingChart.PARAMETER_HEADINGS[key] }</span>"
           $sce.trustAsHtml(html)
-        
+
         # The session modelings which have an overlay.
         $scope.overlayModelings = (
           mdl for mdl in session.modelings when mdl.overlays.length?
@@ -605,8 +603,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
         $scope.overlayIndex = null
 
         # The initial saggital slice. 
-        $scope.saggitalView =
-          slice: slice
+        $scope.saggitalView = slice: slice
 
         # The overlay opacity slider setting and CSS styles.
         $scope.overlayConfig =
@@ -615,14 +612,18 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
             "opacity": 1
             "z-index": -1
 
-        # Watches for a change in the saggital slice control setting. Updates
-        #   the image and, if selected, the overlay.
+        # Watch for a change in the saggital slice control setting.
+        # When the slice index changes, then update the image and,
+        # if selected, the overlay.
         $scope.$watch 'saggitalView.slice', (index) ->
           Slice.updateSlice($scope.imageIds[index].dicomImageId)
           if $scope.overlayIndex?
             Slice.updateOverlay($scope.imageIds[index].overlayIds,
                                             $scope.overlayIndex)
 
+        # Update the URL search parameter.
+        $location.search('slice', number)
+        
         # The overlayIndex scope variable is the overlay radio input
         # selection value in the format *modeling index*.*overlay index*,
         # e.g. the value '0.1' is the second overlay of the first modeling.
@@ -656,10 +657,8 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
             slice = $scope.saggitalView.slice
             $scope.slice.updateOverlay($scope.imageIds[slice].overlayIds,
                                             index)
-
           else
             #$scope.volume.deselectOverlay()
-
             # Move the overlay viewport to the back - Cornerstone prototype.
             $scope.overlayConfig.style['z-index'] = -1
 

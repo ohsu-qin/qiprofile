@@ -108,7 +108,7 @@ define ['angular', 'chart'], (ng) ->
     # @param session the session object
     # @param element the chart Angular jQueryLite element
     # @returns the nvd3 chart configuration
-    configureChart: (scan, element) ->
+    configure: (scan, element) ->
       # The scan data series and volume select color. This value must match
       # the .qi-scan-vol-btn-group basic color.
       SCAN_COLOR = 'Indigo'

@@ -1,67 +1,19 @@
-# TODO - dynamically load XTK. See, e.g.,
-# http://www.bennadel.com/blog/2554-loading-angularjs-components-with-requirejs-after-application-bootstrap.htm
-# and
-# http://stackoverflow.com/questions/18591966/inject-module-dynamically-only-if-required
-#
-define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng, _, _s) ->
-  volume = ng.module 'qiprofile.volume', ['qiprofile.file', 'qiprofile.modeling', 'vr.directives.slider']
+# Note - only the extend function is functional.
+# TODO - capture the VolumeMixin on a xtk branch and delete it from
+#   the mainline.
 
-  volume.factory 'Volume', ['$rootScope', '$q', 'File', 'Modeling', ($rootScope, $q, File, Modeling) ->
-    class Image extends Loader
-      # @param volume the REST Volume object
-      constructor: (@volume) ->
+# TODO - Add 'xtk' to the define to enable XTK.
+define ['angular', 'lodash', 'underscore.string', 'file', 'slider'], (ng, _, _s) ->
+  volume = ng.module 'qiprofile.volume', ['qiprofile.file', 'vr.directives.slider']
 
-      # Transfers the NiFTI file image data to the data property.
-      # The state loading flag is set to true while the
-      # file is being read.
-      #
-      # @returns a promise which resolves to this time series
-      #   when the file is loaded
-      load: ->
-        super @location
-
-    # @returns the image store time series file path
-    Object.defineProperties Image.prototype,
-      location:
-        get: ->
-          parent_dir = @volume.location
-          if @imageSequence._cls is 'Scan'
-            "#{ @volume.location }/scan_ts/scan_ts.nii.gz"
-          else if  @imageSequence._cls is 'Registration'
-            "#{ parent_dir }/#{ @imageSequence.resource }_ts.nii.gz"
-
-    # The ImageSequenceMixin class adds helper properties to an
-    # image collection 4D scan or registration object.
+  volume.factory 'Volume', ['$rootScope', '$q', 'File', ($rootScope, $q, File) ->
+    ### This class is broken after the imageSequence and slice changes. ###
+    # TODO - revisit if XNAT is resurrected.
     #
-    # This class is private within the ImageSequence service scope.
-    class ImageSequenceMixin
-      # @param source the REST Scan or Registration object
-      # @returns a new ImageSequence extension object
-      constructor: ->
-        # The encapsulated 4D time series image.
-        @timeSeries = new TimeSeries(this)
-
-    Object.defineProperties ImageSequenceMixin.prototype,
-      # The image sequence location is the XNAT image store archive
-      # directory. The scan location relative to the parent session is
-      # SCANS/<scan number>. The registration location relative to the
-      # parent scan is the registration resource.
-      #
-      # TODO - generalize this by delegating to an ImageStore service.
-      #
-      # @returns the image store directory for this image sequence
-      location: ->
-        get: ->
-          if @_cls is 'Scan'
-            "#{ @session.location }/SCANS/#{ @number }"
-          else if  @_cls is 'Registration'
-            "#{ @scan.session.location }/SCANS/#{ @scan.number }/#{ @resource }/"
-          else
-            throw new TypeError("Unsupported ImageSequence type:" +
-                                " #{ @_cls }")
-    #
-    # This class is broken after the imageSequence and slice changes.
-    # TODO - adapt to the ImageSequence mixin pattern.
+    # TODO - dynamically load XTK. See, e.g.,
+    # http://www.bennadel.com/blog/2554-loading-angularjs-components-with-requirejs-after-application-bootstrap.htm
+    # and
+    # http://stackoverflow.com/questions/18591966/inject-module-dynamically-only-if-required
     #
     # The Volume class encapsulates a volume with the following properties:
     # * volume - the image scan or registration volume object
@@ -84,7 +36,7 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
       #   when the file is loaded
       load: ->
         super().then (data) ->
-          # The XTK image to render.
+          # The XTK image to render.extendImageSequence
           @xtkVolume = new X.volume()
           @xtkVolume.file = @location
           @xtkVolume.filedata = data
@@ -219,33 +171,36 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
     # @param id the unique image id
     create = (volume, id) ->
       new Image(volume, id)
-    
-    # Caches the image for the given volume on demand.
-    #
-    # @parent the image scan or registration volume object
-    # @returns the cached image object
-    cache = (volume) ->
-      # @param the image id, formatted as the session detail id,
-      #   image sequence protocol id and volume number separated
-      #   by periods
-      # @returns the cached image object with the given id,
-      #   or null if the image is not yet cached
-      get = (imageId) ->
-        $rootScope.images[imageId]
-      
-      # Adds the parent images to the cache.
-      #
-      # @param image the image object
-      # @returns the image object
-      add = (image) ->
-        $rootScope.images[volume.id] = image
 
-      # The unique image id for caching.
-      imageId = "#{ imageSequence.session.detail }" +
-                ".#{ imageSequence.protocol }" +
-                ".#{ volume.number }"
-      # Get the cached image object or add a new image object.
-      get(imageId) or add(create(volume, imageId))
+    ### End of broken obsolete XTK code. ###
+    
+    # Adds the following property to the given volume object:
+    # * scan, if the volume parent is a scan, or
+    # * registration, if the volume parent is a registration
+    #
+    # @param volume the volume object to extend
+    # @param imageSequence the parent object
+    # @param number the one-based volume number
+    extend: (volume, imageSequence, number) ->
+      # Set the volume number property.
+      volume.number = number
+      # The parent reference property (scan or registration).
+      attr = _s.decapitalize(imageSequence._cls)
+      volume[attr] = imageSequence
+      # Add the virtual properties.
+      Object.defineProperties volume,
+        # @returns the parent scan or registration
+        imageSequence:
+          get: ->
+            @scan or @registration
+
+        # @returns the parent image sequence volumes resource name
+        resource:
+          get: ->
+            @imageSequence.volumes.name
+      
+      # Return the extended Volume object.
+      volume
     
     # Obtains image objects for the given volume object. The image
     # object content is described in the create() function.
@@ -257,28 +212,10 @@ define ['angular', 'lodash', 'underscore.string', 'xtk', 'file', 'slider'], (ng,
     # cached object image content data is not loaded until the image
     # object load() function is called.
     #
-    # @param parent the scan or registration volume object
+    # @param imageSequence the parent scan or registration object
+    # @param number the one-based volume number
     # @returns the image object
-    forVolume: (volume) ->
-      cache(volume)
-
-    # Formats the image sequence title.
-    #
-    # Note: this formatting routine should be confined to the filter,
-    # but must be placed in this helper for use by the intensity
-    # chart configuration.
-    #
-    # @param imageSequence the imageSequence object
-    # @returns the display title for the imageSequence
-    imageSequenceTitle: (imageSequence) ->
-      if imageSequence._cls is 'Scan'
-        "#{ _s.capitalize(imageSequence.name) } #{ imageSequence._cls }"
-      else if  imageSequence._cls is 'Registration'
-        if not imageSequence.source?
-          throw new ReferenceError("The scan source name was not found")
-        reg_src = _s.capitalize(imageSequence.source)
-        "#{ reg_src } #{ imageSequence.type } #{ name }"
-      else
-        throw new TypeError("Unsupported image imageSequence type:" +
-                            " #{ imageSequence._cls }")
+    find: (session, number) ->
+      # TODO - adapt for new cache service
+      throw new Error('Not yet implemented')
   ]

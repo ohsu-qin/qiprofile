@@ -1,4 +1,5 @@
 define [], ->
+  # The loader helper.
   class Loader
     # The valid file load states.
     STATES =
@@ -8,34 +9,37 @@ define [], ->
       ERROR: 'error'
 
     constructor: ->
-      @state = STATES.UNLOADED
-      @data = null
+      @_state = STATES.UNLOADED
 
+    # @returns whether the load is completed
     isLoaded: ->
-      @state is STATES.LOADED
+      @_state is STATES.LOADED
 
+    # @returns whether the load is initiated but not completed
     isLoading: ->
-      @state is STATES.LOADING
+      @_state is STATES.LOADING
 
+    # @returns whether the load was initiated but unsuccessful
     isError: ->
-      @state is STATES.ERROR
-  
-    # Transfers the file content to the data property.The state flag
-    # is set to STATES.LOADING while the file is being read.
+      @_state is STATES.ERROR
+
+    # Transfers the loadable content to the data property. The state
+    # flag is set to STATES.LOADING while the file is being read.
     #
-    # @param path the file path name
+    # @param loadable an object which the data store can load
+    # @param the data store
     # @returns a promise which resolves to the loaded data
     #   when the file is loaded
-    load: (path) ->
+    load: (loadable, store) ->
       # Set the loading flag.
-      @state = STATES.LOADING
+      @_state = STATES.LOADING
 
-      # Read the file into an ArrayBuffer. The CoffeeScript fat
-      # arrow (=>) binds the this variable to the image sequence object
+      # Read the content into an ArrayBuffer. The CoffeeScript fat
+      # arrow (=>) binds the this variable to this Loader object
       # rather than the $http request.
-      File.readBinary(path).then (data) =>
+      store.load(loadable).then (data) =>
         # Set the state to loaded.
-        @state = STATES.LOADED
+        @_state = STATES.LOADED
         # Resolve to the data.
         data
       .catch (res) =>
@@ -43,4 +47,7 @@ define [], ->
         alert("The image file #{ path } load was unsuccessful: " +
               "#{ res.statusText } (#{ res.status }).")
         # Set the state to 'error'.
-        @state = STATES.ERROR
+        @_state = STATES.ERROR
+  
+  # Return the Loader class.
+  Loader

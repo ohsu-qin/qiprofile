@@ -51,7 +51,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
         link: (scope, element, attrs) ->
           scope.$watch 'subject', (subject) ->
             if _.some(subject.sessions)
-              scope.config = VisitDateline.configureChart(subject)
+              scope.config = VisitDateline.configure(subject)
               # This function is called by D3 after the chart DOM is built.
               #
               # @param chart the chart SVG element
@@ -118,7 +118,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
           # Wait for a session extended with detail to digest the scan.
           scope.$parent.$watch 'scan', (scan) ->
             if scan?
-              scope.config = Intensity.configureChart(scan, element)
+              scope.config = Intensity.configure(scan, element)
         templateUrl: '/partials/intensity-chart.html'
     ]
 

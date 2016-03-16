@@ -99,7 +99,9 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
     # @param tumor the tumor object
     # @returns the RCB object extended with index and class properties
     residualCancerBurden: (tumor) ->
-      # Returns the RCB index.
+      # @param extent the tumor extent {length, width, depth} REST object
+      # @param rcb the RCB REST object
+      # @returns the RCB index
       rcbIndex = (extent, rcb) ->
         # The bidimensional tumor size metric.
         size = Math.sqrt(extent.length * extent.width)
@@ -109,12 +111,19 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
         inSitu = rcb.dcisCellDensity / 100
         # The invasive carcinoma proportion.
         invasion = (1 - inSitu) * overall
-        # Calculate and return the index value.
-        return (1.4 * Math.pow(invasion * size, 0.17)) +
-                Math.pow(4 * ((1 - Math.pow(0.75, rcb.positiveNodeCount)) *
-                           rcb.largestNodalMetastasisLength),
-                         0.17)
-      # Returns the RCB class, which is based on RCB index cut-offs.
+        # The RCB index invasion component.
+        invasionFactor = 1.4 * Math.pow(invasion * size, 0.17)
+        # The RCB index positive node component.
+        posNodeFactor = 1 - Math.pow(0.75, rcb.positiveNodeCount)
+        # The base of the RCB index node component.
+        nodeBase =  4 * posNodeFactor * rcb.largestNodalMetastasisLength
+        # The RCB index node component.
+        nodeFactor = Math.pow(nodeBase, 0.17)
+
+        # The RCB index is the sum of the invasion and node components.
+        invasionFactor + nodeFactor
+
+      # @returns the RCB class, which is based on RCB index cut-offs
       rcbClass = (rcbIndex) ->
         if rcbIndex == 0
           return 0
@@ -126,11 +135,10 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
           return 3
 
       # If the RCB object exists, return it extended with the index and class.
-      if tumor.rcb?
-        score = rcbIndex(tumor.extent, tumor.rcb)
-        _.extend tumor.rcb,
-          rcbIndex: score
-          rcbClass: rcbClass(score)
+      rcb = tumor.rcb
+      if rcb?
+        rcb.rcbIndex = rcbIndex(tumor.extent, tumor.rcb)
+        rcb.rcbClass = rcbClass(score)
       else
         return null
 

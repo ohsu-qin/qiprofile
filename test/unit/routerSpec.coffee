@@ -116,33 +116,31 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
           sd1:
             _id: 'sd1'
             scans: [
-              {
-                _cls: 'Scan'
-                number: 1
-                protocol: 'sp1'
-                time_series:
-                  name: 'scan_ts'
-                  image: 'scan_ts.nii.gz'
-                volumes:
-                  name: 'NIFTI'
-                  images: [
-                    name: 'volume001.nii.gz'
-                    average_intensity: 2.4
-                  ]
-                registrations: [
-                  _cls: 'Registration'
-                  protocol: 'rp1'
-                  time_series:
-                    name: 'reg_01'
-                    image: 'reg_01_ts.nii.gz'
-                  volumes:
-                    name: 'reg_01'
-                    images:  [
-                      name: 'volume001.nii.gz'
-                      average_intensity: 3.1
-                    ]
+              _cls: 'Scan'
+              number: 1
+              protocol: 'sp1'
+              time_series:
+                name: 'scan_ts'
+                image: 'scan_ts.nii.gz'
+              volumes:
+                name: 'NIFTI'
+                images: [
+                  name: 'volume001.nii.gz'
+                  average_intensity: 2.4
                 ]
-              }
+              registrations: [
+                _cls: 'Registration'
+                protocol: 'rp1'
+                time_series:
+                  name: 'reg_01'
+                  image: 'reg_01_ts.nii.gz'
+                volumes:
+                  name: 'reg_01'
+                  images:  [
+                    name: 'volume001.nii.gz'
+                    average_intensity: 3.1
+                  ]
+              ]
             ]
           sd2:
             _id: 'sd2'
@@ -178,7 +176,8 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
         # Fake the router service module.
         ng.module('qiprofile.router')
 
-        inject ['Router', '$httpBackend', '$rootScope', '$timeout',
+        inject [
+          'Router', '$httpBackend', '$rootScope', '$timeout',
           (_Router_, _$httpBackend_, _$rootScope_, _timeout_) ->
             Router = _Router_
             $httpBackend = _$httpBackend_
@@ -194,7 +193,7 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
             url = encodeURI('/api/subject/s1')
             $httpBackend.whenGET(url).respond(JSON.stringify(mock.subject))
 
-            # The mock session-detail http call.
+            # The mock session-detail http calls.
             url = encodeURI('/api/session-detail/sd1')
             $httpBackend.whenGET(url).respond(JSON.stringify(mock.session_detail.sd1))
             url = encodeURI('/api/session-detail/sd2')
@@ -301,7 +300,7 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
             expect(dsg.duration,  "Treatment dosage duration is incorrect")
               .to.equal(mockDsg.duration)
 
-        describe 'Modeling', ->
+        describe 'ModelingChart', ->
           modeling = null
 
           beforeEach ->
@@ -383,7 +382,17 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
             expect(subject.isMultiSession, "Subject multi-session flag is" +
                                            " incorrect").to.be.true
 
-          describe 'Modeling', ->
+          it 'should set the session subject reference', ->
+            expect(session.subject, "Session is missing a subject reference")
+              .to.exist
+            expect(session.subject, "Session subject reference is incorrect")
+              .to.equal(subject)
+
+          it 'should have a detail id', ->
+            expect(session.detail, "Session is missing the detail id")
+              .to.exist
+
+          describe 'ModelingChart', ->
             modeling = null
 
             beforeEach ->
@@ -471,26 +480,13 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
                       .to.equal(paramResult)
 
           describe 'Detail', ->
-            session = null
-
             beforeEach ->
-              unfetched = _.clone(subject.sessions[0])
-              try
-                Router.getSessionDetail(unfetched).then (fetched) ->
-                  session = fetched
-                $httpBackend.flush()
-              catch ReferenceError
-                # Router couldn't fetch the session detail.
-                # The first test will fail.
+              Router.getSessionDetail(session)
+              $httpBackend.flush()
 
-            it 'should fetch the session detail', ->
-              expect(session, "The session detail was not fetched")
-                .to.exist
-            it 'should set the session subject reference', ->
-              expect(session.subject, "Session is missing a subject reference")
-                .to.exist
-              expect(session.subject, "Session subject reference is incorrect")
-                .to.equal(subject)
+            it 'should have scans', ->
+              expect(session.scans, "Session is missing the scans")
+                .to.exist.and.not.be.empty
 
             describe 'Scan', ->
               scan = null

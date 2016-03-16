@@ -21,7 +21,8 @@ class VolumePage extends Page
   imageControlPanel: ->
     @find('.qi-volume-ctrl')
 
-describe 'E2E Testing Volume', ->
+# Enable the describe below to enable XTK.
+xdescribe 'E2E Testing Volume', ->
   page = null
 
   before ->

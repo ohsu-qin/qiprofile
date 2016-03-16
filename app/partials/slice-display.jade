@@ -13,18 +13,15 @@ block billboard
 block content
   // The modeling parameter overlay select.
   include include/overlay-select
-  // TODO - create volume and slice axis sliders in a new file slice-controls.jade,
-  //   perhaps using volume-controls.jade as a basis., then uncomment the lines
+  // TODO - create volume and slice axis sliders in a new file
+  //   slice-controls.jade, perhaps using the Session Detail
+  //   volume-controls.jade as a basis. Then uncomment the lines
   //   below.
   //- // The opacity, axis and threshold image controls.
   //- include include/image-controls
   .qi-slice-display
-    // The Cornerstone image viewports, one for the slice and one for the
-    //   overlay. The overlay viewport is placed in front of the slice viewport
-    //   using CSS.
-    //
-    // TO DO - Specify image width and height as percentages or use the
-    //   Bootstrap grip template, e.g. col-md-4.
+    // The Cornerstone slice and overlay image viewports. The overlay
+    // viewport is placed in front of the slice viewport using CSS.
     #qi-slice.cornerstone-enabled-image(
       oncontextmenu='return false' unselectable='on'
       onselectstart='return false' onmousedown='return false'
@@ -38,4 +35,4 @@ block content
 block help-text
   // The nested quote ensures evaluation to a string rather than
   // a scope variable.
-  .qi-help-text(ng-include="'/partials/help/image-detail.html'")
+  .qi-help-text(ng-include="'/partials/help/slice-display.html'")

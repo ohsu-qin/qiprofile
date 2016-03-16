@@ -2,7 +2,7 @@ expect = require('./helpers/expect')()
 
 Page = require './helpers/page'
 
-describe 'E2E Testing Collection', ->
+describe 'E2E Testing Collection Detail', ->
   page = null
 
   beforeEach ->

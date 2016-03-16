@@ -23,7 +23,7 @@ define ['ngmocks', 'intensity'], (ng) ->
       # Enable the test services.
       inject ['Intensity', (Intensity) ->
         # Configure the chart.
-        config = Intensity.configureChart(mock.scan)
+        config = Intensity.configure(mock.scan)
       ]
 
     it 'should configure two data series', ->

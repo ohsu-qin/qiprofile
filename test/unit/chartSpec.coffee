@@ -61,7 +61,7 @@ define ['ngmocks', 'moment', 'chart'], (ng, moment) ->
       config = null
 
       beforeEach ->
-        config = Chart.configureChart(mock, spec)
+        config = Chart.configure(mock, spec)
 
       it 'should configure two data series', ->
         expect(config.data, "The configuration data is missing").to.exist

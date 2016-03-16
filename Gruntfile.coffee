@@ -24,7 +24,7 @@ module.exports = (grunt) ->
         force: true
 
     copy:
-      js:
+      bower:
         expand: true
         flatten: true
         cwd: 'bower_components/'
@@ -36,33 +36,31 @@ module.exports = (grunt) ->
           'angular-route/angular-route.js'
           'angular-sanitize/angular-sanitize.js'
           'angular-touch/angular-touch.js'
-          'angular-ui-router/release/*.js'
-          'angularjs-nvd3-directives/dist/*.js'
-          'cornerstone/dist/*.js'
-          'cornerstoneMath/dist/*.js'
-          'cornerstoneTools/dist/*.js'
-          'crossfilter/*.js'
-          'd3/*.js'
+          'angular-ui-router/release/angular-ui-router.js'
+          'angularjs-nvd3-directives/dist/angularjs-nvd3-directives.js'
+          'cornerstone/dist/cornerstone.js'
+          'crossfilter/crossfilter.js'
+          'd3/d3.js'
           'dcjs/dc.js'
           'domready/ready.js'
           'error-stack-parser/dist/error-stack-parser.js'
-          'jquery/dist/*.js'
+          'jquery/dist/jquery.js'
           'lodash/lodash.js'
-          'moment/*.js'
+          'moment/moment.js'
           'nvd3/nv.d3.js'
+          'pako/dist/pako_inflate.js'
           'requirejs/require.js'
           'source-map/dist/source-map.js'
           'spin.js/spin.js'
-          'sprintf/src/*.js'
+          'sprintf/src/sprintf.js'
           'stackframe/dist/stackframe.js'
           'stack-generator/dist/stack-generator.js'
           'stacktrace-gps/dist/stacktrace-gps.js'
           'stacktrace-js/stacktrace.js'
-          'underscore.string/dist/*.js'
-          'venturocket-angular-slider/build/*.js'
-          'xtk/dist/xtk.js'
-          # Exclude minimized files.
-          '!**/*.min.js'
+          'underscore.string/dist/underscore.string.js'
+          'venturocket-angular-slider/build/angular-slider.js'
+          # Uncomment to enable XTK.
+          # 'xtk/dist/xtk.js'
         ]
         dest: '_public/javascripts/lib'
 
@@ -119,6 +117,18 @@ module.exports = (grunt) ->
         src: ['index.jade', 'partials/**/*.jade', '!**/include/**']
         dest: '_public/'
 
+    browserify:
+      nifti:
+        src: []
+        dest: '_build/commonjs/nifti.js'
+        options:
+          require: ['nifti-js']
+      ndarray:
+        src: []
+        dest: '_build/commonjs/ndarray.js'
+        options:
+          require: ['ndarray']
+
     karma:
       options:
         singleRun: not grunt.option('debug')
@@ -128,6 +138,11 @@ module.exports = (grunt) ->
         configFile: 'test/conf/karma-conf.coffee'
 
     exec:
+      # Convert CommonJS modules to AMD.
+      convert:
+        command:
+          './node_modules/.bin/r.js -convert _build/commonjs _public/javascripts/lib'
+
       selenium:
         # If selenium is not already running, then start it. Suppress all
         # output, since there are no documented options to tailor the
@@ -233,6 +248,7 @@ module.exports = (grunt) ->
             nganimate: 'empty:'
             ngresource: 'empty:'
             ngroute: 'empty:'
+            ngsanitize: 'empty:'
           modules: [ name:'qiprofile' ]
           findNestedDependencies: true
 
@@ -245,45 +261,69 @@ module.exports = (grunt) ->
         dest: '_public/stylesheets/app.min.css'
   )
 
+  # Load all grunt-* tasks.
   require('load-grunt-tasks')(grunt)
 
+  # Build for development is the default.
   grunt.registerTask 'default', ['build:dev']
 
+  # Copy the vendor javascript.
+  grunt.registerTask 'copy:js', ['copy:bower']
+
+  # Assemble the app.
   grunt.registerTask 'copy:app', ['copy:js', 'copy:css', 'copy:fonts',
                                   'copy:static']
 
+  # Concatenate the app stylesheets.
   grunt.registerTask 'concat:app', ['concat:css']
 
-  grunt.registerTask 'vendor:app', ['copy:app', 'concat:app']
+  # Convert vendor modules to AMD as necessary.
+  grunt.registerTask 'amdify', ['browserify', 'exec:convert']
 
+  # Collect the vendor libraries.
+  grunt.registerTask 'vendor:app', ['amdify', 'copy:app', 'concat:app']
+
+  # Compile the app javascript.
   grunt.registerTask 'compile:js', ['coffee:compile', 'preprocess']
 
+  # Compile the app bits concurrently.
   grunt.registerTask 'compile', ['concurrent:compile']
 
+  # Build the application from scratch.
   grunt.registerTask 'build:app', ['clean', 'vendor:app', 'compile']
 
+  # Build the app and test environment.
   grunt.registerTask 'build:dev', ['env:dev', 'build:app',
                                    'exec:updatewebdriver']
 
+  # Build the app for deployment.
   grunt.registerTask 'build:prod', ['env:prod', 'build:app']
 
   # The npm postinstall task.
   grunt.registerTask 'postinstall', ['exec:bowerinstall', 'exec:bowerprune',
                                      'build:prod']
 
+  # Start the server with debug turned on.
   grunt.registerTask 'start:dev', ['express:dev', 'watch']
 
+  # Start the server in test mode.
   grunt.registerTask 'start:test', ['express:test', 'watch']
 
+  # Start the server in production mode.
   grunt.registerTask 'start:prod', ['express:prod']
 
+  # Start the server with debug by default.
   grunt.registerTask 'start', ['start:dev']
 
+  # Run the Karma unit tests.
   grunt.registerTask 'test:unit', ['karma:unit']
 
+  # Run the Protractor end-to-end tests.
   grunt.registerTask 'test:e2e', ['exec:selenium', 'express:test',
                                   'protractor:e2e']
 
+  # Run all tests.
   grunt.registerTask 'test', ['test:unit', 'test:e2e']
 
+  # Build the application as a RequireJS AMD module.
   grunt.registerTask 'release', ['build:prod', 'requirejs', 'cssmin']

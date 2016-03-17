@@ -43,13 +43,16 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'volume', 'helpers'],
             .to.exist
           expect(volume.scan, "The volume scan reference is incorrect")
             .to.equal(scan)
+
         it 'should set the volume number', ->
           expect(volume.number, "The volume number is missing").to.exist
           expect(volume.number, "The volume number is incorrect").to.equal(1)
+
         it 'should have a virtual title property', ->
           expect(scan.title, "The volume title is missing").to.exist
           expect(scan.title, "The volume title is incorrect")
             .to.equal('Breast Subject 1 Session 1 Scan 1 Volume 1')
+
         it 'should alias the imageSequence reference to the scan', ->
           expect(volume.imageSequence, "The volume is missing the" +
                                        " imageSequence alias")
@@ -57,6 +60,7 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'volume', 'helpers'],
           expect(volume.imageSequence, "The volume imageSequence alias" +
                                        " is incorrect")
              .to.equal(scan)
+
         it 'should alias the resource', ->
           expect(volume.name, "The resource is missing").to.exist
           expect(volume.name, "The resource is incorrect")

@@ -38,10 +38,11 @@ define ['angular', 'lodash', 'k-trans', 'v-e', 'tau-i', 'chart'], (ng, _, Ktrans
       # Return the standard chart configuration extended with the following:
       # * the xValues and xFormat properties
       # * the tooltip function
-      _.extend Chart.configure(modelingResults, spec),
-        xValues: xValues
-        xFormat: Chart.dateFormat
-        tooltip: tooltip
+      cfg = Chart.configure(modelingResults, spec)
+      cfg.xValues = xValues
+      cfg.xFormat = Chart.dateFormat
+      cfg.tooltip = tooltip
+      cfg
 
     # The Ktrans d3 chart data series formatting configuration.
     kTrans:

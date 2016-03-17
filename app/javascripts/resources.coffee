@@ -4,6 +4,84 @@ define ['angular', 'lodash', 'rest', 'ngresource', 'helpers'], (ng, _, REST) ->
 
   # Make the Resources singleton.
   resources.factory 'Resources', ['$resource', 'ObjectHelper', ($resource, ObjectHelper) ->
+    # Adds the following properties to the given resource:
+    # * secondaryKey - the secondary key field array
+    # * find - _find wrapper
+    # * query - _query wrapper
+    #
+    # @param resource the resource object to extend
+    # @param secondaryKey the secondary key field array
+    # @returns the augmented resource object
+    extend = (resource, secondaryKey) ->
+      # Set the secondary key property.
+      resource.secondaryKey = secondaryKey
+      # @param condition the search condition
+      # @returns a promise which resolves to the REST database object
+      # @throws ValueError if the condition does not have a
+      #  searchable key, either the id or the complete
+      #  secondary key
+      # @throws ReferenceError if no such object was found
+      resource.find = (condition) ->
+        # The id search criterion is either the id or the _id
+        # property.
+        id = condition.id or condition._id
+        # If the search condition includes the id, then find
+        # the unique subject with that id. Otherwise, query
+        # the subjects on the secondary key.
+        if id?
+          # Reference the asynchronous $resource call $promise property.
+          resource._find(id: id).$promise
+        else if resource.secondaryKey.length == 0
+          throw new ReferenceError(
+            "The search condition does not contain the id field:" +
+            " #{ _.toPairs(condition) }"
+          )
+        else
+          # The secondary key search criteria.
+          criterion = _.pick(condition, secondaryKey)
+          # The criteria can only be on the primary or secondary
+          # key fields. Any other field will show up as an empty
+          # criteria _.pick value.
+          if not _.every(_.values(criterion))
+            throw new ValueError(
+              "The search condition is missing both an id" +
+              " value and a complete secondary key: #{ condition }"
+            )
+          # Fetch the REST objects which match the criteria.
+          resource.query(criterion).then (result) ->
+            if not result.length
+              # No match.
+              throw new ReferenceError(
+                "Object was not found matching: { _.toPairs(condition) }"
+              )
+            else if result.length > 1
+              # Unambiguous match.
+              throw new ReferenceError(
+                "The query on the secondary key returned more than" +
+                " one subject: #{ _.toPairs(condition) }"
+              )
+            # Resolve to the unique object that matches the query condition.
+            result[0]
+      
+      # @param condition the search condition
+      # @param fields the optional fields to return (default all fields)
+      # @returns a promise which resolves to the (possibly empty)
+      #   result object array
+      resource.query = (condition, fields) ->
+        # The select clause.
+        select = REST.where(condition)
+        # Format the HTML query parameter.
+        if fields?
+          projection = REST.map(['project', 'collection', 'number'])
+          param = _.extend(select, projection)
+        else
+          param = select
+        # Reference the asynchronous $resource call $promise property.
+        resource._query(param).$promise
+      
+      # Return the extended resource object.
+      resource
+
     # @param url the REST access URL
     # @param secondaryKey the optional secondary key field
     #   name array
@@ -32,13 +110,8 @@ define ['angular', 'lodash', 'rest', 'ngresource', 'helpers'], (ng, _, REST) ->
           method: 'GET'
           isArray: true
           transformResponse: (data) -> ObjectHelper.fromJson(data)
-      # Set the secondary key property.
-      resource.secondaryKey = secondaryKey
       # Wrap the resource methods.
-      _.extend(resource, new ResourceMixin())
-      
-      # Return the resource object.
-      resource
+      extend(resource, secondaryKey)
     
     # Since the REST Session objects are embedded in Subject,
     # this Session factory only operates on the session-detail
@@ -63,68 +136,3 @@ define ['angular', 'lodash', 'rest', 'ngresource', 'helpers'], (ng, _, REST) ->
     Session:
       detail: sessionDetail.find
   ]
-
-  class ResourceMixin
-    # @param condition the search condition
-    # @returns a promise which resolves to the REST database object
-    # @throws ValueError if the condition does not have a
-    #  searchable key, either the id or the complete
-    #  secondary key
-    # @throws ReferenceError if no such object was found
-    find: (condition) ->
-      # The id search criterion is either the id or the _id
-      # property.
-      id = condition.id or condition._id
-      # If the search condition includes the id, then find
-      # the unique subject with that id. Otherwise, query
-      # the subjects on the secondary key.
-      if id?
-        # Reference the asynchronous $resource call $promise property.
-        @_find(id: id).$promise
-      else if @secondaryKey.length == 0
-        throw new ReferenceError(
-          "The search condition does not contain the id field:" +
-          " #{ _.toPairs(condition) }"
-        )
-      else
-        # The secondary key search criteria.
-        criterion = _.pick(condition, @secondaryKey)
-        # The criteria can only be on the primary or secondary
-        # key fields. Any other field will show up as an empty
-        # criteria _.pick value.
-        if not _.every(_.values(criterion))
-          throw new ValueError(
-            "The search condition is missing both an id" +
-            " value and a complete secondary key: #{ condition }"
-          )
-        # Fetch the REST objects which match the criteria.
-        @query(criterion).then (result) ->
-          if not result.length
-            # No match.
-            throw new ReferenceError(
-              "Object was not found matching: { _.toPairs(condition) }"
-            )
-          else if result.length > 1
-            # Unambiguous match.
-            throw new ReferenceError(
-              "The query on the secondary key returned more than" +
-              " one subject: #{ _.toPairs(condition) }"
-            )
-          # Resolve to the unique object that matches the query condition.
-          result[0]
-      
-      # @param condition the search condition
-      # @param fields the optional fields to return (default all fields)
-      # @returns a promise which resolves to the (possibly empty)
-      #   result object array
-      query: (condition, fields) ->
-        # The select clause.
-        select = REST.where(condition)
-        # Format the HTML query parameter.
-        if fields?
-          projection = REST.map(['project', 'collection', 'number'])
-          param = _.extend(_.clone(select), projection)
-        else
-          param = select
-        # Reference the asynchronous $resource call $promise property.
-        @_query(param).$promise

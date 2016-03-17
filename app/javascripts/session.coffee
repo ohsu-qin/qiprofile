@@ -1,12 +1,12 @@
-define ['angular', 'lodash', 'underscore.string', 'imageSequence'], (ng, _, _s) ->
+define ['angular', 'lodash', 'underscore.string', 'scan'], (ng, _, _s) ->
   session = ng.module(
     'qiprofile.session',
-    ['qiprofile.resources', 'qiprofile.imagesequence', 'qiprofile.helpers']
+    ['qiprofile.resources', 'qiprofile.scan', 'qiprofile.helpers']
   )
 
   session.factory 'Session', [
-    'Resources', 'ImageSequence', 'ObjectHelper',
-    (Resources, ImageSequence, ObjectHelper) ->
+    'Resources', 'Scan', 'ObjectHelper',
+    (Resources, Scan, ObjectHelper) ->
       # Adds the following modeling label map properties:
       # * parameterResult - the parent parameter result object
       # * key - the parent parameterResult key
@@ -26,8 +26,8 @@ define ['angular', 'lodash', 'underscore.string', 'imageSequence'], (ng, _, _s) 
       # * overlay - the label map, if it exists and has a
       #   color table
       #
-      # If there is a label map, then this function sets the
-      # label map parent modeling parameter reference.
+      # In addition, if there is a label map, then this function
+      # sets the label map parent modeling parameter reference.
       #
       # @param paramResult the object to extend
       # @param modelingResult the parent modeling result object
@@ -43,11 +43,13 @@ define ['angular', 'lodash', 'underscore.string', 'imageSequence'], (ng, _, _s) 
           paramResult.labelMap.parameterResult = paramResult
           # If the label map has a color table, then set
           # the overlay property.
-          if paramResult.labelMap.colorTable?
-            Object.defineProperty paramResult, 'overlay',
+          Object.defineProperties paramResult,
+            # @returns the parameter result label map
+            overlay:
               get: ->
-                @labelMap
+                @labelMap 
   
+      # TODO - delegate all modeling to Modeling service.
       # Adds the modeling result parent modeling object
       # reference property and extends the parameter result
       # objects as described in extendParameterResult.
@@ -152,18 +154,17 @@ define ['angular', 'lodash', 'underscore.string', 'imageSequence'], (ng, _, _s) 
         # The session object must have a detail reference.
         if not session.detail?
           throw new ReferenceError(
-            "Subject #{ session.subject.number } Session" +
-            " #{ session.number } does not reference a detail object"
+            "#{ session.title } does not reference a detail object"
           )
                 
-        # Fetch the session detail.
+        # Return a promise to fetch the session detail.
         Resources.Session.detail(id: session.detail).then (detail) ->
           # Copy the fetched detail into the session.
           ObjectHelper.aliasPublicDataProperties(detail, session)
           # Add properties to the scans and their registration.
           for scan in session.scans
             # Add properties.
-            extendScan(scan, session)
+            Scan.extend(scan, session)
           # Resolve to the extended session object.
           session
   ]

@@ -1,42 +1,42 @@
 define ['angular', 'lodash', 'imageSequence'], (ng, _) ->
-  scan = ng.module 'qiprofile.scan', ['qiprofile.imagesequence'] 
+  registration = ng.module 'qiprofile.registration', ['qiprofile.imagesequence'] 
 
-  scan.factory 'Registration', ['ImageSequence', (ImageSequence) ->
-      # Extends the given registration object as follows:
-      # * Adds the scan parent reference property
-      # * Adds the ImageSequence properties
-      # * Sets the registration number
-      # * Adds the title and session virtual properties
-      #
-      # @param registration the registration to extend
-      # @param session the parent session object
-      # @param scan the source scan
-      # @param number the one-based registration number within the scan
-      # @returns the extended registration object
-      extend: (registration, session, scan, number) ->
-        # Add the general image sequence properties.
-        ImageSequence.extend(registration)
-        # Add the parent scan reference.
-        registration.scan = scan
-        # Add the registration number.
-        registration.number = number
-        # Add the virtual properties.
-        Object.defineProperties registration,
-          # @returns the display title
-          title:
-            get: ->
-              "#{ @scan.title } Registration #{ @number }"
+  registration.factory 'Registration', ['ImageSequence', (ImageSequence) ->
+    # Extends the given registration object as follows:
+    # * Adds the scan parent reference property
+    # * Adds the ImageSequence properties
+    # * Sets the registration number
+    # * Adds the title and session virtual properties
+    #
+    # @param registration the registration to extend
+    # @param session the parent session object
+    # @param scan the source scan
+    # @param number the one-based registration number within the scan
+    # @returns the extended registration object
+    extend: (registration, session, scan, number) ->
+      # Add the general image sequence properties.
+      ImageSequence.extend(registration)
+      # Add the parent scan reference.
+      registration.scan = scan
+      # Add the registration number.
+      registration.number = number
+      # Add the virtual properties.
+      Object.defineProperties registration,
+        # @returns the display title
+        title:
+          get: ->
+            "#{ @scan.title } Registration #{ @number }"
 
-          # An ImageSequence present a uniform interface, which
-          # includes a session reference.
-          #
-          # @returns the registration scan session
-          session:
-            get: -> @scan.session
-        
-        # Return the extended object.
-        registration
-          
+        # An ImageSequence present a uniform interface, which
+        # includes a session reference.
+        #
+        # @returns the registration scan session
+        session:
+          get: -> @scan.session
+      
+      # Return the extended object.
+      registration
+
     # @param scan the Scan object to search
     # @param number the registration number within the scan
     # @returns the scan object

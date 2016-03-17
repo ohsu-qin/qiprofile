@@ -13,12 +13,7 @@ define ['angular', 'lodash', 'image', 'nifti'], (ng, _) ->
       load: ->
         # Delegate to Image with the Nifti parser.
         super(@location, Nifti)
-
-    Object.defineProperties TimeSeriesMixin.prototype,
-      # @returns the time series name
-      resource:
-        get: -> @name
-
+      
     # Makes the following changes to the given REST TimeSeries object:
     # * adds the parent imageSequence reference
     # * adds the location virtual property
@@ -28,6 +23,18 @@ define ['angular', 'lodash', 'image', 'nifti'], (ng, _) ->
     # @param imageSequence the parent ImageSequence object
     # @return the extended TimeSeries
     extend: (timeSeries, imageSequence) ->
+      # Set the parent reference.
       timeSeries.imageSequence = imageSequence
+
+      # Make the virtual properties.
+      Object.defineProperties timeSeries,
+        # @returns the time series name
+        resource:
+          get: -> @name
+
+        title:
+          get: -> "#{ @imageSequence.title } Time Series"
+      
+      # Add the load function.
       _.extend(timeSeries, new TimeSeriesMixin())
   ]

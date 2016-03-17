@@ -1,10 +1,9 @@
-define ['ngmocks', 'volume'], (ng) ->
+define ['ngmocks', 'volumeDisplay'], (ng) ->
   # Enable the describe below to enable XTK.
   #
-  # TODO - if XTK is resurrected, then fit this test to the new
-  #   Volume object data structure.
-  xdescribe 'Unit Testing the Volume Service', ->
-
+  # TODO - if XTK is resurrected, then fit this test to the revised
+  #   VolumeDisplay service.
+  xdescribe 'Unit Testing the VolumeDisplay Service', ->
     # The mock objects.
     mock =
       # The mock image file content.
@@ -25,26 +24,23 @@ define ['ngmocks', 'volume'], (ng) ->
 
     # The mock Angular $http service provider.
     $httpBackend = null
-    # The volume service.
-    Volume = null
+    # The VolumeDisplay service.
+    VolumeDisplay = null
     # The encapsulated scan volume object.
     volume = null
 
     beforeEach ->
       # Fake the image service.
-      ng.module('qiprofile.volume')
+      ng.module('qiprofile.volumeDisplay')
       # Enable the test services.
-      inject ['Volume', '$httpBackend', (_Volume_, _$httpBackend_) ->
-        Volume = _Volume_
+      inject ['VolumeDisplay', '$httpBackend', (_VolumeDisplay_, _$httpBackend_) ->
+        VolumeDisplay = _VolumeDisplay_
         $httpBackend = _$httpBackend_
         # The mock file URL.
         url = '/static/' + mock.volume.name
         # The mock http call.
         $httpBackend.whenGET(url).respond(mock.volume.data)
-        # The Volume service get method creates the image object
-        # on demand when the volume image property is accessed. This test
-        # case bypasses that mechanism and create the image object directly.
-        volume = Volume.get(mock.volume)
+        VolumeDisplay.extend(mock.volume)
       ]
 
     afterEach ->

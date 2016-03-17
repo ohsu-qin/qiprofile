@@ -11,35 +11,6 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'session', 'model
     
       isClinical = (encounter) -> not isSession(encounter)
 
-      class SubjectMixin
-        isMultiSession: ->
-          @sessions.length > 1
-
-      # Add the virtual properties.
-      Object.defineProperties SubjectMixin.prototype,
-        # @returns the subject display title
-        title:
-          get: ->
-            "#{ @collection } Subject #{ @number }"
-    
-        # @returns the clinical encounters
-        clinicalEncounters:
-          get: ->
-            (enc for enc in @encounters when isClinical(enc))
-  
-        # @returns the session encounters
-        sessions:
-          get: ->
-            (enc for enc in @encounters when isSession(enc))
-
-        # @returns the modelings array
-        modelings:
-          get: ->
-            # Create on demand.
-            if not @_modelings?
-              @_modelings = Modelings.collect(this)
-            @_modelings      
-
       # Fixes the subject date properties.
       fixDates = (subject)  ->
         # Fix the birth date.
@@ -70,7 +41,7 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'session', 'model
       # Adds the clinical encounter title virtual property.
       extendClincalEncounters = (subject) ->
         for enc in subject.clinicalEncounters
-          Clincal.extend(enc)
+          Clinical.extend(enc)
 
       # Makes the following changes to the given subject object:
       # * adds parent references
@@ -80,12 +51,40 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'session', 'model
       # @param subject the REST Subject object to extend
       # @return the extended Subject
       extend = (subject) ->
+        # Add the virtual properties.
+        Object.defineProperties subject,
+          # @returns the subject display title
+          title:
+            get: ->
+              "#{ @collection } Subject #{ @number }"
+    
+          # @returns the clinical encounters
+          clinicalEncounters:
+            get: ->
+              (enc for enc in @encounters when isClinical(enc))
+  
+          # @returns the session encounters
+          sessions:
+            get: ->
+              (enc for enc in @encounters when isSession(enc))
+
+          # @returns the modelings array
+          modelings:
+            get: ->
+              # Create on demand.
+              if not @_modelings?
+                @_modelings = Modelings.collect(this)
+              @_modelings      
+
+        # Add the isMultiSession method.
+        subject.isMultiSession = -> @sessions.length > 1
+
         # Fix the subject dates.
         fixDates(subject)
         # Doctor the encounters.
         extendSessions(subject)
         extendClincalEncounters(subject)
-      
+    
         # Return the extended subject.
         subject
         
@@ -96,7 +95,7 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'session', 'model
       # * anonymize the birth date by setting it to July 7
       # * add the age property
       # * convert the session and encounter dates into moments
-      # * set the subject isMultiSession flag
+      # * set the subject isMultiSession method
       #
       # When this function is called from a ui-route state resolve,
       # the promise is automatically resolved to the extended subject

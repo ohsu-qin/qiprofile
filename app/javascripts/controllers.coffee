@@ -194,7 +194,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
 
         # The modeling format is 'chart' if the subject has
         # more than one session, 'table' otherwise.
-        if $scope.subject.isMultiSession
+        if $scope.subject.isMultiSession()
           $scope.modelingFormat = 'chart'
         else
           $scope.modelingFormat = 'table'

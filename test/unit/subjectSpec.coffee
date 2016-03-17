@@ -1,15 +1,15 @@
 define ['ngmocks', 'lodash', 'expect', 'moment', 'subject', 'helpers'],
   (ng, _, expect, moment) ->
-    describe 'Unit Testing the Subject service', ->
+    describe 'Unit Testing the Subject Service', ->
       # The mock Subject service module.
       Subject = null
 
       # The mock Angular $http service provider.
       $httpBackend = null
-
       $rootScope = null
-      
       $timeout = null
+      # The fetched subject
+      subject = null
 
       # The mock objects.
       mock =
@@ -111,12 +111,19 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'subject', 'helpers'],
             # The mock subjects http call.
             url = encodeURI('/api/subject?where=' +
                             '{"project":"QIN_Test","collection":"Breast","number":1}')
-            $httpBackend.whenGET(url).respond(JSON.stringify(_items: [mock.subject]))
+            $httpBackend.whenGET(url)
+              .respond(JSON.stringify(_items: [mock.subject]))
 
             # The mock subject http call.
             url = encodeURI('/api/subject/s1')
             $httpBackend.whenGET(url).respond(JSON.stringify(mock.subject))
         ]
+
+        # Fetch the subject.
+        condition = id: mock.subject._id
+        Subject.find(condition).then (fetched) ->
+          subject = fetched
+        $httpBackend.flush()
 
       afterEach ->
         # Note: Angular 1.2.5 and after issue a 'Digest in progress' message
@@ -124,15 +131,7 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'subject', 'helpers'],
         $httpBackend.verifyNoOutstandingExpectation(false)
         $httpBackend.verifyNoOutstandingRequest()
 
-      describe 'Subject', ->
-        subject = null
-
-        beforeEach ->
-          condition = id: mock.subject._id
-          Subject.find(condition).then (fetched) ->
-            subject = fetched
-          $httpBackend.flush()
-
+      describe 'find', ->
         it 'should fetch the subject by id', ->
           expect(subject, "Subject not fetched").to.exist
 
@@ -151,57 +150,75 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'subject', 'helpers'],
           expect(subject, "Subject not fetched").to.eventually.exist
           $httpBackend.flush()
 
+      describe 'Encounters', ->
         it 'should have subject encounters', ->
-          expect(subject.encounters, "Subject is missing encounters").to.exist
-          expect(subject.encounters.length,
-                "Subject encounters length is incorrect").to.equal(3)
+          expect(subject.encounters, "Subject is missing encounters")
+            .to.exist
+          expect(subject.encounters.length, "Subject encounters" +
+                                            " length is incorrect")
+            .to.equal(3)
 
-        describe 'Demographics', ->
-          # Validate the birth date.
-          it 'should anonymize the subject birth date', ->
-            expect(subject.birthDate, "Subject is missing a birth date")
-              .to.exist
-            expect(subject.birthDate.valueOf(), "Subject birth date is incorrect")
-              .to.equal(moment('Jul 7, 1986', 'MMM DD, YYYY').valueOf())
+      describe 'Demographics', ->
+        # Validate the birth date.
+        it 'should anonymize the subject birth date', ->
+          expect(subject.birthDate, "Subject is missing a birth date")
+            .to.exist
+          expect(subject.birthDate.valueOf(), "Subject birth date is" +
+                                              " incorrect")
+            .to.equal(moment('Jul 7, 1986', 'MMM DD, YYYY').valueOf())
 
-        describe 'Clinical', ->
-          # Validate the clinical encounters.
-          it 'should set the clinical encounters', ->
-            expect(subject.clinicalEncounters,
-                   "Subject is missing clinical encounters")
-              .to.exist
-            expect(subject.clinicalEncounters.length,
-                   "Subject clinical encounters length is incorrect")
-              .to.equal(1)
-          it 'should set the clinical encounter title', ->
-            enc = subject.clinicalEncounters[0]
-            expect(enc.title, "Encounter is missing a title").to.exist
-            expect(enc.title, "Encounter title is incorrect").to.equal('Surgery')
+      describe 'Clinical', ->
+        # Validate the clinical encounters.
+        it 'should set the clinical encounters', ->
+          expect(subject.clinicalEncounters,
+                 "Subject is missing clinical encounters")
+            .to.exist
+          expect(subject.clinicalEncounters.length,
+                 "Subject clinical encounters length is incorrect")
+            .to.equal(1)
+        it 'should set the clinical encounter title', ->
+          enc = subject.clinicalEncounters[0]
+          expect(enc.title, "Encounter is missing a title").to.exist
+          expect(enc.title, "Encounter title is incorrect")
+            .to.equal('Surgery')
 
-          # Validate the treatments.
-          it 'should extend the subject treatments', ->
-            expect(subject.treatments, "Subject is missing treatments")
-              .to.exist
-            expect(subject.treatments.length, "Subject encounters length" +
-                                              " is incorrect").to.equal(1)
-            trt = subject.treatments[0]
-            mockTrt = mock.subject.treatments[0]
-            expect(trt.treatmentType, "Treatment type is missing").to.exist
-            expect(trt.treatmentType, "Treatment type is incorrect")
-              .to.equal(mockTrt.treatment_type)
-            expect(trt.start_date.valueOf(),
-                   "Treatment start date is incorrect")
-              .to.equal(mockTrt.start_date)
-            expect(trt.dosages, "Treatment dosages is missing")
-              .to.exist.and.not.be.empty
-            expect(trt.dosages.length, "Treatment dosages count is incorrect")
+        # Validate the treatments.
+        it 'should extend the subject treatments', ->
+          expect(subject.treatments, "Subject is missing treatments")
+            .to.exist
+          expect(subject.treatments.length, "Subject encounters length" +
+                                            " is incorrect").to.equal(1)
+          trt = subject.treatments[0]
+          mockTrt = mock.subject.treatments[0]
+          expect(trt.treatmentType, "Treatment type is missing").to.exist
+          expect(trt.treatmentType, "Treatment type is incorrect")
+            .to.equal(mockTrt.treatment_type)
+          expect(trt.start_date.valueOf(),
+                 "Treatment start date is incorrect")
+            .to.equal(mockTrt.start_date)
+          expect(trt.dosages, "Treatment dosages is missing")
+            .to.exist.and.not.be.empty
+          expect(trt.dosages.length, "Treatment dosages count is incorrect")
+            .to.equal(2)
+          dsg = trt.dosages[0]
+          mockDsg = mockTrt.dosages[0]
+          expect(dsg.agent, "Dosage agent is missing").to.exist
+          expect(dsg.agent.name, "Dosage agent name is missing").to.exist
+          expect(dsg.start_date.valueOf(),  "Treatment dosage start date" +
+                                            " is incorrect")
+            .to.equal(mockDsg.start_date)
+          expect(dsg.duration,  "Treatment dosage duration is incorrect")
+            .to.equal(mockDsg.duration)
+
+        describe 'Session', ->
+          # Validate the sessions (without detail).
+          it 'should have a subject session', ->
+            expect(subject.sessions, "Subject is missing sessions").to.exist
+            expect(subject.sessions.length, "Subject session count is" +
+                                            " incorrect")
               .to.equal(2)
-            dsg = trt.dosages[0]
-            mockDsg = mockTrt.dosages[0]
-            expect(dsg.agent, "Dosage agent is missing").to.exist
-            expect(dsg.agent.name, "Dosage agent name is missing").to.exist
-            expect(dsg.start_date.valueOf(),  "Treatment dosage start date" +
-                                              " is incorrect")
-              .to.equal(mockDsg.start_date)
-            expect(dsg.duration,  "Treatment dosage duration is incorrect")
-              .to.equal(mockDsg.duration)
+
+          it 'should set the subject multiSession flag', ->
+            expect(subject.isMultiSession(), "Subject multi-session flag" +
+                                             " is incorrect")
+              .to.be.true

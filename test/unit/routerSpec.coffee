@@ -379,8 +379,9 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'router', 'helpers'],
               .to.equal(2)
 
           it 'should set the subject multiSession flag', ->
-            expect(subject.isMultiSession, "Subject multi-session flag is" +
-                                           " incorrect").to.be.true
+            expect(subject.isMultiSession(), "Subject multi-session flag" +
+                                             " is incorrect")
+              .to.be.true
 
           it 'should set the session subject reference', ->
             expect(session.subject, "Session is missing a subject reference")

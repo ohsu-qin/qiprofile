@@ -40,9 +40,11 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'registration', 'helpers'],
             .to.exist
           expect(registration.scan, "The registration scan reference is incorrect")
             .to.equal(scan)
+
         it 'should set the registration number', ->
           expect(registration.number, "The scan number is missing").to.exist
           expect(registration.number, "The scan number is incorrect").to.equal(1)
+
         it 'should have a virtual title property', ->
           expect(registration.title, "The registration title is missing").to.exist
           expect(registration.title, "The registration title is incorrect")

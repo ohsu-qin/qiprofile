@@ -5,9 +5,6 @@
 define ['ngmocks', 'lodash', 'expect', 'moment', 'modeling', 'helpers'],
   (ng, _, expect, moment, modeling) ->
     describe 'Unit Testing the Modeling Service', ->
-      modelings = null
-      modeling = null
-      
       # The mock objects.
       mock =
         protocol:
@@ -49,11 +46,16 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'modeling', 'helpers'],
             }
           ]
 
+      subject = null
+      modelings = null
+      modeling = null
+
       beforeEach ->
         # Fake the modeling service module.
         ng.module('qiprofile.modeling')
         inject ['Modeling', (Modeling) ->
-            modelings = Modeling.collect(mock.subject)
+            subject = _.cloneDeep(mock.subject)
+            modelings = Modeling.collect(subject)
             try
               modeling = modelings[0]
             catch TypeError
@@ -87,6 +89,18 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'modeling', 'helpers'],
                  "Subject modeling source does not reference the" +
                  " registration protocol")
             .to.equal(mock.protocol.registration._id)
+
+      describe 'Overlay', ->
+        it 'should have one modeling overlay', ->
+          expect(modeling.overlays, "Modeling is missing overlays")
+            .to.exist
+          expect(modeling.overlays.length, "Modeling overlays count" +
+                                           " is incorrect")
+            .to.equal(1)
+
+        it 'should recapitulate the modeling result delta Ktrans overlay', ->
+          expect(modeling.overlays[0], "Modeling result overlays is incorrect")
+            .to.equal(modeling.result.deltaKTrans.overlay)
 
       describe 'Result', ->
         result = null

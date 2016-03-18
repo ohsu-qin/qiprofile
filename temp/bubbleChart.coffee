@@ -24,30 +24,35 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
             'all'
           ]
           accessor: (modelingResult) -> modelingResult.fxlKTrans.average
+          pAccessor: (p) -> p.value.fxlKTrans
       'fxrKTrans':
           label: 'FXR Ktrans'
           coll: [
             'all'
           ]
           accessor: (modelingResult) -> modelingResult.fxrKTrans.average
+          pAccessor: (p) -> p.value.fxrKTrans
       'deltaKTrans':
           label: 'delta Ktrans'
           coll: [
             'all'
           ]
           accessor: (modelingResult) -> modelingResult.deltaKTrans.average
+          pAccessor: (p) -> p.value.deltaKTrans
       'vE':
           label: 'v_e'
           coll: [
             'all'
           ]
           accessor: (modelingResult) -> modelingResult.vE.average
+          pAccessor: (p) -> p.value.vE
       'tauI':
           label: 'tau_i'
           coll: [
             'all'
           ]
           accessor: (modelingResult) -> modelingResult.tauI.average
+          pAccessor: (p) -> p.value.tauI
       'tumorLength':
           label: 'Tumor Length (mm)'
           coll: [
@@ -80,6 +85,7 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
           accessor: (tumor) ->
             return null unless tumor.geneticExpression.normalizedAssay?
             Breast.recurrenceScore(tumor.geneticExpression.normalizedAssay)
+          pAccessor: (p) -> p.value.recurrenceScore
       'ki67':
           label: 'Ki67 Expression'
           coll: [
@@ -157,6 +163,7 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
               rcb.rcbIndex
             else
                 null
+          pAccessor: (p) -> p.value.rcbIndex
       'necrosisPercent':
           label: 'Necrosis Percent'
           coll: [
@@ -284,6 +291,7 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
       constructDCObject = (s, v, modResult, tumor) ->
         # Create a new data object with core properties.
         dcObject =
+            'uid': s.toString() + '-' + v.toString()
             'subject': s
             'visit': v
         # Iterate over the valid data types and add data to the object.
@@ -371,87 +379,292 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
     #
     # @param config the chart configuration
     renderCharts: (config) ->
-      # Enables a specified D3 element to be moved to the "front" layer of
-      #   the visualization, which is necessary if that element is to be
-      #   bound to mouseover events (e.g. tooltips).
-      d3.selection::moveToFront = ->
-        @each ->
-          @parentNode.appendChild this
-          return
-
-      dat = config.data
+      data = config.data
       scales = config.scales
       chartsToDisplay = config.charts
 
-      # TODO - Suppress charts where all the values for either of the data
-      #   types are null.
-      #
-      # Set up the scatterplots.
-      charts = (dc.scatterPlot('#qi-correlation-chart-' + i) for i in [0...4])
-      # Set up the crossfilter.
-      ndx = crossfilter(dat)
-      # Iterate over the charts.
-      for chart, index in charts
-        xAxis = chartsToDisplay[index].x
-        yAxis = chartsToDisplay[index].y
-        # Set up the dimension based on the X/Y axis user selections.
-        dim = ndx.dimension((d) ->
-          # The properties list must correspond exactly to the
-          #   CHART_DATA_CONFIG object keys.
-          props = [
-            d.fxlKTrans
-            d.fxrKTrans
-            d.deltaKTrans
-            d.vE
-            d.tauI
-            d.tumorLength
-            d.tumorWidth
-            d.tumorDepth
-            d.recurrenceScore
-            d.ki67
-            d.gstm1
-            d.cd68
-            d.bag1
-            d.grb7
-            d.her2
-            d.rcbIndex
-            d.necrosisPercent
-          ]
-          # Return the properties corresponding to the user selections.
-          [
-            props[DATA_TYPES.indexOf(xAxis)]
-            props[DATA_TYPES.indexOf(yAxis)]
-          ]
+      getGroup = (dim) ->
+        dim.group().reduce(((p, v) ->
+          p.uid = v.uid
+          p.subject = v.subject
+          p.visit = v.visit
+          p.fxlKTrans = v.fxlKTrans
+          p.fxrKTrans = v.fxrKTrans
+          p.deltaKTrans = v.deltaKTrans
+          p.vE = v.vE
+          p.tauI = v.tauI
+          p.recurrenceScore = v.recurrenceScore
+          p.rcbIndex = v.rcbIndex
+          p
+        ), ((p, v) ->
+          p.uid = ''
+          p.subject = null
+          p.visit = null
+          p.fxlKTrans = null
+          p.fxrKTrans = null
+          p.deltaKTrans = null
+          p.vE = null
+          p.tauI = null
+          p.recurrenceScore = null
+          p.rcbIndex = null
+          p
+        ), ->
+          {
+            uid: ''
+            subject: ''
+            visit: ''
+            fxlKTrans: null
+            fxrKTrans: null
+            deltaKTrans: null
+            vE: null
+            tauI: null
+            recurrenceScore: null
+            rcbIndex: null
+          }
         )
-        # Set up the group.
-        group = dim.group()
-        # The chart configuration.
-        chart.width(CHART_LAYOUT_PARAMS.width)
-          .height(CHART_LAYOUT_PARAMS.height)
-          .x(d3.scale.linear().domain(scales[xAxis].range))
-          .y(d3.scale.linear().domain(scales[yAxis].range))
-          .elasticX(true)
-          .elasticY(true)
-          .xAxisLabel(LABELS[xAxis])
-          .yAxisLabel(LABELS[yAxis])
-          .xAxisPadding(scales[xAxis].padding)
-          .yAxisPadding(scales[yAxis].padding)
-          .renderVerticalGridLines(true)
-          .renderHorizontalGridLines(true)
-          .symbolSize(CHART_LAYOUT_PARAMS.symbolSize)
-          .colors(d3.scale.category10())
-          .colorAccessor((d) -> 1)
-          .dimension(dim)
-          .group(group)
-        chart.xAxis().ticks(CHART_LAYOUT_PARAMS.ticks)
-        chart.yAxis().ticks(CHART_LAYOUT_PARAMS.ticks)
-        chart.margins().left += CHART_LAYOUT_PARAMS.leftMargin
+
+      charts = (dc.bubbleChart('#qi-correlation-chart-' + i) for i in [0...4])
+      # Set up the crossfilter.
+      ndx = crossfilter(data)
+
+      # CHART 0
+      index = 0
+      chart = charts[0]
+      xAxis = chartsToDisplay[index].x
+      yAxis = chartsToDisplay[index].y
+      dim = ndx.dimension((d) ->
+        d.uid
+      )
+      group = getGroup(dim)
+      chart.dimension(dim)
+        .group(group)
+        .x(d3.scale.linear().domain(scales[xAxis].range))
+        .y(d3.scale.linear().domain(scales[yAxis].range))
+        .width(CHART_LAYOUT_PARAMS.width)
+        .height(CHART_LAYOUT_PARAMS.height)
+        .elasticX(true)
+        .elasticY(true)
+        .xAxisPadding(scales[xAxis].padding)
+        .yAxisPadding(scales[yAxis].padding)
+        .xAxisLabel(LABELS[xAxis])
+        .yAxisLabel(LABELS[yAxis])
+        .renderLabel(true)
+        .label((p) ->
+          p.value.subject
+        ).renderTitle(true)
+        .title((p) ->
+          [
+            'Subject: ' + p.value.subject
+            'Visit: ' + p.value.visit
+          ].join '\n'
+        ).colors(d3.scale.category20b())
+        .colorAccessor((p) -> return p.value.subject)
+        .renderVerticalGridLines(true)
+        .renderHorizontalGridLines(true)
+      chart.valueAccessor((p) ->
+          CHART_DATA_CONFIG[chartsToDisplay[0].y].pAccessor(p)
+        ).keyAccessor((p) ->
+          CHART_DATA_CONFIG[chartsToDisplay[0].x].pAccessor(p)
+        ).radiusValueAccessor((p) ->
+          if (CHART_DATA_CONFIG[chartsToDisplay[0].y].pAccessor(p)? and CHART_DATA_CONFIG[chartsToDisplay[0].x].pAccessor(p)?)
+            1
+          else
+            0
+        ).colors(d3.scale.category20b())
+        .colorAccessor((p) -> return p.value.subject)
+      chart.xAxis().ticks(CHART_LAYOUT_PARAMS.ticks)
+      chart.yAxis().ticks(CHART_LAYOUT_PARAMS.ticks)
+      chart.margins().left += 6;
+
+      # CHART 1
+      index = 1
+      chart = charts[1]
+      xAxis = chartsToDisplay[index].x
+      yAxis = chartsToDisplay[index].y
+      dim = ndx.dimension((d) ->
+        d.uid
+      )
+      group = getGroup(dim)
+      chart.dimension(dim)
+        .group(group)
+        .x(d3.scale.linear().domain(scales[xAxis].range))
+        .y(d3.scale.linear().domain(scales[yAxis].range))
+        .width(CHART_LAYOUT_PARAMS.width)
+        .height(CHART_LAYOUT_PARAMS.height)
+        .elasticX(true)
+        .elasticY(true)
+        .xAxisPadding(scales[xAxis].padding)
+        .yAxisPadding(scales[yAxis].padding)
+        .xAxisLabel(LABELS[xAxis])
+        .yAxisLabel(LABELS[yAxis])
+        .renderLabel(true)
+        .label((p) ->
+          p.value.subject
+        ).renderTitle(true)
+        .title((p) ->
+          [
+            'Subject: ' + p.value.subject
+            'Visit: ' + p.value.visit
+          ].join '\n'
+        ).colors(d3.scale.category20b())
+        .colorAccessor((p) -> return p.value.subject)
+        .renderVerticalGridLines(true)
+        .renderHorizontalGridLines(true)
+      chart.valueAccessor((p) ->
+          CHART_DATA_CONFIG[chartsToDisplay[1].y].pAccessor(p)
+        ).keyAccessor((p) ->
+          CHART_DATA_CONFIG[chartsToDisplay[1].x].pAccessor(p)
+        ).radiusValueAccessor((p) ->
+          if (CHART_DATA_CONFIG[chartsToDisplay[1].y].pAccessor(p)? and CHART_DATA_CONFIG[chartsToDisplay[1].x].pAccessor(p)?)
+            1
+          else
+            0
+        ).colors(d3.scale.category20b())
+        .colorAccessor((p) -> return p.value.subject)
+      chart.xAxis().ticks(CHART_LAYOUT_PARAMS.ticks)
+      chart.yAxis().ticks(CHART_LAYOUT_PARAMS.ticks)
+      chart.margins().left += 6;
+
+      # CHART 2
+      index = 2
+      chart = charts[2]
+      xAxis = chartsToDisplay[index].x
+      yAxis = chartsToDisplay[index].y
+      dim = ndx.dimension((d) ->
+        d.uid
+      )
+      group = getGroup(dim)
+      chart.dimension(dim)
+        .group(group)
+        .x(d3.scale.linear().domain(scales[xAxis].range))
+        .y(d3.scale.linear().domain(scales[yAxis].range))
+        .width(CHART_LAYOUT_PARAMS.width)
+        .height(CHART_LAYOUT_PARAMS.height)
+        .elasticX(true)
+        .elasticY(true)
+        .xAxisPadding(scales[xAxis].padding)
+        .yAxisPadding(scales[yAxis].padding)
+        .xAxisLabel(LABELS[xAxis])
+        .yAxisLabel(LABELS[yAxis])
+        .renderLabel(true)
+        .label((p) ->
+          p.value.subject
+        ).renderTitle(true)
+        .title((p) ->
+          [
+            'Subject: ' + p.value.subject
+            'Visit: ' + p.value.visit
+          ].join '\n'
+        ).colors(d3.scale.category20b())
+        .colorAccessor((p) -> return p.value.subject)
+        .renderVerticalGridLines(true)
+        .renderHorizontalGridLines(true)
+      chart.valueAccessor((p) ->
+          CHART_DATA_CONFIG[chartsToDisplay[2].y].pAccessor(p)
+        ).keyAccessor((p) ->
+          CHART_DATA_CONFIG[chartsToDisplay[2].x].pAccessor(p)
+        ).radiusValueAccessor((p) ->
+          if (CHART_DATA_CONFIG[chartsToDisplay[2].y].pAccessor(p)? and CHART_DATA_CONFIG[chartsToDisplay[2].x].pAccessor(p)?)
+            1
+          else
+            0
+        ).colors(d3.scale.category20b())
+        .colorAccessor((p) -> return p.value.subject)
+      chart.xAxis().ticks(CHART_LAYOUT_PARAMS.ticks)
+      chart.yAxis().ticks(CHART_LAYOUT_PARAMS.ticks)
+      chart.margins().left += 6;
+
+      # CHART 3
+      index = 3
+      chart = charts[3]
+      xAxis = chartsToDisplay[index].x
+      yAxis = chartsToDisplay[index].y
+      dim = ndx.dimension((d) ->
+        d.uid
+      )
+      group = getGroup(dim)
+      chart.dimension(dim)
+        .group(group)
+        .x(d3.scale.linear().domain(scales[xAxis].range))
+        .y(d3.scale.linear().domain(scales[yAxis].range))
+        .width(CHART_LAYOUT_PARAMS.width)
+        .height(CHART_LAYOUT_PARAMS.height)
+        .elasticX(true)
+        .elasticY(true)
+        .xAxisPadding(scales[xAxis].padding)
+        .yAxisPadding(scales[yAxis].padding)
+        .xAxisLabel(LABELS[xAxis])
+        .yAxisLabel(LABELS[yAxis])
+        .renderLabel(true)
+        .label((p) ->
+          p.value.subject
+        ).renderTitle(true)
+        .title((p) ->
+          [
+            'Subject: ' + p.value.subject
+            'Visit: ' + p.value.visit
+          ].join '\n'
+        ).colors(d3.scale.category20b())
+        .colorAccessor((p) -> return p.value.subject)
+        .renderVerticalGridLines(true)
+        .renderHorizontalGridLines(true)
+      chart.valueAccessor((p) ->
+          CHART_DATA_CONFIG[chartsToDisplay[3].y].pAccessor(p)
+        ).keyAccessor((p) ->
+          CHART_DATA_CONFIG[chartsToDisplay[3].x].pAccessor(p)
+        ).radiusValueAccessor((p) ->
+          if (CHART_DATA_CONFIG[chartsToDisplay[3].y].pAccessor(p)? and CHART_DATA_CONFIG[chartsToDisplay[3].x].pAccessor(p)?)
+            1
+          else
+            0
+        ).colors(d3.scale.category20b())
+        .colorAccessor((p) -> return p.value.subject)
+      chart.xAxis().ticks(CHART_LAYOUT_PARAMS.ticks)
+      chart.yAxis().ticks(CHART_LAYOUT_PARAMS.ticks)
+      chart.margins().left += CHART_LAYOUT_PARAMS.leftMargin
 
       # Render all the charts.
       dc.renderAll()
 
-      # Move the chart data points to the front layer of the visualization so
-      #   they can be bound to mouse events.
-      d3.selectAll('.chart-body').moveToFront()
+
+      ###
+      # THE OLD TOOLTIP CODE.
+
+      # Append a tooltip div to the document.
+      div = d3.select('body').append('div').attr('class', 'tooltip').style('opacity', 0)
+
+      # Specify tooltips for the data points. Use the "renderlet"
+      #   listener to specify the content of the tooltips after each rendering
+      #   of the chart, including the initial rendering and any re-renderings
+      #   after a brush gesture has been made.
+
+      for chart in charts
+        chart.on 'renderlet', (chart) ->
+          chart.selectAll('.symbol')
+            .data(dat)
+            .on('mouseover', (d) ->
+              div.transition().duration(20).style 'opacity', .9
+              div.html('Subject: ' + d.subject + '<br/>' + 'Visit: ' + d.visit).style('left', d3.event.pageX + 5 + 'px').style 'top', d3.event.pageY - 35 + 'px'
+              return
+            ).on('mouseout', (d) ->
+              div.transition().duration(50).style 'opacity', 0
+              return
+            )
+
+      See: https://jsfiddle.net/eugene_goldberg/yv3nnred/18/
+
+      Stylus:
+        
+      div.tooltip
+        text-align left
+        padding 5px
+        font 14px sans-serif
+        background rgba(0, 0, 0, 0.8)
+        color #fff
+        border 0px
+        border-radius 8px
+        pointer-events none
+
+      ###
 
   ]

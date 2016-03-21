@@ -9,11 +9,10 @@ define ['angular', 'lodash', 'imageSequence'], (ng, _) ->
     # * Adds the title and session virtual properties
     #
     # @param registration the registration to extend
-    # @param session the parent session object
     # @param scan the source scan
     # @param number the one-based registration number within the scan
     # @returns the extended registration object
-    extend: (registration, session, scan, number) ->
+    extend: (registration, scan, number) ->
       # Add the general image sequence properties.
       ImageSequence.extend(registration)
       # Add the parent scan reference.

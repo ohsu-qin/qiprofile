@@ -1,7 +1,6 @@
-# The Modeling unit test.
-#
-# Note: image load cannot be unit-tested, since it requires an
-# active browser.
+# The Modeling unit test. This test suite tests the subject
+# modelings built when Subject.extend calls Modeling.collect.
+# The session modeling objects are tested in sessionSpec.
 define ['ngmocks', 'lodash', 'expect', 'moment', 'modeling', 'helpers'],
   (ng, _, expect, moment, modeling) ->
     describe 'Unit Testing the Modeling Service', ->
@@ -89,18 +88,6 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'modeling', 'helpers'],
                  "Subject modeling source does not reference the" +
                  " registration protocol")
             .to.equal(mock.protocol.registration._id)
-
-      describe 'Overlay', ->
-        it 'should have one modeling overlay', ->
-          expect(modeling.overlays, "Modeling is missing overlays")
-            .to.exist
-          expect(modeling.overlays.length, "Modeling overlays count" +
-                                           " is incorrect")
-            .to.equal(1)
-
-        it 'should recapitulate the modeling result delta Ktrans overlay', ->
-          expect(modeling.overlays[0], "Modeling result overlays is incorrect")
-            .to.equal(modeling.result.deltaKTrans.overlay)
 
       describe 'Result', ->
         result = null

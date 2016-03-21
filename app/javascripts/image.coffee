@@ -1,29 +1,57 @@
-define ['angular', 'loader', 'imageStore'], (ng, Loader) ->
-  image = ng.module 'qiprofile.image', ['qiprofile.imagestore']
+define ['angular', 'lodash', 'loader', 'imageStore', 'nifti'], (ng, _, Loader) ->
+  image = ng.module 'qiprofile.image', ['qiprofile.imagestore', 'qiprofile.nifti']
 
-  image.factory 'Image', ['ImageStore', (ImageStore) ->
+  image.factory 'Image', ['ImageStore', 'Nifti', (ImageStore, Nifti) ->
+    # Matches a NIfTI file extension.
+    NIFTI_REGEX = /\.nii(\.gz)?$/
+
     # An image representation which can load an image file.
-    class Image extends Loader
-      # @param store the image store
-      constructor: ->
+    class ImageMixin extends Loader
+      # @param imageSequence the parent object
+      constructor: (imageSequence) ->
         super
+        @imageSequence = imageSequence
         @data = @header = null
       
-      # Loads this image file and parses it with the given parser.
-      # The isLoading() method will return true while the file is being
-      # read.
+      parser: ->
+        if NIFTI_REGEX.test(@name)
+          Nifti
+        else
+          throw new Error("The image format could not be inferred from" +
+                          " the image file extension for file #{ @name }")
+
+      # Loads the image file and parses it with the given parser.
+      # This method delegates to Loader.load to load the file
+      # and the parser to parse the file.
       #
-      # @returns a promise which resolves to the parsed {header, data}
-      #   content object
-      load: (parser) ->
-        # Delegate to Loader.
+      # @returns a promise which resolves to this image object
+      #   with the parsed header and data properties
+      load: ->
+        # The image content parser service.
+        parser = @parser()
+        # Delegate to the Loader.load function.
         super(this, ImageStore).then (content) ->
           parsed = parser.parse(content)
           @header = parsed.header 
           @data = parsed.data
-          # Resolve to the parsed content.
-          parsed
+          # Resolve to this image object.
+          this
 
-    # Return the Image class.
-    Image
+    # Makes the following changes to the given REST Image object:
+    # * adds the generic parent imageSequence reference
+    # * adds the concrete parent scan or registration reference
+    # * adds the Loader functionality
+    #
+    # @param image the REST Image object to extend
+    # @param imageSequence the parent ImageSequence object
+    # @param the image store resource identifier
+    # @return the extended Image object
+    extend: (image, imageSequence, resource) ->
+      # The parent reference property.
+      image.imageSequence = imageSequence
+      # The image resource.
+      image.resource = resource
+      
+      # Add the loader functionality.
+      _.extend(image, new ImageMixin(imageSequence))
   ]

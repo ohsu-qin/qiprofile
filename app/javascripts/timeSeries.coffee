@@ -1,40 +1,33 @@
-define ['angular', 'lodash', 'image', 'nifti'], (ng, _) ->
+define ['angular', 'underscore.string', 'image', 'nifti'], (ng, _s) ->
   timeSeries = ng.module 'qiprofile.timeseries', ['qiprofile.image', 'qiprofile.nifti'] 
 
   timeSeries.factory 'TimeSeries', ['Image', 'Nifti', (Image, Nifti) ->
-    # The time series mix-in.
-    class TimeSeriesMixin extends Image
-      # Loads and parses this time series image file.
-      # The isLoading() method will return true while the file is being
-      # read.
-      #
-      # @returns a promise which resolves to the parsed {header, data}
-      #   content object
-      load: ->
-        # Delegate to Image with the Nifti parser.
-        super(@location, Nifti)
-      
-    # Makes the following changes to the given REST TimeSeries object:
-    # * adds the parent imageSequence reference
-    # * adds the location virtual property
+    # Adds the following properties to the given REST TimeSeries object:
+    # * the parent imageSequence reference
+    # * resource - the image store resource name
+    # * the location virtual property
     # * adds the load method
     #
     # @param timeSeries the REST TimeSeries object to extend
     # @param imageSequence the parent ImageSequence object
     # @return the extended TimeSeries
     extend: (timeSeries, imageSequence) ->
-      # Set the parent reference.
+      # The generic parent reference property.
       timeSeries.imageSequence = imageSequence
 
-      # Make the virtual properties.
-      Object.defineProperties timeSeries,
-        # @returns the time series name
-        resource:
-          get: -> @name
+      # The concrete parent reference (scan or registration).
+      propertyName = _s.decapitalize(imageSequence._cls)
+      Object.defineProperty timeSeries, propertyName,
+        get: -> @imageSequence
 
+      # Make the title virtual property.
+      Object.defineProperties timeSeries,
+        # @returns the display title
         title:
           get: -> "#{ @imageSequence.title } Time Series"
       
-      # Add the load function.
-      _.extend(timeSeries, new TimeSeriesMixin())
+      # The image resource is the time series name.
+      resource = timeSeries.name
+      # Extend the image.
+      Image.extend(timeSeries.image, imageSequence, resource)
   ]

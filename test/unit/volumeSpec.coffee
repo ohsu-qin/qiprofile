@@ -7,12 +7,13 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'volume', 'helpers'],
     # The mock objects.
     mock =
       scan:
+        _cls: 'Scan'
         title: 'Breast Subject 1 Session 1 Scan 1'
         volumes:
           name: 'NIFTI'
           images:  [
             name: 'volume001.nii.gz'
-            average_intensity: 3.1
+            averageIntensity: 3.1
           ]
 
     describe 'Unit Testing the Volume Service', ->
@@ -49,8 +50,8 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'volume', 'helpers'],
           expect(volume.number, "The volume number is incorrect").to.equal(1)
 
         it 'should have a virtual title property', ->
-          expect(scan.title, "The volume title is missing").to.exist
-          expect(scan.title, "The volume title is incorrect")
+          expect(volume.title, "The volume title is missing").to.exist
+          expect(volume.title, "The volume title is incorrect")
             .to.equal('Breast Subject 1 Session 1 Scan 1 Volume 1')
 
         it 'should alias the imageSequence reference to the scan', ->
@@ -61,14 +62,13 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'volume', 'helpers'],
                                        " is incorrect")
              .to.equal(scan)
 
-        it 'should alias the resource', ->
-          expect(volume.name, "The resource is missing").to.exist
-          expect(volume.name, "The resource is incorrect")
-            .to.equal(mockVolume.volumes.name)
+        it 'should have a resource property', ->
+          expect(volume.resource, "The resource is missing").to.exist
+          expect(volume.resource, "The resource is incorrect")
+            .to.equal(scan.volumes.name)
 
-        it 'should have an intensity', ->
-          expect(volume.averageIntensity, "The voume intensity is missing")
-            .to.exist
-          expect(volume.averageIntensity, "The volume intensity is" +
-                                          " incorrect")
-            .to.equal(mockVolume.average_intensity)
+          it 'should have a load function', ->
+            expect(volume.load, "The load function is missing")
+              .to.exist
+          
+          # TODO - test image load.

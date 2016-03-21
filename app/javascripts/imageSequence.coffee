@@ -13,11 +13,17 @@ define ['angular', 'lodash', 'timeSeries', 'volume'], (ng, _) ->
       extend: (imageSequence) ->
         # Extend the time series.
         if imageSequence.timeSeries?
-          TimeSeries.extend(imageSequence.timeSeries)
+          TimeSeries.extend(imageSequence.timeSeries, imageSequence)
+
         # Extend each volume.
         if imageSequence.volumes?
-          for volume, index in imageSequence.volumes.images
-            Volume.extend(volume, imageSequence, index + 1)
+          for image, index in imageSequence.volumes.images
+            Volume.extend(image, imageSequence, index + 1)
+
+        # @returns whether this image sequence contain more than one
+        #   volume
+        imageSequence.isMultiVolume = ->
+          imageSequence.volumes? and imageSequence.volumes.images.length > 1
 
         # Return the augmented image sequence.
         imageSequence

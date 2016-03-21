@@ -1,39 +1,39 @@
-define ['angular', 'lodash', 'underscore.string'], (ng, _, _s) ->
-  volume = ng.module 'qiprofile.volume', []
+define ['angular', 'lodash', 'underscore.string', 'image'], (ng, _, _s) ->
+  volume = ng.module 'qiprofile.volume', ['qiprofile.image']
 
-  volume.factory 'Volume', ->
-    # Adds the following properties to the given volume object:
+  volume.factory 'Volume', ['Image', (Image) ->
+    # Adds the following volume properties to the given volume
+    # image:
+    # * resource - the image store resource name
     # * number - the one-based volume number
     # * scan, if the volume parent is a scan, or
     # * registration, if the volume parent is a registration
     # * imageSequence - the parent scan or registration
     #
-    # @param volume the volume object to extend
+    # @param image the volume image object to extend
     # @param imageSequence the parent object
     # @param number the one-based volume number
     extend: (volume, imageSequence, number) ->
-      # Set the volume number property.
-      volume.number = number
-      # The parent reference property (scan or registration).
-      attr = _s.decapitalize(imageSequence._cls)
-      volume[attr] = imageSequence
-      # Add the virtual properties.
-      Object.defineProperties volume,
-        # @returns the parent scan or registration
-        imageSequence:
-          get: ->
-            @scan or @registration
+      # The image sequence volumes resource name.
+      resource = imageSequence.volumes.name
+      # Add the image load capability.
+      Image.extend(volume, imageSequence, resource)
 
+      # The concrete parent reference (scan or registration).
+      propertyName = _s.decapitalize(imageSequence._cls)
+      Object.defineProperty volume, propertyName,
+        get: -> @imageSequence
+
+      # The volume number property.
+      volume.number = number
+
+      # The title virtual property.
+      Object.defineProperties volume,
         # @returns the display title
         title:
-          get: -> "#{ imageSequence.title } Volume #{ @number }"
+          get: -> "#{ @imageSequence.title } Volume #{ @number }"
 
-        # @returns the parent image sequence volumes resource name
-        resource:
-          get: ->
-            @imageSequence.volumes.name
-      
-      # Return the extended Volume object.
+      # Return the augmented Image object.
       volume
 
     # @param imageSequence the parent scan or registration to search
@@ -53,3 +53,4 @@ define ['angular', 'lodash', 'underscore.string'], (ng, _, _s) ->
 
       # Return the volume.
       target
+  ]

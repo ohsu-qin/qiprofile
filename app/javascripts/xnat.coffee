@@ -1,5 +1,5 @@
-define ['angular', 'file'], (ng) ->
-  xnat = ng.module('qiprofile.xnat', ['qiprofile.file'])
+define ['angular', 'sprintf', 'file'], (ng, sprintf) ->
+  xnat = ng.module 'qiprofile.xnat', ['qiprofile.file']
 
   xnat.factory 'XNAT', ['File', (File) ->
     # The image store location relative to the web app root.
@@ -11,22 +11,30 @@ define ['angular', 'file'], (ng) ->
     # @returns the image store project directory
     projectLocation = (project) ->
       "#{ IMAGE_STORE_ROOT }/#{ project }/arc001"
+      
+      # If the image sequence is a scan, then this method
+      # returns the image sequence. Otherwise, this method
+      # returns the scan from which the image sequence is
+      # derived.
+      #
+      # @returns the image sequence scan
+    scanFor = (imageSequence) ->
+      if imageSequence._cls is 'Scan'
+        imageSequence
+      else if imageSequence.scan?
+        imageSequence.scan
+      else
+        throw new TypeError("Cannot infer the #{ imageSequence.title }" +
+                            " parent scan")
 
     # @param image the REST TimeSeries or Volume object
     # @returns the image file path relative to the web app root
-    path = (image) ->
+    location = (image) ->
       # The image parent is either a scan or registration image
       # sequence.
       resource = image.resource
       imageSequence = image.imageSequence
-      # The scan.
-      if imageSequence._cls is 'Scan'
-        scan = imageSequence
-      else if imageSequence._cls is 'Registration'
-        scan = imageSequence.scan
-      else
-        throw new TypeError("Unsupported ImageSequence type:" +
-                            " #{ imageSequence._cls }")
+      scan = scanFor(imageSequence)
       session = imageSequence.session
       subject = session.subject
       collection = subject.collection
@@ -54,7 +62,7 @@ define ['angular', 'file'], (ng) ->
     #   content
     load: (image) ->
       # The image file path.
-      path = path(image)
+      path = location(image)
       # Read the file into an ArrayBuffer.
       File.readBinary(path)
   ]

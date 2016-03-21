@@ -7,12 +7,14 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'registration', 'helpers'],
     # The mock objects.
     mock =
       scan:
+        _cls: 'Scan'
         title: 'Breast Subject 1 Session 1 Scan 1'
         registrations: [
+          _cls: 'Registration'
           protocol: 'rp1'
         ]
 
-    describe.only 'Unit Testing the Registration Service', ->
+    describe 'Unit Testing the Registration Service', ->
       Registration = null
       registration = null
       scan = null
@@ -26,7 +28,7 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'registration', 'helpers'],
         scan = _.cloneDeep(mock.scan)
         registration = scan.registrations[0]
         # Extend the test registration.
-        Registration.extend(registration, mock.scan, 1)
+        Registration.extend(registration, scan, 1)
 
       describe 'find', ->
         it 'should find the scan registration', ->

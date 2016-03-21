@@ -37,17 +37,18 @@ define [], ->
       # Read the content into an ArrayBuffer. The CoffeeScript fat
       # arrow (=>) binds the this variable to this Loader object
       # rather than the $http request.
-      store.load(loadable).then (data) =>
-        # Set the state to loaded.
-        @_state = STATES.LOADED
-        # Resolve to the data.
-        data
-      .catch (res) =>
-        # Display an alert with the status text.
-        alert("The image file #{ path } load was unsuccessful: " +
-              "#{ res.statusText } (#{ res.status }).")
-        # Set the state to 'error'.
-        @_state = STATES.ERROR
+      store.load(loadable)
+        .then (data) =>
+          # Set the state to loaded.
+          @_state = STATES.LOADED
+          # Resolve to the data.
+          data
+        .catch (response) =>
+          # Set the state to 'error'.
+          @_state = STATES.ERROR
+          # Throw an error with the status text.
+          throw new Error("Image load was unsuccessful:" +
+                          " #{ response.statusText } (#{ response.status }).")
   
   # Return the Loader class.
   Loader

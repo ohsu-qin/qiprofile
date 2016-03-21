@@ -73,7 +73,7 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'session', 'model
             get: ->
               # Create on demand.
               if not @_modelings?
-                @_modelings = Modelings.collect(this)
+                @_modelings = Modeling.collect(this)
               @_modelings      
 
         # Add the isMultiSession method.
@@ -126,7 +126,7 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'session', 'model
       #   extended subject REST objects array
       query: (condition) ->
         # Fetch the subjects which match the criteria.
-        Resources.Subject.query(select).$promise.then (result) ->
+        Resources.Subject.query(condition).then (result) ->
           # Extend the result objects.
           result.map(extend)  
   ]

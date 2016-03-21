@@ -12,13 +12,12 @@ define ['angular', 'lodash', 'resources', 'session'], (ng, _) ->
         if not assocPcl?
           assocPcl = accum[modeling.protocol] = {}
         if not modeling.source?
-          throw new ReferenceError("Modeling does not have a source" +
-                                   " attribute:" +
-                                   " #{ Object.keys(modeling) }")
+          throw new ReferenceError("The modeling object does not reference" +
+                                   " a source")
         pairs = _.toPairs(modeling.source)
         if pairs.length > 1
-          throw new ReferenceError("Modeling source cannot reference" +
-                                   " more than one source type:" +
+          throw new ReferenceError("The modeling source references more" +
+                                   " than one source type:" +
                                    " #{ Object.keys(modeling.source) }")
         [srcType, srcId] = pairs[0]
         assocSrc = assocPcl[srcType]

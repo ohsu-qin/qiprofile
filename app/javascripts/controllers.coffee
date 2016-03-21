@@ -1,9 +1,9 @@
-define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
+define ['angular', 'lodash', 'ngsanitize', 'resources', 'modelingchart', 'breast', 'slice'],
   (ng, _) ->
     ctlrs = ng.module(
       'qiprofile.controllers',
-      ['ngSanitize', 'ui.bootstrap', 'qiprofile.modelingchart',
-       'qiprofile.resources', 'qiprofile.breast']
+      ['ngSanitize', 'ui.bootstrap', 'qiprofile.resources',
+       'qiprofile.modelingchart', 'qiprofile.breast', 'qiprofile.slice']
     )
 
     # The local controller helper methods.
@@ -293,7 +293,7 @@ define ['angular', 'lodash', 'ngsanitize', 'modeling', 'breast'],
       ($scope, ModelingChart) ->
         # The d3 chart configuration.
         if $scope.selModeling?
-          $scope.config = ModelingChart.configure($scope.selModelingChart.results,
+          $scope.config = ModelingChart.configure($scope.selModeling.results,
                                                   $scope.dataSeriesConfig)
     ]
 

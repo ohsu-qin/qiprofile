@@ -19,11 +19,11 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'session', 'helpers'],
             registration: 'rp1'
           result:
             deltaKTrans:
-              name: "path/to/first/delta_k_trans.nii.gz"
+              name: "delta_k_trans.nii.gz"
               average: 2.3
               labelMap:
-                name: "path/to/first/delta_k_trans_color.nii.gz"
-                colorTable: "path/to/color_table.txt"
+                name: "delta_k_trans_color.nii.gz"
+                colorTable: "/etc/color_table.txt"
         ]
 
       session_detail:
@@ -42,23 +42,12 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'session', 'helpers'],
                 name: 'volume001.nii.gz'
                 average_intensity: 2.4
               ]
-            registrations: [
-              _cls: 'Registration'
-              protocol: 'rp1'
-              time_series:
-                name: 'reg_01'
-                image: 'reg_01_ts.nii.gz'
-              volumes:
-                name: 'reg_01'
-                images:  [
-                  name: 'volume001.nii.gz'
-                  average_intensity: 3.1
-                ]
-            ]
+            registrations: []
           ]
 
     describe 'Unit Testing the Session Service', ->
       Session = null
+      subject = mock.subject
       session = null
 
       beforeEach ->
@@ -69,56 +58,39 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'session', 'helpers'],
         ]
         session = _.cloneDeep(mock.session)
         # Extend the mock session.
-        Session.extend(session, mock.subject, 1)
+        Session.extend(session, subject, 1)
 
-      describe 'ModelingChart', ->
-        modeling = null
-
-        beforeEach ->
-          try
-            modeling = session.modelings[0]
-          catch TypeError
-            # There is not a modelings array.
-
-        it 'should have one session modeling object', ->
-          expect(session.modelings, "Session is missing modeling")
+      describe 'extend', ->
+        it 'should reference the parent subject', ->
+          expect(session.subject, "The session does not reference the" +
+                                  " parent subject")
             .to.exist
-          expect(session.modelings.length,
-                 "Session modeling count is incorrect").to.equal(1)
+          expect(session.subject, "The session subject reference is" +
+                                  " incorrect")
+            .to.equal(subject)
 
-        it 'should have a session reference', ->
-          expect(modeling.session,
-                 "Modeling does not reference the session").to.exist
-          expect(modeling.session,
-                 "Modeling session reference is incorrect")
-            .to.equal(session)
-
-        it 'should have one modeling overlay', ->
-          expect(modeling.overlays, "Modeling is missing overlays")
-            .to.exist
-          expect(modeling.overlays.length,
-                 "Modeling overlays count is incorrect").to.equal(1)
-
-        it 'should recapitulate the modeling result delta Ktrans overlay', ->
-          expect(modeling.overlays[0],
-                 "Modeling result overlays is incorrect")
-            .to.equal(modeling.result.deltaKTrans.overlay)
-
-        describe 'Result', ->
-          modelingResult = null
+        describe 'Overlays', ->
+          overlays = null
 
           beforeEach ->
-            if modeling
-              modelingResult = modeling.result
+            overlays = session.overlays
 
-          it 'should reference the modeling object', ->
-            expect(modelingResult.modeling,
-                   "Modeling result does not reference the parent" +
-                   " modeling object").to.exist
-            expect(modelingResult.modeling,
-                   "Modeling result parent reference is incorrect")
-              .to.equal(modeling)
+          it 'should have one modeling overlay', ->
+            expect(overlays, "Modeling is missing overlays").to.exist
+            expect(overlays.length, "Modeling overlays count is" +
+                                    " incorrect")
+              .to.equal(1)
 
+          it 'should recapitulate the modeling result delta Ktrans overlay', ->
+            expect(overlays[0], "Modeling result overlays is incorrect")
+              .to.equal(session.modelings[0].result.deltaKTrans.labelMap)
+
+        describe 'Modeling', ->
+          modelingResult = null
+          
+          beforeEach ->
+            modelingResult = session.modelings[0].result
+          
           describe 'Parameter', ->
             paramResult = null
 
@@ -143,19 +115,19 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'session', 'helpers'],
 
               it 'should have a modeling parameter result overlay', ->
                 expect(overlay,
-                       "Modeling parameter result does not reference an" +
-                       " overlay").to.exist
-                expect(overlay,
-                       "Modeling parameter result overlay is not the" +
-                       " label map").to.equal(paramResult.labelMap)
+                       "The modeling parameter result does not reference" +
+                       " an overlay").to.exist
+                expect(overlay, "The modeling parameter result overlay" +
+                                " is not the label map")
+                  .to.equal(paramResult.labelMap)
 
               it 'should reference the parent modeling parameter result', ->
                 expect(overlay.parameterResult,
-                       "Overlay does not reference the parent modeling" +
-                       " parameter result").to.exist
+                       "The overlay does not reference the parent" +
+                       " modeling parameter result")
+                  .to.exist
                 expect(overlay.parameterResult,
-                       "Overlay parameter result reference is incorrect")
-
+                       "The overlay parameter result reference is incorrect")
                   .to.equal(paramResult)
 
       describe 'Detail', ->
@@ -198,134 +170,3 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'session', 'helpers'],
           expect(session.scans, "Session is missing the scans")
             .to.exist.and.not.be.empty
 
-        describe 'Scan', ->
-          scan = null
-          mockScan = mock.session_detail.sd1.scans[0]
-
-          beforeEach ->
-            try
-              scan = Session.getScan(session, 1)
-            catch ReferenceError
-              # Session couldn't resolve the scan.
-              # This is caught in the first test case.
-
-          it 'should have a session scan', ->
-            expect(scan, "The session is missing the scan").to.exist
-
-          it 'should reference the session', ->
-            expect(scan.session, "The scan is missing the session" +
-                                 " reference").to.exist
-            expect(scan.session, "The scan session reference is incorrect")
-               .to.equal(session)
-
-          describe 'Volume', ->
-            volume = null
-            mockVolume = mockScan.volumes.images[0]
-
-            beforeEach ->
-              try
-                volume = scan.volumes.images[0]
-              catch TypeError
-                # There is not a volumes array.
-
-            it 'should have a scan volume', ->
-              expect(scan.volumes, "The scan is missing volumes").to.exist
-              expect(scan.volumes.images.length, "The scan volumes length" +
-                                                 " is incorrect")
-                .to.equal(1)
-
-            it 'should reference the scan', ->
-              expect(volume.scan, "The volume is missing the scan reference")
-                .to.exist
-              expect(volume.scan, "The volume scan reference is incorrect")
-                 .to.equal(scan)
-
-            it 'should alias the imageSequence reference to the scan', ->
-              expect(volume.imageSequence, "The volume is missing the" +
-                                           " imageSequence alias")
-                .to.exist
-              expect(volume.imageSequence, "The volume imageSequence alias" +
-                                           " is incorrect")
-                .to.equal(scan)
-
-            it 'should have a volume number', ->
-              expect(volume.number, "The volume number is missing").to.exist
-              expect(volume.number, "The volume number is incorrect")
-                .to.equal(1)
-
-            it 'should have a name', ->
-              expect(volume.name, "The name is missing").to.exist
-              expect(volume.name, "The name is incorrect")
-                .to.equal(mockVolume.name)
-
-            it 'should have an intensity', ->
-              expect(volume.averageIntensity, "The voume intensity is missing")
-                .to.exist
-              expect(volume.averageIntensity, "The scan intensity is incorrect")
-                .to.equal(mockVolume.average_intensity)
-
-          describe 'Registration', ->
-            registration = null
-
-            beforeEach ->
-              try
-                registration = Session.getRegistration(scan, 'reg_01')
-              catch ReferenceError
-                # Session couldn't resolve the registration.
-
-            it 'should have a scan registration', ->
-              expect(registration, "The scan is missing the registration")
-                .to.exist
-
-            it 'should reference the scan', ->
-              expect(registration.scan, "The registration is missing the" +
-                                        " scan reference").to.exist
-              expect(registration.scan, "The registration scan reference" +
-                                        " is incorrect").to.equal(scan)
-
-            describe 'Volume', ->
-              volume = null
-              mockVolume = mockScan.registrations[0].volumes.images[0]
-
-              beforeEach ->
-                try
-                  volume = registration.volumes.images[0]
-                catch TypeError
-                  # There is not a volumes array.
-
-              it 'should have a registration volume', ->
-                expect(registration.volumes, "The registration is missing volumes")
-                  .to.exist
-                expect(registration.volumes.images.length,
-                       "The registration volumes length is incorrect").to.equal(1)
-
-              it 'should reference the registration', ->
-                expect(volume.registration,
-                       "The volume is missing the registration reference").to.exist
-                expect(volume.registration,
-                       "The volume registration reference is incorrect")
-                  .to.equal(registration)
-
-              it 'should alias the imageSequence reference to the registration', ->
-                expect(volume.imageSequence,
-                       "The volume is missing the imageSequence alias").to.exist
-                expect(volume.imageSequence,
-                       "The volume imageSequence alias is incorrect")
-                   .to.equal(registration)
-
-              it 'should have a volume number', ->
-                expect(volume.number, "The volume number is missing").to.exist
-                expect(volume.number, "The volume number is incorrect")
-                  .to.equal(1)
-
-              it 'should have a name', ->
-                expect(volume.name, "The name is missing").to.exist
-                expect(volume.name, "The name is incorrect")
-                  .to.equal(mockVolume.name)
-
-              it 'should have an intensity', ->
-                expect(volume.averageIntensity, "The voume intensity is missing")
-                  .to.exist
-                expect(volume.averageIntensity,
-                       "The registration intensity is incorrect")
-                  .to.equal(mockVolume.average_intensity)

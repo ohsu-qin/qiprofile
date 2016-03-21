@@ -44,34 +44,47 @@ requirejs.config
 
   waitSeconds: WAIT
 
-  # The module paths.
+  # The module paths. The preferred module source is a CND,
+  # if available. The backup is the server ./javascripts/lib
+  # file. Each CDN module should also have an empty path
+  # entry in the Gruntfile.coffee requirejs task.
+  #
   paths:
-    angular: [NG_LIB + '/' + 'angular' + MIN, './lib/angular']
+    angular: [NG_LIB + '/' + 'angular' + MIN, './lib/angular'] 
+    cornerstone: './lib/cornerstone'
+    cornerstoneMath: './lib/cornerstoneMath'
+    cornerstoneTools: './lib/cornerstoneTools'
     crossfilter: './lib/crossfilter'
     d3: './lib/d3'
     dc: './lib/dc'
     domReady: [DOM_READY_LIB + '/domReady' + MIN, './lib/domReady']
     'error-stack-parser': './lib/error-stack-parser'
+    jquery: './lib/jquery'
     lodash: './lib/lodash'
     moment: './lib/moment'
     nganimate: [NG_LIB + '/' + 'angular-animate' + MIN, './lib/angular-animate']
     ngresource: [NG_LIB + '/' + 'angular-resource' + MIN, './lib/angular-resource']
     ngroute: [NG_LIB + '/' + 'angular-route' + MIN, './lib/angular-route']
     ngsanitize: [NG_LIB + '/' + 'angular-sanitize' + MIN, './lib/angular-sanitize']
+    ngsprintf: './lib/angular-sprintf'
     ngnvd3: './lib/angularjs-nvd3-directives'
     nvd3: './lib/nv.d3'
+    pako: './lib/pako_inflate'
     slider: './lib/angular-slider'
     'source-map': './lib/source-map'
     spin: './lib/spin'
+    sprintf: './lib/sprintf'
     'stack-generator': './lib/stack-generator'
     stackframe: './lib/stackframe'
+    stackScrollTool: './temp/stackScrollTool'
     stacktrace: './lib/stacktrace'
     'stacktrace-gps': './lib/stacktrace-gps'
     touch: './lib/angular-touch'
     'underscore.string': './lib/underscore.string'
     uirouter: './lib/angular-ui-router'
     uibootstrap: './lib/ui-bootstrap-tpls'
-    xtk: './lib/xtk'
+    # Uncomment to enable XTK.
+    #xtk: './lib/xtk'
 
   # The module configurations.
   config:
@@ -82,6 +95,9 @@ requirejs.config
   shim:
     angular: exports : 'angular'
     lodash: exports: '_'
+    cornerstone: deps: ['jquery']
+    cornerstoneMath: deps: ['cornerstone']
+    cornerstoneTools: deps: ['cornerstoneMath']
     dc: deps: ['crossfilter', 'd3']
     nganimate: deps: ['angular']
     ngnvd3: deps: ['angular', 'nvd3']

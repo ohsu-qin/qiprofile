@@ -1,5 +1,5 @@
 define ['roman'], (roman) ->
-  describe 'Unit Testing the Roman service', ->
+  describe 'Unit Testing the Roman Service', ->
     describe 'romanize', ->
       it 'should convert a string or an integer to a roman numeral', ->
         ONES = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX']

@@ -124,16 +124,18 @@ class Findable
   # @param selectors the search condition
   # @returns a promise which resolves to the hyperlink URL
   hyperlink: (selectors...) ->
-    @_find(selectors..., 'a').then (anchor) ->
-      anchor.getAttribute('href')
-  
+    selectors.push('a')
+    @_find(selectors...).then (anchor) ->
+      if anchor then anchor.getAttribute('href') else null
+
   # Finds all nested hyperlinks.
   # See the hyperlink method.
   #
   # @param selectors the search condition
   # @returns a promise which resolves to the hyperlink URLs
   hyperlinks: (selectors...) ->
-    @_findAll(selectors..., 'a').then (anchors) ->
+    selectors.push('a')
+    @_findAll(selectors...).then (anchors) ->
       anchors.map (anchor) ->
         anchor.getAttribute('href')
 

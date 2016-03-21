@@ -4,7 +4,7 @@
   .panel-heading
     h4.panel-title Pharmokinetic Modeling
       button#modeling-format-btn.btn.btn-med.qi-profile-btn(
-        ng-show='subject.isMultiSession'
+        ng-show='subject.isMultiSession()'
         ng-click='toggleModelingFormat()'
       )
         .glyphicon.glyphicon-list(ng-show="modelingFormat == 'chart'")

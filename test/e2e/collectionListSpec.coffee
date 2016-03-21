@@ -11,7 +11,7 @@ class CollectionListPage extends Page
   constructor: ->
     # Call the Page superclass initializer with the helpShown
     # flag set to true, since the help box is displayed on
-    # this landing page. 
+    # this landing page.
     super('/quip?project=QIN_Test',  true)
 
   # @returns the collection {name, description, url} object
@@ -26,13 +26,17 @@ class CollectionListPage extends Page
 
   # @returns the collection {name, description, url} promise
   _parse_row: (row) ->
-    nameFinder = row.text(By.binding('collection.name'))
+    # The detail hyperlink.
+    nameEltFinder = row.find(By.binding('collection.name'))
+    detailFinder = nameEltFinder.then (elt) ->
+      if elt then elt.getAttribute('href') else null
+    nameFinder = nameEltFinder.then (elt) -> elt.text()
     descFinder = row.text(By.binding('collection.description'))
     infoFinder = row.find('button')
-    finders = [nameFinder, descFinder, infoFinder]
+    finders = [detailFinder, nameFinder, descFinder, infoFinder]
     webdriver.promise.all(finders).then (resolved) ->
-      [name, desc, info] = resolved
-      {name: name, description: desc, info: info}
+      [detail, name, desc, info] = resolved
+      {name: name, description: desc, info: info, detail: detail}
 
 
 describe 'E2E Testing Collection List', ->
@@ -44,8 +48,12 @@ describe 'E2E Testing Collection List', ->
   it 'should load the page', ->
     expect(page.content, 'The page was not loaded')
       .to.eventually.exist
+  
+  # Note - it would be nice to test whether a trailing slash
+  # resolves to the same page, but the many attempts to build
+  # such a test case were unsuccessful. Test manually instead.
 
-   # The page header test cases.
+  # The page header test cases.
   describe 'Header', ->
     it 'should display the billboard', ->
       expect(page.billboard, 'The billboard is incorrect')
@@ -89,3 +97,19 @@ describe 'E2E Testing Collection List', ->
           expect(coll.info, "The #{ coll.name } collection is" +
                             " missing an info button")
             .to.exist
+
+    it 'should link to the collection detail', ->
+      collectionsFinder.then (collections) ->
+        for coll in collections
+          expect(coll.detail, "The #{ coll.name } collection is" +
+                            " missing a detail hyperlink")
+            .to.exist
+          # The collection detail URL is .../quip/<collection name>/....
+          regex = /.*\/quip\/(\w+)/
+          match = regex.exec(coll.detail)
+          expect(match, "The #{ coll.name } collection detail" +
+                            " hyperlink is malformed: #{ coll.detail }")
+            .to.exist
+          expect(match[1], "The #{ coll.name } collection detail" +
+                         " hyperlink is incorrect: #{ coll.detail }")
+            .to.equal(coll.name.toLowerCase())

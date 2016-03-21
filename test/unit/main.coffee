@@ -66,14 +66,17 @@ requirejs.config
     ngsanitize: './lib/angular-sanitize'
     ngnvd3: './lib/angularjs-nvd3-directives'
     nvd3: './lib/nv.d3'
+    pako: './lib/pako_inflate'
     slider: './lib/angular-slider'
     spin: './lib/spin'
+    sprintf: './lib/sprintf'
     stacktrace: './lib/stacktrace'
     'underscore.string': './lib/underscore.string'
     touch: './lib/angular-touch'
     uirouter: './lib/angular-ui-router'
     uibootstrap: './lib/ui-bootstrap-tpls'
-    xtk: './lib/xtk'
+    # Uncomment to enable XTK.
+    #xtk: './lib/xtk'
     # The test helpers.
     expect: '../../test/unit/helpers/expect'
     # The test vendor libraries.

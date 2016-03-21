@@ -1,11 +1,21 @@
-define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources',
-        'router'],
-  (ng, _, _s, REST) ->
-    routes = ng.module 'qiprofile.routes', ['ui.router', 'qiprofile.resources',
-                                            'qiprofile.router']
+define ['angular', 'lodash', 'underscore.string', 'uirouter', 'resources',
+        'subject', 'session', 'scan', 'registration'],
+  (ng, _, _s) ->
+    routes = ng.module(
+      'qiprofile.routes',
+      ['ui.router', 'qiprofile.resources', 'qiprofile.subject', 'qiprofile.session',
+       'qiprofile.scan', 'qiprofile.registration']
+    )
 
-    routes.config ['$stateProvider', '$urlRouterProvider', '$locationProvider',
-      ($stateProvider, $urlRouterProvider, $locationProvider) ->
+    routes.config [
+      '$stateProvider', '$urlMatcherFactoryProvider', '$locationProvider',
+      ($stateProvider, $urlMatcherFactoryProvider, $locationProvider) ->
+        
+        # Match optional trailing slash. Cf.
+        # https://github.com/angular-ui/ui-router/wiki/Frequently-Asked-Questions\
+        # #how-to-make-a-trailing-slash-optional-for-all-routes
+        $urlMatcherFactoryProvider.strictMode(false)
+
         $stateProvider
           # The top-level state. This abstract state is the ancestor
           # of all other states. It holds the url prefix. There are
@@ -18,9 +28,8 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
             url: '/quip?project'
             abstract: true
             resolve:
-              # The Routers service is injected into all child states.
-              Router: 'Router'
               # The project is shared by all states.
+              # TODO - determine the default in a property.
               project: ($stateParams) ->
                 $stateParams.project or 'QIN'
             views:
@@ -37,12 +46,12 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
           .state 'quip.home',
             url: ''
             resolve:
-              ImagingCollection: 'ImagingCollection'
-              collections: (ImagingCollection, project) ->
+              Resources: 'Resources'
+              collections: (Resources, project) ->
                 # The selection criterion is the project name.
-                cond = REST.where(project: project)
-                # Delegate to the resource.
-                ImagingCollection.query(cond).$promise
+                condition = project: project
+                # Delegate to the ImagingCollection resource.
+                Resources.ImagingCollection.query(condition)
             views:
               'main@':
                 templateUrl: '/partials/collection-list.html'
@@ -55,15 +64,13 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
               Subject: 'Subject'
               subjects: (Subject, project) ->
                 # The selection criterion is the project name.
-                cond = REST.where(project: project)
+                condition = project: project
                 # The id is always fetched. In addition, the
                 # project/collection/number secondary key is fetched.
                 # No other fields are fetched.
-                fields = REST.map(['project', 'collection', 'number'])
-                # The HTML query parameter.
-                param = _.extend(_.clone(cond), fields)
+                fields = ['project', 'collection', 'number']
                 # Delegate to the resource.
-                Subject.query(param).$promise
+                Subject.query(condition, fields)
               collections: ($state, subjects) ->
                 # The sorted collection names, with duplicates removed.
                 _.chain(subjects).map('collection').uniq().value().sort()
@@ -72,54 +79,49 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
                 templateUrl: '/partials/subject-list.html'
                 controller:  'SubjectListCtrl'
 
-          # The collection state.
+          # The collection abstract state.
           .state 'quip.collection',
+            abstract: true
             url: '/:collection'
+            resolve:
+              collection: ($stateParams) ->
+                _s.capitalize($stateParams.collection)
+
+          # The Collection Detail state.
+          .state 'quip.collection.detail',
+            url: ''
             resolve:
               Subject: 'Subject'
               subjects: (Subject, project, collection) ->
                 # The selection criterion is the project name.
-                cond = REST.where(project: project, collection: collection)
+                condition = {project: project, collection: collection}
                 # Delegate to the resource.
-                Subject.query(cond).$promise
-              collection: ($stateParams) ->
-                _s.capitalize($stateParams.collection)
+                Subject.query(condition)
             views:
               'main@':
                 templateUrl: '/partials/collection-detail.html'
                 controller:  'CollectionDetailCtrl'
 
           # The subject state.
-          .state 'quip.subject',
-            url: '/:collection/subject/{subject:[0-9]+}?id'
+          .state 'quip.collection.subject',
+            url: '/subject/{subject:[0-9]+}?id'
             resolve:
-              subject: ($stateParams, Router) ->
-                # Returns the search condition object determnined as
-                # follows:
+              subject: ($stateParams, Subject, project, collection) ->
+                #  The search condition object determnined as follows:
                 # * If the subject id is available, then the search
                 #   condition is the {id} primary key.
                 # * Otherwise, the search condition is the
                 #   {project, collection, number} secondary key.
-                searchCondition = ->
+                condition = 
                   if $stateParams.id?
                     id: $stateParams.id
                   else
-                    # Validate the secondary key parameters.
-                    if not $stateParams.collection?
-                      throw new ValueError("Subject search parameters is missing" +
-                                           " both an id and the subject collection")
-                    if not $stateParams.subject?
-                      throw new ValueError("Subject search parameters is missing" +
-                                           " both an id and the subject number")
                     # Return the secondary key.
-                    project: $stateParams.project or project
-                    collection: _s.capitalize($stateParams.collection)
+                    project: project
+                    collection: collection
                     number: parseInt($stateParams.subject)
-                
-                # Get the search condition.
-                condition = searchCondition()
                 # Fetch the subject.
-                Router.getSubject(condition)
+                Subject.find(condition)
             views:
               'main@':
                 templateUrl: '/partials/subject-detail.html'
@@ -127,15 +129,16 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
 
           # The session state.
           # The session state parameter is the session number.
-          .state 'quip.subject.session',
+          .state 'quip.collection.subject.session',
             url: '/session/{session:[0-9]+}'
             resolve:
-              session: (subject, $stateParams, Router) ->
+              session: (subject, $stateParams, Session) ->
                 number = parseInt($stateParams.session)
                 if number >= subject.sessions.length
-                  throw new ReferenceError.new("Subject #{ subject.number }" +
-                                           " does not have a session" +
-                                           " #{ number }")
+                  throw new ReferenceError(
+                    "Subject #{ subject.number } Session #{ number } was" +
+                    "not found"
+                  )
                 # Grab the subject session embedded object.
                 session = subject.sessions[number - 1]
                 # If the session has a scans array, then the detail was already
@@ -145,11 +148,12 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
                 else
                   # The session must have a detail foreign key.
                   if not session.detail?
-                    throw new ReferenceError.new("Subject #{ subject.number }" +
-                                             " Session #{ session.number }" +
-                                             " does not have detail")
+                    throw new ReferenceError(
+                      "Subject #{ subject.number } Session #{ session.number }" +
+                      " does not have detail"
+                  )
                   # Fetch the session detail.
-                  Router.getSessionDetail(session)
+                  Session.detail(session)
             views:
               'main@':
                 templateUrl: '/partials/session-detail.html'
@@ -157,64 +161,95 @@ define ['angular', 'lodash', 'underscore.string', 'rest', 'uirouter', 'resources
 
           # The scan state.
           # The scan state parameter is the scan number.
-          .state 'quip.subject.session.scan',
+          .state 'quip.collection.subject.session.scan',
             abstract: true
             url: '/scan/:scan'
             resolve:
-              scan: (session, $stateParams, Router) ->
+              scan: (session, $stateParams, Scan) ->
                 number = parseInt($stateParams.scan)
-                Router.getScan(session, number)
+                Scan.find(session, number)
 
           # The scan volume state.
           # The volume state parameter is the volume number.
-          .state 'quip.subject.session.scan.volume',
-            url: '/volume/{volume:[1-9][0-9]*}'
+          .state 'quip.collection.subject.session.scan.volume',
+            abstract: true
+            url: '?volume'
             resolve:
-              image: (scan, $stateParams, Router) ->
-                number = parseInt($stateParams.volume)
-                volume = Router.getVolume(scan, number)
-                image = volume.image
-                if image.isLoaded() then image else image.load()
+              imageSequence: (scan) -> scan
+              volume: ($stateParams) -> parseInt($stateParams.volume)
+
+          # TODO - uncomment to enable XTK.
+          # # The scan 3D volume detail state.
+          # .state 'quip.collection.subject.session.scan.volume.detail',
+          #   url: ''
+          #   views:
+          #     'main@':
+          #       templateUrl: '/partials/volume-display.html'
+          #       controller:  'VolumeCtrl'
+
+          # The Scan Detail state.
+          .state 'quip.collection.subject.session.scan.volume.slice',
+            url: '?slice'
+            resolve:
+              slice: ($stateParams) -> parseInt($stateParams.slice)
+              timeSeries: (subject, session, scan) ->
+                ts = scan.timeSeries
+                if not ts?
+                  throw new ReferenceError(
+                    " #{ scan.title } does not have a time series"
+                  )
+                img = ts.image
+                if img.isLoaded() then ts else img.load().then -> ts
             views:
               'main@':
-                templateUrl: '/partials/image-detail.html'
-                controller:  'ImageDetailCtrl'
+                templateUrl: '/partials/slice-display.html'
+                controller:  'SliceCtrl'
 
           # The registration state.
           # The registration state parameter is the registration
           # resource name.
-          .state 'quip.subject.session.scan.registration',
+          .state 'quip.collection.subject.session.scan.registration',
             abstract: true
             url: '/registration/:registration'
             resolve:
-              registration: (scan, $stateParams, Router) ->
-                Router.getRegistration(scan, $stateParams.registration)
+              registration: (scan, $stateParams, Registration) ->
+                Registration.find(scan, $stateParams.registration)
 
-          # The registration volume state.
-          # The volume state parameter is the volume number.
-          .state 'quip.subject.session.scan.registration.volume',
-            url: '/volume/{volume:[1-9][0-9]*}'
+          # The Registration Detail state.
+          .state 'quip.collection.subject.session.scan.registration.volume',
+            abstract: true
+            url: '?volume'
             resolve:
-              volume: (registration, $stateParams, Router) ->
-                number = parseInt($stateParams.volume)
-                Router.getVolume(registration, number)
-              image: (volume) ->
-                image = volume.image
-                if image.isLoaded() then image else image.load()
+              imageSequence: (registration) -> registration
+              volume: -> parseInt($stateParams.volume)
+
+          # # TODO - uncomment to enable XTK.
+          # # The registration 3D volume detail state.
+          # .state 'quip.collection.subject.session.scan.registration.volume.detail',
+          #   url: ''
+          #   views:
+          #     'main@':
+          #       templateUrl: '/partials/volume-display.html'
+          #       controller:  'VolumeCtrl'
+
+          # The registration slice detail state.
+          .state 'quip.collection.subject.session.scan.registration.volume.slice',
+            url: '?slice'
+            resolve:
+              slice: ($stateParams) -> parseInt($stateParams.slice)
+              timeSeries: (subject, session, scan, registration) ->
+                ts = registration.timeSeries
+                if not ts?
+                  throw new ReferenceError(
+                      "#{ subject.title } #{ session.title }" +
+                      " #{ scan.title } #{ registration.title }" +
+                      " does not have a time series"
+                  )
+                if ts.isLoaded() then ts else ts.load()
             views:
               'main@':
-                templateUrl: '/partials/image-detail.html'
-                controller:  'ImageDetailCtrl'
-
-        # Redirect an URL with trailing slash to an URL without it.
-        $urlRouterProvider.rule ($injector, $location) ->
-          path = $location.path()
-          search = $location.search()
-          if _s.endsWith(path, '/')
-            path = path[0...-1]
-          params = ["#{ k }=#{ v}" for [k, v] in _.toPairs(search)]
-          paramStr = params.join('&')
-          [path, paramStr].join('?')
+                templateUrl: '/partials/slice-display.html'
+                controller:  'SliceCtrl'
 
         # HTML5 mode enables the back button to work properly.
         $locationProvider.html5Mode(enabled: true, requireBase: false)

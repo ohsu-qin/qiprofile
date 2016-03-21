@@ -47,10 +47,10 @@ define [], ->
       fields = [fields]
     # Format the field name: flag entries.
     flags = fields.map (field) -> "\"#{ field }\": 1"
-    critierion = flags.join(',')
+    criterion = flags.join(',')
 
     # Return the {projection: critierion} object.
-    projection: "{#{ critierion }}"
+    projection: "{#{ criterion }}"
 
   # Formats the {field: flag} Eve REST query projection parameter.
   #

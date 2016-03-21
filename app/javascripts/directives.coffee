@@ -51,7 +51,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
         link: (scope, element, attrs) ->
           scope.$watch 'subject', (subject) ->
             if _.some(subject.sessions)
-              scope.config = VisitDateline.configureChart(subject)
+              scope.config = VisitDateline.configure(subject)
               # This function is called by D3 after the chart DOM is built.
               #
               # @param chart the chart SVG element
@@ -95,6 +95,19 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
     ]
 
 
+    # Displays the slice.
+    directives.directive 'qiSlice', ['Slice', '$compile',
+      (Slice, $compile) ->
+        restrict: 'A'
+        link: (scope, element) ->
+          # TODO - obtain the updateImage argument.
+          # Slice.updateImage(???)
+          # TODO - what does the following line do? Document or remove.
+          element.removeAttr 'qi-slice-display'
+          $compile(element)(scope)
+    ]
+
+
     # Displays the session intensity chart.
     directives.directive 'qiIntensityChart', ['Intensity', 'ObjectHelper',
       (Intensity, ObjectHelper) ->
@@ -105,15 +118,15 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
           # Wait for a session extended with detail to digest the scan.
           scope.$parent.$watch 'scan', (scan) ->
             if scan?
-              scope.config = Intensity.configureChart(scan, element)
+              scope.config = Intensity.configure(scan, element)
         templateUrl: '/partials/intensity-chart.html'
     ]
 
 
-    # Displays a scan or registration series 3D image.
-    directives.directive 'qiImage', ->
+    # Displays a scan or registration series 3D volume.
+    directives.directive 'qiVolume', ->
       restrict: 'E'
       link: (scope, element) ->
-        scope.$watch 'image', (image) ->
-          if image.isLoaded()
-            scope.image.open(element)
+        scope.$watch 'volume', (image) ->
+          if volume.isLoaded()
+            scope.volume.open(element)

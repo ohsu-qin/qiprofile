@@ -1,101 +1,115 @@
-define ['ngmocks', 'moment', 'k-trans', 'v-e', 'tau-i', 'modeling'],
-  (ng, moment, KTrans, VE, TauI) ->
+# The Modeling unit test. This test suite tests the subject
+# modelings built when Subject.extend calls Modeling.collect.
+# The session modeling objects are tested in sessionSpec.
+define ['ngmocks', 'lodash', 'expect', 'moment', 'modeling', 'helpers'],
+  (ng, _, expect, moment, modeling) ->
     describe 'Unit Testing the Modeling Service', ->
-      # The mock Modeling service module.
-      Modeling = null
+      # The mock objects.
+      mock =
+        protocol:
+          registration:
+            _id: 'rp1'
+        subject:
+          sessions: [
+            {
+              number: 1
+              modelings: [
+                resource: 'pk_01'
+                protocol: 'mp1'
+                source:
+                  registration: 'rp1'
+                result:
+                  deltaKTrans:
+                    name: "path/to/first/delta_k_trans.nii.gz"
+                    average: 2.3
+                    labelMap:
+                      name: "path/to/first/delta_k_trans_color.nii.gz"
+                      colorTable: "path/to/color_table.txt"
+              ]
+            }
+            {
+              number: 2
+              modelings: [
+                resource: 'pk_02'
+                protocol: 'mp1'
+                source:
+                  registration: 'rp1'
+                result:
+                  deltaKTrans:
+                    name: "path/to/second/delta_k_trans.nii.gz"
+                    average: 2.4
+                    labelMap:
+                      name: "path/to/second/delta_k_trans_color.nii.gz"
+                      colorTable: "path/to/color_table.txt"
+              ]
+            }
+          ]
 
-      # The mock modeling results. The router sets the modeling
-      # and modeling.session parent references, simulated here.
-      mock = [
-        {
-          modeling:
-            session:
-              date: moment('Apr 1, 2014', 'MMM DD, YYYY').valueOf()
-          fxlKTrans:
-            average: 1.4
-          fxrKTrans:
-            average: 1.3
-          vE:
-            average: 0.2
-          tauI:
-            average: 3.1
-        }
-        {
-          modeling:
-            session:
-              date: moment('May 11, 2014', 'MMM DD, YYYY').valueOf()
-          fxlKTrans:
-            average: 1.3
-          fxrKTrans:
-            average: 1.1
-          vE:
-            average: 0.3
-          tauI:
-            average: 2.8
-        }
-      ]
+      subject = null
+      modelings = null
+      modeling = null
 
       beforeEach ->
-        # Fake the modeling service.
+        # Fake the modeling service module.
         ng.module('qiprofile.modeling')
-        # Enable the test service.
-        inject ['Modeling', (_Modeling_) ->
-          Modeling = _Modeling_
+        inject ['Modeling', (Modeling) ->
+            subject = _.cloneDeep(mock.subject)
+            modelings = Modeling.collect(subject)
+            try
+              modeling = modelings[0]
+            catch TypeError
+              # There is not a modelings array.
+              # This is detected by the first test case below.
         ]
 
-      describe 'Chart Configuration', ->
+      it 'should have a subject modelings object', ->
+        expect(modelings, "Subject is missing the modeling objects")
+          .to.exist
 
-        dates = null
+      it 'should have one modeling object', ->
+        expect(modelings.length, "Subject modelings count is incorrect")
+          .to.equal(1)
+        expect(modeling, "Subject modeling is missing").to.exist
+
+      describe 'Source', ->
+        source = null
 
         beforeEach ->
-          dates = mock.map (mdlResult) ->
-            mdlResult.modeling.session.date
+          source = modeling.source
 
-        describe 'kTrans', ->
-          config = null
+        it 'should have a source', ->
+          expect(source, "Subject modeling does not reference a source")
+            .to.exist
 
-          beforeEach ->
-            config = Modeling.configureChart(mock, KTrans.CHART_DATA_SERIES_CONFIG)
+        it 'should reference the registration protocol', ->
+          expect(source.registration,
+                 "Subject modeling does not reference a source").to.exist
+          expect(source.registration,
+                 "Subject modeling source does not reference the" +
+                 " registration protocol")
+            .to.equal(mock.protocol.registration._id)
 
-          it 'should configure two data series', ->
-            expect(config.data, "The configuration data is missing").to.exist
-            expect(config.data.length, "The configuration data series count is incorrect")
-              .to.equal(2)
+      describe 'Result', ->
+        result = null
 
-          it 'should set the X axis values to the session acquisition dates', ->
-            expect(config.xValues, "The configuration X values are incorrect")
-              .to.eql(dates)
+        beforeEach ->
+          try
+            result = modeling.results[0]
+          catch TypeError
+            # There is not a results array.
 
-          it 'should set the Y axis values to the Ktrans values', ->
-            expect(config.xValues, "The configuration Y values are incorrect")
-              .to.eql(dates)
+        it 'should have a result for each session', ->
+          expect(modeling.results.length,
+                 "Subject modeling results length is incorrect")
+            .to.equal(2)
+          expect(result, "Subject modeling result is missing").to.exist
 
-        describe 'vE', ->
-          config = null
-
-          beforeEach ->
-            config = Modeling.configureChart(mock, VE.CHART_DATA_SERIES_CONFIG)
-
-          it 'should configure two data series', ->
-            expect(config.data, "The configuration data is missing").to.exist
-            expect(config.data.length, "The configuration data series count is incorrect")
-              .to.equal(1)
-
-          it 'should set the X axis values to the session acquisition dates', ->
-            expect(config.xValues, "The configuration X values are incorrect")
-              .to.eql(dates)
-
-        describe 'tauI', ->
-          config = null
-
-          beforeEach ->
-            config = Modeling.configureChart(mock, TauI.CHART_DATA_SERIES_CONFIG)
-
-          it 'should configure two data series', ->
-            expect(config.data, "The configuration data is missing").to.exist
-            expect(config.data.length, "The configuration data series count is incorrect")
-              .to.equal(1)
-
-          it 'should set the X axis values to the session acquisition dates', ->
-            expect(config.xValues, "The configuration X values are incorrect")
-              .to.eql(dates)
+        it 'should have a delta Ktrans value', ->
+          expect(result.deltaKTrans, "Modeling does not have a delta" +
+                                     " Ktrans result")
+            .to.exist
+        it 'should reflect the session modeling delta Ktrans value', ->
+          expected = mock.subject.sessions[0].modelings[0].result.deltaKTrans.average
+          expect(result.deltaKTrans.average, "Modeling delta Ktrans result" +
+                                             " is incorrect")
+            .to.equal(expected)

@@ -3,11 +3,13 @@ define ['ngmocks', 'intensity'], (ng) ->
     # The mock scan has one registration.
     mock =
       scan:
-        volumes: ({averageIntensity: 30 - Math.abs(10 - i)} for i in [1..32])
+        volumes:
+          images: ({averageIntensity: 30 - Math.abs(10 - i)} for i in [1..32])
         registrations: [
           {
             # Dampen the registration intensity a bit.
-            volumes: ({averageIntensity: 30 - Math.abs(10 - i) * 1.2} for i in [1..32])
+            volumes:
+              images: ({averageIntensity: 30 - Math.abs(10 - i) * 1.2} for i in [1..32])
           }
         ]
 
@@ -23,7 +25,7 @@ define ['ngmocks', 'intensity'], (ng) ->
       # Enable the test services.
       inject ['Intensity', (Intensity) ->
         # Configure the chart.
-        config = Intensity.configureChart(mock.scan)
+        config = Intensity.configure(mock.scan)
       ]
 
     it 'should configure two data series', ->
@@ -51,7 +53,7 @@ define ['ngmocks', 'intensity'], (ng) ->
         scanX = (coord[0] for coord in scanConfig.values)
         expect(scanX, "The scan X coordinate is incorrect")
           .to.eql(expectedX)
-        expectedY = (vol.averageIntensity for vol in mock.scan.volumes)
+        expectedY = (img.averageIntensity for img in mock.scan.volumes.images)
         scanY = (coord[1] for coord in scanConfig.values)
         expect(scanY, "The scan Y coordinate is incorrect").to.eql(expectedY)
 
@@ -75,6 +77,6 @@ define ['ngmocks', 'intensity'], (ng) ->
           .to.eql(expectedX)
         regY = (coord[1] for coord in regConfig.values)
         mockReg = mock.scan.registrations[0]
-        expectedY = (vol.averageIntensity for vol in mockReg.volumes)
+        expectedY = (img.averageIntensity for img in mockReg.volumes.images)
         expect(regY, "The registration Y coordinate is incorrect")
           .to.eql(expectedY)

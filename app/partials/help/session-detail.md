@@ -1,7 +1,7 @@
 This page displays the MR session details for a patient visit.
 
 The graph displays the average signal intensity, or brightness, of
-scanned and realigned (i.e., motion-corrected) image volumes at each
+scanned and realigned (i.e., motion-corrected) volume images at each
 time point of the multi-volume scan. Hover over a line to view exact
 intensity values at a time point. Click on the purple and green dots
 above the graph at right to hide/show the scanned and realigned image

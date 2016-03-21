@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+0.15.1 / 2016-03-21
+-------------------
+* Refactor Router into submodules.
+
 0.14.3 / 2016-03-03
 -------------------
 * Work around grunt.file bug.

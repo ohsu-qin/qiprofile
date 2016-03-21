@@ -1,9 +1,9 @@
 define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
-        'demographics', 'tnm', 'image'],
+        'demographics', 'tnm', 'imageSequence'],
   (ng, moment, _s, roman) ->
     filters = ng.module 'qiprofile.filters',
                         ['qiprofile.helpers', 'qiprofile.demographics',
-                         'qiprofile.tnm', 'qiprofile.image']
+                         'qiprofile.tnm', 'qiprofile.imagesequence']
 
     filters.filter 'capitalize', ->
       (s) -> if s? then _s.capitalize(s) else s
@@ -59,8 +59,13 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
     filters.filter 'percent', ->
       (value) -> if value? then value * 100 else value
 
+
+    filters.filter 'percentRounded', ->
+      (value) -> Math.round(value * 100) if value?
+
+
     filters.filter 'imageContainerTitle', ->
-      # If the image container name ends with _reg, then it is a registation.
+      # If the image sequence name ends with _reg, then it is a registation.
       # Otherwise, it is a scan.
       (value) ->
         if value.startsWith('reg')
@@ -158,20 +163,8 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
 
 
     filters.filter 'multiVolume', ->
-      (sequences) ->
-        (seq for seq in sequences when seq.volumes.length > 1)
-
-
-    filters.filter 'imageContainerTitle', ['Image', (Image) ->
-      # Formats the given container display title as follows:
-      # * If the container is a scan, then 'Scan' preceded by the
-      #   scan name, e.g. 'T1 Scan'.
-      # * If the container is a registration, then 'Registration'
-      #   preceded by the source scan name and followed by the
-      #  registration name, e.g. 'T1 Registration pY3x'.
-      (container) ->
-        Image.containerTitle(container)
-    ]
+      (imageSequences) ->
+        (seq for seq in imageSequences when seq.isMultiVolume())
 
 
     filters.filter 'gender', ->

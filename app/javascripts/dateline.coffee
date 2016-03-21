@@ -229,7 +229,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
 
     # @param subject the subject to display
     # @returns the nvd3 chart configuration
-    configureChart: (subject) ->
+    configure: (subject) ->
       # Helper function to calculate the earliest and latest session,
       # encounter and treatment dates.
       #
@@ -260,9 +260,10 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
       # with the following:
       # * the xValues and xFormat properties
       # * the addSessionDetailLinks function
-      _.extend Chart.configureChart(subject.sessions, dataSpec),
-        xValues: (dataSpec.x.accessor(sess) for sess in subject.sessions)
-        xFormat: Chart.dateFormat
-        xMaxMin: xMaxMin()
-        height: 100
+      cfg = Chart.configure(subject.sessions, dataSpec)
+      cfg.xValues = (dataSpec.x.accessor(sess) for sess in subject.sessions)
+      cfg.xFormat = Chart.dateFormat
+      cfg.xMaxMin = xMaxMin()
+      cfg.height = 100
+      cfg
   ]

@@ -17,7 +17,7 @@ define ['ngmocks', 'lodash', 'expect', 'pako', 'encoding', 'file'],
         ]
 
       afterEach ->
-        $httpBackend.verifyNoOutstandingExpectation()
+        $httpBackend.verifyNoOutstandingExpectation(false)
         $httpBackend.verifyNoOutstandingRequest()
 
       describe 'Read', ->
@@ -40,25 +40,45 @@ define ['ngmocks', 'lodash', 'expect', 'pako', 'encoding', 'file'],
             $httpBackend.flush()
 
         describe 'Binary Content', ->
+          encoder = new TextEncoder('utf-8')
           mock = null
-          
-          beforeEach ->
-            encoder = new TextEncoder('utf-8')
-            # The mock plaintext file.
-            encoded = encoder.encode('test data')
-            mock =
-              path: 'test.txt.gz'
-              data: pako.deflate(encoded)
-            # The mock http GET.
-            url = '/static/' + mock.path
-            $httpBackend.whenGET(url).respond(mock.data)
 
-          it 'should read the binary file content', ->
-            data = File.readBinary(mock.path)
-            expect(data, "The compressed result is incorrect")
-              .to.eventually.eql(mock.data)
-            # Dispatch the backend request.
-            $httpBackend.flush()
+          describe 'Uncompressed', ->
+            beforeEach ->
+              # The mock binary file.
+              mock =
+                path: 'test.txt'
+                data: encoder.encode('test data')
+              # The mock http GET.
+              url = '/static/' + mock.path
+              $httpBackend.whenGET(url).respond(mock.data)
+          
+            it 'should read uncompressed binary file content', ->
+              actual = File.readBinary(mock.path)
+              expect(actual, "The uncompressed result is incorrect")
+                .to.eventually.eql(mock.data)
+              # Dispatch the backend request.
+              $httpBackend.flush()
+        
+          describe 'Compressed', ->
+            uncompressed = null
+            
+            beforeEach ->
+              uncompressed = encoder.encode('test data')
+              # The mock binary compressed file.
+              mock =
+                path: 'test.txt.gz'
+                data: pako.deflate(uncompressed)
+              # The mock http GET.
+              url = '/static/' + mock.path
+              $httpBackend.whenGET(url).respond(mock.data)
+
+            it 'should read compressed binary file content', ->
+              actual = File.readBinary(mock.path)
+              expect(actual, "The compressed result is incorrect")
+                .to.eventually.eql(uncompressed)
+              # Dispatch the backend request.
+              $httpBackend.flush()
 
       describe 'Send', ->
         mock =

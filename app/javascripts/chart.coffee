@@ -34,7 +34,7 @@ define ['angular', 'lodash', 'moment', 'd3'], (ng, _, moment) ->
     # @param data the resource objects to graph
     # @param dataSpec the data access specification
     # @returns the chart configuration
-    configureChart: (data, dataSpec) ->
+    configure: (data, dataSpec) ->
       # Note: nvd3 is undergoing a major version 2 rewrite.
       # Hopefully, version 2 will address the anomalies noted in
       # the modeling-discrete-chart template.
@@ -51,7 +51,7 @@ define ['angular', 'lodash', 'moment', 'd3'], (ng, _, moment) ->
       getYValueRange = (data, dataSpec) ->
         # @param data the resource objects to graph
         # @param dataSpec the data access specification described
-        #   in configureChart
+        #   in *configure*
         # @returns the result of first calling the accessor in the
         #   data specification to the given resoure, and then applying
         #   the given function
@@ -69,7 +69,7 @@ define ['angular', 'lodash', 'moment', 'd3'], (ng, _, moment) ->
         min: _.min(applyToAllResourcesYValues(data, dataSpec, _.min))
 
       # @param data the input resource objects
-      # @param dataSpec the dataSpec described in configureChart
+      # @param dataSpec the dataSpec described in *configure*
       # @returns the [{key, values, color}] nvd3 configuration
       configureAllDataSeries = (data, dataSpec) ->
         # @param data the input resource objects

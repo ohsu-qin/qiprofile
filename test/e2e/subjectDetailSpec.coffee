@@ -783,7 +783,7 @@ describe 'E2E Testing Subject Detail', ->
 
             it 'should show the residual cancer burden index', ->
               pathologyFinder.then (table) ->
-                table.find(By.binding('rcb.rcbIndex')).then (score) ->
+                table.find(By.binding('rcb.index')).then (score) ->
                   expect(score,
                          'The RCB index table is missing')
                     .to.exist
@@ -793,7 +793,7 @@ describe 'E2E Testing Subject Detail', ->
 
             it 'should show the residual cancer burden class', ->
               pathologyFinder.then (table) ->
-                table.find(By.binding('rcb.rcbClass')).then (cls) ->
+                table.find(By.binding('rcb.class')).then (cls) ->
                   expect(cls,
                          'The RCB class table is missing')
                     .to.exist

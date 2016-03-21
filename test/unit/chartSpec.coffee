@@ -4,8 +4,7 @@ define ['ngmocks', 'moment', 'chart'], (ng, moment) ->
     # The mock Chart service module.
     Chart = null
 
-    # The mock chart results. The router sets the chart
-    # and chart.session parent references, simulated here.
+    # The mock chart results.
     mock = [
       {
         time: 1
@@ -61,7 +60,7 @@ define ['ngmocks', 'moment', 'chart'], (ng, moment) ->
       config = null
 
       beforeEach ->
-        config = Chart.configureChart(mock, spec)
+        config = Chart.configure(mock, spec)
 
       it 'should configure two data series', ->
         expect(config.data, "The configuration data is missing").to.exist

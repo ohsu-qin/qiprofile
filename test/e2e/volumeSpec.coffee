@@ -3,22 +3,30 @@ expect = require('./helpers/expect')()
 Page = require './helpers/page'
 
 class VolumePage extends Page
-  displayPanel: ->
-    @find('qi-image')
-  
+  constructor: ->
+    super('/quip/sarcoma/subject/1/session/1/scan/1/volume/20?project=QIN_Test')
+
+  # Volume display panel.
+  slicePanel: ->
+    @find('#qi-volume')
+
+  overlayPanel: ->
+    @find('#qi-overlay')
+
   # TODO - Replace the CSS selector below with a selector for
   # elements bound to the model modelSelect.
   overlaySelector: ->
     @find('#overlay-select')
   
-  imageCtlPanel: ->
-    @find('.qi-vol-ctl')
+  imageControlPanel: ->
+    @find('.qi-volume-ctrl')
 
-describe 'E2E Testing Volume', ->
+# Enable the describe below to enable XTK.
+xdescribe 'E2E Testing Volume', ->
   page = null
 
   before ->
-    page = new VolumePage '/quip/sarcoma/subject/1/session/1/scan/1/volume/20?project=QIN_Test'
+    page = new VolumePage()
 
   it 'should load the page', ->
     expect(page.content, 'The page was not loaded')
@@ -52,11 +60,21 @@ describe 'E2E Testing Volume', ->
     panel = null
   
     beforeEach ->
-      panel = page.displayPanel()
+    #  panel = page.displayPanel()
+      panel = page.slicePanel()
   
     it 'should display the image', ->
       expect(panel, 'The image panel is missing').to.eventually.exist
+
+  describe 'Overlay', ->
+    panel = null
   
+    beforeEach ->
+      panel = page.overlayPanel()
+  
+    it 'should display the overlay', ->
+      expect(panel, 'The overlay panel is missing').to.eventually.exist
+
   describe 'Overlay Selection Buttons', ->
     panel = null
    
@@ -71,7 +89,7 @@ describe 'E2E Testing Volume', ->
     panel = null
   
     beforeEach ->
-      panel = page.imageCtlPanel()
+      panel = page.imageControlPanel()
   
     it 'should display the image control panel', ->
       expect(panel, 'The image control panel is missing').to.eventually.exist

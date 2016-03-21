@@ -161,6 +161,9 @@ runs the grunt karma ``unit`` task as follows:
 
 * Print the result to the console
 
+Restrict the tests to run by appending ``.only`` to the target ``describe``
+block test suite.
+
 -----
 
 Debugging a unit test case is performed as follows:

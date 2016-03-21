@@ -11,6 +11,7 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'session', 'helpers'],
       session:
         title: 'Breast Subject 1 Session 1'
         scans: [
+          _cls: 'Scan'
           number: '1'
           protocol: 'sp1'
           time_series:
@@ -53,8 +54,10 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'session', 'helpers'],
             .to.exist
           expect(scan.session, "The scan session reference is incorrect")
             .to.equal(session)
+
         it 'should convert the number to an integer', ->
           expect(scan.number, "The scan number is incorrect").to.equal(1)
+
         it 'should have a virtual title property', ->
           expect(scan.title, "The scan title is missing").to.exist
           expect(scan.title, "The scan title is incorrect")

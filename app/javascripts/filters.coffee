@@ -163,8 +163,8 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
 
 
     filters.filter 'multiVolume', ->
-      (sequences) ->
-        (seq for seq in sequences when seq.volumes.length > 1)
+      (imageSequences) ->
+        (seq for seq in imageSequences when seq.isMultiVolume())
 
 
     filters.filter 'gender', ->

@@ -5,10 +5,10 @@
   table.table.qi-table
     tr
       th Index
-      td {{ rcb.rcbIndex | number:2 }}
+      td {{ rcb.index | number:2 }}
     tr
       th Class
-      td {{ rcb.rcbClass }}
+      td {{ rcb.class }}
   // RBC parameters.
   table.table.qi-table.qi-spaced-table
     tr(ng-show="rcb.tumorCellDensity != null")

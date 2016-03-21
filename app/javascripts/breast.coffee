@@ -123,13 +123,14 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
         # The RCB index is the sum of the invasion and node components.
         invasionFactor + nodeFactor
 
-      # @returns the RCB class, which is based on RCB index cut-offs
-      rcbClass = (rcbIndex) ->
-        if rcbIndex == 0
+      # @param index the calculated RCB index value
+      # @returns the RCB class based on RCB index cut-offs
+      rcbClass = (index) ->
+        if index == 0
           return 0
-        else if rcbIndex < 1.36
+        else if index < 1.36
           return 1
-        else if rcbIndex < 3.28
+        else if index < 3.28
           return 2
         else
           return 3
@@ -137,9 +138,8 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
       # If the RCB object exists, return it extended with the index and class.
       rcb = tumor.rcb
       if rcb?
-        rcb.rcbIndex = rcbIndex(tumor.extent, tumor.rcb)
-        rcb.rcbClass = rcbClass(score)
+        rcb.index = rcbIndex(tumor.extent, tumor.rcb)
+        rcb.class = rcbClass(rcb.index)
       else
         return null
-
   ]

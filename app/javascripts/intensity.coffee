@@ -26,11 +26,11 @@ define ['angular', 'chart'], (ng) ->
       # null. The work-around for this possible D3 bug by using
       # the first-of-type selector argument in that case.
       if offset
-        bolusTickSlct = "g.tick:nth-of-type(#{ offset })"
+        bolusTickSel = "g.tick:nth-of-type(#{ offset })"
       else
-        bolusTickSlct = "g.tick:first-of-type"
+        bolusTickSel = "g.tick:first-of-type"
       # The bolus tick element.
-      bolusTick = xAxis.select(bolusTickSlct)
+      bolusTick = xAxis.select(bolusTickSel)
       # The bolus tick child line element.
       bolusTickLine = bolusTick.select('line')
       highlightNode = bolusTickLine.node().cloneNode()
@@ -119,10 +119,10 @@ define ['angular', 'chart'], (ng) ->
       # the .qi-reg-vol-btn-group basic colors.
       REG_COLORS = ['LightGreen', 'LightYellow', 'LightCyan', 'LemonChiffon']
 
-      # @param volumes the scan or registration volumes
+      # @param images the scan or registration volume images
       # @returns the intensity chart [x, y] coordinates
-      coordinates = (volumes) ->
-        ([i + 1, vol.averageIntensity] for vol, i in volumes)
+      coordinates = (images) ->
+        ([i + 1, img.averageIntensity] for img, i in images)
       
       # @returns 'Realigned', followed by the one-based registration
       #   number if there is more than one
@@ -147,12 +147,12 @@ define ['angular', 'chart'], (ng) ->
         # Return the data series format object.
         key: dataSeriesKey(index)
         color: REG_COLORS[index % REG_COLORS.length]
-        values: coordinates(registration.volumes)
+        values: coordinates(registration.volumes.images)
 
       # The scan data series configuration.
       scanData =
         key: 'Scan'
-        values: coordinates(scan.volumes)
+        values: coordinates(scan.volumes.images)
         color: SCAN_COLOR
 
       # Collect the data series specifications.

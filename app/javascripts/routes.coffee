@@ -1,10 +1,10 @@
-define ['angular', 'lodash', 'underscore.string', 'uirouter',
-        'subject', 'session', 'scan', 'registration', 'imagingCollection'],
+define ['angular', 'lodash', 'underscore.string', 'uirouter', 'resources',
+        'subject', 'session', 'scan', 'registration'],
   (ng, _, _s) ->
     routes = ng.module(
       'qiprofile.routes',
-      ['ui.router', 'qiprofile.subject', 'qiprofile.session', 'qiprofile.scan',
-       'qiprofile.registration', 'qiprofile.imagingcollection']
+      ['ui.router', 'qiprofile.resources', 'qiprofile.subject', 'qiprofile.session',
+       'qiprofile.scan', 'qiprofile.registration']
     )
 
     routes.config [
@@ -46,12 +46,12 @@ define ['angular', 'lodash', 'underscore.string', 'uirouter',
           .state 'quip.home',
             url: ''
             resolve:
-              ImagingCollection: 'ImagingCollection'
-              collections: (ImagingCollection, project) ->
+              Resources: 'Resources'
+              collections: (Resources, project) ->
                 # The selection criterion is the project name.
                 condition = project: project
-                # Delegate to the ImagingCollection service.
-                ImagingCollection.query(condition)
+                # Delegate to the ImagingCollection resource.
+                Resources.ImagingCollection.query(condition)
             views:
               'main@':
                 templateUrl: '/partials/collection-list.html'
@@ -175,8 +175,8 @@ define ['angular', 'lodash', 'underscore.string', 'uirouter',
             abstract: true
             url: '?volume'
             resolve:
-              imageSequence: -> scan
-              volume: -> parseInt($stateParams.volume)
+              imageSequence: (scan) -> scan
+              volume: ($stateParams) -> parseInt($stateParams.volume)
 
           # TODO - uncomment to enable XTK.
           # # The scan 3D volume detail state.
@@ -196,10 +196,10 @@ define ['angular', 'lodash', 'underscore.string', 'uirouter',
                 ts = scan.timeSeries
                 if not ts?
                   throw new ReferenceError(
-                      "#{ subject.title } #{ session.title }" +
-                      " #{ scan.title } does not have a time series"
+                    " #{ scan.title } does not have a time series"
                   )
-                if ts.isLoaded() then ts else ts.load()
+                img = ts.image
+                if img.isLoaded() then ts else img.load().then -> ts
             views:
               'main@':
                 templateUrl: '/partials/slice-display.html'

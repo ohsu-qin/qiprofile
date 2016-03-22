@@ -1,4 +1,4 @@
-define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
+define ['angular', 'dc', 'roman', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc, roman) ->
   correlation = ng.module 'qiprofile.correlation', ['qiprofile.breast']
 
   correlation.factory 'Correlation', ['Breast', (Breast) ->
@@ -8,6 +8,8 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
     #     * label - Appears in the dropdown picklists and as chart axis labels.
     #     * coll - The collection(s) for which the data type is valid. May be
     #         'all' or a list of specific collections.
+    #     * scale - If the data type has ordinal values (e.g. TNM stage) then
+    #         they are specified as an array, else null.
     #     * accessor - The data accessor.
     #
     #   The order of the data types and their handles must be exactly
@@ -72,11 +74,21 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
           accessor: (tumor) ->
             return null unless tumor.extent?
             if tumor.extent.depth? then tumor.extent.depth else null
+      'breastTNMStage':
+          label: 'TNM Stage'
+          coll: [
+            'Breast'
+          ]
+          accessor: (tumor) ->
+            return null unless tumor.tnm?
+            stage = Breast.stage(tumor.tnm)
+            stage.replace(/^\d+/, roman.romanize)
       'recurrenceScore':
           label: 'Recurrence Score'
           coll: [
             'Breast'
           ]
+          scale: null
           accessor: (tumor) ->
             return null unless tumor.geneticExpression.normalizedAssay?
             Breast.recurrenceScore(tumor.geneticExpression.normalizedAssay)
@@ -186,12 +198,25 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
 
     # The imaging data types.
     IMAGING_DATA_TYPES = [
-      "fxlKTrans"
-      "fxrKTrans"
-      "deltaKTrans"
-      "vE"
-      "tauI"
+      'fxlKTrans'
+      'fxrKTrans'
+      'deltaKTrans'
+      'vE'
+      'tauI'
     ]
+
+    # All possible values for ordinal data types.
+    ORDINAL_SCALES =
+      'breastTNMStage':
+        [
+         'IA'
+         'IIA'
+         'IIB'
+         'IIIA'
+         'IIIB'
+         'IIIC'
+         'IV'
+        ]
 
     # The chart layout parameters.
     CHART_LAYOUT_PARAMS =
@@ -231,7 +256,7 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
           }
           {
             x: 'necrosisPercent'
-            y: 'vE'
+            y: 'vE' 
           }
           {
             x: 'necrosisPercent'
@@ -339,31 +364,39 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
       scales = new Object
       # Iterate over the valid data types.
       for key of choices
-        # Make a list of all values for the data type and obtain the max
-        #   and min values.
-        allValues = (dat[key] for dat in data)
-        max = _.max allValues
-        min = _.min allValues
-        diff = max - min
-        # If the values are not all the same, calculate a padding value based
-        #   the chart layout parameter setting, e.g. a setting of .2 will
-        #   give the chart 20% padding.
-        # If the values are all the same, calculate a padding value of an
-        #   appropriate resolution for that value. The initial "result" value
-        #   reflects the number of digits or decimal places of the scatterplot
-        #   values. Each chart tick mark above and below that value is then set
-        #   to 10 to the power of the result reduced by 1.
-        if diff != 0
-          pad = diff * CHART_LAYOUT_PARAMS.axisPadding
+        # If the data type has ordinal values, return the value array.
+        #   Otherwise, make a list of all values for the data type and obtain
+        #   the max and min values.     
+        if key in Object.keys ORDINAL_SCALES
+          scales[key] =
+            range: ORDINAL_SCALES[key]
+            padding: null
+            isOrdinal: true
         else
-          max = Math.abs(max)
-          result = Math.ceil(Math.log(max) / Math.log(10))
-          if Math.abs(result) is Infinity then result = 0
-          pad = CHART_LAYOUT_PARAMS.ticks / 2 * Math.pow(10, result - 1)
-        # Add the range and padding for the data type to the scales object.
-        scales[key] =
-          range: [min, max]
-          padding: pad
+          allValues = (dat[key] for dat in data)
+          max = _.max allValues
+          min = _.min allValues
+          diff = max - min
+          # If the values are not all the same, calculate a padding value based
+          #   the chart layout parameter setting, e.g. a setting of .2 will
+          #   give the chart 20% padding.
+          # If the values are all the same, calculate a padding value of an
+          #   appropriate resolution for that value. The initial "result" value
+          #   reflects the number of digits or decimal places of the scatterplot
+          #   values. Each chart tick mark above and below that value is then set
+          #   to 10 to the power of the result reduced by 1.
+          if diff != 0
+            pad = diff * CHART_LAYOUT_PARAMS.axisPadding
+          else
+            max = Math.abs(max)
+            result = Math.ceil(Math.log(max) / Math.log(10))
+            if Math.abs(result) is Infinity then result = 0
+            pad = CHART_LAYOUT_PARAMS.ticks / 2 * Math.pow(10, result - 1)
+          # Add the range and padding for the data type to the scales object.
+          scales[key] =
+            range: [min, max]
+            padding: pad
+            isOrdinal: false
       # Return the scales object.
       scales
 
@@ -407,6 +440,7 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
             d.tumorLength
             d.tumorWidth
             d.tumorDepth
+            d.breastTNMStage
             d.recurrenceScore
             d.ki67
             d.gstm1
@@ -428,14 +462,9 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
         # The chart configuration.
         chart.width(CHART_LAYOUT_PARAMS.width)
           .height(CHART_LAYOUT_PARAMS.height)
-          .x(d3.scale.linear().domain(scales[xAxis].range))
-          .y(d3.scale.linear().domain(scales[yAxis].range))
-          .elasticX(true)
           .elasticY(true)
           .xAxisLabel(LABELS[xAxis])
           .yAxisLabel(LABELS[yAxis])
-          .xAxisPadding(scales[xAxis].padding)
-          .yAxisPadding(scales[yAxis].padding)
           .renderVerticalGridLines(true)
           .renderHorizontalGridLines(true)
           .symbolSize(CHART_LAYOUT_PARAMS.symbolSize)
@@ -446,6 +475,21 @@ define ['angular', 'dc', 'lodash', 'crossfilter', 'd3', 'breast'], (ng, dc) ->
         chart.xAxis().ticks(CHART_LAYOUT_PARAMS.ticks)
         chart.yAxis().ticks(CHART_LAYOUT_PARAMS.ticks)
         chart.margins().left += CHART_LAYOUT_PARAMS.leftMargin
+
+        # Special configuration for X-axis ordinal scales.
+        #
+        # TODO - Ordinal scales are not displaying correctly, need to fix.
+        if scales[xAxis].isOrdinal
+          chart.x(d3.scale.ordinal().domain(scales[xAxis].range))
+            .xUnits(dc.units.ordinal())
+            .elasticX(false)
+        else
+          chart.x(d3.scale.linear().domain(scales[xAxis].range))
+            .xAxisPadding(scales[xAxis].padding)
+            .elasticX(true)
+
+        chart.y(d3.scale.linear().domain(scales[yAxis].range))
+        chart.yAxisPadding(scales[yAxis].padding)
 
       # Render all the charts.
       dc.renderAll()

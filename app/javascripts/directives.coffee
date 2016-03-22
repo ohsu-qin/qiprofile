@@ -96,12 +96,12 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
 
 
     # Displays the slice.
-    directives.directive 'qiSlice', ['Slice', '$compile',
-      (Slice, $compile) ->
+    directives.directive 'qiSliceDisplay', ['SliceDisplay', '$compile',
+      (SliceDisplay, $compile) ->
         restrict: 'A'
         link: (scope, element) ->
           # TODO - obtain the updateImage argument.
-          # Slice.updateImage(???)
+          # SliceDisplay.updateImage(???)
           # TODO - what does the following line do? Document or remove.
           element.removeAttr 'qi-slice-display'
           $compile(element)(scope)
@@ -124,7 +124,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
 
 
     # Displays a scan or registration series 3D volume.
-    directives.directive 'qiVolume', ->
+    directives.directive 'qiVolumeDisplay', ->
       restrict: 'E'
       link: (scope, element) ->
         scope.$watch 'volume', (image) ->

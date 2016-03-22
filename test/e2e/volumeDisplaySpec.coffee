@@ -8,7 +8,7 @@ class VolumePage extends Page
 
   # Volume display panel.
   slicePanel: ->
-    @find('#qi-volume')
+    @find('#qi-volume-display')
 
   overlayPanel: ->
     @find('#qi-overlay')
@@ -19,10 +19,10 @@ class VolumePage extends Page
     @find('#overlay-select')
   
   imageControlPanel: ->
-    @find('.qi-volume-ctrl')
+    @find('.qi-volume-display-ctrl')
 
 # Enable the describe below to enable XTK.
-xdescribe 'E2E Testing Volume', ->
+xdescribe 'E2E Testing Volume Display', ->
   page = null
 
   before ->

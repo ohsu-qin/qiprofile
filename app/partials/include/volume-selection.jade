@@ -35,7 +35,7 @@
     // The artificial intermediate ul-li span element works around the
     // AngularJS bug described in the leading comment above.
     span(ng-repeat="volume in scan.volumes.images" tooltip="{{ $index + 1 }}"
-         ng-controller='VolumeCtrl')
+         ng-controller='VolumeDisplayCtrl')
       li
         include ./volume-select-btn-pair
 
@@ -53,6 +53,6 @@
     // The artificial intermediate ul-li span element works around the
     // AngularJS bug described in the leading comment above.
     span(ng-repeat="volume in registration.volumes.images" tooltip="{{ $index + 1 }}"
-         ng-controller='VolumeCtrl')
+         ng-controller='VolumeDisplayCtrl')
       li
         include ./volume-select-btn-pair

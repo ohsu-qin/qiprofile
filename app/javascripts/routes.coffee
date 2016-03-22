@@ -185,7 +185,7 @@ define ['angular', 'lodash', 'underscore.string', 'uirouter', 'resources',
           #   views:
           #     'main@':
           #       templateUrl: '/partials/volume-display.html'
-          #       controller:  'VolumeCtrl'
+          #       controller:  'VolumeDisplayCtrl'
 
           # The Scan Detail state.
           .state 'quip.collection.subject.session.scan.volume.slice',
@@ -203,7 +203,7 @@ define ['angular', 'lodash', 'underscore.string', 'uirouter', 'resources',
             views:
               'main@':
                 templateUrl: '/partials/slice-display.html'
-                controller:  'SliceCtrl'
+                controller:  'SliceDisplayCtrl'
 
           # The registration state.
           # The registration state parameter is the registration
@@ -230,7 +230,7 @@ define ['angular', 'lodash', 'underscore.string', 'uirouter', 'resources',
           #   views:
           #     'main@':
           #       templateUrl: '/partials/volume-display.html'
-          #       controller:  'VolumeCtrl'
+          #       controller:  'VolumeDisplayCtrl'
 
           # The registration slice detail state.
           .state 'quip.collection.subject.session.scan.registration.volume.slice',
@@ -249,7 +249,7 @@ define ['angular', 'lodash', 'underscore.string', 'uirouter', 'resources',
             views:
               'main@':
                 templateUrl: '/partials/slice-display.html'
-                controller:  'SliceCtrl'
+                controller:  'SliceDisplayCtrl'
 
         # HTML5 mode enables the back button to work properly.
         $locationProvider.html5Mode(enabled: true, requireBase: false)

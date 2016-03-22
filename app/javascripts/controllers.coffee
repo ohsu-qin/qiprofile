@@ -3,7 +3,7 @@ define ['angular', 'lodash', 'ngsanitize', 'resources', 'modelingchart', 'breast
     ctlrs = ng.module(
       'qiprofile.controllers',
       ['ngSanitize', 'ui.bootstrap', 'qiprofile.resources',
-       'qiprofile.modelingchart', 'qiprofile.breast', 'qiprofile.slice']
+       'qiprofile.modelingchart', 'qiprofile.breast', 'qiprofile.slicedisplay']
     )
 
     # The local controller helper methods.
@@ -537,7 +537,7 @@ define ['angular', 'lodash', 'ngsanitize', 'resources', 'modelingchart', 'breast
     ]
 
 
-    ctlrs.controller 'VolumeCtrl', [
+    ctlrs.controller 'VolumeDisplayCtrl', [
       '$scope', '$state',
       ($scope, $state) ->
         # Create the image object on demand.
@@ -578,12 +578,12 @@ define ['angular', 'lodash', 'ngsanitize', 'resources', 'modelingchart', 'breast
     ]
 
 
-    # The Image Slice display controller.
-    ctlrs.controller 'SliceCtrl', [
-      '$rootScope', '$scope', '$sce', 'ModelingChart', 'Slice', 'ControllerHelper',
+    # The Image Slice Display controller.
+    ctlrs.controller 'SliceDisplayCtrl', [
+      '$rootScope', '$scope', '$sce', 'ModelingChart', 'SliceDisplay', 'ControllerHelper',
       'session', 'imageSequence', 'volume', 'slice',
-      ($rootScope, $scope, $sce, ModelingChart,  Slice, ControllerHelper,
-       session, volume, slice, imageSequence
+      ($rootScope, $scope, $sce, ModelingChart,  SliceDisplay, ControllerHelper,
+       session, imageSequence, volume, slice
       ) ->
         # Capture the current project.
         $rootScope.project = session.subject.project
@@ -616,7 +616,7 @@ define ['angular', 'lodash', 'ngsanitize', 'resources', 'modelingchart', 'breast
         # When the slice index changes, then update the image and,
         # if selected, the overlay.
         $scope.$watch 'saggitalView.slice', (index) ->
-          Slice.updateSlice($scope.imageIds[index].dicomImageId)
+          SliceDisplay.updateSlice($scope.imageIds[index].dicomImageId)
           if $scope.overlayIndex?
             Slice.updateOverlay($scope.imageIds[index].overlayIds,
                                             $scope.overlayIndex)

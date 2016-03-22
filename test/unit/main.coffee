@@ -56,6 +56,7 @@ requirejs.config
   # duplication isn't as bad as it seems'. Ugh: it is here.
   paths:
     angular: './lib/angular'
+    cornerstone: './lib/cornerstone'
     d3: './lib/d3'
     domReady: './lib/domReady'
     lodash: './lib/lodash'
@@ -91,7 +92,7 @@ requirejs.config
   # paths note above.
   shim:
     angular: exports: 'angular'
-    slider: deps: ['angular']
+    cornerstone: deps: ['jquery']
     lodash: exports: '_'
     nganimate: deps: ['angular']
     ngnvd3: deps: ['angular', 'nvd3']
@@ -99,7 +100,7 @@ requirejs.config
     ngroute: deps: ['angular']
     ngsanitize: deps: ['angular']
     nvd3: deps: ['d3']
-    slider: deps: ['touch']
+    slider: deps: ['angular', 'touch']
     touch: deps: ['angular']
     uibootstrap: deps: ['angular']
     uirouter: deps: ['ngroute']

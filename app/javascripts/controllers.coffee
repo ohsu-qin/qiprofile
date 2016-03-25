@@ -88,28 +88,32 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
       ($rootScope, $scope, collection, charting, Correlation) ->
         # Place the collection in the scope.
         $scope.collection = collection
-        # Obtain the valid data types for the given collection and put them in
-        #   the scope. These comprise the X/Y-axis dropdown choices.
+        # Obtain the valid data types and labels for the given collection and put them in
+        # the scope. These comprise the X/Y axis dropdown choices. The X axis
+        # choices contain all valid data types; the Y axis choices
+        # contain only continuous data types.
         $scope.choices = Correlation.dataTypeChoices(collection)
         # Obtain the formatted scatterplot data.
-        data = Correlation.prepareScatterPlotData(charting, $scope.choices)
-        # Obtain the axis scales for each valid data type.
-        scales = Correlation.calculateScales(data, $scope.choices)
+        data = Correlation.prepareScatterPlotData(charting, $scope.choices.x)
+        # Obtain the chart padding for each valid continuous data type. The
+        # padding for categorical data types is configured in the correlation
+        # module chart rendering function.
+        padding = Correlation.calculatePadding(data, $scope.choices.y)
         # Put the default charts (X and Y axes) in the scope.
         $scope.charts = Correlation.DEFAULT_CHARTS[collection]
         # Place the chart configuration object in the scope.
         $scope.config =
           data: data
-          scales: scales
+          padding: padding
           charts: $scope.charts
         # The initial load flag.
         $scope.initLoad = true
         # If any X or Y axis selection is changed, re-render the charts and set
-        #   the initial load flag to false. The flag prevents a chart rendering
-        #   call from taking place while the initial collection detail page
-        #   load is taking place, causing the rendering to fail. The page must
-        #   first fully load, at which point the first chart rendering will be
-        #   triggered by the collection detail directive.
+        # the initial load flag to false. The flag prevents a chart rendering
+        # call from taking place while the initial collection detail page
+        # load is taking place, causing the rendering to fail. The page must
+        # first fully load, at which point the first chart rendering will be
+        # triggered by the collection detail directive.
         $scope.$watch 'charts', (() ->
           if not $scope.initLoad
             Correlation.renderCharts($scope.config)

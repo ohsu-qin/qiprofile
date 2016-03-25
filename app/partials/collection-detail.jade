@@ -6,14 +6,17 @@ block billboard
 block content
   div.qi-correlation-charts(qi-correlation-charts)
   // For each chart, construct the X and Y axis data type dropdowns and create
-  //   a container for the chart. The 'choices' object contains the valid data
-  //   types for the current collection. For each data type, the key value is
-  //   the data type handle and the value is the text label that is displayed
-  //   in the dropdowns.
+  // a container for the chart. The 'choices' object contains the valid data
+  // types for the current collection. For each data type, the key value is
+  // the data type handle and the value is the text label that is displayed
+  // in the dropdowns.
+  .row.qi-patient-summary
+    .col-md-2.qi-profile-panel.qi-patient-table#qi-patient-table
+    .col-md-10#qi-patient-chart
   .row
     .col-md-6(ng-repeat="chart in charts")
       .row.qi-axis-dropdowns
-        .col-md-4.col-md-offset-1
+        .col-md-4
           .qi-dropdown.qi-x-axis-dropdown
             button.qi-dropbtn
               span.qi-dropdown-icon.qi-xy X

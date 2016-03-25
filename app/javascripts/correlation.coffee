@@ -7,11 +7,11 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
        'qiprofile.helpers']
     )
 
-    correlation.factory 'Correlation', ['Breast', 'Sarcoma', 'TNM', 'DateHelper'
+    correlation.factory 'Correlation', ['Breast', 'Sarcoma', 'TNM', 'DateHelper',
       (Breast, Sarcoma, TNM, DateHelper) ->
-        # The charting data types. They are in the order in which they appear in
-        # the X/Y axis selection dropdowns. The key value is the handle for each
-        # data type. Each has the following properties:
+        # The charting data types. They are in the order in which they appear
+        # in the X and Y axis selection dropdowns. Each has the following
+        # properties:
         #
         # * label - Appears in the dropdown picklists and as chart axis labels.
         # * coll - The collection(s) for which the data type is valid. May be
@@ -20,7 +20,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         #
         # Note that necrosis percent can exist either as a single value or a
         # range. In the latter case, the mean of the upper and lower values is
-        # obtained and passed on to the charts.
+        # obtained and plotted on the charts.
         CHART_DATA_CONFIG =
           'fxlKTrans':
               label: 'FXL Ktrans'
@@ -166,11 +166,9 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                 'Breast'
               ]
               accessor: (tumor) ->
-                if tumor.rcb?
-                  rcb = Breast.residualCancerBurden tumor
-                  rcb.rcbIndex
-                else
-                    null
+                return null unless tumor.rcb?
+                rcb = Breast.residualCancerBurden tumor
+                rcb.rcbIndex
           'sarcomaTNMStage':
               label: 'TNM Stage'
               coll: [
@@ -197,7 +195,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                 else
                   null
 
-        # Map the data type handles to their display labels.
+        # Map the data type handles to the display labels.
         LABELS = _.mapValues(CHART_DATA_CONFIG, (o) ->
           o.label
         )
@@ -243,8 +241,9 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           leftMargin: 6
 
         # The default chart data types to be displayed, by collection. X axes
-        # may include any data type that is valid for the collection. Y axes
-        # may only be continuous data types (no categorical/ordinal data types).
+        # may include any data types that are valid for the collection. Y axes
+        # may only include continuous data types (no categorical/ordinal data
+        # types).
         DEFAULT_CHARTS:
           'Breast':
             [
@@ -253,16 +252,16 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                 y: 'deltaKTrans'
               }
               {
-                x: 'rcbIndex'
-                y: 'vE'
+                x: 'breastTNMStage'
+                y: 'deltaKTrans'
               }
               {
                 x: 'recurrenceScore'
-                y: 'tauI'
+                y: 'deltaKTrans'
               }
               {
-                x: 'vE'
-                y: 'deltaKTrans'
+                x: 'deltaKTrans'
+                y: 'ki67'
               }
             ]
           'Sarcoma':
@@ -272,24 +271,24 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                 y: 'deltaKTrans'
               }
               {
-                x: 'necrosisPercent'
-                y: 'vE' 
+                x: 'sarcomaTNMStage'
+                y: 'deltaKTrans' 
               }
               {
                 x: 'necrosisPercent'
-                y: 'tauI'
+                y: 'vE'
               }
               {
-                x: 'tumorLength'
-                y: 'deltaKTrans'
+                x: 'deltaKTrans'
+                y: 'tumorLength'
               }
             ]
 
-        # Creates an object containing only those data types that are valid for the
-        # current collection. These are the choices that will appear in the X/Y
-        # axis selection dropdowns. Categorical data types are excluded from the
-        # Y axis choices because the DC charting does not currently support such a
-        # configuration.
+        # Creates an object containing only those data types that are valid for
+        # the current collection. These are the choices that will appear in the
+        # X and Y axis selection dropdowns. Categorical data types are excluded
+        # from the Y axis choices because the DC charting does not currently
+        # support such a configuration.
         #
         # @param coll the collection
         # @returns the valid X and Y axis data types and labels for the current
@@ -307,15 +306,15 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
             x: xChoices
             y: yChoices
 
-        # Obtains and formats the scatterplot data for display in the charts. The
-        # data consist of an array of objects where each object contains the
-        # subject and visit numbers followed by the valid data types for the
-        # current collection, e.g.:
+        # Obtains and formats the scatterplot data for display in the charts.
+        # The data consist of an array of objects where each object contains
+        # the subject and visit numbers and dates followed by the the data
+        # types that are valid for the current collection, e.g.:
         #
         # {
         #   'subject': 1
         #   'visit': 1
-        #   'date': "01/05/2013"
+        #   'date': "01/06/2013"
         #   'fxlKTrans': 0.16492194885121594
         #   ...
         #   'recurrenceScore': 76
@@ -364,9 +363,9 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
             for enc in subj.encounters
               if _.endsWith(enc._cls, 'Surgery') and enc.pathology.tumors?
                 tumors = enc.pathology.tumors
-            # Iterate over the subject encounters. If an encounter is a modeling
-            # session, construct a data object with the modeling and, if
-            # available, tumor pathology data.
+            # Iterate over the subject encounters. If an encounter is a
+            # modeling session, construct a data object with the modeling and,
+            # if available, tumor pathology data.
             for enc, i in subj.encounters
               if enc._cls == 'Session'
                 for mod in enc.modelings
@@ -383,14 +382,13 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           # Return the scatterplot data.
           data
 
-        # Calculates the chart padding value for each continuous data type.
-        # In DC charts, the padding must be expressed in the same unit domains as
-        # the data being charted.
+        # Calculates the chart padding value for each continuous data type. In
+        # the DC charts, the padding must be expressed in the same unit domains
+        # as the data being charted.
         #
         # @param dat the scatterplot data
-        # @param choices the valid continuous data types for the current
-        #   collection
-        # @returns the range and padding for each data type
+        # @param choices the valid data types for the current collection
+        # @returns the chart padding for each data type
         calculatePadding: (dat, choices) ->
           padding = new Object
           # Iterate over the data types.
@@ -398,25 +396,25 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
             max = _.maxBy(dat, (o) -> o[key])[key]
             min = _.minBy(dat, (o) -> o[key])[key]
             diff = max - min
-            # If the values are not all the same, calculate a padding value based
-            # the chart layout parameter setting, e.g. a setting of .2 will
-            # give the chart 20% padding.
+            # If the values are not all the same, calculate a padding value
+            # based the chart layout parameter setting, e.g. a setting of .2
+            # will give the chart 20% padding.
             #
             # If the values are all the same, calculate a padding value of an
-            # appropriate resolution for that value. The initial "result" value
-            # reflects the number of digits or decimal places of the scatterplot
-            # values. Each chart tick mark above and below that value is then set
-            # to 10 to the power of the result reduced by 1.
+            # appropriate resolution for that value. The initial result value
+            # reflects the number of digits or decimal places of the
+            # scatterplot values. Each chart tick mark above and below that
+            # value is then set to 10 to the power of the result reduced by 1.
             if diff != 0
               pad = diff * CHART_LAYOUT_PARAMS.corrChartPadding
             else
-              max = Math.abs(max)
+              max = Math.abs max
               result = Math.ceil(Math.log(max) / Math.log(10))
               if Math.abs(result) is Infinity then result = 0
               pad = CHART_LAYOUT_PARAMS.ticks / 2 * Math.pow(10, result - 1)
-              # Add the range and padding for the data type to the scales object.
+              # Add the padding for the data type to the object.
             padding[key] = pad
-          # Return the scales object.
+          # Return the padding object.
           padding
 
         # The dimensional charting (DC) rendering function.
@@ -438,17 +436,17 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           # Set up the crossfilter.
           ndx = crossfilter dat
 
-          # The patient and visit dimension.
+          # The patient/visit dimension.
           dim = ndx.dimension (d) -> 
             [
               d.subject
               d.visit
             ]
 
-          # The patient and visit group.
+          # The patient/visit group.
           group = dim.group()
 
-          # The patient and visit table configuration.
+          # The patient/visit table configuration.
           #
           # TODO - Construct the hyperlinks.
           table = dc.dataTable '#qi-patient-table'
@@ -461,7 +459,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                 '&#8226; <a ui-sref="">Visit ' + d.visit + '</a> <span class="qi-dc-date">' + d.date + '</span>'
             ]
 
-          # The patient and visit chart configuration.
+          # The patient/visit chart configuration.
           chart = dc.scatterPlot '#qi-patient-chart'
           chart.dimension dim
             .group group
@@ -484,7 +482,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           chart.yAxis().ticks _.maxBy(dat, (o) -> o.visit).visit
           chart.margins().left += CHART_LAYOUT_PARAMS.leftMargin
           
-          # Supply the tooltips
+          # Supply the tooltips.
           chart.on 'renderlet', (chart) ->
             chart.selectAll '.symbol'
               .on 'mouseover', (d) ->
@@ -557,11 +555,10 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                   else
                     0
 
-          # Render all of the charts.
+          # Render the charts.
           dc.renderAll()
 
-          # Move the chart data points to the front layer of the visualization so
-          # they can be bound to mouse events.
+          # Move the chart data points to the front layer of the visualization.
           d3.selectAll('.chart-body').moveToFront()
 
           # The tooltip div.

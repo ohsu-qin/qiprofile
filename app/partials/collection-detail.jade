@@ -20,38 +20,38 @@ block content
           .qi-dropdown.qi-x-axis-dropdown
             button.qi-dropbtn
               span.qi-dropdown-icon.qi-xy X
-              span {{ choices[chart.x] }}
+              span {{ choices.x[chart.x] }}
               span.qi-caret.caret
             .qi-dropdown-content
               .qi-dropdown-choice(
-                ng-repeat="(key,val) in choices"
+                ng-repeat="(key,val) in choices.x"
                 ng-model="chart.x"
                 ng-click="chart.x=key"
               )
                 span.qi-dropdown-icon.qi-check-hide(
-                  ng-show="val!=choices[chart.x]"
+                  ng-show="val!=choices.x[chart.x]"
                 ) &#10003;
                 span.qi-dropdown-icon.qi-check-show(
-                  ng-show="val==choices[chart.x]"
+                  ng-show="val==choices.x[chart.x]"
                 ) &#10003;
                 span.qi-dropdown-text {{ val }}
         .col-md-4
           .qi-dropdown.qi-y-axis-dropdown
             button.qi-dropbtn
               span.qi-dropdown-icon.qi-xy Y
-              span {{ choices[chart.y] }}
+              span {{ choices.y[chart.y] }}
               span.qi-caret.caret
             .qi-dropdown-content
               .qi-dropdown-choice(
-                ng-repeat="(key,val) in choices"
+                ng-repeat="(key,val) in choices.y"
                 ng-model="chart.y"
                 ng-click="chart.y=key"
               )
                 span.qi-dropdown-icon.qi-check-hide(
-                  ng-show="val!=choices[chart.y]"
+                  ng-show="val!=choices.y[chart.y]"
                 ) &#10003;
                 span.qi-dropdown-icon.qi-check-show(
-                  ng-show="val==choices[chart.y]"
+                  ng-show="val==choices.y[chart.y]"
                 ) &#10003;
                 span.qi-dropdown-text {{ val }}
       .row   

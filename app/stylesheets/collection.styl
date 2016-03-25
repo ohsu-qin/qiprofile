@@ -1,13 +1,26 @@
-//** The Collection List and Detail page styles. **//
-
-.qi-collection-name
-  font-size larger
+//** The Collection Detail page styles. **//
 
 .qi-correlation-charts
   margin-top 0.8em
 
+.qi-patient-summary
+  height 12em
+  padding-left 1em
+
+.qi-patient-table
+  height 9em
+  overflow-y scroll
+
+.qi-dc-date
+  padding-left 1em
+  font-size smaller
+  font-style italic
+
+.qi-correlation-chart
+  height 20em
+
 .qi-dropbtn
-  width 16em
+  width 18em
   margin-bottom 0.2em
   border none
   border-radius 0.4em
@@ -31,9 +44,9 @@
 .qi-dropdown-content
   display none
   position absolute
-  height 25em
+  height 20em
   overflow-y scroll
-  min-width 16em
+  min-width 18em
   border-radius .4em
   font-size smaller
   background-color GhostWhite
@@ -68,3 +81,13 @@
 
 .qi-axis-dropdowns
   margin-bottom 0.5em
+
+// The correlation chart tooltip styles.
+
+div.tooltip
+  border 1px solid SlateGray
+  padding 4px
+  font 14px sans-serif
+  text-align left
+  background White
+  pointer-events none

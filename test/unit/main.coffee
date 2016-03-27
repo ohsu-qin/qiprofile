@@ -55,29 +55,40 @@ requirejs.config
   # issue comment cited in the above reference: 'sometimes code
   # duplication isn't as bad as it seems'. Ugh: it is here.
   paths:
-    angular: './lib/angular'
+    ## Adapted from app/javascripts/main.coffee ##
+    angular: './lib/angular' 
     cornerstone: './lib/cornerstone'
+    crossfilter: './lib/crossfilter'
     d3: './lib/d3'
+    dc: './lib/dc'
     domReady: './lib/domReady'
+    'error-stack-parser': './lib/error-stack-parser'
     lodash: './lib/lodash'
     moment: './lib/moment'
     nganimate: './lib/angular-animate'
+    ngndc: './lib/angular-dc'
+    ngnvd3: './lib/angular-nvd3'
+    nvd3: './lib/nv.d3'
     ngresource: './lib/angular-resource'
     ngroute: './lib/angular-route'
     ngsanitize: './lib/angular-sanitize'
-    ngnvd3: './lib/angularjs-nvd3-directives'
-    nvd3: './lib/nv.d3'
+    ngsprintf: './lib/angular-sprintf'
     pako: './lib/pako_inflate'
     slider: './lib/angular-slider'
+    'source-map': './lib/source-map'
     spin: './lib/spin'
     sprintf: './lib/sprintf'
+    'stack-generator': './lib/stack-generator'
+    stackframe: './lib/stackframe'
+    stackScrollTool: './temp/stackScrollTool'
     stacktrace: './lib/stacktrace'
-    'underscore.string': './lib/underscore.string'
+    'stacktrace-gps': './lib/stacktrace-gps'
     touch: './lib/angular-touch'
+    'underscore.string': './lib/underscore.string'
     uirouter: './lib/angular-ui-router'
     uibootstrap: './lib/ui-bootstrap-tpls'
-    # Uncomment to enable XTK.
-    #xtk: './lib/xtk'
+    ## End of copy ##
+
     # The test helpers.
     expect: '../../test/unit/helpers/expect'
     # The test vendor libraries.
@@ -87,12 +98,34 @@ requirejs.config
     ngmocks: '../../node_modules/angular-mocks/angular-mocks'
     pako: '../../node_modules/pako/dist/pako'
 
+  # The module configurations.
+  config:
+    moment:
+      noGlobal: true
+
   # The non-AMD module dependencies replicates the web app main
   # shim dependencies, extended with the test modules. See the
   # paths note above.
+  #
+  ## Copied from app/javascripts/main.coffee ##
+  # The non-AMD module dependencies.
+  shim:
+    angular: exports : 'angular'
+    d3: exports: 'd3'
+    lodash: exports: '_'
+    nganimate: deps: ['angular']
+    ngnvd3: deps: ['angular', 'nvd3']
+    ngresource: deps: ['angular']
+    ngroute: deps: ['angular']
+    ngsanitize: deps: ['angular']
+    nvd3: deps: ['d3']
+    slider: deps: ['touch']
+    touch: deps: ['angular']
+    uibootstrap: deps: ['angular']
+    uirouter: deps: ['ngroute']
+
   shim:
     angular: exports: 'angular'
-    cornerstone: deps: ['jquery']
     lodash: exports: '_'
     nganimate: deps: ['angular']
     ngnvd3: deps: ['angular', 'nvd3']

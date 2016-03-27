@@ -32,22 +32,22 @@ module.exports = (grunt) ->
           'angular/angular.js'
           'angular-animate/angular-animate.js'
           'angular-bootstrap/ui-bootstrap-tpls.js'
+          'angular-dc/dist/angular-dc.js'
           'angular-resource/angular-resource.js'
           'angular-route/angular-route.js'
           'angular-sanitize/angular-sanitize.js'
           'angular-touch/angular-touch.js'
           'angular-ui-router/release/angular-ui-router.js'
-          'angularjs-nvd3-directives/dist/angularjs-nvd3-directives.js'
+          'angular-nvd3/dist/angular-nvd3.js'
           'cornerstone/dist/cornerstone.js'
           'crossfilter/crossfilter.js'
           'd3/d3.js'
           'dcjs/dc.js'
           'domready/ready.js'
           'error-stack-parser/dist/error-stack-parser.js'
-          'jquery/dist/jquery.js'
           'lodash/lodash.js'
           'moment/moment.js'
-          'nvd3/nv.d3.js'
+          'nvd3/build/nv.d3.js'
           'pako/dist/pako_inflate.js'
           'requirejs/require.js'
           'source-map/dist/source-map.js'
@@ -59,8 +59,6 @@ module.exports = (grunt) ->
           'stacktrace-js/stacktrace.js'
           'underscore.string/dist/underscore.string.js'
           'venturocket-angular-slider/build/angular-slider.js'
-          # Uncomment to enable XTK.
-          # 'xtk/dist/xtk.js'
         ]
         dest: '_public/javascripts/lib'
 
@@ -71,7 +69,7 @@ module.exports = (grunt) ->
         expand: true
         flatten: true
         cwd: 'bower_components/'
-        src: ['bootstrap/dist/css/bootstrap.css.map']
+        src: ['bootstrap/dist/css/bootstrap.css.map', 'dcjs/dc.css']
         dest: '_public/stylesheets/'
 
       fonts:

@@ -21,6 +21,10 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         # Note that necrosis percent can exist either as a single value or a
         # range. In the latter case, the mean of the upper and lower values is
         # obtained and plotted on the charts.
+        #
+        # TODO - push the common config data into the respective services.
+        #   See the k-trans.coffee TODO item.
+        #
         CHART_DATA_CONFIG =
           'fxlKTrans':
               label: 'FXL Ktrans'

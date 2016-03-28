@@ -6,7 +6,27 @@ expect = require('./helpers/expect')()
 
 Page = require './helpers/page'
 
+<<<<<<< HEAD
 describe 'E2E Testing Collection Detail', ->
+=======
+class collectionDetailPage extends Page
+  constructor: ->
+    super('/quip/breast?project=QIN_Test')
+
+  # @returns the X-axis dropdown promise
+  @property xAxisDropdowns: ->
+    @findAll('.qi-x-axis-dropdown')
+
+  # @returns the Y-axis dropdown promise
+  @property yAxisDropdowns: ->
+    @findAll('.qi-y-axis-dropdown')
+
+  # @returns the correlation charts promise
+  @property correlationCharts: ->
+    @findAll('.qi-correlation-chart')
+
+describe 'E2E Testing Collection', ->
+>>>>>>> 3749333577540ed6927ca7dbba5dafa9ebfa806e
   page = null
 
   before ->

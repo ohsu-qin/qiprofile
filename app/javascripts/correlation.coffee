@@ -172,7 +172,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
               accessor: (tumor) ->
                 return null unless tumor.rcb?
                 rcb = Breast.residualCancerBurden tumor
-                rcb.rcbIndex
+                rcb.index
           'sarcomaTNMStage':
               label: 'TNM Stage'
               coll: [

@@ -6,6 +6,5 @@ define ['angular', 'nganimate', 'ngnvd3', 'uibootstrap', 'controllers',
         'directives', 'filters', 'routes', 'error'],
   (ng) ->
     ng.module 'qiprofile',
-              ['nvd3ChartDirectives', 'ui.bootstrap', 'qiprofile.controllers',
-               'qiprofile.directives', 'qiprofile.filters', 'qiprofile.routes',
-               'qiprofile.error']
+              ['ui.bootstrap', 'qiprofile.controllers', 'qiprofile.directives',
+               'qiprofile.filters', 'qiprofile.routes', 'qiprofile.error']

@@ -1,5 +1,5 @@
 mixin modeling-chart()
-  .qi-modeling-chart(ng-switch='dataSeriesConfig.data.length == 1'
+  .qi-modeling-chart(ng-switch='data.length == 1'
                      ng-controller='ModelingChartCtrl')
     div(ng-switch-when='true')
       include modeling-discrete-chart

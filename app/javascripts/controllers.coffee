@@ -1,9 +1,9 @@
-define ['angular', 'lodash', 'ngsanitize', 'resources', 'modelingchart', 'breast', 'slice'],
+define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart', 'breast', 'sliceDisplay'],
   (ng, _) ->
     ctlrs = ng.module(
       'qiprofile.controllers',
-      ['ngSanitize', 'ui.bootstrap', 'qiprofile.resources',
-       'qiprofile.modelingchart', 'qiprofile.breast', 'qiprofile.slice']
+      ['ngSanitize', 'ui.bootstrap', 'nvd3', 'qiprofile.resources',
+       'qiprofile.modelingchart', 'qiprofile.breast', 'qiprofile.slicedisplay']
     )
 
     # The local controller helper methods.
@@ -293,12 +293,49 @@ define ['angular', 'lodash', 'ngsanitize', 'resources', 'modelingchart', 'breast
       ($scope, ModelingChart) ->
         # The d3 chart configuration.
         if $scope.selModeling?
-          $scope.config = ModelingChart.configure($scope.selModeling.results,
-                                                  $scope.dataSeriesConfig)
+          config = ModelingChart.configure($scope.selModeling.results,
+                                           $scope.dataSeriesConfig)
+          # The chart is either a discrete or multi bar chart,
+          # depending on the number of data arrays.
+          chartType = if config.data.length == 1 then 'discreteBarChart' else 'multiBarChart'
+          $scope.options =
+            chart:
+              type: chartType
+              height: 200
+              # TODO - what do clipEdge and duration do?
+              #   Revisit all parameters below.
+              clipEdge: true
+              duration: 500
+              xAxis:
+                  axisLabel: 'Visit Date'
+                  showMaxMin: false
+              yAxis:
+                  axisLabel: config.yLabel
+                  axisLabelDistance: -20
+            # TODO - add tick config
+            #       tickFormat: config.xFormat
+            #       tickFormat: config.yFormat
+          
+          # Tease out the data.
+          # TODO - should ModelingChart put this in ngnvd3 format?
+          data = ({key: d.key, values: {x: v[0], y: v[1]} for v in d.values} for d in config.data)
+          # The discrete chart data is 1D, the multi chart is 2D.
+          $scope.data = if data.length == 1 then data[0] else data 
     ]
+           
+    # TODO -delete cruft below.
+    # height='200'
+    #    showXAxis='true' xAxisShowMaxMin='false' xAxisLabel='Visit Date'
+    #    xAxisTickFormat='config.xFormat' xAxisTickValues='$parent.config.xValues'
+    #    showYAxis='true' yAxisShowMaxMin='false' yAxisLabel="{{ config.yLabel }}"
+    #    yAxisTickFormat='config.yFormat' forcey="{{ config.yMaxMin }}"
+    #    useInteractiveGuideline='true' tooltips='true'
+    #    tooltipContent='config.tooltip
 
 
     ## The modeling parameter controllers. ##
+    #
+    # TODO - revise comment after ngnvd3 conversion.
     #
     # Each controller is required to set the following scope variable:
     # * dataSeriesConfig - the ModelingChart.configure dataSeriesSpec
@@ -537,7 +574,7 @@ define ['angular', 'lodash', 'ngsanitize', 'resources', 'modelingchart', 'breast
     ]
 
 
-    ctlrs.controller 'VolumeCtrl', [
+    ctlrs.controller 'VolumeDisplayCtrl', [
       '$scope', '$state',
       ($scope, $state) ->
         # Create the image object on demand.
@@ -578,12 +615,12 @@ define ['angular', 'lodash', 'ngsanitize', 'resources', 'modelingchart', 'breast
     ]
 
 
-    # The Image Slice display controller.
-    ctlrs.controller 'SliceCtrl', [
-      '$rootScope', '$scope', '$sce', 'ModelingChart', 'Slice', 'ControllerHelper',
+    # The Image Slice Display controller.
+    ctlrs.controller 'SliceDisplayCtrl', [
+      '$rootScope', '$scope', '$sce', 'ModelingChart', 'SliceDisplay', 'ControllerHelper',
       'session', 'imageSequence', 'volume', 'slice',
-      ($rootScope, $scope, $sce, ModelingChart,  Slice, ControllerHelper,
-       session, volume, slice, imageSequence
+      ($rootScope, $scope, $sce, ModelingChart,  SliceDisplay, ControllerHelper,
+       session, imageSequence, volume, slice
       ) ->
         # Capture the current project.
         $rootScope.project = session.subject.project
@@ -616,7 +653,7 @@ define ['angular', 'lodash', 'ngsanitize', 'resources', 'modelingchart', 'breast
         # When the slice index changes, then update the image and,
         # if selected, the overlay.
         $scope.$watch 'saggitalView.slice', (index) ->
-          Slice.updateSlice($scope.imageIds[index].dicomImageId)
+          SliceDisplay.updateSlice($scope.imageIds[index].dicomImageId)
           if $scope.overlayIndex?
             Slice.updateOverlay($scope.imageIds[index].overlayIds,
                                             $scope.overlayIndex)

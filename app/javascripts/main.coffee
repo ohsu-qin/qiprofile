@@ -52,23 +52,21 @@ requirejs.config
   paths:
     angular: [NG_LIB + '/' + 'angular' + MIN, './lib/angular'] 
     cornerstone: './lib/cornerstone'
-    cornerstoneMath: './lib/cornerstoneMath'
-    cornerstoneTools: './lib/cornerstoneTools'
     crossfilter: './lib/crossfilter'
     d3: './lib/d3'
     dc: './lib/dc'
     domReady: [DOM_READY_LIB + '/domReady' + MIN, './lib/domReady']
     'error-stack-parser': './lib/error-stack-parser'
-    jquery: './lib/jquery'
     lodash: './lib/lodash'
     moment: './lib/moment'
     nganimate: [NG_LIB + '/' + 'angular-animate' + MIN, './lib/angular-animate']
+    ngndc: './lib/angular-dc'
+    ngnvd3: './lib/angular-nvd3'
+    nvd3: './lib/nv.d3'
     ngresource: [NG_LIB + '/' + 'angular-resource' + MIN, './lib/angular-resource']
     ngroute: [NG_LIB + '/' + 'angular-route' + MIN, './lib/angular-route']
     ngsanitize: [NG_LIB + '/' + 'angular-sanitize' + MIN, './lib/angular-sanitize']
     ngsprintf: './lib/angular-sprintf'
-    ngnvd3: './lib/angularjs-nvd3-directives'
-    nvd3: './lib/nv.d3'
     pako: './lib/pako_inflate'
     slider: './lib/angular-slider'
     'source-map': './lib/source-map'
@@ -83,8 +81,6 @@ requirejs.config
     'underscore.string': './lib/underscore.string'
     uirouter: './lib/angular-ui-router'
     uibootstrap: './lib/ui-bootstrap-tpls'
-    # Uncomment to enable XTK.
-    #xtk: './lib/xtk'
 
   # The module configurations.
   config:
@@ -94,11 +90,8 @@ requirejs.config
   # The non-AMD module dependencies.
   shim:
     angular: exports : 'angular'
+    d3: exports: 'd3'
     lodash: exports: '_'
-    cornerstone: deps: ['jquery']
-    cornerstoneMath: deps: ['cornerstone']
-    cornerstoneTools: deps: ['cornerstoneMath']
-    dc: deps: ['crossfilter', 'd3']
     nganimate: deps: ['angular']
     ngnvd3: deps: ['angular', 'nvd3']
     ngresource: deps: ['angular']

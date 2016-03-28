@@ -1,9 +1,9 @@
 define(
   ['angular', 'lodash', 'cornerstone', 'slider'],
   (ng, _, cornerstone) ->
-    slice = ng.module 'qiprofile.slice', ['vr.directives.slider']
+    sliceDisplay = ng.module 'qiprofile.slicedisplay', ['vr.directives.slider']
 
-    slice.factory 'Slice', ->
+    sliceDisplay.factory 'SliceDisplay', ->
       # The image inversion color LUT flips the colors.
     	INVERSION_LUT =
         id: '1'
@@ -12,9 +12,9 @@ define(
         # TODO - get the limit value from wherever it is defined.
         lut: _.range(255, 0, -1)
 
-      # Enable the Cornerstone viewports.
-      sliceViewport = cornerstone.enable(document.getElementById('qi-slice'))
-      overlayViewport = cornerstone.enable(document.getElementById('qi-overlay'))
+      # # Enable the Cornerstone viewports.
+      # sliceViewport = cornerstone.enable(document.getElementById('qi-slice-display'))
+      # overlayViewport = cornerstone.enable(document.getElementById('qi-overlay'))
 
       # Loads and displays an image in a viewport. The binary data served
       # up by ImageSequence.load() are referenced by the imageId.

@@ -1,5 +1,9 @@
 //** The Collection Detail page styles. **//
 
+// TODO - change 'correlation' to 'collection-detail'.
+
+// TODO - can the mmicro-formatting be reduced, e.g. by
+// placing in nested .panel or .row?
 .qi-correlation-charts
   margin-top 0.8em
 
@@ -29,6 +33,7 @@
   color white
   text-align left
   background-color Teal
+  // TODO - Justify: The button is behind the content?
   z-index 1
 
 .qi-dropdown
@@ -51,6 +56,7 @@
   font-size smaller
   background-color GhostWhite
   box-shadow 0em 0.8em 1.6em 0em rgba(0,0,0,0.2)
+  // TODO - Justify: The content is in front of the button?
   z-index 2
   .qi-dropdown-choice
     display block
@@ -83,8 +89,8 @@
   margin-bottom 0.5em
 
 // The correlation chart tooltip styles.
-
-div.tooltip
+// TODO - specialize to the charts.
+.tooltip
   border 1px solid SlateGray
   padding 4px
   font 14px sans-serif

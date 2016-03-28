@@ -135,11 +135,11 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
         else
           return 3
 
-      # If the RCB object exists, return it extended with the index and class.
+      # If the RCB object exists, then return it extended with the
+      # index and class properties.
       rcb = tumor.rcb
       if rcb?
         rcb.index = rcbIndex(tumor.extent, tumor.rcb)
         rcb.class = rcbClass(rcb.index)
-      else
-        return null
+        rcb
   ]

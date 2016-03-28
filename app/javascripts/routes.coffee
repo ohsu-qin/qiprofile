@@ -92,8 +92,6 @@ define ['angular', 'lodash', 'underscore.string', 'uirouter', 'resources',
             url: ''
             resolve:
               Subject: 'Subject'
-              collection: ($stateParams) ->
-                _s.capitalize($stateParams.collection)
               # TODO - rename charting to subjects.
               charting: (Subject, project, collection) ->
                 # The selection criterion is the project and collection.

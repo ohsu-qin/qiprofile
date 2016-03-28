@@ -84,8 +84,10 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
 
 
     ctlrs.controller 'CollectionDetailCtrl', [
-      '$rootScope', '$scope', 'collection', 'charting', 'Correlation',
-      ($rootScope, $scope, collection, charting, Correlation) ->
+      '$rootScope', '$scope', 'project', 'collection', 'charting', 'Correlation', 'ControllerHelper',
+      ($rootScope, $scope, project, collection, charting, Correlation, ControllerHelper) ->
+        # Capture the current project.
+        $rootScope.project = project
         # Place the collection in the scope.
         $scope.collection = collection
         # Obtain the valid data types and labels for the current collection
@@ -99,8 +101,10 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
         # for categorical data types is configured in the correlation module
         # chart rendering function.
         padding = Correlation.calculatePadding(data, $scope.choices.y)
-        # Put the default charts (X and Y axes) in the scope.
-        $scope.charts = Correlation.DEFAULT_CHARTS[collection]
+        # Put a copy of the default charts (X and Y axes) in the scope.
+        # This charts object changes when the user selects a different
+        # axis to chart.
+        $scope.charts = _.clone(Correlation.DEFAULT_CHARTS[collection])
         # Place the chart configuration object in the scope.
         $scope.config =
           data: data
@@ -108,19 +112,29 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
           charts: $scope.charts
         # The initial load flag.
         $scope.initLoad = true
+
         # If any X or Y axis selection is changed, re-render the charts and set
         # the initial load flag to false. The flag prevents a chart rendering
         # call from taking place while the initial collection detail page
         # load is taking place and causing the rendering to fail. The page must
         # first fully load, at which point the first chart rendering will be
         # triggered by the collection detail directive.
-        $scope.$watch 'charts', (() ->
+        #
+        # TODO - how could the charts object change before the page is loaded?
+        # TODO - how often is the watch (and therefore equals test) performed?
+        watcher = ->
           if not $scope.initLoad
             Correlation.renderCharts($scope.config)
           else
             $scope.initLoad = false
-        ),
-        true
+        # Since charts is an object, the objectEquality flag is set to true.
+        # AngularJS then copies the object for later comparison and uses
+        # angular.equals to recursively compare the object properties rather
+        # than a simple === test, which is the default.
+        $scope.$watch('charts', watcher, true)
+        
+        # If the project is the default, then remove it from the URL.
+        ControllerHelper.cleanBrowserUrl($rootScope.project)
     ]
 
 

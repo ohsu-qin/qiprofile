@@ -460,7 +460,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
             .sortBy (d) -> d.visit
             .columns [
               (d) ->
-                '&#8226; <a ui-sref="">Visit ' + d.visit + '</a> <span class="qi-dc-date">' + d.date + '</span>'
+                '&bullet; <a ui-sref="">Visit ' + d.visit + '</a> <span class="qi-dc-date">' + d.date + '</span>'
             ]
 
           # The patient/visit chart configuration.

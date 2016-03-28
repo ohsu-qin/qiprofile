@@ -89,9 +89,14 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
       (Correlation, $compile) ->
         restrict: 'A'
         link: (scope, element) ->
-          Correlation.renderCorrelationCharts()
-          element.removeAttr 'qi-correlation-charts'
-          $compile(element)(scope)
+          scope.$watch 'config', (config) ->
+            if config?
+              # The page must completely load before the chart rendering call
+              # is made.
+              element.ready ->
+                Correlation.renderCharts(config)
+                element.removeAttr 'qi-correlation-charts'
+                $compile(element)(scope)
     ]
 
 

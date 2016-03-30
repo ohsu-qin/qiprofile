@@ -19,6 +19,9 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
       RANGES: [[3..5], [6..7], [8..9]]
       SCORES: ['tubularFormation', 'mitoticCount', 'nuclearPleomorphism']
 
+    # @returns the sorted stage values
+    stageExtent: ->
+      _.chain(STAGES).flatten().union(['4']).sort().value()
 
     # Returns the cancer stage.
     #
@@ -32,6 +35,9 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
     #    stage
     stage: (tnm) ->
       # M1 => stage IV.
+      # TODO - shouldn't this be '4'? Is there a test case for this?
+      #   Since the value is romanized prior to display, this bug might
+      #   be hidden. Same with the Sarcoma stage.
       if tnm.metastasis
         return 'IV'
       # The T and N scores.

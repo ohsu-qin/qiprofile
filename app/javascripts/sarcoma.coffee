@@ -19,6 +19,9 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
       RANGES: [[2..3], [4..5], [6..8]]
       SCORES: ['differentiation', 'mitoticCount', 'necrosisScore']
 
+    # @returns the sorted stage values
+    stageExtent: ->
+      _.chain(STAGES).values().flattenDeep().union(['4']).uniq.sort().value()
 
     # Returns the cancer stage.
     #
@@ -33,6 +36,7 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
     #    stage
     stage: (tnm, summaryGrade) ->
       # M1 => stage IV.
+      # TODO - see Breast stage TODO.
       if tnm.metastasis
         return 'IV'
       # The T and N scores.

@@ -104,34 +104,46 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
         # Put a copy of the default charts (X and Y axes) in the scope.
         # This charts object changes when the user selects a different
         # axis to chart.
-        $scope.charts = _.clone(Correlation.DEFAULT_CHARTS[collection])
+        $scope.axes = _.clone(Correlation.DEFAULT_AXES[collection])
         # Place the chart configuration object in the scope.
         $scope.config =
           data: data
           padding: padding
-          charts: $scope.charts
-        # The initial load flag.
-        $scope.initLoad = true
+          axes: $scope.axes
+        # The re-render flag.
+        $scope.reRenderChart = false
 
-        # If any X or Y axis selection is changed, re-render the charts and set
-        # the initial load flag to false. The flag prevents a chart rendering
-        # call from taking place while the initial collection detail page
-        # load is taking place and causing the rendering to fail. The page must
-        # first fully load, at which point the first chart rendering will be
-        # triggered by the collection detail directive.
+        # If the user changes any X or Y axis selection, then re-render the charts.
+        # The re-render flag prevents a chart rendering call from taking place
+        # on the initial collection detail page digest, since that would
+        # cause the rendering to fail. The page must first be fully digested,
+        # at which point the first chart rendering will be triggered by the
+        # collection detail directive. Any subsequent change by the user to the
+        # axes activates the listener, which re-renders the charts.
         #
-        # TODO - how could the charts object change before the page is loaded?
+        # TODO - how could the axes object change before the page is loaded?
+        #   Does Angular always invoke the watcher body on the first digest?
+        #   I wouldn't expect that to be true.
         # TODO - how often is the watch (and therefore equals test) performed?
+        # TODO - this watch is called on every $digest. Since the watch does a
+        #   deep equality test, this might be expensive. How often is the
+        #   watch expression evaluated, i.e., how often is $digest performed
+        #   on this page? I doubt if the equality test is a problem, but I'm
+        #   curious how often in general redigest occurs.
         watcher = ->
-          if not $scope.initLoad
+          # If the re-render flag is set, then render the charts and leave the
+          # flag set to true. Otherwise, set the flag to true so that each
+          # subsequent charts change triggers a re-render.
+          if $scope.reRenderChart
             Correlation.renderCharts($scope.config)
           else
-            $scope.initLoad = false
+            $scope.reRenderChart = true
+        
         # Since charts is an object, the objectEquality flag is set to true.
         # AngularJS then copies the object for later comparison and uses
         # angular.equals to recursively compare the object properties rather
         # than a simple === test, which is the default.
-        $scope.$watch('charts', watcher, true)
+        $scope.$watch('axes', watcher, true)
         
         # If the project is the default, then remove it from the URL.
         ControllerHelper.cleanBrowserUrl($rootScope.project)

@@ -110,34 +110,17 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
           data: data
           padding: padding
           axes: $scope.axes
-        # The re-render flag.
-        $scope.reRenderChart = false
 
-        # If the user changes any X or Y axis selection, then re-render the charts.
-        # The re-render flag prevents a chart rendering call from taking place
-        # on the initial collection detail page digest, since that would
-        # cause the rendering to fail. The page must first be fully digested,
-        # at which point the first chart rendering will be triggered by the
-        # collection detail directive. Any subsequent change by the user to the
-        # axes activates the listener, which re-renders the charts.
-        #
-        # TODO - how could the axes object change before the page is loaded?
-        #   Does Angular always invoke the watcher body on the first digest?
-        #   I wouldn't expect that to be true.
-        # TODO - how often is the watch (and therefore equals test) performed?
-        # TODO - this watch is called on every $digest. Since the watch does a
-        #   deep equality test, this might be expensive. How often is the
-        #   watch expression evaluated, i.e., how often is $digest performed
-        #   on this page? I doubt if the equality test is a problem, but I'm
-        #   curious how often in general redigest occurs.
-        watcher = ->
-          # If the re-render flag is set, then render the charts and leave the
-          # flag set to true. Otherwise, set the flag to true so that each
-          # subsequent charts change triggers a re-render.
-          if $scope.reRenderChart
+        # If the user changes any X or Y axis selection, then re-render the
+        # charts. The watcher is invoked on initialization and whenever the
+        # user changes the axes. On initialization, then the watcher is called
+        # with new axes value argument identical (===) to the old value
+        # argument. If the user changes the axes, then the watcher is called
+        # with different new and old axes objects.
+        watcher = (newValue, oldValue) ->
+          # If the user changed the axes, then re-render the charts.
+          if newValue != oldValue
             Correlation.renderCharts($scope.config)
-          else
-            $scope.reRenderChart = true
         
         # Since charts is an object, the objectEquality flag is set to true.
         # AngularJS then copies the object for later comparison and uses

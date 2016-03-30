@@ -14,7 +14,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         # properties:
         #
         # * label - Appears in the dropdown picklists and as chart axis labels.
-        # * coll - The collection(s) for which the data type is valid. May be
+        # * collection - The collection(s) for which the data type is valid. May be
         #   'all' or a list of specific collections.
         # * accessor - The data accessor.
         #
@@ -23,42 +23,43 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         # obtained and plotted on the charts.
         #
         # TODO - push the common config data into the respective services.
-        #   See the k-trans.coffee TODO item.
+        #   See the k-trans.coffee TODO item. See also the CATEGORICAL_VALUES
+        #   TODO below.
         #
         CHART_DATA_CONFIG =
           'fxlKTrans':
               label: 'FXL Ktrans'
-              coll: [
+              collection: [
                 'all'
               ]
               accessor: (modelingResult) -> modelingResult.fxlKTrans.average
           'fxrKTrans':
               label: 'FXR Ktrans'
-              coll: [
+              collection: [
                 'all'
               ]
               accessor: (modelingResult) -> modelingResult.fxrKTrans.average
           'deltaKTrans':
               label: 'delta Ktrans'
-              coll: [
+              collection: [
                 'all'
               ]
               accessor: (modelingResult) -> modelingResult.deltaKTrans.average
           'vE':
               label: 'v_e'
-              coll: [
+              collection: [
                 'all'
               ]
               accessor: (modelingResult) -> modelingResult.vE.average
           'tauI':
               label: 'tau_i'
-              coll: [
+              collection: [
                 'all'
               ]
               accessor: (modelingResult) -> modelingResult.tauI.average
           'tumorLength':
               label: 'Tumor Length (mm)'
-              coll: [
+              collection: [
                 'all'
               ]
               accessor: (tumor) ->
@@ -66,7 +67,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                 if tumor.extent.length? then tumor.extent.length else null
           'tumorWidth':
               label: 'Tumor Width (mm)'
-              coll: [
+              collection: [
                 'all'
               ]
               accessor: (tumor) ->
@@ -74,7 +75,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                 if tumor.extent.width? then tumor.extent.width else null
           'tumorDepth':
               label: 'Tumor Depth (mm)'
-              coll: [
+              collection: [
                 'all'
               ]
               accessor: (tumor) ->
@@ -82,7 +83,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                 if tumor.extent.depth? then tumor.extent.depth else null
           'breastTNMStage':
               label: 'TNM Stage'
-              coll: [
+              collection: [
                 'Breast'
               ]
               accessor: (tumor) ->
@@ -91,7 +92,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                 stage.replace /^\d+/, roman.romanize
           'recurrenceScore':
               label: 'Recurrence Score'
-              coll: [
+              collection: [
                 'Breast'
               ]
               scale: null
@@ -100,7 +101,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                 Breast.recurrenceScore tumor.geneticExpression.normalizedAssay
           'ki67':
               label: 'Ki67 Expression'
-              coll: [
+              collection: [
                 'Breast'
               ]
               accessor: (tumor) ->
@@ -111,7 +112,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                   null
           'gstm1':
               label: 'GSTM1 Normalized Assay'
-              coll: [
+              collection: [
                 'Breast'
               ]
               accessor: (tumor) ->
@@ -122,7 +123,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                   null
           'cd68':
               label: 'CD68 Normalized Assay'
-              coll: [
+              collection: [
                 'Breast'
               ]
               accessor: (tumor) ->
@@ -133,7 +134,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                   null
           'bag1':
               label: 'BAG1 Normalized Assay'
-              coll: [
+              collection: [
                 'Breast'
               ]
               accessor: (tumor) ->
@@ -144,7 +145,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                   null
           'grb7':
               label: 'GRB7 Normalized Assay'
-              coll: [
+              collection: [
                 'Breast'
               ]
               accessor: (tumor) ->
@@ -155,7 +156,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                   null
           'her2':
               label: 'HER2 Normalized Assay'
-              coll: [
+              collection: [
                 'Breast'
               ]
               accessor: (tumor) ->
@@ -166,7 +167,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                   null
           'rcbIndex':
               label: 'RCB Index'
-              coll: [
+              collection: [
                 'Breast'
               ]
               accessor: (tumor) ->
@@ -175,7 +176,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                 rcb.index
           'sarcomaTNMStage':
               label: 'TNM Stage'
-              coll: [
+              collection: [
                 'Sarcoma'
               ]
               accessor: (tumor) ->
@@ -184,7 +185,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                 stage.replace /^\d+/, roman.romanize
           'necrosisPercent':
               label: 'Necrosis Percent'
-              coll: [
+              collection: [
                 'Sarcoma'
               ]
               accessor: (tumor) ->
@@ -208,10 +209,31 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         DATA_TYPES = _.keys CHART_DATA_CONFIG
 
         # The imaging data types.
-        IMAGING_DATA_TYPES = DATA_TYPES.slice 0, 5
+        IMAGING_DATA_TYPES = DATA_TYPES.slice(0, 5)
 
-        # All possible values for categorical data types.
-        CAT_DATA_SCALES =
+        # The categorical data type {data type: value extent array}
+        # associative look-up object.
+        #
+        # TODO - get this from the respective services:
+        #
+        #     breast: Breast.stageExtent().map(Roman.romanize)
+        #     sarcoma: Sarcoma.stageExtent().map(Roman.romanize)
+        #
+        #   Better still is to geet the stages on demand given the
+        #   current collection rather than list the known collections
+        #   here, e.g. make a service collection.coffee with:
+        #     factory 'Collection', ... ->
+        #       SERVICES = {breast: Breast, ...}
+        #       service: (key) -> SERVICES[key] or throw error 
+        #       extent: (collection) -> service(key).stageExtent()
+        #   then replace use of CATEGORICAL_VALUES by:
+        #      Collection.extent(key)
+        #
+        #   The application tends to break if detailed domain knowledge
+        #   is redundantly dispersed throughout the source code. There
+        #   are other opportunities to consolidate domain knowledge
+        #   in services and delegate to those services in this file.
+        CATEGORICAL_VALUES =
           'breastTNMStage':
             [
              'IA'
@@ -244,11 +266,13 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           ticks: 4
           leftMargin: 6
 
-        # The default chart data types to be displayed, by collection. X axes
-        # may include any data types that are valid for the collection. Y axes
-        # may only include continuous data types (no categorical/ordinal data
-        # types).
-        DEFAULT_CHARTS:
+        # The default chart axes to be displayed, by collection. The X
+        # axes can include any data type that is valid for the collection.
+        # The Y axes can include only the continuous data types, i.e. no
+        # categorical/ordinal data types.
+        #
+        # TODO - where is the above statement enforced?
+        DEFAULT_AXES:
           'Breast':
             [
               {
@@ -294,17 +318,17 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         # from the Y axis choices because the DC charting does not currently
         # support such a configuration.
         #
-        # @param coll the collection
-        # @returns the valid X and Y axis data types and labels for the current
+        # @param collection the target collection
+        # @returns the valid X and Y axis data types and labels for the target
         #   collection
-        dataTypeChoices: (coll) ->
+        dataTypeChoices: (collection) ->
           xChoices = new Object
           yChoices = new Object
           for dt in DATA_TYPES
             config = CHART_DATA_CONFIG[dt]
-            if 'all' in config.coll or coll in config.coll
+            if 'all' in config.collection or collection in config.collection
               xChoices[dt] = LABELS[dt]
-              if dt not in Object.keys CAT_DATA_SCALES
+              if dt not in Object.keys(CATEGORICAL_VALUES)
                 yChoices[dt] = LABELS[dt]
           choices =
             x: xChoices
@@ -328,61 +352,108 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         # Each object needs to contain all of the same keys. If data
         # is not available for a data type, it must be assigned a null value.
         #
+        # TODO - The chart should collect whatever properties are available
+        #   rather than be constrained by choices. See the CHART_DATA_CONFIG
+        #   TODO above.
+        #
+        # TODO - Are there count(session) x max(1, count(tumors)) objects for
+        #   each subject?
+        #
         # @param charting the REST query result
         # @param choices the valid data types for the current collection
         # @returns the scatterplot data
         prepareScatterPlotData: (charting, choices) ->
-          # @param s the subject number
-          # @param v the visit number
-          # @param d the visit date
-          # @param modResult the modeling result
+          # @param modeling the modeling object
           # @param tumor the tumor pathology
           # @returns a complete scatterplot data object
-          constructDCObject = (s, v, d, modResult, tumor) ->
-            dateFormat = (date) ->
+          createDCObject = (modeling, tumor) ->
+            formatDate = (date) ->
+              # TODO - the date should already be a moment here and below.
               moment(date).format 'MM/DD/YYYY'
+
             # Create a new data object with core properties.
+            session = modeling.session
+            subject = session.subject
+            # TODO - the date should already be a moment here and above.
+            date = formatDate(DateHelper.asMoment(session.date))
+
+            # Make the session page hyperlink.
+            sbjRefUrl = "/quip/#{ subject.collection }/subject/#{ subject.number }"
+            sbjRef = "#{ sbjRefUrl }?project=#{ subject.project }"
+            sessRef = "#{ sbjRefUrl }/session/#{ session.number }?project=#{ subject.project }"
+
+            # Make the chart data object. The chart data object combines the
+            # subject, session and modeling objects.
+            #
+            # TODO - rename the visit variable to session here and elsewhere.
+            #   Visit has a web connotation that differs from the imaging connotation.
+            #   For clarity, 'visit' is confined to the presentation layer, i.e. it is
+            #   displayed to the user but is not used as a variable in the source code.
+            #   Thus, e.g., the test Page class has a function named 'visit' that
+            #   follows a link. It would be confusing to 'visit the visit page'.
+            #
+            # TODO - similarly, rename patient variables and element ids/classes to
+            #   'subject'.
+            #
             dcObject =
-              'subject': s
-              'visit': v + 1
-              'date': dateFormat DateHelper.asMoment(d)
+              subject: _.extend({href: sbjRef}, subject)
+              visit: _.extend({href: sessRef}, session)
+
             # Iterate over the valid data types and add data to the object.
             for key of choices
               config = CHART_DATA_CONFIG[key]
               if key in IMAGING_DATA_TYPES
-                dcObject[key] = config.accessor modResult
+                dcObject[key] = config.accessor(modeling.result)
               else if tumor?
-                dcObject[key] = config.accessor tumor
+                dcObject[key] = config.accessor(tumor)
               else
                 dcObject[key] = null
+
             # Return the data object.
             dcObject
 
           # Initialize the data object array.
           data = new Array
           # Iterate over the subjects.
-          for subj in charting
+          for sbj in charting
             # Obtain the tumor pathology data from the Surgery encounter.
+            # tumors will be null iff there is no pathology report.
+            # A path report is required for a biopsy, optional for a
+            # surgery. However, the biopsy tumors could be an empty
+            # array, althought that should be an error.
+            #
+            # For now, we allow for at most one path report and raise an error
+            # otherwise.
+            #
+            # TODO - Support both a biopsy and a surgery path report.
+            #   Then rework the tumors loop below.
+            #
+            # TODO - Support no path reports.
+            #
             tumors = null
-            for enc in subj.encounters
-              if _.endsWith(enc._cls, 'Surgery') and enc.pathology.tumors?
-                tumors = enc.pathology.tumors
-            # Iterate over the subject encounters. If an encounter is a
-            # modeling session, construct a data object with the modeling and,
-            # if available, tumor pathology data.
-            for enc, i in subj.encounters
-              if enc._cls == 'Session'
-                for mod in enc.modelings
-                  if not tumors
-                    dcObject = constructDCObject(
-                      subj.number, i, enc.date, mod.result, null
-                    )
-                  else
-                    for tumor in tumors
-                      dcObject = constructDCObject(
-                        subj.number, i, enc.date, mod.result, tumor
-                      )
-                  data.push dcObject
+            for enc in sbj.clinicalEncounters
+              if enc.pathology.tumors?
+                # More than one path report is not yet supported.
+                if tumors?
+                  console.warn("Only one pathology report per subject is" +
+                               " supported: #{ sbj.collection } Subject" +
+                               " #{ sbj.number }")
+                if enc.isSurgery()
+                  tumors = enc.pathology.tumors
+            # Make a chart data object for each tumor of each session. The
+            # data object consists of the modeling result properties and,
+            # if available, the tumor pathology data.
+            for session in sbj.sessions
+              for mdl in session.modelings
+                if tumors
+                  # TODO - how are tumors distinguished? Should we aggregate
+                  #   the size across tumors? What about other clinical values?
+                  #   Current handling of more than one tumor is probably a bug.
+                  for tumor in tumors
+                    dcObject = createDCObject(mdl, tumor)
+                else
+                  dcObject = createDCObject(mdl,  null)
+                data.push dcObject
           # Return the scatterplot data.
           data
 
@@ -390,33 +461,50 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         # the DC charts, the padding must be expressed in the same unit domains
         # as the data being charted.
         #
-        # @param dat the scatterplot data
+        # @param data the scatterplot data
         # @param choices the valid data types for the current collection
         # @returns the chart padding for each data type
-        calculatePadding: (dat, choices) ->
+        calculatePadding: (data, choices) ->
           padding = new Object
           # Iterate over the data types.
+          #
+          # TODO - What does 'data type' mean here?
+          #
+          # FIXME - this breaks if data is empty. Present an alert
+          #   in that case. Can this occur in practice?
+          #
+          # TODO - rename function to chartPadding. Then, make a function to
+          #   get the item padding and collect the iteration result into an
+          #   object using the functional programming reduce idiom, e.g.:
+          #     chartPadding: (data, choices) ->
+          #       dataTypePadding = (key) -> ...
+          #       addDataTypePadding = (obj, key) ->
+          #         obj[key] = dataTypePadding(key)
+          #         obj
+          #     # Return the {data type: padding} object
+          #     choices.reduce(addDataTypePadding, key, {})
           for key of choices
-            max = _.maxBy(dat, (o) -> o[key])[key]
-            min = _.minBy(dat, (o) -> o[key])[key]
+            values = _.map(data, key)
+            max = _.max(values)
+            min = _.min(values)
             diff = max - min
-            # If the values are not all the same, calculate a padding value
-            # based the chart layout parameter setting, e.g. a setting of .2
-            # will give the chart 20% padding.
-            #
-            # If the values are all the same, calculate a padding value of an
-            # appropriate resolution for that value. The initial result value
-            # reflects the number of digits or decimal places of the
-            # scatterplot values. Each chart tick mark above and below that
-            # value is then set to 10 to the power of the result reduced by 1.
-            if diff != 0
-              pad = diff * CHART_LAYOUT_PARAMS.corrChartPadding
-            else
+            # The padding is determined as follows:
+            # * If the values are all the same, then calculate a padding value of
+            #   an appropriate resolution for that value. The initial result value
+            #   reflects the number of digits or decimal places of the
+            #   scatterplot values. Each chart tick mark above and below that
+            #   value is then set to 10 to the power of the result reduced by 1.
+            # * Otherwise, calculate a padding value based the chart layout
+            #   parameter setting, e.g. a setting of .2 will give the chart 20%
+            #   padding.
+            if diff == 0
               max = Math.abs max
               result = Math.ceil(Math.log(max) / Math.log(10))
               if Math.abs(result) is Infinity then result = 0
               pad = CHART_LAYOUT_PARAMS.ticks / 2 * Math.pow(10, result - 1)
+            else
               # Add the padding for the data type to the object.
+              pad = diff * CHART_LAYOUT_PARAMS.corrChartPadding
             padding[key] = pad
           # Return the padding object.
           padding
@@ -425,43 +513,55 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         #
         # @param config the chart configuration
         renderCharts: (config) ->
+          # TODO - refactor this function body into app. 3 smaller functions.
+          #
           # Enables a specified D3 element to be moved to the front layer of
           # the visualization, which is necessary if that element is to be
           # bound to mouseover events (e.g. tooltips).
           d3.selection::moveToFront = ->
             @each ->
               @parentNode.appendChild this
+              # TODO - Why this return?
               return
-
-          dat = config.data
+          
+          # Convenience temp config variables.
+          data = config.data
           padding = config.padding
-          chartsToDisplay = config.charts
+          axes = config.axes
 
           # Set up the crossfilter.
-          ndx = crossfilter dat
+          # TODO - what is ndx? Rename and describe.
+          #   'ndx' conventionally signifies an integer index.
+          #   That is not what ndx is here.
+          ndx = crossfilter(data)
 
           # The patient/visit dimension.
-          dim = ndx.dimension (d) -> 
+          dim = ndx.dimension (obj) -> 
             [
-              d.subject
-              d.visit
+              obj.subject.number
+              obj.visit.number
             ]
 
           # The patient/visit group.
           group = dim.group()
 
           # The patient/visit table configuration.
-          #
-          # TODO - Construct the hyperlinks.
           table = dc.dataTable '#qi-patient-table'
           table.dimension dim
-            .group (d) ->
-              '<a ui-sref="">Patient ' + d.subject + '</a>'
-            .sortBy (d) -> d.visit
+            .group (obj) -> "<a href=\"#{ obj.subject.href }\">Patient #{ obj.subject.number }</a>"
+            .sortBy (obj) -> obj.visit.href
             .columns [
-              (d) ->
-                '&bullet; <a ui-sref="">Visit ' + d.visit + '</a> <span class="qi-dc-date">' + d.date + '</span>'
+              # TODO - Should this be two columns per row?
+              (obj) ->
+                refElt = "&bullet; <a href=\"#{ obj.visit.href }\">Visit #{ obj.visit.number }</a>"
+                dateElt = "<span class='qi-dc-date'>#{ obj.visit.date.format('MM/DD/YYYY') }</span>"
+                "#{ refElt } #{ dateElt }"
             ]
+
+          # The largest subject number is the number of X tick marks.
+          maxSbjNbr = _.chain(data).map('subject.number').max().value()
+          # The largest session number is the number of Y tick marks.
+          maxSessNbr = _.chain(data).map('visit.number').max().value()
 
           # The patient/visit chart configuration.
           chart = dc.scatterPlot '#qi-patient-chart'
@@ -472,40 +572,60 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
             .renderHorizontalGridLines true
             .symbolSize CHART_LAYOUT_PARAMS.symbolSize
             .symbol CHART_LAYOUT_PARAMS.patientChartSymbol
+            # TODO - What is category 10?
             .colors d3.scale.category10()
+            # TODO - What is d here? Why key 1?
             .colorAccessor (d) -> d.key[1]
             .xAxisLabel "Patient"
             .yAxisLabel "Visit"
-            .elasticY true
             .elasticX true
+            .elasticY true
             .x d3.scale.linear()
             .y d3.scale.linear()
             .xAxisPadding CHART_LAYOUT_PARAMS.patientChartPadding
             .yAxisPadding CHART_LAYOUT_PARAMS.patientChartPadding
-          chart.xAxis().ticks _.maxBy(dat, (o) -> o.subject).subject
-          chart.yAxis().ticks _.maxBy(dat, (o) -> o.visit).visit
+          # Set the axis tick counts.
+          chart.xAxis().ticks(maxSbjNbr)
+          chart.yAxis().ticks(maxSessNbr)
+          # Pad the left margins.
           chart.margins().left += CHART_LAYOUT_PARAMS.leftMargin
           
           # Supply the tooltips.
           chart.on 'renderlet', (chart) ->
             chart.selectAll '.symbol'
               .on 'mouseover', (d) ->
-                div.transition().duration(20).style 'opacity', .9
+                # TODO - What is div here?
+                # TODO - Remove the returns below if they are extraneous.
+                div.transition().duration(20).style('opacity', .9)
+                # TODO - make temp variables and interpolate the argument,
+                #   e.g.:
+                #     label = "<strong>Patient:</strong>#{ d.key[0] }"
+                #     ...
+                #     html = "#{ label }..."
+                #     div.html(html)
                 div.html('<strong>Patient:</strong> ' + d.key[0] + '<br/><strong>Visit:</strong> ' + d.key[1]).style('left', d3.event.pageX + 5 + 'px').style 'top', d3.event.pageY - 35 + 'px'
                 return
               .on 'mouseout', (d) ->
-                div.transition().duration(50).style 'opacity', 0
+                div.transition().duration(50).style('opacity', 0)
                 return
 
+          # The axes determine the number of charts to display.
+          chartCnt = axes.length
+          # The charts are numbered from 1 to n, where n is the number of
+          # axis pairs defined in the chart config axes variable. 
+          chartNbrs = _.range(1, chartCnt + 1)
           # Set up the scatterplots.
-          charts = (dc.scatterPlot('#qi-correlation-chart-' + i) for i in [0...4])
+          charts = (dc.scatterPlot('#qi-correlation-chart-' + chartNbr) for chartNbr in chartNbrs)
 
           # Iterate over the charts.
-          for chart, index in charts
-            xAxis = chartsToDisplay[index].x
-            yAxis = chartsToDisplay[index].y
+          for chart, i in charts
+            # TODO - make this for body a function.
+            xAxis = axes[i].x
+            yAxis = axes[i].y
 
             # Set up the dimension based on the X and Y axis user selections.
+            # TODO - is d here the chart data object? If so, then comment and
+            # rename to obj here and below.
             dim = ndx.dimension (d) ->
               [
                 d[xAxis]
@@ -532,9 +652,9 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
             chart.margins().left += CHART_LAYOUT_PARAMS.leftMargin
 
             # Special configuration for X-axis categorical data.
-            if xAxis in Object.keys CAT_DATA_SCALES
+            if xAxis in Object.keys(CATEGORICAL_VALUES)
               chart.elasticX false
-                .x d3.scale.ordinal().domain(CAT_DATA_SCALES[xAxis])
+                .x d3.scale.ordinal().domain(CATEGORICAL_VALUES[xAxis])
                 .xUnits dc.units.ordinal
                 ._rangeBandPadding 1
             else
@@ -554,10 +674,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                   div.transition().duration(50).style 'opacity', 0
                   return
                 .style 'opacity', (d) ->
-                  if d.key[0]? && d.key[1]?
-                    1
-                  else
-                    0
+                  if d.key[0]? and d.key[1]? then 1 else 0
 
           # Render the charts.
           dc.renderAll()

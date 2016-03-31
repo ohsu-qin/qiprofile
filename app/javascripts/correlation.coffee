@@ -90,6 +90,15 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                 return null unless tumor.tnm?
                 stage = Breast.stage tumor.tnm
                 stage.replace /^\d+/, roman.romanize
+          'rcbIndex':
+              label: 'RCB Index'
+              collection: [
+                'Breast'
+              ]
+              accessor: (tumor) ->
+                return null unless tumor.rcb?
+                rcb = Breast.residualCancerBurden tumor
+                rcb.index
           'recurrenceScore':
               label: 'Recurrence Score'
               collection: [
@@ -99,7 +108,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
               accessor: (tumor) ->
                 return null unless tumor.geneticExpression.normalizedAssay?
                 Breast.recurrenceScore tumor.geneticExpression.normalizedAssay
-          'ki67':
+          'ki67Expression':
               label: 'Ki67 Expression'
               collection: [
                 'Breast'
@@ -165,15 +174,127 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                   tumor.geneticExpression.normalizedAssay.her2.her2
                 else
                   null
-          'rcbIndex':
-              label: 'RCB Index'
+          'er':
+              label: 'ER Normalized Assay'
               collection: [
                 'Breast'
               ]
               accessor: (tumor) ->
-                return null unless tumor.rcb?
-                rcb = Breast.residualCancerBurden tumor
-                rcb.index
+                return null unless tumor.geneticExpression.normalizedAssay?
+                if tumor.geneticExpression.normalizedAssay.estrogen?
+                  tumor.geneticExpression.normalizedAssay.estrogen.er
+                else
+                  null
+          'pgr':
+              label: 'PGR Normalized Assay'
+              collection: [
+                'Breast'
+              ]
+              accessor: (tumor) ->
+                return null unless tumor.geneticExpression.normalizedAssay?
+                if tumor.geneticExpression.normalizedAssay.estrogen?
+                  tumor.geneticExpression.normalizedAssay.estrogen.pgr
+                else
+                  null
+          'bcl2':
+              label: 'BCL2 Normalized Assay'
+              collection: [
+                'Breast'
+              ]
+              accessor: (tumor) ->
+                return null unless tumor.geneticExpression.normalizedAssay?
+                if tumor.geneticExpression.normalizedAssay.estrogen?
+                  tumor.geneticExpression.normalizedAssay.estrogen.bcl2
+                else
+                  null
+          'scube2':
+              label: 'SCUBE2 Normalized Assay'
+              collection: [
+                'Breast'
+              ]
+              accessor: (tumor) ->
+                return null unless tumor.geneticExpression.normalizedAssay?
+                if tumor.geneticExpression.normalizedAssay.estrogen?
+                  tumor.geneticExpression.normalizedAssay.estrogen.scube2
+                else
+                  null
+          'ki67':
+              label: 'Ki67 Normalized Assay'
+              collection: [
+                'Breast'
+              ]
+              accessor: (tumor) ->
+                return null unless tumor.geneticExpression.normalizedAssay?
+                if tumor.geneticExpression.normalizedAssay.proliferation?
+                  tumor.geneticExpression.normalizedAssay.proliferation.ki67
+                else
+                  null
+          'stk15':
+              label: 'STK15 Normalized Assay'
+              collection: [
+                'Breast'
+              ]
+              accessor: (tumor) ->
+                return null unless tumor.geneticExpression.normalizedAssay?
+                if tumor.geneticExpression.normalizedAssay.proliferation?
+                  tumor.geneticExpression.normalizedAssay.proliferation.stk15
+                else
+                  null
+          'survivin':
+              label: 'Survivin Normalized Assay'
+              collection: [
+                'Breast'
+              ]
+              accessor: (tumor) ->
+                return null unless tumor.geneticExpression.normalizedAssay?
+                if tumor.geneticExpression.normalizedAssay.proliferation?
+                  tumor.geneticExpression.normalizedAssay.proliferation.survivin
+                else
+                  null
+          'ccnb1':
+              label: 'CCNB1 Normalized Assay'
+              collection: [
+                'Breast'
+              ]
+              accessor: (tumor) ->
+                return null unless tumor.geneticExpression.normalizedAssay?
+                if tumor.geneticExpression.normalizedAssay.proliferation?
+                  tumor.geneticExpression.normalizedAssay.proliferation.ccnb1
+                else
+                  null
+          'mybl2':
+              label: 'MYBL2 Normalized Assay'
+              collection: [
+                'Breast'
+              ]
+              accessor: (tumor) ->
+                return null unless tumor.geneticExpression.normalizedAssay?
+                if tumor.geneticExpression.normalizedAssay.proliferation?
+                  tumor.geneticExpression.normalizedAssay.proliferation.mybl2
+                else
+                  null
+          'mmp11':
+              label: 'MMP11 Normalized Assay'
+              collection: [
+                'Breast'
+              ]
+              accessor: (tumor) ->
+                return null unless tumor.geneticExpression.normalizedAssay?
+                if tumor.geneticExpression.normalizedAssay.invasion?
+                  tumor.geneticExpression.normalizedAssay.invasion.mmp11
+                else
+                  null
+          'ctsl2':
+              label: 'CTSL2 Normalized Assay'
+              collection: [
+                'Breast'
+              ]
+              accessor: (tumor) ->
+                return null unless tumor.geneticExpression.normalizedAssay?
+                if tumor.geneticExpression.normalizedAssay.invasion?
+                  tumor.geneticExpression.normalizedAssay.invasion.ctsl2
+                else
+                  null
           'sarcomaTNMStage':
               label: 'TNM Stage'
               collection: [
@@ -289,7 +410,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
               }
               {
                 x: 'deltaKTrans'
-                y: 'ki67'
+                y: 'ki67Expression'
               }
             ]
           'Sarcoma':

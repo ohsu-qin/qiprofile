@@ -650,14 +650,11 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           padding = config.padding
           axes = config.axes
 
-          # Set up the crossfilter.
-          # TODO - what is ndx? Rename and describe.
-          #   'ndx' conventionally signifies an integer index.
-          #   That is not what ndx is here.
-          ndx = crossfilter(data)
+          # Construct the multi-dimensional crossfilter.
+          xFilter = crossfilter(data)
 
           # The patient/visit dimension.
-          dim = ndx.dimension (obj) -> 
+          dim = xFilter.dimension (obj) -> 
             [
               obj.subject.number
               obj.visit.number
@@ -745,9 +742,9 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
             yAxis = axes[i].y
 
             # Set up the dimension based on the X and Y axis user selections.
-            # TODO - is d here the chart data object? If so, then comment and
-            # rename to obj here and below.
-            dim = ndx.dimension (d) ->
+# TODO - is d here the chart data object? If so, then comment and
+# rename to obj here and below.
+            dim = xFilter.dimension (d) ->
               [
                 d[xAxis]
                 d[yAxis]

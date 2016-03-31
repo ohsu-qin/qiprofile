@@ -116,6 +116,32 @@ class Findable
         if target? then target.getText() else null
       .then (text) ->
         if text? and text.length then text else null
+
+  # Clicks on this element, captures the visited URL,
+  # and returns.
+  #
+  # @returns the visited URL
+  visit: ->
+    # Navigates to the previous page, if necessary.
+    #
+    # @param prev_url the previous location
+    # @returns the URL of the page navigated from
+    restore = (prev_url) ->
+      # The current URL.
+      browser.getLocationAbsUrl().then (curr_url) ->
+        # If the location changed, then navigate back to
+        # the previous page.
+        if curr_url == prev_url
+          curr_url
+        else
+          browser.navigate().back().then ->
+            # Resolve to the page navigated from.
+            curr_url
+
+    # Capture the current location.
+    browser.getLocationAbsUrl().then (url) =>
+      # Click the button and resolve to the home page.
+      @click().then -> restore(url)
   
   # Finds a nested hyperlink. The hyperlink is the href
   # attribute of an anchor element (<a href=...></a>) contained

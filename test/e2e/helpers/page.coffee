@@ -76,28 +76,9 @@ class Page extends Findable
       # The home button is the parent of the home icon.
       @find('button .glyphicon-home', '..')
 
-    # Navigates to the previous page, if necessary.
-    #
-    # @param prev_url the previous location
-    # @returns the page navigated from
-    restore = (prev_url) ->
-      # The current URL.
-      browser.getLocationAbsUrl().then (curr_url) ->
-        # If the location changed, then navigate back to
-        # the previous page.
-        if curr_url == prev_url
-          curr_url
-        else
-          browser.navigate().back().then ->
-            # Resolve to the page navigated from.
-            curr_url
-
     findHomeButton().then (btn) ->
       expect(btn, 'The home button is missing').to.exist
-      # Capture the current location.
-      browser.getLocationAbsUrl().then (url) ->
-        # Click the button and resolve to the home page.
-        btn.click().then -> restore(url)
+      btn.visit()
 
   # @returns the help text
   @property help: ->

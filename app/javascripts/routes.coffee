@@ -96,9 +96,10 @@ define ['angular', 'lodash', 'underscore.string', 'uirouter', 'resources',
               charting: (Subject, project, collection) ->
                 # The selection criterion is the project and collection.
                 condition = {project: project, collection: collection}
-                # The id is always fetched. In addition, the number and encounters
-                # are fetched. No other field is fetched.
-                fields = ['number', 'encounters']
+                # The id is always fetched. In addition, the
+                # project/collection/number secondary key and
+                # encounters are fetched. No other field is fetched.
+                fields = ['project', 'collection', 'number', 'encounters']
                 # Delegate to the resource.
                 Subject.query(condition, fields)
             views:

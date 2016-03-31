@@ -5,7 +5,7 @@ define(
 
     sliceDisplay.factory 'SliceDisplay', ->
       # The image inversion color LUT flips the colors.
-    	INVERSION_LUT =
+      INVERSION_LUT =
         id: '1'
         firstValueMapped: 0
         numBitsPerEntry: 8

@@ -7,7 +7,7 @@ block content
    ul.qi-main-list(ng-repeat="collection in collections | orderBy:'name'")
      li
       .qi-inline-heading.qi-collection-name
-        a(ui-sref="quip.collection({collection: collection.name.toLowerCase()})")
+        a(ui-sref="quip.collection.detail({project: collection.project, collection: collection.name.toLowerCase()})")
           | {{ collection.name }}
       span : {{ collection.description }}
       button.btn.btn-med.qi-profile-btn(

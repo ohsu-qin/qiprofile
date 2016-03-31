@@ -85,6 +85,21 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
 
 
     # Displays the correlation charts.
+    #
+    # TODO - Why is this not an entity (E) directive?
+    #   Why is the attribute removed after rendering? The intent seems to
+    #   be to disable the directive after the link. However, removing the
+    #   attribute does not appear to have any effect. The directive is
+    #   called on AngularJS compile. Once compiled, the element is not
+    #   recompiled. Thus, removing the attribute is superfluous. Is this
+    #   assessment correct?
+    # TODO - why is there a config? test. Shouldn't config always exist?
+    # TODO - Why is $compile called? This call does not appear to have any
+    #   effect. The link is performed during $compile, so calling $compile
+    #   here seems to be at best unnecessary and at worst dangerous.
+    # TODO - same effect might be obtained more cleanly on each chart
+    #   using the qiCorrelationChart directive below.
+    #
     directives.directive 'qiCorrelationCharts', ['Correlation', '$compile',
       (Correlation, $compile) ->
         restrict: 'A'
@@ -93,10 +108,24 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
             if config?
               # The page must completely load before the chart rendering call
               # is made.
+              # TODO - element should already be ready before link is called.
+              #   Also, this element ready is no guarantee that the chart
+              #   elements are ready.
               element.ready ->
-                Correlation.renderCharts(config)
-                element.removeAttr 'qi-correlation-charts'
+                Correlation.renderCharts(scope.config)
+                element.removeAttr('qi-correlation-charts')
                 $compile(element)(scope)
+    ]
+
+
+    # TODO - try enabling this in conjunction with the TODO above.
+    directives.directive 'qiCorrelationChart', ['Correlation',
+      (Correlation) ->
+        restrict: 'E'
+        link: (scope, element) ->
+          # Here, the scope config is set on the individual chart, not
+          # all of the charts.
+          Correlation.renderChart(scope.config)
     ]
 
 
@@ -107,8 +136,8 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
         link: (scope, element) ->
           # TODO - obtain the updateImage argument.
           # SliceDisplay.updateImage(???)
-          # TODO - what does the following line do? Document or remove.
-          element.removeAttr 'qi-slice-display'
+          # TODO - see qiCorrelationCharts link TODO.
+          element.removeAttr('qi-slice-display')
           $compile(element)(scope)
     ]
 
@@ -121,6 +150,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
           scan: '='
         link: (scope, element) ->
           # Wait for a session extended with detail to digest the scan.
+          # TODO - see qiCorrelationCharts link TODO.
           scope.$parent.$watch 'scan', (scan) ->
             if scan?
               scope.config = Intensity.configure(scan, element)

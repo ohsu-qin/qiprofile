@@ -8,7 +8,8 @@ block content
     h3 {{ collection }}
     ul.qi-main-list
       li(ng-repeat="subject in subjects | filter: {collection: collection} | orderBy:'number'")
-        a(ui-sref="quip.subject({project: subject.project, collection: subject.collection.toLowerCase(), subject: subject.number, subjectdetail: subject.detail})")
+        // TODO - should id: subject._id be subjectdetail: subject.detail? Is there a subject._id? 
+        a(ui-sref="quip.collection.subject({project: subject.project, collection: subject.collection.toLowerCase(), subject: subject.number, id: subject._id})")
           | Patient {{ subject.number }}
 
 block help-text

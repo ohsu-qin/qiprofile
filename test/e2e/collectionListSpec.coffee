@@ -43,7 +43,7 @@ describe 'E2E Testing Collection List', ->
   page = null
 
   before ->
-    page = new CollectionListPage()
+    page = new CollectionListPage
 
   it 'should load the page', ->
     expect(page.content, 'The page was not loaded')

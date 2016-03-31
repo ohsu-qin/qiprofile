@@ -3,8 +3,12 @@ expect = require('./helpers/expect')()
 Page = require './helpers/page'
 
 class SessionDetailPage extends Page
+  constructor: ->
+    super('/quip/sarcoma/subject/1/session/1?project=QIN_Test')
+
   # @returns the line chart promise
   @property chart: ->
+    # Perform a XSL search for the line chart subelement.
     @find('//qi-intensity-chart//nvd3-line-chart')
 
   # @param number the volume number
@@ -80,7 +84,7 @@ describe 'E2E Testing Session Detail', ->
   page = null
 
   beforeEach ->
-    page = new SessionDetailPage '/quip/sarcoma/subject/1/session/1?project=QIN_Test'
+    page = new SessionDetailPage
 
   it 'should load the page', ->
     expect(page.content, 'The page was not loaded')

@@ -15,7 +15,7 @@ class SubjectListPage extends Page
 
   # @returns a promise resolving to the asssociative collection
   #   {name: subjects} object
-  @property collection_subjects: ->
+  @property collectionSubjects: ->
     # @param assoc the associate accumulator object
     # @param pair the [name, subjects] array
     # @returns the accumulator object
@@ -44,7 +44,7 @@ describe 'E2E Testing Subject List', ->
   page = null
 
   beforeEach ->
-    page = new SubjectListPage()
+    page = new SubjectListPage
 
   # FIXME - before the tests, Protractor displays the following message:
   #     Client error: TypeError: Cannot read property 'hasOwnProperty' of null
@@ -85,7 +85,7 @@ describe 'E2E Testing Subject List', ->
     assocFinder = null
 
     before ->
-      assocFinder = page.collection_subjects
+      assocFinder = page.collectionSubjects
 
     it 'should display the Breast and Sarcoma collections', ->
       expect(assocFinder, 'The collections are incorrect')
@@ -98,3 +98,14 @@ describe 'E2E Testing Subject List', ->
           .to.eql(expected)
         expect(assoc.Sarcoma, 'The Sarcoma subjects are incorrect')
           .to.eql(expected)
+
+    it 'should visit the Subject Detail page', ->
+      visit = page.findAll('collection in collections')
+        .then (collElts) ->
+          collElts[0].findAll('subject in subjects')
+        .then (sbjElts) ->
+          sbjElts[0].find('a')
+        .then (linkElt) ->
+          linkElt.visit()
+       expect(visit, 'The Subject Detail page is not visited')
+        .to.eventually.match(/^\/quip\/\w+\/subject\/\d+/)

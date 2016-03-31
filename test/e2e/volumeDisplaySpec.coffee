@@ -26,7 +26,7 @@ xdescribe 'E2E Testing Volume Display', ->
   page = null
 
   before ->
-    page = new VolumePage()
+    page = new VolumePage
 
   it 'should load the page', ->
     expect(page.content, 'The page was not loaded')

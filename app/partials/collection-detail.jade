@@ -5,17 +5,15 @@ block billboard
 
 block content
   //
-  // TODO - rename 'correlation' to 'collection' here and elsewhere.
-  //
   // TODO - scrolling is disabled when the cursor focus is within a chart.
   //  Can this be fixed?
   //
   // The subject/session table and chart.
-  .qi-correlation-charts(qi-correlation-charts)
+  .qi-collection-charts(qi-collection-charts)
   .row.qi-subject-summary
     .col-md-2.qi-profile-panel.qi-subject-table#qi-subject-table
     .col-md-10#qi-subject-chart
-  // The correlation charts. For each chart, construct the X and Y axis data
+  // The collection charts. For each chart, construct the X and Y axis data
   // series dropdowns and create a container for the chart. The choices object
   // contains the valid data series for the current collection. For each data
   // series, the key value is the series name and the value is the text label
@@ -67,7 +65,7 @@ block content
                 ) &#10003;
                 span.qi-dropdown-text {{ val }}
       .row
-        .col-md-12.qi-correlation-chart(id="qi-correlation-chart-{{ $index + 1 }}")
+        .col-md-12.qi-collection-chart(id="qi-collection-chart-{{ $index + 1 }}")
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

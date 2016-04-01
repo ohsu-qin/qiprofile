@@ -1,10 +1,10 @@
 define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart', 'breast', 
-        'sliceDisplay', 'correlation'],
+        'sliceDisplay', 'collection'],
   (ng, _) ->
     ctlrs = ng.module(
       'qiprofile.controllers',
       ['ngSanitize', 'ui.bootstrap', 'nvd3', 'qiprofile.resources', 'qiprofile.modelingchart',
-       'qiprofile.breast', 'qiprofile.slicedisplay', 'qiprofile.correlation']
+       'qiprofile.breast', 'qiprofile.slicedisplay', 'qiprofile.collection']
     )
 
     # The local controller helper methods.
@@ -84,8 +84,8 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
 
 
     ctlrs.controller 'CollectionDetailCtrl', [
-      '$rootScope', '$scope', 'project', 'collection', 'charting', 'Correlation', 'ControllerHelper',
-      ($rootScope, $scope, project, collection, charting, Correlation, ControllerHelper) ->
+      '$rootScope', '$scope', 'project', 'collection', 'charting', 'Collection', 'ControllerHelper',
+      ($rootScope, $scope, project, collection, charting, Collection, ControllerHelper) ->
         # Capture the current project.
         $rootScope.project = project
         # Place the collection in the scope.
@@ -94,17 +94,17 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
         # and put them in the scope. These comprise the X/Y axis dropdown
         # choices. The X axis choices contain all valid data series. The Y axis
         # choices may only include continuous data types.
-        $scope.choices = Correlation.dataSeriesChoices(collection)
+        $scope.choices = Collection.dataSeriesChoices(collection)
         # Obtain the formatted scatterplot data.
-        data = Correlation.prepareScatterPlotData(charting, $scope.choices.x)
+        data = Collection.prepareScatterPlotData(charting, $scope.choices.x)
         # Obtain the chart padding for each data series - continuous data types
         # only. The padding for categorical data series is configured in the
         # correlation module chart rendering function.
-        padding = Correlation.calculatePadding(data, $scope.choices.y)
+        padding = Collection.calculatePadding(data, $scope.choices.y)
         # Put a copy of the default charts (X and Y axes) in the scope.
         # This charts object changes when the user selects a different
         # axis to chart.
-        $scope.axes = _.clone(Correlation.DEFAULT_AXES[collection])
+        $scope.axes = _.clone(Collection.DEFAULT_AXES[collection])
         # Place the chart configuration object in the scope.
         $scope.config =
           data: data
@@ -120,7 +120,7 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
         watcher = (newValue, oldValue) ->
           # If the user changed the axes, then re-render the charts.
           if newValue != oldValue
-            Correlation.renderCharts($scope.config)
+            Collection.renderCharts($scope.config)
         
         # Since charts is an object, the objectEquality flag is set to true.
         # AngularJS then copies the object for later comparison and uses

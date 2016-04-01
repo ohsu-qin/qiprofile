@@ -1,13 +1,13 @@
 define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         'breast', 'sarcoma', 'tnm', 'helpers'],
   (ng, dc, moment, roman) ->
-    correlation = ng.module(
-      'qiprofile.correlation',
+    collection = ng.module(
+      'qiprofile.collection',
       ['qiprofile.breast', 'qiprofile.sarcoma', 'qiprofile.tnm',
        'qiprofile.helpers']
     )
 
-    correlation.factory 'Correlation', ['Breast', 'Sarcoma', 'TNM', 'DateHelper',
+    collection.factory 'Collection', ['Breast', 'Sarcoma', 'TNM', 'DateHelper',
       (Breast, Sarcoma, TNM, DateHelper) ->
         # The data series configuration. These are all of the data series that
         # the dimensional charting (DC) charts support and are in the order in
@@ -380,11 +380,11 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         # The chart layout parameters.
         CHART_LAYOUT_PARAMS =
           subjectChartHeight: 150
-          corrChartHeight: 250
+          collectionChartHeight: 250
           symbolSize: 8
           subjectChartSymbol: 'diamond'
           subjectChartPadding: .5
-          corrChartPadding: .2
+          collectionChartPadding: .2
           ticks: 4
           leftMargin: 6
 
@@ -614,7 +614,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
               pad = CHART_LAYOUT_PARAMS.ticks / 2 * Math.pow(10, result - 1)
             else
               # Add the padding for the data series to the object.
-              pad = diff * CHART_LAYOUT_PARAMS.corrChartPadding
+              pad = diff * CHART_LAYOUT_PARAMS.collectionChartPadding
             padding[key] = pad
           # Return the padding object.
           padding
@@ -722,7 +722,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           # axis pairs defined in the chart config axes variable. 
           chartNbrs = _.range(1, chartCnt + 1)
           # Set up the scatterplots.
-          charts = (dc.scatterPlot('#qi-correlation-chart-' + chartNbr) for chartNbr in chartNbrs)
+          charts = (dc.scatterPlot('#qi-collection-chart-' + chartNbr) for chartNbr in chartNbrs)
 
           # Iterate over the charts.
           for chart, i in charts
@@ -745,7 +745,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
             # The chart configuration.
             chart.dimension dim
               .group group
-              .height CHART_LAYOUT_PARAMS.corrChartHeight
+              .height CHART_LAYOUT_PARAMS.collectionChartHeight
               .renderVerticalGridLines true
               .renderHorizontalGridLines true
               .symbolSize CHART_LAYOUT_PARAMS.symbolSize

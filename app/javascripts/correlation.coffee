@@ -459,12 +459,12 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
 
         # Obtains and formats the scatterplot data for display in the charts.
         # The data consist of an array of objects where each object contains
-        # the subject and visit numbers and dates followed by the the data
+        # the subject and session numbers and dates followed by the the data
         # series that are valid for the current collection, e.g.:
         #
         # {
         #   'subject': 1
-        #   'visit': 1
+        #   'session': 1
         #   'date': "01/06/2013"
         #   'fxlKTrans': 0.16492194885121594
         #   ...
@@ -507,17 +507,9 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
 
             # Make the chart data object. The chart data object combines the
             # subject, session and modeling objects.
-            #
-            # TODO - rename the visit variable to session here and elsewhere.
-            #   Visit has a web connotation that differs from the imaging connotation.
-            #   For clarity, 'visit' is confined to the presentation layer, i.e. it is
-            #   displayed to the user but is not used as a variable in the source code.
-            #   Thus, e.g., the test Page class has a function named 'visit' that
-            #   follows a link. It would be confusing to 'visit the visit page'.
-            #
             dcObject =
               subject: _.extend({href: sbjRef}, subject)
-              visit: _.extend({href: sessRef}, session)
+              session: _.extend({href: sessRef}, session)
 
             # Iterate over the valid data series and add data to the object.
             for key of choices
@@ -650,35 +642,35 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           # Construct the multi-dimensional crossfilter.
           xFilter = crossfilter(data)
 
-          # The subject/visit dimension.
+          # The subject/session dimension.
           dim = xFilter.dimension (obj) -> 
             [
               obj.subject.number
-              obj.visit.number
+              obj.session.number
             ]
 
-          # The subject/visit group.
+          # The subject/session group.
           group = dim.group()
 
-          # The subject/visit table configuration.
+          # The subject/session table configuration.
           table = dc.dataTable '#qi-subject-table'
           table.dimension dim
             .group (obj) -> "<a href=\"#{ obj.subject.href }\">Patient #{ obj.subject.number }</a>"
-            .sortBy (obj) -> obj.visit.href
+            .sortBy (obj) -> obj.session.href
             .columns [
               # TODO - Should this be two columns per row?
               (obj) ->
-                refElt = "&bullet; <a href=\"#{ obj.visit.href }\">Visit #{ obj.visit.number }</a>"
-                dateElt = "<span class='qi-dc-date'>#{ obj.visit.date.format('MM/DD/YYYY') }</span>"
+                refElt = "&bullet; <a href=\"#{ obj.session.href }\">Visit #{ obj.session.number }</a>"
+                dateElt = "<span class='qi-dc-date'>#{ obj.session.date.format('MM/DD/YYYY') }</span>"
                 "#{ refElt } #{ dateElt }"
             ]
 
           # The largest subject number is the number of X tick marks.
           maxSbjNbr = _.chain(data).map('subject.number').max().value()
           # The largest session number is the number of Y tick marks.
-          maxSessNbr = _.chain(data).map('visit.number').max().value()
+          maxSessNbr = _.chain(data).map('session.number').max().value()
 
-          # The subject/visit chart configuration.
+          # The subject/session chart configuration.
           chart = dc.scatterPlot '#qi-subject-chart'
           chart.dimension dim
             .group group

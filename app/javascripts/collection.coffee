@@ -631,8 +631,6 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           d3.selection::moveToFront = ->
             @each ->
               @parentNode.appendChild this
-              # TODO - Why this return?
-              return
           
           # Convenience temp config variables.
           data = config.data
@@ -701,20 +699,18 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           chart.on 'renderlet', (chart) ->
             chart.selectAll '.symbol'
               .on 'mouseover', (d) ->
-                # TODO - What is div here?
-                # TODO - Remove the returns below if they are extraneous.
-                div.transition().duration(20).style('opacity', .9)
+                # The 'tooltip' is the selection returned by d3 after the chart
+                # rendering call.
+                tooltip.transition().duration(20).style('opacity', .9)
                 # TODO - make temp variables and interpolate the argument,
                 #   e.g.:
                 #     label = "<strong>Patient:</strong>#{ d.key[0] }"
                 #     ...
                 #     html = "#{ label }..."
-                #     div.html(html)
-                div.html('<strong>Patient:</strong> ' + d.key[0] + '<br/><strong>Visit:</strong> ' + d.key[1]).style('left', d3.event.pageX + 5 + 'px').style 'top', d3.event.pageY - 35 + 'px'
-                return
+                #     tooltip.html(html)
+                tooltip.html('<strong>Patient:</strong> ' + d.key[0] + '<br/><strong>Visit:</strong> ' + d.key[1]).style('left', d3.event.pageX + 5 + 'px').style 'top', d3.event.pageY - 35 + 'px'
               .on 'mouseout', (d) ->
-                div.transition().duration(50).style('opacity', 0)
-                return
+                tooltip.transition().duration(50).style('opacity', 0)
 
           # The axes determine the number of charts to display.
           chartCnt = axes.length
@@ -731,8 +727,8 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
             yAxis = axes[i].y
 
             # Set up the dimension based on the X and Y axis user selections.
-# TODO - is d here the chart data object? If so, then comment and
-# rename to obj here and below.
+            # TODO - is d here the chart data object? If so, then comment and
+            # rename to obj here and below.
             dim = xFilter.dimension (d) ->
               [
                 d[xAxis]
@@ -774,12 +770,10 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
             chart.on 'renderlet', (chart) ->
               chart.selectAll '.symbol'
                 .on 'mouseover', (d) ->
-                  div.transition().duration(20).style 'opacity', 1
-                  div.html('<strong>x:</strong> ' + d.key[0] + '<br/><strong>y:</strong> ' + d.key[1]).style('left', d3.event.pageX + 5 + 'px').style 'top', d3.event.pageY - 35 + 'px'
-                  return
+                  tooltip.transition().duration(20).style 'opacity', 1
+                  tooltip.html('<strong>x:</strong> ' + d.key[0] + '<br/><strong>y:</strong> ' + d.key[1]).style('left', d3.event.pageX + 5 + 'px').style 'top', d3.event.pageY - 35 + 'px'
                 .on 'mouseout', (d) ->
-                  div.transition().duration(50).style 'opacity', 0
-                  return
+                  tooltip.transition().duration(50).style 'opacity', 0
                 .style 'opacity', (d) ->
                   if d.key[0]? and d.key[1]? then 1 else 0
 
@@ -790,6 +784,6 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           d3.selectAll('.chart-body').moveToFront()
 
           # The tooltip div.
-          div = d3.select('body').append('div').attr('class', 'tooltip').style 'opacity', 0
+          tooltip = d3.select('body').append('div').attr('class', 'tooltip').style 'opacity', 0
 
       ]

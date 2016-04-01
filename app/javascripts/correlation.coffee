@@ -9,13 +9,14 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
 
     correlation.factory 'Correlation', ['Breast', 'Sarcoma', 'TNM', 'DateHelper',
       (Breast, Sarcoma, TNM, DateHelper) ->
-        # The charting data types. They are in the order in which they appear
-        # in the X and Y axis selection dropdowns. Each has the following
-        # properties:
+        # The data series configuration. These are all of the data series that
+        # the dimensional charting (DC) charts support and are in the order in
+        # which they appear in the X and Y axis selection dropdowns. Each has
+        # the following properties:
         #
         # * label - Appears in the dropdown picklists and as chart axis labels.
-        # * collection - The collection(s) for which the data type is valid. May be
-        #   'all' or a list of specific collections.
+        # * collection - The collection(s) for which the data series is valid.
+        #     May be 'all' or a list of specific collections.
         # * accessor - The data accessor.
         #
         # Note that necrosis percent can exist either as a single value or a
@@ -26,7 +27,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         #   See the k-trans.coffee TODO item. See also the CATEGORICAL_VALUES
         #   TODO below.
         #
-        CHART_DATA_CONFIG =
+        DATA_SERIES_CONFIG =
           'fxlKTrans':
               label: 'FXL Ktrans'
               collection: [
@@ -321,18 +322,18 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                 else
                   null
 
-        # Map the data type handles to the display labels.
-        LABELS = _.mapValues(CHART_DATA_CONFIG, (o) ->
-          o.label
+        # Map the data series key values to the display labels.
+        LABELS = _.mapValues(DATA_SERIES_CONFIG, (obj) ->
+          obj.label
         )
 
-        # The complete list of data types.
-        DATA_TYPES = _.keys CHART_DATA_CONFIG
+        # The complete list of data series.
+        DATA_SERIES = _.keys DATA_SERIES_CONFIG
 
-        # The imaging data types.
-        IMAGING_DATA_TYPES = DATA_TYPES.slice(0, 5)
+        # The imaging data series.
+        IMAGING_DATA_SERIES = DATA_SERIES.slice(0, 5)
 
-        # The categorical data type {data type: value extent array}
+        # The categorical type data series {data series: value extent array}
         # associative look-up object.
         #
         # TODO - get this from the respective services:
@@ -387,10 +388,12 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           ticks: 4
           leftMargin: 6
 
-        # The default chart axes to be displayed, by collection. The X
-        # axes can include any data type that is valid for the collection.
-        # The Y axes can include only the continuous data types, i.e. no
-        # categorical/ordinal data types.
+        # The default chart axes to be displayed, by collection. The X axes can
+        # include any data series that is valid for the collection. The Y axes
+        # can include only data series that have continuous data. Data series
+        # that have categorical/ordinal data types are excluded from the Y axis
+        # choices because the DC charting does not currently support such a
+        # configuration.
         #
         # TODO - where is the above statement enforced?
         DEFAULT_AXES:
@@ -433,24 +436,23 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
               }
             ]
 
-        # Creates an object containing only those data types that are valid for
-        # the current collection. These are the choices that will appear in the
-        # X and Y axis selection dropdowns. Categorical data types are excluded
-        # from the Y axis choices because the DC charting does not currently
-        # support such a configuration.
+        # Creates an object containing only those data series that are valid
+        # for the current collection. These are the choices that will appear in
+        # the X and Y axis selection dropdowns. Categorical type data series
+        # are excluded from the Y axis choices.
         #
         # @param collection the target collection
-        # @returns the valid X and Y axis data types and labels for the target
+        # @returns the valid X and Y axis data series and labels for the target
         #   collection
-        dataTypeChoices: (collection) ->
+        dataSeriesChoices: (collection) ->
           xChoices = new Object
           yChoices = new Object
-          for dt in DATA_TYPES
-            config = CHART_DATA_CONFIG[dt]
+          for ds in DATA_SERIES
+            config = DATA_SERIES_CONFIG[ds]
             if 'all' in config.collection or collection in config.collection
-              xChoices[dt] = LABELS[dt]
-              if dt not in Object.keys(CATEGORICAL_VALUES)
-                yChoices[dt] = LABELS[dt]
+              xChoices[ds] = LABELS[ds]
+              if ds not in Object.keys(CATEGORICAL_VALUES)
+                yChoices[ds] = LABELS[ds]
           choices =
             x: xChoices
             y: yChoices
@@ -458,7 +460,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         # Obtains and formats the scatterplot data for display in the charts.
         # The data consist of an array of objects where each object contains
         # the subject and visit numbers and dates followed by the the data
-        # types that are valid for the current collection, e.g.:
+        # series that are valid for the current collection, e.g.:
         #
         # {
         #   'subject': 1
@@ -471,17 +473,17 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         # }
         #
         # Each object needs to contain all of the same keys. If data
-        # is not available for a data type, it must be assigned a null value.
+        # is not available for a data series, it must be assigned a null value.
         #
         # TODO - The chart should collect whatever properties are available
-        #   rather than be constrained by choices. See the CHART_DATA_CONFIG
+        #   rather than be constrained by choices. See the DATA_SERIES_CONFIG
         #   TODO above.
         #
         # TODO - Are there count(session) x max(1, count(tumors)) objects for
         #   each subject?
         #
         # @param charting the REST query result
-        # @param choices the valid data types for the current collection
+        # @param choices the valid data series for the current collection
         # @returns the scatterplot data
         prepareScatterPlotData: (charting, choices) ->
           # @param modeling the modeling object
@@ -520,10 +522,10 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
               subject: _.extend({href: sbjRef}, subject)
               visit: _.extend({href: sessRef}, session)
 
-            # Iterate over the valid data types and add data to the object.
+            # Iterate over the valid data series and add data to the object.
             for key of choices
-              config = CHART_DATA_CONFIG[key]
-              if key in IMAGING_DATA_TYPES
+              config = DATA_SERIES_CONFIG[key]
+              if key in IMAGING_DATA_SERIES
                 dcObject[key] = config.accessor(modeling.result)
               else if tumor?
                 dcObject[key] = config.accessor(tumor)
@@ -578,18 +580,16 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           # Return the scatterplot data.
           data
 
-        # Calculates the chart padding value for each continuous data type. In
-        # the DC charts, the padding must be expressed in the same unit domains
-        # as the data being charted.
+        # Calculates the chart padding value for each continuous type data
+        # series. In the charts, the padding must be expressed in the same unit
+        # domains as the data being charted.
         #
         # @param data the scatterplot data
-        # @param choices the valid data types for the current collection
-        # @returns the chart padding for each data type
+        # @param choices the valid data series for the current collection
+        # @returns the chart padding for each data series
         calculatePadding: (data, choices) ->
           padding = new Object
-          # Iterate over the data types.
-          #
-          # TODO - What does 'data type' mean here?
+          # Iterate over the data series items (choices).
           #
           # FIXME - this breaks if data is empty. Present an alert
           #   in that case. Can this occur in practice?
@@ -598,12 +598,12 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           #   get the item padding and collect the iteration result into an
           #   object using the functional programming reduce idiom, e.g.:
           #     chartPadding: (data, choices) ->
-          #       dataTypePadding = (key) -> ...
-          #       addDataTypePadding = (obj, key) ->
-          #         obj[key] = dataTypePadding(key)
+          #       dataSeriesPadding = (key) -> ...
+          #       addDataSeriesPadding = (obj, key) ->
+          #         obj[key] = dataSeriesPadding(key)
           #         obj
-          #     # Return the {data type: padding} object
-          #     choices.reduce(addDataTypePadding, key, {})
+          #     # Return the {data series: padding} object
+          #     choices.reduce(addDataSeriesPadding, key, {})
           for key of choices
             values = _.map(data, key)
             max = _.max(values)
@@ -624,7 +624,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
               if Math.abs(result) is Infinity then result = 0
               pad = CHART_LAYOUT_PARAMS.ticks / 2 * Math.pow(10, result - 1)
             else
-              # Add the padding for the data type to the object.
+              # Add the padding for the data series to the object.
               pad = diff * CHART_LAYOUT_PARAMS.corrChartPadding
             padding[key] = pad
           # Return the padding object.

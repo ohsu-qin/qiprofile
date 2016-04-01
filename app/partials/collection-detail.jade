@@ -17,10 +17,10 @@ block content
     .col-md-2.qi-profile-panel.qi-patient-table#qi-patient-table
     .col-md-10#qi-patient-chart
   // The correlation charts. For each chart, construct the X and Y axis data
-  // type dropdowns and create a container for the chart. The choices object
-  // contains the valid data types for the current collection. For each data
-  // type, the key value is the data type handle and the value is the text
-  // label that is displayed in the dropdown.
+  // series dropdowns and create a container for the chart. The choices object
+  // contains the valid data series for the current collection. For each data
+  // series, the key value is the series name and the value is the text label
+  // that is displayed in the dropdown.
   .row
     .col-md-6(ng-repeat="chartAxes in axes")
       // TODO - scooch the dropdowns over to the right, or perhaps

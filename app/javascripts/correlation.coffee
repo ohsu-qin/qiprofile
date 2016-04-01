@@ -379,11 +379,11 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
 
         # The chart layout parameters.
         CHART_LAYOUT_PARAMS =
-          patientChartHeight: 150
+          subjectChartHeight: 150
           corrChartHeight: 250
           symbolSize: 8
-          patientChartSymbol: 'diamond'
-          patientChartPadding: .5
+          subjectChartSymbol: 'diamond'
+          subjectChartPadding: .5
           corrChartPadding: .2
           ticks: 4
           leftMargin: 6
@@ -514,9 +514,6 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
             #   displayed to the user but is not used as a variable in the source code.
             #   Thus, e.g., the test Page class has a function named 'visit' that
             #   follows a link. It would be confusing to 'visit the visit page'.
-            #
-            # TODO - similarly, rename patient variables and element ids/classes to
-            #   'subject'.
             #
             dcObject =
               subject: _.extend({href: sbjRef}, subject)
@@ -653,18 +650,18 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           # Construct the multi-dimensional crossfilter.
           xFilter = crossfilter(data)
 
-          # The patient/visit dimension.
+          # The subject/visit dimension.
           dim = xFilter.dimension (obj) -> 
             [
               obj.subject.number
               obj.visit.number
             ]
 
-          # The patient/visit group.
+          # The subject/visit group.
           group = dim.group()
 
-          # The patient/visit table configuration.
-          table = dc.dataTable '#qi-patient-table'
+          # The subject/visit table configuration.
+          table = dc.dataTable '#qi-subject-table'
           table.dimension dim
             .group (obj) -> "<a href=\"#{ obj.subject.href }\">Patient #{ obj.subject.number }</a>"
             .sortBy (obj) -> obj.visit.href
@@ -681,15 +678,15 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           # The largest session number is the number of Y tick marks.
           maxSessNbr = _.chain(data).map('visit.number').max().value()
 
-          # The patient/visit chart configuration.
-          chart = dc.scatterPlot '#qi-patient-chart'
+          # The subject/visit chart configuration.
+          chart = dc.scatterPlot '#qi-subject-chart'
           chart.dimension dim
             .group group
-            .height CHART_LAYOUT_PARAMS.patientChartHeight
+            .height CHART_LAYOUT_PARAMS.subjectChartHeight
             .renderVerticalGridLines true
             .renderHorizontalGridLines true
             .symbolSize CHART_LAYOUT_PARAMS.symbolSize
-            .symbol CHART_LAYOUT_PARAMS.patientChartSymbol
+            .symbol CHART_LAYOUT_PARAMS.subjectChartSymbol
             # TODO - What is category 10?
             .colors d3.scale.category10()
             # TODO - What is d here? Why key 1?
@@ -700,8 +697,8 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
             .elasticY true
             .x d3.scale.linear()
             .y d3.scale.linear()
-            .xAxisPadding CHART_LAYOUT_PARAMS.patientChartPadding
-            .yAxisPadding CHART_LAYOUT_PARAMS.patientChartPadding
+            .xAxisPadding CHART_LAYOUT_PARAMS.subjectChartPadding
+            .yAxisPadding CHART_LAYOUT_PARAMS.subjectChartPadding
           # Set the axis tick counts.
           chart.xAxis().ticks(maxSbjNbr)
           chart.yAxis().ticks(maxSessNbr)

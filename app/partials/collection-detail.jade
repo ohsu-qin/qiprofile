@@ -6,16 +6,15 @@ block billboard
 block content
   //
   // TODO - rename 'correlation' to 'collection' here and elsewhere.
-  // TODO - rename 'patient' to 'subject' here and elsewhere.
   //
   // TODO - scrolling is disabled when the cursor focus is within a chart.
   //  Can this be fixed?
   //
-  // The patient/visit table and chart.
+  // The subject/visit table and chart.
   .qi-correlation-charts(qi-correlation-charts)
-  .row.qi-patient-summary
-    .col-md-2.qi-profile-panel.qi-patient-table#qi-patient-table
-    .col-md-10#qi-patient-chart
+  .row.qi-subject-summary
+    .col-md-2.qi-profile-panel.qi-subject-table#qi-subject-table
+    .col-md-10#qi-subject-chart
   // The correlation charts. For each chart, construct the X and Y axis data
   // series dropdowns and create a container for the chart. The choices object
   // contains the valid data series for the current collection. For each data

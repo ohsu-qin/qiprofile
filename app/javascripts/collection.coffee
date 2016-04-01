@@ -677,10 +677,11 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
             .renderHorizontalGridLines true
             .symbolSize CHART_LAYOUT_PARAMS.symbolSize
             .symbol CHART_LAYOUT_PARAMS.subjectChartSymbol
-            # TODO - What is category 10?
+            # Construct a new scale with a range of ten categorical colors.
             .colors d3.scale.category10()
-            # TODO - What is d here? Why key 1?
-            .colorAccessor (d) -> d.key[1]
+            # The symbol color is based on the data object's key 1 value, which
+            # is the session number.
+            .colorAccessor (obj) -> obj.key[1]
             .xAxisLabel "Patient"
             .yAxisLabel "Visit"
             .elasticX true
@@ -695,21 +696,21 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           # Pad the left margins.
           chart.margins().left += CHART_LAYOUT_PARAMS.leftMargin
           
-          # Supply the tooltips.
+          # Apply a renderlet and associate it with tooltip callbacks.
           chart.on 'renderlet', (chart) ->
             chart.selectAll '.symbol'
-              .on 'mouseover', (d) ->
-                # The 'tooltip' is the selection returned by d3 after the chart
-                # rendering call.
+              .on 'mouseover', (obj) ->
+                # Supply the tooltips. The tooltip element is the selection
+                # returned by d3 after the chart rendering call.
                 tooltip.transition().duration(20).style('opacity', .9)
                 # TODO - make temp variables and interpolate the argument,
                 #   e.g.:
-                #     label = "<strong>Patient:</strong>#{ d.key[0] }"
+                #     label = "<strong>Patient:</strong>#{ obj.key[0] }"
                 #     ...
                 #     html = "#{ label }..."
                 #     tooltip.html(html)
-                tooltip.html('<strong>Patient:</strong> ' + d.key[0] + '<br/><strong>Visit:</strong> ' + d.key[1]).style('left', d3.event.pageX + 5 + 'px').style 'top', d3.event.pageY - 35 + 'px'
-              .on 'mouseout', (d) ->
+                tooltip.html('<strong>Patient:</strong> ' + obj.key[0] + '<br/><strong>Visit:</strong> ' + obj.key[1]).style('left', d3.event.pageX + 5 + 'px').style 'top', d3.event.pageY - 35 + 'px'
+              .on 'mouseout', (obj) ->
                 tooltip.transition().duration(50).style('opacity', 0)
 
           # The axes determine the number of charts to display.
@@ -727,12 +728,10 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
             yAxis = axes[i].y
 
             # Set up the dimension based on the X and Y axis user selections.
-            # TODO - is d here the chart data object? If so, then comment and
-            # rename to obj here and below.
-            dim = xFilter.dimension (d) ->
+            dim = xFilter.dimension (obj) ->
               [
-                d[xAxis]
-                d[yAxis]
+                obj[xAxis]
+                obj[yAxis]
               ]
 
             # The chart group.
@@ -765,17 +764,19 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
                 .x d3.scale.linear()
                 .xAxisPadding padding[xAxis]
 
-            # Supply the tooltips and hide plot points where the X or Y value
-            # is null.
             chart.on 'renderlet', (chart) ->
               chart.selectAll '.symbol'
-                .on 'mouseover', (d) ->
+                # Supply the tooltips.
+                .on 'mouseover', (obj) ->
                   tooltip.transition().duration(20).style 'opacity', 1
-                  tooltip.html('<strong>x:</strong> ' + d.key[0] + '<br/><strong>y:</strong> ' + d.key[1]).style('left', d3.event.pageX + 5 + 'px').style 'top', d3.event.pageY - 35 + 'px'
-                .on 'mouseout', (d) ->
+                  tooltip.html('<strong>x:</strong> ' + obj.key[0] + '<br/><strong>y:</strong> ' + obj.key[1]).style('left', d3.event.pageX + 5 + 'px').style 'top', d3.event.pageY - 35 + 'px'
+                .on 'mouseout', (obj) ->
                   tooltip.transition().duration(50).style 'opacity', 0
-                .style 'opacity', (d) ->
-                  if d.key[0]? and d.key[1]? then 1 else 0
+                # Hide plot points where either the X or Y value is null. The
+                # data object's key 0 value is the X axis data value and the
+                # key 1 value is the Y axis data value.
+                .style 'opacity', (obj) ->
+                  if obj.key[0]? and obj.key[1]? then 1 else 0
 
           # Render the charts.
           dc.renderAll()

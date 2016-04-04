@@ -1,4 +1,6 @@
-#_ = require 'lodash'
+_ = require 'lodash'
+
+webdriver = require 'selenium-webdriver'
 
 expect = require('./helpers/expect')()
 
@@ -8,6 +10,28 @@ class CollectionDetailPage extends Page
   constructor: ->
     super('/quip/breast?project=QIN_Test')
 
+  # @returns a promise which resolves to the subject table
+  #   ElementFinder
+  @property subjectTable: ->
+    @find('#qi-subject-table')
+
+  # @returns a promise which resolves to the subject chart
+  #   ElementFinder
+  @property subjectChart: ->
+    @find('#qi-subject-chart')
+
+  # @returns the collection charts promise
+  @property collectionCharts: ->
+    @findAll('.qi-collection-chart')
+
+  # @returns the DC table label promise
+  @property dcTableLabels: ->
+    @findAll('.dc-table-label')
+
+  # @returns the DC table label promise
+  @property dcTableColumns: ->
+    @findAll('.dc-table-column')
+
   # @returns the X-axis dropdown promise
   @property xAxisDropdowns: ->
     @findAll('.qi-x-axis-dropdown')
@@ -15,10 +39,6 @@ class CollectionDetailPage extends Page
   # @returns the Y-axis dropdown promise
   @property yAxisDropdowns: ->
     @findAll('.qi-y-axis-dropdown')
-
-  # @returns the correlation charts promise
-  @property correlationCharts: ->
-    @findAll('.qi-correlation-chart')
 
 describe 'E2E Testing Collection Detail', ->
   page = null
@@ -55,36 +75,82 @@ describe 'E2E Testing Collection Detail', ->
           .to.eventually.include(Page.SUGGESTION_BOX_URL)
 
   # The page main body test cases.
-  describe 'Chart', ->
-    it 'should display the X-axis dropdowns', ->
+  describe 'Charts', ->
+    it 'should display the subject table', ->
+      page.subjectTable.then (table) ->
+        expect(table.isDisplayed(), 'The subject table is missing')
+          .to.eventually.exist
+
+    it 'should display a subject', ->
+      page.dcTableLabels.then (subjects) ->
+        subj = _.first(subjects)
+        expect(subj.text(), 'The chart table does not display a' +
+                                   ' subject')
+          .to.eventually.include('Patient')
+
+    it 'should display a session', ->
+      page.dcTableColumns.then (sessions) ->
+        sess = _.first(sessions)
+        expect(sess.text(), 'The chart table does not display a ' +
+                                   ' session')
+          .to.eventually.include('Visit')
+
+    it 'should display the subject chart', ->
+      page.subjectChart.then (chart) ->
+        expect(chart.isDisplayed(), 'The subject chart is missing')
+          .to.eventually.exist
+
+    it 'should display four data charts', ->
+      page.collectionCharts.then (charts) ->
+        expect(charts.length, 'The data chart count is incorrect')
+          .to.equal(4)
+
+    it 'should display four X-axis dropdowns', ->
       page.xAxisDropdowns.then (dropdowns) ->
-        # The dropdowns exist.
-        expect(dropdowns, 'The X-axis dropdowns are missing')
-          .to.exist.and.not.be.empty
-        # The dropdowns are displayed.
-        for dropdown, i in dropdowns
-          expect(dropdown.isDisplayed(),
-                 "The X-axis dropdown #{ i } is initially hidden")
-            .to.eventually.be.true
+        expect(dropdowns.length, 'The X-axis dropdown count is incorrect')
+          .to.equal(4)
 
-    it 'should display the Y-axis dropdowns', ->
+    it 'should display the X-axis dropdown items', ->
+      page.xAxisDropdowns.then (dropdowns) ->
+        dropdown = _.first(dropdowns)
+        # Show the dropdown.
+        dropdown.click()
+        # The default selection for the first chart is 'RCB Index'.
+        dropdown.find(By.css('.qi-selected-label')).then (selected) ->
+          expect(selected.text(), 'The default X-axis selection is incorrect')
+            .to.eventually.equal('RCB Index')
+        # The first item in the dropdown is 'FXL Ktrans'.
+        dropdown.findAll(By.css('.qi-dropdown-choice')).then (items) ->
+          item = _.first(items)
+          item.find(By.css('.qi-dropdown-label')).then (label) ->
+            expect(label.text(), 'The first item in the X-axis dropdown is' +
+                                 ' incorrect')
+              .to.eventually.equal('FXL Ktrans')
+
+    it 'should display four Y-axis dropdowns', ->
       page.yAxisDropdowns.then (dropdowns) ->
-        # The dropdowns exist.
-        expect(dropdowns, 'The Y-axis dropdowns are missing')
-          .to.exist.and.not.be.empty
-        # The dropdowns are displayed.
-        for dropdown, i in dropdowns
-          expect(dropdown.isDisplayed(),
-                 "The Y-axis dropdown #{ i } is initially hidden")
-            .to.eventually.be.true
+        expect(dropdowns.length, 'The Y-axis dropdown count is incorrect')
+          .to.equal(4)
 
-    it 'should display the correlation charts', ->
-      page.correlationCharts.then (charts) ->
-        # The charts exist.
-        expect(charts, 'The correlation charts are missing')
-          .to.exist.and.not.be.empty
-        # The charts are displayed.
-        for chart, i in charts
-          expect(chart.isDisplayed(),
-                 "The correlation chart #{ i } is initially hidden")
-            .to.eventually.be.true
+    it 'should display the Y-axis dropdown items', ->
+      page.yAxisDropdowns.then (dropdowns) ->
+        dropdown = _.first(dropdowns)
+        # Show the dropdown.
+        dropdown.click()
+        # The default selection of the first chart is 'delta Ktrans'.
+        dropdown.find(By.css('.qi-selected-label')).then (selected) ->
+          expect(selected.text(), 'The default Y-axis selection is incorrect')
+            .to.eventually.equal('delta Ktrans')
+        # The first item in the dropdown is 'FXL Ktrans'.
+        dropdown.findAll(By.css('.qi-dropdown-choice')).then (items) ->
+          item = _.first(items)
+          item.find(By.css('.qi-dropdown-label')).then (label) ->
+            expect(label.text(), 'The first item in the Y-axis dropdown is' +
+                                 ' incorrect')
+              .to.eventually.equal('FXL Ktrans')
+          # TNM stage is a categorical data series and is not included in the
+          # Y-axis choices.
+          for item in items
+            item.find(By.css('.qi-dropdown-label')).then (label) ->
+              expect(label.text(), 'TNM stage appears in the Y-axis dropdown')
+                .to.eventually.not.equal('TNM Stage')

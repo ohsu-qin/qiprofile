@@ -3,7 +3,7 @@
   .qi-dropdown.qi-x-axis-dropdown
     button.qi-dropbtn
       span.qi-dropdown-icon.qi-xy X
-      span {{ choices.x[chartAxes.x] }}
+      span.qi-selected-label {{ choices.x[chartAxes.x] }}
       span.qi-caret.caret
     .qi-dropdown-content
       .qi-dropdown-choice(
@@ -17,14 +17,14 @@
         span.qi-dropdown-icon.qi-check-show(
           ng-show="val==choices.x[chartAxes.x]"
         ) &#10003;
-        span.qi-dropdown-text {{ val }}
+        span.qi-dropdown-label {{ val }}
 
 // The Y axis dropdown.
 .col-md-4
   .qi-dropdown.qi-y-axis-dropdown
     button.qi-dropbtn
       span.qi-dropdown-icon.qi-xy Y
-      span {{ choices.y[chartAxes.y] }}
+      span.qi-selected-label {{ choices.y[chartAxes.y] }}
       span.qi-caret.caret
     .qi-dropdown-content
       .qi-dropdown-choice(
@@ -38,4 +38,4 @@
         span.qi-dropdown-icon.qi-check-show(
           ng-show="val==choices.y[chartAxes.y]"
         ) &#10003;
-        span.qi-dropdown-text {{ val }}
+        span.qi-dropdown-label {{ val }}

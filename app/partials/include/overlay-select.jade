@@ -1,20 +1,20 @@
 // The overlay selection radio button controls.
 div(ng-show='overlayModelings.length')
   h4.qi-inset-title.qi-cell Overlays:
-  table.table.qi-table.qi-table-super-condensed.qi-cell
-    tbody.qi-tbody-borderless
-      tr(ng-repeat="modeling in overlayModelings")
-        td.qi-text-center
-          include modeling-info-btn
-        td.btn-group
-          // The shared ng-model $parent.overlayIndex variable below
-          // is in the parent scope, since the ng-repeat creates a
-          // child scope for every button. The uncheckable attribute
-          // toggles a checked button to clear the overlay.
-          label.btn.qi-btn.qi-btn-radio(
-            ng-repeat="overlay in modeling.overlays | orderBy:'key'"
-            ng-model="$parent.$parent.overlayIndex"
-            uib-btn-radio="'{{ $parent.$index }}.{{ $index }}'"
-            uncheckable
-          )
-            span(ng-bind-html="parameterHeading(overlay.parameterResult.key)")
+  table.table.qi-table.qi-borderless.qi-table-super-condensed.qi-cell
+    tr(ng-repeat="modeling in overlayModelings")
+      td.qi-text-center
+        include modeling-info-btn
+      td.btn-group
+        // The shared ng-model $parent.overlayIndex variable below
+        // is in the parent scope, since the ng-repeat creates a
+        // child scope for every button. The uncheckable attribute
+        // toggles a checked button to clear the overlay.
+        label.btn.qi-btn.qi-btn-radio(
+          ng-repeat="overlay in modeling.overlays | orderBy:'key'"
+          ng-model="$parent.$parent.overlayIndex"
+          uib-btn-radio="'{{ $parent.$index }}.{{ $index }}'"
+          uncheckable
+        )
+          // Insert the sanitized HTML into the span element.
+          span(ng-bind-html="parameterHeading(overlay.parameterResult.key)")

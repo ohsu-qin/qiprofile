@@ -69,7 +69,7 @@ module.exports = (grunt) ->
         expand: true
         flatten: true
         cwd: 'bower_components/'
-        src: ['bootstrap/dist/css/bootstrap.css.map', 'dcjs/dc.css']
+        src: ['bootstrap/dist/css/bootstrap.css.map']
         dest: '_public/stylesheets/'
 
       fonts:
@@ -93,7 +93,7 @@ module.exports = (grunt) ->
           'bower_components/cornerstone/dist/cornerstone.css'
           'bower_components/dcjs/dc.css'
           'bower_components/font-awesome/css/font-awesome.css'
-          'bower_components/nvd3/nv.d3.css'
+          'bower_components/nvd3/build/nv.d3.css'
         ]
         dest: '_public/stylesheets/vendor.css'
 

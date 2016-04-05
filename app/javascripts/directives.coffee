@@ -43,6 +43,8 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
 
 
     # Displays the MR session visit dateline chart.
+    # TODO - upgrade to new ngnvd3.
+    # TODO - rename 'visit' to 'session'.
     directives.directive 'qiVisitDateline', ['VisitDateline', '$compile',
       (VisitDateline, $compile) ->
         restrict: 'E'

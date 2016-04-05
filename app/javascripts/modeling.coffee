@@ -57,6 +57,70 @@ define ['angular', 'lodash', 'resources', 'session'], (ng, _) ->
       # Return the [[{protocol, source, results}, ...], ...] array.
       _.flatten(modelingArrays)
 
+    # A label map micro-service.
+    LabelMap =
+      # Adds the following modeling label map properties:
+      # * parameterResult - the parent parameter result object
+      # * key - the parent parameterResult key
+      #
+      # @param labelMap the object to extend
+      # @param paramResult the parent parameter result
+      extend: (labelMap, paramResult) ->
+        # Set the parent reference.
+        labelMap.parameterResult = paramResult
+        # Define the virtual properties.
+        Object.defineProperties labelMap,
+          key:
+            get: ->
+              @parameterResult.key
+
+    # A modeling parameter result micro-service.
+    ParameterResult =
+      # Adds the following modeling parameter result properties:
+      # * key - the parameter result access property name
+      # * modelingResult - the parent modeling result
+      #   reference
+      # * overlay - the label map, if it exists and has a
+      #   color table
+      #
+      # In addition, if there is a label map, then this function
+      # sets the label map parent modeling parameter reference.
+      #
+      # @param paramResult the object to extend
+      # @param modelingResult the parent modeling result object
+      # @param key the parameter result access property name
+      extend: (paramResult, modelingResult, key) ->
+        # The parameter key property identifies the
+        # parameter, e.g. ktrans.
+        paramResult.key = key
+        # Set the parent modeling result reference.
+        paramResult.modelingResult = modelingResult
+        if paramResult.labelMap?
+          # Set the label map parent reference.
+          LabelMap.extend(paramResult.labelMap)
+          # If the label map has a color table, then set
+          # the overlay property.
+          Object.defineProperties paramResult,
+            # @returns the parameter result label map
+            overlay:
+              get: ->
+                @labelMap
+
+    # A modeling result micro-service.
+    ModelingResult =
+      # Adds the modeling result parent modeling object
+      # reference property and extends the parameter result
+      # objects as described in extendParameterResult.
+      #
+      # @param modelingResult the modeling result object to extend
+      # @param modeling the parent modeling object
+      extend: (modelingResult, modeling) ->
+        # Set the modeling result parent reference.
+        modelingResult.modeling = modeling
+        # Extend each modeling parameter result object.
+        for key, paramResult of modelingResult
+          ParameterResult.extend(paramResult, modelingResult, key)
+
     # @param subject the parent subject
     # @returns the modeling [{source, results}] array, where
     #   each source value is a {source type: source id}
@@ -73,4 +137,61 @@ define ['angular', 'lodash', 'resources', 'session'], (ng, _) ->
       )
       # Flatten into a [{protocol, source, results}, ...] array.
       _.flatten(modelingArrays)
+
+    # Extends the modeling result as described in
+    # extendModelingResult and adds the following
+    # modeling object properties:
+    # * session - the parent session object reference
+    # * overlays - the modeling result overlays
+    #
+    # @param modeling the modeling object to extend
+    # @param session the parent session object
+    extend: (modeling, session) ->
+      # Set the modeling parent session reference.
+      modeling.session = session
+      # Extend the modeling result object.
+      ModelingResult.extend(modeling.result, modeling)
+      # Add the virtual properties.
+      Object.defineProperties modeling,
+        # @returns the modeling results which have an overlay,
+        #   sorted by modeling parameter name
+        overlays:
+          get: ->
+            # Filter the modeling results for files with an overlay.
+            overlayed = (
+              res for res in _.values(@result) when res.overlay?
+            )
+            # Sort the overlayed results.
+            sorted = _.sortBy(overlayed, 'key')
+            # Pluck the overlay from the overlayed results.
+            _.map(sorted, 'overlay')
+        
+      # Return the extended object.
+      modeling
+
+    # The property metadata, as follows:
+    # * text - plaintext label
+    # * html - HTML label
+    # * color - recommended HTML color
+    properties:
+      fxlKTrans:
+        text: 'FXL Ktrans'
+        html: 'FXL K<sub>trans</sub>'
+        color: 'BurlyWood'
+      fxrKTrans:
+        text: 'FXR Ktrans'
+        html: 'FXR K<sub>trans</sub>'
+        color: 'OliveDrab'
+      deltaKTrans:
+        text: 'Delta Ktrans'
+        html: '&Delta;K<sub>trans</sub>'
+        color: 'DarkGoldenRod'
+      tauI:
+        text: 'tau_i'
+        html: '&tau;<sub>i</sub>'
+        color: 'PaleVioletRed'
+      vE:
+        text: 'v_e'
+        html: 'v<sub>e</sub>'
+        color: 'MediumSeaGreen'
   ]

@@ -1,8 +1,3 @@
-// TODO - obsolete; delete.
 mixin modeling-chart()
-  .qi-modeling-chart(ng-switch='data.length == 1'
-                     ng-controller='ModelingChartCtrl')
-    div(ng-switch-when='true')
-      include modeling-discrete-chart
-    div(ng-switch-default)
-      include modeling-multi-chart
+  .row.qi-chart-row.qi-modeling-chart(ng-controller='ModelingChartCtrl')
+    nvd3(options='options' data='data' config='config')

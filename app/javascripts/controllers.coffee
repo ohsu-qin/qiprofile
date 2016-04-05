@@ -331,38 +331,24 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
     ctlrs.controller 'ModelingChartCtrl', [
       '$scope', 'ModelingChart',
       ($scope, ModelingChart) ->
-        # The d3 chart configuration.
+        # selModeling is set to the modeling object to display.
+        # It is set if and only if there is at least one modeling
+        # object. Thus, the if test guards against there not being
+        # any modeling object to display.
         if $scope.selModeling?
-          config = ModelingChart.configure($scope.selModeling.results,
-                                           $scope.dataSeriesConfig)
-          # The chart is either a discrete or multi bar chart,
-          # depending on the number of data arrays.
-          chartType = if config.data.length == 1 then 'discreteBarChart' else 'multiBarChart'
-          $scope.options =
-            chart:
-              type: chartType
-              height: 200
-              # TODO - what do clipEdge and duration do?
-              #   Revisit all parameters below.
-              clipEdge: true
-              duration: 500
-              xAxis:
-                  axisLabel: 'Visit Date'
-                  showMaxMin: false
-              yAxis:
-                  axisLabel: config.yLabel
-                  axisLabelDistance: -20
-            # TODO - add tick config
-            #       tickFormat: config.xFormat
-            #       tickFormat: config.yFormat
-          
-          # Tease out the data.
-          # TODO - should ModelingChart put this in ngnvd3 format?
-          data = ({key: d.key, values: {x: v[0], y: v[1]} for v in d.values} for d in config.data)
-          # The discrete chart data is 1D, the multi chart is 2D.
-          $scope.data = if data.length == 1 then data[0] else data 
+          # The chart {options, data} configuration.
+          chartConfig = ModelingChart.configure($scope.selModeling.results,
+                                                $scope.paramKey)
+          $scope.options = chartConfig.options
+          $scope.data = chartConfig.data
+          # The global configuration. Disable the data watcher since,
+          # once built, the data is not changed. Furthermore, the
+          # data is the modeling parameter objects, which are complex
+          # objects with a circular object graph reference
+          # (paramResult -> parent modelingResult -> child paramResult).
+          $scope.config = deepWatchData: false
     ]
-           
+
     # TODO -delete cruft below.
     # height='200'
     #    showXAxis='true' xAxisShowMaxMin='false' xAxisLabel='Visit Date'
@@ -375,10 +361,11 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
 
     ## The modeling parameter controllers. ##
     #
-    # TODO - revise comment after ngnvd3 conversion.
+    # TODO - revise to beter fit ngnvd3. These controller's don't do
+    #   much. 
     #
     # Each controller is required to set the following scope variable:
-    # * dataSeriesConfig - the ModelingChart.configure dataSeriesSpec
+    # * dataSeriesConfig - the ModelingChart.configureD3 dataSeriesSpec
     #     argument
     #
     # Note: The modeling parameter controllers defined below somewhat abuse
@@ -391,24 +378,16 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
     # should not be used as an example for building a non-d3 charting
     # component.
 
-    ctlrs.controller 'KTransCtrl', [
-      '$scope', 'ModelingChart',
-      ($scope, ModelingChart) ->
-        $scope.dataSeriesConfig = ModelingChart.kTrans.dataSeriesConfig
+    ctlrs.controller 'KTransCtrl', [ '$scope', ($scope) ->
+        $scope.paramKey = 'kTrans'
     ]
 
-
-    ctlrs.controller 'VeCtrl', [
-      '$scope', 'ModelingChart',
-      ($scope, ModelingChart) ->
-        $scope.dataSeriesConfig = ModelingChart.vE.dataSeriesConfig
+    ctlrs.controller 'VeCtrl', [ '$scope', ($scope) ->
+        $scope.paramKey = 'vE'
     ]
 
-
-    ctlrs.controller 'TauICtrl', [
-      '$scope', 'ModelingChart',
-      ($scope, ModelingChart) ->
-        $scope.dataSeriesConfig = ModelingChart.tauI.dataSeriesConfig
+    ctlrs.controller 'TauICtrl', [ '$scope', ($scope) ->
+        $scope.paramKey = 'tauI'
     ]
 
 
@@ -669,7 +648,7 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
         # @returns the modeling parameter heading HTML span element,
         #   e.g. '<span>&Delta;K<sub>trans</sub></span>'
         $scope.parameterHeading = (key) ->
-          html = "<span>#{ ModelingChart.PARAMETER_HEADINGS[key] }</span>"
+          html = "<span>#{ Modeling.properties[key].html }</span>"
           $sce.trustAsHtml(html)
 
         # The session modelings which have an overlay.

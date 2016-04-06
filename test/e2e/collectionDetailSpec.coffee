@@ -20,17 +20,17 @@ class CollectionDetailPage extends Page
   @property subjectChart: ->
     @find('#qi-subject-chart')
 
+  # @returns the subject table group promise
+  @property subjectTableGroups: ->
+    @findAll('.dc-table-label')
+
+  # @returns the subject table column promise
+  @property subjectTableColumns: ->
+    @findAll('.dc-table-column')
+
   # @returns the collection charts promise
   @property collectionCharts: ->
     @findAll('.qi-collection-chart')
-
-  # @returns the DC table label promise
-  @property dcTableLabels: ->
-    @findAll('.dc-table-label')
-
-  # @returns the DC table label promise
-  @property dcTableColumns: ->
-    @findAll('.dc-table-column')
 
   # @returns the X-axis dropdown promise
   @property xAxisDropdowns: ->
@@ -82,14 +82,14 @@ describe 'E2E Testing Collection Detail', ->
           .to.eventually.exist
 
     it 'should display a subject', ->
-      page.dcTableLabels.then (subjects) ->
+      page.subjectTableGroups.then (subjects) ->
         subj = _.first(subjects)
         expect(subj.text(), 'The chart table does not display a' +
                                    ' subject')
           .to.eventually.include('Patient')
 
     it 'should display a session', ->
-      page.dcTableColumns.then (sessions) ->
+      page.subjectTableColumns.then (sessions) ->
         sess = _.first(sessions)
         expect(sess.text(), 'The chart table does not display a ' +
                                    ' session')
@@ -116,11 +116,11 @@ describe 'E2E Testing Collection Detail', ->
         # Show the dropdown.
         dropdown.click()
         # The default selection for the first chart is 'RCB Index'.
-        dropdown.find(By.css('.qi-selected-label')).then (selected) ->
+        dropdown.find(By.css('.qi-dropbtn-label')).then (selected) ->
           expect(selected.text(), 'The default X-axis selection is incorrect')
             .to.eventually.equal('RCB Index')
         # The first item in the dropdown is 'FXL Ktrans'.
-        dropdown.findAll(By.css('.qi-dropdown-choice')).then (items) ->
+        dropdown.findAll(By.css('.qi-dropdown-item')).then (items) ->
           item = _.first(items)
           item.find(By.css('.qi-dropdown-label')).then (label) ->
             expect(label.text(), 'The first item in the X-axis dropdown is' +
@@ -138,11 +138,11 @@ describe 'E2E Testing Collection Detail', ->
         # Show the dropdown.
         dropdown.click()
         # The default selection of the first chart is 'delta Ktrans'.
-        dropdown.find(By.css('.qi-selected-label')).then (selected) ->
+        dropdown.find(By.css('.qi-dropbtn-label')).then (selected) ->
           expect(selected.text(), 'The default Y-axis selection is incorrect')
             .to.eventually.equal('delta Ktrans')
         # The first item in the dropdown is 'FXL Ktrans'.
-        dropdown.findAll(By.css('.qi-dropdown-choice')).then (items) ->
+        dropdown.findAll(By.css('.qi-dropdown-item')).then (items) ->
           item = _.first(items)
           item.find(By.css('.qi-dropdown-label')).then (label) ->
             expect(label.text(), 'The first item in the Y-axis dropdown is' +

@@ -10,19 +10,16 @@ block content
   //
   // The subject/session table and chart.
   .qi-collection-charts(qi-collection-charts)
-  .row.qi-subject-summary
+  .row.qi-subject-charts
     .col-md-2.qi-profile-panel.qi-subject-table#qi-subject-table
     .col-md-10#qi-subject-chart
   // The collection charts. For each chart, construct the X and Y axis data
-  // series dropdowns and create a container for the chart. The choices object
-  // contains the valid data series for the current collection. For each data
-  // series, the key value is the series name and the value is the text label
-  // that is displayed in the dropdown.
+  // series dropdowns and create a container for the chart.
   .row
     .col-md-6(ng-repeat="chartAxes in axes")
       // TODO - scooch the dropdowns over to the right, or perhaps
       //   center them over their respective chart.
-      .row.qi-axis-dropdowns
+      .row.col-md-offset-2
         include include/collection-dropdowns
       .row
         .col-md-12.qi-collection-chart(id="qi-collection-chart-{{ $index + 1 }}")

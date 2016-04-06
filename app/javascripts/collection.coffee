@@ -1,14 +1,13 @@
 define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
-        'breast', 'sarcoma', 'tnm', 'helpers'],
+        'breast', 'sarcoma', 'tnm'],
   (ng, dc, moment, roman) ->
     collection = ng.module(
       'qiprofile.collection',
-      ['qiprofile.breast', 'qiprofile.sarcoma', 'qiprofile.tnm',
-       'qiprofile.helpers']
+      ['qiprofile.breast', 'qiprofile.sarcoma', 'qiprofile.tnm']
     )
 
-    collection.factory 'Collection', ['Breast', 'Sarcoma', 'TNM', 'DateHelper',
-      (Breast, Sarcoma, TNM, DateHelper) ->
+    collection.factory 'Collection', ['Breast', 'Sarcoma', 'TNM',
+      (Breast, Sarcoma, TNM) ->
         # The data series configuration. These are all of the data series that
         # the dimensional charting (DC) charts support and are in the order in
         # which they appear in the X and Y axis selection dropdowns. Each has
@@ -490,15 +489,10 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           # @param tumor the tumor pathology
           # @returns a complete scatterplot data object
           createDCObject = (modeling, tumor) ->
-            formatDate = (date) ->
-              # TODO - the date should already be a moment here and below.
-              moment(date).format 'MM/DD/YYYY'
-
             # Create a new data object with core properties.
             session = modeling.session
             subject = session.subject
-            # TODO - the date should already be a moment here and above.
-            date = formatDate(DateHelper.asMoment(session.date))
+            date = session.date
 
             # Make the session page hyperlink.
             sbjRefUrl = "/quip/#{ subject.collection }/subject/#{ subject.number }"
@@ -653,14 +647,14 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           # The subject/session table configuration.
           table = dc.dataTable '#qi-subject-table'
           table.dimension dim
-            .group (obj) -> "<a href=\"#{ obj.subject.href }\">Patient #{ obj.subject.number }</a>"
+            .group (obj) ->
+              "<a href=\"#{ obj.subject.href }\">Patient #{ obj.subject.number }</a>"
             .sortBy (obj) -> obj.session.href
             .columns [
-              # TODO - Should this be two columns per row?
               (obj) ->
-                refElt = "&bullet; <a href=\"#{ obj.session.href }\">Visit #{ obj.session.number }</a>"
-                dateElt = "<span class='qi-dc-date'>#{ obj.session.date.format('MM/DD/YYYY') }</span>"
-                "#{ refElt } #{ dateElt }"
+                "<span class='qi-subject-table-col'><a href=\"#{ obj.session.href }\">Visit #{ obj.session.number }</a></span>"
+              (obj) ->
+                "<span class='qi-subject-table-col'>#{ obj.session.date.format('MM/DD/YYYY') }</span>"
             ]
 
           # The largest subject number is the number of X tick marks.
@@ -676,6 +670,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
             .renderVerticalGridLines true
             .renderHorizontalGridLines true
             .symbolSize CHART_LAYOUT_PARAMS.symbolSize
+            .highlightedSize CHART_LAYOUT_PARAMS.symbolSize + 2
             .symbol CHART_LAYOUT_PARAMS.subjectChartSymbol
             # Construct a new scale with a range of ten categorical colors.
             .colors d3.scale.category10()
@@ -702,14 +697,13 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
               .on 'mouseover', (obj) ->
                 # Supply the tooltips. The tooltip element is the selection
                 # returned by d3 after the chart rendering call.
-                tooltip.transition().duration(20).style('opacity', .9)
-                # TODO - make temp variables and interpolate the argument,
-                #   e.g.:
-                #     label = "<strong>Patient:</strong>#{ obj.key[0] }"
-                #     ...
-                #     html = "#{ label }..."
-                #     tooltip.html(html)
-                tooltip.html('<strong>Patient:</strong> ' + obj.key[0] + '<br/><strong>Visit:</strong> ' + obj.key[1]).style('left', d3.event.pageX + 5 + 'px').style 'top', d3.event.pageY - 35 + 'px'
+                xText = "<strong>Subject:</strong> #{ obj.key[0] }"
+                yText = "<strong>Visit:</strong> #{ obj.key[1] }"
+                html = "#{ xText }<br/>#{ yText }"
+                leftOffset = d3.event.pageX + 5 + 'px'
+                topOffset = d3.event.pageY - 35 + 'px'
+                tooltip.html(html).style('left', leftOffset).style('top', topOffset)
+                tooltip.transition().duration(20).style 'opacity', 1
               .on 'mouseout', (obj) ->
                 tooltip.transition().duration(50).style('opacity', 0)
 
@@ -744,6 +738,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
               .renderVerticalGridLines true
               .renderHorizontalGridLines true
               .symbolSize CHART_LAYOUT_PARAMS.symbolSize
+              .highlightedSize CHART_LAYOUT_PARAMS.symbolSize + 2
               .xAxisLabel LABELS[xAxis]
               .yAxisLabel LABELS[yAxis]
               .elasticY true
@@ -768,8 +763,13 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
               chart.selectAll '.symbol'
                 # Supply the tooltips.
                 .on 'mouseover', (obj) ->
+                  xText = "<strong>x:</strong> #{ obj.key[0] }"
+                  yText = "<strong>y:</strong> #{ obj.key[1] }"
+                  html = "#{ xText }<br/>#{ yText }"
+                  leftOffset = d3.event.pageX + 5 + 'px'
+                  topOffset = d3.event.pageY - 35 + 'px'
+                  tooltip.html(html).style('left', leftOffset).style('top', topOffset)
                   tooltip.transition().duration(20).style 'opacity', 1
-                  tooltip.html('<strong>x:</strong> ' + obj.key[0] + '<br/><strong>y:</strong> ' + obj.key[1]).style('left', d3.event.pageX + 5 + 'px').style 'top', d3.event.pageY - 35 + 'px'
                 .on 'mouseout', (obj) ->
                   tooltip.transition().duration(50).style 'opacity', 0
                 # Hide plot points where either the X or Y value is null. The
@@ -784,7 +784,9 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           # Move the chart data points to the front layer of the visualization.
           d3.selectAll('.chart-body').moveToFront()
 
+          # The collection chart tooltip container.
+          d3.select('body').append('div').attr('class', 'qi-collection-tooltip')
           # The tooltip div.
-          tooltip = d3.select('body').append('div').attr('class', 'tooltip').style 'opacity', 0
+          tooltip = d3.select('.qi-collection-tooltip').append('div').attr('class', 'tooltip').style 'opacity', 0
 
       ]

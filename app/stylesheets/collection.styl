@@ -1,64 +1,61 @@
 //** The Collection Detail page styles. **//
 
-// TODO - can the mmicro-formatting be reduced, e.g. by
-// placing in nested .panel or .row?
-.qi-collection-charts
-  margin-top 0.8em
-
-.qi-subject-summary
+.qi-subject-charts
   height 12em
-  padding-left 1em
+  margin 0.8em 0 0 0
 
 .qi-subject-table
-  height 9em
+  height 75%
   overflow-y scroll
 
-.qi-dc-date
-  padding-left 1em
-  font-size smaller
-  font-style italic
+.qi-subject-table-col
+  padding-left 0.8em
 
 .qi-collection-chart
+  margin-top 1em
+
+// The dropdown height should not exceed that of the chart.
+.qi-collection-chart, .qi-dropdown-content
   height 20em
 
-.qi-dropbtn
-  width 18em
-  margin-bottom 0.2em
-  border none
-  border-radius 0.4em
-  padding 0.2em 0.4em
-  font-size smaller
-  color white
-  text-align left
-  background-color Teal
-
+// The X/Y-axis dropdown picklist styles. The dropdown container includes the
+// dropdown button element and the dropdown content.
 .qi-dropdown
   position relative
   display inline-block
   &:hover
     cursor pointer
-    .qi-dropdown-content
-      display block
     .qi-dropbtn
       background-color SeaGreen
+    .qi-dropdown-content
+      display block
+
+.qi-dropbtn, .qi-dropdown-content
+  width 18em
+  border-radius 0.4em
+  font-size smaller
+
+.qi-dropbtn, .qi-dropdown-item, .qi-dropdown-icon
+  padding 0.2em 0.4em 0.2em 0.4em
+
+.qi-dropbtn
+  margin-bottom 0.2em
+  border 0
+  border-radius 0.4em
+  color White
+  text-align left
+  background-color Teal
 
 .qi-dropdown-content
   display none
   position absolute
-  height 20em
   overflow-y scroll
-  min-width 18em
-  border-radius .4em
-  font-size smaller
   background-color GhostWhite
-  box-shadow 0em 0.8em 1.6em 0em rgba(0,0,0,0.2)
-  // The Z-index is necessary to layer the dropdowns over the chart body.
+  box-shadow 0 0.8em 1.6em 0 rgba(0,0,0,0.2)
+  // Use the Z-index to layer the content over the chart body.
   z-index 1
-  .qi-dropdown-choice
+  .qi-dropdown-item
     display block
-    padding 0.2em 0.4em
-    color black
-    text-decoration none
     &:hover
       background-color OldLace
       .qi-check-hide
@@ -66,30 +63,26 @@
 
 .qi-dropdown-icon
   margin-right 0.8em
-  border-radius .6em
-  padding 0.1em 0.4em
+  border-radius 0.6em
   font-size smaller
   &.qi-xy
     color Teal
     background-color SeaShell
-  &.qi-check-hide
-    color GhostWhite
   &.qi-check-show
     color Teal
+  &.qi-check-hide
+    color GhostWhite
 
 .qi-caret
-  margin 0.5em 0.4em 0em 0em
+  margin-top 0.4em
+  margin-right 0.4em
   float right
 
-.qi-axis-dropdowns
-  margin-bottom 0.5em
-
-// The collection chart tooltip styles.
-// TODO - specialize to the charts.
-.tooltip
-  border 1px solid SlateGray
-  padding 4px
-  font 14px sans-serif
-  text-align left
-  background White
-  pointer-events none
+// The chart tooltips.
+.qi-collection-tooltip
+  & .tooltip
+    border 0.1em solid SlateGray
+    padding 0.4em
+    font-size inherit
+    background White
+    pointer-events none

@@ -38,7 +38,7 @@ class SubjectDetailPage extends Page
 
   # @returns the date line chart promise
   @property dateLine: ->
-    @find('//qi-visit-dateline//nvd3-line-chart')
+    @find('//qi-timeline//nvd3-line-chart')
 
   # @returns the clinical profile panel promise
   @property clinicalProfile: ->
@@ -114,14 +114,14 @@ describe 'E2E Testing Subject Detail', ->
 
     # The page main body test cases.
     describe 'Imaging Profile', ->
-      describe 'Dateline', ->
+      describe 'Timeline', ->
         # Note: this is as deep as the chart can be tested,
         # since the chart SVG content is not visible to the
         # tester, perhaps because the chart directive dynamically
         # inserts the SVG into the DOM, and the app directive
         # then further modifies it.
         it 'should exist', ->
-          expect(page.dateLine, 'The dateline is missing').to.eventually.exist
+          expect(page.dateLine, 'The timeline is missing').to.eventually.exist
 
       describe 'Format Button', ->
         it 'should toggle the chart/table display', ->

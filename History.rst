@@ -115,7 +115,7 @@ for change details.
 
 0.7.1 / 2014-08-14
 ------------------
-* Show treatments and encounters in the dateline.
+* Show treatments and encounters in the timeline.
 
 0.6.1 / 2014-08-11
 ------------------

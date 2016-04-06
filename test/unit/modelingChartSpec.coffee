@@ -55,7 +55,7 @@ define ['ngmocks', 'moment', 'k-trans', 'v-e', 'tau-i', 'modelingChart'],
           config = null
 
           beforeEach ->
-            config = ModelingChart.configure(mock, KTrans.CHART_DATA_SERIES_CONFIG)
+            config = ModelingChart.configureD3(mock, KTrans.CHART_DATA_SERIES_CONFIG)
 
           it 'should configure two data series', ->
             expect(config.data, "The configuration data is missing").to.exist
@@ -74,7 +74,7 @@ define ['ngmocks', 'moment', 'k-trans', 'v-e', 'tau-i', 'modelingChart'],
           config = null
 
           beforeEach ->
-            config = ModelingChart.configure(mock, VE.CHART_DATA_SERIES_CONFIG)
+            config = ModelingChart.configureD3(mock, VE.CHART_DATA_SERIES_CONFIG)
 
           it 'should configure two data series', ->
             expect(config.data, "The configuration data is missing").to.exist
@@ -89,7 +89,7 @@ define ['ngmocks', 'moment', 'k-trans', 'v-e', 'tau-i', 'modelingChart'],
           config = null
 
           beforeEach ->
-            config = ModelingChart.configure(mock, TauI.CHART_DATA_SERIES_CONFIG)
+            config = ModelingChart.configureD3(mock, TauI.CHART_DATA_SERIES_CONFIG)
 
           it 'should configure two data series', ->
             expect(config.data, "The configuration data is missing").to.exist

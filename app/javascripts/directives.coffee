@@ -1,9 +1,9 @@
 define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
-        'correlation', 'dateline', 'intensity', 'modeling'],
+        'correlation', 'timeline', 'intensity', 'modeling'],
   (ng, _, _s, Spinner) ->
     directives = ng.module(
       'qiprofile.directives',
-      ['qiprofile.helpers', 'qiprofile.correlation', 'qiprofile.dateline',
+      ['qiprofile.helpers', 'qiprofile.correlation', 'qiprofile.timeline',
        'qiprofile.intensity', 'qiprofile.modeling']
     )
 
@@ -42,18 +42,18 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
             scope.spinner.stop()
 
 
-    # Displays the MR session visit dateline chart.
+    # Displays the MR session visit timeline chart.
     # TODO - upgrade to new ngnvd3.
     # TODO - rename 'visit' to 'session'.
-    directives.directive 'qiVisitDateline', ['VisitDateline', '$compile',
-      (VisitDateline, $compile) ->
+    directives.directive 'qiTimeline', ['Timeline', '$compile',
+      (Timeline, $compile) ->
         restrict: 'E'
         scope:
           subject: '='
         link: (scope, element, attrs) ->
           scope.$watch 'subject', (subject) ->
             if _.some(subject.sessions)
-              scope.config = VisitDateline.configure(subject)
+              scope.config = Timeline.configure(subject)
               # This function is called by D3 after the chart DOM is built.
               #
               # @param chart the chart SVG element
@@ -68,8 +68,8 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
                 # Add the session detail hyperlinks, treatment bars and
                 # encounter points. The callback compiles the ui-sref
                 # anchor hyperlinks after they are added to the DOM.
-                VisitDateline.decorate(subject, chart, scope.config, compileDetailLink)
-        templateUrl: '/partials/visit-dateline-chart.html'
+                Timeline.decorate(subject, chart, scope.config, compileDetailLink)
+        templateUrl: '/partials/timeline-chart.html'
     ]
     
     

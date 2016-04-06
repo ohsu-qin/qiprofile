@@ -1,7 +1,7 @@
 define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
-  dateline = ng.module 'qiprofile.dateline', ['qiprofile.helpers', 'qiprofile.chart']
+  timeline = ng.module 'qiprofile.timeline', ['qiprofile.helpers', 'qiprofile.chart']
 
-  dateline.factory 'VisitDateline', ['ObjectHelper', 'Chart', (ObjectHelper, Chart) ->
+  timeline.factory 'Timeline', ['ObjectHelper', 'Chart', (ObjectHelper, Chart) ->
     # A helper function to calculate the effective treatment dates.
     # This function returns a [start, end] array, where:
     # * start is the moment start date integer
@@ -18,7 +18,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
       end = endDate.valueOf()
       [start, end]
 
-    # Decorates the dateline as follows:
+    # Decorates the timeline as follows:
     # * Add the session hyperlinks, encounter dates and treatment
     #   start-end bars.
     # * Rotate the date x-axis tick labels
@@ -29,8 +29,8 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
     # on each new hyperlink.ui-sref directive.
     #
     # @param subject the subject to display
-    # @param chart the dateline chart
-    # @param config the dateline configuration
+    # @param chart the timeline chart
+    # @param config the timeline configuration
     # @param callback the function to call on each new session anchor
     #   element
     decorate: (subject, chart, config, callback) ->
@@ -93,12 +93,12 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
       addTreatmentBars = (xAxisNode, config) ->
         # The x axis container.
         parent = d3.select(xAxisNode.parentNode)
-        # The invisible SVG rect element spans the dateline.
+        # The invisible SVG rect element spans the timeline.
         rect = parent.select('rect')
-        dateline = width: parseInt(rect.attr('width'))
+        timeline = width: parseInt(rect.attr('width'))
         [low, high] = config.xMaxMin
         # The scaling factor.
-        factor = dateline.width / (high - low)
+        factor = timeline.width / (high - low)
         for trt in subject.treatments
           [start, end] = treatmentSpan(trt)
           left = (start - low) * factor
@@ -114,7 +114,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
           bar.attr('height', "#{ TREATMENT_BAR_HEIGHT }em")
           bar.attr('width', width)
           # Set the bar style.
-          bar.classed("qi-dateline-#{ trt.treatment_type.toLowerCase() }", true)
+          bar.classed("qi-timeline-#{ trt.treatment_type.toLowerCase() }", true)
           # Position the bar.
           bar.attr('x', left)
           bar.attr('y', "-#{ TREATMENT_BAR_HEIGHT }em")
@@ -126,12 +126,12 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
       addEncounterDates = (xAxisNode, config) ->
         # The x axis container.
         parent = d3.select(xAxisNode.parentNode)
-        # The invisible SVG rect element spans the dateline.
+        # The invisible SVG rect element spans the timeline.
         rect = parent.select('rect')
-        dateline = width: parseInt(rect.attr('width'))
+        timeline = width: parseInt(rect.attr('width'))
         [low, high] = config.xMaxMin
         # The scaling factor.
-        factor = dateline.width / (high - low)
+        factor = timeline.width / (high - low)
         for enc in subject.clinicalEncounters
           date = enc.date.valueOf()
           offset = (date - low) * factor
@@ -142,14 +142,14 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
           text.attr('x', Math.floor(offset) - 6)
           # Set the text style.
           #
-          text.classed("qi-dateline-#{ enc.title.toLowerCase() }", true)
+          text.classed("qi-timeline-#{ enc.title.toLowerCase() }", true)
           # Set the text content to a marker, specifically the HTML
           # nabla math special character (the wedge-like del operator).
           text.text(TREATMENT_SYMBOL)
 
       # Rotates the x-axis visit date tick labels by 45 degrees.
       #
-      # @param chart the dateline chart
+      # @param chart the timeline chart
       # @param xAxis the x-axis D3 selection
       rotateDateLabels = (chart, xAxis) ->
         xTicks = xAxis.selectAll('.tick')
@@ -181,7 +181,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
             # Place the new span element.
             span = p.append('span')
             # The legend style.
-            span.classed("qi-dateline-#{ label.toLowerCase() }", true)
+            span.classed("qi-timeline-#{ label.toLowerCase() }", true)
             # The span content is the treatment type label.
             span.text(label)
 
@@ -201,7 +201,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
             # Place the new span element.
             span = p.append('span')
             # The legend style.
-            span.classed("qi-dateline-#{ label.toLowerCase() }", true)
+            span.classed("qi-timeline-#{ label.toLowerCase() }", true)
             # The span content is the symbol which designates the encounter
             # followed by the encounter type.
             span.text(TREATMENT_SYMBOL + label)
@@ -247,23 +247,46 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
         # Return the min and max date.
         [_.min(values), _.max(values)]
 
-      # The chart data specification.
-      dataSpec =
-        x:
-          accessor: (session) -> session.date.valueOf()
-        y:
-          # There is one tri-partite data series. The y coordinate
-          # for this data series is always zero.
-          data: [ accessor: -> 0 ]
-
-      # Return the standard chart configuration extended
-      # with the following:
-      # * the xValues and xFormat properties
-      # * the addSessionDetailLinks function
-      cfg = Chart.configure(subject.sessions, dataSpec)
-      cfg.xValues = (dataSpec.x.accessor(sess) for sess in subject.sessions)
-      cfg.xFormat = Chart.dateFormat
-      cfg.xMaxMin = xMaxMin()
-      cfg.height = 100
-      cfg
+      # The base configuration.
+      config =
+        options:
+          chart:
+            type: 'bulletChart'
+        data:
+          ranges: [150, 200, 300]
+          measures: []
+          markers: [100, 225]
+        
+        
+        
+      #       # @returns the session date
+      #       x: (encounter) ->
+      #         encounter.date
+      #       xAxis:
+      #         axisLabel: 'Visit Date'
+      #         tickFormat: Chart.formatDate
+      #       # There is one tri-partite data series. The y coordinate
+      #       # for this data series is always zero.
+      #       y: -> 0
+      #
+      #
+      # # The chart data specification.
+      # dataSpec =
+      #   x:
+      #     accessor: (session) -> session.date.valueOf()
+      #   y:
+      #     # There is one tri-partite data series. The y coordinate
+      #     # for this data series is always zero.
+      #     data: [ accessor: -> 0 ]
+      #
+      # # Return the standard chart configuration extended
+      # # with the following:
+      # # * the xValues and xFormat properties
+      # # * the addSessionDetailLinks function
+      # config = Chart.configureD3(subject.sessions, dataSpec)
+      # config.xValues = (dataSpec.x.accessor(sess) for sess in subject.sessions)
+      # config.xFormat = Chart.formatDate
+      # config.xMaxMin = xMaxMin()
+      # config.height = 100
+      config
   ]

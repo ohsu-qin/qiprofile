@@ -105,6 +105,18 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
         # This charts object changes when the user selects a different
         # axis to chart.
         $scope.axes = _.clone(Collection.DEFAULT_AXES[collection])
+        # Check the validity of the default chart axes.
+        checkAxes = (axis) ->
+          axis.x in xAxisChoices or
+            throw new Error "Invalid #{ collection } X-axis data series: " +
+                            "#{ axis.x }"
+          axis.y in yAxisChoices or
+            throw new Error "Invalid #{ collection } Y-axis data series: " +
+                            "#{ axis.y }"
+        xAxisChoices = Object.keys($scope.choices.x)
+        yAxisChoices = Object.keys($scope.choices.y)
+        checkAxes(axis) for axis in $scope.axes
+
         # Place the chart configuration object in the scope.
         $scope.config =
           data: data

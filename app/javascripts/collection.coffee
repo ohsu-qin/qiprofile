@@ -393,8 +393,6 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         # that have categorical/ordinal data types are excluded from the Y axis
         # choices because the DC charting does not currently support such a
         # configuration.
-        #
-        # TODO - where is the above statement enforced?
         DEFAULT_AXES:
           'Breast':
             [

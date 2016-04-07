@@ -335,14 +335,9 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         # The categorical type data series {data series: value extent array}
         # associative look-up object.
         #
-        # TODO - get this from the respective services:
-        #
-        #     breast: Breast.stageExtent().map(Roman.romanize)
-        #     sarcoma: Sarcoma.stageExtent().map(Roman.romanize)
-        #
-        #   Better still is to geet the stages on demand given the
-        #   current collection rather than list the known collections
-        #   here, e.g. make a service collection.coffee with:
+        # TODO - Get the stages on demand given the current collection rather
+        #   than list the known collections here, e.g. make a service
+        #   collection.coffee with:
         #     factory 'Collection', ... ->
         #       SERVICES = {breast: Breast, ...}
         #       service: (key) -> SERVICES[key] or throw error 
@@ -355,27 +350,12 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         #   are other opportunities to consolidate domain knowledge
         #   in services and delegate to those services in this file.
         CATEGORICAL_VALUES =
-          'breastTNMStage':
-            [
-             'IA'
-             'IIA'
-             'IIB'
-             'IIIA'
-             'IIIB'
-             'IIIC'
-             'IV'
-            ]
-          'sarcomaTNMStage':
-            [
-             'IA'
-             'IB'
-             'IIA'
-             'IIB'
-             'IIC'
-             'III'
-             'IV'
-            ]
-
+          'breastTNMStage': Breast.stageExtent().map(
+                              (s) -> s.replace /^\d+/, roman.romanize
+                            )
+          'sarcomaTNMStage': Sarcoma.stageExtent().map(
+                               (s) -> s.replace /^\d+/, roman.romanize
+                             )
         # The chart layout parameters.
         CHART_LAYOUT_PARAMS =
           subjectChartHeight: 150

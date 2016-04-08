@@ -460,9 +460,9 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         #   each subject?
         #
         # @param charting the REST query result
-        # @param choices the valid data series for the current collection
+        # @param dataSeries the valid data series for the current collection
         # @returns the scatterplot data
-        prepareScatterPlotData: (charting, choices) ->
+        chartData: (charting, dataSeries) ->
           # @param modeling the modeling object
           # @param tumor the tumor pathology
           # @returns a complete scatterplot data object
@@ -484,14 +484,14 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
               session: _.extend({href: sessRef}, session)
 
             # Iterate over the valid data series and add data to the object.
-            for key of choices
-              config = DATA_SERIES_CONFIG[key]
-              if key in IMAGING_DATA_SERIES
-                dcObject[key] = config.accessor(modeling.result)
+            for ds in dataSeries
+              config = DATA_SERIES_CONFIG[ds]
+              if ds in IMAGING_DATA_SERIES
+                dcObject[ds] = config.accessor(modeling.result)
               else if tumor?
-                dcObject[key] = config.accessor(tumor)
+                dcObject[ds] = config.accessor(tumor)
               else
-                dcObject[key] = null
+                dcObject[ds] = null
 
             # Return the data object.
             dcObject
@@ -545,38 +545,28 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         # series. In the charts, the padding must be expressed in the same unit
         # domains as the data being charted.
         #
+        # FIXME - this breaks if data is empty. Present an alert
+        #   in that case. Can this occur in practice?
+        #
         # @param data the scatterplot data
-        # @param choices the valid data series for the current collection
+        # @param dataSeries the valid data series for the current collection
         # @returns the chart padding for each data series
-        calculatePadding: (data, choices) ->
-          padding = new Object
-          # Iterate over the data series items (choices).
-          #
-          # FIXME - this breaks if data is empty. Present an alert
-          #   in that case. Can this occur in practice?
-          #
-          # TODO - rename function to chartPadding. Then, make a function to
-          #   get the item padding and collect the iteration result into an
-          #   object using the functional programming reduce idiom, e.g.:
-          #     chartPadding: (data, choices) ->
-          #       dataSeriesPadding = (key) -> ...
-          #       addDataSeriesPadding = (obj, key) ->
-          #         obj[key] = dataSeriesPadding(key)
-          #         obj
-          #     # Return the {data series: padding} object
-          #     choices.reduce(addDataSeriesPadding, key, {})
-          for key of choices
+        chartPadding: (data, dataSeries) ->
+          # @param key the data series
+          # @returns the chart padding for the data series
+          dataSeriesPadding = (key) ->
             values = _.map(data, key)
             max = _.max(values)
             min = _.min(values)
             diff = max - min
             # The padding is determined as follows:
-            # * If the values are all the same, then calculate a padding value of
-            #   an appropriate resolution for that value. The initial result value
-            #   reflects the number of digits or decimal places of the
+            # * If the values are all the same, then calculate a padding amount
+            #   of an appropriate resolution for that value. The initial result
+            #   value reflects the number of digits or decimal places of the
             #   scatterplot values. Each chart tick mark above and below that
-            #   value is then set to 10 to the power of the result reduced by 1.
-            # * Otherwise, calculate a padding value based the chart layout
+            #   value is then set to 10 to the power of the result reduced by
+            #   one.
+            # * Otherwise, calculate a padding amount based the chart layout
             #   parameter setting, e.g. a setting of .2 will give the chart 20%
             #   padding.
             if diff == 0
@@ -585,11 +575,15 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
               if Math.abs(result) is Infinity then result = 0
               pad = CHART_LAYOUT_PARAMS.ticks / 2 * Math.pow(10, result - 1)
             else
-              # Add the padding for the data series to the object.
               pad = diff * CHART_LAYOUT_PARAMS.collectionChartPadding
-            padding[key] = pad
-          # Return the padding object.
-          padding
+          # @param obj the padding object
+          # @param key the data series
+          # @returns the padding object
+          addDataSeriesPadding = (obj, key) ->
+            obj[key] = dataSeriesPadding(key)
+            obj
+          # Return the chart padding object.
+          padding = dataSeries.reduce(addDataSeriesPadding, {})
 
         # The dimensional charting (DC) rendering function.
         #

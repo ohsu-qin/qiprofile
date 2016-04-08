@@ -96,11 +96,11 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
         # choices may only include continuous data types.
         $scope.choices = Collection.dataSeriesChoices(collection)
         # Obtain the formatted scatterplot data.
-        data = Collection.prepareScatterPlotData(charting, $scope.choices.x)
+        data = Collection.chartData(charting, Object.keys $scope.choices.x)
         # Obtain the chart padding for each data series - continuous data types
         # only. The padding for categorical data series is configured in the
         # correlation module chart rendering function.
-        padding = Collection.calculatePadding(data, $scope.choices.y)
+        padding = Collection.chartPadding(data, Object.keys $scope.choices.y)
         # Put a copy of the default charts (X and Y axes) in the scope.
         # This charts object changes when the user selects a different
         # axis to chart.

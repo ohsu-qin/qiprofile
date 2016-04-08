@@ -1,7 +1,7 @@
-define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
-  timeline = ng.module 'qiprofile.timeline', ['qiprofile.helpers', 'qiprofile.chart']
+define ['angular', 'lodash', 'moment', 'helpers', 'chart', 'session'], (ng, _, moment) ->
+  timeline = ng.module 'qiprofile.timeline', ['qiprofile.helpers', 'qiprofile.chart', 'qiprofile.session']
 
-  timeline.factory 'Timeline', ['ObjectHelper', 'Chart', (ObjectHelper, Chart) ->
+  timeline.factory 'Timeline', ['ObjectHelper', 'Chart', 'Session', (ObjectHelper, Chart, Session) ->
     # A helper function to calculate the effective treatment dates.
     # This function returns a [start, end] array, where:
     # * start is the moment start date integer
@@ -13,10 +13,44 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
     # @param treatment the treatment object
     # @returns the [start, end] array
     treatmentSpan = (treatment) ->
-      start = treatment.start_date.valueOf()
-      endDate = treatment.end_date or moment()
-      end = endDate.valueOf()
+      start = treatment.startDate
+      end = treatment.endDate or moment()
       [start, end]
+
+    # Helper function to calculate the earliest and latest session,
+    # encounter and treatment dates.
+    #
+    # @param subject the target subject
+    # @returns the [earliest, latest] X axis range
+    minMax = (subject) ->
+      values = []
+      for trt in subject.treatments
+        trtSpan = treatmentSpan(trt)
+        for value in trtSpan
+          values.push(value)
+      for enc in subject.encounters
+        values.push(enc.date)
+      # Return the min and max date.
+      [_.min(values), _.max(values)]
+    
+    # @param subject the target subject
+    # @returns the date values to plot
+    xValues = (subject) ->
+      # The session dates are displayed as X axis tick marks.
+      sessionDates = (sess.date for sess in subject.sessions)
+      # The starting values are the sorted session dates.
+      values = _.sortBy(sessionDates, (date) -> date.valueOf())
+      # The [earliest, latest] session, treatment or encounter
+      # date.
+      [low, high] = minMax(subject)
+      # Add the other dates only if they do not coincide with
+      # the session dates.
+      if low.valueOf() != _.first(sessionDates).valueOf()
+        values.unshift(low)
+      if high.valueOf() != _.last(sessionDates).valueOf()
+        values.push(high)
+      # Return the date values.
+      values
 
     # Decorates the timeline as follows:
     # * Add the session hyperlinks, encounter dates and treatment
@@ -28,18 +62,27 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
     # the callback must call Angular $compile with the current scope
     # on each new hyperlink.ui-sref directive.
     #
-    # @param subject the subject to display
-    # @param chart the timeline chart
-    # @param config the timeline configuration
-    # @param callback the function to call on each new session anchor
-    #   element
-    decorate: (subject, chart, config, callback) ->
+    # @param chart the timeline chart element
+    # @param subject the displayed subject
+    # @param scope the (isolated) chart scope containing the options
+    #   and data
+    # @param $state the ui-router $state 
+    decorate: (chart, subject, scope, $state) ->
+      # The min and max X values. The dates are sorted by the
+      # configure method.
+      values = scope.data[0].values
+      low = _.first(values)
+      high = _.last(values)
+      
       # The treatment bar height, in em units
       TREATMENT_BAR_HEIGHT = 1
-
+      
       # A treatment is designated by the HTML nabla special character
       # (the wedge-like math del operator).
       TREATMENT_SYMBOL = '\u2207'
+      
+      # The Session Detail state.
+      SESSION_DETAIL_STATE = 'quip.collection.subject.session'
 
       # Adds the session hyperlinks above the timeline. The template
       # sets the callback attribute to this function. The new anchor
@@ -49,56 +92,78 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
       # hyperlinks.
       #
       # @param sessions the subject sessions
-      # @param xAxis the chart SVG x axis D3 selection
+      # @param xAxis the chart SVG X axis D3 selection
+      # @param low the minimum date
+      # @param high the maximum date
       # @param dy the optional y offset in em units
-      addSessionDetailLinks = (sessions, xAxis, dy=0) ->
-        # @returns the ui-sref link to detail page for the given session
-        sessionDetailLink = (session) ->
-          "quip.subject.session(" +
-          "{project: '#{ session.subject.project }'," +
-          " collection: '#{ session.subject.collection.toLowerCase() }'," +
-          " subject: #{ session.subject.number }," +
-          " session: #{ session.number }})"
-
+      addSessionDetailLinks = (sessions, xAxis, low, high, dy=0) ->
         # Makes a new ui-sref anchor element that hyperlinks to the given
         # session detail page.
         #
-        # @param tick the timeline X-axis tick mark
         # @param session the hyperlink target session
-        # @param dy the y axis offset
-        createSessionDetailLink = (tick, session, offset) ->
+        # @param tick the X axis tick mark
+        createSessionDetailLink = (session, tick) ->
           # Make a new SVG text element to hold the session number.
-          text = d3.select(tick).append('text')
+          text = tick.append('text')
           # Position the session number a bit to right and above the tick
           # mark, scooched up by the dy amount.
           text.attr('dx', '-.2em').attr('dy', "-#{ 0.5 + dy }em")
           text.style('text-anchor: middle')
           # The text content is the session number.
           text.text(session.number)
-          # The hyperlink target.
-          sref = sessionDetailLink(session)
+          # The Session Detail state parameters.
+          params =
+            project: subject.project
+            collection: subject.collection
+            subject: subject.number
+            session: session.number
+          # The hyperlink click event handler.
+          handler = -> $state.go(SESSION_DETAIL_STATE, params)
           # Wrap the text element in a hyperlink.
-          Chart.d3Hyperlink(text.node(), sref)
+          Chart.d3Hyperlink(text, handler)
 
-        # The tick elements.
-        ticks = xAxis.selectAll('.tick')[0]
-        for i in [0...ticks.length]
-          a = createSessionDetailLink(ticks[i], sessions[i])
-          callback(a) if callback
+        # The tick marks.
+        ticks = xAxis.selectAll('.tick')
+        # The session milliseconds.
+        sessionMillis = (session.date.valueOf() for session in sessions)
+
+        # @param date the date to check
+        # @returns whether the date is a session date
+        isSessionDate = (date) -> _.includes(sessionMillis, date.valueOf())
+
+        # Make the Session Detail page links.
+        #
+        # The odd D3 *each* operator calls this function with
+        # *this* bound to the D3 tick selection and arguments
+        # the element "data", as D3 chooses to call it, and
+        # the iteration number. The element data in this
+        # case is the date. We want the D3 tick selection,
+        # which is given by d3.select(this).
+        #
+        # Note that we can't simply iterate over the ticks in a
+        # for loop, since that is a D3 taboo which results in
+        # garbage.
+        sessionIndex = 0
+        ticks.each (date, i) ->
+          if isSessionDate(date)
+            tick = d3.select(this)
+            createSessionDetailLink(sessions[sessionIndex], tick)
+            sessionIndex++
 
       # Inserts an SVG bar for each treatment above the timeline.
       #
       # @param xAxisNode the chart SVG x axis element
-      # @param config the chart configuration
-      addTreatmentBars = (xAxisNode, config) ->
-        # The x axis container.
+      # @param options the chart options
+      addTreatmentBars = (xAxis, low, high) ->
+        # The .nv-background xAxis contained in the X axis parent
+        # spaces the X axis.
+        xAxisNode = xAxis.node()
         parent = d3.select(xAxisNode.parentNode)
-        # The invisible SVG rect element spans the timeline.
-        rect = parent.select('rect')
-        timeline = width: parseInt(rect.attr('width'))
-        [low, high] = config.xMaxMin
-        # The scaling factor.
-        factor = timeline.width / (high - low)
+        background = parent.select('.nv-background')
+        spacer = background.select('rect')
+        axisWidth = spacer.attr('width')
+        # The date offset-to-pixel scaling factor.
+        factor = axisWidth / (high - low)
         for trt in subject.treatments
           [start, end] = treatmentSpan(trt)
           left = (start - low) * factor
@@ -114,60 +179,58 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
           bar.attr('height', "#{ TREATMENT_BAR_HEIGHT }em")
           bar.attr('width', width)
           # Set the bar style.
-          bar.classed("qi-timeline-#{ trt.treatment_type.toLowerCase() }", true)
+          bar.classed("qi-timeline-#{ trt.treatmentType.toLowerCase() }", true)
           # Position the bar.
           bar.attr('x', left)
           bar.attr('y', "-#{ TREATMENT_BAR_HEIGHT }em")
 
-      # Inserts a marker for each encounter above the timeline.
+      # Inserts a marker for each clinical encounter above the
+      # timeline.
       #
-      # @param xAxisNode the chart SVG x axis element
-      # @param config the chart configuration
-      addEncounterDates = (xAxisNode, config) ->
-        # The x axis container.
+      # @param element the chart X axis D3 selection
+      # @param low the minimum date
+      # @param high the maximum date
+      addClinicalEncounters = (xAxis, low, high) ->
+        # The .nv-background xAxis contained in the X axis parent
+        # spaces the X axis.
+        xAxisNode = xAxis.node()
         parent = d3.select(xAxisNode.parentNode)
-        # The invisible SVG rect element spans the timeline.
-        rect = parent.select('rect')
-        timeline = width: parseInt(rect.attr('width'))
-        [low, high] = config.xMaxMin
-        # The scaling factor.
-        factor = timeline.width / (high - low)
+        background = parent.select('.nv-background')
+        spacer = background.select('rect')
+        axisWidth = spacer.attr('width')
+        # The X axis line element is contained in the axis parent.
+        line = parent.select('.nv-series-0')
+        # Unwrap the DOM element.
+        lineNode = line.node()
+        # The date offset-to-pixel scaling factor.
+        factor = axisWidth / (high - low)
+        # Insert the encounters.
         for enc in subject.clinicalEncounters
-          date = enc.date.valueOf()
+          date = enc.date
+          # The pixel offset.
           offset = (date - low) * factor
           # Place the new text element in the DOM before the
           # x axis element. Scooch it over 6 pixels to center
           # the marker.
-          text = parent.insert('svg:text', -> xAxisNode)
+          text = parent.insert('svg:text')
           text.attr('x', Math.floor(offset) - 6)
-          # Set the text style.
-          #
+          # Set the text style, e.g. .qi-timeline-surgery.
           text.classed("qi-timeline-#{ enc.title.toLowerCase() }", true)
           # Set the text content to a marker, specifically the HTML
           # nabla math special character (the wedge-like del operator).
           text.text(TREATMENT_SYMBOL)
 
-      # Rotates the x-axis visit date tick labels by 45 degrees.
-      #
-      # @param chart the timeline chart
-      # @param xAxis the x-axis D3 selection
-      rotateDateLabels = (chart, xAxis) ->
-        xTicks = xAxis.selectAll('.tick')
-        labels = xTicks.select('text')
-        labels.attr 'transform', (d, i, j) ->
-            'translate (-27, 18) rotate(-40, 0, 0)'
-
       # Adds the treatment and encounter legend directly before the
       # SVG element.
       #
-      # @param svg the SVG element
-      addLegend = (svgNode) ->
-        addTreatmentLegend = (parent, svgNode) ->
+      # @param svg the SVG D3 selection
+      addLegend = (svg) ->
+        addTreatmentLegend = (parent) ->
           # If there are no treatments, then bail out.
           trts = subject.treatments
           return if not trts.length
           # Place the legend line.
-          p = parent.insert('p', -> svgNode)
+          p = parent.insert('p', -> svg.node())
           p.text('Treatments: ')
           p.classed({'col-md-offset-5': true, 'font-size: small': true})
           # Sort by start date.
@@ -185,12 +248,12 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
             # The span content is the treatment type label.
             span.text(label)
 
-        addEncounterLegend = (parent, svgNode) ->
+        addEncounterLegend = (parent) ->
           # Bail if no encounters are displayed.
           encs = subject.clinicalEncounters
           return if not encs.length
           # Place the legend line.
-          p = parent.insert('p', -> svgNode)
+          p = parent.insert('p', -> svg.node())
           p.text('Encounters: ')
           p.classed({'col-md-offset-5': true, 'font-size: small': true})
           # Sort by start date.
@@ -207,86 +270,80 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart'], (ng, _, moment) ->
             span.text(TREATMENT_SYMBOL + label)
 
         # The legend is inserted directly before the svg element.
+        svgNode = svg.node()
         parent = d3.select(svgNode.parentNode)
-        addTreatmentLegend(parent, svgNode)
-        addEncounterLegend(parent, svgNode)
+        addTreatmentLegend(parent)
+        addEncounterLegend(parent)
 
-      # Select the SVG element.
-      svg = d3.select(chart.container)
-      # The x axis element.
+      # Find the SVG element.
+      svg = d3.select('svg')
+      if not svg?
+        throw new ReferenceError("The svg element was not found.")
+      # The X axis element.
       xAxis = svg.select('.nv-x')
       # The session hyperlink vertical offset.
       if _.some(subject.treatments) or _.some(subject.clinicalEncounters)
         dy = TREATMENT_BAR_HEIGHT
       else
         dy = 0
+      
+      # Scooch the X axis label up to work around the
+      # nvd3 or d3 bug described in the config rotateLabels
+      # setting below.
+      workAroundAxisLabelBug = (xAxis) ->
+        label = xAxis.select('.nv-axislabel')
+        y = label.attr('y')
+        label.attr('y', y - 10)
+
+      # The earliest and latest dates.
+      [low, high] = minMax(subject)
       # Decorate the chart.
-      addTreatmentBars(xAxis.node(), config)
-      addEncounterDates(xAxis.node(), config)
-      addSessionDetailLinks(subject.sessions, xAxis, dy)
-      rotateDateLabels(chart, xAxis)
-      addLegend(svg.node())
+      addTreatmentBars(xAxis, low, high)
+      addClinicalEncounters(xAxis, low, high)
+      addSessionDetailLinks(subject.sessions, xAxis, low, high, dy)
+      addLegend(svg)
+      workAroundAxisLabelBug(xAxis)
 
     # @param subject the subject to display
     # @returns the nvd3 chart configuration
     configure: (subject) ->
-      # Helper function to calculate the earliest and latest session,
-      # encounter and treatment dates.
-      #
-      # @returns the [earliest, latest] X axis range
-      xMaxMin = ->
-        values = []
-        for trt in subject.treatments
-          trtSpan = treatmentSpan(trt)
-          for value in trtSpan
-            values.push(value)
-        for enc in subject.clinicalEncounters
-          values.push(enc.date.valueOf())
-        for sess in subject.sessions
-          values.push(sess.date.valueOf())
-        # Return the min and max date.
-        [_.min(values), _.max(values)]
-
-      # The base configuration.
-      config =
-        options:
-          chart:
-            type: 'bulletChart'
-        data:
-          ranges: [150, 200, 300]
-          measures: []
-          markers: [100, 225]
-        
-        
-        
-      #       # @returns the session date
-      #       x: (encounter) ->
-      #         encounter.date
-      #       xAxis:
-      #         axisLabel: 'Visit Date'
-      #         tickFormat: Chart.formatDate
-      #       # There is one tri-partite data series. The y coordinate
-      #       # for this data series is always zero.
-      #       y: -> 0
-      #
-      #
-      # # The chart data specification.
-      # dataSpec =
-      #   x:
-      #     accessor: (session) -> session.date.valueOf()
-      #   y:
-      #     # There is one tri-partite data series. The y coordinate
-      #     # for this data series is always zero.
-      #     data: [ accessor: -> 0 ]
-      #
-      # # Return the standard chart configuration extended
-      # # with the following:
-      # # * the xValues and xFormat properties
-      # # * the addSessionDetailLinks function
-      # config = Chart.configureD3(subject.sessions, dataSpec)
-      # config.xValues = (dataSpec.x.accessor(sess) for sess in subject.sessions)
-      # config.xFormat = Chart.formatDate
-      # config.xMaxMin = xMaxMin()
-      # config.height = 100
-      config
+      # The values to plot.
+      values = xValues(subject)
+      
+      # Return the {options, data} configuration.
+      options:
+        chart:
+          type: 'lineChart'
+          height: 83
+          # We roll our own legend in the callback.
+          showLegend: false
+          x: (date) -> date
+          xAxis:
+            axisLabel: 'Visit Date'
+            showMaxMin: false
+            tickValues: values
+            tickFormat: Chart.formatDate
+            # Note - due to a nvd3 or d3 bug, rotating the labels
+            # forces the axis out of the chart display. Adding a
+            # margin has no effect. The only recourse is to hammer
+            # the DOM afterwards to move the label up.
+            rotateLabels: -30
+            # Note: a nvd3 bug clobbers the custom tickSize set below.
+            # The work-around is to reduce the height to a just-so
+            # value that loses the tick marks (yuck). Setting the
+            # xAxis height would be an alternative, but this has
+            # no effect, probably due to another nvd3 bug.
+            # TODO - file a nvd3 bug and revisit this in 2017.
+            #tickSize: 4
+          tooltip:
+            enabled: false
+          xScale: d3.time.scale()
+          # The session dates align on the X axis,
+          # hence the Y value is always zero.
+          y: -> 0
+          showYAxis: false
+      data: [
+        key: 'Visit Date'
+        values: values
+      ]
   ]

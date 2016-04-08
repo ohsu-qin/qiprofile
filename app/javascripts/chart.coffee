@@ -42,37 +42,37 @@ define ['angular', 'lodash', 'moment', 'd3'], (ng, _, moment) ->
     formatDate: (date) ->
       moment(date).format('MM/DD/YYYY')
 
-    # Replaces the given text element with a ui-router ui-sref
-    # hyperlink anchor element.
+    # Replaces the given text element with a  hyperlink anchor element.
     #
-    # Note: since this function modifies the DOM with an AngularJS
-    # directive, the element returned by this function must be
-    # compiled by AngularJS with the scope $compile function.
-    #
-    # @param text the text element
-    # @param the ui-router ui-sef
-    # @returns the new ui-sref anchor element
-    d3Hyperlink: (text, sref) ->
-      # The parent node wrapped by D3.
-      p = d3.select(text.parentNode)
-      # The D3 wrapper on this text element.
-      t = d3.select(text)
-      # Remove this text element from the DOM.
-      t.remove()
+    # @param text the text D3 selection
+    # @param handler the click event handler
+    # @returns the new anchor element
+    d3Hyperlink: (text, handler) ->
+      # Unwrap the DOM element.
+      textNode = text.node()
+      # The parent selection.
+      parent = d3.select(textNode.parentNode)
+      # Remove the text element from the DOM.
+      text.remove()
       # Append a SVG anchor.
-      a = p.append('svg:a')
-      # Add the ui-sref.
-      a.attr('ui-sref', sref)
-      # Failure to set href to a non-null, non-empty value results in
-      # an obscure AngularJS DOM insertion error and disables the link.
-      # The href is not used, since the ui-sref hyperlink target takes
-      # precedence.
+      a = parent.append('svg:a')
+      # Add the (unused) href.
       a.attr('href', '#')
+      
+      # Note: the anchor element is well-formed, but is only partially
+      # recognized as such by the browser. The browser changes the cursor
+      # on hover as if the anchor element was recognized, but clicking
+      # has no effect and right mouse button click does not show the
+      # expected hyperlink items. Perhaps this bug results from the element
+      # as a svg:a rather than an a. In any case, the work-around is to
+      # add an on click event that delegats to the event handler.
+      a.on('click', handler)
+      
       # Reattach the text element to the anchor.
       # The D3 selection append method takes either a string,
       # in which case it creates a new element as in the above
       # svg:a append, or a function which returns a DOM element.
-      # In the call below, the text element is appended.
-      a.append(-> text)
-      # Return the anchor element
-      a.node()
+      # In the call below, the text DOM element is appended.
+      a.append(-> textNode)
+      # Return the anchor D3 selection.
+      a

@@ -45,32 +45,34 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
     # Displays the MR session visit timeline chart.
     # TODO - upgrade to new ngnvd3.
     # TODO - rename 'visit' to 'session'.
-    directives.directive 'qiTimeline', ['Timeline', '$compile',
-      (Timeline, $compile) ->
-        restrict: 'E'
-        scope:
-          subject: '='
-        link: (scope, element, attrs) ->
-          scope.$watch 'subject', (subject) ->
-            if _.some(subject.sessions)
-              scope.config = Timeline.configure(subject)
-              # This function is called by D3 after the chart DOM is built.
-              #
-              # @param chart the chart SVG element
-              scope.applyChart = (chart) ->
-                # Compiles the given anchor element ui-sref directive
-                # in the current scope.
-                #
-                # @param a the anchor element
-                compileDetailLink = (a) ->
-                  $compile(a)(scope)
-
-                # Add the session detail hyperlinks, treatment bars and
-                # encounter points. The callback compiles the ui-sref
-                # anchor hyperlinks after they are added to the DOM.
-                Timeline.decorate(subject, chart, scope.config, compileDetailLink)
-        templateUrl: '/partials/timeline-chart.html'
-    ]
+    # directives.directive 'qiTimeline', ['Timeline', '$compile',
+    #   (Timeline, $compile) ->
+    #     restrict: 'E'
+    #     scope:
+    #       subject: '='
+    #     link: (scope, element, attrs) ->
+    #       scope.$watch 'subject', (subject) ->
+    #         if _.some(subject.sessions)
+    #           config = Timeline.configure(subject)
+    #           scope.data = config.data
+    #           scope.options = config.options
+    #           # This function is called by D3 after the chart DOM is built.
+    #           #
+    #           # @param chart the chart SVG element
+    #           scope.applyChart = (chart) ->
+    #             # Compiles the given anchor element ui-sref directive
+    #             # in the current scope.
+    #             #
+    #             # @param a the anchor element
+    #             compileDetailLink = (a) ->
+    #               $compile(a)(scope)
+    #
+    #             # Add the session detail hyperlinks, treatment bars and
+    #             # encounter points. The callback compiles the ui-sref
+    #             # anchor hyperlinks after they are added to the DOM.
+    #             Timeline.decorate(subject, chart, scope.config, compileDetailLink)
+    #     templateUrl: '/partials/timeline-chart.html'
+    # ]
     
     
     directives.directive 'qiFocus', ['$timeout',

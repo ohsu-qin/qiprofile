@@ -3,7 +3,7 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
   (ng, _) ->
     ctlrs = ng.module(
       'qiprofile.controllers',
-      ['ngSanitize', 'ui.bootstrap', 'nvd3', 'qiprofile.resources', 'qiprofile.modelingchart',
+      ['ngSanitize', 'nvd3', 'qiprofile.resources', 'qiprofile.modelingchart',
        'qiprofile.breast', 'qiprofile.slicedisplay', 'qiprofile.correlation']
     )
 
@@ -325,6 +325,50 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
         else
           throw new Error("The modeling source has neither a scan" +
                           " nor a registration protocol reference")
+    ]
+
+
+    ctlrs.controller 'TimelineCtrl', [
+      '$scope', '$state', '$compile', 'Timeline',
+      ($scope, $state, $compile, Timeline) ->
+        # The chart {options, data} configuration.
+        chartConfig = Timeline.configure($scope.subject)
+        $scope.options = chartConfig.options
+        $scope.data = chartConfig.data
+        # The global configuration. Disable the data watcher since,
+        # once built, the data is not changed. Furthermore, the
+        # data is the modeling parameter objects, which are complex
+        # objects with a circular object graph reference
+        # (paramResult -> parent modelingResult -> child paramResult).
+        $scope.config = deepWatchData: false
+        # The chart decoration callback.
+        $scope.decorate = (scope, element) ->
+          # Note: since the nvd3 directive isolates the scope,
+          # it does not inherit to the parent $scope properties.
+          # Therefore, we must specify $scope.subject rather than
+          # scope.subject.
+          Timeline.decorate(element, $scope.subject, scope, $state)
+
+          # Note: an angular-nvd3 bug voids element changes made
+          # in this callback on refresh
+          # (cf. https://github.com/krispo/angular-nvd3/issues/316).
+          # The work-around is to surgically intervene in the
+          # defective ngnvd3 code.
+          if _.isUndefined(scope.isBroken)
+            broken = scope.api.refresh
+            fixed = ->
+              # Note: setting scope.isReady should trigger the watcher
+              # but doesn't. The work-around to this work-around bug is
+              # to force the issue by calling the decorate function
+              # directly in the refresh rather than indirectly via the
+              # watcher.
+              # TODO - periodically check whether the ngnvd3 bug is
+              #   fixed and remove the work-around if possible. 
+              #scope.isReady = false
+              broken()
+              $scope.decorate(scope, element)
+            scope.api.refresh = fixed
+            scope.isBroken = false
     ]
 
 

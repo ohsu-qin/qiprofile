@@ -86,10 +86,15 @@ define ['angular', 'lodash', 'modeling', 'chart'], (ng, _) ->
           singleParameterConfiguration(modelingResults, paramKey)
 
       # @param paramKey the modeling parameter key
+      # @param precision the minimum number of decimals to display
       # @returns the tooltip HTML content generator function
-      tooltipGenerator = (paramKey) ->
-         # The tooltip value heading.
-         if paramKey is 'kTrans'
+      tooltipGenerator = (paramKey, precision) ->
+        # The tooltip displays three decimals more than the
+        # minimum.
+        valueFormatter = d3.format(".#{ precision + 3 }f")
+
+        # The ktrans tooltip shows the FXL, FXR and delta.
+        kTransTooltipGenerator = ->
            propertyFormatter = (modelingResult, property) ->
              dspConf = Modeling.properties[property]
              # The value to display.
@@ -99,8 +104,9 @@ define ['angular', 'lodash', 'modeling', 'chart'], (ng, _) ->
                "<td>#{ dspConf.html }:</td>" +
                "<td>#{ valueFormatter(value) }</td>" +
              "</tr>"
-
-           generateTooltip = (obj) ->
+           
+           # Return the formatter function.
+           (obj) ->
              # The charting object is the data series object,
              # for either the FXL or FXR ktrans. In either case,
              # the modeling parameter result is in obj.data,
@@ -116,15 +122,20 @@ define ['angular', 'lodash', 'modeling', 'chart'], (ng, _) ->
              "<table>" +
                rows.join("\n") +
              "</table>"
-         else
-           dspConf = Modeling.properties[paramKey]
-           generateTooltip = (obj) ->
-             # The value to display.
-             value = obj.series[0].value
-             "#{ dspConf.html }: #{ valueFormatter(value) }"
-          
-          # Return the generator function.
-          generateTooltip
+       
+        singleParameterTooltipGenerator = (paramKey) ->
+          dspConf = Modeling.properties[paramKey]
+          # Return the formatter function.
+          (obj) ->
+            # The value to display.
+            value = obj.series[0].value
+            "#{ dspConf.html }: #{ valueFormatter(value) }"
+
+        # Return the generator function.
+        if paramKey is 'kTrans'
+          kTransTooltipGenerator()
+        else
+          singleParameterTooltipGenerator(paramKey)
       
       # Configures the D3 chart with the given format. The format is an
       # object in the form {label: string, data: array}
@@ -138,7 +149,7 @@ define ['angular', 'lodash', 'modeling', 'chart'], (ng, _) ->
         # Start with a copy of the shared configuration.
         conf = _.cloneDeep(COMMON_CONFIG)
         # The parameter-specific configuration.
-        paramConf = parameterConfiguration(modelingResults, paramKey, precision)
+        paramConf = parameterConfiguration(modelingResults, paramKey)
         # Add the parameter-specific settings.
         _.merge(conf, paramConf)
 
@@ -151,11 +162,8 @@ define ['angular', 'lodash', 'modeling', 'chart'], (ng, _) ->
         # The smallest value precision that captures at least
         # one non-zero digit for all non-zero values.
         precision = Chart.minPrecision(values)
-        # The value formatter shows three decimals more than
-        # the minimum.
-        valueFormatter = d3.format(".#{ precision + 3 }f")
         # The tooltip content generator.
-        generateTooltip = tooltipGenerator(paramKey)
+        generateTooltip = tooltipGenerator(paramKey, precision)
         # The tooltip and Y tick formatter depend on the precision.
         mixin =
           options:

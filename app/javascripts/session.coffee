@@ -84,4 +84,12 @@ define ['angular', 'lodash', 'scan', 'modeling', 'helpers'], (ng, _) ->
             Scan.extend(scan, session)
           # Resolve to the extended session object.
           session
+      
+      # @param session the session object
+      # @returns the href to the session detail page
+      hyperlink: (session) ->
+        subject = session.subject
+        sbjRefUrl = "/quip/#{ subject.collection }/subject/#{ subject.number }"
+
+        "#{ sbjRefUrl }/session/#{ session.number }?project=#{ subject.project }"
   ]

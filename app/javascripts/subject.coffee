@@ -129,5 +129,11 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'session', 'model
         Resources.Subject.query(condition).then (result) ->
           # Extend the result objects.
           result.map(extend)  
+      
+      # @param session the session object
+      # @returns the href to the session detail page
+      hyperlink: (subject) ->
+        sbjRefUrl = "/quip/#{ subject.collection }/subject/#{ subject.number }"
+        "#{ sbjRefUrl }?project=#{ subject.project }"
   ]
   

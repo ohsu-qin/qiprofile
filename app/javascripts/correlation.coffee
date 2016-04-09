@@ -1,14 +1,14 @@
 define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
-        'breast', 'sarcoma', 'tnm', 'helpers'],
+        'breast', 'sarcoma', 'subject', 'session', 'tnm', 'helpers'],
   (ng, dc, moment, roman) ->
     correlation = ng.module(
       'qiprofile.correlation',
-      ['qiprofile.breast', 'qiprofile.sarcoma', 'qiprofile.tnm',
-       'qiprofile.helpers']
+      ['qiprofile.breast', 'qiprofile.sarcoma', 'qiprofile.subject',
+       'qiprofile.session', 'qiprofile.tnm', 'qiprofile.helpers']
     )
 
-    correlation.factory 'Correlation', ['Breast', 'Sarcoma', 'TNM', 'DateHelper',
-      (Breast, Sarcoma, TNM, DateHelper) ->
+    correlation.factory 'Correlation', ['Breast', 'Sarcoma', 'Subject', 'Session', 'TNM', 'DateHelper',
+      (Breast, Sarcoma, Subject, Session, TNM, DateHelper) ->
         # The charting data types. They are in the order in which they appear
         # in the X and Y axis selection dropdowns. Each has the following
         # properties:
@@ -377,10 +377,10 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
             # TODO - the date should already be a moment here and above.
             date = formatDate(DateHelper.asMoment(session.date))
 
-            # Make the session page hyperlink.
-            sbjRefUrl = "/quip/#{ subject.collection }/subject/#{ subject.number }"
-            sbjRef = "#{ sbjRefUrl }?project=#{ subject.project }"
-            sessRef = "#{ sbjRefUrl }/session/#{ session.number }?project=#{ subject.project }"
+            #The Subject Detail page hyperlink.
+            sbjRef = Subject.hyperlink(subject)
+            #The Session Detail page hyperlink.
+            sessRef = Session.hyperlink(session)
 
             # Make the chart data object. The chart data object combines the
             # subject, session and modeling objects.

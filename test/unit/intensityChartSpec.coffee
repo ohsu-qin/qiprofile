@@ -1,5 +1,5 @@
-define ['ngmocks', 'intensity'], (ng) ->
-  describe 'Unit Testing the Intensity Service', ->
+define ['ngmocks', 'intensityChart'], (ng) ->
+  describe 'Unit Testing the Intensity Chart Service', ->
     # The mock scan has one registration.
     mock =
       scan:
@@ -21,11 +21,11 @@ define ['ngmocks', 'intensity'], (ng) ->
 
     beforeEach ->
       # Fake the intensity service.
-      ng.module('qiprofile.intensity')
+      ng.module('qiprofile.intensitychart')
       # Enable the test services.
-      inject ['Intensity', (Intensity) ->
+      inject ['IntensityChart', (IntensityChart) ->
         # Configure the chart.
-        config = Intensity.configure(mock.scan)
+        config = IntensityChart.configure(mock.scan)
       ]
 
     it 'should configure two data series', ->

@@ -147,8 +147,8 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
 
 
     # Displays the session intensity chart.
-    directives.directive 'qiIntensityChart', ['Intensity', 'ObjectHelper',
-      (Intensity, ObjectHelper) ->
+    directives.directive 'qiIntensityChart', ['IntensityChart', 'ObjectHelper',
+      (IntensityChart, ObjectHelper) ->
         restrict: 'E'
         scope:
           scan: '='
@@ -157,7 +157,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
           # TODO - see qiCollectionCharts link TODO.
           scope.$parent.$watch 'scan', (scan) ->
             if scan?
-              scope.config = Intensity.configure(scan, element)
+              scope.config = IntensityChart.configure(scan, element)
         templateUrl: '/partials/intensity-chart.html'
     ]
 

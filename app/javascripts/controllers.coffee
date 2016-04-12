@@ -405,14 +405,17 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
           $scope.config = deepWatchData: false
     ]
 
-    # TODO -delete cruft below.
-    # height='200'
-    #    showXAxis='true' xAxisShowMaxMin='false' xAxisLabel='Visit Date'
-    #    xAxisTickFormat='config.xFormat' xAxisTickValues='$parent.config.xValues'
-    #    showYAxis='true' yAxisShowMaxMin='false' yAxisLabel="{{ config.yLabel }}"
-    #    yAxisTickFormat='config.yFormat' forcey="{{ config.yMaxMin }}"
-    #    useInteractiveGuideline='true' tooltips='true'
-    #    tooltipContent='config.tooltip
+
+    ctlrs.controller 'IntensityChartCtrl', [
+      '$scope', 'IntensityChart',
+      ($scope, IntensityChart) ->
+        # The chart {options, data} configuration.
+        chartConfig = IntensityChart.configure($scope.session)
+        $scope.options = chartConfig.options
+        $scope.data = chartConfig.data
+        # The global configuration. See ModelingChartCtrl comment.
+        $scope.config = deepWatchData: false
+    ]
 
 
     ## The modeling parameter controllers. ##

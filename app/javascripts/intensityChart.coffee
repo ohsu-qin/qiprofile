@@ -1,7 +1,7 @@
 define ['angular', 'chart'], (ng) ->
-  intensity = ng.module 'qiprofile.intensity', []
+  intensityChart = ng.module 'qiprofile.intensitychart', []
 
-  intensity.factory 'Intensity', ->
+  intensityChart.factory 'IntensityChart', ->
     # Highlights the bolus arrival tick mark. The bolus arrival is
     # only highlighted if it occurs after the first series.
     #

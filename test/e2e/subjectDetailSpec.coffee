@@ -37,8 +37,8 @@ class SubjectDetailPage extends Page
     @findAll('.qi-modeling-chart')
 
   # @returns the date line chart promise
-  @property dateLine: ->
-    @find('//qi-timeline//nvd3-line-chart')
+  @property timeline: ->
+    @find('//div[@ng-controller="TimelineCtrl"]')
 
   # @returns the clinical profile panel promise
   @property clinicalProfile: ->
@@ -121,7 +121,7 @@ describe 'E2E Testing Subject Detail', ->
         # inserts the SVG into the DOM, and the app directive
         # then further modifies it.
         it 'should exist', ->
-          expect(page.dateLine, 'The timeline is missing').to.eventually.exist
+          expect(page.timeline, 'The timeline is missing').to.eventually.exist
 
       describe 'Format Button', ->
         it 'should toggle the chart/table display', ->

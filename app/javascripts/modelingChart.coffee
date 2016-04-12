@@ -61,6 +61,9 @@ define ['angular', 'lodash', 'modeling', 'chart'], (ng, _) ->
       singleParameterConfiguration = (modelingResults, paramKey) ->
         # The label text and bar color.
         dspConf = Modeling.properties[paramKey]
+        if not dspConf?
+          throw new ReferenceError("The modeling result parameter is not" +
+                                   " supported: #{ paramKey }")
         
         # Return the {options, data} chart configuration.
         options:
@@ -70,6 +73,7 @@ define ['angular', 'lodash', 'modeling', 'chart'], (ng, _) ->
             yAxis:
               axisLabel: dspConf.text
         data: [
+          key: dspConf.text
           # Pluck the modeling parameter object from each modeling
           # result.
           color: dspConf.color

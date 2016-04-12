@@ -3,50 +3,6 @@ define ['ngmocks', 'moment', 'chart'], (ng, moment) ->
 
     # The mock Chart service module.
     Chart = null
-
-    # The mock chart results.
-    mock = [
-      {
-        time: 1
-        measurement:
-          a: 4
-          b: 5
-      }
-      {
-        time: 2
-        measurement:
-          a: 3
-          b: 2
-      }
-    ]
-
-    spec =
-      x:
-        label: 'Time'
-        accessor: (reading) ->
-          reading.time
-      y:
-        label: 'Value'
-        data:
-          [
-            {
-              label: 'A'
-              color: 'Blue'
-              accessor: (reading) ->
-                reading.measurement.a
-            }
-            {
-              label: 'B'
-              color: 'Green'
-              accessor: (reading) ->
-                reading.measurement.b
-            }
-          ]
-
-    mockTimes = _.map(mock, 'time')
-    mockValues = ['a', 'b'].map (attr) ->
-      mock.map (reading) ->
-        [reading.time, reading.measurement[attr]]
     
     beforeEach ->
       # Fake the chart service.
@@ -56,19 +12,7 @@ define ['ngmocks', 'moment', 'chart'], (ng, moment) ->
         Chart = _Chart_
       ]
 
-    describe 'Chart Configuration', ->
-      config = null
-
-      beforeEach ->
-        config = Chart.configureD3(mock, spec)
-
-      it 'should configure two data series', ->
-        expect(config.data, "The configuration data is missing").to.exist
-        expect(config.data.length, "The configuration data series count is incorrect")
-          .to.equal(2)
-
-      it 'should set the data values to the coordinates', ->
-        actual = _.map(config.data, 'values')
-        expect(actual, "The configuration data values are incorrect")
-          .to.eql(mockValues
-          )
+    describe 'Precision', ->
+      it 'should calculate the minimum precision', ->
+        actual = Chart.minPrecision([0.1234, 1.2, 0.004000002, 1.0, 2, 0.0, 0.12345])
+        expect(actual, "The minimum precision is incorrect").to.equal(5)

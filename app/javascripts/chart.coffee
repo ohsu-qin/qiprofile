@@ -27,10 +27,31 @@ define ['angular', 'lodash', 'moment', 'd3'], (ng, _, moment) ->
       # @returns the number of decimals to display for the
       #   given value
       minValuePrecision = (value) ->
-        if not value or Math.abs(value) > 1
+        # * Zero has no precision.
+        # * Otherwise, if the value is negative, then recurse on the
+        #   absolute value.
+        # * Otherwise, if we are not yet into the non-zero decimals,
+        #   then shift left one decimal place and recurse.
+        # * Otherwise, check the decimal residue as described below.
+        if not value
           0
-        else
+        else if value < 0
+          minValuePrecision(Math.abs(value))
+        else if value < 1
           1 + minValuePrecision(value * 10)
+        else
+          # The decimal portion. Rounding handles the case of an
+          # insignificant negative delta, e.g. the iteration:
+          # .234, 2.34, 3.4, 3.99999999 checks against the
+          # residuals .234, .34, .4, .000000001. If floor were
+          # used the last residual would be .99999999.
+          residual = Math.abs(value - Math.round(value))
+          # If the decimal portion is roughly zero, then we are done.
+          # Otherwise, recurse.
+          if residual < .0002
+            0
+          else
+            1 + minValuePrecision(residual * 10)
 
       # The precision for each value.
       precisions = (minValuePrecision(value) for value in values)

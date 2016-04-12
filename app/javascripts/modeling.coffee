@@ -97,7 +97,7 @@ define ['angular', 'lodash', 'resources', 'session'], (ng, _) ->
         paramResult.modelingResult = modelingResult
         if paramResult.labelMap?
           # Set the label map parent reference.
-          LabelMap.extend(paramResult.labelMap)
+          LabelMap.extend(paramResult.labelMap, paramResult)
           # If the label map has a color table, then set
           # the overlay property.
           Object.defineProperties paramResult,

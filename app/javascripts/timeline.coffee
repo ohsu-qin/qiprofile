@@ -317,6 +317,17 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart', 'session'], (ng, _, m
           height: 83
           # We roll our own legend in the callback.
           showLegend: false
+          # Note: the trivial X value accessor works around the
+          # following nvd3 bug:
+          # * If there is no x chart accessor option, then the chart
+          #   render results in an obscure error in the d3 voronoi
+          #   tesselation:
+          #      Cannot read property 'x' of null
+          #   This bug possibly results from a nvd3 expectation that
+          #   if there is a y option then there is also an x option.
+          #   The work-around is to supply a trivial x option.
+          # TODO - isolate this bug with a nvd3 test case and report
+          #   it to nvd3.
           x: (date) -> date
           xAxis:
             axisLabel: 'Visit Date'

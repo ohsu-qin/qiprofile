@@ -21,7 +21,7 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
 
     # @returns the sorted stage values
     stageExtent: ->
-      _.chain(STAGES).values().flattenDeep().union(['4']).uniq.sort().value()
+      _.chain(STAGES).values().flattenDeep().union(['4']).uniq().sort().value()
 
     # Returns the cancer stage.
     #

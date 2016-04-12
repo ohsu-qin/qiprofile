@@ -5,70 +5,24 @@ block billboard
 
 block content
   //
-  // TODO - rename 'correlation' to 'collection' here and elsewhere.
-  // TODO - rename 'patient' to 'subject' here and elsewhere.
-  //
   // TODO - scrolling is disabled when the cursor focus is within a chart.
   //  Can this be fixed?
   //
-  // The patient/visit table and chart.
-  .qi-correlation-charts(qi-correlation-charts)
-  .row.qi-patient-summary
-    .col-md-2.qi-profile-panel.qi-patient-table#qi-patient-table
-    .col-md-10#qi-patient-chart
-  // The correlation charts. For each chart, construct the X and Y axis data
-  // type dropdowns and create a container for the chart. The choices object
-  // contains the valid data types for the current collection. For each data
-  // type, the key value is the data type handle and the value is the text
-  // label that is displayed in the dropdown.
+  // The subject/session table and chart.
+  .qi-collection-charts(qi-collection-charts)
+  .row.qi-subject-charts
+    .col-md-2.qi-profile-panel.qi-subject-table#qi-subject-table
+    .col-md-10#qi-subject-chart
+  // The collection charts. For each chart, construct the X and Y axis data
+  // series dropdowns and create a container for the chart.
   .row
     .col-md-6(ng-repeat="chartAxes in axes")
       // TODO - scooch the dropdowns over to the right, or perhaps
       //   center them over their respective chart.
-      // TODO - put the dropdowns in an include.
-      .row.qi-axis-dropdowns
-        .col-md-4
-          // The X axis dropdown.
-          .qi-dropdown.qi-x-axis-dropdown
-            button.qi-dropbtn
-              span.qi-dropdown-icon.qi-xy X
-              span {{ choices.x[chartAxes.x] }}
-              span.qi-caret.caret
-            .qi-dropdown-content
-              .qi-dropdown-choice(
-                ng-repeat="(key,val) in choices.x"
-                ng-model="chartAxes.x"
-                ng-click="chartAxes.x=key"
-              )
-                span.qi-dropdown-icon.qi-check-hide(
-                  ng-show="val!=choices.x[chartAxes.x]"
-                ) &#10003;
-                span.qi-dropdown-icon.qi-check-show(
-                  ng-show="val==choices.x[chartAxes.x]"
-                ) &#10003;
-                span.qi-dropdown-text {{ val }}
-        .col-md-4
-          // The Y axis dropdown.
-          .qi-dropdown.qi-y-axis-dropdown
-            button.qi-dropbtn
-              span.qi-dropdown-icon.qi-xy Y
-              span {{ choices.y[chartAxes.y] }}
-              span.qi-caret.caret
-            .qi-dropdown-content
-              .qi-dropdown-choice(
-                ng-repeat="(key,val) in choices.y"
-                ng-model="chartAxes.y"
-                ng-click="chartAxes.y=key"
-              )
-                span.qi-dropdown-icon.qi-check-hide(
-                  ng-show="val!=choices.y[chartAxes.y]"
-                ) &#10003;
-                span.qi-dropdown-icon.qi-check-show(
-                  ng-show="val==choices.y[chartAxes.y]"
-                ) &#10003;
-                span.qi-dropdown-text {{ val }}
+      .row.col-md-offset-2
+        include include/collection-dropdowns
       .row
-        .col-md-12.qi-correlation-chart(id="qi-correlation-chart-{{ $index + 1 }}")
+        .col-md-12.qi-collection-chart(id="qi-collection-chart-{{ $index + 1 }}")
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

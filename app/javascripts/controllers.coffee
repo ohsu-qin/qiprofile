@@ -1,10 +1,10 @@
 define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart', 'breast', 
-        'sliceDisplay', 'correlation'],
+        'sliceDisplay', 'collection'],
   (ng, _) ->
     ctlrs = ng.module(
       'qiprofile.controllers',
       ['ngSanitize', 'nvd3', 'qiprofile.resources', 'qiprofile.modelingchart',
-       'qiprofile.breast', 'qiprofile.slicedisplay', 'qiprofile.correlation']
+       'qiprofile.breast', 'qiprofile.slicedisplay', 'qiprofile.collection']
     )
 
     # The local controller helper methods.
@@ -84,27 +84,39 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
 
 
     ctlrs.controller 'CollectionDetailCtrl', [
-      '$rootScope', '$scope', 'project', 'collection', 'charting', 'Correlation', 'ControllerHelper',
-      ($rootScope, $scope, project, collection, charting, Correlation, ControllerHelper) ->
+      '$rootScope', '$scope', 'project', 'collection', 'charting', 'Collection', 'ControllerHelper',
+      ($rootScope, $scope, project, collection, charting, Collection, ControllerHelper) ->
         # Capture the current project.
         $rootScope.project = project
         # Place the collection in the scope.
         $scope.collection = collection
-        # Obtain the valid data types and labels for the current collection
+        # Obtain the valid data series and labels for the current collection
         # and put them in the scope. These comprise the X/Y axis dropdown
-        # choices. The X axis choices contain all valid data types. The Y axis
-        # choices contain only continuous data types.
-        $scope.choices = Correlation.dataTypeChoices(collection)
+        # choices. The X axis choices contain all valid data series. The Y axis
+        # choices may only include continuous data types.
+        $scope.choices = Collection.dataSeriesChoices(collection)
         # Obtain the formatted scatterplot data.
-        data = Correlation.prepareScatterPlotData(charting, $scope.choices.x)
-        # Obtain the chart padding for each continuous data type. The padding
-        # for categorical data types is configured in the correlation module
-        # chart rendering function.
-        padding = Correlation.calculatePadding(data, $scope.choices.y)
+        data = Collection.chartData(charting, Object.keys $scope.choices.x)
+        # Obtain the chart padding for each data series - continuous data types
+        # only. The padding for categorical data series is configured in the
+        # correlation module chart rendering function.
+        padding = Collection.chartPadding(data, Object.keys $scope.choices.y)
         # Put a copy of the default charts (X and Y axes) in the scope.
         # This charts object changes when the user selects a different
         # axis to chart.
-        $scope.axes = _.clone(Correlation.DEFAULT_AXES[collection])
+        $scope.axes = _.clone(Collection.DEFAULT_AXES[collection])
+        # Check the validity of the default chart axes.
+        checkAxes = (axis) ->
+          axis.x in xAxisChoices or
+            throw new Error "Invalid #{ collection } X-axis data series: " +
+                            "#{ axis.x }"
+          axis.y in yAxisChoices or
+            throw new Error "Invalid #{ collection } Y-axis data series: " +
+                            "#{ axis.y }"
+        xAxisChoices = Object.keys($scope.choices.x)
+        yAxisChoices = Object.keys($scope.choices.y)
+        checkAxes(axis) for axis in $scope.axes
+
         # Place the chart configuration object in the scope.
         $scope.config =
           data: data
@@ -120,7 +132,7 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
         watcher = (newValue, oldValue) ->
           # If the user changed the axes, then re-render the charts.
           if newValue != oldValue
-            Correlation.renderCharts($scope.config)
+            Collection.renderCharts($scope.config)
         
         # Since charts is an object, the objectEquality flag is set to true.
         # AngularJS then copies the object for later comparison and uses

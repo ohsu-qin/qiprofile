@@ -25,6 +25,11 @@ class SubjectDetailPage extends Page
   @property tnmStageHelpButton: ->
     @find('.tnm-stage-help-btn')
 
+  # @returns a promise which resolves to the modeling accordion panel
+  #   ElementFinder
+  @property modelingAccordionPanel: ->
+    @find('#modeling-accordion-panel')
+
   # Finds the modeling table WebElements.
   # See profileTables.
   #
@@ -200,6 +205,11 @@ describe 'E2E Testing Subject Detail', ->
               .to.equal(3)
 
         describe 'Properties', ->
+          modelingAccordionPanelFinder = null
+
+          before ->
+            modelingAccordionPanelFinder = page.modelingAccordionPanel
+
           it 'should display the column headers', ->
             modelingTablesFinder.then (tables) ->
               for table, tblNdx in tables
@@ -212,6 +222,30 @@ describe 'E2E Testing Subject Detail', ->
                                     " column heading #{ hdgNdx + 1 }")
                       .to.exist
 
+          it 'should toggle collapse', ->
+            modelingTablesFinder.then (tables) ->
+              modelingAccordionPanelFinder.then (panel) ->
+                panel.findAll(By.css('.glyphicon-chevron-down')).then (ctrls) ->
+                  expect(ctrls.length, 'The opened accordion control count' +
+                                       ' count is incorrect')
+                    .to.equal(3)
+                  # Close all of the modeling table accordion controls and
+                  # expect the tables to be hidden.
+                  for i in [0...3]
+                    ctrls[i].click()
+                  for table, tblNdx in tables
+                    expect(table.isDisplayed(), "Table #{ tblNdx + 1 } is" + 
+                                                " not collapsed")
+                      .to.eventually.be.false
+                  # Open all of the modeling table accordion controls and
+                  # expect the tables to be displayed.
+                  for i in [0...3]
+                    ctrls[i].click()
+                  for table, tblNdx in tables
+                    expect(table.isDisplayed(), "Table #{ tblNdx + 1 } is" + 
+                                                " not expanded")
+                      .to.eventually.be.true
+          
           it 'should have four Breast patient visits', ->
             modelingTablesFinder.then (tables) ->
               for table, tblNdx in tables

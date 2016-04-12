@@ -88,7 +88,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
     ]
 
 
-    # Displays the correlation charts.
+    # Displays the collection charts.
     #
     # TODO - Why is this not an entity (E) directive?
     #   Why is the attribute removed after rendering? The intent seems to
@@ -102,10 +102,10 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
     #   effect. The link is performed during $compile, so calling $compile
     #   here seems to be at best unnecessary and at worst dangerous.
     # TODO - same effect might be obtained more cleanly on each chart
-    #   using the qiCorrelationChart directive below.
+    #   using the qiCollectionChart directive below.
     #
-    directives.directive 'qiCorrelationCharts', ['Correlation', '$compile',
-      (Correlation, $compile) ->
+    directives.directive 'qiCollectionCharts', ['Collection', '$compile',
+      (Collection, $compile) ->
         restrict: 'A'
         link: (scope, element) ->
           scope.$watch 'config', (config) ->
@@ -116,20 +116,20 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
               #   Also, this element ready is no guarantee that the chart
               #   elements are ready.
               element.ready ->
-                Correlation.renderCharts(scope.config)
-                element.removeAttr('qi-correlation-charts')
+                Collection.renderCharts(scope.config)
+                element.removeAttr('qi-collection-charts')
                 $compile(element)(scope)
     ]
 
 
     # TODO - try enabling this in conjunction with the TODO above.
-    directives.directive 'qiCorrelationChart', ['Correlation',
-      (Correlation) ->
+    directives.directive 'qiCollectionChart', ['Collection',
+      (Collection) ->
         restrict: 'E'
         link: (scope, element) ->
           # Here, the scope config is set on the individual chart, not
           # all of the charts.
-          Correlation.renderChart(scope.config)
+          Collection.renderChart(scope.config)
     ]
 
 
@@ -140,7 +140,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
         link: (scope, element) ->
           # TODO - obtain the updateImage argument.
           # SliceDisplay.updateImage(???)
-          # TODO - see qiCorrelationCharts link TODO.
+          # TODO - see qiCollectionCharts link TODO.
           element.removeAttr('qi-slice-display')
           $compile(element)(scope)
     ]
@@ -154,7 +154,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
           scan: '='
         link: (scope, element) ->
           # Wait for a session extended with detail to digest the scan.
-          # TODO - see qiCorrelationCharts link TODO.
+          # TODO - see qiCollectionCharts link TODO.
           scope.$parent.$watch 'scan', (scan) ->
             if scan?
               scope.config = Intensity.configure(scan, element)

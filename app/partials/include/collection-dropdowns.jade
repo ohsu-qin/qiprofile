@@ -1,0 +1,43 @@
+// The X axis dropdown. The choices object contains the valid data series for
+// the current collection. For each data series, the key value is the series
+// name and the value is the text label that is displayed in the dropdown.
+.col-md-5
+  .qi-dropdown.qi-x-axis-dropdown
+    button.qi-dropbtn
+      span.qi-dropdown-icon.qi-xy X
+      span.qi-dropbtn-label {{ choices.x[chartAxes.x] }}
+      span.qi-caret.caret
+    .qi-dropdown-content
+      .qi-dropdown-item(
+        ng-repeat="(key,val) in choices.x"
+        ng-model="chartAxes.x"
+        ng-click="chartAxes.x=key"
+      )
+        span.qi-dropdown-icon.qi-check-hide(
+          ng-show="val!=choices.x[chartAxes.x]"
+        ) &#10003;
+        span.qi-dropdown-icon.qi-check-show(
+          ng-show="val==choices.x[chartAxes.x]"
+        ) &#10003;
+        span.qi-dropdown-label {{ val }}
+
+// The Y axis dropdown.
+.col-md-5
+  .qi-dropdown.qi-y-axis-dropdown
+    button.qi-dropbtn
+      span.qi-dropdown-icon.qi-xy Y
+      span.qi-dropbtn-label {{ choices.y[chartAxes.y] }}
+      span.qi-caret.caret
+    .qi-dropdown-content
+      .qi-dropdown-item(
+        ng-repeat="(key,val) in choices.y"
+        ng-model="chartAxes.y"
+        ng-click="chartAxes.y=key"
+      )
+        span.qi-dropdown-icon.qi-check-hide(
+          ng-show="val!=choices.y[chartAxes.y]"
+        ) &#10003;
+        span.qi-dropdown-icon.qi-check-show(
+          ng-show="val==choices.y[chartAxes.y]"
+        ) &#10003;
+        span.qi-dropdown-label {{ val }}

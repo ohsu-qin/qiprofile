@@ -7,7 +7,8 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
        'qiprofile.session', 'qiprofile.tnm', 'qiprofile.helpers']
     )
 
-    correlation.factory 'Collection', ['Breast', 'Sarcoma', 'Subject', 'Session', 'TNM', 'DateHelper',
+    collection.factory 'Collection', ['Breast', 'Sarcoma', 'Subject', 'Session', 'TNM', 'DateHelper',
+      (Breast, Sarcoma, Subject, Session, TNM, DateHelper) ->
         # The data series configuration. These are all of the data series that
         # the dimensional charting (DC) charts support and are in the order in
         # which they appear in the X and Y axis selection dropdowns. Each has

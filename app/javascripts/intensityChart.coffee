@@ -96,7 +96,7 @@ define ['angular', 'chart'], (ng) ->
       data = [scanDataSeries].concat(regDataSeries)
 
       # Add the bolus arrival bar.
-      bolusArvNdx = scan.session.bolusArrivalIndex
+      bolusArvNdx = scan.bolusArrivalIndex
       if bolusArvNdx?
         # Extend the bar from the axis to the top.
         dsIntensities = (_.map(dataSeries.values, 'y') for dataSeries in data)

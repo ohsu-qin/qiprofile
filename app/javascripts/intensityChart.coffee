@@ -77,8 +77,8 @@ define ['angular', 'chart'], (ng) ->
       bolusLegend.attr('dy', "#{ textScale }em")
       bolusLegend.text(text)
 
-    # The y-axis format function. If the given intensity value
-    # is integral, then this function returns the integer.
+    # The Y axis value formatter function. If the given intensity
+    # value is integral, then this function returns the integer.
     # Otherwise, the value is truncated to two decimal places.
     #
     # nvd3 unfortunately uses this function to format both the tick
@@ -89,9 +89,9 @@ define ['angular', 'chart'], (ng) ->
     #
     # @param value the intensity value
     # @returns the chart display value
-    yFormat = (value) ->
+    formatIntensity = (value) ->
       # ~~ is the obscure Javascript idiom for correctly converting
-      # a float to an int. Math.ceil does not correctly truncate
+      # a float to an int. Math.floor does not correctly truncate
       # negative floats.
       intValue = ~~value
       if value == intValue
@@ -99,15 +99,15 @@ define ['angular', 'chart'], (ng) ->
       else
         value.toFixed(2)
 
-    # Makes the intensity chart configuration for the given session.
+    # Makes the D3 intensity chart configuration for the given session.
     #
     # The result includes the T1 scan data series and each registration
     # data series. The chart x-axis labels are the one-based series
     # indexes, e.g. ['1', '2', ..., '12'] for 12 series.
     #
     # @param session the session object
-    # @param element the chart Angular jQueryLite element
-    # @returns the nvd3 chart configuration
+    # @param element the chart Angular jqLite element
+    # @returns the ngnvd3 chart configuration
     configure: (scan, element) ->
       # The scan data series and volume select color. This value must match
       # the .qi-scan-vol-btn-group basic color.
@@ -119,11 +119,17 @@ define ['angular', 'chart'], (ng) ->
       # the .qi-reg-vol-btn-group basic colors.
       REG_COLORS = ['LightGreen', 'LightYellow', 'LightCyan', 'LemonChiffon']
 
+      # @param image the scan or registration volume image
+      # @param index the zero-based volume index
+      # @returns the intensity chart {x, y} coordinate
+      coordinate = (image, index) ->
+        {x: index + 1, y: image.averageIntensity}
+
       # @param images the scan or registration volume images
-      # @returns the intensity chart [x, y] coordinates
+      # @returns the intensity chart [{x, y}, ...] coordinates
       coordinates = (images) ->
-        ([i + 1, img.averageIntensity] for img, i in images)
-      
+        (coordinate(image, i) for image, i in images)
+
       # @returns 'Realigned', followed by the one-based registration
       #   number if there is more than one
       dataSeriesKey = (index) ->
@@ -150,17 +156,33 @@ define ['angular', 'chart'], (ng) ->
         values: coordinates(registration.volumes.images)
 
       # The scan data series configuration.
-      scanData =
+      scanDataSeries =
         key: 'Scan'
-        values: coordinates(scan.volumes.images)
         color: SCAN_COLOR
+        values: coordinates(scan.volumes.images)
+      # The registration data series.
+      regDataSeries = (registrationDataSeries(reg, i) for reg, i in scan.registrations)
+      # Combine the scan and registration data series.
+      data = [scanDataSeries].concat(regDataSeries)
 
-      # Collect the data series specifications.
-      regData = (registrationDataSeries(reg, i) for reg, i in scan.registrations)
-
-      # Return the chart configuration.
-      data: [scanData].concat(regData)
-      xValues: (coord[0] for coord in scanData.values)
-      yFormat: yFormat
+      # TODO - adapt highlightBolusArrival for ngnvd3 and enable
+      #   as the onready callback.
+      #   But try out a line/bar combo chart first.
       highlightBolusArrival: (chart) ->
         highlightBolusArrival(scan.session, chart)
+
+      # Return the chart configuration.
+      options:
+        chart:
+          type: 'lineChart'
+          forceY: [0]
+          yAxis:
+            tickFormat: formatIntensity
+            showMaxMin: false
+          xAxis:
+            axisLabel: 'Time Point'
+            ticks: scan.volumes.images.length
+          tooltip:
+            headerFormatter: (volumeNumber) ->
+              "Volume #{ volumeNumber }"
+      data: data

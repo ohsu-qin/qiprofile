@@ -33,10 +33,6 @@ define ['ngmocks', 'intensityChart'], (ng) ->
       expect(config.data.length, "The configuration data series count is incorrect")
         .to.equal(2)
 
-    it 'should set the X axis values to the time points', ->
-      expect(config.xValues, "The configuration X values are incorrect")
-        .to.eql(expectedX)
-
     describe 'Scan Configuration', ->
       scanConfig = null
 
@@ -50,11 +46,11 @@ define ['ngmocks', 'intensityChart'], (ng) ->
         expect(scanConfig.values, "The scan values are missing").to.exist
 
       it 'should configure the scan coordinates', ->
-        scanX = (coord[0] for coord in scanConfig.values)
+        scanX = (coord.x for coord in scanConfig.values)
         expect(scanX, "The scan X coordinate is incorrect")
           .to.eql(expectedX)
         expectedY = (img.averageIntensity for img in mock.scan.volumes.images)
-        scanY = (coord[1] for coord in scanConfig.values)
+        scanY = (coord.y for coord in scanConfig.values)
         expect(scanY, "The scan Y coordinate is incorrect").to.eql(expectedY)
 
     describe 'Registration Configuration', ->
@@ -72,10 +68,10 @@ define ['ngmocks', 'intensityChart'], (ng) ->
           .to.exist
 
       it 'should configure the registration coordinates', ->
-        regX = (coord[0] for coord in regConfig.values)
+        regX = (coord.x for coord in regConfig.values)
         expect(regX, "The registration X coordinate is incorrect")
           .to.eql(expectedX)
-        regY = (coord[1] for coord in regConfig.values)
+        regY = (coord.y for coord in regConfig.values)
         mockReg = mock.scan.registrations[0]
         expectedY = (img.averageIntensity for img in mockReg.volumes.images)
         expect(regY, "The registration Y coordinate is incorrect")

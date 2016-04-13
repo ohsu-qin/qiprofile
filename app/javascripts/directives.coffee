@@ -1,10 +1,10 @@
 define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
-        'correlation', 'timeline', 'intensity', 'modeling'],
+        'collection', 'timeline', 'intensityChart', 'modeling'],
   (ng, _, _s, Spinner) ->
     directives = ng.module(
       'qiprofile.directives',
-      ['qiprofile.helpers', 'qiprofile.correlation', 'qiprofile.timeline',
-       'qiprofile.intensity', 'qiprofile.modeling']
+      ['qiprofile.helpers', 'qiprofile.collection', 'qiprofile.timeline',
+       'qiprofile.intensitychart', 'qiprofile.modeling']
     )
 
     # Spinner directive.
@@ -40,39 +40,6 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
             scope.spinner.spin(element[0])
           else if scope.spinner
             scope.spinner.stop()
-
-
-    # Displays the MR session visit timeline chart.
-    # TODO - upgrade to new ngnvd3.
-    # TODO - rename 'visit' to 'session'.
-    # directives.directive 'qiTimeline', ['Timeline', '$compile',
-    #   (Timeline, $compile) ->
-    #     restrict: 'E'
-    #     scope:
-    #       subject: '='
-    #     link: (scope, element, attrs) ->
-    #       scope.$watch 'subject', (subject) ->
-    #         if _.some(subject.sessions)
-    #           config = Timeline.configure(subject)
-    #           scope.data = config.data
-    #           scope.options = config.options
-    #           # This function is called by D3 after the chart DOM is built.
-    #           #
-    #           # @param chart the chart SVG element
-    #           scope.applyChart = (chart) ->
-    #             # Compiles the given anchor element ui-sref directive
-    #             # in the current scope.
-    #             #
-    #             # @param a the anchor element
-    #             compileDetailLink = (a) ->
-    #               $compile(a)(scope)
-    #
-    #             # Add the session detail hyperlinks, treatment bars and
-    #             # encounter points. The callback compiles the ui-sref
-    #             # anchor hyperlinks after they are added to the DOM.
-    #             Timeline.decorate(subject, chart, scope.config, compileDetailLink)
-    #     templateUrl: '/partials/timeline-chart.html'
-    # ]
     
     
     directives.directive 'qiFocus', ['$timeout',
@@ -143,22 +110,6 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
           # TODO - see qiCollectionCharts link TODO.
           element.removeAttr('qi-slice-display')
           $compile(element)(scope)
-    ]
-
-
-    # Displays the session intensity chart.
-    directives.directive 'qiIntensityChart', ['IntensityChart', 'ObjectHelper',
-      (IntensityChart, ObjectHelper) ->
-        restrict: 'E'
-        scope:
-          scan: '='
-        link: (scope, element) ->
-          # Wait for a session extended with detail to digest the scan.
-          # TODO - see qiCollectionCharts link TODO.
-          scope.$parent.$watch 'scan', (scan) ->
-            if scan?
-              scope.config = IntensityChart.configure(scan, element)
-        templateUrl: '/partials/intensity-chart.html'
     ]
 
 

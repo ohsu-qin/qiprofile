@@ -366,6 +366,9 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
           # (cf. https://github.com/krispo/angular-nvd3/issues/316).
           # The work-around is to surgically intervene in the
           # defective ngnvd3 code.
+          # TODO - periodically check whether the ngnvd3 bug is
+          #   fixed and remove the work-around if possible.
+          #scope.isReady = false
           if _.isUndefined(scope.isBroken)
             broken = scope.api.refresh
             fixed = ->
@@ -374,13 +377,24 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
               # to force the issue by calling the decorate function
               # directly in the refresh rather than indirectly via the
               # watcher.
-              # TODO - periodically check whether the ngnvd3 bug is
-              #   fixed and remove the work-around if possible. 
-              #scope.isReady = false
+              # TODO - remove this work-around to a work-around bug when
+              #   the original work-around is fixed.
               broken()
               $scope.decorate(scope, element)
             scope.api.refresh = fixed
             scope.isBroken = false
+    ]
+
+
+    ctlrs.controller 'IntensityChartCtrl', [
+      '$scope', 'IntensityChart',
+      ($scope, IntensityChart) ->
+        # The chart {options, data} configuration.
+        chartConfig = IntensityChart.configure($scope.scan)
+        $scope.options = chartConfig.options
+        $scope.data = chartConfig.data
+        # The global configuration. See ModelingChartCtrl comment.
+        $scope.config = deepWatchData: false
     ]
 
 
@@ -403,18 +417,6 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
           # objects with a circular object graph reference
           # (paramResult -> parent modelingResult -> child paramResult).
           $scope.config = deepWatchData: false
-    ]
-
-
-    ctlrs.controller 'IntensityChartCtrl', [
-      '$scope', 'IntensityChart',
-      ($scope, IntensityChart) ->
-        # The chart {options, data} configuration.
-        chartConfig = IntensityChart.configure($scope.session)
-        $scope.options = chartConfig.options
-        $scope.data = chartConfig.data
-        # The global configuration. See ModelingChartCtrl comment.
-        $scope.config = deepWatchData: false
     ]
 
 

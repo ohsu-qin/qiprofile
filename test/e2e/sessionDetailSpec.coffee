@@ -8,8 +8,8 @@ class SessionDetailPage extends Page
 
   # @returns the line chart promise
   @property chart: ->
-    # Perform a XSL search for the line chart subelement.
-    @find('//qi-intensity-chart//nvd3-line-chart')
+    # Perform a XSL search for the chart element.
+    @find('//div[@ng-controller="IntensityChartCtrl"]')
 
   # @param number the volume number
   # @returns the {download: ElementFinder, display: ElementFinder}

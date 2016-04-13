@@ -21,38 +21,45 @@
   iterated button list item rather than the list repeat
   element itself. This is somewhat counter-intuitive, but is
   necessary to work around the AngularJS bug.
+  
+  TODO - confirm whether this bug is still present in Angular 1.5.
 
-// The scan image selection buttons.
-.row
-  .qi-vol-selection-title Scan
-.row
-  .qi-vol-selection-title(ng-controller='ScanVolumeSelectCtrl')
-    button.btn.btn-med.qi-profile-btn(
-      ng-click="open()" ng-controller='ScanProtocolCtrl'
-    )
-      .glyphicon.glyphicon-info-sign()
-  ul.qi-hor-list.qi-scan-vol-btn-group
-    // The artificial intermediate ul-li span element works around the
-    // AngularJS bug described in the leading comment above.
-    span(ng-repeat="volume in scan.volumes.images" tooltip="{{ $index + 1 }}"
-         ng-controller='VolumeDisplayCtrl')
-      li
-        include ./volume-select-btn-pair
+.qi-volume-selection
+  // The scan image selection buttons.
+  .row
+    .qi-vol-selection-title Scan
+  .row
+    // FIXME - the open content shows an empty scan type for the
+    //   test seed database.
+    .qi-vol-selection-title(ng-controller='ScanVolumeSelectCtrl')
+      button.btn.btn-med.qi-profile-btn(
+        ng-click="open()" ng-controller='ScanProtocolCtrl'
+      )
+        .glyphicon.glyphicon-info-sign()
+    ul.qi-hor-list.qi-scan-vol-btn-group
+      // Note: The artificial intermediate ul-li span element works 
+      //around the AngularJS bug described in the leading comment above.
+      // The title attribute displays the volume number tooltip. 
+      // FIXME - The tooltip is not displayed, possibly because the span
+      //   does not have text content.
+      span(ng-repeat="volume in scan.volumes.images" title="{{ $index + 1 }}"
+           ng-controller='VolumeDisplayCtrl')
+        li
+          include ./volume-select-btn-pair
 
-// The realigned image selection buttons.
-.row
-  .qi-vol-selection-title(show="scan.registrations.length > 1")
-    | Realigned
-.row(ng-repeat="registration in scan.registrations")
-  .qi-vol-selection-title(ng-controller='RegistrationVolumeSelectCtrl')
-    button.btn.btn-med.qi-profile-btn(
-      ng-click="open()" ng-controller='RegistrationProtocolCtrl'
-    )
-      .glyphicon.glyphicon-info-sign()
-  ul.qi-hor-list.qi-reg-vol-btn-group
-    // The artificial intermediate ul-li span element works around the
-    // AngularJS bug described in the leading comment above.
-    span(ng-repeat="volume in registration.volumes.images" tooltip="{{ $index + 1 }}"
-         ng-controller='VolumeDisplayCtrl')
-      li
-        include ./volume-select-btn-pair
+  // The realigned image selection buttons.
+  .row
+    .qi-vol-selection-title(show="scan.registrations.length > 1")
+      | Realigned
+  .row(ng-repeat="registration in scan.registrations")
+    .qi-vol-selection-title(ng-controller='RegistrationVolumeSelectCtrl')
+      button.btn.btn-med.qi-profile-btn(
+        ng-click="open()" ng-controller='RegistrationProtocolCtrl'
+      )
+        .glyphicon.glyphicon-info-sign()
+    ul.qi-hor-list.qi-reg-vol-btn-group
+      // See the comments for the scan selection list above.
+      span(ng-repeat="volume in registration.volumes.images" title="{{ $index + 1 }}"
+           ng-controller='VolumeDisplayCtrl')
+        li
+          include ./volume-select-btn-pair

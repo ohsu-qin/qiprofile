@@ -2,81 +2,6 @@ define ['angular', 'chart'], (ng) ->
   intensityChart = ng.module 'qiprofile.intensitychart', []
 
   intensityChart.factory 'IntensityChart', ->
-    # Highlights the bolus arrival tick mark. The bolus arrival is
-    # only highlighted if it occurs after the first series.
-    #
-    # @param session the session object
-    # @param chart the intensity chart
-    highlightBolusArrival = (session, chart) ->
-      # If the bolus arrival index is zero, then it does not have
-      # have a tick mark, so bail.
-      if not session.bolusArrivalIndex
-        return
-      # Select the SVG element.
-      svg = d3.select(chart.container)
-      # The x axis element.
-      xAxis = svg.select('.nv-x')
-
-      # The D3 CSS3 bolus tick selector. The tick marks are SVG
-      # g elements with the tick class. There is a tick mark for
-      # all but the first and last series. Therefore, the tick
-      # offset is one less than the bolus arrival index.
-      offset = session.bolusArrivalIndex - 1
-      # The D3 CSS3 nth-of-type selector argument of zero returns
-      # null. The work-around for this possible D3 bug by using
-      # the first-of-type selector argument in that case.
-      if offset
-        bolusTickSel = "g.tick:nth-of-type(#{ offset })"
-      else
-        bolusTickSel = "g.tick:first-of-type"
-      # The bolus tick element.
-      bolusTick = xAxis.select(bolusTickSel)
-      # The bolus tick child line element.
-      bolusTickLine = bolusTick.select('line')
-      highlightNode = bolusTickLine.node().cloneNode()
-      highlight = d3.select(highlightNode)
-      # Set the bolus CSS class.
-      highlight.classed('qi-bolus-arrival', true)
-
-      # Insert the highlight SVG element after the tick line. The
-      # highlight will display centered over the tick line. Note
-      # that D3 insert differs from jQuery insert. The D3 arguments
-      # are a function which returns a DOM element and the selector
-      # before which the node is inserted. In our case, the node to
-      # insert is the highlight node and the before selector is the
-      # bolus tick selector.
-      highlightNodeFunc = -> highlightNode
-      bolusTick.insert(highlightNodeFunc, 'line')
-
-      # The chart legend.
-      legend = svg.select('.nv-legend')
-      # The legend group holds the legend elements.
-      legendGroup = legend.select(':first-child')
-      # Add a bolus legend group before the standard legends.
-      bolusGroup = legendGroup.insert('svg:g', ':first-child')
-      bolusGroup.attr('transform', 'translate(-25, 5)')
-      # The legend text.
-      text = 'Bolus Arrival'
-      # The SVG text size in em units.
-      textScale = 0.32
-      # The legend length.
-      textWidth = textScale * text.length
-
-      # A rectangle of the same color as the bolus arrival timeline
-      # bar is the background for the legend text.
-      bolusLegendBar = bolusGroup.append('svg:rect')
-      bolusLegendBar.attr('width', "#{ textWidth + 1 }em")
-      bolusLegendBar.attr('height', '1.1em')
-      bolusLegendBar.attr('x', "#{ -textWidth - 1.1 + textScale }em")
-      bolusLegendBar.attr('y', "-#{ textScale + .2 }em")
-      bolusLegendBar.attr('fill', 'Gainsboro')
-
-      # The bolus legend text is painted on top of the rectangle.
-      bolusLegend = bolusGroup.append('svg:text')
-      bolusLegend.attr('class', 'qi-bolus-legend')
-      bolusLegend.attr('dy', "#{ textScale }em")
-      bolusLegend.text(text)
-
     # The Y axis value formatter function. If the given intensity
     # value is integral, then this function returns the integer.
     # Otherwise, the value is truncated to two decimal places.
@@ -152,29 +77,47 @@ define ['angular', 'chart'], (ng) ->
       registrationDataSeries = (registration, index) ->
         # Return the data series format object.
         key: dataSeriesKey(index)
+        type: 'line'
+        yAxis: 1
         color: REG_COLORS[index % REG_COLORS.length]
         values: coordinates(registration.volumes.images)
 
       # The scan data series configuration.
       scanDataSeries =
         key: 'Scan'
+        type: 'line'
+        yAxis: 1
         color: SCAN_COLOR
         values: coordinates(scan.volumes.images)
       # The registration data series.
       regDataSeries = (registrationDataSeries(reg, i) for reg, i in scan.registrations)
+      
       # Combine the scan and registration data series.
       data = [scanDataSeries].concat(regDataSeries)
 
-      # TODO - adapt highlightBolusArrival for ngnvd3 and enable
-      #   as the onready callback.
-      #   But try out a line/bar combo chart first.
-      highlightBolusArrival: (chart) ->
-        highlightBolusArrival(scan.session, chart)
+      # Add the bolus arrival bar.
+      bolusArvNdx = scan.session.bolusArrivalIndex
+      if bolusArvNdx?
+        # Extend the bar from the axis to the top.
+        dsIntensities = (_.map(dataSeries.values, 'y') for dataSeries in data)
+        dsMaxIntensities = (_.max(values) for values in dsIntensities)
+        maxIntensity = _.max(dsMaxIntensities)
+        yValues = new Array(scan.volumes.images.length).fill(0)
+        yValues[bolusArvNdx] = maxIntensity
+        values = ({x: i + 1, y: y} for y, i in yValues)
+        bolusDataSeries =
+          key: 'Bolus Arrival'
+          type: 'bar'
+          yAxis: 1
+          color: 'SandyBrown'
+          values: values
+          showMaxMin: false
+        data.push(bolusDataSeries)
 
       # Return the chart configuration.
       options:
         chart:
-          type: 'lineChart'
+          type: 'multiChart'
           forceY: [0]
           yAxis:
             tickFormat: formatIntensity
@@ -185,4 +128,7 @@ define ['angular', 'chart'], (ng) ->
           tooltip:
             headerFormatter: (volumeNumber) ->
               "Volume #{ volumeNumber }"
+            # Note: due to a svd3 but, valueFormatter doesn't work on a
+            # multichart, although headerFormatter does.
+            #valueFormatter: d3.format('.2f')
       data: data

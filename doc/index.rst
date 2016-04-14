@@ -19,7 +19,7 @@ Feature List
 
 1. Side-by-side clinical and pharmokinetic modeling results display.
 
-2. Patient MR visualization.
+2. MR visualization.
 
 3. ROI and modeling overlays.
 

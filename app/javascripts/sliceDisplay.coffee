@@ -12,10 +12,16 @@ define(
         # TODO - get the limit value from wherever it is defined.
         lut: _.range(255, 0, -1)
 
+      #
+      # TODO - uncomment below.
+      #
       # # Enable the Cornerstone viewports.
       # sliceViewport = cornerstone.enable(document.getElementById('qi-slice-display'))
       # overlayViewport = cornerstone.enable(document.getElementById('qi-overlay'))
 
+      #
+      # TODO - What is the imageId? Where is it set?
+      #
       # Loads and displays an image in a viewport. The binary data served
       # up by ImageSequence.load() are referenced by the imageId.
       #

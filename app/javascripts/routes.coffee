@@ -246,9 +246,7 @@ define ['angular', 'lodash', 'underscore.string', 'uirouter', 'resources',
                 ts = registration.timeSeries
                 if not ts?
                   throw new ReferenceError(
-                      "#{ subject.title } #{ session.title }" +
-                      " #{ scan.title } #{ registration.title }" +
-                      " does not have a time series"
+                      "#{ registration.title } does not have a time series"
                   )
                 if ts.isLoaded() then ts else ts.load()
             views:

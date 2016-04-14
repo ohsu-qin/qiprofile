@@ -1,9 +1,18 @@
-
+// TODO - see volume-display TODO. Retain this file on a branch
+//   and delete from master.
+//
+// TODO - shouldn't the divs be inside the uib-accordion-group?
+//
 // The image controls are organized into accordion groups.
 .qi-panel.qi-volume-display-ctrl
   uib-accordion(close-others='false')
     div(ng-controller='AccordionGroupCtrl')
       uib-accordion-group(is-open="isOpen")
+        //
+        // TODO - this is a volume control rather than a time series
+        //   control. The time series does not change. The title
+        //   should be 'Time Point' and the model should be volume.
+        // 
         +accordion-heading('Time Series')
         // The time series control.
         .row
@@ -17,6 +26,8 @@
         .row
           .col-md-3.qi-slider-label Sagittal
           .col-md-9
+            // TODO - watch the slice directly. Don't need to
+            //   wrap it in a saggitalView object in the controller. 
             slider.qi-slider(ng-model="saggitalView.slice"
                              floor='0' ceiling='1' step='1')
         .row   

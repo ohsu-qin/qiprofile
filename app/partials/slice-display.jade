@@ -1,24 +1,25 @@
-
 extends ../layout/partial
 
 include include/accordion-heading-mixin
 
+// TODO - the model should be a timeSeries, not a volume.
 block billboard
-  | {{ imageSequence.session.subject.collection | capitalize }}
-  | Patient {{ imageSequence.session.subject.number }}
-  | Session {{ imageSequence.session.number }}
-  | {{ imageSequence.title }}
-  | Volume {{ volume.number }}
+  | {{ volume.title }}
 
 block content
   // The modeling parameter overlay select.
-  include include/overlay-select
+  // TODO - Enable overlay.
+  //- include include/overlay-select
+  //
   // TODO - create volume and slice axis sliders in a new file
   //   slice-controls.jade, perhaps using the Session Detail
   //   volume-controls.jade as a basis. Then uncomment the lines
   //   below.
   //- // The opacity, axis and threshold image controls.
   //- include include/image-controls
+  //
+  // TODO - Rename the elements and styles below. Shouldn't have
+  //   an element with id X as a child of a div with style X.
   .qi-slice-display
     // The Cornerstone slice and overlay image viewports. The overlay
     // viewport is placed in front of the slice viewport using CSS.
@@ -26,11 +27,11 @@ block content
       oncontextmenu='return false' unselectable='on'
       onselectstart='return false' onmousedown='return false'
     )
-    #qi-overlay.cornerstone-enabled-image(
-      oncontextmenu='return false' unselectable='on'
-      onselectstart='return false' onmousedown='return false'
-      ng-style='overlayConfig.style'
-    )
+    //- #qi-overlay.cornerstone-enabled-image(
+    //-   oncontextmenu='return false' unselectable='on'
+    //-   onselectstart='return false' onmousedown='return false'
+    //-   ng-style='overlayConfig.style'
+    //- )
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

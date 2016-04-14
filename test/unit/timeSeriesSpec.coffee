@@ -8,7 +8,7 @@ define ['ngmocks', 'lodash', 'expect', 'timeSeries', 'helpers'],
     mock =
       scan:
         _cls: 'Scan'
-        title: 'Breast Subject 1 Session 1 Scan 1'
+        title: 'Breast Patient 1 Session 1 Scan 1'
         timeSeries:
           name: 'scan_ts'
           image:

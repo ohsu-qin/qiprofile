@@ -7,7 +7,7 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'session', 'helpers'],
     # The mock objects.
     mock =
       subject:
-        title: 'Breast Subject 1'
+        title: 'Breast Patient 1'
 
       session:
         acquisitionDate: moment('Jul 1, 2013', 'MMM DD, YYYY').valueOf()

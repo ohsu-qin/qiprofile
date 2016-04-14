@@ -9,7 +9,7 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'session', 'helpers'],
     #  and transformed to a number by Scan.extend.
     mock =
       session:
-        title: 'Breast Subject 1 Session 1'
+        title: 'Breast Patient 1 Session 1'
         scans: [
           _cls: 'Scan'
           number: '1'
@@ -61,4 +61,4 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'session', 'helpers'],
         it 'should have a virtual title property', ->
           expect(scan.title, "The scan title is missing").to.exist
           expect(scan.title, "The scan title is incorrect")
-            .to.equal('Breast Subject 1 Session 1 Scan 1')
+            .to.equal('Breast Patient 1 Session 1 Scan 1')

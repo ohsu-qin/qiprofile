@@ -8,7 +8,7 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'volume', 'helpers'],
     mock =
       scan:
         _cls: 'Scan'
-        title: 'Breast Subject 1 Session 1 Scan 1'
+        title: 'Breast Patient 1 Session 1 Scan 1'
         volumes:
           name: 'NIFTI'
           images:  [
@@ -52,7 +52,7 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'volume', 'helpers'],
         it 'should have a virtual title property', ->
           expect(volume.title, "The volume title is missing").to.exist
           expect(volume.title, "The volume title is incorrect")
-            .to.equal('Breast Subject 1 Session 1 Scan 1 Volume 1')
+            .to.equal('Breast Patient 1 Session 1 Scan 1 Volume 1')
 
         it 'should alias the imageSequence reference to the scan', ->
           expect(volume.imageSequence, "The volume is missing the" +

@@ -8,7 +8,7 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'registration', 'helpers'],
     mock =
       scan:
         _cls: 'Scan'
-        title: 'Breast Subject 1 Session 1 Scan 1'
+        title: 'Breast Patient 1 Session 1 Scan 1'
         registrations: [
           _cls: 'Registration'
           protocol: 'rp1'
@@ -50,4 +50,4 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'registration', 'helpers'],
         it 'should have a virtual title property', ->
           expect(registration.title, "The registration title is missing").to.exist
           expect(registration.title, "The registration title is incorrect")
-            .to.equal('Breast Subject 1 Session 1 Scan 1 Registration 1')
+            .to.equal('Breast Patient 1 Session 1 Scan 1 Registration 1')

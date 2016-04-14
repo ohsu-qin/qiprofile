@@ -11,7 +11,7 @@ table.table.qi-table.qi-ver-space
     td {{ encounter.date | moment }}
   
   tr(ng-show="encounter.weight != null")
-    th Subject Weight
+    th Patient Weight
     td {{ encounter.weight }}
 
 .qi-ver-space(ng-switch="encounter.title")

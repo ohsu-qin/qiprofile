@@ -1,17 +1,13 @@
 // TODO - following successful introduction of the Slice Display,
-// create a volume-display branch to preserve the XTK variant and
-// delete all volume files and references from the master branch.
+//   create a volume-display branch to preserve the XTK variant and
+//   delete all volume files and references from the master branch.
 
 extends ../layout/partial
 
 include include/accordion-heading-mixin
 
 block billboard
-  | {{ imageSequence.session.subject.collection | capitalize }}
-  | Patient {{ imageSequence.session.subject.number }}
-  | Session {{ imageSequence.session.number }}
-  | {{ imageSequence.title }}
-  | Volume {{ volume.number }}
+  | {{ volume.title }}
 
 block content
   // The modeling parameter overlay select.

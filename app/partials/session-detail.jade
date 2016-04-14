@@ -1,9 +1,7 @@
 extends ../layout/partial
 
 block billboard
-  | {{ session.subject.collection | capitalize }}
-  | Patient {{ session.subject.number }}
-  | Session {{ session.number }}
+  | {{ session.title }}
 
 block content
   .qi-panel.qi-nested(ng-repeat="scan in session.scans | multiVolume")

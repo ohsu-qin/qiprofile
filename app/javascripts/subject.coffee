@@ -56,8 +56,13 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'session', 'model
           # @returns the subject display title
           title:
             get: ->
-              "#{ @collection } Subject #{ @number }"
-    
+              # TODO - get the Subject display text from a config,
+              #   e.g.:
+              #     label = config.subject.label
+              #     "#{ @collection } #{ label } #{ @number }"
+              #   See also the subject.coffee title TODO.
+              "#{ @collection } Patient #{ @number }"
+
           # @returns the clinical encounters
           clinicalEncounters:
             get: ->

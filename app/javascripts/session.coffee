@@ -55,6 +55,14 @@ define ['angular', 'lodash', 'scan', 'modeling', 'helpers'], (ng, _) ->
         Object.defineProperties session,
           # @returns the display title
           title:
+              # TODO - get the Session display text from a config,
+              #   e.g.:
+              #     label = config.session.label
+              #     "#{ @collection } #{ label } #{ @number }"
+              #   Thus, the label could be, say, 'Visit', rather than
+              #   'Session', and externally configurable. See also
+              #   the subject.coffee title TODO.
+              #
             get: -> "#{ @subject.title } Session #{ @number }"
 
         # Return the augmented session object.

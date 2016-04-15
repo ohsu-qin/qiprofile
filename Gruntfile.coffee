@@ -62,10 +62,11 @@ module.exports = (grunt) ->
         ]
         dest: '_public/javascripts/lib'
 
+      # Since the non-minimized Bootstrap module references the
+      # CSS map, the map must be colocated with the stylesheets.
+      # The CSS style files themselves are copied to the destination
+      # in the concat:css task.
       css:
-        # Note: Since the non-minimized Bootstrap module
-        # references the CSS map, the map must be colocated
-        # with the stylesheets.
         expand: true
         flatten: true
         cwd: 'bower_components/'

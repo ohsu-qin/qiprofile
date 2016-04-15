@@ -794,91 +794,146 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
 
     # The Image Slice Display controller.
     ctlrs.controller 'SliceDisplayCtrl', [
-      '$rootScope', '$scope', '$location', '$sce', 'ModelingChart', 'SliceDisplay',
-      'ControllerHelper', 'session', 'imageSequence', 'volume', 'slice',
-      ($rootScope, $scope, $location, $sce, ModelingChart,  SliceDisplay,
-       ControllerHelper, session, imageSequence, volume, slice) ->
-        # Capture the current project.
-        $rootScope.project = session.subject.project
-
-        # @param key the modeling parameter key, e.g. 'deltaKTrans'
-        # @returns the modeling parameter heading HTML span element,
-        #   e.g. '<span>&Delta;K<sub>trans</sub></span>'
-        $scope.parameterHeading = (key) ->
-          html = "<span>#{ Modeling.properties[key].html }</span>"
-          $sce.trustAsHtml(html)
-        #
-        # # The session modelings which have an overlay.
-        # $scope.overlayModelings = (
-        #   mdl for mdl in session.modelings when mdl.overlays.length?
-        # )
-        # # The overlay selection.
-        # $scope.overlayIndex = null
-        #
-        # # The initial saggital slice.
-        # $scope.saggitalView = slice: slice
-        #
-        # # The overlay opacity slider setting and CSS styles.
-        # $scope.overlayConfig =
-        #   setting: 1
-        #   style:
-        #     "opacity": 1
-        #     "z-index": -1
-        #
-        # # Watch for a change in the saggital slice control setting.
-        # # When the slice index changes, then update the image and,
-        # # if selected, the overlay.
-        # #
-        # # TODO - address the volume-controls.jade TODO items.
-        # #
-        # $scope.$watch 'saggitalView.slice', (index) ->
-        #   SliceDisplay.updateSlice($scope.imageIds[index].dicomImageId)
-        #   if $scope.overlayIndex?
-        #     Slice.updateOverlay($scope.imageIds[index].overlayIds,
-        #                                     $scope.overlayIndex)
-
-        # Update the URL search parameters.
-        $location.search('volume', volume)
-        $location.search('slice', slice)
+      '$rootScope', '$scope', '$location', 'SliceDisplay', 'ControllerHelper', 'timeSeries', 'volume', 'slice',
+      ($rootScope, $scope, $location, SliceDisplay, ControllerHelper, timeSeries, volume, slice) ->
         
-        # # The overlayIndex scope variable is the overlay radio input
-        # # selection value in the format *modeling index*.*overlay index*,
-        # # e.g. the value '0.1' is the second overlay of the first modeling.
-        # # By default, no overlay is selected. When a radio button is
-        # # checked, then the overlayIndex variable is set and the watcher
-        # # below is triggered.
-        # #
-        # # If the overlayIndex scope variable is changed to a non-null value,
-        # # then parse the value and call the image selectOverlay(overlay)
-        # # function on the referenced overlay.
-        # # Otherwise, call the image deselectOverlay() function.
-        # $scope.$watch 'overlayIndex', (index) ->
-        #   if index?
-        #     # Parse and disaggregate the composite index.
-        #     # Note: calling map with parseInt fails with a NaN second value
-        #     # since both parseInt can include optional arguments
-        #     # (cf. http://stackoverflow.com/questions/262427/javascript-arraymap-and-parseint).
-        #     # The work-around is to call map with Number, which takes a
-        #     # single string argument.
-        #     #[mdlIndex, ovrIndex] = index.split('.').map(Number)
-        #     # The selected modeling object.
-        #     #modeling = $scope.overlayModelings[mdlIndex]
-        #     # The select overlay label map in the selected modeling object.
-        #     #overlay = modeling.overlays[ovrIndex]
-        #     # Delegate to the image object.
-        #     #$scope.volume.selectOverlay(overlay)
-        #
-        #     # Move the overlay viewport to the front and update it -
-        #     #   Cornerstone prototype.
-        #     $scope.overlayConfig.style['z-index'] = 1
-        #     slice = $scope.saggitalView.slice
-        #     $scope.slice.updateOverlay($scope.imageIds[slice].overlayIds,
-        #                                     index)
-        #   else
-        #     #$scope.volume.deselectOverlay()
-        #     # Move the overlay viewport to the back - Cornerstone prototype.
-        #     $scope.overlayConfig.style['z-index'] = -1
+        # Capture the current project.
+        $rootScope.project = timeSeries.imageSequence.session.subject.project
+        
+        # Place the time series in scope.
+        $scope.timeSeries = timeSeries
+        
+        # Initialize the volume number, if necessary.
+        if not volume?
+          # The default volume is at bolus arrival, if defined, otherwise the
+          # first volume.
+          bolusArvNdx = timeSeries.imageSequence.bolusArrivalIndex
+          volume = if bolusArvNdx? then bolusArvNdx + 1 else 1
+          # Update the URL search parameter.
+          $location.search('volume', volume)
+        # Place the volume in scope.
+        $scope.volume = volume
 
+        # Initialize the slice number, if necessary.
+        if not slice?
+          # The default slice is the point of maximal ROI extent, if defined,
+          # otherwise the first slice.
+          # TODO - calculate the maximal ROI slice in the pipeline and put in
+          #  the REST database. 
+          maximalROISlice = undefined
+          slice = if maximalROISlice? then maximalROISlice + 1 else 1
+          # Update the URL search parameter.
+          $location.search('slice', slice)
+        # Place the slice in scope.
+        $scope.slice = slice
+        
+        # The overlay is initially unselected.
+        $scope.overlayIndex = null
+        
+        display = ->
+          SliceDisplay.display($scope.volume, $scope.slice, $scope.overlayIndex)
+
+        # Display the image the first time and whenever the volume changes
+        # thereafter.
+        
+        # Redisplay the image when the volume changes.
+        $scope.$watch 'volume', (volume, previous) ->
+          display()
+        
+        # Redisplay the image when the slice changes.
+        $scope.$watch 'slice', (slice, previous) ->
+          if volume != previous
+            display()
+        
+        # Redisplay the overlay when the overlay changes.
+        $scope.$watch 'overlayIndex', (overlayIndex, previous) ->
+          if overlayIndex != previous
+            display()
+
+      #
+      # TODO - use whatever is useful from below, then delete.
+      #
+      # '$rootScope', '$scope', '$location', '$sce', 'ModelingChart', 'SliceDisplay',
+      # 'ControllerHelper', 'session', 'imageSequence', 'volume', 'slice',
+      # ($rootScope, $scope, $location, $sce, ModelingChart, SliceDisplay,
+      #  ControllerHelper, session, imageSequence, volume, slice) ->
+      #   # Capture the current project.
+      #   $rootScope.project = session.subject.project
+      #
+      #   # @param key the modeling parameter key, e.g. 'deltaKTrans'
+      #   # @returns the modeling parameter heading HTML span element,
+      #   #   e.g. '<span>&Delta;K<sub>trans</sub></span>'
+      #   $scope.parameterHeading = (key) ->
+      #     html = "<span>#{ Modeling.properties[key].html }</span>"
+      #     $sce.trustAsHtml(html)
+      #
+      #   # The session modelings which have an overlay.
+      #   $scope.overlayModelings = (
+      #     mdl for mdl in session.modelings when mdl.overlays.length?
+      #   )
+      #   # The overlay selection.
+      #   $scope.overlayIndex = null
+      #
+      #   # The initial saggital slice.
+      #   $scope.saggitalView = slice: slice
+      #
+      #   # The overlay opacity slider setting and CSS styles.
+      #   $scope.overlayConfig =
+      #     setting: 1
+      #     style:
+      #       "opacity": 1
+      #       "z-index": -1
+      #
+      #   # Watch for a change in the saggital slice control setting.
+      #   # When the slice index changes, then update the image and,
+      #   # if selected, the overlay.
+      #   #
+      #   # TODO - address the volume-controls.jade TODO items.
+      #   #
+      #   $scope.$watch 'saggitalView.slice', (index) ->
+      #     SliceDisplay.updateSlice($scope.imageIds[index].dicomImageId)
+      #     if $scope.overlayIndex?
+      #       Slice.updateOverlay($scope.imageIds[index].overlayIds,
+      #                                       $scope.overlayIndex)
+      #
+      #
+      #   # The overlayIndex scope variable is the overlay radio input
+      #   # selection value in the format *modeling index*.*overlay index*,
+      #   # e.g. the value '0.1' is the second overlay of the first modeling.
+      #   # By default, no overlay is selected. When a radio button is
+      #   # checked, then the overlayIndex variable is set and the watcher
+      #   # below is triggered.
+      #   #
+      #   # If the overlayIndex scope variable is changed to a non-null value,
+      #   # then parse the value and call the image selectOverlay(overlay)
+      #   # function on the referenced overlay.
+      #   # Otherwise, call the image deselectOverlay() function.
+      #   $scope.$watch 'overlayIndex', (index) ->
+      #     if index?
+      #       # Parse and disaggregate the composite index.
+      #       # Note: calling map with parseInt fails with a NaN second value
+      #       # since both parseInt can include optional arguments
+      #       # (cf. http://stackoverflow.com/questions/262427/javascript-arraymap-and-parseint).
+      #       # The work-around is to call map with Number, which takes a
+      #       # single string argument.
+      #       #[mdlIndex, ovrIndex] = index.split('.').map(Number)
+      #       # The selected modeling object.
+      #       #modeling = $scope.overlayModelings[mdlIndex]
+      #       # The select overlay label map in the selected modeling object.
+      #       #overlay = modeling.overlays[ovrIndex]
+      #       # Delegate to the image object.
+      #       #$scope.volume.selectOverlay(overlay)
+      #
+      #       # Move the overlay viewport to the front and update it -
+      #       #   Cornerstone prototype.
+      #       $scope.overlayConfig.style['z-index'] = 1
+      #       slice = $scope.saggitalView.slice
+      #       $scope.slice.updateOverlay($scope.imageIds[slice].overlayIds,
+      #                                       index)
+      #     else
+      #       #$scope.volume.deselectOverlay()
+      #       # Move the overlay viewport to the back - Cornerstone prototype.
+      #       $scope.overlayConfig.style['z-index'] = -1
 
         # If the project is the default, then remove it from the URL.
         ControllerHelper.cleanBrowserUrl($rootScope.project)

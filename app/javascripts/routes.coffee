@@ -181,7 +181,8 @@ define ['angular', 'lodash', 'underscore.string', 'uirouter', 'resources',
             url: '?volume'
             resolve:
               imageSequence: (scan) -> scan
-              volume: ($stateParams) -> parseInt($stateParams.volume)
+              volume: ($stateParams) ->
+                if $stateParams.volume? then parseInt($stateParams.volume)
 
           # TODO - uncomment to enable XTK.
           # # The scan 3D volume detail state.
@@ -196,15 +197,20 @@ define ['angular', 'lodash', 'underscore.string', 'uirouter', 'resources',
           .state 'quip.collection.subject.session.scan.volume.slice',
             url: '?slice'
             resolve:
-              slice: ($stateParams) -> parseInt($stateParams.slice)
+              slice: ($stateParams) ->
+                if $stateParams.slice? then parseInt($stateParams.slice)
               timeSeries: (subject, session, scan) ->
-                ts = scan.timeSeries
-                if not ts?
+                timeSeries = scan.timeSeries
+                if not timeSeries?
                   throw new ReferenceError(
                     " #{ scan.title } does not have a time series"
                   )
-                img = ts.image
-                if img.isLoaded() then ts else img.load().then -> ts
+                # Resolve to the loaded time series.
+                # TODO - Load here and for registration below in a subcomponent
+                #   pane instead.
+                if not timeSeries.image.isLoaded()
+                  timeSeries.image.load()
+                timeSeries
             views:
               'main@':
                 templateUrl: '/partials/slice-display.html'
@@ -226,7 +232,8 @@ define ['angular', 'lodash', 'underscore.string', 'uirouter', 'resources',
             url: '?volume'
             resolve:
               imageSequence: (registration) -> registration
-              volume: -> parseInt($stateParams.volume)
+              volume: ->
+                if $stateParams.volume? then parseInt($stateParams.volume)
 
           # # TODO - uncomment to enable XTK.
           # # The registration 3D volume detail state.
@@ -241,14 +248,17 @@ define ['angular', 'lodash', 'underscore.string', 'uirouter', 'resources',
           .state 'quip.collection.subject.session.scan.registration.volume.slice',
             url: '?slice'
             resolve:
-              slice: ($stateParams) -> parseInt($stateParams.slice)
-              timeSeries: (subject, session, scan, registration) ->
-                ts = registration.timeSeries
-                if not ts?
+              slice: ($stateParams) ->
+                if $stateParams.slice? then parseInt($stateParams.slice)
+              timeSeries: (registration) ->
+                timeSeries = registration.timeSeries
+                if not timeSeries?
                   throw new ReferenceError(
                       "#{ registration.title } does not have a time series"
                   )
-                if ts.isLoaded() then ts else ts.load()
+                if not timeSeries.image.isLoaded()
+                  timeSeries.image.load()
+                timeSeries
             views:
               'main@':
                 templateUrl: '/partials/slice-display.html'

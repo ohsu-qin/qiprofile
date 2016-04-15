@@ -5,6 +5,7 @@ define(
 
     sliceDisplay.factory 'SliceDisplay', ->
       # The image inversion color LUT flips the colors.
+      # TODO - comment these settings.
       INVERSION_LUT =
         id: '1'
         firstValueMapped: 0
@@ -12,42 +13,31 @@ define(
         # TODO - get the limit value from wherever it is defined.
         lut: _.range(255, 0, -1)
 
-      #
-      # TODO - uncomment below.
-      #
-      # # Enable the Cornerstone viewports.
-      # sliceViewport = cornerstone.enable(document.getElementById('qi-slice-display'))
-      # overlayViewport = cornerstone.enable(document.getElementById('qi-overlay'))
+      # Enable the Cornerstone viewports.
+      imageElt = document.getElementById('qi-slice-image')
+      cornerstone.enable(imageElt)
+      overlayElt = document.getElementById('qi-slice-overlay')
+      cornerstone.enable(overlayElt)
 
-      #
-      # TODO - What is the imageId? Where is it set?
-      #
-      # Loads and displays an image in a viewport. The binary data served
-      # up by ImageSequence.load() are referenced by the imageId.
-      #
-      # @param imageId the image ID
-      # @param viewport the enabled viewport element
-      loadAndDisplayImage = (imageId, viewport) ->
-        cornerstone.loadAndCacheImage(imageId).then (data) ->
-          cornerstone.displayImage(viewport, data)
+      # @param data the binary image data
+      displayImage = (data) ->
+        cornerstone.displayImage(imageElt, data)
 
-      # Updates the slice image.
-      #
-      # @param imageId the image ID
-      updateSlice: (imageId) ->
-        loadAndDisplayImage(imageId, sliceViewport)
+      # @param data the binary overlay data
+      displayOverlay = (data) ->
+        # The viewport option applies the LUT.
+        opts = modalityLUT: INVERSION_LUT
+        cornerstone.displayImage(overlayElt, data, opts)
 
-      # Updates the overlay image.
+      # Displays the slice image and overlay.
       #
-      # @param overlayIds the overlay IDs
-      # @param overlayIndex the overlay index value
-      updateOverlay: (overlayIds, overlayIndex) ->
-        # Parse and disaggregate the composite index.
-        # Note: See the explanation in the Slice controller.
-        index = overlayIndex.split('.').map(Number)[1]
-        loadAndDisplayImage(overlayIds[index], overlayViewport)
-        # Apply the LUT.
-        viewport = cornerstone.getViewport(overlayViewport)
-        viewport.modalityLUT = INVERSION_LUT
-        cornerstone.setViewport(overlay, viewport)
+      # @param volume the one-based volume number
+      # @param slice the one-based slice number
+      # @param overlayIndex the zero-based overlay index
+      display: (volume, slice, overlayIndex) ->
+        imgData = imageData(volume - 1, slice - 1)
+        cornerstone.displayImage(imgData)
+        if overlayIndex?
+          ovlData = overlayData(overlayIndex)
+          cornerstone.displayOverlay(ovlData)
 )

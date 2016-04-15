@@ -1,33 +1,34 @@
 extends ../layout/partial
 
-include include/accordion-heading-mixin
-
 // TODO - the model should be a timeSeries, not a volume.
 block billboard
-  | {{ volume.title }}
+  | {{ timeSeries.title }}
 
 block content
   // The modeling parameter overlay select.
-  // TODO - Enable overlay.
+  // TODO - enable overlay.
   //- include include/overlay-select
   //
   // TODO - create volume and slice axis sliders in a new file
   //   slice-controls.jade, perhaps using the Session Detail
-  //   volume-controls.jade as a basis. Then uncomment the lines
-  //   below.
-  //- // The opacity, axis and threshold image controls.
-  //- include include/image-controls
-  //
-  // TODO - Rename the elements and styles below. Shouldn't have
-  //   an element with id X as a child of a div with style X.
+  //   volume-controls.jade as a basis--but justifying and
+  //   simplifying every part of the file (i.e. not just a
+  //   copy). Then uncomment the lines below.
+  //- // The selection and rendering image controls.
+  //- include include/slice-controls
   .qi-slice-display
     // The Cornerstone slice and overlay image viewports. The overlay
     // viewport is placed in front of the slice viewport using CSS.
-    #qi-slice-display.cornerstone-enabled-image(
+    //
+    // TODO - document the attributes below. Are they necessary?
+    //   Remove any defaults.
+    //
+    #qi-slice-image.cornerstone-enabled-image(
       oncontextmenu='return false' unselectable='on'
       onselectstart='return false' onmousedown='return false'
     )
-    //- #qi-overlay.cornerstone-enabled-image(
+    // TODO - enable overlay.
+    //- #qi-slice-overlay.cornerstone-enabled-image(
     //-   oncontextmenu='return false' unselectable='on'
     //-   onselectstart='return false' onmousedown='return false'
     //-   ng-style='overlayConfig.style'

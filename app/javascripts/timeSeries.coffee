@@ -28,6 +28,9 @@ define ['angular', 'underscore.string', 'image', 'nifti'], (ng, _s) ->
       
       # The image resource is the time series name.
       resource = timeSeries.name
-      # Extend the image.
+      # Extend the image with load capability.
       Image.extend(timeSeries.image, imageSequence, resource)
+      # If there is an overlay, then extend it as a Loader.
+      if timeSeries.overlay?
+        Image.extend(timeSeries.overlay, imageSequence, resource)
   ]

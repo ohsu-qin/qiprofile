@@ -6,6 +6,9 @@ div(ng-show='overlayModelings.length')
       td.qi-text-center
         include modeling-info-btn
       td.btn-group
+        // TODO - why are the $parent references below necessary?
+        //   Doesn't the scope inherit the parent references?
+        //
         // The shared ng-model $parent.overlayIndex variable below
         // is in the parent scope, since the ng-repeat creates a
         // child scope for every button. The uncheckable attribute

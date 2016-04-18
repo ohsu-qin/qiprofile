@@ -27,11 +27,15 @@ define ['angular', 'lodash', 'imageSequence'], (ng, _) ->
             "#{ @scan.title } Registration #{ @number }"
 
         # An ImageSequence present a uniform interface, which
-        # includes a session reference.
+        # includes a bolus arrival index and session reference.
         #
         # @returns the registration scan session
         session:
           get: -> @scan.session
+
+        # @returns the registration scan bolus arrival
+        bolusArrivalIndex:
+          get: -> @scan.bolusArrivalIndex
       
       # Return the extended object.
       registration

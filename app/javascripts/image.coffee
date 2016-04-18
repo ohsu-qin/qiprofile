@@ -8,9 +8,9 @@ define ['angular', 'lodash', 'loader', 'imageStore', 'nifti'], (ng, _, Loader) -
     # An image representation which can load an image file.
     class ImageMixin extends Loader
       # @param imageSequence the parent object
-      constructor: (imageSequence) ->
+      constructor: ->
         super
-        @imageSequence = imageSequence
+        # The image data and header, obtained upon .
         @data = @header = null
       
       parser: ->
@@ -19,6 +19,9 @@ define ['angular', 'lodash', 'loader', 'imageStore', 'nifti'], (ng, _, Loader) -
         else
           throw new Error("The image format could not be inferred from" +
                           " the image file extension for file #{ @name }")
+
+      # @returns whether the image data is loaded
+      isLoaded: -> @data?
 
       # Loads the image file and parses it with the given parser.
       # This method delegates to Loader.load to load the file
@@ -53,5 +56,5 @@ define ['angular', 'lodash', 'loader', 'imageStore', 'nifti'], (ng, _, Loader) -
       image.resource = resource
       
       # Add the loader functionality.
-      _.extend(image, new ImageMixin(imageSequence))
+      _.extend(image, new ImageMixin)
   ]

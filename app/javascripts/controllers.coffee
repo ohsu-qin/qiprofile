@@ -827,16 +827,48 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
         # Place the slice in scope.
         $scope.slice = slice
         
-        # The overlay is initially unselected.
-        $scope.overlayIndex = null
-        
+        #
+        # TODO - add overlays. The REST data model is:
+        #     Modeling {
+        #       result {
+        #         parameter: parameterResult{name, labelMap: {name, colorTable}}, ...}
+        #       }
+        #     }
+        #   and:
+        #     Scan {
+        #       rois: [{name, labelMap: {name, colorTable}}, ...]
+        #       }
+        #     }
+        #   with one ROI per tumor.
+        #
+        #   The LabelMap objects need to be collected by Scan.extend into a
+        #   Scan.overlays virtual property {key, image} object, where:
+        #   * *key* is either a modeling parameter name or 'roi'
+        #   * *image* is the LabelMap extended by the Image service, which
+        #     should be done in Modeling.extend and Scan.extend.
+        #
+        #   The composite ROI needs to be created in the pipeline from the
+        #   tumor ROIs and placed into a new REST Scan.rois ROI object
+        #   {composite, regions}, where:
+        #   *composite* is a LabelMap object
+        #   *regions* is the current Scan.rois [Region, ...] array. Since
+        #   the Scan ROIs do not overlap, the masks can be combined in a
+        #   ndarray operation by the pipeline.
+        #
+        #   The Slice Display page should have an overlay selection control,
+        #   one per modeling parameter and one for the composite ROI.
+        #   
+        #   Note that a registration time series needs to delegate to the parent
+        #   scan overlays. This can be done in Registration.extend by adding a
+        #   Registration.overlays virtual property.
         display = ->
-          SliceDisplay.display($scope.volume, $scope.slice, $scope.overlayIndex)
+          data =
+            image: $scope.timeSeries.image
+            #overlay: ...
+          SliceDisplay.display(data, $scope.volume, $scope.slice)
 
         # Display the image the first time and whenever the volume changes
         # thereafter.
-        
-        # Redisplay the image when the volume changes.
         $scope.$watch 'volume', (volume, previous) ->
           display()
         
@@ -844,14 +876,23 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
         $scope.$watch 'slice', (slice, previous) ->
           if volume != previous
             display()
-        
-        # Redisplay the overlay when the overlay changes.
-        $scope.$watch 'overlayIndex', (overlayIndex, previous) ->
-          if overlayIndex != previous
-            display()
+        #
+        # TODO - implement the overlay watcher in conjunction with the
+        #   changes described above.
+        #
+        # # Redisplay the overlay when the overlay changes.
+        # $scope.$watch 'overlayIndex', (overlayIndex, previous) ->
+        #   # There must first be an overlay. This situation should never
+        #   # occur by construction if the UI overlay selection properly
+        #   # guards against it.
+        #   if not data?
+        #     throw new ReferenceError("The time series does not have an overlay")
+        #   if overlayIndex != previous
+        #     display()
 
       #
-      # TODO - use whatever is useful from below, then delete.
+      # TODO - borrow whatever is useful from below--but don't copy it as is--then
+      # delete it.
       #
       # '$rootScope', '$scope', '$location', '$sce', 'ModelingChart', 'SliceDisplay',
       # 'ControllerHelper', 'session', 'imageSequence', 'volume', 'slice',

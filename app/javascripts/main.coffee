@@ -59,9 +59,11 @@ requirejs.config
     'error-stack-parser': './lib/error-stack-parser'
     lodash: './lib/lodash'
     moment: './lib/moment'
+    ndarray: './lib/ndarray'
     nganimate: [NG_LIB + '/' + 'angular-animate' + MIN, './lib/angular-animate']
     ngndc: './lib/angular-dc'
     ngnvd3: './lib/angular-nvd3'
+    nifti: './lib/nifti'
     nvd3: './lib/nv.d3'
     ngresource: [NG_LIB + '/' + 'angular-resource' + MIN, './lib/angular-resource']
     ngroute: [NG_LIB + '/' + 'angular-route' + MIN, './lib/angular-route']

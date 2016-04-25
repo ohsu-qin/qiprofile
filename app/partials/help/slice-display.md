@@ -1,8 +1,22 @@
-This page displays the 2D MR image slice and PK modeling color maps.
+This page displays the 2D MR image slice and pharmokinetic modeling
+color maps.
 
-The buttons above the image at left let you display a map of PK modeling
-results over the 3D volume. Color maps are turned off when the image is
-initially loaded. The following overlay options may be included:
+Image selection
+---------------
+Click on the *Orientation* left
+<span class="glyphicon glyphicon-step-backward"></span>
+or right <span class="glyphicon glyphicon-step-forward"></span> button
+to scroll through the MR slices in the orientation dimension.
+
+Click on the *Time Point* left
+<span class="glyphicon glyphicon-step-backward"></span>
+or right <span class="glyphicon glyphicon-step-forward"></span> button
+to scroll through the MR volumes in the time dimension.
+
+Modeling Result
+---------------
+Click on a Modeling Result button above the MR image to overlay the
+result on the image. The possible overlays include the following:
 
 * &Delta;K<sub>trans</sub>: the measure of the shutter speed effect on
   K<sub>trans</sub> estimation (i.e., FXL K<sub>trans</sub> subtracted
@@ -22,8 +36,10 @@ Click on the <span class="glyphicon glyphicon-info-sign"></span> button
 to the left of the overlay buttons to view details about modeling input
 and registration (motion correction).
 
-On the right, the image control panel lets you adjust the appearance of
-the image and overlay. The following controls are available:
+Image Control
+-------------
+The control buttons on the right lets you adjust the appearance of
+the image and overlay as follows:
 
 * Opacity: Drag the slider to adjust the transparency of the volume.
 

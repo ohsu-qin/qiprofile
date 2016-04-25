@@ -57,13 +57,12 @@ requirejs.config
     dc: './lib/dc'
     domReady: [DOM_READY_LIB + '/domReady' + MIN, './lib/domReady']
     'error-stack-parser': './lib/error-stack-parser'
+    EventEmitter: './lib/EventEmitter'
     lodash: './lib/lodash'
     moment: './lib/moment'
-    ndarray: './lib/ndarray'
     nganimate: [NG_LIB + '/' + 'angular-animate' + MIN, './lib/angular-animate']
     ngndc: './lib/angular-dc'
     ngnvd3: './lib/angular-nvd3'
-    nifti: './lib/nifti'
     nvd3: './lib/nv.d3'
     ngresource: [NG_LIB + '/' + 'angular-resource' + MIN, './lib/angular-resource']
     ngroute: [NG_LIB + '/' + 'angular-route' + MIN, './lib/angular-route']
@@ -92,6 +91,7 @@ requirejs.config
   # The non-AMD module dependencies.
   shim:
     angular: exports : 'angular'
+    cornerstone: deps: ['EventEmitter']
     d3: exports: 'd3'
     lodash: exports: '_'
     nganimate: deps: ['angular']

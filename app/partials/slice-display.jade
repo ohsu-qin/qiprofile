@@ -6,6 +6,14 @@ block billboard
 
 block content
   // The modeling parameter overlay select.
+  //
+  // TODO - add a Loading... indicator.
+  //
+  // TODO - load the overlays synchronously with the image.
+  //
+  // TODO - show the panels first, then load the image and
+  //   overlays.
+  //
   // TODO - enable overlay.
   //- include include/overlay-select
   //
@@ -16,18 +24,20 @@ block content
   //   copy). Then uncomment the lines below.
   //- // The selection and rendering image controls.
   //- include include/slice-controls
+  // Display the slice
   .qi-slice-display
-    // The Cornerstone slice and overlay image viewports. The overlay
-    // viewport is placed in front of the slice viewport using CSS.
-    //
+    // The Cornerstone image viewport.
     // TODO - document the attributes below. Are they necessary?
     //   Remove any defaults.
-    //
     #qi-slice-image.cornerstone-enabled-image(
       oncontextmenu='return false' unselectable='on'
       onselectstart='return false' onmousedown='return false'
     )
-    // TODO - enable overlay.
+    // TODO - enable the overlay.
+    // TODO - there might not be an overlay. What happens then?
+    //   Should the element be conditionally included?
+    //- // The Cornerstone overlay viewport. The overlay is placed
+    //- // in front of the image viewport using CSS.
     //- #qi-slice-overlay.cornerstone-enabled-image(
     //-   oncontextmenu='return false' unselectable='on'
     //-   onselectstart='return false' onmousedown='return false'

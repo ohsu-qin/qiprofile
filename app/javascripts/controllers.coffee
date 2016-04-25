@@ -858,14 +858,14 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
         #   The Slice Display page should have an overlay selection control,
         #   one per modeling parameter and one for the composite ROI.
         #   
-        #   Note that a registration time series needs to delegate to the parent
+        #   A registration image sequence needs to delegate to the parent
         #   scan overlays. This can be done in Registration.extend by adding a
         #   Registration.overlays virtual property.
+        #   
+        #   Finally, TimeSeries.extend should create a TimeSeries.overlays
+        #   virtual property which delegates to the parent overlays.
         display = ->
-          data =
-            image: $scope.timeSeries.image
-            #overlay: ...
-          SliceDisplay.display(data, $scope.volume, $scope.slice)
+          SliceDisplay.display($scope.timeSeries, $scope.volume, $scope.slice)
 
         # Display the image the first time and whenever the volume changes
         # thereafter.

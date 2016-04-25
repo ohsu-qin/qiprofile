@@ -35,12 +35,12 @@ define ['ngmocks', 'lodash', 'expect', 'moment', 'session', 'helpers'],
             protocol: 'sp1'
             time_series:
               name: 'scan_ts'
-              image: 'scan_ts.nii.gz'
+              image:
+                name: 'scan_ts.nii.gz'
             volumes:
               name: 'NIFTI'
               images: [
                 name: 'volume001.nii.gz'
-                average_intensity: 2.4
               ]
             registrations: []
           ]

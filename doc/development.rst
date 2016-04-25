@@ -253,10 +253,61 @@ Coding Standards
 
 * CoffeeScript variable names are camelCase rather than underscore.
 
-* CoffeeScript function calls with an anonymous function argument
-  omit parentheses, e.g.::
+* Source code lines are no longer than 80 characters, unless a single
+  line is more readable.
 
-      result = _.sortBy array, (a, b) -> a.priority - b.priority
+* Comment lines are no longer than 72 characters, unless a single line
+  is more readable.
+
+* Function calls are on one line unless they exceed the recommended
+  length, e.g.::
+  
+      a = _.concat(first, second)  # Good
+
+  rather than::
+
+      a = _.concat(first,  # Bad
+                   second)
+
+* Function arguments are aligned when the function call extends to more
+  than one line, e.g.::
+
+      a = _.concat(first, second, third, fourth, fifth, sixth, seventh,
+                   eighth)
+
+* Arguments for a function with a long name are placed on a separate
+  line if it is more readable, e.g.::
+
+      aLongVariableName.anEvenLongerFunctionName(
+          anotherLongVariableName, yetAnotherLongerVariableName
+      )
+
+  The closing parenthesis is placed on a separate line if and only if
+  the arguments are on a separate line.
+
+* A string argument that extends over one line is broken into a
+  concatenation of aligned substrings, e.g.::
+
+      console.log("A long string like this is broken into aligned" +
+                  " substrings.")
+      
+
+* CoffeeScript function calls with an anonymous function argument
+  omit parentheses if and only if the function is defined on a
+  separate line, e.g.::
+
+      result = _.sortBy(array, (a, b) -> a.priority - b.priority)
+      result = _.sortBy array, (a, b) ->
+          a.priority - b.priority
+
+* Functions extending over several lines are defined in a separate
+  variable rather than an anonymous argument, e.g.::
+
+      sort_criterion = (a, b) ->
+          .
+          .
+          .
+      result = _.sortBy(array, sort_criterion)
 
 * Function and array boundaries are not padded with a string, e.g.::
 
@@ -273,6 +324,24 @@ Coding Standards
 
       doSomethingUseful = ->
         ...
+
+* A throw argument is always an Error object rather than a string,
+  e.g.::
+
+      throw new Error(message)   # Good
+
+ rather than::
+ 
+      throw new message   # Bad
+
+* Error messages are simple, informative text without ending punction,
+  e.g.::
+  
+      throw new Error("The file type is not recognized: #{ file }") # Good
+  
+  rather than::
+  
+      throw new Error("Bad file type!")  # Bad
 
 * CoffeeScript, Jade and Stylus string literals have double quotation
   marks if they are evaluated or interpolated, single quotation marks

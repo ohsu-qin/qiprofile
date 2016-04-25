@@ -46,7 +46,7 @@ define(
         # The image header.
         header = timeSeries.image.contents.header
         # The slice image data subarray.
-        data = timeSeries.image.contents.data.pick(volumeIndex, null, null, sliceIndex)
+        data = timeSeries.image.contents.data.pick(sliceIndex, null, null, volumeIndex)
         # Return the data adapted for Cornerstone.
         adaptImage(imageId, sliceIndex, header, data)
 
@@ -56,6 +56,8 @@ define(
         # The image header.
         header = overlay.contents.header
         # The slice overlay data subarray.
+        # TODO - is the argument order correct? Should slice be first?
+        #   Check this before any overlay functionality is committed.
         data = overlay.contents.data.pick(null, null, sliceIndex)
         # Return the data adapted for Cornerstone.
         adaptImage(imageId, sliceIndex, header, data)
@@ -187,8 +189,10 @@ define(
       # @param volume the one-based volume number
       # @param slice the one-based slice number
       display: (timeSeries, volume, slice) ->
+        # Display the image.
         imgData = imageData(timeSeries, volume - 1, slice - 1)
         displayImage(imgData)
+        # If there is an overlay, then display it on top of the image.
         if timeSeries.overlay?
           ovlData = overlayData(timeSeries.overlay, slice - 1)
           displayOverlay(ovlData)

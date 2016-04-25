@@ -7,12 +7,6 @@ define ['angular', 'lodash', 'loader', 'imageStore', 'nifti'], (ng, _, Loader) -
 
     # An image representation which can load an image file.
     class ImageMixin extends Loader
-      # @param imageSequence the parent object
-      constructor: ->
-        super
-        # The image data and header, obtained upon .
-        @data = @header = null
-      
       parser: ->
         if NIFTI_REGEX.test(@name)
           Nifti
@@ -28,17 +22,16 @@ define ['angular', 'lodash', 'loader', 'imageStore', 'nifti'], (ng, _, Loader) -
       # and the parser to parse the file.
       #
       # @returns a promise which resolves to this image object
-      #   with the parsed header and data properties
+      #   extended with the parsed {header, data} *contents* property
       load: ->
         # The image content parser service.
         parser = @parser()
         # Delegate to the Loader.load function.
-        super(this, ImageStore).then (content) ->
-          parsed = parser.parse(content)
-          @header = parsed.header 
-          @data = parsed.data
-          # Resolve to this image object.
-          this
+        super(this, ImageStore)
+          .then (raw) =>
+            parser.parse(raw)
+          .then (parsed) =>
+            @contents = parsed
 
     # Makes the following changes to the given REST Image object:
     # * adds the generic parent imageSequence reference
@@ -46,15 +39,8 @@ define ['angular', 'lodash', 'loader', 'imageStore', 'nifti'], (ng, _, Loader) -
     # * adds the Loader functionality
     #
     # @param image the REST Image object to extend
-    # @param imageSequence the parent ImageSequence object
-    # @param the image store resource identifier
     # @return the extended Image object
-    extend: (image, imageSequence, resource) ->
-      # The parent reference property.
-      image.imageSequence = imageSequence
-      # The image resource.
-      image.resource = resource
-      
+    extend: (image) ->
       # Add the loader functionality.
       _.extend(image, new ImageMixin)
   ]

@@ -208,9 +208,10 @@ define ['angular', 'lodash', 'underscore.string', 'uirouter', 'resources',
                 # Resolve to the loaded time series.
                 # TODO - Load here and for registration below in a subcomponent
                 #   pane instead.
-                if not timeSeries.image.isLoaded()
-                  timeSeries.image.load()
-                timeSeries
+                if timeSeries.image.isLoaded()
+                  timeSeries
+                else
+                  timeSeries.image.load().then -> timeSeries
             views:
               'main@':
                 templateUrl: '/partials/slice-display.html'
@@ -256,9 +257,12 @@ define ['angular', 'lodash', 'underscore.string', 'uirouter', 'resources',
                   throw new ReferenceError(
                       "#{ registration.title } does not have a time series"
                   )
-                if not timeSeries.image.isLoaded()
-                  timeSeries.image.load()
-                timeSeries
+                # TODO - see scan TODO
+                if timeSeries.image.isLoaded()
+                  timeSeries
+                else
+                  # TODO - defer the promise resolution to the rendering?
+                  timeSeries.image.load().then -> timeSeries
             views:
               'main@':
                 templateUrl: '/partials/slice-display.html'

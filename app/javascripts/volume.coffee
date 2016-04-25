@@ -14,10 +14,10 @@ define ['angular', 'lodash', 'underscore.string', 'image'], (ng, _, _s) ->
     # @param imageSequence the parent object
     # @param number the one-based volume number
     extend: (volume, imageSequence, number) ->
-      # The image sequence volumes resource name.
-      resource = imageSequence.volumes.name
+      # Set the image parent volume reference.
+      volume.imageSequence = imageSequence
       # Add the image load capability.
-      Image.extend(volume, imageSequence, resource)
+      Image.extend(volume)
 
       # The concrete parent reference (scan or registration).
       propertyName = _s.decapitalize(imageSequence._cls)
@@ -27,11 +27,15 @@ define ['angular', 'lodash', 'underscore.string', 'image'], (ng, _, _s) ->
       # The volume number property.
       volume.number = number
 
-      # The title virtual property.
+      # The volume virtual properties.
       Object.defineProperties volume,
         # @returns the display title
         title:
           get: -> "#{ @imageSequence.title } Volume #{ @number }"
+        
+        # @returns the volume resource name
+        resource:
+          get: -> @imageSequence.volumes.name
 
       # Return the augmented Image object.
       volume

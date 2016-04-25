@@ -105,6 +105,14 @@ define ['angular', 'lodash', 'resources', 'session'], (ng, _) ->
             overlay:
               get: ->
                 @labelMap
+            
+            # @returns the parameter result title
+            title:
+              get: ->
+                "#{ @modelingResult.modeling.title } #{ @key }"
+
+          # Set the overlay parent reference.
+          paramResult.labelMap.parameterResult = paramResult
 
     # A modeling result micro-service.
     ModelingResult =
@@ -117,6 +125,7 @@ define ['angular', 'lodash', 'resources', 'session'], (ng, _) ->
       extend: (modelingResult, modeling) ->
         # Set the modeling result parent reference.
         modelingResult.modeling = modeling
+
         # Extend each modeling parameter result object.
         for key, paramResult of modelingResult
           ParameterResult.extend(paramResult, modelingResult, key)
@@ -164,8 +173,13 @@ define ['angular', 'lodash', 'resources', 'session'], (ng, _) ->
             # Sort the overlayed results.
             sorted = _.sortBy(overlayed, 'key')
             # Pluck the overlay from the overlayed results.
-            _.map(sorted, 'overlay')
-        
+            overlays = _.map(sorted, 'overlay')
+
+        # @returns the modeling title
+        title:
+          get: ->
+            "#{ @session.title } #{ @resource }"
+
       # Return the extended object.
       modeling
 

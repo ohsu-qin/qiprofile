@@ -45,6 +45,7 @@ module.exports = (grunt) ->
           'dcjs/dc.js'
           'domready/ready.js'
           'error-stack-parser/dist/error-stack-parser.js'
+          'eventEmitter/EventEmitter.js'
           'lodash/lodash.js'
           'moment/moment.js'
           'nvd3/build/nv.d3.js'
@@ -61,6 +62,13 @@ module.exports = (grunt) ->
           'venturocket-angular-slider/build/angular-slider.js'
         ]
         dest: '_public/javascripts/lib'
+
+      # The non-coffee app javascript files.
+      appjs:
+        expand: true
+        cwd: 'app/'
+        src: ['javascripts/*.js']
+        dest: '_public/'
 
       # Since the non-minimized Bootstrap module references the
       # CSS map, the map must be colocated with the stylesheets.
@@ -117,11 +125,6 @@ module.exports = (grunt) ->
         dest: '_public/'
 
     browserify:
-      nifti:
-        src: []
-        dest: '_build/commonjs/nifti.js'
-        options:
-          require: ['nifti-js']
       ndarray:
         src: []
         dest: '_build/commonjs/ndarray.js'
@@ -219,6 +222,9 @@ module.exports = (grunt) ->
       coffee:
         files: ['app/**/*.coffee']
         tasks: ['compile:js']
+      javascript:
+        files: ['app/**/*.js']
+        tasks: ['copy:appjs']
       jade:
         files: ['app/**/*.jade', 'test/**/*.jade']
         tasks: ['jade']
@@ -267,7 +273,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'default', ['build:dev']
 
   # Copy the vendor javascript.
-  grunt.registerTask 'copy:js', ['copy:bower']
+  grunt.registerTask 'copy:js', ['copy:bower', 'copy:appjs']
 
   # Assemble the app.
   grunt.registerTask 'copy:app', ['copy:js', 'copy:css', 'copy:fonts',

@@ -15,5 +15,4 @@ test/results/
 *.pyc
 *.tar*
 **log
-*/**/*.js
 *.css

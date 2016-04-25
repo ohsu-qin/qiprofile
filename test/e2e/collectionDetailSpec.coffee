@@ -132,7 +132,7 @@ describe 'E2E Testing Collection Detail', ->
         expect(dropdowns.length, 'The Y-axis dropdown count is incorrect')
           .to.equal(4)
 
-    xit 'should display the Y-axis dropdown items', ->
+    it 'should display the Y-axis dropdown items', ->
       page.yAxisDropdowns.then (dropdowns) ->
         dropdown = _.first(dropdowns)
         # Show the dropdown.

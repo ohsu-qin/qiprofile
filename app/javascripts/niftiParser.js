@@ -415,7 +415,7 @@ niftiParser.parseHeaderExtensions = function (buffer_org) {
   var buffer = buf8.buffer; // Make sure we have an ArrayBuffer
   var view = new DataView(buffer);
   if (buffer.byteLength<354 || view.getInt8(348) === 0) {
-    return null
+    return []
   }
   // The extensions cannot go past the voxel offset.
   var niftiHeader = niftiParser.parseNIfTIHeader(buffer_org);

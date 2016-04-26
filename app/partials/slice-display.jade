@@ -7,12 +7,7 @@ block billboard
 block content
   // The modeling parameter overlay select.
   //
-  // TODO - add a Loading... indicator.
-  //
   // TODO - load the overlays synchronously with the image.
-  //
-  // TODO - show the panels first, then load the image and
-  //   overlays.
   //
   // TODO - enable overlay.
   //- include include/overlay-select
@@ -41,6 +36,16 @@ block content
       oncontextmenu='return false' unselectable='on'
       onselectstart='return false' onmousedown='return false'
     )
+      // TODO - place the spinner in its own element just to the
+      //   right of the text and remove the .col-md-4 style.
+      //   Trying that results in a roughly centered spinner.
+      //   Perhaps the qi-spin directive over-specifies its
+      //   layout. spinner formatting should go in CSS anyway
+      //   and rely on the browser to lay out its parent element
+      //   where possible, as described in the directive TODO.
+      .col-md-4.qi-loading(ng-show='timeSeries.image.isLoading()')
+        div(qi-spin="timeSeries.image.isLoading()")
+          | Loading the time series...
     // TODO - enable the overlay.
     // TODO - there might not be an overlay. What happens then?
     //   Should the element be conditionally included?

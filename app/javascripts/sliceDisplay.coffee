@@ -1,8 +1,9 @@
 define(
   ['angular', 'lodash', 'cornerstone', 'slider'],
   (ng, _, cornerstone) ->
-    sliceDisplay = ng.module 'qiprofile.slicedisplay', ['vr.directives.slider']
-
+    sliceDisplay = ng.module('qiprofile.slicedisplay',
+                             ['vr.directives.slider'])
+    
     sliceDisplay.factory 'SliceDisplay', ->
       # The image inversion color LUT flips the colors.
       # TODO - comment these settings.
@@ -189,11 +190,19 @@ define(
       # @param volume the one-based volume number
       # @param slice the one-based slice number
       display: (timeSeries, volume, slice) ->
-        # Display the image.
-        imgData = imageData(timeSeries, volume - 1, slice - 1)
-        displayImage(imgData)
-        # If there is an overlay, then display it on top of the image.
-        if timeSeries.overlay?
-          ovlData = overlayData(timeSeries.overlay, slice - 1)
-          displayOverlay(ovlData)
+        displayLoaded = ->
+          # Display the image.
+          imgData = imageData(timeSeries, volume - 1, slice - 1)
+          displayImage(imgData)
+
+          # If there is an overlay, then display it on top of the image.
+          if timeSeries.overlay?
+            ovlData = overlayData(timeSeries.overlay, slice - 1)
+            displayOverlay(ovlData)
+
+        # Load the image, if necessary.
+        if not timeSeries.image.isLoaded()
+          timeSeries.image.load().then(displayLoaded)
+        else
+          displayLoaded()
 )

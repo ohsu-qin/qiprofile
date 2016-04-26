@@ -200,18 +200,12 @@ define ['angular', 'lodash', 'underscore.string', 'uirouter', 'resources',
               slice: ($stateParams) ->
                 if $stateParams.slice? then parseInt($stateParams.slice)
               timeSeries: (subject, session, scan) ->
-                timeSeries = scan.timeSeries
-                if not timeSeries?
+                if not scan.timeSeries?
                   throw new ReferenceError(
                     " #{ scan.title } does not have a time series"
                   )
-                # Resolve to the loaded time series.
-                # TODO - Load here and for registration below in a subcomponent
-                #   pane instead.
-                if timeSeries.image.isLoaded()
-                  timeSeries
-                else
-                  timeSeries.image.load().then -> timeSeries
+                # Resolve to the time series.
+                scan.timeSeries
             views:
               'main@':
                 templateUrl: '/partials/slice-display.html'

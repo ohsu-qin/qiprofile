@@ -30,7 +30,14 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
             radius: 2
             trail: 80
             speed: 1
-            color: 'Orange'
+            color: 'IndianRed'
+            # TODO - moving the color to the common.styl class with definition:
+            #     // The spinner style.
+            #     .qi-spinner
+            #     color: IndianRed
+            #   then removing the color attribute and enabling the className
+            #   attribute below has no effect. Why not?
+            #className: 'qi-spinner'
           )
 
         scope.$watch attrs.qiSpin, (value, oldValue) ->

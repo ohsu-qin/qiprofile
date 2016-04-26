@@ -70,11 +70,14 @@ module.exports = (grunt) ->
         src: ['javascripts/*.js']
         dest: '_public/'
 
+      # Note: this task is only used to copy CSS map files. The
+      # CSS style files themselves are copied to the destination
+      # in the concat:css task.
+      #
+      # This task is only used to copy the Bootstrap map file. 
       # Since the non-minimized Bootstrap module references the
       # CSS map, the map must be colocated with the stylesheets.
-      # The CSS style files themselves are copied to the destination
-      # in the concat:css task.
-      css:
+      cssmap:
         expand: true
         flatten: true
         cwd: 'bower_components/'
@@ -276,7 +279,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'copy:js', ['copy:bower', 'copy:appjs']
 
   # Assemble the app.
-  grunt.registerTask 'copy:app', ['copy:js', 'copy:css', 'copy:fonts',
+  grunt.registerTask 'copy:app', ['copy:js', 'copy:cssmap', 'copy:fonts',
                                   'copy:static']
 
   # Concatenate the app stylesheets.

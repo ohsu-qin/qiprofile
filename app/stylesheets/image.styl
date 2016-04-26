@@ -11,22 +11,17 @@
 //   in the following two styles.
 //
 // TODO - convert occurences of px >= 10 to em in all style files.
+
+// TODO - put volume CSS on the volume branch and delete from the
+// master.
 //
 // The volume rendering styles.
-.qi-volume-display-display
+.qi-volume-display
   position relative
   width 512px
   height 512px
   margin-top 10px
   margin-bottom 10px
-
-// The slice rendering styles.
-.qi-slice-viewport
-  position absolute
-  top 0
-  left 0
-  width 512px
-  height 512px
 
 .qi-volume-display-ctrl
   position absolute
@@ -36,6 +31,20 @@
   & .row
     vertical-align middle
     margin 0.5em
+
+// The loading indicator.
+.qi-loading
+  display inline-block
+  font-size larger
+  color IndianRed
+
+// The slice rendering styles.
+.qi-slice-viewport
+  position absolute
+  top 0
+  left 0
+  width 512px
+  height 512px
 
 .qi-slider-label
   // Scooch the label down a bit, since the slider is vertically fatter than

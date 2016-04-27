@@ -812,7 +812,7 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
           # Update the URL search parameter.
           $location.search('volume', volume)
         # Place the volume in scope.
-        $scope.volume = volume
+        $scope.volume = volumeNbr: volume
 
         # Initialize the slice number, if necessary.
         if not slice?
@@ -825,8 +825,18 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
           # Update the URL search parameter.
           $location.search('slice', slice)
         # Place the slice in scope.
-        $scope.slice = slice
+        $scope.slice = sliceNbr: slice
         
+        # The slice dimensions.
+        $scope.dimensions = [
+          "Saggital"
+          "Coronal"
+          "Axial"
+        ]
+
+        # The default slice dimension.
+        $scope.dimension = "Axial"
+
         #
         # TODO - add overlays. The REST data model is:
         #     Modeling {
@@ -865,17 +875,19 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
         #   Finally, TimeSeries.extend should create a TimeSeries.overlays
         #   virtual property which delegates to the parent overlays.
         display = ->
-          SliceDisplay.display($scope.timeSeries, $scope.volume, $scope.slice)
+          SliceDisplay.display($scope.timeSeries, $scope.volume.volumeNbr, $scope.slice.sliceNbr)
+
+        watcher = (newValue, oldValue) ->
+          if newValue != oldValue
+            display()
 
         # Display the image the first time and whenever the volume changes
         # thereafter.
-        $scope.$watch 'volume', (volume, previous) ->
-          display()
-        
+        $scope.$watch('volume', display, true)
+
         # Redisplay the image when the slice changes.
-        $scope.$watch 'slice', (slice, previous) ->
-          if slice != previous
-            display()
+        $scope.$watch('slice', watcher, true)
+        
         #
         # TODO - implement the overlay watcher in conjunction with the
         #   changes described above.

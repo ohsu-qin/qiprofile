@@ -5,37 +5,38 @@
   uib-accordion(close-others='false')
     div(ng-controller='AccordionGroupCtrl')
       uib-accordion-group(is-open="isOpen")
+        +accordion-heading('Orientation')
+        // The orientation control.
+        .row.qi-orient-btn-group
+          div.btn-group
+            label.btn.qi-btn.qi-btn-radio(
+              ng-repeat="dim in dimensions"
+              ng-model="dimension"
+              uib-btn-radio="'{{ dim }}'"
+            ) {{ dim }}
+        .row
+          .col-md-2.glyphicon.glyphicon-step-backward.qi-step-btn(
+            ng-click="slice.sliceNbr = slice.sliceNbr - 1"
+          )
+          .col-md-8
+            slider.qi-slider(
+              ng-model="slice.sliceNbr" floor='1' ceiling='118' step='1'
+            )
+          .col-md-2.glyphicon.glyphicon-step-forward.qi-step-btn(
+            ng-click="slice.sliceNbr = slice.sliceNbr + 1"
+          )
+    div(ng-controller='AccordionGroupCtrl')
+      uib-accordion-group(is-open="isOpen")
         +accordion-heading('Time Point')
         // The time point control.
         .row
-          .col-md-2.glyphicon.glyphicon-step-backward
+          .col-md-2.glyphicon.glyphicon-step-backward.qi-step-btn(
+            ng-click="volume.volumeNbr = volume.volumeNbr - 1"
+          )
           .col-md-8
-            slider.qi-slider(ng-model="volume"
-                             floor='1' ceiling='32' step='1')
-          .col-md-2.glyphicon.glyphicon-step-forward
-    div(ng-controller='AccordionGroupCtrl')
-      uib-accordion-group(is-open="isOpen")
-        +accordion-heading('Orientation')
-        // The orientation control.
-        .row
-          // TODO - These will be buttons. 
-          .col-md-4 Sagittal
-          .col-md-4 Coronal
-          .col-md-4 Axial
-        .row
-          .col-md-2.glyphicon.glyphicon-step-backward
-          .col-md-8
-            slider.qi-slider(ng-model="slice"
-                             floor='1' ceiling='118' step='1')
-          .col-md-2.glyphicon.glyphicon-step-forward
-
-    //-div(ng-controller='AccordionGroupCtrl')
-    //-  uib-accordion-group(is-open="isOpen")
-    //-    +accordion-heading('Opacity')
-    //-    .row
-    //-      .col-md-3.qi-slider-label Overlay
-    //-      .col-md-9
-    //-        slider.qi-slider(ng-model='overlayConfig.setting'
-    //-          ng-change="overlayConfig.style['opacity']=overlayConfig.setting"
-    //-          floor='0' ceiling='1' step='0.1' precision='1'
-    //-        )
+            slider.qi-slider(
+              ng-model="volume.volumeNbr" floor='1' ceiling='32' step='1'
+            )
+          .col-md-2.glyphicon.glyphicon-step-forward.qi-step-btn(
+            ng-click="volume.volumeNbr = volume.volumeNbr + 1"
+          )

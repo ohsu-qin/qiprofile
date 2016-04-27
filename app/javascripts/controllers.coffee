@@ -874,7 +874,7 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart
         
         # Redisplay the image when the slice changes.
         $scope.$watch 'slice', (slice, previous) ->
-          if volume != previous
+          if slice != previous
             display()
         #
         # TODO - implement the overlay watcher in conjunction with the

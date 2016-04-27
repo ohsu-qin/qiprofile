@@ -1,5 +1,6 @@
 extends ../layout/partial
 
+include include/accordion-heading-mixin
 // TODO - the model should be a timeSeries, not a volume.
 block billboard
   | {{ timeSeries.title }}
@@ -12,13 +13,8 @@ block content
   // TODO - enable overlay.
   //- include include/overlay-select
   //
-  // TODO - create volume and slice axis sliders in a new file
-  //   slice-controls.jade, perhaps using the Session Detail
-  //   volume-controls.jade as a basis--but justifying and
-  //   simplifying every part of the file (i.e. not just a
-  //   copy). Then uncomment the lines below.
-  //- // The selection and rendering image controls.
-  //- include include/slice-controls
+  // The selection and rendering image controls.
+  include include/slice-controls
   //
   // TODO - nav using the following panels to the right of the
   //   image:

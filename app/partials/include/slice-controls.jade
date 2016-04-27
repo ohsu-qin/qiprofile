@@ -1,0 +1,41 @@
+// TODO - shouldn't the divs be inside the uib-accordion-group?
+//
+// The slice controls are organized into accordion groups.
+.qi-panel.qi-slice-display-ctrl
+  uib-accordion(close-others='false')
+    div(ng-controller='AccordionGroupCtrl')
+      uib-accordion-group(is-open="isOpen")
+        +accordion-heading('Time Point')
+        // The time point control.
+        .row
+          .col-md-2.glyphicon.glyphicon-step-backward
+          .col-md-8
+            slider.qi-slider(ng-model="volume"
+                             floor='1' ceiling='32' step='1')
+          .col-md-2.glyphicon.glyphicon-step-forward
+    div(ng-controller='AccordionGroupCtrl')
+      uib-accordion-group(is-open="isOpen")
+        +accordion-heading('Orientation')
+        // The orientation control.
+        .row
+          // TODO - These will be buttons. 
+          .col-md-4 Sagittal
+          .col-md-4 Coronal
+          .col-md-4 Axial
+        .row
+          .col-md-2.glyphicon.glyphicon-step-backward
+          .col-md-8
+            slider.qi-slider(ng-model="slice"
+                             floor='1' ceiling='118' step='1')
+          .col-md-2.glyphicon.glyphicon-step-forward
+
+    //-div(ng-controller='AccordionGroupCtrl')
+    //-  uib-accordion-group(is-open="isOpen")
+    //-    +accordion-heading('Opacity')
+    //-    .row
+    //-      .col-md-3.qi-slider-label Overlay
+    //-      .col-md-9
+    //-        slider.qi-slider(ng-model='overlayConfig.setting'
+    //-          ng-change="overlayConfig.style['opacity']=overlayConfig.setting"
+    //-          floor='0' ceiling='1' step='0.1' precision='1'
+    //-        )

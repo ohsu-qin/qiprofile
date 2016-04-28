@@ -14,9 +14,6 @@ define ['angular', 'lodash', 'loader', 'imageStore', 'nifti'], (ng, _, Loader) -
           throw new Error("The image format could not be inferred from" +
                           " the image file extension for file #{ @name }")
 
-      # @returns whether the image data is loaded
-      isLoaded: -> @data?
-
       # Loads the image file and parses it with the given parser.
       # This method delegates to Loader.load to load the file
       # and the parser to parse the file.

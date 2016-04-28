@@ -1,0 +1,42 @@
+// TODO - shouldn't the divs be inside the uib-accordion-group?
+//
+// The slice controls are organized into accordion groups.
+.qi-panel.qi-slice-display-ctrl
+  uib-accordion(close-others='false')
+    div(ng-controller='AccordionGroupCtrl')
+      uib-accordion-group(is-open="isOpen")
+        +accordion-heading('Orientation')
+        // The orientation control.
+        .row.qi-orient-btn-group
+          div.btn-group
+            label.btn.qi-btn.qi-btn-radio(
+              ng-repeat="dim in dimensions"
+              ng-model="dimension"
+              uib-btn-radio="'{{ dim }}'"
+            ) {{ dim }}
+        .row
+          .col-md-2.glyphicon.glyphicon-step-backward.qi-step-btn(
+            ng-click="slice.sliceNbr = slice.sliceNbr - 1"
+          )
+          .col-md-8
+            slider.qi-slider(
+              ng-model="slice.sliceNbr" floor='1' ceiling='118' step='1'
+            )
+          .col-md-2.glyphicon.glyphicon-step-forward.qi-step-btn(
+            ng-click="slice.sliceNbr = slice.sliceNbr + 1"
+          )
+    div(ng-controller='AccordionGroupCtrl')
+      uib-accordion-group(is-open="isOpen")
+        +accordion-heading('Time Point')
+        // The time point control.
+        .row
+          .col-md-2.glyphicon.glyphicon-step-backward.qi-step-btn(
+            ng-click="volume.volumeNbr = volume.volumeNbr - 1"
+          )
+          .col-md-8
+            slider.qi-slider(
+              ng-model="volume.volumeNbr" floor='1' ceiling='32' step='1'
+            )
+          .col-md-2.glyphicon.glyphicon-step-forward.qi-step-btn(
+            ng-click="volume.volumeNbr = volume.volumeNbr + 1"
+          )

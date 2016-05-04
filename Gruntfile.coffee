@@ -127,13 +127,6 @@ module.exports = (grunt) ->
         src: ['index.jade', 'partials/**/*.jade', '!**/include/**']
         dest: '_public/'
 
-    browserify:
-      ndarray:
-        src: []
-        dest: '_build/commonjs/ndarray.js'
-        options:
-          require: ['ndarray']
-
     karma:
       options:
         singleRun: not grunt.option('debug')
@@ -289,7 +282,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'amdify', ['browserify', 'exec:convert']
 
   # Collect the vendor libraries.
-  grunt.registerTask 'vendor:app', ['amdify', 'copy:app', 'concat:app']
+  grunt.registerTask 'vendor:app', ['copy:app', 'concat:app']
 
   # Compile the app javascript.
   grunt.registerTask 'compile:js', ['coffee:compile', 'preprocess']

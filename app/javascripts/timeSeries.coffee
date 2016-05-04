@@ -46,13 +46,8 @@ define ['angular', 'underscore.string', 'image', 'nifti'], (ng, _s) ->
       Object.defineProperties timeSeries,
         # @returns the display title
         title:
-          # Make and cache the title on demand, since it is
-          # potentially called frequently as the basis for
-          # an image id.
           get: ->
-            if not @_title?
-              @_title = "#{ @imageSequence.title } Time Series"
-            @_title
+            "#{ @imageSequence.title } Time Series"
 
       # Extend the image.
       extendImage(timeSeries.image, timeSeries)

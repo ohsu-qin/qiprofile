@@ -63,6 +63,16 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'session', 'model
               #   See also the subject.coffee title TODO.
               "#{ @collection } Patient #{ @number }"
 
+          # Returns the /project/collection/subject path, where:
+          # * *project* is the lower-case project name
+          # * *collection* is the lower-case collection name
+          # * *subject* is the subject number
+          #
+          # @returns the session path
+          path:
+            get: ->
+              "#{ @project.toLowerCase() }/#{ @collection.toLowerCase() }/#{ @number }"
+
           # @returns the clinical encounters
           clinicalEncounters:
             get: ->

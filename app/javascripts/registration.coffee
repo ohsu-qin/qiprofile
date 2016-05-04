@@ -26,6 +26,15 @@ define ['angular', 'lodash', 'imageSequence'], (ng, _) ->
           get: ->
             "#{ @scan.title } Registration #{ @number }"
 
+        # Returns the <parent>/session path, where:
+        # * <parent> is the parent scan path
+        # * *registration* is the registration number
+        #
+        # @returns the registration path
+        path:
+          get: ->
+            "#{ @scan.path }/reg/#{ @number }"
+
         # An ImageSequence present a uniform interface, which
         # includes a bolus arrival index and session reference.
         #

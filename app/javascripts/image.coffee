@@ -30,6 +30,22 @@ define ['angular', 'lodash', 'loader', 'imageStore', 'nifti'], (ng, _, Loader) -
           .then (parsed) =>
             @contents = parsed
 
+    Object.defineProperties ImageMixin.prototype,
+      # Returns the <parent>/image path, where:
+      # * <parent> is the parent scan or registration image
+      #   sequence path
+      # * *image* is the time series image name
+      #
+      # @returns the ancestor path
+      path:
+        get: ->
+          # Make and cache the title on demand, since it is
+          # potentially called frequently as the basis for
+          # an image id.
+          if not @_path?
+            @_path = "#{ @imageSequence.path }/#{ @resource }/#{ @name }"
+          @_path
+
     # Makes the following changes to the given REST Image object:
     # * adds the generic parent imageSequence reference
     # * adds the concrete parent scan or registration reference

@@ -27,6 +27,16 @@ define ['angular', 'lodash', 'imageSequence', 'registration'], (ng, _) ->
           # TODO - replace by "#{ @protocol.technique } Scan",
           #   once the scan protocol is fetched and cached.
           get: -> "#{ @session.title } Scan #{ @number }"
+
+        # Returns the <parent>/scan path, where:
+        # * <parent> is the parent session path
+        # * *scan* is the scan number
+        #
+        # @returns the scan path
+        path:
+          get: ->
+            "#{ @ssession.path }/#{ @number }"
+
       # Add the scan registration properties.
       for reg, i in scan.registrations
         Registration.extend(reg, session, scan, i + 1)

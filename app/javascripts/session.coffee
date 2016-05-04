@@ -65,6 +65,15 @@ define ['angular', 'lodash', 'scan', 'modeling', 'helpers'], (ng, _) ->
               #
             get: -> "#{ @subject.title } Session #{ @number }"
 
+        # Returns the <parent>/session path, where:
+        # * <parent> is the parent subject path
+        # * *session* is the session number
+        #
+        # @returns the session path
+        path:
+          get: ->
+            "#{ @subject.path }/#{ @number }"
+
         # Return the augmented session object.
         session
       

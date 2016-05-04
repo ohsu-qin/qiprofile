@@ -1,10 +1,11 @@
 define(
-  ['angular', 'lodash', 'cornerstone', 'slider'],
+  ['angular', 'lodash', 'cornerstone'],
   (ng, _, cornerstone) ->
-    sliceDisplay = ng.module('qiprofile.slicedisplay',
-                             ['vr.directives.slider'])
+    sliceDisplay = ng.module('qiprofile.slicedisplay')
     
     sliceDisplay.factory 'SliceDisplay', ->
+      # The Cornerstone loader scheme.
+      LOADER_SCHEME = 'qiprofile'
       # The image inversion color LUT flips the colors.
       # TODO - comment these settings.
       INVERSION_LUT =
@@ -32,13 +33,13 @@ define(
       
       # @returns a unique id for the given image
       imageIdFor = (timeSeries, volumeIndex, sliceIndex) ->
-        # Append the volume and slice numbers to the time series title.
-        "#{ timeSeries.title } Volume #{ volumeIndex + 1 } Slice #{ sliceIndex + 1 }"
+        # Append the volume and slice numbers to the time series image path.
+        "#{ LOADER_SCHEME }:#{ timeSeries.image.path }/#{ volumeIndex + 1 }/#{ sliceIndex + 1 }"
       
       # @returns a unique id for the given overlay slice
       overlayIdFor = (overlay, sliceIndex) ->
         # Append the slice number to the overlay title.
-        "#{ overlay.parameterResult.title } Slice #{ sliceIndex + 1 }"
+        "#{ LOADER_SCHEME }:#{ overlay.parameterResult.title }/#{ sliceIndex + 1 }"
 
       # Selects the [x, y] view of the time series [time, x, y, z] ndarray.
       imageData = (timeSeries, volumeIndex, sliceIndex) ->
@@ -73,7 +74,7 @@ define(
         opts = modalityLUT: INVERSION_LUT
         cornerstone.displayImage(overlayElt, data, opts)
 
-      #Converts the given 2D ndarray to a 1D array.
+      # Converts the given 2D ndarray to a 1D array.
       #
       # @param data the 2D ndarray
       # @param datumSize the intensity value size in bytes
@@ -89,23 +90,23 @@ define(
         maxValue = -minValue
         # The 1D array content.
         buffer = new ArrayBuffer(length * datumSize)
-        # The 1D array.
-        if datumSize is 8
-          flat = new Int8Array(buffer)
-        else if datumSize is 16
-          flat = new Int16Array(buffer)
-        else if datumSize is 32
-          flat = new Int32Array(buffer)
-        else
-          throw new Error("The intensity value size is unsupported: #{ datumSize }")
-        # Fill the array.
-        for j in [0...rowCnt]
-          offset = j * colCnt
-          for i in [0...colCnt]
-            value = data.get(i, j)
-            flat[offset + i] = value
-            minValue = Math.min(minValue, value)
-            maxValue = Math.max(maxValue, value)
+        
+        # Flatten the ndarray.
+        shape = [data.shape.reduce(_.multiply)]
+        stride = data.stride[..0]
+        flat = ndarray(data.data, shape=shape, stride=stride, offset=data.offset)
+        # Alias the size property as length.
+        Object.defineProperties flat,
+          length:
+            get: -> @size
+        # Add a map function.
+        flat.map = (fn) ->
+            (fn(@get(i), i, this) for i in [0...@length])
+        
+        # TODO - calculate the min/max in pipeline.
+        for i in [0...flat.length]
+          minValue = Math.min(minValue, flat.get(i))
+          maxValue = Math.max(maxValue, flat.get(i))
 
         # Return the {data, min, max} object
         data: flat
@@ -176,6 +177,16 @@ define(
         columnPixelSpacing: spacing.column
         rowPixelSpacing: spacing.row
         sizeInBytes: byteCnt
+      
+      # @param imageId the image id built by the imageIdFor function
+      # @returns the image hierarchy array
+      parseImageId = (imageId)
+      
+      # The Cornerstone image loader callback function.
+      loadImage = (imageId) ->
+        parseImageId(imageId)
+      
+      cornerstone.registerImageLoader(LOADER_SCHEME, loadImage)
 
       # Displays the slice image and overlay. The input *data* argument
       # is a {image, overlay} object, where:
@@ -201,6 +212,8 @@ define(
             displayOverlay(ovlData)
 
         # Load the image, if necessary.
+        # TODO - cache the image in Cornerstone. Register a loader which
+        #   calls imageData by parsing the image id.
         if not timeSeries.image.isLoaded()
           timeSeries.image.load().then(displayLoaded)
         else

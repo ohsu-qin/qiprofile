@@ -35,21 +35,17 @@
 .qi-slice-display-ctrl
   position absolute
   right 0
-  min-width 28em
+  min-width 25em
   font-size smaller
   & .row
+    text-align center
+  & .qi-orient-ctrl
     vertical-align middle
-    margin 0.5em
+    margin 0.5em 0 0.5em 1em
 
 .qi-step-btn
-  padding-top 1em
-  font-size large
-  text-align center
-  &:hover
-    cursor pointer
-
-.qi-orient-btn-group
-  text-align center
+  // Scooch the button down a bit.
+  margin-top 1em
 
 // The loading indicator.
 .qi-loading

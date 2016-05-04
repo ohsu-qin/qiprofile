@@ -85,14 +85,14 @@ describe 'E2E Testing Collection Detail', ->
       page.subjectTableGroups.then (subjects) ->
         subj = _.first(subjects)
         expect(subj.text(), 'The chart table does not display a' +
-                                   ' subject')
+                            ' subject')
           .to.eventually.include('Patient')
 
     it 'should display a session', ->
       page.subjectTableColumns.then (sessions) ->
         sess = _.first(sessions)
         expect(sess.text(), 'The chart table does not display a ' +
-                                   ' session')
+                            ' session')
           .to.eventually.include('Visit')
 
     it 'should display the subject chart', ->
@@ -112,20 +112,27 @@ describe 'E2E Testing Collection Detail', ->
 
     it 'should display the X-axis dropdown items', ->
       page.xAxisDropdowns.then (dropdowns) ->
+        # The X-axis dropdown for the first chart.
         dropdown = _.first(dropdowns)
-        # Show the dropdown.
-        dropdown.click()
-        # The default selection for the first chart is 'RCB Index'.
+        # The default selection is 'RCB Index'.
         dropdown.find(By.css('.qi-dropbtn-label')).then (selected) ->
           expect(selected.text(), 'The default X-axis selection is incorrect')
             .to.eventually.equal('RCB Index')
-        # The first item in the dropdown is 'FXL Ktrans'.
-        dropdown.findAll(By.css('.qi-dropdown-item')).then (items) ->
-          item = _.first(items)
-          item.find(By.css('.qi-dropdown-label')).then (label) ->
-            expect(label.text(), 'The first item in the X-axis dropdown is' +
-                                 ' incorrect')
-              .to.eventually.equal('FXL Ktrans')
+        # Display the dropdown list.
+        dropdown.click().then ->
+          # The first item in the list is 'FXL Ktrans'.
+          dropdown.findAll(By.css('.qi-dropdown-item')).then (items) ->
+            item = _.first(items)
+            item.find(By.css('.qi-dropdown-label')).then (label) ->
+              expect(label.text(), 'The first item in the X-axis dropdown is' +
+                                   ' incorrect')
+                .to.eventually.equal('FXL Ktrans')
+              label.click().then ->
+                # The selected item changes to 'FXL Ktrans'.
+                dropdown.find(By.css('.qi-dropbtn-label')).then (selected) ->
+                  expect(selected.text(), 'The new X-axis selection is' +
+                                          ' incorrect')
+                    .to.eventually.equal('FXL Ktrans')
 
     it 'should display four Y-axis dropdowns', ->
       page.yAxisDropdowns.then (dropdowns) ->
@@ -134,29 +141,31 @@ describe 'E2E Testing Collection Detail', ->
 
     it 'should display the Y-axis dropdown items', ->
       page.yAxisDropdowns.then (dropdowns) ->
+        # The Y-axis dropdown for the first chart.
         dropdown = _.first(dropdowns)
-        # Show the dropdown.
-        # TODO - the following tests began failing with the message:
-        #    UnknownError: unknown error: Element is not clickable at point (120, 318). Other element would receive the click:
-        #    <div ng-repeat="(key,val) in choices.x" ng-model="chartAxes.x" ng-click="chartAxes.x=key"
-        #    class="qi-dropdown-item ng-pristine ng-untouched ng-valid ng-scope">...</div>
-        #  Enable this test case and resolve this error.
-        #
-        dropdown.click()
-        # The default selection of the first chart is 'delta Ktrans'.
+        # The default selection is 'delta Ktrans'.
         dropdown.find(By.css('.qi-dropbtn-label')).then (selected) ->
           expect(selected.text(), 'The default Y-axis selection is incorrect')
             .to.eventually.equal('delta Ktrans')
-        # The first item in the dropdown is 'FXL Ktrans'.
-        dropdown.findAll(By.css('.qi-dropdown-item')).then (items) ->
-          item = _.first(items)
-          item.find(By.css('.qi-dropdown-label')).then (label) ->
-            expect(label.text(), 'The first item in the Y-axis dropdown is' +
-                                 ' incorrect')
-              .to.eventually.equal('FXL Ktrans')
-          # TNM stage is a categorical data series and is not included in the
-          # Y-axis choices.
-          for item in items
+        # Display the dropdown list.
+        dropdown.click().then ->
+          # The first item in the list is 'FXL Ktrans'.
+          dropdown.findAll(By.css('.qi-dropdown-item')).then (items) ->
+            item = _.first(items)
             item.find(By.css('.qi-dropdown-label')).then (label) ->
-              expect(label.text(), 'TNM stage appears in the Y-axis dropdown')
-                .to.eventually.not.equal('TNM Stage')
+              expect(label.text(), 'The first item in the Y-axis dropdown is' +
+                                   ' incorrect')
+                .to.eventually.equal('FXL Ktrans')
+              label.click().then ->
+                # The selected item changes to 'FXL Ktrans'.
+                dropdown.find(By.css('.qi-dropbtn-label')).then (selected) ->
+                  expect(selected.text(), 'The new Y-axis selection is' +
+                                          ' incorrect')
+                    .to.eventually.equal('FXL Ktrans')
+            # Categorical data types (e.g., TNM stage) are not permitted on the
+            # Y-axis.
+            for item in items
+              item.find(By.css('.qi-dropdown-label')).then (label) ->
+                expect(label.text(), 'TNM stage appears in the Y-axis' +
+                                     ' dropdown')
+                  .to.eventually.not.equal('TNM Stage')

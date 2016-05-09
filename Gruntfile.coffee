@@ -59,6 +59,7 @@ module.exports = (grunt) ->
           'stacktrace-gps/dist/stacktrace-gps.js'
           'stacktrace-js/stacktrace.js'
           'underscore.string/dist/underscore.string.js'
+          'venturocket-angular-slider/build/angular-slider.js'
         ]
         dest: '_public/javascripts/lib'
 

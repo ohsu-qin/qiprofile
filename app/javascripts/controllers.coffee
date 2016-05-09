@@ -1,4 +1,4 @@
-define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingchart', 'breast', 
+define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingChart', 'breast', 
         'sliceDisplay', 'collection'],
   (ng, _) ->
     ctlrs = ng.module(

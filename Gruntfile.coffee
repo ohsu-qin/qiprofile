@@ -18,56 +18,89 @@ module.exports = (grunt) ->
 
     clean:
       # Note: Grunt 0.4.5 file.js has an invalid test for whether the
-      # target is contained in the cwd. Work-around is the force option.
-      derived: ['_build', '_public/*']
+      #   target is contained in the cwd. Work-around is the force option.
+      # Note: the odd _public patterns are the most concise way to delete
+      #   all of the _public tree except for the data directory and the
+      #   jspm package directory _public/javascripts/lib defined in
+      #   package.json. The entries:
+      #     '_public/**', '!_public/javascripts/lib'
+      #   deletes the entire _public tree. Given
+      #   https://github.com/cbas/grunt-rev/issues/16, this is probably
+      #   a grunt bug, although it is unclear how the force option is
+      #   intended to modify the behavior in this case.
+      derived: ['_build', '_public/*.*', '_public/*/*', '!_public/data',
+                '!_public/javascripts/lib']
       options:
         force: true
 
-    copy:
-      bower:
+    ts:
+      options:
+        module: "commonjs"
+        emitDecoratorMetadata: true
+        sourceMap: true
+        removeComments: false
+        verbose: true
+      default:
         expand: true
-        flatten: true
-        cwd: 'bower_components/'
-        src: [
-          'angular/angular.js'
-          'angular-animate/angular-animate.js'
-          'angular-bootstrap/ui-bootstrap-tpls.js'
-          'angular-dc/dist/angular-dc.js'
-          'angular-resource/angular-resource.js'
-          'angular-route/angular-route.js'
-          'angular-sanitize/angular-sanitize.js'
-          'angular-touch/angular-touch.js'
-          'angular-ui-router/release/angular-ui-router.js'
-          'angular-nvd3/dist/angular-nvd3.js'
-          'cornerstone/dist/cornerstone.js'
-          'crossfilter/crossfilter.js'
-          'd3/d3.js'
-          'dcjs/dc.js'
-          'domready/ready.js'
-          'error-stack-parser/dist/error-stack-parser.js'
-          'eventEmitter/EventEmitter.js'
-          'lodash/lodash.js'
-          'moment/moment.js'
-          'nvd3/build/nv.d3.js'
-          'pako/dist/pako_inflate.js'
-          'requirejs/require.js'
-          'source-map/dist/source-map.js'
-          'spin.js/spin.js'
-          'sprintf/src/sprintf.js'
-          'stackframe/dist/stackframe.js'
-          'stack-generator/dist/stack-generator.js'
-          'stacktrace-gps/dist/stacktrace-gps.js'
-          'stacktrace-js/stacktrace.js'
-          'underscore.string/dist/underscore.string.js'
-          'venturocket-angular-slider/build/angular-slider.js'
-        ]
-        dest: '_public/javascripts/lib'
+        cwd: 'app/'
+        src: ['javascripts/*.ts']
+        dest: '_public/'
 
-      # The non-coffee app javascript files.
-      appjs:
+    coffee:
+      default:
+        expand: true
+        ext: '.js'
+        cwd: 'app/'
+        src: ['javascripts/*.coffee']
+        dest: '_public/'
+
+    jade:
+      options:
+        pretty: true
+      default:
+        expand: true
+        ext: '.html'
+        cwd: 'app/'
+        src: ['index.jade', 'partials/**/*.jade', '!**/include/**']
+        dest: '_public/'
+
+    markdown:
+      default:
+        expand: true
+        ext: '.html'
+        cwd: 'app/'
+        src: ['partials/**/*.md']
+        dest: '_public/'
+
+    stylus:
+      options:
+        use: [
+          require('autoprefixer-stylus')
+          require('csso-stylus')
+        ]
+      default:
+        src: ['app/stylesheets/app.styl']
+        dest: '_public/static/stylesheets/app.css'
+
+    copy:
+      # The native applicaton JavaScript files.
+      js:
         expand: true
         cwd: 'app/'
         src: ['javascripts/*.js']
+        dest: '_public/'
+
+      # The applicaton TypeScript files.
+      ts:
+        expand: true
+        cwd: 'app/'
+        src: ['javascripts/*.ts']
+        dest: '_public/'
+
+      # The images and icons.
+      static:
+        expand: true
+        src: ['static/**']
         dest: '_public/'
 
       # Note: this task is only used to copy CSS map files. The
@@ -80,52 +113,27 @@ module.exports = (grunt) ->
       cssmap:
         expand: true
         flatten: true
-        cwd: 'bower_components/'
+        cwd: 'node_modules/'
         src: ['bootstrap/dist/css/bootstrap.css.map']
-        dest: '_public/stylesheets/'
+        dest: '_public/static/stylesheets/'
 
       fonts:
         expand: true
         flatten: true
-        cwd: 'bower_components/'
+        cwd: 'node_modules/'
+        # Note: Due to a grunt bug, the font-awesome example subdirectory,
+        #   e.g. 4.0.4/index.html, can't be excluded
+        #   (cf. https://github.com/gruntjs/grunt-contrib-copy/issues/13).
         src: ['bootstrap/dist/fonts/*', 'font-awesome/fonts/*']
         dest: '_public/fonts/'
-
-      # The images and icons.
-      static:
-        expand: true
-        cwd: 'static/'
-        src: ['**']
-        dest: '_public/'
 
     concat:
       css:
         src: [
-          'bower_components/bootstrap/dist/css/bootstrap.css'
-          'bower_components/cornerstone/dist/cornerstone.css'
-          'bower_components/dcjs/dc.css'
-          'bower_components/font-awesome/css/font-awesome.css'
-          'bower_components/nvd3/build/nv.d3.css'
+          'node_modules/bootstrap/dist/css/bootstrap.css'
+          'node_modules/font-awesome/css/font-awesome.css'
         ]
-        dest: '_public/stylesheets/vendor.css'
-
-    coffee:
-      compile:
-        expand: true
-        ext: '.js'
-        cwd: 'app/'
-        src: ['javascripts/*.coffee']
-        dest: '_public/'
-
-    pug:
-      options:
-        pretty: true
-      compile:
-        expand: true
-        ext: '.html'
-        cwd: 'app/'
-        src: ['index.pug', 'partials/**/*.pug', '!**/include/**']
-        dest: '_public/'
+        dest: '_public/static/stylesheets/vendor.css'
 
     karma:
       options:
@@ -163,12 +171,6 @@ module.exports = (grunt) ->
                  '   install --silent && ' +
                  ' ((./node_modules/selenium-standalone/bin/selenium-standalone' +
                  '   start >/dev/null 2>&1 &) && sleep 1))'
-
-      bowerinstall:
-        command: './node_modules/.bin/bower update'
-        
-      bowerprune:
-        command: './node_modules/.bin/bower prune'
       
       updatewebdriver:
         command: './node_modules/protractor/bin/webdriver-manager update'
@@ -176,24 +178,6 @@ module.exports = (grunt) ->
     protractor:
       e2e:
         configFile: 'test/conf/protractor-conf.coffee'
-
-    markdown:
-      compile:
-        expand: true
-        ext: '.html'
-        cwd: 'app/'
-        src: ['partials/**/*.md']
-        dest: '_public/'
-
-    stylus:
-      options:
-        use: [
-          require('autoprefixer-stylus')
-          require('csso-stylus')
-        ]
-      compile:
-        src: ['app/stylesheets/app.styl']
-        dest: '_public/stylesheets/app.css'
 
     express:
       options:
@@ -212,18 +196,21 @@ module.exports = (grunt) ->
     watch:
       options:
         livereload: true
+      typescript:
+        files: ['app/**/*.ts']
+        tasks: ['copy:ts']
+      coffee:
+        files: ['app/**/*.coffee']
+        tasks: ['coffee']
+      javascript:
+        files: ['app/**/*.js']
+        tasks: ['copy:js']
+      jade:
+        files: ['app/**/*.jade', 'test/**/*.jade']
+        tasks: ['jade']
       stylus:
         files: ['app/**/*.styl']
         tasks: ['stylus']
-      coffee:
-        files: ['app/**/*.coffee']
-        tasks: ['compile:js']
-      javascript:
-        files: ['app/**/*.js']
-        tasks: ['copy:appjs']
-      pug:
-        files: ['app/**/*.pug', 'test/**/*.pug']
-        tasks: ['pug']
       markdown:
         files: ['app/partials/**/*.md']
         tasks: ['markdown']
@@ -232,26 +219,7 @@ module.exports = (grunt) ->
       options:
         logConcurrentOutput: true
       compile:
-        tasks: ['compile:js', 'pug:compile', 'markdown', 'stylus']
-
-    # TODO - try this.
-    requirejs:
-      compile:
-        options:
-          appDir: "_public"
-          baseUrl: "javascripts"
-          dir: "_build"
-          mainConfigFile:'_public/javascripts/config.js'
-          # Skip the CDN modules.
-          paths:
-            angular: 'empty:'
-            domReady: 'empty:'
-            nganimate: 'empty:'
-            ngresource: 'empty:'
-            ngroute: 'empty:'
-            ngsanitize: 'empty:'
-          modules: [ name:'qiprofile' ]
-          findNestedDependencies: true
+        tasks: ['compile:coffee', 'jade', 'markdown', 'stylus']
 
     cssmin:
       options:
@@ -268,30 +236,19 @@ module.exports = (grunt) ->
   # Build for development is the default.
   grunt.registerTask 'default', ['build:dev']
 
-  # Copy the vendor javascript.
-  grunt.registerTask 'copy:js', ['copy:bower', 'copy:appjs']
-
   # Assemble the app.
-  grunt.registerTask 'copy:app', ['copy:js', 'copy:cssmap', 'copy:fonts',
-                                  'copy:static']
+  grunt.registerTask 'copy:app', ['copy:js', 'copy:ts', 'copy:cssmap',
+                                  'copy:fonts', 'copy:static']
 
-  # Concatenate the app stylesheets.
-  grunt.registerTask 'concat:app', ['concat:css']
-
-  # Convert vendor modules to AMD as necessary.
-  grunt.registerTask 'amdify', ['browserify', 'exec:convert']
-
-  # Collect the vendor libraries.
-  grunt.registerTask 'vendor:app', ['copy:app', 'concat:app']
-
-  # Compile the app javascript.
-  grunt.registerTask 'compile:js', ['coffee:compile', 'preprocess']
+  # Compile the app CoffeeScript.
+  grunt.registerTask 'compile:coffee', ['coffee', 'preprocess']
 
   # Compile the app bits concurrently.
   grunt.registerTask 'compile', ['concurrent:compile']
 
   # Build the application from scratch.
-  grunt.registerTask 'build:app', ['clean', 'vendor:app', 'compile']
+  grunt.registerTask 'build:app', ['clean', 'copy:app', 'concat:css',
+                                   'compile']
 
   # Build the app and test environment.
   grunt.registerTask 'build:dev', ['env:dev', 'build:app',
@@ -301,8 +258,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'build:prod', ['env:prod', 'build:app']
 
   # The npm postinstall task.
-  grunt.registerTask 'postinstall', ['exec:bowerinstall', 'exec:bowerprune',
-                                     'build:prod']
+  grunt.registerTask 'postinstall', ['build:prod']
 
   # Start the server with debug turned on.
   grunt.registerTask 'start:dev', ['express:dev', 'watch']
@@ -327,4 +283,4 @@ module.exports = (grunt) ->
   grunt.registerTask 'test', ['test:unit', 'test:e2e']
 
   # Build the application as a RequireJS AMD module.
-  grunt.registerTask 'release', ['build:prod', 'requirejs', 'cssmin']
+  grunt.registerTask 'release', ['build:prod']

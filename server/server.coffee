@@ -1,5 +1,5 @@
 #
-# The Imaging Profile Express server application.
+# The Quantitative Imaging Profile Express server application.
 #
 express = require 'express'
 http = require 'http'
@@ -8,7 +8,6 @@ mkdirp = require 'mkdirp'
 net = require 'net'
 fs = require 'fs'
 logger = require 'express-bunyan-logger'
-forever = require 'forever-monitor'
 authenticate = require 'authenticate'
 spawn = require './spawn'
 favicon = require 'serve-favicon'
@@ -27,9 +26,8 @@ EVE_PORT = 5000
 # the _public directory.
 root = path.join(__dirname, '..', '_public')
 
-# Rewrite all server /api requests to the REST server
-# on the default REST host and port.
-api = require './api'
+# The REST request handler.
+rest = require './rest'
 
 # The Express server.
 server = express()
@@ -70,7 +68,7 @@ logConfig =
   ]
 
 # Enable the middleware.
-server.use favicon(root + '/media/favicon.ico')
+server.use favicon(root + '/static/media/favicon.ico')
 server.use bodyParser.json()
 server.use bodyParser.urlencoded(extended: true)
 server.use methodOverride()
@@ -91,25 +89,51 @@ server.get '/login', (req, res) ->
   )
   res.end
 
-# The API route.
+# The REST API route.
 restUrl = process.env.QIREST_HOST or 'localhost'
-server.use '/api', api(restUrl)
+server.use '/qirest', rest(restUrl)
 
-# Serve the static files from root.
-server.get '/static/*', (req, res) ->
-  path = root + req.path.replace('/static', '')
-  res.sendFile path
+# # Serve the static files from root.
+# server.get '/static/*', (req, res) ->
+#   path = root + req.path.replace('/static', '')
+#   res.sendFile path
+#
+# # Serve the partial HTML files.
+# server.get '/partials/*', (req, res) ->
+#   res.sendFile "#{root}/#{req.path}.html"
+#
+# # The app javascript files.
+# server.get '/javascripts*', (req, res) ->
+#   res.sendFile(root + req.path)
+#
+# # Since qiprofile is an Angular Single-Page Application,
+# # serve the landing page for all qiprofile routes.
+# # The qiprofile application then resolves the URL on the
+# # client and requests the partial.
+# # TODO - is this necessary with Angular 2?
+# server.get '/qiprofile', (req, res) ->
+#   res.sendFile "#{root}/index.html"
 
-# Serve the partial HTML files.
-server.get '/partials/*', (req, res) ->
-  res.sendFile "#{root}/#{req.path}.html"
 
-# Since qiprofile is an Angular Single-Page Application,
-# serve index for all quip routes. The qiprofile
-# application then resolves the URL on the client
-# and requests the partial.
-server.get '/quip*', (req, res) ->
-  res.sendFile "#{root}/index.html"
+# Strip the app prefix from the request URL and serve up the
+# static file.
+server.get '/qiprofile(/*)?', (req, res) ->
+  tail = req.path.substr('/qiprofile'.length)
+  if not tail then tail = '/index.html'
+  res.sendFile "#{ root }#{ tail }"
+
+# Work around the following jspm beta bug:
+#   jspm internally tries to fetch .json files by file path
+#   rather than web app url, e.g.:
+#      /_public/javascripts/lib/npm/typescript@1.8.10.json
+#   rather than:
+#      /javascripts/lib/npm/typescript@1.8.10.json
+# The work-around is to match on _public in the server
+# request.
+# TODO - isolate and resolve or report this bug to jspm.
+server.get '/_public(/*)?', (req, res) ->
+  tail = req.path.substr('/_public'.length)
+  res.sendFile "#{ root }#{ tail }"
 
 # Kludge to work around repeat requests. See the app
 # error.coffee FIXME.

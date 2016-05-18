@@ -1,4 +1,7 @@
 extends layout/layout
 
 block main
-  div(ui-view='main')
+  qiprofile
+  script
+    :typescript
+      SystemJS.import('javascripts/boot.ts')

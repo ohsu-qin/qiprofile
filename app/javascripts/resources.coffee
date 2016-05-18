@@ -121,18 +121,18 @@ define ['angular', 'lodash', 'rest', 'ngresource', 'helpers'], (ng, _, REST) ->
     # Subject delete, which cascades to its embedded sessions.
     # Thus, the Session wrapper below only as a *detail* method
     # which delegates to sessionDetail.find.
-    sessionDetail = create('/api/session-detail/:id')
+    sessionDetail = create('/qirest/session-detail/:id')
 
     ImagingCollection:
-      create('/api/imaging-collection/:id')
+      create('/qirest/imaging-collection/:id')
     Subject:
-      create('/api/subject/:id', ['project', 'collection', 'number'])
+      create('/qirest/subject/:id', ['project', 'collection', 'number'])
     ScanProtocol:
-      create('/api/scan-protocol/:id')
+      create('/qirest/scan-protocol/:id')
     RegistrationProtocol:
-      create('/api/registration-protocol/:id')
+      create('/qirest/registration-protocol/:id')
     ModelingProtocol:
-      create('/api/modeling-protocol/:id')
+      create('/qirest/modeling-protocol/:id')
     Session:
       detail: sessionDetail.find
   ]

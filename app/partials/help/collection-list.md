@@ -1,6 +1,13 @@
 Overview
 --------
-The Imaging Profile application helps clinicians and imaging scientists
+The Quantitative Imaging Profile
+(<em><span class='qi-x-smaller'>QIPR</span></em>
+ <a href="#" 
+    onclick='new Audio("/static/media/qipr.mp3").play()'>
+   <span class="glyphicon glyphicon-volume-up"></span>
+ </a>
+)
+application helps clinicians and imaging scientists
 correlate imaging analysis results with clinical outcomes.
 
 Collections

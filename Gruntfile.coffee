@@ -117,14 +117,14 @@ module.exports = (grunt) ->
         src: ['javascripts/*.coffee']
         dest: '_public/'
 
-    jade:
+    pug:
       options:
         pretty: true
       compile:
         expand: true
         ext: '.html'
         cwd: 'app/'
-        src: ['index.jade', 'partials/**/*.jade', '!**/include/**']
+        src: ['index.pug', 'partials/**/*.pug', '!**/include/**']
         dest: '_public/'
 
     karma:
@@ -221,9 +221,9 @@ module.exports = (grunt) ->
       javascript:
         files: ['app/**/*.js']
         tasks: ['copy:appjs']
-      jade:
-        files: ['app/**/*.jade', 'test/**/*.jade']
-        tasks: ['jade']
+      pug:
+        files: ['app/**/*.pug', 'test/**/*.pug']
+        tasks: ['pug']
       markdown:
         files: ['app/partials/**/*.md']
         tasks: ['markdown']
@@ -232,7 +232,7 @@ module.exports = (grunt) ->
       options:
         logConcurrentOutput: true
       compile:
-        tasks: ['compile:js', 'jade:compile', 'markdown', 'stylus']
+        tasks: ['compile:js', 'pug:compile', 'markdown', 'stylus']
 
     # TODO - try this.
     requirejs:

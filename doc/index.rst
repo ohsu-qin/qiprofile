@@ -1,14 +1,14 @@
 .. _index:
 
 ===================================================================================
-*QIPR*
+*QiPr*
 ===================================================================================
 
 ********
 Synopsis
 ********
 
-The *Qu*\ antitative *I*\ maging *P*\ rofile (*Q<font size="smaller">I</font>P<font size="smaller">R</font>*\ ) web application displays
+The *Q*\ antitative *I*\ maging *PR*\ ofile (*QiPr*\ ) web application displays
 medical imaging and clinical data. The intent is to visualize the correlation of
 imaging analysis biomarkers with clinical outcomes.
 

@@ -8,7 +8,7 @@
 Synopsis
 ********
 
-The *Q*\ antitative *I*\ maging *PR*\ ofile (*QiPr*\ ) web application displays
+The *Q*\ uantitative *I*\ maging *PR*\ ofile (*QiPr*\ ) web application displays
 medical imaging and clinical data. The intent is to visualize the correlation of
 imaging analysis biomarkers with clinical outcomes.
 

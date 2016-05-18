@@ -1,7 +1,3 @@
-// TODO - following successful introduction of the Slice Display,
-//   create a volume-display branch to preserve the XTK variant and
-//   delete all volume files and references from the master branch.
-
 extends ../layout/partial
 
 include include/accordion-heading-mixin
@@ -10,6 +6,11 @@ block billboard
   | {{ volume.title }}
 
 block content
+  //
+  // TODO - following successful introduction of the Slice Display,
+  //   create a volume-display branch to preserve the XTK variant and
+  //   delete all volume files and references from the master branch.
+  //
   // The modeling parameter overlay select.
   include include/overlay-select
   // The image display.

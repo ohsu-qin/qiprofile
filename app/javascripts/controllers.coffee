@@ -668,18 +668,19 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingChart
         # @param image the Image object
         $scope.openImage = () ->
           # The parent scan or registration image sequence.
-          imageSequence = $scope.slice.imageSequence
+          imageSequence = $scope.volume.imageSequence
 
           # The common parameters.
           params =
             project: imageSequence.session.subject.project
+            collection: imageSequence.session.subject.collection
             subject: imageSequence.session.subject.number
             session: imageSequence.session.number
             detail: imageSequence.session.detail
             volume: $scope.volume.number
 
           # The target imageSequence route prefix.
-          route = 'quip.subject.session.scan.'
+          route = 'quip.collection.subject.session.scan.'
           # Add to the parameters and route based on the imageSequence type.
           if imageSequence._cls == 'Scan'
             params.scan = imageSequence.number
@@ -691,7 +692,7 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingChart
             throw new TypeError("Unsupported image sequence type:" +
                                 " #{ imageSequence._cls }")
           # Finish off the route.
-          route += 'volume'
+          route += 'volume.slice'
 
           # Go to the volume page.
           $state.go(route, params)

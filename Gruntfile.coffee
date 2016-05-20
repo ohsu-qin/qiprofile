@@ -36,7 +36,6 @@ module.exports = (grunt) ->
           'angular-resource/angular-resource.js'
           'angular-route/angular-route.js'
           'angular-sanitize/angular-sanitize.js'
-          'angular-touch/angular-touch.js'
           'angular-ui-router/release/angular-ui-router.js'
           'angular-nvd3/dist/angular-nvd3.js'
           'cornerstone/dist/cornerstone.js'
@@ -48,6 +47,7 @@ module.exports = (grunt) ->
           'eventEmitter/EventEmitter.js'
           'lodash/lodash.js'
           'moment/moment.js'
+          'nouislider/distribute/nouislider.js'
           'nvd3/build/nv.d3.js'
           'pako/dist/pako_inflate.js'
           'requirejs/require.js'
@@ -59,7 +59,6 @@ module.exports = (grunt) ->
           'stacktrace-gps/dist/stacktrace-gps.js'
           'stacktrace-js/stacktrace.js'
           'underscore.string/dist/underscore.string.js'
-          'venturocket-angular-slider/build/angular-slider.js'
         ]
         dest: '_public/javascripts/lib'
 
@@ -105,6 +104,8 @@ module.exports = (grunt) ->
           'bower_components/cornerstone/dist/cornerstone.css'
           'bower_components/dcjs/dc.css'
           'bower_components/font-awesome/css/font-awesome.css'
+          'bower_components/nouislider/src/nouislider.css'
+          'bower_components/nouislider/src/nouislider.pips.css'
           'bower_components/nvd3/build/nv.d3.css'
         ]
         dest: '_public/stylesheets/vendor.css'

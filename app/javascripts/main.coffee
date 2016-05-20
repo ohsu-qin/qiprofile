@@ -68,8 +68,8 @@ requirejs.config
     ngroute: [NG_LIB + '/' + 'angular-route' + MIN, './lib/angular-route']
     ngsanitize: [NG_LIB + '/' + 'angular-sanitize' + MIN, './lib/angular-sanitize']
     ngsprintf: './lib/angular-sprintf'
+    nouislider: './lib/nouislider'
     pako: './lib/pako_inflate'
-    slider: './lib/angular-slider'
     'source-map': './lib/source-map'
     spin: './lib/spin'
     sprintf: './lib/sprintf'
@@ -78,7 +78,6 @@ requirejs.config
     stackScrollTool: './temp/stackScrollTool'
     stacktrace: './lib/stacktrace'
     'stacktrace-gps': './lib/stacktrace-gps'
-    touch: './lib/angular-touch'
     'underscore.string': './lib/underscore.string'
     uirouter: './lib/angular-ui-router'
     uibootstrap: './lib/ui-bootstrap-tpls'
@@ -100,8 +99,6 @@ requirejs.config
     ngroute: deps: ['angular']
     ngsanitize: deps: ['angular']
     nvd3: deps: ['d3']
-    slider: deps: ['touch']
-    touch: deps: ['angular']
     uibootstrap: deps: ['angular']
     uirouter: deps: ['ngroute']
 

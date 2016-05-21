@@ -102,7 +102,13 @@ define ['angular', 'chart'], (ng) ->
         dsIntensities = (_.map(dataSeries.values, 'y') for dataSeries in data)
         dsMaxIntensities = (_.max(values) for values in dsIntensities)
         maxIntensity = _.max(dsMaxIntensities)
-        yValues = new Array(scan.volumes.images.length).fill(0)
+        yValues = new Array(scan.volumes.images.length)
+        if Array.prototype.fill?
+          yValues.fill(0)
+        else
+          # Polyfill IE.
+          for i in [0...yValues.length]
+            yValues[i] = 0
         yValues[bolusArvNdx] = maxIntensity
         values = ({x: i + 1, y: y} for y, i in yValues)
         bolusDataSeries =

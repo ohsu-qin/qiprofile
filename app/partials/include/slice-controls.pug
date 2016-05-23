@@ -14,29 +14,15 @@
               ng-model="dimension"
               uib-btn-radio="'{{ dim }}'"
             ) {{ dim }}
-        .row.qi-orient-ctrl
-          .col-md-1.btn.btn-med.qi-profile-btn.qi-step-btn(
-              ng-click="slice.sliceNbr = slice.sliceNbr - 1"
-            ).glyphicon.glyphicon-step-backward
-          .col-md-9
-            slider.qi-slider(
-                ng-model="slice.sliceNbr" floor='1' ceiling='12' step='1'
-              )
-          .col-md-1.btn.btn-med.qi-profile-btn.qi-step-btn(
-              ng-click="slice.sliceNbr = slice.sliceNbr + 1"
-            ).glyphicon.glyphicon-step-forward
+        .row.qi-slice-ctrl-param
+          .col-md-1.btn.btn-med.qi-profile-btn.qi-step-btn.glyphicon.glyphicon-step-backward#qi-slider-axial-plane-back
+          .col-md-9.qi-noui-slider(qi-slider-axial-plane)#qi-slider-axial-plane
+          .col-md-1.btn.btn-med.qi-profile-btn.qi-step-btn.glyphicon.glyphicon-step-forward#qi-slider-axial-plane-fwd
     div(ng-controller='AccordionGroupCtrl')
       uib-accordion-group(is-open="isOpen")
         +accordion-heading('Time Point')
         // The time point control.
-        .row.qi-orient-ctrl
-          .col-md-1.btn.btn-med.qi-profile-btn.qi-step-btn(
-              ng-click="volume.volumeNbr = volume.volumeNbr - 1"
-            ).glyphicon.glyphicon-step-backward
-          .col-md-9
-            slider.qi-slider(
-                ng-model="volume.volumeNbr" floor='1' ceiling='40' step='1'
-              )
-          .col-md-1.btn.btn-med.qi-profile-btn.qi-step-btn(
-              ng-click="volume.volumeNbr = volume.volumeNbr + 1"
-            ).glyphicon.glyphicon-step-forward
+        .row.qi-slice-ctrl-param
+          .col-md-1.btn.btn-med.qi-profile-btn.qi-step-btn.glyphicon.glyphicon-step-backward#qi-slider-time-series-back
+          .col-md-9.qi-noui-slider(qi-slider-time-series)#qi-slider-time-series
+          .col-md-1.btn.btn-med.qi-profile-btn.qi-step-btn.glyphicon.glyphicon-step-forward#qi-slider-time-series-fwd

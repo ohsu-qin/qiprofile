@@ -1,10 +1,10 @@
-define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
-        'collection', 'timeline', 'intensityChart', 'modeling'],
-  (ng, _, _s, Spinner) ->
+define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers',
+        'collection', 'timeline', 'intensityChart', 'modeling', 'SliceDisplay'],
+  (ng, _, _s, Spinner, noUiSlider) ->
     directives = ng.module(
       'qiprofile.directives',
       ['qiprofile.helpers', 'qiprofile.collection', 'qiprofile.timeline',
-       'qiprofile.intensitychart', 'qiprofile.modeling']
+       'qiprofile.intensitychart', 'qiprofile.modeling', 'qiprofile.slicedisplay']
     )
 
     # Spinner directive.
@@ -47,8 +47,80 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
             scope.spinner.spin(element[0])
           else if scope.spinner
             scope.spinner.stop()
-    
-    
+
+
+    directives.directive 'qiSliderAxialPlane', ->
+      (scope) ->
+
+        sliderAxialPlane = document.getElementById('qi-slider-axial-plane')
+        sliderAxialPlaneBack = document.getElementById('qi-slider-axial-plane-back')
+        sliderAxialPlaneFwd = document.getElementById('qi-slider-axial-plane-fwd')
+
+        noUiSlider.create sliderAxialPlane,
+          start: [ scope.slice.sliceNbr ]
+          step: 1
+          range:
+            'min': 1
+            'max': 12
+          pips:
+            mode: 'values'
+            values: [
+              1
+              12
+            ]
+            density: 4
+
+        sliderAxialPlane.noUiSlider.on 'change', ->
+          val = Math.floor sliderAxialPlane.noUiSlider.get()
+          console.log val
+
+        sliderAxialPlaneBack.addEventListener 'click', ->
+          val = Math.floor(sliderAxialPlane.noUiSlider.get()) - 1
+          sliderAxialPlane.noUiSlider.set(val)
+          console.log val
+
+        sliderAxialPlaneFwd.addEventListener 'click', ->
+          val = Math.floor(sliderAxialPlane.noUiSlider.get()) + 1
+          sliderAxialPlane.noUiSlider.set(val)
+          console.log val
+
+
+    directives.directive 'qiSliderTimeSeries', ->
+      (scope) ->
+
+        sliderTimeSeries = document.getElementById('qi-slider-time-series')
+        sliderTimeSeriesBack = document.getElementById('qi-slider-time-series-back')
+        sliderTimeSeriesFwd = document.getElementById('qi-slider-time-series-fwd')
+
+        noUiSlider.create sliderTimeSeries,
+          start: [ scope.volume.volumeNbr ]
+          step: 1
+          range:
+            'min': 1
+            'max': 64
+          pips:
+            mode: 'values'
+            values: [
+              1
+              64
+            ]
+            density: 4
+
+        sliderTimeSeries.noUiSlider.on 'change', ->
+          val = Math.floor sliderTimeSeries.noUiSlider.get()
+          console.log val
+
+        sliderTimeSeriesBack.addEventListener 'click', ->
+          val = Math.floor(sliderTimeSeries.noUiSlider.get()) - 1
+          sliderTimeSeries.noUiSlider.set(val)
+          console.log val
+
+        sliderTimeSeriesFwd.addEventListener 'click', ->
+          val = Math.floor(sliderTimeSeries.noUiSlider.get()) + 1
+          sliderTimeSeries.noUiSlider.set(val)
+          console.log val
+
+
     directives.directive 'qiFocus', ['$timeout',
       ($timeout) ->
         restrict: 'A'

@@ -7,7 +7,7 @@
     "url": "git@github.com:ohsu-qin/qiprofile.git"
   },
   "keywords": [
-    "qipr",
+    "QiPr",
     "QIN",
     "DCE",
     "MR",
@@ -30,46 +30,105 @@
   "engines": {
     "node": ">=5.1"
   },
+  "main": "server.js",
   "//": [
     "Note:",
-    "jpsm consists of the client libraries.",
-    "The remaining npm dependencies consist of the server and test",
-    "libraries."
+    "  jpsm manages the client libraries. The remaining npm dependencies",
+    "  contain the build, server and test libraries.",
+    "Note: angular2 is redundantly included in both jspm and node to",
+    "  resolve the angular types.",
+    "TODO - revisit this."
   ],
+  "dependencies": {
+    "authenticate": "^0.1.5",
+    "bootstrap": "^3.3.6",
+    "errorhandler": "^1.4.3",
+    "express-bunyan-logger": "^1.2.0",
+    "forever-monitor": "^1.7.0",
+    "grunt-express-server": "^0.5.3",
+    "method-override": "^2.3.5",
+    "serve-favicon": "^2.3.0",
+    "serve-static": "^1.10.2",
+    "superagent": "^1.8.3",
+    "typescript": "^1.9.0-dev.20160519-1.0"
+  },
+  "devDependencies": {
+    "autoprefixer-stylus": "^0.9.3",
+    "chai": "^3.4.1",
+    "chokidar-socket-emitter": "^0.5.2",
+    "csso-stylus": "0.0.3",
+    "font-awesome": "^4.6.1",
+    "grunt": "^1.0.1",
+    "grunt-browser-sync": "^2.2.0",
+    "grunt-cli": "^1.2.0",
+    "grunt-concurrent": "^2.3.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-coffee": "^1.0.0",
+    "grunt-contrib-concat": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-jade": "^1.0.0",
+    "grunt-contrib-stylus": "^1.2.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-env": "^0.4.4",
+    "grunt-exec": "^0.4.7",
+    "grunt-markdown": "^0.7.0",
+    "grunt-sync": "^0.5.2",
+    "grunt-ts": "^5.5.0-beta.2",
+    "jspm": "^0.17.0-beta.14",
+    "jstransformer-typescript": "^1.0.0",
+    "load-grunt-tasks": "^3.5.0",
+    "protractor": "^3.3.0"
+  },
   "jspm": {
-    "main": "main",
+    "registry": "github",
     "directories": {
-      "packages": "_public/javascripts/lib"
+      "baseUrl": "app",
+      "packages": "public/jspm_packages"
     },
-    "configFile": "app/javascripts/config.js",
+    "configFiles": {
+      "jspm:browser": "app/jspm.browser.js",
+      "jspm": "app/jspm.config.js"
+    },
     "dependencies": {
-      "@angular2-material/button": "npm:@angular2-material/button@^2.0.0-alpha.3",
-      "@angular2-material/card": "npm:@angular2-material/card@^2.0.0-alpha.3",
-      "@angular2-material/checkbox": "npm:@angular2-material/checkbox@^2.0.0-alpha.3",
-      "@angular2-material/core": "npm:@angular2-material/core@^2.0.0-alpha.3",
-      "@angular2-material/input": "npm:@angular2-material/input@^2.0.0-alpha.3",
-      "@angular2-material/list": "npm:@angular2-material/list@^2.0.0-alpha.3",
-      "@angular2-material/progress-bar": "npm:@angular2-material/progress-bar@^2.0.0-alpha.3",
-      "@angular2-material/progress-circle": "npm:@angular2-material/progress-circle@^2.0.0-alpha.3",
-      "@angular2-material/radio": "npm:@angular2-material/radio@^2.0.0-alpha.3",
-      "@angular2-material/sidenav": "npm:@angular2-material/sidenav@^2.0.0-alpha.3",
-      "@angular2-material/toolbar": "npm:@angular2-material/toolbar@^2.0.0-alpha.3",
-      "angular2": "npm:angular2@^2.0.0-beta.17",
-      "es6-promise": "npm:es6-promise@^3.0.2",
-      "es6-shim": "github:es-shims/es6-shim@^0.35.1",
-      "json": "github:systemjs/plugin-json@^0.1.0",
-      "lodash": "npm:lodash@^4.12.0",
+      "@angular/core": "npm:@angular/core@2.0.0-rc.1",
+      "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@^2.0.0-rc.1",
       "ng2-bootstrap": "npm:ng2-bootstrap@^1.0.16",
-      "ng2-translate": "npm:ng2-translate@^1.10.0",
-      "reflect-metadata": "npm:reflect-metadata@^0.1.3",
-      "typescript": "npm:typescript@^1.8.10",
-      "zone.js": "npm:zone.js@^0.6.10"
+      "plugin-babel": "npm:systemjs-plugin-babel@0.0.6",
+      "reflect-metadata": "npm:reflect-metadata@^0.1.0",
+      "rxjs": "npm:rxjs@5.0.0-beta.6",
+      "ts": "frankwallis/plugin-typescript@^4.0.16",
+      "zone.js": "npm:zone.js@^0.6.12"
     },
     "devDependencies": {
-      "babel": "npm:babel-core@^5.8.24",
-      "babel-runtime": "npm:babel-runtime@^5.8.24",
-      "core-js": "npm:core-js@^1.1.4",
-      "os": "github:jspm/nodelibs-os@^0.2.0-alpha"
+      "assert": "jspm/nodelibs-assert@^0.2.0-alpha",
+      "http": "jspm/nodelibs-http@^0.2.0-alpha",
+      "https": "jspm/nodelibs-https@^0.2.0-alpha",
+      "module": "jspm/nodelibs-module@^0.2.0-alpha",
+      "net": "jspm/nodelibs-net@^0.2.0-alpha",
+      "os": "jspm/nodelibs-os@^0.2.0-alpha",
+      "clean-css": "npm:clean-css@^3.4.3",
+      "css": "frankwallis/plugin-css@master",
+      "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.8",
+      "text": "systemjs/plugin-text@^0.0.2",
+      "tty": "jspm/nodelibs-tty@^0.2.0-alpha",
+      "url": "jspm/nodelibs-url@^0.2.0-alpha"
+    },
+    "peerDependencies": {
+      "@angular/common": "npm:@angular/common@2.0.0-rc.1",
+      "@angular/compiler": "npm:@angular/compiler@2.0.0-rc.1",
+      "@angular/platform-browser": "npm:@angular/platform-browser@2.0.0-rc.1",
+      "buffer": "jspm/nodelibs-buffer@^0.2.0-alpha",
+      "child_process": "jspm/nodelibs-child_process@^0.2.0-alpha",
+      "constants": "jspm/nodelibs-constants@^0.2.0-alpha",
+      "crypto": "jspm/nodelibs-crypto@^0.2.0-alpha",
+      "events": "jspm/nodelibs-events@^0.2.0-alpha",
+      "fs": "jspm/nodelibs-fs@^0.2.0-alpha",
+      "path": "jspm/nodelibs-path@^0.2.0-alpha",
+      "process": "jspm/nodelibs-process@^0.2.0-alpha",
+      "stream": "jspm/nodelibs-stream@^0.2.0-alpha",
+      "string_decoder": "jspm/nodelibs-string_decoder@^0.2.0-alpha",
+      "util": "jspm/nodelibs-util@^0.2.0-alpha",
+      "vm": "jspm/nodelibs-vm@^0.2.0-alpha"
     },
     "overrides": {
       "npm:@angular/common@2.0.0-rc.1": {
@@ -94,21 +153,15 @@
       },
       "npm:@angular/core@2.0.0-rc.1": {
         "meta": {
-          "src/*.js": {
-            "deps": [
-              "reflect-metadata",
-              "zone.js"
-            ]
+          "*.js": {
+            "typings": true
           }
         }
       },
       "npm:@angular/platform-browser-dynamic@2.0.0-rc.1": {
         "meta": {
-          "src/*.js": {
-            "deps": [
-              "reflect-metadata",
-              "zone.js"
-            ]
+          "*.js": {
+            "typings": true
           }
         }
       },
@@ -122,87 +175,36 @@
           }
         }
       },
-      "npm:angular2@2.0.0-beta.17": {
-        "main": false,
-        "dependencies": {
-          "reflect-metadata": "npm:reflect-metadata@0.1.2",
-          "rxjs": "npm:rxjs@^5.0.0-beta.2",
-          "zone.js": "npm:zone.js@^0.6.6"
-        },
-        "peerDependencies": {
-          "reflect-metadata": "npm:reflect-metadata@0.1.2",
-          "rxjs": "npm:rxjs@^5.0.0-beta.2",
-          "zone.js": "npm:zone.js@^0.6.6"
-        },
-        "jspmNodeConversion": false,
-        "map": {
-          "crypto": "@empty"
-        },
-        "meta": {
-          "src/*.js": {
-            "deps": [
-              "reflect-metadata",
-              "zone.js"
-            ]
-          }
-        }
+      "npm:inherits@2.0.1": {
+        "ignore": [
+          "test.js"
+        ]
       },
       "npm:moment@2.13.0": {
         "jspmNodeConversion": false
       },
-      "npm:reflect-metadata@0.1.2": {
-        "map": {
-          "crypto": "@empty"
-        }
-      },
       "npm:reflect-metadata@0.1.3": {
         "jspmNodeConversion": false,
-        "map": {
-          "crypto": {
-            "node": "@node/crypto",
-            "default": "@empty"
+        "map": {}
+      },
+      "npm:rxjs@5.0.0-beta.6": {
+        "meta": {
+          "*.js": {
+            "typings": true
           }
+        }
+      },
+      "npm:typescript@1.8.10": {
+        "browser": {},
+        "map": {
+          "buffer": "@empty",
+          "child_process": "@empty",
+          "fs": "@empty",
+          "path": "@empty",
+          "process": "@empty",
+          "readline": "@empty"
         }
       }
     }
-  },
-  "dependencies": {
-    "authenticate": "^0.1.5",
-    "errorhandler": "^1.4.3",
-    "express-bunyan-logger": "^1.2.0",
-    "forever-monitor": "^1.7.0",
-    "grunt-express-server": "^0.5.3",
-    "method-override": "^2.3.5",
-    "serve-favicon": "^2.3.0",
-    "serve-static": "^1.10.2",
-    "superagent": "^1.8.3"
-  },
-  "devDependencies": {
-    "angular2": "^2.0.0-beta.17",
-    "autoprefixer-stylus": "^0.9.3",
-    "bootstrap": "^4.0.0-alpha.2",
-    "csso-stylus": "0.0.3",
-    "font-awesome": "^4.6.1",
-    "grunt": "^1.0.1",
-    "grunt-cli": "^1.2.0",
-    "grunt-concurrent": "^2.3.0",
-    "grunt-contrib-clean": "^1.0.0",
-    "grunt-contrib-coffee": "^1.0.0",
-    "grunt-contrib-concat": "^1.0.1",
-    "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-jade": "^1.0.0",
-    "grunt-contrib-stylus": "^1.2.0",
-    "grunt-contrib-watch": "^1.0.0",
-    "grunt-env": "^0.4.4",
-    "grunt-exec": "^0.4.7",
-    "grunt-markdown": "^0.7.0",
-    "grunt-preprocess": "^5.1.0",
-    "grunt-ts": "^5.5.0-beta.2",
-    "jspm": "^0.16.34",
-    "jstransformer-typescript": "^1.0.0",
-    "load-grunt-tasks": "^3.5.0",
-    "protractor": "^3.3.0",
-    "rxjs": "^5.0.0-beta.7"
-  },
-  "main": "server.js"
+  }
 }

@@ -56,6 +56,10 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
         sliderAxialPlaneBack = document.getElementById('qi-slider-axial-plane-back')
         sliderAxialPlaneFwd = document.getElementById('qi-slider-axial-plane-fwd')
 
+        # Configure the slider.
+        #
+        # TODO - Obtain the range max from the image object properties.
+        #
         noUiSlider.create sliderAxialPlane,
           start: [ scope.slice.sliceNbr ]
           step: 1
@@ -70,19 +74,39 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
             ]
             density: 4
 
-        sliderAxialPlane.noUiSlider.on 'change', ->
-          val = Math.floor sliderAxialPlane.noUiSlider.get()
-          console.log val
+        updateImage = (sliderPos) ->
+          # Update the image with the new slice number, which corresponds to
+          # new slider position.
+          scope.$apply ->
+            scope.slice.sliceNbr = sliderPos
 
+        # When the slider is dragged, get the new slider position and update
+        # the image.
+        sliderAxialPlane.noUiSlider.on 'slide', ->
+          newVal = Math.floor sliderAxialPlane.noUiSlider.get()
+          updateImage(newVal)
+
+        # When the back button is clicked, reduce the slider position by one
+        # and update the image.
         sliderAxialPlaneBack.addEventListener 'click', ->
-          val = Math.floor(sliderAxialPlane.noUiSlider.get()) - 1
-          sliderAxialPlane.noUiSlider.set(val)
-          console.log val
+          newVal = Math.floor(sliderAxialPlane.noUiSlider.get()) - 1
+          # Do the update only if the new value does not fall below 1.
+          if newVal >= 1
+            sliderAxialPlane.noUiSlider.set(newVal)
+            updateImage(newVal)
 
+        # When the forward button is clicked, increase the slider position by
+        # one and update the image.
         sliderAxialPlaneFwd.addEventListener 'click', ->
-          val = Math.floor(sliderAxialPlane.noUiSlider.get()) + 1
-          sliderAxialPlane.noUiSlider.set(val)
-          console.log val
+          newVal = Math.floor(sliderAxialPlane.noUiSlider.get()) + 1
+          # Do the update only if the new value does not go above the number of
+          # slices in the image axial plane.
+          #
+          # TODO - Obtain this value from the image object properties.
+          #
+          if newVal <= 12
+            sliderAxialPlane.noUiSlider.set(newVal)
+            updateImage(newVal)
 
 
     directives.directive 'qiSliderTimeSeries', ->
@@ -92,6 +116,10 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
         sliderTimeSeriesBack = document.getElementById('qi-slider-time-series-back')
         sliderTimeSeriesFwd = document.getElementById('qi-slider-time-series-fwd')
 
+        # Configure the slider.
+        #
+        # TODO - Obtain the range max from the time series object properties.
+        #
         noUiSlider.create sliderTimeSeries,
           start: [ scope.volume.volumeNbr ]
           step: 1
@@ -106,19 +134,39 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
             ]
             density: 4
 
-        sliderTimeSeries.noUiSlider.on 'change', ->
-          val = Math.floor sliderTimeSeries.noUiSlider.get()
-          console.log val
+        updateImage = (sliderPos) ->
+          # Update the image with the new volume number, which corresponds to
+          # new slider position.
+          scope.$apply ->
+            scope.volume.volumeNbr = sliderPos
 
+        # When the slider is dragged, get the new slider position and update
+        # the image.
+        sliderTimeSeries.noUiSlider.on 'slide', ->
+          newVal = Math.floor sliderTimeSeries.noUiSlider.get()
+          updateImage(newVal)
+
+        # When the back button is clicked, reduce the slider position by one
+        # and update the image.
         sliderTimeSeriesBack.addEventListener 'click', ->
-          val = Math.floor(sliderTimeSeries.noUiSlider.get()) - 1
-          sliderTimeSeries.noUiSlider.set(val)
-          console.log val
+          newVal = Math.floor(sliderTimeSeries.noUiSlider.get()) - 1
+          # Do the update only if the new value does not fall below 1.
+          if newVal >= 1
+            sliderTimeSeries.noUiSlider.set(newVal)
+            updateImage(newVal)
 
+        # When the forward button is clicked, increase the slider position by
+        # one and update the image.
         sliderTimeSeriesFwd.addEventListener 'click', ->
-          val = Math.floor(sliderTimeSeries.noUiSlider.get()) + 1
-          sliderTimeSeries.noUiSlider.set(val)
-          console.log val
+          newVal = Math.floor(sliderTimeSeries.noUiSlider.get()) + 1
+          # Do the update only if the new value does not go above the number of
+          # volumes in the time series.
+          #
+          # TODO - Obtain this value from the time series object properties.
+          #
+          if newVal <= 64
+            sliderTimeSeries.noUiSlider.set(newVal)
+            updateImage(newVal)
 
 
     directives.directive 'qiFocus', ['$timeout',

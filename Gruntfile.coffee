@@ -53,7 +53,7 @@ module.exports = (grunt) ->
         expand: true
         ext: '.html'
         cwd: 'app/'
-        src: ['**/*.jade', '!**/include/**']
+        src: ['**/*.pug', '!**/include/**']
         dest: 'public/'
 
     markdown:
@@ -146,7 +146,7 @@ module.exports = (grunt) ->
       options:
         logConcurrentOutput: true
       compile:
-        tasks: ['coffee', 'jade', 'markdown', 'stylus']
+        tasks: ['coffee', 'pug', 'markdown', 'stylus']
 
     cssmin:
       options:
@@ -240,9 +240,9 @@ module.exports = (grunt) ->
       javascript:
         files: ['app/**/*.js']
         tasks: ['copy:js']
-      jade:
-        files: ['app/**/*.jade', 'test/**/*.jade']
-        tasks: ['jade']
+      pug:
+        files: ['app/**/*.pug', 'test/**/*.pug']
+        tasks: ['pug']
       stylus:
         files: ['app/**/*.styl']
         tasks: ['stylus']

@@ -3,16 +3,18 @@ head
   meta(http-equiv='X-UA-Compatible' content='IE=edge,chrome=1')
   meta(name='viewport' content='width=device-width, initial-scale=1')
   meta(name='keywords' content='qipr QIN MR imaging')
-  meta(name='description' content='Quantitative Imaging PRofile (qipr) - correlate imaging biomarkers and clinical results.')
+  meta(name='description' content='Quantitative Imaging PRofile (QiPr) - correlate imaging biomarkers and clinical results.')
 
+  // All relative URLs are requested as /qiprofile/... .
+  base(href='/qiprofile')
   // Bootstrap into jspm.
-  script(src='javascripts/lib/system.js')
-  script(src='javascripts/jspm.browser.js')
-  script(src='javascripts/config.js')
+  script(src='jspm_packages/system.src.js')
+  script(src='jspm.browser.js')
+  script(src='jspm.config.js')
 
-  link(href='/static/stylesheets/app.css' rel='stylesheet')
-  link(href='/static/media/favicon.ico' rel='shortcut icon' type='image/x-icon')
+  link(href='stylesheets/app.css' rel='stylesheet')
+  link(href='static/media/favicon.ico' rel='shortcut icon' type='image/x-icon')
 
   title
     block title
-      | Quantitative Imaging PRofile (QIPR)
+      | QiPr - Quantitative Imaging Profile

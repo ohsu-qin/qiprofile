@@ -1,11 +1,13 @@
 **~
 _*/
+public/
 bower_components/
 dist/
 **/build
 lib/
 node_modules/
 test/results/
+.baseDir.ts
 .DS_Store
 .idea
 .loadpath

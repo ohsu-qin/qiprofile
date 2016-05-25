@@ -28,17 +28,18 @@ define ['angular', 'niftiParser', 'ndarray'], (ng, niftiParser, ndarray) ->
         throw new Error("The NIfTI file has more than one extension")
       if extensions.length == 1
         extension = extensions[0]
-        # Note - the conventional idiom:
+        # Note: the conventional idiom:
         #   String.fromCharCode.apply(null, data)
-        # results in a stack overflow.
+        # results in a stack overflow. The work-around is to convert
+        # the characters one byte at a time.
         chars = (String.fromCharCode(c) for c in extension.data)
         # Get rid of whitespace.
         json = chars.join('').replace(WHITESPACE_REGEX, '')
-        # Note - JSON parse fails with message that it can't find
-        # a JSON object The work-around to this work-around bug is
+        # Note: JSON parse fails with message that it can't find
+        # a JSON object. The work-around to this work-around bug is
         # to search for the substrings we want and hammer together
         # a minimal JSON string.
-        # TODO - 
+        # TODO - unravel this mess.
         windowCenterRegex = /("WindowCenter":\[[^\]]+\])/
         windowWidthRegex = /("WindowWidth":\[[^\]]+\])/
         matches = windowCenterRegex.exec(json)

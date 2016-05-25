@@ -15,6 +15,7 @@ bodyParser = require 'body-parser'
 serveStatic = require 'serve-static'
 methodOverride = require 'method-override'
 errorHandler = require 'errorhandler'
+watcher = require('chokidar-socket-emitter')
 
 # The port assignments.
 PORT = 3000
@@ -23,8 +24,8 @@ MONGODB_PORT = 27017
 EVE_PORT = 5000
 
 # The grunt build tasks place all compiled and copied files within
-# the _public directory.
-root = path.join(__dirname, '..', '_public')
+# the public directory.
+root = path.join(__dirname, '..', 'public')
 
 # The REST request handler.
 rest = require './rest'
@@ -125,15 +126,15 @@ server.get '/qiprofile(/*)?', (req, res) ->
 # Work around the following jspm beta bug:
 #   jspm internally tries to fetch .json files by file path
 #   rather than web app url, e.g.:
-#      /_public/javascripts/lib/npm/typescript@1.8.10.json
+#      /public/lib/npm/typescript@1.8.10.json
 #   rather than:
 #      /javascripts/lib/npm/typescript@1.8.10.json
-# The work-around is to match on _public in the server
+# The work-around is to match on public in the server
 # request.
 # TODO - isolate and resolve or report this bug to jspm.
-server.get '/_public(/*)?', (req, res) ->
-  tail = req.path.substr('/_public'.length)
-  res.sendFile "#{ root }#{ tail }"
+# server.get '/public(/*)?', (req, res) ->
+#   tail = req.path.substr('/public'.length)
+#   res.sendFile "#{ root }#{ tail }"
 
 # Kludge to work around repeat requests. See the app
 # error.coffee FIXME.
@@ -164,14 +165,21 @@ mongod_callback = ->
   restMode = if env is 'test' then 'development' else env
   # The REST server command.
   cmd = if restMode? then "qirest --#{ restMode }" else 'qirest'
+  
   # The callback after the REST server is started.
   eve_callback = ->
-    #...then the Express server.
+    # The server port.
     port = server.get 'port'
-    http.createServer(server).listen port, ->
+    # Make the server.
+    srv = http.createServer(server)
+    # The watcher hot reloads modules.
+    watcher({app: srv})
+    # Start the server.
+    srv.listen port, ->
       env = server.settings.env
-      console.log "The qiprofile server is listening on port #{port}" +
-                  " in #{env} mode."
+      console.log "The qiprofile server is listening on port #{ port }" +
+                  " in #{ env } mode."
+  
   # Start the REST app without logging to the console.
   spawn(cmd, EVE_PORT, eve_callback, {silent: true})
 

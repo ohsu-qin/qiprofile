@@ -87,7 +87,7 @@ Project structure
 The project is organized as follows::
 
     qiprofile/        # Top-level project directory
-      _public/        # Web app root
+      public/        # Web app root
       app/            # Source code
         app.coffee    # AngularJS application definition
         index.jade    # Landing page
@@ -178,7 +178,7 @@ Debugging a unit test case is performed as follows:
 
 * Open the Chrome Developer Tools (DevTools_).
 
-* Set a breakpoint in the ``base/_public/javascripts/app.js`` source file.
+* Set a breakpoint in the ``base/public/app.js`` source file.
 
 * Refresh the page.
 
@@ -583,10 +583,10 @@ content.
 The ``qiprofile-rest`` ``test/helpers/seed.py`` script populates the
 ``ImageContainer`` ``files`` field described above for the 24 Breast and
 Sarcoma test MR sessions. The ``grunt test:e2e`` end-to-end testing task runs
-the ``qiprofile-rest`` seed script and creates a link in the local ``_public``
+the ``qiprofile-rest`` seed script and creates a link in the local ``public``
 web app build to the test image file fixtures location::
 
-      _public/data -> ../test/fixtures/data
+      public/data -> ../test/fixtures/data
 
 The test image files conform to the XNAT file location convention, e.g.::
 

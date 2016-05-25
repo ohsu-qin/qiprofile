@@ -74,7 +74,7 @@ class SessionDetailPage extends Page
 describe 'E2E Testing Session Detail', ->
   # The Sarcoma001 Session01 volume number for which there is a test
   # fixture scan image file. The seed helper function called from the
-  # protractor config links _public/data to the test fixture data
+  # protractor config links public/data to the test fixture data
   # directory.
   TEST_VOL_NBR = 20
   # A Sarcoma001 Session01 volume number for which a test fixture scan

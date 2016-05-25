@@ -9,7 +9,7 @@ karmaFiles = Object.keys(window.__karma__.files)
 # Karma serves files under /base. Replace this root with
 # the unit test spec location and remove the file extension.
 # The Karma files are at unit/test and the spec location
-# is relative to the base URL (_public/javascripts). Thus,
+# is relative to the base URL (public). Thus,
 # the test spec module paths are '../../test/unit/' followed
 # by the test spec file name, minus the extension, e.g.
 # '../../test/unit/imageSpec'.
@@ -36,7 +36,7 @@ else
 # The require.js configuration.
 requirejs.config
   # The application Javascript URL.
-  baseUrl: rootUrl + '/_public/javascripts'
+  baseUrl: rootUrl + '/public'
 
   # Undocumented karama-requirejs magic added per
   # https://github.com/karma-runner/karma-requirejs/issues/6.

@@ -22,7 +22,7 @@ exports.config =
   # stable before each action.
   useAllAngular2AppRoots: true
 
-  # Run the qirest seed and link the test fixtures into _public,
+  # Run the qirest seed and link the test fixtures into public,
   # if necessary.
   onPrepare: '../e2e/helpers/seed'
 

@@ -15,7 +15,7 @@ module.exports = (config) ->
     preprocessors: '**/*.coffee': 'coffee'
 
     # The files to load. The included flag defers loading in deference
-    # to the requirejs loader. _public/javascripts/main.js is excluded
+    # to the requirejs loader. public/main.js is excluded
     # below, since that is the web app requirejs config. Testing uses
     # its own main config, which is the last file specified and is
     # loaded immediately. The pattern declarations below configure
@@ -23,7 +23,7 @@ module.exports = (config) ->
     # by test/unit/main.
     files: [
       # The web app libraries.
-      {pattern: '_public/javascripts/**/*.js', included: false}
+      {pattern: 'public/**/*.js', included: false}
       # The test libraries.
       {pattern: 'node_modules/angular-mocks/angular-mocks.js', included: false}
       {pattern: 'node_modules/chai-as-promised/lib/chai-as-promised.js', included: false}
@@ -38,9 +38,9 @@ module.exports = (config) ->
     ]
 
     # The requirejs configuration is given by test/unit/main.coffee,
-    # not the application _public/javascripts/main.js file.
+    # not the application public/main.js file.
     exclude: [
-      '_public/javascripts/main.js'
+      'public/main.js'
     ]
 
     # The test results reporter.

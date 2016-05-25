@@ -37,6 +37,8 @@ module.exports = (grunt) ->
         cwd: 'app/'
         src: ['**/*.ts']
         dest: 'public/'
+        # See the pug extDot comment.
+        extDot: 'last'
 
     coffee:
       default:
@@ -46,7 +48,7 @@ module.exports = (grunt) ->
         src: ['**/*.coffee']
         dest: 'public/'
 
-    jade:
+    pug:
       options:
         pretty: true
       default:
@@ -55,6 +57,11 @@ module.exports = (grunt) ->
         cwd: 'app/'
         src: ['**/*.pug', '!**/include/**']
         dest: 'public/'
+        # The default extDot chops off more than the trailing .pug, e.g.:
+        #   src/collections.view.pug -> public/collections.html
+        # We want to preserve the filename up to .pug, e.g.:
+        #   src/collections.view.pug -> public/collections.view.html
+        extDot: 'last'
 
     markdown:
       default:
@@ -203,7 +210,7 @@ module.exports = (grunt) ->
                  '   install --silent && ' +
                  ' ((./node_modules/selenium-standalone/bin/selenium-standalone' +
                  '   start >/dev/null 2>&1 &) && sleep .5))'
-      
+
       updatewebdriver:
         command: './node_modules/protractor/bin/webdriver-manager update'
 

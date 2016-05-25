@@ -75,41 +75,22 @@ ul.qi-clean-list
   display inline-block
 
 // Override the bootstrap button as follows:
+// * remove the border and outline
 // * add color
 // * change the padding from the bulky 6px 12px
 //   to the compact 2px 4px.
 .qi-btn
+  border 0
   padding 2px 4px
   background-color Moccasin
   &:hover
     background-color Peru
     cursor pointer
   &:focus, &.active
-    border 1px solid Peru
-    color White
-    background-color Chocolate
-// TODO - fold the style attributes below into this .qi-btn style.
-// The style below was defined in volume.styl for the overlay demo.
-// Unnecessary attributes should be culled.
-// Confirm that all buttons which use this style display correctly.
-// See the volume.styl .qi-slider TODO comments.
-//   & button
-//     width 7em
-//     padding 0.2em
-//     border 1px solid Peru
-//     margin 0em 0em 0.2em 0em
-//     color Black
-//     background OldLace
-//     &:hover
-//       border 1px solid Peru
-//       color Black
-//       background Chocolate
-//     &:focus, &.active
-//       border 1px solid Peru
-//       color White
-//       background Chocolate
+    outline none
 
-// Override .qi-btn to change the colors.
+// Override .qi-btn to change the colors and preserve
+// highlighting on click.
 .qi-btn-radio
   background-color Aquamarine
   &:hover

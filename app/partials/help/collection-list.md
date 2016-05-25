@@ -1,12 +1,10 @@
 Overview
 --------
 The Quantitative Imaging Profile
-(<em><span class='qi-x-smaller'>QIPR</span></em>
- <a href="#" 
-    onclick='new Audio("/static/media/qipr.mp3").play()'>
+(<em>Q<span class='qi-x-smaller'>I</span>P<span class='qi-x-smaller'>R</span></em>
+ <button class="btn btn-small qi-btn" type='button' onclick='new Audio("static/media/QiPr1.mp3").play()'>
    <span class="glyphicon glyphicon-volume-up"></span>
- </a>
-)
+ </button>)
 application helps clinicians and imaging scientists
 correlate imaging analysis results with clinical outcomes.
 

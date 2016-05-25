@@ -9,6 +9,6 @@ import { CollectionsComponent } from './collections.component.ts';
    directives: [CollectionsComponent]
 })
 
-class QIProfileApp { }
+class AppComponent { }
 
-bootstrap(QIProfileApp);
+bootstrap(AppComponent);

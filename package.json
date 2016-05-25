@@ -18,7 +18,7 @@
   "license": "MIT",
   "bin": "./bin/qiprofile",
   "scripts": {
-    "postinstall": "./node_modules/grunt-cli/bin/grunt postinstall",
+    "postinstall": "jspm install && ./node_modules/grunt-cli/bin/grunt postinstall",
     "start": "node server.js",
     "test": "echo \"Error: No test specified\" && exit 1"
   },
@@ -42,42 +42,51 @@
   "dependencies": {
     "authenticate": "^0.1.5",
     "bootstrap": "^3.3.6",
+    "csso-stylus": "0.0.3",
+    "font-awesome": "^4.6.1",
     "errorhandler": "^1.4.3",
     "express-bunyan-logger": "^1.2.0",
     "forever-monitor": "^1.7.0",
-    "grunt-express-server": "^0.5.3",
-    "method-override": "^2.3.5",
-    "serve-favicon": "^2.3.0",
-    "serve-static": "^1.10.2",
-    "superagent": "^1.8.3",
-    "typescript": "^1.9.0-dev.20160519-1.0"
-  },
-  "devDependencies": {
-    "autoprefixer-stylus": "^0.9.3",
-    "chai": "^3.4.1",
-    "chokidar-socket-emitter": "^0.5.2",
-    "csso-stylus": "0.0.3",
-    "font-awesome": "^4.6.1",
     "grunt": "^1.0.1",
-    "grunt-browser-sync": "^2.2.0",
     "grunt-cli": "^1.2.0",
     "grunt-concurrent": "^2.3.0",
     "grunt-contrib-clean": "^1.0.0",
     "grunt-contrib-coffee": "^1.0.0",
     "grunt-contrib-concat": "^1.0.1",
     "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-jade": "^1.0.0",
+    "grunt-contrib-pug": "^1.0.0",
     "grunt-contrib-stylus": "^1.2.0",
-    "grunt-contrib-watch": "^1.0.0",
     "grunt-env": "^0.4.4",
     "grunt-exec": "^0.4.7",
     "grunt-markdown": "^0.7.0",
-    "grunt-sync": "^0.5.2",
     "grunt-ts": "^5.5.0-beta.2",
     "jspm": "^0.17.0-beta.14",
     "jstransformer-typescript": "^1.0.0",
     "load-grunt-tasks": "^3.5.0",
-    "protractor": "^3.3.0"
+    "lodash": "^4.2.1",
+    "mkdirp": "^0.5.0",
+    "method-override": "^2.3.5",
+    "pug": "^2.0.0-alpha7",
+    "serve-favicon": "^2.3.0",
+    "serve-static": "^1.10.2",
+    "superagent": "^1.8.3",
+    "typescript": "^1.9.0-dev.20160519-1.0",
+    "underscore.string": "^2.3.3"
+  },
+  "devDependencies": {
+    "autoprefixer-stylus": "^0.9.3",
+    "chai": "^3.4.1",
+    "chokidar-socket-emitter": "^0.5.2",
+    "grunt-browser-sync": "^2.2.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-sync": "^0.5.2",
+    "mocha": "^2.4.5",
+    "pako": "^0.2.8",
+    "phantomjs-prebuilt": "^2.1.3",
+    "protractor": "^3.3.0",
+    "selenium-standalone": "^4.9.0",
+    "text-encoding": "^0.5.2",
+    "time-grunt": "^1.3.0"
   },
   "jspm": {
     "registry": "github",
@@ -96,13 +105,11 @@
       "plugin-babel": "npm:systemjs-plugin-babel@0.0.6",
       "reflect-metadata": "npm:reflect-metadata@^0.1.0",
       "rxjs": "npm:rxjs@5.0.0-beta.6",
+      "socket.io-client": "npm:socket.io-client@^1.4.6",
       "ts": "frankwallis/plugin-typescript@^4.0.16",
       "zone.js": "npm:zone.js@^0.6.12"
     },
     "devDependencies": {
-      "assert": "jspm/nodelibs-assert@^0.2.0-alpha",
-      "http": "jspm/nodelibs-http@^0.2.0-alpha",
-      "https": "jspm/nodelibs-https@^0.2.0-alpha",
       "module": "jspm/nodelibs-module@^0.2.0-alpha",
       "net": "jspm/nodelibs-net@^0.2.0-alpha",
       "os": "jspm/nodelibs-os@^0.2.0-alpha",
@@ -110,25 +117,30 @@
       "css": "frankwallis/plugin-css@master",
       "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.5.8",
       "text": "systemjs/plugin-text@^0.0.2",
-      "tty": "jspm/nodelibs-tty@^0.2.0-alpha",
-      "url": "jspm/nodelibs-url@^0.2.0-alpha"
+      "tty": "jspm/nodelibs-tty@^0.2.0-alpha"
     },
     "peerDependencies": {
       "@angular/common": "npm:@angular/common@2.0.0-rc.1",
       "@angular/compiler": "npm:@angular/compiler@2.0.0-rc.1",
       "@angular/platform-browser": "npm:@angular/platform-browser@2.0.0-rc.1",
+      "assert": "jspm/nodelibs-assert@^0.2.0-alpha",
       "buffer": "jspm/nodelibs-buffer@^0.2.0-alpha",
       "child_process": "jspm/nodelibs-child_process@^0.2.0-alpha",
       "constants": "jspm/nodelibs-constants@^0.2.0-alpha",
       "crypto": "jspm/nodelibs-crypto@^0.2.0-alpha",
       "events": "jspm/nodelibs-events@^0.2.0-alpha",
       "fs": "jspm/nodelibs-fs@^0.2.0-alpha",
+      "http": "jspm/nodelibs-http@^0.2.0-alpha",
+      "https": "jspm/nodelibs-https@^0.2.0-alpha",
       "path": "jspm/nodelibs-path@^0.2.0-alpha",
       "process": "jspm/nodelibs-process@^0.2.0-alpha",
       "stream": "jspm/nodelibs-stream@^0.2.0-alpha",
       "string_decoder": "jspm/nodelibs-string_decoder@^0.2.0-alpha",
+      "tls": "jspm/nodelibs-tls@^0.2.0-alpha",
+      "url": "jspm/nodelibs-url@^0.2.0-alpha",
       "util": "jspm/nodelibs-util@^0.2.0-alpha",
-      "vm": "jspm/nodelibs-vm@^0.2.0-alpha"
+      "vm": "jspm/nodelibs-vm@^0.2.0-alpha",
+      "zlib": "jspm/nodelibs-zlib@^0.2.0-alpha"
     },
     "overrides": {
       "npm:@angular/common@2.0.0-rc.1": {
@@ -175,6 +187,15 @@
           }
         }
       },
+      "npm:browserify-zlib@0.1.4": {
+        "dependencies": {
+          "readable-stream": "^2.0.2",
+          "pako": "~0.2.0"
+        },
+        "map": {
+          "_stream_transform": "readable-stream/transform"
+        }
+      },
       "npm:inherits@2.0.1": {
         "ignore": [
           "test.js"
@@ -194,6 +215,9 @@
           }
         }
       },
+      "npm:socket.io-client@1.4.6": {
+        "main": "lib/index.js"
+      },
       "npm:typescript@1.8.10": {
         "browser": {},
         "map": {
@@ -203,6 +227,14 @@
           "path": "@empty",
           "process": "@empty",
           "readline": "@empty"
+        }
+      },
+      "npm:ws@1.0.1": {
+        "dependencies": {
+          "options": ">=0.0.5",
+          "ultron": "1.0.x",
+          "utf-8-validate": "1.2.x",
+          "bufferutil": "1.2.x"
         }
       }
     }

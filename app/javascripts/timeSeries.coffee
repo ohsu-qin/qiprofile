@@ -20,7 +20,24 @@ define ['angular', 'underscore.string', 'image', 'nifti'], (ng, _s) ->
         # @returns the parent time series parent image sequence
         imageSequence:
           get: -> @timeSeries.imageSequence
-      
+        
+        # @returns the [x, y, z, v] sizes
+        shape:
+          get: ->
+            if not @timeSeries.image.isLoaded()
+              throw new Error("The #{ @timeSeries.title } is not loaded")
+            @timeSeries.image.contents.data.shape
+        
+        # @returns the {size: number of volumes} object
+        volumes:
+          get: ->
+            size: @shape[3]
+        
+        # @returns the {size: number of slices} object
+        slices:
+          get: ->
+            size: @shape[0]
+
     # Adds the following properties to the given REST TimeSeries
     # object:
     # * *imageSequence* - the abstract parent image sequence

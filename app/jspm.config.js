@@ -11,7 +11,7 @@ SystemJS.config({
   },
   packages: {
     "src": {
-      "main": "main.ts",
+      "main": "app.component.ts",
       "meta": {
         "*.ts": {
           "loader": "ts"

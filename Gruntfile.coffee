@@ -106,6 +106,7 @@ module.exports = (grunt) ->
           'bower_components/font-awesome/css/font-awesome.css'
           'bower_components/nouislider/src/nouislider.css'
           'bower_components/nouislider/src/nouislider.pips.css'
+          'bower_components/nouislider/src/nouislider.tooltips.css'
           'bower_components/nvd3/build/nv.d3.css'
         ]
         dest: '_public/stylesheets/vendor.css'

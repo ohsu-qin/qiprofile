@@ -60,6 +60,8 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
         #
         # TODO - Obtain the range max from the image object properties.
         #
+        # TODO - Add tooltip to show current slider value.
+        #
         noUiSlider.create sliderAxialPlane,
           start: [ scope.slice.sliceNbr ]
           step: 1
@@ -67,12 +69,9 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
             'min': 1
             'max': 12
           pips:
-            mode: 'values'
-            values: [
-              1
-              12
-            ]
-            density: 4
+            mode: 'positions'
+            values: [ 0, 100 ]
+            density: 9
 
         updateImage = (sliderPos) ->
           # Update the image with the new slice number, which corresponds to
@@ -120,6 +119,8 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
         #
         # TODO - Obtain the range max from the time series object properties.
         #
+        # TODO - Add tooltip to show current slider value.
+        #
         noUiSlider.create sliderTimeSeries,
           start: [ scope.volume.volumeNbr ]
           step: 1
@@ -127,12 +128,10 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
             'min': 1
             'max': 64
           pips:
-            mode: 'values'
-            values: [
-              1
-              64
-            ]
+            mode: 'positions'
+            values: [ 0, 100 ]
             density: 4
+            
 
         updateImage = (sliderPos) ->
           # Update the image with the new volume number, which corresponds to

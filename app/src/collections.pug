@@ -1,0 +1,14 @@
+extends ../layout/partial
+
+block billboard
+  | Collections
+
+block content
+  ul.qi-main-list
+    li(*ngFor="let collection of collections | orderBy:'name'")
+      <collection [collection]="collection"></collection>
+
+block help-text
+  // The nested quote ensures evaluation to a string rather than
+  // a scope variable.
+  .qi-help-text(ng-include="'/partials/help/collection-list.html'")

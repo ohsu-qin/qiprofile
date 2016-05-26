@@ -131,7 +131,6 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
             mode: 'positions'
             values: [ 0, 100 ]
             density: 4
-            
 
         updateImage = (sliderPos) ->
           # Update the image with the new volume number, which corresponds to

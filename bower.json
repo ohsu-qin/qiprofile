@@ -59,6 +59,7 @@
     "json3": "^3.3.2",
     "lodash": "^4.7.0",
     "moment": "^2.11.2",
+    "nouislider": "8.5.1",
     "nvd3": "^1.8.2",
     "pako": "^0.2.8",
     "requirejs": "^2.1.22",
@@ -67,18 +68,12 @@
     "stack-generator": "^1.1.0",
     "stacktrace-gps": "^2.4.1",
     "stacktrace-js": "^1.0.1",
-    "underscore.string": "^3.2.3",
-    "venturocket-angular-slider": "^0.3.2"
+    "underscore.string": "^3.2.3"
   },
   "devDependencies": {
     "domready": "^1.0.8"
   },
   "overrides": {
-    "venturocket-angular-sliders": {
-      "dependencies": {
-        "angular": "*"
-      }
-    },
     "font-awesome": {
       "main": "css/font-awesome.css"
     }

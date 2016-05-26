@@ -32,20 +32,47 @@
     vertical-align middle
     margin 0.5em
 
-.qi-slice-display-ctrl
+
+// The slice display control styles.
+.qi-slice-ctrl-panel
   position absolute
   right 0
-  min-width 25em
+  min-width 28em
   font-size smaller
   & .row
     text-align center
-  & .qi-orient-ctrl
-    vertical-align middle
-    margin 0.5em 0 0.5em 1em
+  & .qi-slider
+    margin 0.3em 0 3em 0
 
-.qi-step-btn
-  // Scooch the button down a bit.
-  margin-top 1em
+.qi-slice-ctrl
+  margin 0.5em 0 0.5em 0
+
+// Override some of the noUiSlider styles.
+.noUi-horizontal
+  height 14px
+  border 1px solid Silver
+  .noUi-handle
+    width 34px
+    height 20px
+    top -4px
+    left -17px
+    border-radius 18px
+    background-color Peru
+    cursor pointer
+    &:hover
+      background-color Chocolate
+
+.noUi-handle:before, .noUi-handle:after
+  height 10px
+  top 4px
+  background-color Black
+
+.noUi-value, .noUi-tooltip
+  font-size 12px
+
+.noUi-value
+  margin-top 10px
+
 
 // The loading indicator.
 .qi-loading
@@ -61,12 +88,12 @@
   width 512px
   height 512px
 
-.qi-slider-label
-  // Scooch the label down a bit, since the slider is vertically fatter than
-  // the label text.
-  padding-top .5em
 
-// The slider style. This style is adapted from
+// The obsolete slider styles.
+//-.qi-slider-label
+//-  padding-top .5em
+
+// This style is adapted from
 // http://prajwalkman.github.io/angular-slider/angular-slider/angular-slider.css
 // with the following modifications:
 // * The pointer width and height are aligned so they are not off-center
@@ -80,69 +107,68 @@
 // * color should be a name
 // * the pointer can probably be subsumed by common.styl .qi-btn
 // * Add comments, e.g. what is bubble?
-.qi-slider
-  display inline-block
-  position relative
-  height 1em
-  width 100%
-  margin 2em 0 1em 0
-  span
-    white-space nowrap
-    &.bar
-      height 100%
-      z-index 0
-      -webkit-border-radius 1em/1em
-      border-radius 1em/1em
-      background -webkit-gradient(linear, left top, left bottom, color-stop(0, #c0c0c0), color-stop(1, #8d8d8d))
-      background -webkit-linear-gradient(top, #c0c0c0 0, #8d8d8d 100%)
-      background -moz-linear-gradient(top, #c0c0c0 0, #8d8d8d 100%)
-      background -o-linear-gradient(top, #c0c0c0 0, #8d8d8d 100%)
-      background -ms-linear-gradient(top, #c0c0c0 0, #8d8d8d 100%)
-      background linear-gradient(to bottom, #c0c0c0 0, #8d8d8d 100%)
-      -webkit-box-shadow inset 2px 2px 5px
-      box-shadow inset 2px 2px 5px
-      &.selection
-        z-index 1
-        background -webkit-gradient(linear, left top, left bottom, color-stop(0, #13b6ff), color-stop(1, #00a8f3))
-        background -webkit-linear-gradient(top, #13b6ff 0, #00a8f3 100%)
-        background -moz-linear-gradient(top, #13b6ff 0, #00a8f3 100%)
-        background -o-linear-gradient(top, #13b6ff 0, #00a8f3 100%)
-        background -ms-linear-gradient(top, #13b6ff 0, #00a8f3 100%)
-        background linear-gradient(to bottom, #13b6ff 0, #00a8f3 100%)
-        -webkit-box-shadow none
-        box-shadow none
-    &.pointer
-      cursor pointer
-      width 22px
-      height 22px
-      top -8px
-      background-color #fff
-      border 1px solid #000
-      z-index 2
-      -webkit-border-radius 1em/1em
-      border-radius 1em/1em
-      &:after
-        content ''
-        background-color Peru
-        width 8px
-        height 8px
-        position absolute
-        top 6px
-        left 6px
-        -webkit-border-radius 1em/1em
-        border-radius 1em/1em
-      &:hover
-        &:after
-          background-color Chocolate
-      &.active
-        &:after
-          background-color Chocolate
-    &.bubble
-      cursor default
-      top -22px
-      padding 1px 3px 1px 3px
-      font-size smaller
-      &.selection
-        top 15px
-      &.limit
-        color #808080
+//-.qi-slider
+//-  position relative
+//-  height 1em
+//-  width 100%
+//-  margin 2em 0 1em 0
+//-  span
+//-    white-space nowrap
+//-    &.bar
+//-      height 100%
+//-      z-index 0
+//-      -webkit-border-radius 1em/1em
+//-      border-radius 1em/1em
+//-      background -webkit-gradient(linear, left top, left bottom, color-stop(0, #c0c0c0), color-stop(1, #8d8d8d))
+//-      background -webkit-linear-gradient(top, #c0c0c0 0, #8d8d8d 100%)
+//-      background -moz-linear-gradient(top, #c0c0c0 0, #8d8d8d 100%)
+//-      background -o-linear-gradient(top, #c0c0c0 0, #8d8d8d 100%)
+//-      background -ms-linear-gradient(top, #c0c0c0 0, #8d8d8d 100%)
+//-      background linear-gradient(to bottom, #c0c0c0 0, #8d8d8d 100%)
+//-      -webkit-box-shadow inset 2px 2px 5px
+//-      box-shadow inset 2px 2px 5px
+//-      &.selection
+//-        z-index 1
+//-        background -webkit-gradient(linear, left top, left bottom, color-stop(0, #13b6ff), color-stop(1, #00a8f3))
+//-        background -webkit-linear-gradient(top, #13b6ff 0, #00a8f3 100%)
+//-        background -moz-linear-gradient(top, #13b6ff 0, #00a8f3 100%)
+//-        background -o-linear-gradient(top, #13b6ff 0, #00a8f3 100%)
+//-        background -ms-linear-gradient(top, #13b6ff 0, #00a8f3 100%)
+//-        background linear-gradient(to bottom, #13b6ff 0, #00a8f3 100%)
+//-        -webkit-box-shadow none
+//-        box-shadow none
+//-    &.pointer
+//-      cursor pointer
+//-      width 22px
+//-      height 22px
+//-      top -8px
+//-      background-color #fff
+//-      border 1px solid #000
+//-      z-index 2
+//-      -webkit-border-radius 1em/1em
+//-      border-radius 1em/1em
+//-      &:after
+//-        content ''
+//-        background-color Peru
+//-        width 8px
+//-        height 8px
+//-        position absolute
+//-        top 6px
+//-        left 6px
+//-        -webkit-border-radius 1em/1em
+//-        border-radius 1em/1em
+//-      &:hover
+//-        &:after
+//-          background-color Chocolate
+//-      &.active
+//-        &:after
+//-          background-color Chocolate
+//-    &.bubble
+//-      cursor default
+//-      top -22px
+//-      padding 1px 3px 1px 3px
+//-      font-size smaller
+//-      &.selection
+//-        top 15px
+//-      &.limit
+//-        color #808080

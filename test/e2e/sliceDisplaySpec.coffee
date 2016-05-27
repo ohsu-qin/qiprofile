@@ -10,7 +10,7 @@ class SlicePage extends Page
     @find('#qi-slice-image')
   
   sliceControlPanel: ->
-    @find('.qi-slice-display-ctrl')
+    @find('.qi-slice-ctrl-panel')
 
 # TODO - timeout of 5000ms exceeded. Ensure the done() callback is being called
 # in this test.

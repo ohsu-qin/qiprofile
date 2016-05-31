@@ -1,0 +1,6 @@
+a.qi-inline-heading.qi-collection-name(
+  (click)="visit qiprofile.collection.detail({project: collection.project, collection: collection.name.toLowerCase()})"
+)
+span : {{ collection.description }}
+button.btn.btn-med.qi-profile-btn((click)="open(collection.url)")
+  .glyphicon.glyphicon-info-sign()

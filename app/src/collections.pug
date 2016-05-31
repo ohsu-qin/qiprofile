@@ -5,8 +5,8 @@ block billboard
 
 block content
   ul.qi-main-list
-    li(*ngFor="let collection of collections | orderBy:'name'")
-      <collection [collection]="collection"></collection>
+    li(*ngFor="let coll of sortedCollections")
+      collection([collection]="coll")
 
 block help-text
   // The nested quote ensures evaluation to a string rather than

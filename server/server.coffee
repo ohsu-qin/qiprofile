@@ -15,7 +15,7 @@ bodyParser = require 'body-parser'
 serveStatic = require 'serve-static'
 methodOverride = require 'method-override'
 errorHandler = require 'errorhandler'
-watcher = require('chokidar-socket-emitter')
+# watcher = require 'chokidar-socket-emitter'
 
 # The port assignments.
 PORT = 3000
@@ -117,7 +117,7 @@ server.use '/qirest', rest(restUrl)
 
 
 # Strip the app prefix from the request URL and serve up the
-# static file.
+# file in the root directory.
 server.get '/qiprofile(/*)?', (req, res) ->
   tail = req.path.substr('/qiprofile'.length)
   if not tail then tail = '/index.html'
@@ -172,8 +172,8 @@ mongod_callback = ->
     port = server.get 'port'
     # Make the server.
     srv = http.createServer(server)
-    # The watcher hot reloads modules.
-    watcher({app: srv})
+    # # The watcher hot reloads modules.
+    # watcher({app: srv})
     # Start the server.
     srv.listen port, ->
       env = server.settings.env

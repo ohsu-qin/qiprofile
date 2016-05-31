@@ -40,6 +40,10 @@ module.exports = (grunt) ->
         # See the pug extDot comment.
         extDot: 'last'
 
+    tslint:
+      files:
+        src: ['app/**/*.ts']
+
     coffee:
       default:
         expand: true
@@ -133,9 +137,15 @@ module.exports = (grunt) ->
         src: ['bootstrap/dist/fonts/*', 'font-awesome/fonts/*']
         dest: 'public/fonts/'
 
+    # Copy only changed app files.
     sync:
-      # Copy changed app TypeScript files.
       ts:
+        expand: true
+        cwd: 'app/'
+        src: ['**/*.ts']
+        dest: 'public/'
+
+      js:
         expand: true
         cwd: 'app/'
         src: ['**/*.js']
@@ -235,18 +245,18 @@ module.exports = (grunt) ->
     watch:
       options:
         livereload: true
-      typescript:
+      ts:
         files: ['app/**/*.ts']
-        tasks: ['copy:ts']
+        tasks: ['sync:ts']
+      js:
+        files: ['app/**/*.js']
+        tasks: ['sync:js']
       json:
         files: ['app/**/*.json']
         tasks: ['copy:json']
       coffee:
         files: ['app/**/*.coffee']
         tasks: ['coffee']
-      javascript:
-        files: ['app/**/*.js']
-        tasks: ['copy:js']
       pug:
         files: ['app/**/*.pug', 'test/**/*.pug']
         tasks: ['pug']
@@ -271,7 +281,8 @@ module.exports = (grunt) ->
   grunt.registerTask 'build:app', ['clean', 'copy', 'concat:css', 'compile']
 
   # Build the app and test environment.
-  grunt.registerTask 'build:dev', ['env:dev', 'build:app', 'exec:updatewebdriver']
+  grunt.registerTask 'build:dev', ['env:dev', 'tslint', 'build:app',
+                                   'exec:updatewebdriver']
 
   # Build the app for deployment.
   grunt.registerTask 'build:prod', ['env:prod', 'build:app']
@@ -280,7 +291,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'postinstall', ['build:prod']
 
   # Start the server with debug turned on.
-  grunt.registerTask 'start:dev', ['express:dev', 'watch', 'sync']
+  grunt.registerTask 'start:dev', ['express:dev', 'watch']
 
   # Start the server in production mode.
   grunt.registerTask 'start:prod', ['express:prod']

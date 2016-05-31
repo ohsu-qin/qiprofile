@@ -9,8 +9,9 @@ head
 
   // Bootstrap into jspm.
   script(src='jspm_packages/system.src.js')
-  script(src='jspm.browser.js')
   script(src='jspm.config.js')
+  script(type='text/javascript').
+    System.import('./boot.js');
 
   link(href='stylesheets/app.css' rel='stylesheet')
   link(href='media/favicon.ico' rel='shortcut icon' type='image/x-icon')

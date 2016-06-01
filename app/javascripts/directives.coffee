@@ -188,7 +188,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
           #
           # TODO - Obtain this value from the time series object properties.
           #
-          if newVal <= scope.timeSeries.image.slices.size
+          if newVal <= scope.timeSeries.image.volumes.size
             # sliderTimeSeries.noUiSlider.set(newVal)
             updateImage(newVal)
 

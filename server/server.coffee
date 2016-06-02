@@ -15,7 +15,7 @@ bodyParser = require 'body-parser'
 serveStatic = require 'serve-static'
 methodOverride = require 'method-override'
 errorHandler = require 'errorhandler'
-# watcher = require 'chokidar-socket-emitter'
+watcher = require 'chokidar-socket-emitter'
 
 # The port assignments.
 PORT = 3000
@@ -25,7 +25,7 @@ EVE_PORT = 5000
 
 # The grunt build tasks place all compiled and copied files within
 # the public directory.
-root = path.join(__dirname, '..', 'public')
+root = path.join(__dirname, '..')
 
 # The REST request handler.
 rest = require './rest'
@@ -172,8 +172,8 @@ mongod_callback = ->
     port = server.get 'port'
     # Make the server.
     srv = http.createServer(server)
-    # # The watcher hot reloads modules.
-    # watcher({app: srv})
+    # The watcher hot reloads modules.
+    watcher({app: srv})
     # Start the server.
     srv.listen port, ->
       env = server.settings.env

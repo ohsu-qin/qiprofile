@@ -8,5 +8,8 @@
     "experimentalDecorators": true,
     "target": "es6",
     "outFile": "public/tsc.js"
-  }
+  },
+  "files": [
+    "typings/index.d.ts"
+  ]
 }

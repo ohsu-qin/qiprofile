@@ -1,6 +1,6 @@
 import '../shims.js';
 import { Component } from '@angular/core';
-import { bootstrap } from 'platform-browser-dynamic';
+import { bootstrap } from '@angular/platform-browser-dynamic';
 import { CollectionsComponent } from './collections.component.ts';
 
 @Component({

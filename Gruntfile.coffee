@@ -9,18 +9,7 @@ module.exports = (grunt) ->
         NODE_ENV: 'production'
 
     clean:
-      # Note: Grunt 0.4.5 file.js has an invalid test for whether the
-      #   target is contained in the cwd. Work-around is the force option.
-      # Note: the odd public patterns are the most concise way to delete
-      #   all of the public tree except for the data and jspm_packages
-      #   subdirectories. The entries:
-      #     'public/**', '!public/jspm_packages/**'
-      #   deletes the entire public tree. Given
-      #   https://github.com/cbas/grunt-rev/issues/16, this is probably
-      #   a grunt bug, although it is unclear how the force option is
-      #   intended to modify the behavior in this case.
-      derived: ['_build', 'public/*', 'public/*/**', '!public/data/**',
-                '!public/jspm_packages/**']
+      derived: ['_build', 'javascripts', 'stylesheets', 'fonts', 'typings', '**.html']
       options:
         force: true
 
@@ -34,23 +23,26 @@ module.exports = (grunt) ->
         verbose: true
       default:
         expand: true
-        cwd: 'app/'
+        cwd: 'src/'
         src: ['**/*.ts']
-        dest: 'public/'
+        dest: 'public'
         # See the pug extDot comment.
         extDot: 'last'
 
     tslint:
       files:
-        src: ['app/**/*.ts']
+        src: ['src/**/*.ts']
+    
+    typings:
+      install: {}
 
     coffee:
       default:
         expand: true
         ext: '.js'
-        cwd: 'app/'
+        cwd: 'coffeescripts/'
         src: ['**/*.coffee']
-        dest: 'public/'
+        dest: 'javascripts'
 
     pug:
       options:
@@ -58,9 +50,8 @@ module.exports = (grunt) ->
       default:
         expand: true
         ext: '.html'
-        cwd: 'app/'
-        src: ['**/*.pug', '!**/include/**']
-        dest: 'public/'
+        src: ['*.pug', 'src/*.pug', 'partials/*.pug', '!partials/include/**']
+        dest: '.'
         # The default extDot chops off more than the trailing .pug, e.g.:
         #   src/collections.view.pug -> public/collections.html
         # We want to preserve the filename up to .pug, e.g.:
@@ -71,9 +62,9 @@ module.exports = (grunt) ->
       default:
         expand: true
         ext: '.html'
-        cwd: 'app/'
+        cwd: 'partials/'
         src: ['**/*.md']
-        dest: 'public/'
+        dest: '.'
 
     stylus:
       options:
@@ -82,36 +73,16 @@ module.exports = (grunt) ->
           require('csso-stylus')
         ]
       default:
-        src: ['app/stylesheets/app.styl']
-        dest: 'public/stylesheets/app.css'
+        src: ['stylus/app.styl']
+        dest: 'stylesheets/app.css'
 
     copy:
       # The native applicaton JavaScript files.
       js:
         expand: true
-        cwd: 'app/'
+        cwd: 'coffeescripts/'
         src: ['**/*.js']
-        dest: 'public/'
-
-      # The applicaton TypeScript files.
-      ts:
-        expand: true
-        cwd: 'app/'
-        src: ['**/*.ts']
-        dest: 'public/'
-
-      # The applicaton JSON files.
-      json:
-        expand: true
-        cwd: 'app/'
-        src: ['**/*.json']
-        dest: 'public/'
-
-      # The images and icons.
-      static:
-        expand: true
-        src: ['static/**']
-        dest: 'public/'
+        dest: 'javascripts/'
 
       # Note: this task is only used to copy CSS map files. The
       # CSS style files themselves are copied to the destination
@@ -125,7 +96,7 @@ module.exports = (grunt) ->
         flatten: true
         cwd: 'node_modules/'
         src: ['bootstrap/dist/css/bootstrap.css.map']
-        dest: 'public/stylesheets/'
+        dest: 'stylesheets/'
 
       fonts:
         expand: true
@@ -135,21 +106,7 @@ module.exports = (grunt) ->
         #   e.g. 4.0.4/index.html, can't be excluded
         #   (cf. https://github.com/gruntjs/grunt-contrib-copy/issues/13).
         src: ['bootstrap/dist/fonts/*', 'font-awesome/fonts/*']
-        dest: 'public/fonts/'
-
-    # Copy only changed app files.
-    sync:
-      ts:
-        expand: true
-        cwd: 'app/'
-        src: ['**/*.ts']
-        dest: 'public/'
-
-      js:
-        expand: true
-        cwd: 'app/'
-        src: ['**/*.js']
-        dest: 'public/'
+        dest: 'fonts/'
 
     concat:
       css:
@@ -157,21 +114,21 @@ module.exports = (grunt) ->
           'node_modules/bootstrap/dist/css/bootstrap.css'
           'node_modules/font-awesome/css/font-awesome.css'
         ]
-        dest: 'public/stylesheets/vendor.css'
+        dest: 'stylesheets/vendor.css'
 
     concurrent:
       options:
         logConcurrentOutput: true
       compile:
-        tasks: ['coffee', 'pug', 'markdown', 'stylus']
+        tasks: ['typings', 'coffee', 'pug', 'markdown', 'stylus']
 
     cssmin:
       options:
         'nomunge': true
         'line-break': 80
       files:
-        src: ['public/stylesheets/app.css']
-        dest: 'public/stylesheets/app.min.css'
+        src: ['stylesheets/app.css']
+        dest: 'stylesheets/app.min.css'
 
     browserSync:
       options:
@@ -179,7 +136,7 @@ module.exports = (grunt) ->
         proxy: 'http:3000'
       bsFiles:
         src:
-          'public/**'
+          'html/**'
 
     karma:
       options:
@@ -192,7 +149,7 @@ module.exports = (grunt) ->
     exec:
       # Convert CommonJS modules to AMD.
       convert:
-        command: './node_modules/.bin/r.js -convert _build/commonjs public/lib'
+        command: './node_modules/.bin/r.js -convert _build/commonjs lib'
 
       # This task is used in preference to grunt-selenium-standalone to
       # suppress extraneous console messages and wait for the server to
@@ -245,26 +202,17 @@ module.exports = (grunt) ->
     watch:
       options:
         livereload: true
-      ts:
-        files: ['app/**/*.ts']
-        tasks: ['sync:ts']
-      js:
-        files: ['app/**/*.js']
-        tasks: ['sync:js']
-      json:
-        files: ['app/**/*.json']
-        tasks: ['copy:json']
       coffee:
-        files: ['app/**/*.coffee']
+        files: ['coffeescripts/**/*.coffee']
         tasks: ['coffee']
       pug:
-        files: ['app/**/*.pug', 'test/**/*.pug']
+        files: ['*.pug', '**/*.pug']
         tasks: ['pug']
       stylus:
-        files: ['app/**/*.styl']
+        files: ['stylus/**/*.styl']
         tasks: ['stylus']
       markdown:
-        files: ['app/partials/**/*.md']
+        files: ['partials/**/*.md']
         tasks: ['markdown']
   )
 

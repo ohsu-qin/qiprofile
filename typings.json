@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "@angular/common": "file:jspm_packages/npm/@angular/common@2.0.0-rc.1/index.d.ts",
+    "@angular/compiler": "file:jspm_packages/npm/@angular/compiler@2.0.0-rc.1/index.d.ts",
+    "@angular/core": "file:jspm_packages/npm/@angular/core@2.0.0-rc.1/index.d.ts",
+    "@angular/platform-browser-dynamic": "file:jspm_packages/npm/@angular/platform-browser-dynamic@2.0.0-rc.1/index.d.ts",
+    "@angular/platform-browser": "file:jspm_packages/npm/@angular/platform-browser@2.0.0-rc.1/index.d.ts",
+    "@angular/router": "file:jspm_packages/npm/@angular/router@2.0.0-rc.1/index.d.ts",
+    "lodash": "registry:npm/lodash#4.0.0+20160416211519"
+  },
+  "globalDependencies": {
+    "core-js": "registry:dt/core-js#0.0.0+20160524134847",
+    "node": "registry:dt/node#6.0.0+20160524002506"
+  },
+  "globalDevDependencies": {
+    "mocha": "registry:dt/mocha#2.2.5+20160317120654"
+  }
+}

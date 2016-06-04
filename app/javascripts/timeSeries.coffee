@@ -31,7 +31,7 @@ define ['angular', 'underscore.string', 'image', 'nifti'], (ng, _s) ->
         # @returns the {size: number of volumes} object
         volumes:
           get: ->
-            size: @shape[3]
+            size: @timeSeries.imageSequence.volumes.images.length
         
         # @returns the {size: number of slices} object
         slices:

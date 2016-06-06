@@ -49,13 +49,6 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
             scope.spinner.stop()
 
 
-    # Note: the slider is disabled due to the following bugs:
-    # * does not get the max from the loaded image
-    # * min/max do not align under the slider
-    # * the slider handle does not move
-    #
-    # TODO - fix these bugs, address the TODO items below, then reenable.
-    #
     # TODO -  Refactor the code block into a common service function called
     #   by the directive.
     #
@@ -137,26 +130,32 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
 
     directives.directive 'qiSliderTimeSeries', ->
       (scope) ->
-        # sliderTimeSeries = document.getElementById('qi-slider-time-series')
+        # TODO - The controls should be directives. Should use angular element()
+        #   rather than document.getElementById() to find the elements. Should
+        #   use angular events rather than addEventListener().
+        sliderTimeSeries = document.getElementById('qi-slider-time-series')
         sliderTimeSeriesBack = document.getElementById('qi-slider-time-series-back')
         sliderTimeSeriesFwd = document.getElementById('qi-slider-time-series-fwd')
 
+        # The number of volumes in the time series.
+        timeSeriesLength = scope.timeSeries.image.volumes.size
+        # The initial volume number.
+        volumeNbr = scope.volume.volumeNbr
+
         # Configure the slider.
-        #
-        # TODO - Obtain the range max from the time series object properties.
         #
         # TODO - Add tooltip to show current slider value.
         #
-        # noUiSlider.create sliderTimeSeries,
-        #   start: [ scope.volume.volumeNbr ]
-        #   step: 1
-        #   range:
-        #     'min': 1
-        #     'max': 64
-        #   pips:
-        #     mode: 'positions'
-        #     values: [0, 100]
-        #     density: 4
+        noUiSlider.create sliderTimeSeries,
+          start: [ volumeNbr ]
+          step: 1
+          range:
+            'min': 1
+            'max': timeSeriesLength
+          pips:
+            mode: 'positions'
+            values: [0, 100]
+            density: 4
 
         updateImage = (volumeNbr) ->
           # Update the image with the new volume number, which corresponds to
@@ -166,9 +165,9 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
 
         # # When the slider is dragged, get the new slider position and update
         # # the image.
-        # sliderTimeSeries.noUiSlider.on 'slide', ->
-        #   newVal = Math.floor sliderTimeSeries.noUiSlider.get()
-        #   updateImage(newVal)
+        sliderTimeSeries.noUiSlider.on 'slide', ->
+          newVal = Math.floor sliderTimeSeries.noUiSlider.get()
+          updateImage(newVal)
 
         # When the back button is clicked, reduce the slider position by one
         # and update the image.
@@ -176,7 +175,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
           newVal = scope.volume.volumeNbr - 1
           # Do the update only if the new value does not fall below 1.
           if newVal >= 1
-            # sliderTimeSeries.noUiSlider.set(newVal)
+            sliderTimeSeries.noUiSlider.set(newVal)
             updateImage(newVal)
 
         # When the forward button is clicked, increase the slider position by
@@ -185,11 +184,8 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
           newVal = scope.volume.volumeNbr + 1
           # Do the update only if the new value does not go above the number of
           # volumes in the time series.
-          #
-          # TODO - Obtain this value from the time series object properties.
-          #
-          if newVal <= scope.timeSeries.image.volumes.size
-            # sliderTimeSeries.noUiSlider.set(newVal)
+          if newVal <= timeSeriesLength
+            sliderTimeSeries.noUiSlider.set(newVal)
             updateImage(newVal)
 
 

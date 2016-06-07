@@ -83,6 +83,11 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
         # TODO - Add tooltip to show current slider value.
         #
         scope.timeSeries.image.loader.callback = ->
+          # Obtain the range max from the scope.timeSeries.image.volumes.size
+          # property. This requires that the image is loaded. Therefore, the
+          # slider compile must be coordinated with the image display compile.
+          # The slider create must then be deferred as a callback after load
+          # completes.
           noUiSlider.create sliderAxialPlane,
             start: [ scope.slice.sliceNbr ]
             step: 1
@@ -100,37 +105,30 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
             newVal = Math.floor sliderAxialPlane.noUiSlider.get()
             updateImage(newVal)
 
-        updateImage = (sliceNbr) ->
-          # Update the image with the new slice number, which corresponds to
-          # new slider position.
-          scope.$apply ->
-            scope.slice.sliceNbr = sliceNbr
-        
-        # FIXME - Forward or back click moves the slider two ticks rather
-        #   than one. This is true only for the axial slider, not for the
-        #   time series slider.
+          updateImage = (sliceNbr) ->
+            # Update the image with the new slice number, which corresponds to
+            # new slider position.
+            scope.$apply ->
+              scope.slice.sliceNbr = sliceNbr
 
-        # When the back button is clicked, reduce the slider position by one
-        # and update the image.
-        sliderAxialPlaneBack.addEventListener 'click', ->
-          newVal = scope.slice.sliceNbr - 1
-          # Do the update only if the new value does not fall below 1.
-          if newVal >= 1
-            sliderAxialPlane.noUiSlider.set(newVal)
-            updateImage(newVal)
+          # When the back button is clicked, reduce the slider position by one
+          # and update the image.
+          sliderAxialPlaneBack.addEventListener 'click', ->
+            newVal = scope.slice.sliceNbr - 1
+            # Do the update only if the new value does not fall below 1.
+            if newVal >= 1
+              sliderAxialPlane.noUiSlider.set(newVal)
+              updateImage(newVal)
 
-        # When the forward button is clicked, increase the slider position by
-        # one and update the image.
-        sliderAxialPlaneFwd.addEventListener 'click', ->
-          newVal = scope.slice.sliceNbr + 1
-          # Do the update only if the new value does not go above the number of
-          # slices in the image axial plane.
-          #
-          # TODO - Obtain this value from the image object properties.
-          #
-          if newVal <= scope.timeSeries.image.slices.size
-            sliderAxialPlane.noUiSlider.set(newVal)
-            updateImage(newVal)
+          # When the forward button is clicked, increase the slider position by
+          # one and update the image.
+          sliderAxialPlaneFwd.addEventListener 'click', ->
+            newVal = scope.slice.sliceNbr + 1
+            # Do the update only if the new value does not go above the number of
+            # slices in the image axial plane.
+            if newVal <= scope.timeSeries.image.slices.size
+              sliderAxialPlane.noUiSlider.set(newVal)
+              updateImage(newVal)
 
 
     directives.directive 'qiSliderTimeSeries', ->
@@ -141,11 +139,6 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
         sliderTimeSeries = document.getElementById('qi-slider-time-series')
         sliderTimeSeriesBack = document.getElementById('qi-slider-time-series-back')
         sliderTimeSeriesFwd = document.getElementById('qi-slider-time-series-fwd')
-
-        # The number of volumes in the time series.
-        timeSeriesLength = scope.timeSeries.image.volumes.size
-        # The initial volume number.
-        volumeNbr = scope.volume.volumeNbr
 
         # Configure the slider.
         #
@@ -158,27 +151,27 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
         # TODO - Add tooltip to show current slider value.
         #
         noUiSlider.create sliderTimeSeries,
-          start: [ volumeNbr ]
+          start: [ scope.volume.volumeNbr ]
           step: 1
           range:
             'min': 1
-            'max': timeSeriesLength
+            'max': scope.timeSeries.image.volumes.size
           pips:
             mode: 'positions'
             values: [0, 100]
             density: 4
+
+        # When the slider is dragged, get the new slider position and update
+        # the image.
+        sliderTimeSeries.noUiSlider.on 'slide', ->
+          newVal = Math.floor sliderTimeSeries.noUiSlider.get()
+          updateImage(newVal)
 
         updateImage = (volumeNbr) ->
           # Update the image with the new volume number, which corresponds to
           # new slider position.
           scope.$apply ->
             scope.volume.volumeNbr = volumeNbr
-
-        # # When the slider is dragged, get the new slider position and update
-        # # the image.
-        sliderTimeSeries.noUiSlider.on 'slide', ->
-          newVal = Math.floor sliderTimeSeries.noUiSlider.get()
-          updateImage(newVal)
 
         # When the back button is clicked, reduce the slider position by one
         # and update the image.
@@ -195,7 +188,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
           newVal = scope.volume.volumeNbr + 1
           # Do the update only if the new value does not go above the number of
           # volumes in the time series.
-          if newVal <= timeSeriesLength
+          if newVal <= scope.timeSeries.image.volumes.size
             sliderTimeSeries.noUiSlider.set(newVal)
             updateImage(newVal)
 

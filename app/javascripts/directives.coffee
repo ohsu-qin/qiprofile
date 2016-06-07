@@ -49,7 +49,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
             scope.spinner.stop()
 
 
-    # TODO -  Refactor the code block into a common service function called
+    # TODO - Refactor the code block into a common service function called
     #   by the directive.
     #
     # TODO - Refactor this and the following directive into one directive
@@ -67,7 +67,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
         #   rather than document.getElementById() to find the elements. Should
         #   use angular events rather than addEventListener().
         #   Do this for qiSliderTimeSeries as well.
-        # sliderAxialPlane = document.getElementById('qi-slider-axial-plane')
+        sliderAxialPlane = document.getElementById('qi-slider-axial-plane')
         sliderAxialPlaneBack = document.getElementById('qi-slider-axial-plane-back')
         sliderAxialPlaneFwd = document.getElementById('qi-slider-axial-plane-fwd')
 
@@ -82,28 +82,33 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
         #
         # TODO - Add tooltip to show current slider value.
         #
-        # noUiSlider.create sliderAxialPlane,
-        #   start: [ scope.slice.sliceNbr ]
-        #   step: 1
-        #   range:
-        #     'min': 1
-        #     'max': 12
-        #   pips:
-        #     mode: 'positions'
-        #     values: [0, 100]
-        #     density: 9
+        scope.timeSeries.image.loader.callback = ->
+          noUiSlider.create sliderAxialPlane,
+            start: [ scope.slice.sliceNbr ]
+            step: 1
+            range:
+              'min': 1
+              'max': scope.timeSeries.image.slices.size
+            pips:
+              mode: 'positions'
+              values: [0, 100]
+              density: 9
+
+          # When the slider is dragged, get the new slider position and update
+          # the image.
+          sliderAxialPlane.noUiSlider.on 'slide', ->
+            newVal = Math.floor sliderAxialPlane.noUiSlider.get()
+            updateImage(newVal)
 
         updateImage = (sliceNbr) ->
           # Update the image with the new slice number, which corresponds to
           # new slider position.
           scope.$apply ->
             scope.slice.sliceNbr = sliceNbr
-
-        # # When the slider is dragged, get the new slider position and update
-        # # the image.
-        # sliderAxialPlane.noUiSlider.on 'slide', ->
-        #   newVal = Math.floor sliderAxialPlane.noUiSlider.get()
-        #   updateImage(newVal)
+        
+        # FIXME - Forward or back click moves the slider two ticks rather
+        #   than one. This is true only for the axial slider, not for the
+        #   time series slider.
 
         # When the back button is clicked, reduce the slider position by one
         # and update the image.
@@ -111,7 +116,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
           newVal = scope.slice.sliceNbr - 1
           # Do the update only if the new value does not fall below 1.
           if newVal >= 1
-            # sliderAxialPlane.noUiSlider.set(newVal)
+            sliderAxialPlane.noUiSlider.set(newVal)
             updateImage(newVal)
 
         # When the forward button is clicked, increase the slider position by
@@ -124,7 +129,7 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
           # TODO - Obtain this value from the image object properties.
           #
           if newVal <= scope.timeSeries.image.slices.size
-            # sliderAxialPlane.noUiSlider.set(newVal)
+            sliderAxialPlane.noUiSlider.set(newVal)
             updateImage(newVal)
 
 
@@ -143,6 +148,12 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
         volumeNbr = scope.volume.volumeNbr
 
         # Configure the slider.
+        #
+        # FIXME - The time series slider created is called twice,
+        #  perhaps as an Angular digest anomaly. An error is printed to the
+        #  console, but otherwise ther is no harm. Find out why it it is
+        #  called the second time and guard against it with  an if test
+        #  if necessary.
         #
         # TODO - Add tooltip to show current slider value.
         #

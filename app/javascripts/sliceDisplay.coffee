@@ -306,6 +306,10 @@ define ['angular', 'lodash', 'cornerstone'], (ng, _, cornerstone) ->
       # TODO - cache the image in Cornerstone. Register a loader which
       #   calls imageData by parsing the image id.
       if not timeSeries.image.isLoaded()
-        timeSeries.image.load().then(displayLoaded)
+        timeSeries.image.load().then ->
+          # If there is a load callback, then call it.
+          if timeSeries.image.loader.callback?
+            timeSeries.image.loader.callback()
+          displayLoaded()
       else
         displayLoaded()

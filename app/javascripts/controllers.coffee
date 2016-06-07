@@ -875,8 +875,12 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingChart
         #   
         #   Finally, TimeSeries.extend should create a TimeSeries.overlays
         #   virtual property which delegates to the parent overlays.
+
+        $scope.timeSeries.image.loader = {}
+
         display = ->
-          SliceDisplay.display($scope.timeSeries, $scope.volume.volumeNbr, $scope.slice.sliceNbr)
+          SliceDisplay.display($scope.timeSeries, $scope.volume.volumeNbr
+                               $scope.slice.sliceNbr)
 
         watcher = (newValue, oldValue) ->
           if newValue != oldValue

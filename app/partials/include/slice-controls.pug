@@ -16,14 +16,14 @@
     //-   uib-accordion-group(is-open="isOpen")
     //-     +accordion-heading('Orientation')
     //-     // The orientation control.
-    //-     .row.qi-slice-ctrl
+    //-     .row.qi-slice-sel
     //-       div.btn-group
     //-         label.btn.qi-btn.qi-btn-radio(
     //-           ng-repeat="dim in dimensions"
     //-           ng-model="dimension"
     //-           uib-btn-radio="'{{ dim }}'"
     //-         ) {{ dim }}
-    //-     .row.qi-slice-ctrl
+    //-     .row.qi-slice-sel
     //-       .col-md-2
     //-         #qi-slider-axial-plane-back.btn.btn-med.qi-profile-btn.glyphicon.glyphicon-step-backward
     //-       .col-md-8
@@ -33,23 +33,24 @@
     div(ng-controller='AccordionGroupCtrl')
       uib-accordion-group(is-open="isOpen")
         +accordion-heading('Slice')
-        // TODO - rename to qi-slice-sel. ctrl is reserved for controllers. 
-        qi-slider-axial-plane.row.qi-slice-ctrl
-          .col-md-2
-            #qi-slider-axial-plane-back.btn.btn-med.qi-profile-btn.glyphicon.glyphicon-step-backward
-          .col-md-8
-            #qi-slider-axial-plane.qi-slider(qi-slider-axial-plane)
-          .col-md-2
-            #qi-slider-axial-plane-fwd.btn.btn-med.qi-profile-btn.glyphicon.glyphicon-step-forward
+        // The axial plane slice control.
+        qi-slider-axial-plane
+          .row
+            .col-md-2
+              #qi-slider-axial-plane-back.btn.btn-med.qi-profile-btn.glyphicon.glyphicon-step-backward
+            .col-md-8
+              #qi-slider-axial-plane.qi-slider(qi-slider-axial-plane)
+            .col-md-2
+              #qi-slider-axial-plane-fwd.btn.btn-med.qi-profile-btn.glyphicon.glyphicon-step-forward
     div(ng-controller='AccordionGroupCtrl')
       uib-accordion-group(is-open="isOpen")
         +accordion-heading('Time Point')
-        // TODO - rename to qi-slice-sel. ctrl is reserved for controllers. 
         // The time point control.
-        qi-slider-time-series.row.qi-slice-ctrl
-          .col-md-2
-            #qi-slider-time-series-back.btn.btn-med.qi-profile-btn.glyphicon.glyphicon-step-backward
-          .col-md-8
-            #qi-slider-time-series.qi-slider(qi-slider-time-series)
-          .col-md-2
-            #qi-slider-time-series-fwd.btn.btn-med.qi-profile-btn.glyphicon.glyphicon-step-forward
+        qi-slider-time-series
+          .row
+            .col-md-2
+              #qi-slider-time-series-back.btn.btn-med.qi-profile-btn.glyphicon.glyphicon-step-backward
+            .col-md-8
+              #qi-slider-time-series.qi-slider(qi-slider-time-series)
+            .col-md-2
+              #qi-slider-time-series-fwd.btn.btn-med.qi-profile-btn.glyphicon.glyphicon-step-forward

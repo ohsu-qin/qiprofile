@@ -1,4 +1,4 @@
-# This main-test file sets the Karma testing require.js configuration.
+# This main file sets the Karma testing require.js configuration.
 
 # The test spec pattern.
 SPEC_REGEXP = /Spec\.js$/

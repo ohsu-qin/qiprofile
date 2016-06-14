@@ -3,45 +3,38 @@ module.exports = (config) ->
     # The base path to resolve files is the top-level qiprofile
     # directory.
     basePath: '../..'
-
+    
     # The karma adapter frameworks to use.
-    frameworks: ['mocha', 'requirejs', 'chai']
+    frameworks: ['jspm', 'traceur', 'mocha', 'chai']
+
+    # By default, karma loads node_modules sibling karma-* plug-ins.
+    # However, note that the plug-ins must be installed as siblings
+    # of the launched karma node context. In particular, a globally
+    # installed karma will not find locally installed karma plugins.
+    # For both this reason and to ensure version consistency, it is
+    # recommended that karma be installed locally in the project and
+    # executed on the command line using the following command:
+    #   ./node_modules/karam/bin/karma start
+    #plugins: ['karma-jspm', 'karma-mocha', 'karma-chai', 'karma-phantomjs-launcher']
+
+    # The karma-jspm option specifying the files to dynamically
+    # load via SystemJS.
+    jspm:
+      loadFiles: ['test/unit/**/*.spec.*'],
+      serveFiles: ['src/**/*.*'],
+      stripExtension: false
 
     # Print messages.
     client:
       captureConsole: true
 
-    # The test specs can be written in coffescript.
-    preprocessors: '**/*.coffee': 'coffee'
+    # The test specs can be written in CoffeeScript or TypeScript. 
+    preprocessors:
+      '**/*.coffee': 'coffee'
+      '**/*.ts': 'typescript'
 
-    # The files to load. The included flag defers loading in deference
-    # to the requirejs loader. public/main.js is excluded
-    # below, since that is the web app requirejs config. Testing uses
-    # its own main config, which is the last file specified and is
-    # loaded immediately. The pattern declarations below configure
-    # karma to recognize the libraries. The libraries are then loaded
-    # by test/unit/main.
-    files: [
-      # The web app libraries.
-      {pattern: 'public/**/*.js', included: false}
-      # The test libraries.
-      {pattern: 'node_modules/angular-mocks/angular-mocks.js', included: false}
-      {pattern: 'node_modules/chai-as-promised/lib/chai-as-promised.js', included: false}
-      {pattern: 'node_modules/pako/dist/pako.js', included: false}
-      {pattern: 'node_modules/text-encoding/**/*.js', included: false}
-      # The test specs.
-      {pattern: 'test/unit/*Spec.coffee', included: false}
-      # The chai eventually assertion helper.
-      {pattern: 'test/unit/helpers/expect.coffee', included: false}
-      # Lastly, the test requirejs main config.
-      'test/unit/main.coffee'
-    ]
-
-    # The requirejs configuration is given by test/unit/main.coffee,
-    # not the application public/main.js file.
-    exclude: [
-      'public/main.js'
-    ]
+    # The files to load is empty since karma-jspm assumes that responsibility.
+    files: ['node_modules/traceur/bin/traceur.js']
 
     # The test results reporter.
     # Possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
@@ -77,8 +70,14 @@ module.exports = (config) ->
     # If the browser does not capture output in the given number of milliseconds,
     # then kill it.
     captureTimeout: 5000
+    
+    # Allowing empty test suites is useful when commenting out tests. The
+    # default is true.
+    failOnEmptyTestSuite: false
 
     # The Continuous Integration mode.
     # If true, then karma will capture the browsers, run the tests and exit.
-    # This value is set in the grunt config file.
-    # singleRun: true
+    # This value is overridden in the Gruntfile as follows:
+    # * false if grunt is run with the --debug flag, true otherwise
+    # The default is false.
+    singleRun: true

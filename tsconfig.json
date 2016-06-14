@@ -1,14 +1,16 @@
 {
   "compilerOptions": {
-    "noImplicitAny": true,
+    "target": "es6",
     "removeComments": false,
     "preserveConstEnums": true,
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "target": "es6",
-    "outFile": "public/tsc.js"
+    "outFile": "public/app.js"
   },
+  "exclude": [
+    "node_modules"
+  ],
   "files": [
     "typings/index.d.ts"
   ]

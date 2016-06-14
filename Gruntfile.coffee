@@ -2,12 +2,6 @@ module.exports = (grunt) ->
   grunt.config.init(
     pkg: grunt.file.readJSON('package.json')
 
-    env:
-      dev:
-        NODE_ENV: 'development'
-      prod:
-        NODE_ENV: 'production'
-
     clean:
       derived: ['javascripts', 'stylesheets', 'fonts', 'html']
       options:
@@ -18,16 +12,22 @@ module.exports = (grunt) ->
         module: "commonjs"
         emitDecoratorMetadata: true
         sourceMap: true
-        sourceRoot: 'app'
+        sourceRoot: 'src'
         removeComments: false
         verbose: true
-      default:
+      app:
         expand: true
         cwd: 'src/'
         src: ['**/*.ts']
-        dest: 'public'
+        out: 'public/app.ts'
         # See the pug extDot comment.
         extDot: 'last'
+      tslint:
+        options:
+          sourceMap: false
+          sourceRoot: false
+        src: ['tslint/src/rules/*.ts', 'node_modules/tslint/lib/tslint.d.ts']
+        dest: 'tslint/dist/rules'
 
     tslint:
       files:
@@ -54,9 +54,9 @@ module.exports = (grunt) ->
         src: ['**.pug', '!include/**']
         dest: 'html'
         # The default extDot chops off more than the trailing .pug, e.g.:
-        #   src/collections.view.pug -> public/collections.html
+        #   src/collections.view.pug -> html/collections.html
         # We want to preserve the filename up to .pug, e.g.:
-        #   src/collections.view.pug -> public/collections.view.html
+        #   src/collections.view.pug -> html/collections.view.html
         extDot: 'last'
 
     markdown:
@@ -138,6 +138,11 @@ module.exports = (grunt) ->
       bsFiles:
         src:
           'html/**'
+    
+    jspm:
+      dist:
+        files:
+          "public/javascripts/app.js": "build/javascripts/app.js"
 
     karma:
       options:
@@ -217,23 +222,19 @@ module.exports = (grunt) ->
   require('load-grunt-tasks')(grunt)
 
   # Build for development is the default.
-  grunt.registerTask 'default', ['build:dev']
+  grunt.registerTask 'default', ['build']
 
   # Compile the app bits concurrently.
   grunt.registerTask 'compile', ['concurrent:compile']
 
   # Build the application from scratch.
-  grunt.registerTask 'build:app', ['clean', 'copy', 'concat:css', 'compile']
+  grunt.registerTask 'build', ['clean', 'copy', 'concat:css', 'tslint', 'compile']
 
-  # Build the app and test environment.
-  grunt.registerTask 'build:dev', ['env:dev', 'tslint', 'build:app',
-                                   'exec:updatewebdriver']
-
-  # Build the app for deployment.
-  grunt.registerTask 'build:prod', ['env:prod', 'build:app']
+  # Build the application release.
+  grunt.registerTask 'bundle', ['build', 'ts:app', 'jspm']
 
   # The npm postinstall task.
-  grunt.registerTask 'postinstall', ['build:prod']
+  grunt.registerTask 'postinstall', ['build', 'ts:tslint']
 
   # Start the server with debug turned on.
   grunt.registerTask 'start:dev', ['express:dev', 'watch']
@@ -248,10 +249,11 @@ module.exports = (grunt) ->
   grunt.registerTask 'test:unit', ['karma:unit']
 
   # Run the Protractor end-to-end tests.
-  grunt.registerTask 'test:e2e', ['exec:selenium', 'express:test', 'protractor:e2e']
+  grunt.registerTask 'test:e2e', ['exec:updatewebdriver', 'exec:selenium', 'express:test',
+                                  'protractor:e2e']
 
   # Run all tests.
   grunt.registerTask 'test', ['test:unit', 'test:e2e']
 
   # Build the application as a RequireJS AMD module.
-  grunt.registerTask 'release', ['build:prod']
+  grunt.registerTask 'release', ['build']

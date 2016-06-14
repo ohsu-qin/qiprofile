@@ -9,7 +9,7 @@ module.exports = (grunt) ->
         NODE_ENV: 'production'
 
     clean:
-      derived: ['_build', 'javascripts', 'stylesheets', 'fonts', 'typings', '**.html']
+      derived: ['javascripts', 'stylesheets', 'fonts', 'html']
       options:
         force: true
 
@@ -50,8 +50,9 @@ module.exports = (grunt) ->
       default:
         expand: true
         ext: '.html'
-        src: ['*.pug', 'src/*.pug', 'partials/*.pug', '!partials/include/**']
-        dest: '.'
+        cwd: 'src/'
+        src: ['**.pug', '!include/**']
+        dest: 'html'
         # The default extDot chops off more than the trailing .pug, e.g.:
         #   src/collections.view.pug -> public/collections.html
         # We want to preserve the filename up to .pug, e.g.:
@@ -62,9 +63,9 @@ module.exports = (grunt) ->
       default:
         expand: true
         ext: '.html'
-        cwd: 'partials/'
+        cwd: 'src/'
         src: ['**/*.md']
-        dest: '.'
+        dest: 'html'
 
     stylus:
       options:
@@ -147,10 +148,6 @@ module.exports = (grunt) ->
         configFile: 'test/conf/karma-conf.coffee'
 
     exec:
-      # Convert CommonJS modules to AMD.
-      convert:
-        command: './node_modules/.bin/r.js -convert _build/commonjs lib'
-
       # This task is used in preference to grunt-selenium-standalone to
       # suppress extraneous console messages and wait for the server to
       # start.

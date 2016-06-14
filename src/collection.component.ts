@@ -1,12 +1,10 @@
 import { Component, Input } from '@angular/core';
 
-import { Collection } from './collection.ts';
-
 @Component({
-  selector: 'collection',
-  templateUrl: 'src/collection.html'
+  selector: 'qi-collection',
+  templateUrl: 'html/collection.html'
 })
 
 export class CollectionComponent {
-  @Input() collection: Collection;
+  @Input() collection;
 }

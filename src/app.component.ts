@@ -7,8 +7,8 @@ import { RESOURCE_PROVIDERS } from 'ng2-resource-rest';
 import { CollectionsComponent } from './collections.component.ts';
 
 @Component({
-  selector: 'qiprofile-app',
-  template: '<collections></collections>',
+  selector: 'qi-app',
+  template: '<qi-collections></qi-collections>',
   directives: [CollectionsComponent]
 })
 

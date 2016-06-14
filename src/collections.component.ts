@@ -3,29 +3,23 @@ import * as _ from 'lodash';
 
 import { CollectionService } from './collection.service.ts';
 import { CollectionComponent } from './collection.component.ts';
-import { Collection } from './collection.ts';
+import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'collections',
-  // Note: the preferred relative templateUrl value './collections.view.html'
-  //   resolves the path relative to the app root rather than this file's
-  //   parent directory. A templateUrl value must be prefixed by the src
-  //   package directory.
-  templateUrl: 'src/collections.html',
+  selector: 'qi-collections',
+  templateUrl: '/html/collections.html',
   directives: [CollectionComponent],
   providers: [CollectionService]
 })
 
-export class CollectionsComponent {
+export class CollectionsComponent implements OnInit {
   constructor(private service: CollectionService) { }
 
-  collections: Collection[];
+  collections: Observable<Object[]>;
 
   ngOnInit() {
-    this.collections = this.service.getCollections();
-  }
-
-  get sortedCollections(): Collection[] {
-    return _.sortBy(this.collections, 'name');
+    this.collections = this.service.getCollections('QIN_Test').map(
+      collections => _.sortBy(collections, 'name')
+    );
   }
 }

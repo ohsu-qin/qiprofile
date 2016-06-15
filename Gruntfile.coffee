@@ -47,17 +47,15 @@ module.exports = (grunt) ->
     pug:
       options:
         pretty: true
-      default:
+      index:
+        src: 'index.pug'
+        dest: 'index.html'
+      partials:
         expand: true
-        ext: '.html'
         cwd: 'src/'
-        src: ['**.pug', '!include/**']
+        ext: '.html'
+        src: ['*.pug', '*/**.pug', '!**include/*.pug']
         dest: 'html'
-        # The default extDot chops off more than the trailing .pug, e.g.:
-        #   src/collections.view.pug -> html/collections.html
-        # We want to preserve the filename up to .pug, e.g.:
-        #   src/collections.view.pug -> html/collections.view.html
-        extDot: 'last'
 
     markdown:
       default:

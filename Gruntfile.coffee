@@ -3,7 +3,7 @@ module.exports = (grunt) ->
     pkg: grunt.file.readJSON('package.json')
 
     clean:
-      derived: ['javascripts', 'stylesheets', 'fonts', 'html']
+      derived: ['public']
       options:
         force: true
 
@@ -20,8 +20,6 @@ module.exports = (grunt) ->
         cwd: 'src/'
         src: ['**/*.ts']
         out: 'public/app.ts'
-        # See the pug extDot comment.
-        extDot: 'last'
       tslint:
         options:
           sourceMap: false
@@ -36,14 +34,6 @@ module.exports = (grunt) ->
     typings:
       install: {}
 
-    coffee:
-      default:
-        expand: true
-        ext: '.js'
-        cwd: 'coffeescripts/'
-        src: ['**/*.coffee']
-        dest: 'javascripts'
-
     pug:
       options:
         pretty: true
@@ -55,7 +45,7 @@ module.exports = (grunt) ->
         cwd: 'src/'
         ext: '.html'
         src: ['*.pug', '*/**.pug', '!**include/*.pug']
-        dest: 'html'
+        dest: 'public/html'
 
     markdown:
       default:
@@ -63,7 +53,7 @@ module.exports = (grunt) ->
         ext: '.html'
         cwd: 'src/'
         src: ['**/*.md']
-        dest: 'html'
+        dest: 'public/html'
 
     stylus:
       options:
@@ -73,15 +63,14 @@ module.exports = (grunt) ->
         ]
       default:
         src: ['stylus/app.styl']
-        dest: 'stylesheets/app.css'
+        dest: 'public/stylesheets/app.css'
 
     copy:
-      # The native applicaton JavaScript files.
-      js:
+      static:
         expand: true
-        cwd: 'coffeescripts/'
-        src: ['**/*.js']
-        dest: 'javascripts/'
+        cwd: 'static/'
+        src: '**/*'
+        dest: 'public/'
 
       # Note: this task is only used to copy CSS map files. The
       # CSS style files themselves are copied to the destination
@@ -95,7 +84,7 @@ module.exports = (grunt) ->
         flatten: true
         cwd: 'node_modules/'
         src: ['bootstrap/dist/css/bootstrap.css.map']
-        dest: 'stylesheets/'
+        dest: 'public/stylesheets/'
 
       fonts:
         expand: true
@@ -105,7 +94,7 @@ module.exports = (grunt) ->
         #   e.g. 4.0.4/index.html, can't be excluded
         #   (cf. https://github.com/gruntjs/grunt-contrib-copy/issues/13).
         src: ['bootstrap/dist/fonts/*', 'font-awesome/fonts/*']
-        dest: 'fonts/'
+        dest: 'public/fonts/'
 
     concat:
       css:
@@ -113,21 +102,21 @@ module.exports = (grunt) ->
           'node_modules/bootstrap/dist/css/bootstrap.css'
           'node_modules/font-awesome/css/font-awesome.css'
         ]
-        dest: 'stylesheets/vendor.css'
+        dest: 'public/stylesheets/vendor.css'
 
     concurrent:
       options:
         logConcurrentOutput: true
       compile:
-        tasks: ['typings', 'coffee', 'pug', 'markdown', 'stylus']
+        tasks: ['typings', 'pug', 'markdown', 'stylus']
 
     cssmin:
       options:
         'nomunge': true
         'line-break': 80
       files:
-        src: ['stylesheets/app.css']
-        dest: 'stylesheets/app.min.css'
+        src: ['public/stylesheets/app.css']
+        dest: 'public/stylesheets/app.min.css'
 
     browserSync:
       options:
@@ -140,7 +129,7 @@ module.exports = (grunt) ->
     jspm:
       dist:
         files:
-          "public/javascripts/app.js": "build/javascripts/app.js"
+          "public/app.js": "build/app.js"
 
     karma:
       options:

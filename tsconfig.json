@@ -5,8 +5,7 @@
     "preserveConstEnums": true,
     "sourceMap": true,
     "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "outFile": "public/app.js"
+    "experimentalDecorators": true
   },
   "exclude": [
     "node_modules"

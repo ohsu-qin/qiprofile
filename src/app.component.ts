@@ -4,7 +4,7 @@ import { bootstrap } from '@angular/platform-browser-dynamic';
 import { HTTP_PROVIDERS } from '@angular/http';
 import { RESOURCE_PROVIDERS } from 'ng2-resource-rest';
 
-import { CollectionsComponent } from './collections.component.ts';
+import { CollectionsComponent } from './collections/collections.component.ts';
 
 @Component({
   selector: 'qi-app',

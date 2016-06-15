@@ -1,0 +1,12 @@
+extends ../layout/partial
+
+block billboard
+  | Collections
+
+block content
+  ul.qi-main-list
+    li(*ngFor="let coll of collections | async")
+      qi-collections-collection([collection]="coll")
+
+block help-text
+  qi-help.qi-help-text

@@ -1,8 +1,8 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'qi-collection',
-  templateUrl: 'html/collection.html'
+  selector: 'qi-collections-collection',
+  templateUrl: '/public/html/collections/collection.html'
 })
 
 export class CollectionComponent {

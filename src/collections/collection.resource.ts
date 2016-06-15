@@ -1,6 +1,6 @@
 import { ResourceParams } from 'ng2-resource-rest';
 
-import { RestResource } from './rest.resource.ts';
+import { RestResource } from '../helpers/rest.resource.ts';
 
 @ResourceParams({
     path: '/imaging-collection/{id}'

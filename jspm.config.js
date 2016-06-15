@@ -50,7 +50,6 @@ SystemJS.config({
     "domain": "github:jspm/nodelibs-domain@0.2.0-alpha",
     "module": "github:jspm/nodelibs-module@0.2.0-alpha",
     "ng2-resource-rest": "npm:ng2-resource-rest@0.3.4",
-    "pug": "npm:pug@2.0.0-beta2",
     "reflect-metadata": "npm:reflect-metadata@0.1.2",
     "child_process": "github:jspm/nodelibs-child_process@0.2.0-alpha",
     "constants": "github:jspm/nodelibs-constants@0.2.0-alpha",
@@ -78,7 +77,7 @@ SystemJS.config({
     "os": "github:jspm/nodelibs-os@0.2.0-alpha",
     "plugin-babel": "npm:systemjs-plugin-babel@0.0.11",
     "process": "github:jspm/nodelibs-process@0.2.0-alpha",
-    "rxjs": "npm:rxjs@5.0.0-beta.8",
+    "rxjs": "npm:rxjs@5.0.0-beta.6",
     "socket.io": "npm:socket.io@1.4.6",
     "socket.io-client": "npm:socket.io-client@1.4.6",
     "stream": "github:jspm/nodelibs-stream@0.2.0-alpha",
@@ -480,178 +479,6 @@ SystemJS.config({
         "minimalistic-assert": "npm:minimalistic-assert@1.0.0"
       }
     },
-    "npm:pug@2.0.0-beta2": {
-      "map": {
-        "pug-code-gen": "npm:pug-code-gen@0.0.7",
-        "pug-runtime": "npm:pug-runtime@2.0.1",
-        "pug-linker": "npm:pug-linker@1.0.0",
-        "pug-lexer": "npm:pug-lexer@2.0.2",
-        "pug-filters": "npm:pug-filters@1.2.2",
-        "pug-load": "npm:pug-load@2.0.0",
-        "pug-strip-comments": "npm:pug-strip-comments@0.0.1",
-        "pug-parser": "npm:pug-parser@2.0.1"
-      }
-    },
-    "npm:pug-code-gen@0.0.7": {
-      "map": {
-        "pug-runtime": "npm:pug-runtime@2.0.1",
-        "pug-attrs": "npm:pug-attrs@2.0.1",
-        "void-elements": "npm:void-elements@2.0.1",
-        "doctypes": "npm:doctypes@1.0.0",
-        "js-stringify": "npm:js-stringify@1.0.2",
-        "pug-error": "npm:pug-error@1.3.1",
-        "constantinople": "npm:constantinople@3.1.0",
-        "with": "npm:with@5.1.1"
-      }
-    },
-    "npm:pug-parser@2.0.1": {
-      "map": {
-        "token-stream": "npm:token-stream@0.0.1",
-        "pug-error": "npm:pug-error@1.3.1"
-      }
-    },
-    "npm:pug-linker@1.0.0": {
-      "map": {
-        "pug-walk": "npm:pug-walk@0.0.3",
-        "pug-error": "npm:pug-error@1.3.1"
-      }
-    },
-    "npm:pug-load@2.0.0": {
-      "map": {
-        "pug-walk": "npm:pug-walk@0.0.3"
-      }
-    },
-    "npm:pug-filters@1.2.2": {
-      "map": {
-        "pug-walk": "npm:pug-walk@0.0.3",
-        "pug-error": "npm:pug-error@1.3.1",
-        "constantinople": "npm:constantinople@3.1.0",
-        "jstransformer": "npm:jstransformer@1.0.0",
-        "resolve": "npm:resolve@1.1.7",
-        "uglify-js": "npm:uglify-js@2.6.2",
-        "clean-css": "npm:clean-css@3.4.17"
-      }
-    },
-    "npm:pug-lexer@2.0.2": {
-      "map": {
-        "is-expression": "npm:is-expression@2.0.1",
-        "pug-error": "npm:pug-error@1.3.1",
-        "character-parser": "npm:character-parser@2.2.0"
-      }
-    },
-    "npm:pug-strip-comments@0.0.1": {
-      "map": {
-        "pug-error": "npm:pug-error@0.0.0"
-      }
-    },
-    "npm:pug-attrs@2.0.1": {
-      "map": {
-        "constantinople": "npm:constantinople@3.1.0",
-        "pug-runtime": "npm:pug-runtime@2.0.1",
-        "js-stringify": "npm:js-stringify@1.0.2"
-      }
-    },
-    "npm:constantinople@3.1.0": {
-      "map": {
-        "is-expression": "npm:is-expression@2.0.1",
-        "acorn": "npm:acorn@3.2.0"
-      }
-    },
-    "npm:is-expression@2.0.1": {
-      "map": {
-        "object-assign": "npm:object-assign@4.1.0",
-        "acorn": "npm:acorn@3.1.0"
-      }
-    },
-    "npm:with@5.1.1": {
-      "map": {
-        "acorn": "npm:acorn@3.2.0",
-        "acorn-globals": "npm:acorn-globals@3.0.0"
-      }
-    },
-    "npm:jstransformer@1.0.0": {
-      "map": {
-        "is-promise": "npm:is-promise@2.1.0",
-        "promise": "npm:promise@7.1.1"
-      }
-    },
-    "npm:uglify-js@2.6.2": {
-      "map": {
-        "source-map": "npm:source-map@0.5.6",
-        "uglify-to-browserify": "npm:uglify-to-browserify@1.0.2",
-        "async": "npm:async@0.2.10",
-        "yargs": "npm:yargs@3.10.0"
-      }
-    },
-    "npm:clean-css@3.4.17": {
-      "map": {
-        "source-map": "npm:source-map@0.4.4",
-        "commander": "npm:commander@2.8.1"
-      }
-    },
-    "npm:acorn-globals@3.0.0": {
-      "map": {
-        "acorn": "npm:acorn@3.2.0"
-      }
-    },
-    "npm:promise@7.1.1": {
-      "map": {
-        "asap": "npm:asap@2.0.4"
-      }
-    },
-    "npm:source-map@0.4.4": {
-      "map": {
-        "amdefine": "npm:amdefine@1.0.0"
-      }
-    },
-    "npm:commander@2.8.1": {
-      "map": {
-        "graceful-readlink": "npm:graceful-readlink@1.0.1"
-      }
-    },
-    "npm:yargs@3.10.0": {
-      "map": {
-        "decamelize": "npm:decamelize@1.2.0",
-        "camelcase": "npm:camelcase@1.2.1",
-        "window-size": "npm:window-size@0.1.0",
-        "cliui": "npm:cliui@2.1.0"
-      }
-    },
-    "npm:character-parser@2.2.0": {
-      "map": {
-        "is-regex": "npm:is-regex@1.0.3"
-      }
-    },
-    "npm:cliui@2.1.0": {
-      "map": {
-        "right-align": "npm:right-align@0.1.3",
-        "wordwrap": "npm:wordwrap@0.0.2",
-        "center-align": "npm:center-align@0.1.3"
-      }
-    },
-    "npm:right-align@0.1.3": {
-      "map": {
-        "align-text": "npm:align-text@0.1.4"
-      }
-    },
-    "npm:center-align@0.1.3": {
-      "map": {
-        "align-text": "npm:align-text@0.1.4",
-        "lazy-cache": "npm:lazy-cache@1.0.4"
-      }
-    },
-    "npm:align-text@0.1.4": {
-      "map": {
-        "longest": "npm:longest@1.0.1",
-        "kind-of": "npm:kind-of@3.0.3",
-        "repeat-string": "npm:repeat-string@1.5.4"
-      }
-    },
-    "npm:kind-of@3.0.3": {
-      "map": {
-        "is-buffer": "npm:is-buffer@1.1.3"
-      }
-    },
     "github:jspm/nodelibs-domain@0.2.0-alpha": {
       "map": {
         "domain-browserify": "npm:domain-browser@1.1.7"
@@ -669,11 +496,6 @@ SystemJS.config({
         "to-arraybuffer": "npm:to-arraybuffer@1.0.1",
         "builtin-status-codes": "npm:builtin-status-codes@2.0.0",
         "xtend": "npm:xtend@4.0.1"
-      }
-    },
-    "npm:rxjs@5.0.0-beta.8": {
-      "map": {
-        "symbol-observable": "npm:symbol-observable@0.2.4"
       }
     }
   }

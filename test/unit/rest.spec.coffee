@@ -1,4 +1,4 @@
-`import Rest from "src/rest.resource.coffee"`
+`import Rest from "src/common/rest.resource.coffee"`
 
 RestSpec =
   describe 'Unit Testing the REST Service', ->

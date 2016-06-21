@@ -1,9 +1,13 @@
+// The header, including the nav home and help buttons.
+include header
+
 // The context billboard, e.g. 'Breast Patient 4'.
 .qi-billboard
   h3
     block billboard
 
+// The main partial content.
 .row.qi-main
   .qi-content
-    include help
+    qi-help
     block content

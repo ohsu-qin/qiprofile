@@ -1,16 +1,16 @@
 .navbar.navbar-default.qi-navbar(role='navigation')
   .header.navbar-header
     // The logo.
-    img.qi-logo(src='static/media/H.png' width='48' height='48' alt='Hydrogen')
+    img.qi-logo(src='static/media/H.png', width='48', height='48', alt='Hydrogen')
     .brand.navbar-brand.qi-brand
       | <em>
       |   Q<span class='qi-x-smaller'>I</span>P<span class='qi-x-smaller'>R</span>
       | </em>
       | - Quantitative Imaging Profile
-  //- // The navigation controls.
-  //- .collapse.navbar-collapse
-  //-   ul.nav.navbar-nav.qi-navbar-right.navbar-right
-  //-     li
-  //-       div(ui-view='home')
-  //-     li
-  //-       div(ui-view='help')
+  // The navigation controls.
+  .collapse.navbar-collapse
+    ul.nav.navbar-nav.qi-navbar-right.navbar-right
+      li
+        qi-go-home(project="{{ project }}")
+      li
+        qi-toggle-help

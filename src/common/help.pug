@@ -1,0 +1,11 @@
+.qi-help([hidden]="!showHelp", (close)="toggleHelp()")
+  .qi-help-close.glyphicon.glyphicon-remove((click)="toggleHelp()")
+  qi-help-text.qi-help-text
+  .qi-contact-info
+     | We welcome your questions and comments placed in our
+     a(href="http://qiprofile.idea.informer.com")
+       span.qi-over-under
+         span.over Sugg
+         span.under Qu
+       | estion Box
+     | .

@@ -44,15 +44,7 @@ module.exports = (grunt) ->
         expand: true
         cwd: 'src/'
         ext: '.html'
-        src: ['*.pug', '*/**.pug', '!**include/*.pug']
-        dest: 'public/html'
-
-    markdown:
-      default:
-        expand: true
-        ext: '.html'
-        cwd: 'src/'
-        src: ['**/*.md']
+        src: ['*.pug', '*/**.pug', '!layout/*.pug', '!**include/*.pug']
         dest: 'public/html'
 
     stylus:
@@ -108,7 +100,7 @@ module.exports = (grunt) ->
       options:
         logConcurrentOutput: true
       compile:
-        tasks: ['typings', 'pug', 'markdown', 'stylus']
+        tasks: ['typings', 'pug', 'stylus']
 
     cssmin:
       options:
@@ -200,9 +192,6 @@ module.exports = (grunt) ->
       stylus:
         files: ['stylus/**/*.styl']
         tasks: ['stylus']
-      markdown:
-        files: ['partials/**/*.md']
-        tasks: ['markdown']
   )
 
   # Load all grunt-* tasks.

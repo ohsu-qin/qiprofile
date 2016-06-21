@@ -17,13 +17,16 @@ SystemJS.config({
   },
   packages: {
     "src": {
-      "main": "app.component.ts",
+      "main": "main/main.js",
       "meta": {
         "*.ts": {
           "loader": "ts"
         },
         "*.coffee": {
           "loader": "coffee"
+        },
+        "*.md": {
+          "loader": "md"
         },
         "*.css": {
           "loader": "css"
@@ -43,14 +46,20 @@ SystemJS.config({
     "github:*/*.json"
   ],
   map: {
-    "@angular/http": "npm:@angular/http@2.0.0-rc.1",
-    "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@2.0.0-rc.1",
-    "@angular/router@2.0.0-rc.1": "npm:@angular/router@2.0.0-rc.1",
+    "@angular/router": "npm:@angular/router@2.0.0-rc.2",
+    "@angular/common": "npm:@angular/common@2.0.0-rc.2",
+    "@angular/compiler": "npm:@angular/compiler@2.0.0-rc.2",
+    "@angular/core": "npm:@angular/core@2.0.0-rc.2",
+    "@angular/http": "npm:@angular/http@2.0.0-rc.2",
+    "@angular/platform-browser": "npm:@angular/platform-browser@2.0.0-rc.2",
+    "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@2.0.0-rc.2",
+    "@angular/router-deprecated": "npm:@angular/router-deprecated@2.0.0-rc.2",
     "coffee": "github:forresto/system-coffee@master",
     "domain": "github:jspm/nodelibs-domain@0.2.0-alpha",
+    "md": "github:guybedford/system-md@0.1.0",
     "module": "github:jspm/nodelibs-module@0.2.0-alpha",
     "ng2-resource-rest": "npm:ng2-resource-rest@0.3.4",
-    "reflect-metadata": "npm:reflect-metadata@0.1.2",
+    "reflect-metadata": "npm:reflect-metadata@0.1.3",
     "child_process": "github:jspm/nodelibs-child_process@0.2.0-alpha",
     "constants": "github:jspm/nodelibs-constants@0.2.0-alpha",
     "crypto": "github:jspm/nodelibs-crypto@0.2.0-alpha",
@@ -58,16 +67,12 @@ SystemJS.config({
     "https": "github:jspm/nodelibs-https@0.2.0-alpha",
     "path": "github:jspm/nodelibs-path@0.2.0-alpha",
     "querystring": "github:jspm/nodelibs-querystring@0.2.0-alpha",
-    "common": "npm:@angular/common@2.0.0-rc.1",
-    "compiler": "npm:@angular/compiler@2.0.0-rc.1",
-    "core": "npm:@angular/core@2.0.0-rc.1",
-    "platform-browser": "npm:@angular/platform-browser@2.0.0-rc.1",
-    "platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@2.0.0-rc.1",
+    "common": "npm:@angular/common@2.0.0-rc.2",
+    "compiler": "npm:@angular/compiler@2.0.0-rc.2",
+    "core": "npm:@angular/core@2.0.0-rc.2",
+    "platform-browser": "npm:@angular/platform-browser@2.0.0-rc.2",
+    "platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@2.0.0-rc.2",
     "requirejs": "npm:requirejs@2.2.0",
-    "@angular/common": "npm:@angular/common@2.0.0-rc.1",
-    "@angular/compiler": "npm:@angular/compiler@2.0.0-rc.1",
-    "@angular/core": "npm:@angular/core@2.0.0-rc.1",
-    "@angular/platform-browser": "npm:@angular/platform-browser@2.0.0-rc.1",
     "assert": "github:jspm/nodelibs-assert@0.2.0-alpha",
     "buffer": "github:jspm/nodelibs-buffer@0.2.0-alpha",
     "fs": "github:jspm/nodelibs-fs@0.2.0-alpha",
@@ -189,9 +194,9 @@ SystemJS.config({
         "inherits": "npm:inherits@2.0.1",
         "create-hash": "npm:create-hash@1.1.2",
         "browserify-rsa": "npm:browserify-rsa@4.0.1",
-        "bn.js": "npm:bn.js@4.11.3",
+        "bn.js": "npm:bn.js@4.11.4",
         "parse-asn1": "npm:parse-asn1@5.0.0",
-        "elliptic": "npm:elliptic@6.2.8"
+        "elliptic": "npm:elliptic@6.3.1"
       }
     },
     "npm:create-hmac@1.1.4": {
@@ -203,7 +208,7 @@ SystemJS.config({
     "npm:diffie-hellman@5.0.2": {
       "map": {
         "randombytes": "npm:randombytes@2.0.3",
-        "bn.js": "npm:bn.js@4.11.3",
+        "bn.js": "npm:bn.js@4.11.4",
         "miller-rabin": "npm:miller-rabin@4.0.0"
       }
     },
@@ -225,7 +230,7 @@ SystemJS.config({
         "create-hash": "npm:create-hash@1.1.2",
         "randombytes": "npm:randombytes@2.0.3",
         "browserify-rsa": "npm:browserify-rsa@4.0.1",
-        "bn.js": "npm:bn.js@4.11.3",
+        "bn.js": "npm:bn.js@4.11.4",
         "parse-asn1": "npm:parse-asn1@5.0.0"
       }
     },
@@ -245,8 +250,8 @@ SystemJS.config({
     },
     "npm:create-ecdh@4.0.0": {
       "map": {
-        "bn.js": "npm:bn.js@4.11.3",
-        "elliptic": "npm:elliptic@6.2.8"
+        "bn.js": "npm:bn.js@4.11.4",
+        "elliptic": "npm:elliptic@6.3.1"
       }
     },
     "npm:browserify-aes@1.0.6": {
@@ -266,7 +271,7 @@ SystemJS.config({
     "npm:browserify-rsa@4.0.1": {
       "map": {
         "randombytes": "npm:randombytes@2.0.3",
-        "bn.js": "npm:bn.js@4.11.3"
+        "bn.js": "npm:bn.js@4.11.4"
       }
     },
     "npm:parse-asn1@5.0.0": {
@@ -280,7 +285,7 @@ SystemJS.config({
     },
     "npm:miller-rabin@4.0.0": {
       "map": {
-        "bn.js": "npm:bn.js@4.11.3",
+        "bn.js": "npm:bn.js@4.11.4",
         "brorand": "npm:brorand@1.0.5"
       }
     },
@@ -464,17 +469,9 @@ SystemJS.config({
         "nan": "npm:nan@2.3.5"
       }
     },
-    "npm:elliptic@6.2.8": {
-      "map": {
-        "bn.js": "npm:bn.js@4.11.3",
-        "inherits": "npm:inherits@2.0.1",
-        "hash.js": "npm:hash.js@1.0.3",
-        "brorand": "npm:brorand@1.0.5"
-      }
-    },
     "npm:asn1.js@4.6.2": {
       "map": {
-        "bn.js": "npm:bn.js@4.11.3",
+        "bn.js": "npm:bn.js@4.11.4",
         "inherits": "npm:inherits@2.0.1",
         "minimalistic-assert": "npm:minimalistic-assert@1.0.0"
       }
@@ -496,6 +493,19 @@ SystemJS.config({
         "to-arraybuffer": "npm:to-arraybuffer@1.0.1",
         "builtin-status-codes": "npm:builtin-status-codes@2.0.0",
         "xtend": "npm:xtend@4.0.1"
+      }
+    },
+    "npm:elliptic@6.3.1": {
+      "map": {
+        "inherits": "npm:inherits@2.0.1",
+        "bn.js": "npm:bn.js@4.11.4",
+        "brorand": "npm:brorand@1.0.5",
+        "hash.js": "npm:hash.js@1.0.3"
+      }
+    },
+    "github:guybedford/system-md@0.1.0": {
+      "map": {
+        "showdown": "github:showdownjs/showdown@1.4.1"
       }
     }
   }

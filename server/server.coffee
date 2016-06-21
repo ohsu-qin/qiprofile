@@ -94,47 +94,10 @@ server.get '/login', (req, res) ->
 restUrl = process.env.QIREST_HOST or 'localhost'
 server.use '/qirest', rest(restUrl)
 
-# # Serve the static files from root.
-# server.get '/static/*', (req, res) ->
-#   path = root + req.path.replace('/static', '')
-#   res.sendFile path
-#
-# # Serve the partial HTML files.
-# server.get '/partials/*', (req, res) ->
-#   res.sendFile "#{root}/#{req.path}.html"
-#
-# # The app javascript files.
-# server.get '/javascripts*', (req, res) ->
-#   res.sendFile(root + req.path)
-#
-# # Since qiprofile is an Angular Single-Page Application,
-# # serve the landing page for all qiprofile routes.
-# # The qiprofile application then resolves the URL on the
-# # client and requests the partial.
-# # TODO - is this necessary with Angular 2?
-# server.get '/qiprofile', (req, res) ->
-#   res.sendFile "#{root}/index.html"
-
-
 # Strip the app prefix from the request URL and serve up the
 # file in the root directory.
-server.get '/qiprofile(/*)?', (req, res) ->
-  tail = req.path.substr('/qiprofile'.length)
-  if not tail then tail = '/index.html'
-  res.sendFile "#{ root }#{ tail }"
-
-# Work around the following jspm beta bug:
-#   jspm internally tries to fetch .json files by file path
-#   rather than web app url, e.g.:
-#      /public/lib/npm/typescript@1.8.10.json
-#   rather than:
-#      /javascripts/lib/npm/typescript@1.8.10.json
-# The work-around is to match on public in the server
-# request.
-# TODO - isolate and resolve or report this bug to jspm.
-# server.get '/public(/*)?', (req, res) ->
-#   tail = req.path.substr('/public'.length)
-#   res.sendFile "#{ root }#{ tail }"
+server.get '/qiprofile/*', (req, res) ->
+  res.sendFile "#{ root }/index.html"
 
 # Kludge to work around repeat requests. See the app
 # error.coffee FIXME.

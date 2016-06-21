@@ -18,8 +18,5 @@ test/results/
 *.pyc
 *.tar*
 **log
-javascripts/
-fonts/
-stylesheets/
 typings/
 **.html

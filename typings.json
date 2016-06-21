@@ -1,12 +1,13 @@
 {
   "dependencies": {
-    "@angular/common": "file:jspm_packages/npm/@angular/common@2.0.0-rc.1/index.d.ts",
-    "@angular/compiler": "file:jspm_packages/npm/@angular/compiler@2.0.0-rc.1/index.d.ts",
-    "@angular/core": "file:jspm_packages/npm/@angular/core@2.0.0-rc.1/index.d.ts",
-    "@angular/http": "file:jspm_packages/npm/@angular/http@2.0.0-rc.1/index.d.ts",
-    "@angular/platform-browser": "file:jspm_packages/npm/@angular/platform-browser@2.0.0-rc.1/index.d.ts",
-    "@angular/platform-browser-dynamic": "file:jspm_packages/npm/@angular/platform-browser-dynamic@2.0.0-rc.1/index.d.ts",
-    "@angular/router": "file:jspm_packages/npm/@angular/router@2.0.0-rc.1/index.d.ts",
+    "@angular/common": "file:jspm_packages/npm/@angular/common@2.0.0-rc.2/index.d.ts",
+    "@angular/compiler": "file:jspm_packages/npm/@angular/compiler@2.0.0-rc.2/index.d.ts",
+    "@angular/core": "file:jspm_packages/npm/@angular/core@2.0.0-rc.2/index.d.ts",
+    "@angular/http": "file:jspm_packages/npm/@angular/http@2.0.0-rc.2/index.d.ts",
+    "@angular/platform-browser": "file:jspm_packages/npm/@angular/platform-browser@2.0.0-rc.2/index.d.ts",
+    "@angular/platform-browser-dynamic": "file:jspm_packages/npm/@angular/platform-browser-dynamic@2.0.0-rc.2/index.d.ts",
+    "@angular/router": "file:jspm_packages/npm/@angular/router@2.0.0-rc.2/index.d.ts",
+    "@angular/router-deprecated": "file:jspm_packages/npm/@angular/router-deprecated@2.0.0-rc.2/index.d.ts",
     "lodash": "registry:npm/lodash#4.0.0+20160416211519",
     "ng2-resource-rest": "file:jspm_packages/npm/ng2-resource-rest@0.3.4/index.d.ts",
     "rxjs": "file:jspm_packages/npm/rxjs@5.0.0-beta.6/Rx.d.ts"

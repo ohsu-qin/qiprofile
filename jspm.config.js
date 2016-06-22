@@ -1,5 +1,4 @@
 SystemJS.config({
-  baseURL: "/",
   trace: true,
   paths: {
     "github:": "jspm_packages/github/",
@@ -33,6 +32,9 @@ SystemJS.config({
         },
         "*.html": {
           "loader": "text"
+        },
+        "*.json": {
+          "loader": "json"
         }
       }
     }
@@ -53,9 +55,9 @@ SystemJS.config({
     "@angular/http": "npm:@angular/http@2.0.0-rc.2",
     "@angular/platform-browser": "npm:@angular/platform-browser@2.0.0-rc.2",
     "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@2.0.0-rc.2",
-    "@angular/router-deprecated": "npm:@angular/router-deprecated@2.0.0-rc.2",
     "coffee": "github:forresto/system-coffee@master",
     "domain": "github:jspm/nodelibs-domain@0.2.0-alpha",
+    "json": "github:systemjs/plugin-json@0.1.2",
     "md": "github:guybedford/system-md@0.1.0",
     "module": "github:jspm/nodelibs-module@0.2.0-alpha",
     "ng2-resource-rest": "npm:ng2-resource-rest@0.3.4",
@@ -505,7 +507,7 @@ SystemJS.config({
     },
     "github:guybedford/system-md@0.1.0": {
       "map": {
-        "showdown": "github:showdownjs/showdown@1.4.1"
+        "showdown": "github:showdownjs/showdown@1.4.2"
       }
     }
   }

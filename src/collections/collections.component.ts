@@ -39,7 +39,7 @@ export class CollectionsComponent implements OnInit, OnActivate {
     // There must be a project.
     if (!this.project) {
       let url = curr.stringifiedUrlSegments;
-      throw new Error(`The project is missing in the location #{ url }`);
+      throw new Error(`The project is missing in the location ${ url }`);
     }
     // If this is the first visit to this home page, then show the help.
     if (!prev) {

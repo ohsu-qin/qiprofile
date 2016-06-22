@@ -1,11 +1,10 @@
 module.exports = (config) ->
   config.set
-    # The base path to resolve files is the top-level qiprofile
-    # directory.
+    # The base path to resolve files is the top-level qiprofile directory.
     basePath: '../..'
     
     # The karma adapter frameworks to use.
-    frameworks: ['jspm', 'traceur', 'mocha', 'chai']
+    frameworks: ['jspm', 'mocha', 'chai']
 
     # By default, karma loads node_modules sibling karma-* plug-ins.
     # However, note that the plug-ins must be installed as siblings
@@ -20,8 +19,9 @@ module.exports = (config) ->
     # The karma-jspm option specifying the files to dynamically
     # load via SystemJS.
     jspm:
+      config: 'jspm.config.js',
       loadFiles: ['test/unit/**/*.spec.*'],
-      serveFiles: ['src/**/*.*'],
+      serveFiles: ['src/**/*.*', 'tsconfig.json', 'typings/**/*.d.ts'],
       stripExtension: false
 
     # Print messages.
@@ -30,11 +30,11 @@ module.exports = (config) ->
 
     # The test specs can be written in CoffeeScript or TypeScript. 
     preprocessors:
-      '**/*.coffee': 'coffee'
-      '**/*.ts': 'typescript'
+      '**/*.spec.coffee': 'coffee'
+      '**/*.spec.ts': 'typescript'
 
     # The files to load is empty since karma-jspm assumes that responsibility.
-    files: ['node_modules/traceur/bin/traceur.js']
+    files: []
 
     # The test results reporter.
     # Possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'

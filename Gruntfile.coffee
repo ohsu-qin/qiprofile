@@ -54,13 +54,13 @@ module.exports = (grunt) ->
           require('csso-stylus')
         ]
       default:
-        src: ['stylus/app.styl']
+        src: ['app/stylesheets/app.styl']
         dest: 'public/stylesheets/app.css'
 
     copy:
       static:
         expand: true
-        cwd: 'static/'
+        cwd: 'app/static/'
         src: '**/*'
         dest: 'public/'
 

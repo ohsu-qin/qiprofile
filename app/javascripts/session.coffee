@@ -18,7 +18,7 @@ define ['angular', 'lodash', 'scan', 'modeling', 'helpers'], (ng, _) ->
         associate = (accum, modeling) ->
           accum[modeling.protocol] = modeling.overlays
 
-        # The modeling objects with at least one overlay
+        # The modeling objects with at least one overlay.
         overlayed = (
           mdl for mdl in session.modelings when mdl.overlays.length?
         )
@@ -55,14 +55,14 @@ define ['angular', 'lodash', 'scan', 'modeling', 'helpers'], (ng, _) ->
         Object.defineProperties session,
           # @returns the display title
           title:
-              # TODO - get the Session display text from a config,
-              #   e.g.:
-              #     label = config.session.label
-              #     "#{ @collection } #{ label } #{ @number }"
-              #   Thus, the label could be, say, 'Visit', rather than
-              #   'Session', and externally configurable. See also
-              #   the subject.coffee title TODO.
-              #
+            # TODO - get the Session display text from a config,
+            #   e.g.:
+            #     label = config.session.label
+            #     "#{ @collection } #{ label } #{ @number }"
+            #   Thus, the label could be, say, 'Visit', rather than
+            #   'Session', and externally configurable. See also
+            #   the subject.coffee title TODO.
+            #
             get: -> "#{ @subject.title } Session #{ @number }"
 
         # Returns the <parent>/session path, where:
@@ -109,4 +109,4 @@ define ['angular', 'lodash', 'scan', 'modeling', 'helpers'], (ng, _) ->
         sbjRefUrl = "/quip/#{ subject.collection }/subject/#{ subject.number }"
 
         "#{ sbjRefUrl }/session/#{ session.number }?project=#{ subject.project }"
-  ]
+]

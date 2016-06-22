@@ -3,7 +3,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'qi-go-home',
-  templateUrl: '/public/html/main/go-home.html'
+  templateUrl: '/public/html/common/go-home.html'
 })
 
 export class GoHomeComponent {

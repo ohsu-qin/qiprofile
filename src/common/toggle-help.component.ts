@@ -4,7 +4,7 @@ import { HelpService } from '../common/help.service.ts';
 
 @Component({
   selector: 'qi-toggle-help',
-  templateUrl: '/public/html/main/toggle-help.html'
+  templateUrl: '/public/html/common/toggle-help.html'
 })
 
 export class ToggleHelpComponent {

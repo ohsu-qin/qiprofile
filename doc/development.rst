@@ -233,7 +233,7 @@ Coding Standards
   
       `import * as _ from "lodash"`
 
-* The CoffeeScript modules export a singleton variable, e.g.::
+* The CoffeeScript service modules export a singleton variable, e.g.::
   
       Rest =
         ...
@@ -248,17 +248,13 @@ Coding Standards
   JavaScript, e.g.::
   
       ###*
-       * @class Rest
+       * Formats the {where: condition} Eve REST query parameter.
+       *
+       * @method where
+       * @param params the input parameters
+       * @return the REST condition query parameter
       ###
-      Rest =
-        ###*
-         * Formats the {where: condition} Eve REST query parameter.
-         *
-         * @method where
-         * @param params the input parameters
-         * @return the REST condition query parameter
-        ###
-        where: (params) ->
+      where: (params) ->
   
   Note that the blocks are in the form::
   
@@ -270,6 +266,14 @@ Coding Standards
   
       ###
       #  Bad!
+      ###
+
+* Each CoffeeScript service module include a static class comment block,
+  e.g.::
+  
+      ###*
+       * @class Rest
+       * @static
       ###
 
 * Every TypeScript class is tested in a TypeScript test case. Every

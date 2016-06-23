@@ -47,8 +47,8 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
             scope.spinner.spin(element[0])
           else if scope.spinner
             scope.spinner.stop()
-    
-    
+
+
     directives.directive 'qiFocus', ['$timeout',
       ($timeout) ->
         restrict: 'A'

@@ -10,7 +10,7 @@ define ['angular', 'lodash', 'underscore.string', 'uirouter', 'resources',
     routes.config [
       '$stateProvider', '$urlMatcherFactoryProvider', '$locationProvider',
       ($stateProvider, $urlMatcherFactoryProvider, $locationProvider) ->
-        
+
         # Match optional trailing slash. Cf.
         # https://github.com/angular-ui/ui-router/wiki/Frequently-Asked-Questions\
         # #how-to-make-a-trailing-slash-optional-for-all-routes
@@ -117,7 +117,7 @@ define ['angular', 'lodash', 'underscore.string', 'uirouter', 'resources',
                 #   condition is the {id} primary key.
                 # * Otherwise, the search condition is the
                 #   {project, collection, number} secondary key.
-                condition = 
+                condition =
                   if $stateParams.id?
                     id: $stateParams.id
                   else

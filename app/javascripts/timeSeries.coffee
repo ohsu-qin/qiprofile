@@ -1,5 +1,5 @@
 define ['angular', 'underscore.string', 'image', 'nifti'], (ng, _s) ->
-  timeSeries = ng.module 'qiprofile.timeseries', ['qiprofile.image', 'qiprofile.nifti'] 
+  timeSeries = ng.module 'qiprofile.timeseries', ['qiprofile.image', 'qiprofile.nifti']
 
   timeSeries.factory 'TimeSeries', ['Image', 'Nifti', (Image, Nifti) ->
     # Adds the following properties to the given REST Image object:
@@ -13,26 +13,35 @@ define ['angular', 'underscore.string', 'image', 'nifti'], (ng, _s) ->
       image.timeSeries = timeSeries
       # Add the virtual properties.
       Object.defineProperties image,
-        # @returns the parent time series name
+        ###*
+         * @method resource
+         * @return the parent time series name
+        ###
         resource:
-          get: -> @timeSeries.name     
-        
-        # @returns the parent time series parent image sequence
+          get: -> @timeSeries.name
+
+        ###*
+         * @method imageSequence
+         * @return the parent time series parent image sequence
+        ###
         imageSequence:
           get: -> @timeSeries.imageSequence
-      
-    # Adds the following properties to the given REST TimeSeries
-    # object:
-    # * *imageSequence* - the abstract parent image sequence
-    #   reference
-    # * the concrete parent *scan* or *registration* reference
-    #
-    # The time series *image* is also extended as described in
-    # extendImage.
-    #
-    # @param timeSeries the REST TimeSeries object to extend
-    # @param imageSequence the parent ImageSequence object
-    # @return the extended TimeSeries
+
+    ###*
+     * Adds the following properties to the given REST TimeSeries
+     * object:
+     * * *imageSequence* - the abstract parent image sequence
+     *   reference
+     * * the concrete parent *scan* or *registration* reference
+     *
+     * The time series *image* is also extended as described in
+     * extendImage.
+     *
+     * @method extend
+     * @param timeSeries the REST TimeSeries object to extend
+     * @param imageSequence the parent ImageSequence object
+     * @return the extended TimeSeries
+    ###
     extend: (timeSeries, imageSequence) ->
       # The generic parent reference property.
       timeSeries.imageSequence = imageSequence
@@ -44,7 +53,10 @@ define ['angular', 'underscore.string', 'image', 'nifti'], (ng, _s) ->
 
       # Make the title virtual property.
       Object.defineProperties timeSeries,
-        # @returns the display title
+        ###*
+         * @method title
+         * @return the display title
+        ###
         title:
           get: ->
             "#{ @imageSequence.title } Time Series"
@@ -54,7 +66,7 @@ define ['angular', 'underscore.string', 'image', 'nifti'], (ng, _s) ->
       # If there is an overlay, then extend it as while.
       if timeSeries.overlay?
         extendImage(timeSeries.overlay, timeSeries)
-      
+
       # Return the extnded time series.
       timeSeries
   ]

@@ -47,4 +47,4 @@ define [], ->
     deltaKTrans: '&Delta;K<sub>trans</sub>'
     fxlKTrans: 'FXL K<sub>trans</sub>'
     fxrKTrans: 'FXR K<sub>trans</sub>'
-  
+

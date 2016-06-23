@@ -341,7 +341,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         #   collection.coffee with:
         #     factory 'Collection', ... ->
         #       SERVICES = {breast: Breast, ...}
-        #       service: (key) -> SERVICES[key] or throw error 
+        #       service: (key) -> SERVICES[key] or throw error
         #       extent: (collection) -> service(key).stageExtent()
         #   then replace use of CATEGORICAL_VALUES by:
         #      Collection.extent(key)
@@ -402,7 +402,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
               }
               {
                 x: 'sarcomaTNMStage'
-                y: 'deltaKTrans' 
+                y: 'deltaKTrans'
               }
               {
                 x: 'necrosisPercent'
@@ -414,14 +414,17 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
               }
             ]
 
-        # Creates an object containing only those data series that are valid
-        # for the current collection. These are the choices that will appear in
-        # the X and Y axis selection dropdowns. Categorical type data series
-        # are excluded from the Y axis choices.
-        #
-        # @param collection the target collection
-        # @returns the valid X and Y axis data series and labels for the target
-        #   collection
+        ###*
+         * Creates an object containing only those data series that are valid
+         * for the current collection. These are the choices that will appear in
+         * the X and Y axis selection dropdowns. Categorical type data series
+         * are excluded from the Y axis choices.
+         *
+         * @method dataSeriesChoices
+         * @param collection the target collection
+         * @return the valid X and Y axis data series and labels for the target
+         *   collection
+        ###
         dataSeriesChoices: (collection) ->
           xChoices = new Object
           yChoices = new Object
@@ -435,38 +438,44 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
             x: xChoices
             y: yChoices
 
-        # Obtains and formats the scatterplot data for display in the charts.
-        # The data consist of an array of objects where each object contains
-        # the subject and session numbers and dates followed by the the data
-        # series that are valid for the current collection, e.g.:
-        #
-        # {
-        #   'subject': 1
-        #   'session': 1
-        #   'date': "01/06/2013"
-        #   'fxlKTrans': 0.16492194885121594
-        #   ...
-        #   'recurrenceScore': 76
-        #   'rcbIndex': 2.9283422241238926
-        # }
-        #
-        # Each object needs to contain all of the same keys. If data
-        # is not available for a data series, it must be assigned a null value.
-        #
-        # TODO - The chart should collect whatever properties are available
-        #   rather than be constrained by choices. See the DATA_SERIES_CONFIG
-        #   TODO above.
-        #
-        # TODO - Are there count(session) x max(1, count(tumors)) objects for
-        #   each subject?
-        #
-        # @param charting the REST query result
-        # @param dataSeries the valid data series for the current collection
-        # @returns the scatterplot data
+        ###*
+         * Obtains and formats the scatterplot data for display in the charts.
+         * The data consist of an array of objects where each object contains
+         * the subject and session numbers and dates followed by the the data
+         * series that are valid for the current collection, e.g.:
+         *
+         * {
+         *   'subject': 1
+         *   'session': 1
+         *   'date': "01/06/2013"
+         *   'fxlKTrans': 0.16492194885121594
+         *   ...
+         *   'recurrenceScore': 76
+         *   'rcbIndex': 2.9283422241238926
+         * }
+         *
+         * Each object needs to contain all of the same keys. If data
+         * is not available for a data series, it must be assigned a null value.
+         *
+         * TODO - The chart should collect whatever properties are available
+         *   rather than be constrained by choices. See the DATA_SERIES_CONFIG
+         *   TODO above.
+         *
+         * TODO - Are there count(session) x max(1, count(tumors)) objects for
+         *   each subject?
+         *
+         * @method chartData
+         * @param charting the REST query result
+         * @param dataSeries the valid data series for the current collection
+         * @return the scatterplot data
+        ###
         chartData: (charting, dataSeries) ->
-          # @param modeling the modeling object
-          # @param tumor the tumor pathology
-          # @returns a complete scatterplot data object
+          ###*
+           * @method createDCObject
+           * @param modeling the modeling object
+           * @param tumor the tumor pathology
+           * @return a complete scatterplot data object
+          ###
           createDCObject = (modeling, tumor) ->
             # Create a new data object with core properties.
             session = modeling.session
@@ -542,19 +551,25 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           # Return the scatterplot data.
           data
 
-        # Calculates the chart padding value for each continuous type data
-        # series. In the charts, the padding must be expressed in the same unit
-        # domains as the data being charted.
-        #
-        # FIXME - this breaks if data is empty. Present an alert
-        #   in that case. Can this occur in practice?
-        #
-        # @param data the scatterplot data
-        # @param dataSeries the valid data series for the current collection
-        # @returns the chart padding for each data series
+        ###*
+         * Calculates the chart padding value for each continuous type data
+         * series. In the charts, the padding must be expressed in the same unit
+         * domains as the data being charted.
+         *
+         * FIXME - this breaks if data is empty. Present an alert
+         *   in that case. Can this occur in practice?
+         *
+         * @method chartPadding
+         * @param data the scatterplot data
+         * @param dataSeries the valid data series for the current collection
+         * @return the chart padding for each data series
+        ###
         chartPadding: (data, dataSeries) ->
-          # @param key the data series
-          # @returns the chart padding for the data series
+          ###*
+           * @method dataSeriesPadding
+           * @param key the data series
+           * @return the chart padding for the data series
+          ###
           dataSeriesPadding = (key) ->
             values = _.map(data, key)
             max = _.max(values)
@@ -577,18 +592,24 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
               pad = CHART_LAYOUT_PARAMS.ticks / 2 * Math.pow(10, result - 1)
             else
               pad = diff * CHART_LAYOUT_PARAMS.collectionChartPadding
-          # @param obj the padding object
-          # @param key the data series
-          # @returns the padding object
+          ###*
+           * @method addDataSeriesPadding
+           * @param obj the padding object
+           * @param key the data series
+           * @return the padding object
+          ###
           addDataSeriesPadding = (obj, key) ->
             obj[key] = dataSeriesPadding(key)
             obj
           # Return the chart padding object.
           padding = dataSeries.reduce(addDataSeriesPadding, {})
 
-        # The dimensional charting (DC) rendering function.
-        #
-        # @param config the chart configuration
+        ###*
+         * The dimensional charting (DC) rendering function.
+         *
+         * @method renderCharts
+         * @param config the chart configuration
+        ###
         renderCharts: (config) ->
           # TODO - refactor this function body into app. 3 smaller functions.
           #
@@ -598,7 +619,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           d3.selection::moveToFront = ->
             @each ->
               @parentNode.appendChild this
-          
+
           # Convenience temp config variables.
           data = config.data
           padding = config.padding
@@ -608,7 +629,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           xFilter = crossfilter(data)
 
           # The subject/session dimension.
-          dim = xFilter.dimension (obj) -> 
+          dim = xFilter.dimension (obj) ->
             [
               obj.subject.number
               obj.session.number
@@ -663,7 +684,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           chart.yAxis().ticks(maxSessNbr)
           # Pad the left margins.
           chart.margins().left += CHART_LAYOUT_PARAMS.leftMargin
-          
+
           # Apply a renderlet and associate it with tooltip callbacks.
           chart.on 'renderlet', (chart) ->
             chart.selectAll '.symbol'
@@ -683,7 +704,7 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
           # The axes determine the number of charts to display.
           chartCnt = axes.length
           # The charts are numbered from 1 to n, where n is the number of
-          # axis pairs defined in the chart config axes variable. 
+          # axis pairs defined in the chart config axes variable.
           chartNbrs = _.range(1, chartCnt + 1)
           # Set up the scatterplots.
           charts = (dc.scatterPlot('#qi-collection-chart-' + chartNbr) for chartNbr in chartNbrs)

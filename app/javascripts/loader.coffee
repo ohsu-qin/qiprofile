@@ -11,25 +11,37 @@ define [], ->
     constructor: ->
       @_state = STATES.UNLOADED
 
-    # @returns whether the load is completed
+    ###*
+     * @method isLoaded
+     * @return whether the load is completed
+    ###
     isLoaded: ->
       @_state is STATES.LOADED
 
-    # @returns whether the load is initiated but not completed
+    ###*
+     * @method isLoading
+     * @return whether the load is initiated but not completed
+    ###
     isLoading: ->
       @_state is STATES.LOADING
 
-    # @returns whether the load was initiated but unsuccessful
+    ###*
+     * @method isError
+     * @return whether the load was initiated but unsuccessful
+    ###
     isError: ->
       @_state is STATES.ERROR
 
-    # Transfers the loadable content to the data property. The state
-    # flag is set to STATES.LOADING while the file is being read.
-    #
-    # @param loadable an object which the data store can load
-    # @param the data store
-    # @returns a promise which resolves to the loaded data
-    #   when the file is loaded
+    ###*
+     * Transfers the loadable content to the data property. The state
+     * flag is set to STATES.LOADING while the file is being read.
+     *
+     * @method load
+     * @param loadable an object which the data store can load
+     * @param the data store
+     * @return a promise which resolves to the loaded data
+     *   when the file is loaded
+    ###
     load: (loadable, store) ->
       # Set the loading flag.
       @_state = STATES.LOADING
@@ -49,6 +61,6 @@ define [], ->
           # Throw an error with the status text.
           throw new Error("Image load was unsuccessful:" +
                           " #{ response.statusText } (#{ response.status }).")
-  
+
   # Return the Loader class.
   Loader

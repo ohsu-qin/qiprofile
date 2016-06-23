@@ -19,21 +19,27 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
       RANGES: [[2..3], [4..5], [6..8]]
       SCORES: ['differentiation', 'mitoticCount', 'necrosisScore']
 
-    # @returns the sorted stage values
+    ###*
+     * @method stageExtent
+     * @return the sorted stage values
+    ###
     stageExtent: ->
       _.chain(STAGES).values().flattenDeep().union(['4']).uniq().sort().value()
 
-    # Returns the cancer stage.
-    #
-    # If metastasis exists (M1), then the stage is IV.
-    # Otherwise, the stage is determined by T and N scores as
-    # defined in the tumor type factory STAGES associative
-    # lookup table.
-    #
-    # @param tnm the TNM object
-    # @param summaryGrade the summary grade (1 to 3)
-    # @returns the cancer stage object, as described in tnm.coffee
-    #    stage
+    ###*
+     * Returns the cancer stage.
+     *
+     * If metastasis exists (M1), then the stage is IV.
+     * Otherwise, the stage is determined by T and N scores as
+     * defined in the tumor type factory STAGES associative
+     * lookup table.
+     *
+     * @method stage
+     * @param tnm the TNM object
+     * @param summaryGrade the summary grade (1 to 3)
+     * @return the cancer stage object, as described in tnm.coffee
+     *    stage
+    ###
     stage: (tnm, summaryGrade) ->
       # M1 => stage IV.
       # TODO - see Breast stage TODO.

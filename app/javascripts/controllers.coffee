@@ -1,4 +1,4 @@
-define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingChart', 'breast', 
+define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingChart', 'breast',
         'sliceDisplay', 'collection'],
   (ng, _) ->
     ctlrs = ng.module(
@@ -133,13 +133,13 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingChart
           # If the user changed the axes, then re-render the charts.
           if newValue != oldValue
             Collection.renderCharts($scope.config)
-        
+
         # Since charts is an object, the objectEquality flag is set to true.
         # AngularJS then copies the object for later comparison and uses
         # angular.equals to recursively compare the object properties rather
         # than a simple === test, which is the default.
         $scope.$watch('axes', watcher, true)
-        
+
         # If the project is the default, then remove it from the URL.
         ControllerHelper.cleanBrowserUrl($rootScope.project)
     ]
@@ -218,7 +218,7 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingChart
 
 
     ## The Imaging Profile pane controllers.
-  
+
     ctlrs.controller 'SubjectModelingCtrl', [
       '$scope',
       ($scope) ->
@@ -233,7 +233,7 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingChart
         # scope here avoids this trap by fixing the value for the
         # course of the AngularJS page formatting.
         $scope.modelings = $scope.subject.modelings
-      
+
         # The format button action.
         $scope.toggleModelingFormat = ->
           if $scope.modelingFormat is 'chart'
@@ -423,7 +423,7 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingChart
     ## The modeling parameter controllers. ##
     #
     # TODO - revise to beter fit ngnvd3. These controller's don't do
-    #   much. 
+    #   much.
     #
     # Each controller is required to set the following scope variable:
     # * dataSeriesConfig - the ModelingChart.configureD3 dataSeriesSpec
@@ -641,7 +641,7 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingChart
 
 
     ## The Session Detail page controllers. ##
-  
+
     ctlrs.controller 'SessionDetailCtrl', [
       '$rootScope', '$scope', '$state', 'session', 'ControllerHelper',
       ($rootScope, $scope, $state, session, ControllerHelper) ->
@@ -662,7 +662,7 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingChart
       ($scope, $state) ->
         # Create the image object on demand.
         $scope.image = $scope.volume.image
-      
+
         # Opens the series image display page.
         #
         # @param image the Image object
@@ -710,7 +710,7 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingChart
     #     $rootScope.project = session.subject.project
     #
     #     # @param key the modeling parameter key, e.g. 'deltaKTrans'
-    #     # @returns the modeling parameter heading HTML span element,
+    #     # @return the modeling parameter heading HTML span element,
     #     #   e.g. '<span>&Delta;K<sub>trans</sub></span>'
     #     $scope.parameterHeading = (key) ->
     #       html = "<span>#{ Modeling.properties[key].html }</span>"
@@ -797,13 +797,13 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingChart
     ctlrs.controller 'SliceDisplayCtrl', [
       '$rootScope', '$scope', '$location', 'SliceDisplay', 'ControllerHelper', 'timeSeries', 'volume', 'slice',
       ($rootScope, $scope, $location, SliceDisplay, ControllerHelper, timeSeries, volume, slice) ->
-        
+
         # Capture the current project.
         $rootScope.project = timeSeries.imageSequence.session.subject.project
-        
+
         # Place the time series in scope.
         $scope.timeSeries = timeSeries
-        
+
         # Initialize the volume number, if necessary.
         if not volume?
           # The default volume is at bolus arrival, if defined, otherwise the
@@ -820,14 +820,14 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingChart
           # The default slice is the point of maximal ROI extent, if defined,
           # otherwise the first slice.
           # TODO - calculate the maximal ROI slice in the pipeline and put in
-          #  the REST database. 
+          #  the REST database.
           maximalROISlice = undefined
           slice = if maximalROISlice? then maximalROISlice + 1 else 1
           # Update the URL search parameter.
           $location.search('slice', slice)
         # Place the slice in scope.
         $scope.slice = sliceNbr: slice
-        
+
         # The slice dimensions.
         $scope.dimensions = [
           "Saggital"
@@ -868,11 +868,11 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingChart
         #
         #   The Slice Display page should have an overlay selection control,
         #   one per modeling parameter and one for the composite ROI.
-        #   
+        #
         #   A registration image sequence needs to delegate to the parent
         #   scan overlays. This can be done in Registration.extend by adding a
         #   Registration.overlays virtual property.
-        #   
+        #
         #   Finally, TimeSeries.extend should create a TimeSeries.overlays
         #   virtual property which delegates to the parent overlays.
         display = ->
@@ -888,7 +888,7 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingChart
 
         # Redisplay the image when the slice changes.
         $scope.$watch('slice', watcher, true)
-        
+
         #
         # TODO - implement the overlay watcher in conjunction with the
         #   changes described above.
@@ -915,7 +915,7 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingChart
       #   $rootScope.project = session.subject.project
       #
       #   # @param key the modeling parameter key, e.g. 'deltaKTrans'
-      #   # @returns the modeling parameter heading HTML span element,
+      #   # @return the modeling parameter heading HTML span element,
       #   #   e.g. '<span>&Delta;K<sub>trans</sub></span>'
       #   $scope.parameterHeading = (key) ->
       #     html = "<span>#{ Modeling.properties[key].html }</span>"

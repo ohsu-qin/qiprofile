@@ -1,17 +1,20 @@
 define ['angular', 'lodash', 'imageSequence'], (ng, _) ->
-  registration = ng.module 'qiprofile.registration', ['qiprofile.imagesequence'] 
+  registration = ng.module 'qiprofile.registration', ['qiprofile.imagesequence']
 
   registration.factory 'Registration', ['ImageSequence', (ImageSequence) ->
-    # Extends the given registration object as follows:
-    # * Adds the scan parent reference property
-    # * Adds the ImageSequence properties
-    # * Sets the registration number
-    # * Adds the title and session virtual properties
-    #
-    # @param registration the registration to extend
-    # @param scan the source scan
-    # @param number the one-based registration number within the scan
-    # @returns the extended registration object
+    ###*
+     * Extends the given registration object as follows:
+     * * Adds the scan parent reference property
+     * * Adds the ImageSequence properties
+     * * Sets the registration number
+     * * Adds the title and session virtual properties
+     *
+     * @method extend
+     * @param registration the registration to extend
+     * @param scan the source scan
+     * @param number the one-based registration number within the scan
+     * @return the extended registration object
+    ###
     extend: (registration, scan, number) ->
       # Add the general image sequence properties.
       ImageSequence.extend(registration)
@@ -21,38 +24,53 @@ define ['angular', 'lodash', 'imageSequence'], (ng, _) ->
       registration.number = number
       # Add the virtual properties.
       Object.defineProperties registration,
-        # @returns the display title
+        ###*
+         * @method title
+         * @return the display title
+        ###
         title:
           get: ->
             "#{ @scan.title } Registration #{ @number }"
 
-        # Returns the <parent>/session path, where:
-        # * <parent> is the parent scan path
-        # * *registration* is the registration number
-        #
-        # @returns the registration path
+        ###*
+         * Returns the <parent>/session path, where:
+         * * <parent> is the parent scan path
+         * * *registration* is the registration number
+         *
+         * @method path
+         * @return the registration path
+        ###
         path:
           get: ->
             "#{ @scan.path }/reg/#{ @number }"
 
-        # An ImageSequence present a uniform interface, which
-        # includes a bolus arrival index and session reference.
-        #
-        # @returns the registration scan session
+        ###*
+         * An ImageSequence present a uniform interface, which
+         * includes a bolus arrival index and session reference.
+         *
+         * @method session
+         * @return the registration scan session
+        ###
         session:
           get: -> @scan.session
 
-        # @returns the registration scan bolus arrival
+        ###*
+         * @method bolusArrivalIndex
+         * @return the registration scan bolus arrival
+        ###
         bolusArrivalIndex:
           get: -> @scan.bolusArrivalIndex
-      
+
       # Return the extended object.
       registration
 
-    # @param scan the Scan object to search
-    # @param number the registration number within the scan
-    # @returns the scan object
-    # @throws ReferenceError if the session does not have the scan
+    ###*
+     * @method find
+     * @param scan the Scan object to search
+     * @param number the registration number within the scan
+     * @return the scan object
+     * @throws ReferenceError if the session does not have the scan
+    ###
     find: (scan, number) ->
       # Match on the registration number.
       match = (reg) -> reg.number is number

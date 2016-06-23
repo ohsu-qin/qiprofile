@@ -3,7 +3,7 @@ define ['angular', 'lodash', 'modeling', 'chart'], (ng, _) ->
     'qiprofile.modelingchart',
     ['qiprofile.modeling', 'qiprofile.chart']
   )
-  
+
   modelingChart.factory(
     'ModelingChart',
     ['Modeling', 'Chart', (Modeling, Chart) ->
@@ -11,7 +11,10 @@ define ['angular', 'lodash', 'modeling', 'chart'], (ng, _) ->
       COMMON_CONFIG =
         options:
           chart:
-            # @returns the session date
+            ###*
+             * @method x
+             * @return the session date
+            ###
             x: (paramResult) ->
               paramResult.modelingResult.modeling.session.date
             xAxis:
@@ -19,7 +22,10 @@ define ['angular', 'lodash', 'modeling', 'chart'], (ng, _) ->
               tickFormat: Chart.formatDate
               tooltip:
                 headerEnabled: false
-            # @returns the modeling parameter result average value
+            ###*
+             * @method y
+             * @return the modeling parameter result average value
+            ###
             y: (paramResult) ->
               paramResult.average
             yAxis:
@@ -27,10 +33,13 @@ define ['angular', 'lodash', 'modeling', 'chart'], (ng, _) ->
               showMaxMin: true
             tooltip:
               headerEnabled: false
-      
-      # @param modelingResults the modeling result REST objects
-      #   to chart
-      # @returns the Ktrans-specific chart configuration
+
+      ###*
+       * @method kTransConfiguration
+       * @param modelingResults the modeling result REST objects
+       *   to chart
+       * @return the Ktrans-specific chart configuration
+      ###
       kTransConfiguration = (modelingResults) ->
         options:
           chart:
@@ -52,19 +61,22 @@ define ['angular', 'lodash', 'modeling', 'chart'], (ng, _) ->
             values: _.map(modelingResults, 'fxrKTrans')
           }
         ]
-      
-      # @param modelingResults the modeling result REST objects
-      #   to chart
-      # @param paramKey the Modeling.properties property to chart,
-      #   e.g. 'vE'
-      # @returns the modeling parameter chart configuration
+
+      ###*
+       * @method singleParameterConfiguration
+       * @param modelingResults the modeling result REST objects
+       *   to chart
+       * @param paramKey the Modeling.properties property to chart,
+       *   e.g. 'vE'
+       * @return the modeling parameter chart configuration
+      ###
       singleParameterConfiguration = (modelingResults, paramKey) ->
         # The label text and bar color.
         dspConf = Modeling.properties[paramKey]
         if not dspConf?
           throw new ReferenceError("The modeling result parameter is not" +
                                    " supported: #{ paramKey }")
-        
+
         # Return the {options, data} chart configuration.
         options:
           chart:
@@ -79,19 +91,25 @@ define ['angular', 'lodash', 'modeling', 'chart'], (ng, _) ->
           color: dspConf.color
           values: _.map(modelingResults, paramKey)
         ]
-      
-      # @param paramKey the modeling parameter key, either 'kTrans'
-      #   or a Modeling.properties property
-      # @returns the parameter-specific chart configuration
+
+      ###*
+       * @method parameterConfiguration
+       * @param paramKey the modeling parameter key, either 'kTrans'
+       *   or a Modeling.properties property
+       * @return the parameter-specific chart configuration
+      ###
       parameterConfiguration = (modelingResults, paramKey) ->
         if paramKey is 'kTrans'
           kTransConfiguration(modelingResults)
         else
           singleParameterConfiguration(modelingResults, paramKey)
 
-      # @param paramKey the modeling parameter key
-      # @param precision the minimum number of decimals to display
-      # @returns the tooltip HTML content generator function
+      ###*
+       * @method tooltipGenerator
+       * @param paramKey the modeling parameter key
+       * @param precision the minimum number of decimals to display
+       * @return the tooltip HTML content generator function
+      ###
       tooltipGenerator = (paramKey, precision) ->
         # The tooltip displays three decimals more than the
         # minimum.
@@ -108,7 +126,7 @@ define ['angular', 'lodash', 'modeling', 'chart'], (ng, _) ->
                "<td>#{ dspConf.html }:</td>" +
                "<td>#{ valueFormatter(value) }</td>" +
              "</tr>"
-           
+
            # Return the formatter function.
            (obj) ->
              # The charting object is the data series object,
@@ -126,7 +144,7 @@ define ['angular', 'lodash', 'modeling', 'chart'], (ng, _) ->
              "<table>" +
                rows.join("\n") +
              "</table>"
-       
+
         singleParameterTooltipGenerator = (paramKey) ->
           dspConf = Modeling.properties[paramKey]
           # Return the formatter function.
@@ -140,15 +158,18 @@ define ['angular', 'lodash', 'modeling', 'chart'], (ng, _) ->
           kTransTooltipGenerator()
         else
           singleParameterTooltipGenerator(paramKey)
-      
-      # Configures the D3 chart with the given format. The format is an
-      # object in the form {label: string, data: array}
-      # where the data array has one object per data series in the form
-      # {label: string, color: color, accessor: (modelingResult) -> body}
-      #
-      # @param modelingResults the session modeling results array
-      # @param property the modeling parameter property, e.g. 'kTrans'
-      # @returns the nvd3 chart {data, options} configuration
+
+      ###*
+       * Configures the D3 chart with the given format. The format is an
+       * object in the form {label: string, data: array}
+       * where the data array has one object per data series in the form
+       * {label: string, color: color, accessor: (modelingResult) -> body}
+       *
+       * @method configure
+       * @param modelingResults the session modeling results array
+       * @param property the modeling parameter property, e.g. 'kTrans'
+       * @return the nvd3 chart {data, options} configuration
+      ###
       configure: (modelingResults, paramKey) ->
         # Start with a copy of the shared configuration.
         conf = _.cloneDeep(COMMON_CONFIG)
@@ -178,7 +199,7 @@ define ['angular', 'lodash', 'modeling', 'chart'], (ng, _) ->
                 contentGenerator: generateTooltip
         # Add the additional settings.
         _.merge(conf, mixin)
-        
+
         # Return the configuration.
         conf
     ]

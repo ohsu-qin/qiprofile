@@ -1,6 +1,6 @@
 define ['angular', 'lodash', 'cornerstone'], (ng, _, cornerstone) ->
   sliceDisplay = ng.module('qiprofile.slicedisplay', [])
-  
+
   sliceDisplay.factory 'SliceDisplay', ->
     # The Cornerstone loader scheme.
     LOADER_SCHEME = 'qiprofile'
@@ -12,7 +12,7 @@ define ['angular', 'lodash', 'cornerstone'], (ng, _, cornerstone) ->
       numBitsPerEntry: 8
       # TODO - get the limit value from wherever it is defined.
       lut: _.range(255, 0, -1)
-    
+
     # The integer data type pattern matcher.
     INT_DATATYPE_REGEX = /^u?int(\d\d?)$/
 
@@ -28,13 +28,19 @@ define ['angular', 'lodash', 'cornerstone'], (ng, _, cornerstone) ->
     # TODO - see slice-display overlay TODO.
     # overlayElt = document.getElementById('qi-slice-overlay')
     # cornerstone.enable(overlayElt)
-    
-    # @returns a unique id for the given image
+
+    ###*
+     * @method imageIdFor
+     * @return a unique id for the given image
+    ###
     imageIdFor = (timeSeries, volumeIndex, sliceIndex) ->
       # Append the volume and slice numbers to the time series image path.
       "#{ LOADER_SCHEME }:#{ timeSeries.image.path }/#{ volumeIndex + 1 }/#{ sliceIndex + 1 }"
-    
-    # @returns a unique id for the given overlay slice
+
+    ###*
+     * @method overlayIdFor
+     * @return a unique id for the given overlay slice
+    ###
     overlayIdFor = (overlay, sliceIndex) ->
       # Append the slice number to the overlay title.
       "#{ LOADER_SCHEME }:#{ overlay.parameterResult.title }/#{ sliceIndex + 1 }"
@@ -62,23 +68,32 @@ define ['angular', 'lodash', 'cornerstone'], (ng, _, cornerstone) ->
       # Return the data adapted for Cornerstone.
       adaptImage(imageId, sliceIndex, header, data)
 
-    # @param data the binary image data
+    ###*
+     * @method displayImage
+     * @param data the binary image data
+    ###
     displayImage = (data) ->
       cornerstone.displayImage(imageElt, data)
 
-    # @param data the binary overlay data
+    ###*
+     * @method displayOverlay
+     * @param data the binary overlay data
+    ###
     displayOverlay = (data) ->
       # The viewport option applies the LUT.
       opts = modalityLUT: INVERSION_LUT
       cornerstone.displayImage(overlayElt, data, opts)
 
-    # Converts the given 2D ndarray to a 1D array.
-    #
-    # @param data the 2D ndarray
-    # @param datumSize the intensity value size in bytes
-    # @returns the {data, min, max} object containing
-    #   the flattened 1D data array and the minimum
-    #   and maximum values
+    ###*
+     * Converts the given 2D ndarray to a 1D array.
+     *
+     * @method flatten
+     * @param data the 2D ndarray
+     * @param datumSize the intensity value size in bytes
+     * @return the {data, min, max} object containing
+     *   the flattened 1D data array and the minimum
+     *   and maximum values
+    ###
     flatten = (data, datumSize) ->
       colCnt = data.shape[0]
       rowCnt = data.shape[1]
@@ -88,7 +103,7 @@ define ['angular', 'lodash', 'cornerstone'], (ng, _, cornerstone) ->
       maxValue = -minValue
       # The 1D array content.
       buffer = new ArrayBuffer(length * datumSize)
-      
+
       # Flatten the ndarray.
       shape = [data.shape.reduce(_.multiply)]
       stride = data.stride[..0]
@@ -100,7 +115,7 @@ define ['angular', 'lodash', 'cornerstone'], (ng, _, cornerstone) ->
       # Add a map function.
       flat.map = (fn) ->
         (fn(@get(i), i, this) for i in [0...@length])
-      
+
       # TODO - calculate the min/max in pipeline.
       for i in [0...flat.length]
         minValue = Math.min(minValue, flat.get(i))
@@ -110,12 +125,15 @@ define ['angular', 'lodash', 'cornerstone'], (ng, _, cornerstone) ->
       data: flat
       min: minValue
       max: maxValue
-    
-    # @param imageId the caching id
-    # @param sliceIndex the zero-based slice index
-    # @param header the parsed {nifti, dicom} object
-    # @param data the NIfTI image byte array
-    # @returns the Cornerstone image object
+
+    ###*
+     * @method adaptImage
+     * @param imageId the caching id
+     * @param sliceIndex the zero-based slice index
+     * @param header the parsed {nifti, dicom} object
+     * @param data the NIfTI image byte array
+     * @return the Cornerstone image object
+    ###
     adaptImage = (imageId, sliceIndex, header, data) ->
       # The datum size in bytes.
       match = INT_DATATYPE_REGEX.exec(header.nifti.datatype)
@@ -157,7 +175,7 @@ define ['angular', 'lodash', 'cornerstone'], (ng, _, cornerstone) ->
         row: header.nrrd.spacings[2]
       # The number of bytes in the image data.
       byteCnt = colCnt * rowCnt * datumSize
-        
+
       imageId: imageId
       minPixelValue : flat.min
       maxPixelValue : flat.max
@@ -175,32 +193,38 @@ define ['angular', 'lodash', 'cornerstone'], (ng, _, cornerstone) ->
       columnPixelSpacing: spacing.column
       rowPixelSpacing: spacing.row
       sizeInBytes: byteCnt
-    
-    # @param imageId the image id built by the imageIdFor function
-    # @returns the image hierarchy array
+
+    ###*
+     * @method parseImageId
+     * @param imageId the image id built by the imageIdFor function
+     * @return the image hierarchy array
+    ###
     parseImageId = (imageId) ->
       path = imageId.split('/')
       [project, subject, session, scan] = path[...4]
       rest = path[4..]
-    
+
     # The Cornerstone image loader callback function.
     loadImage = (imageId) ->
       parseImageId(imageId)
-    
+
     cornerstone.registerImageLoader(LOADER_SCHEME, loadImage)
 
-    # Displays the slice image and overlay. The input *data* argument
-    # is a {image, overlay} object, where:
-    # * *image* is the required 4D time series image [x, y, z, t]
-    #   intensity array
-    # * *overlay* is the optional 3D [x, y, z] overlay array
-    #
-    # The overlay can be a binary mask, e.g. ROI, or a scalar modeling
-    # result, e.g. Ktrans.
-    #
-    # @param timeSeries the 4D TimeSeries object to display
-    # @param volume the one-based volume number
-    # @param slice the one-based slice number
+    ###*
+     * Displays the slice image and overlay. The input *data* argument
+     * is a {image, overlay} object, where:
+     * * *image* is the required 4D time series image [x, y, z, t]
+     *   intensity array
+     * * *overlay* is the optional 3D [x, y, z] overlay array
+     *
+     * The overlay can be a binary mask, e.g. ROI, or a scalar modeling
+     * result, e.g. Ktrans.
+     *
+     * @method display
+     * @param timeSeries the 4D TimeSeries object to display
+     * @param volume the one-based volume number
+     * @param slice the one-based slice number
+    ###
     display: (timeSeries, volume, slice) ->
       displayLoaded = ->
         # Display the image.

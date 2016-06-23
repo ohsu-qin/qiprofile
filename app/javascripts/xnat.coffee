@@ -7,17 +7,23 @@ define ['angular', 'sprintf', 'file'], (ng, sprintf) ->
     # on the server.
     IMAGE_STORE_ROOT = '/data'
 
-    # @param project the project name
-    # @returns the image store project directory
+    ###*
+     * @method projectLocation
+     * @param project the project name
+     * @return the image store project directory
+    ###
     projectLocation = (project) ->
       "#{ IMAGE_STORE_ROOT }/#{ project }/arc001"
-      
-      # If the image sequence is a scan, then this method
-      # returns the image sequence. Otherwise, this method
-      # returns the scan from which the image sequence is
-      # derived.
-      #
-      # @returns the image sequence scan
+
+      ###*
+       * If the image sequence is a scan, then this method
+       * returns the image sequence. Otherwise, this method
+       * returns the scan from which the image sequence is
+       * derived.
+       *
+       * @method scanFor
+       * @return the image sequence scan
+      ###
     scanFor = (imageSequence) ->
       if imageSequence._cls is 'Scan'
         imageSequence
@@ -27,8 +33,11 @@ define ['angular', 'sprintf', 'file'], (ng, sprintf) ->
         throw new TypeError("Cannot infer the #{ imageSequence.title }" +
                             " parent scan")
 
-    # @param image the REST TimeSeries or Volume object
-    # @returns the image file path relative to the web app root
+    ###*
+     * @method location
+     * @param image the REST TimeSeries or Volume object
+     * @return the image file path relative to the web app root
+    ###
     location = (image) ->
       # The image parent is either a scan or registration image
       # sequence.
@@ -51,15 +60,18 @@ define ['angular', 'sprintf', 'file'], (ng, sprintf) ->
       sessionNumberSuffix = sprintf.sprintf("%02d", session.number)
       # The XNAT experiment label, e.g. "Breast003_Session02".
       expLabel = "#{ subjectLabel }_Session#{ sessionNumberSuffix }"
-      
+
       # Return the formatted image file path.
       "#{ projectDir }/#{ expLabel }/#{ scanDir }/#{ resource }/#{ image.name }"
 
-    # Loads the image file content.
-    #
-    # @param image the image object
-    # @returns a promise which resolves to the loaded image file
-    #   content
+    ###*
+     * Loads the image file content.
+     *
+     * @method load
+     * @param image the image object
+     * @return a promise which resolves to the loaded image file
+     *   content
+    ###
     load: (image) ->
       # The image file path.
       path = location(image)

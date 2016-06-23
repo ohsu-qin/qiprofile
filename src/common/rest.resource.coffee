@@ -22,14 +22,15 @@ Rest =
    *
    * @method where
    * @param params the input parameters
-   * @returns the REST condition query parameter
+   * @return the REST condition query parameter
   ###
   where: (params) ->
     ###*
      * @method formatFieldCondition
+     * @private
      * @param field the request field
      * @param value the request value
-     * @returns the formatted Eve {where: condition}
+     * @return the formatted Eve {where: condition}
     ###
     formatFieldCondition = (field, value) ->
       if typeof value is 'number'
@@ -53,7 +54,7 @@ Rest =
    *
    * @method map
    * @param fields the Javascript camelCase data properties to select
-   * @returns the formatted Eve {projection: critierion}
+   * @return the formatted Eve {projection: critierion}
   ###
   map: (fields) ->
     # The input can be a single field name.
@@ -71,7 +72,7 @@ Rest =
    *
    * @method omit
    * @param fields the Javascript camelCase data properties to exclude
-   * @returns the formatted Eve {projection: critierion}
+   * @return the formatted Eve {projection: critierion}
   ###
   omit: (fields) ->
     # Format the field name: flag entries.
@@ -91,13 +92,14 @@ Rest =
    *
    * @method transformResponse
    * @param res the HTTP response object
-   * @returns the Javascript object
+   * @return the Javascript object
   ###
   transformResponse: (response) ->
     ###*
      * Aliases the given underscore property.
      *
      * @method camelizeProperty
+     * @private
      * @param obj the input object to modify
      * @param property the input property to alias
     ###
@@ -123,8 +125,9 @@ Rest =
      * Aliases underscore properties with camelCase properties.
      *
      * @method camelizeProperties
+     * @private
      * @param obj the input object to modify
-     * @returns the input object
+     * @return the input object
     ###
     camelizeProperties = (obj, visited=[]) ->
       # Add camelCase aliases to underscore properties.

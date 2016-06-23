@@ -2,6 +2,7 @@
 
 ###*
  * @class Rest
+ * @static
 ###
 Rest =
   ###*

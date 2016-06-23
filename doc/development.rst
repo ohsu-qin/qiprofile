@@ -58,6 +58,14 @@ Setup
        grunt --help
 
 
+***
+API
+***
+
+The ``grunt`` default build task builds the API documentation at
+``build/doc/api/index.html`` in the project workspace.
+
+
 ******
 Update
 ******
@@ -213,10 +221,61 @@ Coding Standards
   equivalent CoffeeScript, which has the added benefit of understanding
   and trimming the example.
 
-* All test cases are written as CoffeeScript files in the appropriate
-  ``unit`` or ``e2e`` test subdirectory. The CoffeeScript test case
-  is compiled on the fly to JavaScript by the Karma_ or Protractor_ test
-  runner.
+* CoffeeScript import and export statements are escaped in order to pass
+  them on to JavaScript, e.g.::
+
+      `import Rest from "./rest.resource/coffee"`
+      `export { Rest as default }`
+  
+  The export ``as default`` ensures ES6 and TypeScript interoperability.
+  Libraries with an ``index.js`` in the package root folder, e.g. ``lodash``,
+  need to be imported using ``* as``, e.g.::
+  
+      `import * as _ from "lodash"`
+
+* The CoffeeScript modules export a singleton variable, e.g.::
+  
+      Rest =
+        ...
+      `export { Rest as default }`
+
+* Every TypeScript class and CoffeeScript export is documented with
+  YUIDoc_ comments. Every public function is documented. Every private
+  function that is not self-explanatory is documented and marked with
+  the ``@private`` tag.
+  
+* CoffeeScript comments must compile to ``/** ... */`` blocks  in
+  JavaScript, e.g.::
+  
+      ###*
+       * @class Rest
+      ###
+      Rest =
+        ###*
+         * Formats the {where: condition} Eve REST query parameter.
+         *
+         * @method where
+         * @param params the input parameters
+         * @return the REST condition query parameter
+        ###
+        where: (params) ->
+  
+  Note that the blocks are in the form::
+  
+      ###*
+       * Good
+      ###
+  
+  rather than::
+  
+      ###
+      #  Bad!
+      ###
+
+* Every TypeScript class is tested in a TypeScript test case. Every
+  CoffeeScript module is tested in a CoffeeScript test case. The test
+  cases are compiled on the fly to JavaScript by a Karma_ or Protractor_
+  pre-processor.
 
 * Every application Angular component file is indicated by ``.component.``
    in the file name, e.g. ``app.component.ts``.
@@ -673,3 +732,5 @@ The test image files conform to the XNAT file location convention, e.g.::
 .. _XTK: http://www.goXTK.com
 
 .. _XTK Bower Fork: https://www.github.com/FredLoney/get
+
+.. _YUIDoc: http://yui.github.io/yuidoc/

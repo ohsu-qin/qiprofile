@@ -3,7 +3,7 @@ module.exports = (grunt) ->
     pkg: grunt.file.readJSON('package.json')
 
     clean:
-      derived: ['public']
+      derived: ['public', 'build']
       options:
         force: true
 
@@ -87,6 +87,19 @@ module.exports = (grunt) ->
         #   (cf. https://github.com/gruntjs/grunt-contrib-copy/issues/13).
         src: ['bootstrap/dist/fonts/*', 'font-awesome/fonts/*']
         dest: 'public/fonts/'
+      
+      doc:
+        expand: true
+        src: ['src/**/*.ts']
+        dest: 'build'
+    
+    coffee:
+      doc:
+        expand: true
+        ext: '.js'
+        extDot: 'last'
+        src: ['src/**/*.coffee']
+        dest: 'build'
 
     concat:
       css:
@@ -101,6 +114,13 @@ module.exports = (grunt) ->
         logConcurrentOutput: true
       compile:
         tasks: ['typings', 'pug', 'stylus']
+
+    yuidoc:
+      compile:
+        options:
+          paths: 'build/src'
+          extension: '.ts,.js'
+          outdir: 'build/doc/api'
 
     cssmin:
       options:
@@ -201,13 +221,22 @@ module.exports = (grunt) ->
   grunt.registerTask 'default', ['build']
 
   # Compile the app bits concurrently.
-  grunt.registerTask 'compile', ['concurrent:compile']
+  grunt.registerTask 'compile', ['tslint', 'concurrent:compile']
 
   # Build the application from scratch.
-  grunt.registerTask 'build', ['clean', 'copy', 'concat:css', 'tslint', 'compile']
+  grunt.registerTask 'copy:dev', ['copy:static', 'copy:cssmap', 'copy:fonts']
+
+  # Build the application from scratch.
+  grunt.registerTask 'build:dev', ['copy:dev', 'concat:css', 'compile']
+
+  # Build the application from scratch.
+  grunt.registerTask 'doc', ['copy:doc', 'coffee:doc', 'yuidoc']
+
+  # Build the application from scratch.
+  grunt.registerTask 'build', ['clean', 'build:dev', 'doc']
 
   # Build the application release.
-  grunt.registerTask 'bundle', ['build', 'ts:app', 'jspm']
+  grunt.registerTask 'bundle', ['build:dev', 'ts:app', 'jspm']
 
   # The npm postinstall task.
   grunt.registerTask 'postinstall', ['build', 'ts:tslint']

@@ -1,3 +1,8 @@
+/**
+ * The application entry module.
+ *
+ * @module main
+ */
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, Routes, ROUTER_DIRECTIVES } from '@angular/router';
@@ -18,11 +23,36 @@ import { HelpService } from '../common/help.service.ts';
   {path: '/qiprofile/:project', component: CollectionsComponent}
 ])
 
+/**
+ * The boot entry point.
+ *
+ * This component provides the following services:
+ * * Sets the application routes
+ * * Provides the `HelpService` for injection by subcomponents
+ * * Includes router directives for use by subcomponents
+ * * Defines the main `<qi-app></qi-app>` HTML body context
+ * * Navigates to the `CollectionsComponent` on start-up
+ *
+ * @class AppComponent
+ * @constructor
+ */
 export class AppComponent implements OnInit {
+  /**
+   * Captures the router and location for use in the `ngOnInit`
+   * initialization callback.
+   *
+   * @method constructor
+   * @param router the injected router
+   * @param location the injected location
+   */
   constructor(private router: Router, private location: Location) { }
 
+  /**
+   * Kicks the router to get things started.
+   *
+   * @method ngOnInit
+   */
   ngOnInit() {
-    // Kick the router to get things started.
     this.router.navigateByUrl(this.location.path());
   }
 }

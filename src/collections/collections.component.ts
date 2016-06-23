@@ -1,3 +1,8 @@
+/**
+ * The Collections List module.
+ *
+ * @module collections
+ */
 import { Component, OnInit } from '@angular/core';
 import { RouteSegment, OnActivate } from '@angular/router';
 import * as _ from 'lodash';

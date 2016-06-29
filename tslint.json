@@ -18,6 +18,7 @@
     "eofline": true,
     "import-destructuring-spacing": true,
     "indent": [true, "spaces"],
+    "jsdoc-format": true,
     "max-line-length": [true, 100],
     "no-arg": true,
     "no-attribute-parameter-decorator": true,
@@ -72,18 +73,6 @@
     "use-life-cycle-interface": true,
     "use-output-property-decorator": true,
     "use-pipe-transform-interface": true,
-    "valid-jsdoc": [
-      true,
-      {
-        "prefer": {
-          "return": "return"
-        },
-        "requireReturn": false,
-        "requireParamDescription": true,
-        "requireReturnDescription": true,
-        "matchDescription": "^[A-Z][A-Za-z0-9\\s]*[.]$"
-      }
-    ],
     "valid-typeof": true,
     "variable-name": [
       true,

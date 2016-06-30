@@ -1,8 +1,5 @@
 `import * as _ from "lodash"`
 
-class ValueError extends Exception
-
-
 ###*
  * @method repeat
  * @private
@@ -24,7 +21,7 @@ repeat = (s, n) ->
  * @return an array of the roman numerals
  * @throws RangeError if the max parameter is not in the inclusive
  *   range [0, 10]
- * @throws ValueError if one of the characters or the max is invalid
+ * @throws Error if one of the characters or the max is invalid
 ###
 genRomans = (one, five, ten, max=10) ->
   ###*
@@ -49,11 +46,11 @@ genRomans = (one, five, ten, max=10) ->
     throw new RangeError("The roman numeral generator count must be in" +
                          " the range 1 to 10: #{ max }")
   if not one
-    throw new ValueError("The roman numeral generator is missing a one character")
+    throw new Error("The roman numeral generator is missing a one character")
   if five and not ten
-    throw new ValueError("The roman numeral generator is missing a ten character")
+    throw new Error("The roman numeral generator is missing a ten character")
   if ten and not five
-    throw new ValueError("The roman numeral generator is missing a five character")
+    throw new Error("The roman numeral generator is missing a five character")
 
   [0..max].map(genRoman)
 

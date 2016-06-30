@@ -6,6 +6,15 @@ module.exports = (config) ->
     # The karma adapter frameworks to use.
     frameworks: ['jspm', 'mocha', 'chai']
 
+    files: [
+      'node_modules/babel-polyfill/dist/polyfill.js'
+    ]
+
+    proxies:
+      '/src/': '/base/src/'
+      '/test/': '/base/test/'
+      '/jspm_packages/': '/base/jspm_packages/'
+
     # By default, karma loads node_modules sibling karma-* plug-ins.
     # However, note that the plug-ins must be installed as siblings
     # of the launched karma node context. In particular, a globally
@@ -19,22 +28,23 @@ module.exports = (config) ->
     # The karma-jspm option specifying the files to dynamically
     # load via SystemJS.
     jspm:
-      config: 'jspm.config.js',
-      loadFiles: ['test/unit/**/*.spec.*'],
-      serveFiles: ['src/**/*.*', 'tsconfig.json', 'typings/**/*.d.ts'],
-      stripExtension: false
+      config: 'jspm.config.js'
+      loadFiles: ['src/../test/unit/common/roman.service.spec.coffee']
+      serveFiles: ['src/**/*.*', 'tsconfig.json', 'typings/**/*.d.ts']
 
     # Print messages.
     client:
       captureConsole: true
 
     # The test specs can be written in CoffeeScript or TypeScript. 
-    preprocessors:
-      '**/*.spec.coffee': 'coffee'
-      '**/*.spec.ts': 'typescript'
+    # preprocessors:
+    #   '**/*.spec.coffee': 'coffee'
+    #   '**/*.spec.ts': 'typescript'
 
     # The files to load is empty since karma-jspm assumes that responsibility.
-    files: []
+    files: [
+      'node_modules/babel-polyfill/dist/polyfill.js'
+    ]
 
     # The test results reporter.
     # Possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
@@ -47,7 +57,7 @@ module.exports = (config) ->
     # The logging level. Possible values:
     # config.LOG_DISABLE, config.LOG_ERROR, config.LOG_WARN, config.LOG_INFO, config.LOG_DEBUG
     # The log level is set in the Grunt karma task.
-    logLevel : config.LOG_DEBUG
+    # logLevel :   config.LOG_DEBUG
 
     # Flag indicating whether to execute the tests whenever any file changes.
     autoWatch: false
@@ -67,13 +77,22 @@ module.exports = (config) ->
     # test case. See the Developer Guide for details.
     browsers: ['PhantomJS']
 
+		preprocessors:
+			'src/*.js': ['babel', 'sourcemap']
+
+		babelPreprocessor:
+			options:
+				sourceMap: 'inline'
+			sourceFileName: (file) ->
+				file.originalPath
+
     # If the browser does not capture output in the given number of milliseconds,
     # then kill it.
-    captureTimeout: 5000
+    captureTimeout: 2000
     
     # Allowing empty test suites is useful when commenting out tests. The
     # default is true.
-    failOnEmptyTestSuite: false
+    # failOnEmptyTestSuite: false
 
     # The Continuous Integration mode.
     # If true, then karma will capture the browsers, run the tests and exit.

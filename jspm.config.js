@@ -1,10 +1,25 @@
 SystemJS.config({
-  trace: true,
+  browserConfig: {
+    "baseURL": "."
+  },
   paths: {
     "github:": "jspm_packages/github/",
     "npm:": "jspm_packages/npm/"
   },
-  transpiler: "plugin-babel",
+  devConfig: {
+    "map": {
+      "babel": "npm:babel-core@5.8.38",
+      "babel-runtime": "npm:babel-runtime@5.8.38",
+      "core-js": "npm:core-js@1.2.6"
+    }
+  },
+  transpiler: "babel",
+  babelOptions: {
+    "optional": [
+      "runtime",
+      "optimisation.modules.system"
+    ]
+  },
   typescriptOptions: {
     "module": "es6",
     "target": "es6",
@@ -57,6 +72,7 @@ SystemJS.config({
     "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@2.0.0-rc.2",
     "coffee": "github:forresto/system-coffee@master",
     "domain": "github:jspm/nodelibs-domain@0.2.0-alpha",
+    "jasmine": "npm:jasmine@2.4.1",
     "json": "github:systemjs/plugin-json@0.1.2",
     "md": "github:guybedford/system-md@0.1.0",
     "module": "github:jspm/nodelibs-module@0.2.0-alpha",
@@ -112,14 +128,7 @@ SystemJS.config({
     },
     "github:jspm/nodelibs-buffer@0.2.0-alpha": {
       "map": {
-        "buffer-browserify": "npm:buffer@4.6.0"
-      }
-    },
-    "npm:buffer@4.6.0": {
-      "map": {
-        "ieee754": "npm:ieee754@1.1.6",
-        "isarray": "npm:isarray@1.0.0",
-        "base64-js": "npm:base64-js@1.1.2"
+        "buffer-browserify": "npm:buffer@4.7.0"
       }
     },
     "npm:debug@2.2.0": {
@@ -508,6 +517,32 @@ SystemJS.config({
     "github:guybedford/system-md@0.1.0": {
       "map": {
         "showdown": "github:showdownjs/showdown@1.4.2"
+      }
+    },
+    "npm:buffer@4.7.0": {
+      "map": {
+        "ieee754": "npm:ieee754@1.1.6",
+        "base64-js": "npm:base64-js@1.1.2",
+        "isarray": "npm:isarray@1.0.0"
+      }
+    },
+    "npm:jasmine@2.4.1": {
+      "map": {
+        "exit": "npm:exit@0.1.2",
+        "glob": "npm:glob@3.2.11",
+        "jasmine-core": "npm:jasmine-core@2.4.1"
+      }
+    },
+    "npm:glob@3.2.11": {
+      "map": {
+        "minimatch": "npm:minimatch@0.3.0",
+        "inherits": "npm:inherits@2.0.1"
+      }
+    },
+    "npm:minimatch@0.3.0": {
+      "map": {
+        "sigmund": "npm:sigmund@1.0.1",
+        "lru-cache": "npm:lru-cache@2.7.3"
       }
     }
   }

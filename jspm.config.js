@@ -10,7 +10,8 @@ SystemJS.config({
   devConfig: {
     "map": {
       "babel-runtime": "npm:babel-runtime@5.8.38",
-      "core-js": "npm:core-js@1.2.6"
+      "core-js": "npm:core-js@1.2.6",
+      "plugin-babel": "npm:systemjs-plugin-babel@0.0.12"
     }
   },
   transpiler: "plugin-babel",
@@ -118,7 +119,6 @@ SystemJS.config({
     "lodash": "npm:lodash@4.13.1",
     "net": "github:jspm/nodelibs-net@0.2.0-alpha",
     "os": "github:jspm/nodelibs-os@0.2.0-alpha",
-    "plugin-babel": "npm:systemjs-plugin-babel@0.0.12",
     "process": "github:jspm/nodelibs-process@0.2.0-alpha",
     "rxjs": "npm:rxjs@5.0.0-beta.6",
     "socket.io": "npm:socket.io@1.4.6",

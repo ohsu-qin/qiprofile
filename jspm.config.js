@@ -4,7 +4,9 @@ SystemJS.config({
   },
   paths: {
     "github:": "jspm_packages/github/",
-    "npm:": "jspm_packages/npm/"
+    "npm:": "jspm_packages/npm/",
+    "app/": "src/",
+    "test/": "test/"
   },
   devConfig: {
     "map": {
@@ -30,7 +32,7 @@ SystemJS.config({
     "supportHtmlImports": true
   },
   packages: {
-    "src": {
+    "app": {
       "main": "main/main.js",
       "meta": {
         "*.ts": {

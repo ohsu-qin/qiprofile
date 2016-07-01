@@ -1,4 +1,4 @@
-`import Rest from "app/common/rest.resource.coffee"`
+`import Rest from "./rest.resource.coffee"`
 
 describe 'Unit Testing the REST Service', ->
   describe 'where', ->

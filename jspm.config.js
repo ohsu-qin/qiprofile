@@ -5,21 +5,18 @@ SystemJS.config({
   paths: {
     "github:": "jspm_packages/github/",
     "npm:": "jspm_packages/npm/",
-    "app/": "src/",
-    "test/": "test/"
+    "app/": "src/"
   },
   devConfig: {
     "map": {
-      "babel": "npm:babel-core@5.8.38",
       "babel-runtime": "npm:babel-runtime@5.8.38",
       "core-js": "npm:core-js@1.2.6"
     }
   },
-  transpiler: "babel",
+  transpiler: "plugin-babel",
   babelOptions: {
     "optional": [
-      "runtime",
-      "optimisation.modules.system"
+      "runtime"
     ]
   },
   typescriptOptions: {
@@ -54,7 +51,29 @@ SystemJS.config({
           "loader": "json"
         }
       }
+    },
+    "npm:jasmine@2.4.1": {
+      "map": {
+        "exit": "npm:exit@0.1.2",
+        "glob": "npm:glob@3.2.11",
+        "jasmine-core": "npm:jasmine-core@2.4.1"
+      }
+    },
+    "npm:glob@3.2.11": {
+      "map": {
+        "minimatch": "npm:minimatch@0.3.0",
+        "inherits": "npm:inherits@2.0.1"
+      }
+    },
+    "npm:minimatch@0.3.0": {
+      "map": {
+        "sigmund": "npm:sigmund@1.0.1",
+        "lru-cache": "npm:lru-cache@2.7.3"
+      }
     }
+  },
+  map: {
+    "jasmine": "npm:jasmine@2.4.1"
   }
 });
 
@@ -74,7 +93,6 @@ SystemJS.config({
     "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@2.0.0-rc.2",
     "coffee": "github:forresto/system-coffee@master",
     "domain": "github:jspm/nodelibs-domain@0.2.0-alpha",
-    "jasmine": "npm:jasmine@2.4.1",
     "json": "github:systemjs/plugin-json@0.1.2",
     "md": "github:guybedford/system-md@0.1.0",
     "module": "github:jspm/nodelibs-module@0.2.0-alpha",
@@ -100,7 +118,7 @@ SystemJS.config({
     "lodash": "npm:lodash@4.13.1",
     "net": "github:jspm/nodelibs-net@0.2.0-alpha",
     "os": "github:jspm/nodelibs-os@0.2.0-alpha",
-    "plugin-babel": "npm:systemjs-plugin-babel@0.0.11",
+    "plugin-babel": "npm:systemjs-plugin-babel@0.0.12",
     "process": "github:jspm/nodelibs-process@0.2.0-alpha",
     "rxjs": "npm:rxjs@5.0.0-beta.6",
     "socket.io": "npm:socket.io@1.4.6",
@@ -526,25 +544,6 @@ SystemJS.config({
         "ieee754": "npm:ieee754@1.1.6",
         "base64-js": "npm:base64-js@1.1.2",
         "isarray": "npm:isarray@1.0.0"
-      }
-    },
-    "npm:jasmine@2.4.1": {
-      "map": {
-        "exit": "npm:exit@0.1.2",
-        "glob": "npm:glob@3.2.11",
-        "jasmine-core": "npm:jasmine-core@2.4.1"
-      }
-    },
-    "npm:glob@3.2.11": {
-      "map": {
-        "minimatch": "npm:minimatch@0.3.0",
-        "inherits": "npm:inherits@2.0.1"
-      }
-    },
-    "npm:minimatch@0.3.0": {
-      "map": {
-        "sigmund": "npm:sigmund@1.0.1",
-        "lru-cache": "npm:lru-cache@2.7.3"
       }
     }
   }

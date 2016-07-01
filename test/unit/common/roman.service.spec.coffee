@@ -1,6 +1,6 @@
 `import chai, { expect } from "chai"`
 
-`import Roman from "src/common/roman.service.coffee"`
+`import Roman from "app/common/roman.service.coffee"`
 
 describe 'Unit Testing the Roman Service', ->
   it 'should convert a string or an integer to a roman numeral', ->

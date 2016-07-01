@@ -59,9 +59,6 @@ See the `Developer Guide`_ for starting a development server.
 
 ---------
 
-.. container:: copyright
-
-
 .. Targets:
 
 .. _Developer Guide: https://github.com/ohsu-qin/qiprofile/blob/master/doc/development.rst

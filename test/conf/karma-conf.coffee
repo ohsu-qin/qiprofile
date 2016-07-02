@@ -47,62 +47,55 @@ module.exports = (config) ->
     #   ./node_modules/karam/bin/karma start
     #plugins: ['karma-jspm', 'karma-mocha', 'karma-chai', 'karma-phantomjs-launcher']
 
-    # The jspm option specifis the files that karma-jspm loads
+    # The jspm option specifies the files that karma-jspm loads
     # dynamically via SystemJS. loadFiles are loaded unconditionally
     # on start-up, and constitute the test suites. serveFiles are
     # loaded on demand when referenced.
-    #
-    # Note: the loadFiles is set to src/../test/... rather than test/...
-    # to work around the following test framework bug:
-    # * karma/jspm cannot find a loadFile unless it starts at the
-    #   app base directory.
-    # TODO - revisit this in 2017 and isolate and file a bug if
-    #   necessary.
     jspm:
       config: 'jspm.config.js'
       loadFiles: ['src/**/*.spec.*']
       #serveFiles: ['src/**/!(*.spec).*']
       # Include config and typings for TypeScript?
       serveFiles: ['src/**/*!(.spec).*', 'tsconfig.json', 'typings/**/*.d.ts']
-      stripExtension: false
 
-    # The test specs can be written in CoffeeScript or TypeScript. 
-    preprocessors:
-      'src/**/*.js': ['babel', 'sourcemap']
-
-    # The test suite language pre-processors.
-    # CoffeeScript is supported out of the box.
-    #
-    # Note: the karma babel preprocessor fails due to the following bug:
-    # * Running karma on a js with the babel preprocessor results in the
-    #   following error:
-    #     path.charAt is not a function
-    #
-    # Note: the karma typescript preprocessor fails due to the following bug:
-    # * Running karma on a typescript test suite results in the following error:
-    #
+    # The preprocessor settings are unnecessary since jspm takes over file
+    # resolution and invokes the jspm transpilers. 
     # preprocessors:
     #   'src/**/*.js': ['babel', 'sourcemap']
-    #   'src/**/*.ts': ['typescript', 'sourcemap']
-
-    # The babel ec6-to-ec5 compiler options.
-    # karma-sourcemap-loader generates the source maps.
-    # The filename function is used for messages.
-    # The sourceFileName function specifies the
-    # transpiled file to use as the source map key.
-    babelPreprocessor:
-      options:
-        # This preset option might be unnecessary, since it is also specified
-        # in .babelrc.
-        # TODO - Confirm this.
-        presets: ['es2015']
-        sourceMap: 'inline'
-        sourceFileName: (file) ->
-          file.originalPath
-
-    # The TypeScript compiler options.
-    typescriptPreprocessor:
-      typescript: typescriptCompiler
+    #
+    # # The test suite language pre-processors.
+    # # CoffeeScript is supported out of the box.
+    # #
+    # # Note: the karma babel preprocessor fails due to the following bug:
+    # # * Running karma on a js with the babel preprocessor results in the
+    # #   following error:
+    # #     path.charAt is not a function
+    # #
+    # # Note: the karma typescript preprocessor fails due to the following bug:
+    # # * Running karma on a typescript test suite results in the following error:
+    # #
+    # # preprocessors:
+    # #   'src/**/*.js': ['babel', 'sourcemap']
+    # #   'src/**/*.ts': ['typescript', 'sourcemap']
+    #
+    # # The babel ec6-to-ec5 compiler options.
+    # # karma-sourcemap-loader generates the source maps.
+    # # The filename function is used for messages.
+    # # The sourceFileName function specifies the
+    # # transpiled file to use as the source map key.
+    # babelPreprocessor:
+    #   options:
+    #     # This preset option might be unnecessary, since it is also specified
+    #     # in .babelrc.
+    #     # TODO - Confirm this.
+    #     presets: ['es2015']
+    #     sourceMap: 'inline'
+    #     sourceFileName: (file) ->
+    #       file.originalPath
+    #
+    # # The TypeScript compiler options.
+    # typescriptPreprocessor:
+    #   typescript: typescriptCompiler
 
     # The test results reporter.
     # Possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'

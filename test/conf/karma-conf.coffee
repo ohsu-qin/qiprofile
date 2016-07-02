@@ -33,7 +33,6 @@ module.exports = (config) ->
     # a proxy.
     proxies:
       '/src/': '/base/src/'
-      '/test/': '/base/test/'
       '/jspm_packages/': '/base/jspm_packages/'
       '/tsconfig.json': '/base/tsconfig.json'
       '/typings/': '/base/typings/'
@@ -62,14 +61,15 @@ module.exports = (config) ->
     jspm:
       config: 'jspm.config.js'
       loadFiles: ['src/**/*.spec.*']
-      serveFiles: ['src/**/!(*spec).*']
+      serveFiles: ['src/**/!(*.spec).*']
       # Include config and typings for TypeScript?
       #serveFiles: ['src/**/*!(.spec).*', 'tsconfig.json', 'typings/**/*.d.ts']
+      stripExtension: false
 
     # The test specs can be written in CoffeeScript or TypeScript. 
     preprocessors:
       'src/**/*.js': ['babel', 'sourcemap']
-      'src/**/*.coffee': 'coffee'
+      #'src/**/*.coffee': ['coffee']
       'src/**/*.ts': ['typescript', 'sourcemap']
 
     # The test suite language pre-processors.

@@ -36,6 +36,9 @@ SystemJS.config({
         "*.ts": {
           "loader": "ts"
         },
+        "*.js": {
+          "loader": "babel"
+        },
         "*.coffee": {
           "loader": "coffee"
         },

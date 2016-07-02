@@ -1,25 +1,53 @@
 SystemJS.config({
-  trace: true,
+  browserConfig: {
+    "baseURL": "."
+  },
   paths: {
     "github:": "jspm_packages/github/",
-    "npm:": "jspm_packages/npm/"
+    "npm:": "jspm_packages/npm/",
+    "app/": "src/"
   },
+  devConfig: {
+    "map": {
+      "babel-runtime": "npm:babel-runtime@5.8.38",
+      "core-js": "npm:core-js@1.2.6",
+      "plugin-babel": "npm:systemjs-plugin-babel@0.0.12"
+    }
+  },
+  // The default .js transpiler. This setting is redundant for
+  // the app modules, since all app loaders are already
+  // specified in the packages below. However, omitting the
+  // setting below results in an error 'traceur not found',
+  // since traceur is the default jspm transpiler.
   transpiler: "plugin-babel",
+  babelOptions: {
+    "optional": [
+      "runtime"
+    ]
+  },
+  // See https://github.com/frankwallis/plugin-typescript for
+  // these settings.
+  // Note: static type checking is turned off to suppress
+  //   annoying extraneous message, e.g. redundant typings.
+  //   Bona fide type errors will show up at run time. 
   typescriptOptions: {
     "module": "es6",
     "target": "es6",
-    "typeCheck": "strict",
+    "typeCheck": false,
     "tsconfig": true,
     "sourceMap": true,
     "removeComments": false,
     "supportHtmlImports": true
   },
   packages: {
-    "src": {
+    "app": {
       "main": "main/main.js",
       "meta": {
         "*.ts": {
           "loader": "ts"
+        },
+        "*.js": {
+          "loader": "babel"
         },
         "*.coffee": {
           "loader": "coffee"
@@ -37,7 +65,29 @@ SystemJS.config({
           "loader": "json"
         }
       }
+    },
+    "npm:jasmine@2.4.1": {
+      "map": {
+        "exit": "npm:exit@0.1.2",
+        "glob": "npm:glob@3.2.11",
+        "jasmine-core": "npm:jasmine-core@2.4.1"
+      }
+    },
+    "npm:glob@3.2.11": {
+      "map": {
+        "minimatch": "npm:minimatch@0.3.0",
+        "inherits": "npm:inherits@2.0.1"
+      }
+    },
+    "npm:minimatch@0.3.0": {
+      "map": {
+        "sigmund": "npm:sigmund@1.0.1",
+        "lru-cache": "npm:lru-cache@2.7.3"
+      }
     }
+  },
+  map: {
+    "jasmine": "npm:jasmine@2.4.1"
   }
 });
 
@@ -82,7 +132,6 @@ SystemJS.config({
     "lodash": "npm:lodash@4.13.1",
     "net": "github:jspm/nodelibs-net@0.2.0-alpha",
     "os": "github:jspm/nodelibs-os@0.2.0-alpha",
-    "plugin-babel": "npm:systemjs-plugin-babel@0.0.11",
     "process": "github:jspm/nodelibs-process@0.2.0-alpha",
     "rxjs": "npm:rxjs@5.0.0-beta.6",
     "socket.io": "npm:socket.io@1.4.6",
@@ -112,14 +161,7 @@ SystemJS.config({
     },
     "github:jspm/nodelibs-buffer@0.2.0-alpha": {
       "map": {
-        "buffer-browserify": "npm:buffer@4.6.0"
-      }
-    },
-    "npm:buffer@4.6.0": {
-      "map": {
-        "ieee754": "npm:ieee754@1.1.6",
-        "isarray": "npm:isarray@1.0.0",
-        "base64-js": "npm:base64-js@1.1.2"
+        "buffer-browserify": "npm:buffer@4.7.0"
       }
     },
     "npm:debug@2.2.0": {
@@ -508,6 +550,13 @@ SystemJS.config({
     "github:guybedford/system-md@0.1.0": {
       "map": {
         "showdown": "github:showdownjs/showdown@1.4.2"
+      }
+    },
+    "npm:buffer@4.7.0": {
+      "map": {
+        "ieee754": "npm:ieee754@1.1.6",
+        "base64-js": "npm:base64-js@1.1.2",
+        "isarray": "npm:isarray@1.0.0"
       }
     }
   }

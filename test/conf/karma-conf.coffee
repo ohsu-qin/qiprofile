@@ -6,6 +6,24 @@ module.exports = (config) ->
     # The karma adapter frameworks to use.
     frameworks: ['jspm', 'mocha', 'chai']
 
+    # The files to load consist solely of the polyfill since karma-jspm
+    # is responsible for loading the test and app files.
+    files: [
+      'node_modules/babel-polyfill/dist/polyfill.js'
+    ]
+
+    # The proxies map the file paths to the karma root url /base.
+    # Each directory referenced by a test file must be mapped as
+    # a proxy.
+    #
+    # Note: /app is mapped to /src by jspm, so we don't need a separate
+    #   /app/ mapping here.
+    proxies:
+      '/src/': '/base/src/'
+      '/jspm_packages/': '/base/jspm_packages/'
+      '/tsconfig.json': '/base/tsconfig.json'
+      '/typings/': '/base/typings/'
+
     # By default, karma loads node_modules sibling karma-* plug-ins.
     # However, note that the plug-ins must be installed as siblings
     # of the launched karma node context. In particular, a globally
@@ -16,38 +34,29 @@ module.exports = (config) ->
     #   ./node_modules/karam/bin/karma start
     #plugins: ['karma-jspm', 'karma-mocha', 'karma-chai', 'karma-phantomjs-launcher']
 
-    # The karma-jspm option specifying the files to dynamically
-    # load via SystemJS.
+    # The jspm option specifies the files that karma-jspm loads
+    # dynamically via SystemJS. loadFiles are loaded unconditionally
+    # on start-up, and constitute the test suites. serveFiles are
+    # loaded on demand when referenced.
     jspm:
-      config: 'jspm.config.js',
-      loadFiles: ['test/unit/**/*.spec.*'],
-      serveFiles: ['src/**/*.*', 'tsconfig.json', 'typings/**/*.d.ts'],
-      stripExtension: false
-
-    # Print messages.
-    client:
-      captureConsole: true
-
-    # The test specs can be written in CoffeeScript or TypeScript. 
-    preprocessors:
-      '**/*.spec.coffee': 'coffee'
-      '**/*.spec.ts': 'typescript'
-
-    # The files to load is empty since karma-jspm assumes that responsibility.
-    files: []
+      config: 'jspm.config.js'
+      loadFiles: ['src/**/*.spec.*']
+      #serveFiles: ['src/**/!(*.spec).*']
+      # Include config and typings for TypeScript?
+      serveFiles: ['src/**/*!(.spec).*', 'tsconfig.json', 'typings/**/*.d.ts']
 
     # The test results reporter.
     # Possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-    # and (thanks to karma-spec-reporter") 'spec'.
+    # and (thanks to karma-spec-reporter) 'spec'.
     reporters: ['spec']
 
     # Flag indicating whether to display colors in the reporter and log output.
     colors: true
 
     # The logging level. Possible values:
-    # config.LOG_DISABLE, config.LOG_ERROR, config.LOG_WARN, config.LOG_INFO, config.LOG_DEBUG
+    # config.LOG_DISABLE .LOG_ERROR .LOG_WARN .LOG_INFO .LOG_DEBUG
     # The log level is set in the Grunt karma task.
-    logLevel : config.LOG_DEBUG
+    # logLevel : config.LOG_DEBUG
 
     # Flag indicating whether to execute the tests whenever any file changes.
     autoWatch: false
@@ -63,17 +72,25 @@ module.exports = (config) ->
     # - PhantomJS
     # - IE (Windows only; requires karma-ie-launcher)
     #
-    # The Grunt karma task overrides this setting to Chrome in order to debug a
-    # test case. See the Developer Guide for details.
+    # The Grunt karma task overrides this setting to Chrome in order to debug
+    # a test case. See the Developer Guide for details.
     browsers: ['PhantomJS']
 
-    # If the browser does not capture output in the given number of milliseconds,
-    # then kill it.
-    captureTimeout: 5000
+    # Print messages.
+    client:
+      captureConsole: true
+
+    # If the browser does not capture output in the given number of 
+    # milliseconds, then kill it.
+    # Note: timeout doesn't necessarily mean the test fails, but guards
+    # against hanging test cases. Chances are if it takes more than 2
+    # seconds to run the test, the test either hangs or needs to be
+    # refactored. 
+    captureTimeout: 2000
     
     # Allowing empty test suites is useful when commenting out tests. The
     # default is true.
-    failOnEmptyTestSuite: false
+    # failOnEmptyTestSuite: false
 
     # The Continuous Integration mode.
     # If true, then karma will capture the browsers, run the tests and exit.

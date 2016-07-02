@@ -10,13 +10,9 @@ import { Injectable } from '@angular/core';
 export class HelpService {
   /**
    * @property showHelp flag indicating whether to display
-   *   the help pane
+   * the help pane
    */
-  showHelp: boolean;
-  
-  constructor() {
-     this.showHelp = false;
-  }
+  showHelp: boolean = false;
 
   /**
    * Inverts the `showHelp` flag.

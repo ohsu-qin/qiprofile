@@ -36,6 +36,14 @@
     "  The top-level dependencies contain the build, server and test libraries.",
     "  jspm manages the client libraries."
   ],
+  "//": [
+    "Note:",
+    "  The karma fork fixes the following karma bug:",
+    "  * karma with jspm results in the following error:",
+    "      decorator { '0': [Function], '1': 0, '2': true, '3': undefined }",
+    "      PhantomJS 2.1.1 (Mac OS X 0.0.0) ERROR",
+    "      You need to include some adapter that implements __karma__.start method!"
+  ],
   "dependencies": {
     "authenticate": "^0.1.5",
     "babel": "^5.8.38",
@@ -100,7 +108,6 @@
     "karma-script-launcher": "^0.1.0",
     "karma-sourcemap-loader": "^0.3.5",
     "karma-spec-reporter": "^0.0.23",
-    "karma-typescript-preprocessor": "^0.2.1",
     "mocha": "^2.2.5",
     "mocha-phantomjs": "^4.1.0",
     "pako": "^0.2.8",
@@ -115,7 +122,6 @@
     "tslint": "^3.10.2",
     "tslint-eslint-rules": "^1.3.0",
     "typescript": "^1.8.9",
-    "typescript-simple": "^5.0.2",
     "typings": "^1.1.0"
   },
   "jspm": {

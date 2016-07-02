@@ -61,16 +61,14 @@ module.exports = (config) ->
     jspm:
       config: 'jspm.config.js'
       loadFiles: ['src/**/*.spec.*']
-      serveFiles: ['src/**/!(*.spec).*']
+      #serveFiles: ['src/**/!(*.spec).*']
       # Include config and typings for TypeScript?
-      #serveFiles: ['src/**/*!(.spec).*', 'tsconfig.json', 'typings/**/*.d.ts']
+      serveFiles: ['src/**/*!(.spec).*', 'tsconfig.json', 'typings/**/*.d.ts']
       stripExtension: false
 
     # The test specs can be written in CoffeeScript or TypeScript. 
     preprocessors:
       'src/**/*.js': ['babel', 'sourcemap']
-      #'src/**/*.coffee': ['coffee']
-      'src/**/*.ts': ['typescript', 'sourcemap']
 
     # The test suite language pre-processors.
     # CoffeeScript is supported out of the box.

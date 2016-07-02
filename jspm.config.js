@@ -14,16 +14,26 @@ SystemJS.config({
       "plugin-babel": "npm:systemjs-plugin-babel@0.0.12"
     }
   },
+  // The default .js transpiler. This setting is redundant for
+  // the app modules, since all app loaders are already
+  // specified in the packages below. However, omitting the
+  // setting below results in an error 'traceur not found',
+  // since traceur is the default jspm transpiler.
   transpiler: "plugin-babel",
   babelOptions: {
     "optional": [
       "runtime"
     ]
   },
+  // See https://github.com/frankwallis/plugin-typescript for
+  // these settings.
+  // Note: static type checking is turned off to suppress
+  //   annoying extraneous message, e.g. redundant typings.
+  //   Bona fide type errors will show up at run time. 
   typescriptOptions: {
     "module": "es6",
     "target": "es6",
-    "typeCheck": "strict",
+    "typeCheck": false,
     "tsconfig": true,
     "sourceMap": true,
     "removeComments": false,

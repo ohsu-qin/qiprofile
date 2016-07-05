@@ -1,6 +1,6 @@
-var comment = `
-/* Note: comments within the config call are deleted by jspm install.
- * Therefore, comments are listed in this bogus comment variable.
+/* Note: comments within or directly preceding the config call are
+ * deleted by jspm install. Therefore, this comment precedes a bogus
+ * comment variable.
  *
  * Note: The transpiler option is redundant for the app package, since
  * all app loaders are already specified in the packages option. However,
@@ -14,7 +14,7 @@ var comment = `
  * extraneous message, e.g. redundant typings. Bona fide type errors will
  * show up at run time.
  */
-`;
+var comment;
 
 SystemJS.config({
   comment: {

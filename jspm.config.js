@@ -17,8 +17,6 @@
 var comment;
 
 SystemJS.config({
-  comment: {
-  },
   browserConfig: {
     'baseURL': '.'
   },

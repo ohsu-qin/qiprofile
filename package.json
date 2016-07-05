@@ -33,14 +33,14 @@
   },
   "main": "server.js",
   "//": [
-    "Note:",
-    "  The top-level dependencies contain the build, server and test libraries.",
-    "  jspm manages the client libraries."
-    "  The karma fork fixes the following karma bug:",
-    "  * karma with jspm results in the following error:",
-    "      decorator { '0': [Function], '1': 0, '2': true, '3': undefined }",
-    "      PhantomJS 2.1.1 (Mac OS X 0.0.0) ERROR",
-    "      You need to include some adapter that implements __karma__.start method!"
+    "Note: The top-level dependencies contain the build, server and",
+    "test libraries. jspm manages the client libraries.",
+    "",
+    "Note: The karma fork fixes the following karma bug:",
+    "* karma with jspm results in the following error:",
+    "    decorator { '0': [Function], '1': 0, '2': true, '3': undefined }",
+    "    PhantomJS 2.1.1 (Mac OS X 0.0.0) ERROR",
+    "    You need to include some adapter that implements __karma__.start method!"
   ],
   "dependencies": {
     "authenticate": "^0.1.5",

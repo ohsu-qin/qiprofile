@@ -551,28 +551,27 @@ e.g.::
       files: [..., 'Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz', ...]
     }
 
-When the *QuIP* Session Detail scan or registration image download button
-is clicked, then *QuIP* builds the file location relative to the web app
-root directory, e.g.::
+When the Session Detail scan or registration image download button is clicked,
+then qiprofile builds the file location relative to the web app root directory,
+e.g.::
 
     data/QIN/arc001/Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz
 
-where ``QIN`` is the project name. *QuIP* then dispatches an HTTP XHR_
+where ``QIN`` is the project name. qiprofile then dispatches an HTTP XHR_
 request for the static file at that location::
 
      HTTP GET /static/data/QIN/arc001/Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz
 
-The *QuIP* Express server recognizes the ``/static/`` prefix as a request for
+The Express server recognizes the ``/static/`` prefix as a request for
 a file relative to the web app root and returns the content of the server file,
 in this case the file at::
 
       /var/local/express/webapps/qiprofile/
         data/QIN/arc001/Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz
 
-When the file content is received by the *QuIP* client, then the Session Detail
-image download button is hidden and the open button is shown. When the open
-button is clicked, then the Image Detail page is visited with the image file
-content.
+When the file content is received by the client, then the Session Detail image
+download button is hidden and the open button is shown. When the open button is
+clicked, then the Image Detail page is visited with the image file content.
 
 The ``qiprofile-rest`` ``test/helpers/seed.py`` script populates the
 ``ImageContainer`` ``files`` field described above for the 24 Breast and

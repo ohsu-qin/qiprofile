@@ -1,13 +1,14 @@
 {
   "name": "qiprofile",
   "version": "0.16.1",
-  "description": "Quantitative Imaging Profile (QuIP) web application",
+  "description": "Quantitative Imaging Profile (  QiPr) web application",
   "repository": {
     "type": "git",
     "url": "git@github.com:ohsu-qin/qiprofile.git"
   },
   "keywords": [
-    "QuIP",
+    "qiprofile",
+    "QiPr",
     "QIN",
     "DCE",
     "MR",

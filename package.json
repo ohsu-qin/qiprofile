@@ -14,8 +14,18 @@
     "medical",
     "imaging"
   ],
-  "author": "Fred Loney <loneyf@ohsu.edu>",
-  "license": "MIT",
+  "author": "Oregon Health & Science University",
+  "contributors": [
+    "Fred Loney <loneyf@ohsu.edu>",
+    "Erik Segerdel <segerdel@ohsu.edu>",
+    "Jayashree Kalpathy-Cramer <kalpathy@nmr.mgh.harvard.edu>",
+    "Brendan Moloney <moloney@ohsu.edu>",
+    "Katrina Myron <myron@ohsu.edu>",
+    "Sarah Perry <perrsa@ohsu.edu>",
+    "Shannon McWeeney <mcweeney@ohsu.edu>",
+    "Wei Huang <huangwe@ohsu.edu>"
+  ],
+  "license": "BSD",
   "bin": "./bin/qiprofile",
   "scripts": {
     "postinstall": "./node_modules/grunt-cli/bin/grunt postinstall",

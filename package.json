@@ -1,12 +1,13 @@
 {
   "name": "qiprofile",
   "version": "2.1.1",
-  "description": "Quantitative Imaging Profile (qipr) web application",
+  "description": "Quantitative Imaging Profile (QiPr) web application",
   "repository": {
     "type": "git",
     "url": "git@github.com:ohsu-qin/qiprofile.git"
   },
   "keywords": [
+    "qiprofile",
     "QiPr",
     "QIN",
     "DCE",
@@ -35,9 +36,6 @@
     "Note:",
     "  The top-level dependencies contain the build, server and test libraries.",
     "  jspm manages the client libraries."
-  ],
-  "//": [
-    "Note:",
     "  The karma fork fixes the following karma bug:",
     "  * karma with jspm results in the following error:",
     "      decorator { '0': [Function], '1': 0, '2': true, '3': undefined }",
@@ -138,6 +136,7 @@
       "lodash": "npm:lodash@^4.13.1",
       "md": "guybedford/system-md@^0.1.0",
       "ng2-resource-rest": "npm:ng2-resource-rest@^0.3.4",
+      "nouislider": "npm:nouislider@^8.5.1",
       "platform-browser": "npm:@angular/platform-browser@^2.0.0-rc.2",
       "platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@^2.0.0-rc.2",
       "reflect-metadata": "npm:reflect-metadata@^0.1.0",

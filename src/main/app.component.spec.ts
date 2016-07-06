@@ -1,7 +1,9 @@
 import { AppComponent } from './app.component.ts';
 
+// TODO - verify routing.
+
 describe('AppComponent', () => {
-  it('should be trivial', () => {
-    expect(AppComponent).to.exist;
+  it('should exist', () => {
+    expect(AppComponent, 'Missing the AppComponent').to.exist;
   });
 });

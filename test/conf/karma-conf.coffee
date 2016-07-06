@@ -39,10 +39,11 @@ module.exports = (config) ->
     # on start-up, and constitute the test suites. serveFiles are
     # loaded on demand when referenced.
     jspm:
+      # The jspm config is in the conventional location.
       config: 'jspm.config.js'
+      # The test suites.
       loadFiles: ['src/**/*.spec.*']
-      #serveFiles: ['src/**/!(*.spec).*']
-      # Include config and typings for TypeScript?
+      # The app, TypeScript config and typings are loaded on demand.
       serveFiles: ['src/**/*!(.spec).*', 'tsconfig.json', 'typings/**/*.d.ts']
 
     # The test results reporter.
@@ -72,8 +73,9 @@ module.exports = (config) ->
     # - PhantomJS
     # - IE (Windows only; requires karma-ie-launcher)
     #
-    # The Grunt karma task overrides this setting to Chrome in order to debug
-    # a test case. See the Developer Guide for details.
+    # If the Grunt --debug option is set, then the Grunt karma task overrides this
+    # setting to Chrome in order to debug a test case. See the Developer Guide for
+    # details.
     browsers: ['PhantomJS']
 
     # Print messages.

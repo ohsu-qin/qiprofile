@@ -336,27 +336,27 @@ Coding Standards
   The service can then be imported by a TypeScript file with import, 
   e.g.::
   
-      import Rest from './rest.resource.coffee';
+      import Rest from './rest.service.coffee';
   
   CoffeeScript unit test suites do not need to be exported. 
 
 * Each intra-``src/`` import is relative, e.g.::
 
-      import Rest from './rest.resource.coffee';  // good
+      import Rest from './rest.service.coffee';  // good
   
   rather than::
   
-      import Rest from 'src/rest.resource.coffee'; // bad!
+      import Rest from 'src/rest.service.coffee'; // bad!
 
 * Outside imports of source files, e.g. from a test suite, are rooted at
   ``app/``, e.g.::
 
-      import Rest from 'app/rest.resource.coffee';  // good from test/
+      import Rest from 'app/rest.service.coffee';  // good from test/
   
   rather than::
   
-      import Rest from '../../src/rest.resource.coffee'; // bad from test/!
-      import Rest from 'src/rest.resource.coffee'; // bad from test/!
+      import Rest from '../../src/rest.service.coffee'; // bad from test/!
+      import Rest from 'src/rest.service.coffee'; // bad from test/!
       
   ``app/`` is a ``src/`` alias defined in the jspm ``paths`` option.
 

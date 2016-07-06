@@ -1,21 +1,3 @@
-/* Note: comments within or directly preceding the config call are
- * deleted by jspm install. Therefore, this comment precedes a bogus
- * comment variable.
- *
- * Note: The transpiler option is redundant for the app package, since
- * all app loaders are already specified in the packages option. However,
- * omitting the transpiler option results in the error 'traceur not found',
- * since traceur is the default jspm transpiler.
- *
- * Note: See https: *github.com/frankwallis/plugin-typescript for
- * the typescriptOptions.
- *
- * Note: static type checking is turned off to suppress  annoying
- * extraneous message, e.g. redundant typings. Bona fide type errors will
- * show up at run time.
- */
-var comment;
-
 SystemJS.config({
   browserConfig: {
     'baseURL': '.'
@@ -33,11 +15,6 @@ SystemJS.config({
     }
   },
   transpiler: 'plugin-babel',
-  babelOptions: {
-    'optional': [
-      'runtime'
-    ]
-  },
   typescriptOptions: {
     'module': 'es6',
     'target': 'es6',
@@ -48,7 +25,7 @@ SystemJS.config({
     'supportHtmlImports': true
   },
   packages: {
-    'app': {
+    'src': {
       'main': 'main/main.js',
       'meta': {
         '*.ts': {
@@ -95,6 +72,7 @@ SystemJS.config({
     }
   },
   map: {
+    'babel': 'node_modules/babel-core/browser.js',
     'jasmine': 'npm:jasmine@2.4.1'
   }
 });

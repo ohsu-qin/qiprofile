@@ -12,7 +12,7 @@ class CollectionListPage extends Page
     # Call the Page superclass initializer with the helpShown
     # flag set to true, since the help box is displayed on
     # this landing page.
-    super('/quip?project=QIN_Test',  true)
+    super('/qiprofile/QIN_Test',  true)
 
   # @returns the collection {name, description, url} object
   #   array promise

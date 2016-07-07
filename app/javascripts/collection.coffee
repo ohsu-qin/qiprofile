@@ -27,6 +27,9 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         #   See the k-trans.coffee TODO item. See also the CATEGORICAL_VALUES
         #   TODO below.
         #
+        # TODO - Add any other data series that we want to support
+        #   (e.g. demographics) to the chart configuration.
+        #
         DATA_SERIES_CONFIG =
           'fxlKTrans':
               label: 'FXL Ktrans'
@@ -420,6 +423,9 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
          * the X and Y axis selection dropdowns. Categorical type data series
          * are excluded from the Y axis choices.
          *
+         * TODO - Suppress X/Y axis menu choices where no data exists for a
+         *   particular data series throughout the collection.
+         *
          * @method dataSeriesChoices
          * @param collection the target collection
          * @return the valid X and Y axis data series and labels for the target
@@ -556,8 +562,10 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
          * series. In the charts, the padding must be expressed in the same unit
          * domains as the data being charted.
          *
-         * FIXME - this breaks if data is empty. Present an alert
-         *   in that case. Can this occur in practice?
+         * FIXME - this breaks if data is empty. The configuration should
+         *   suppress charts where no data exists for a particular data
+         *   series throughout the collection, per the comment in the
+         *   controller.
          *
          * @method chartPadding
          * @param data the scatterplot data
@@ -612,6 +620,9 @@ define ['angular', 'dc', 'moment', 'roman', 'lodash', 'crossfilter', 'd3',
         ###
         renderCharts: (config) ->
           # TODO - refactor this function body into app. 3 smaller functions.
+          #
+          # TODO - brushing selection gestures can not be applied to
+          #   categorical data (e.g. TNM stage). Is there a workaround?
           #
           # Enables a specified D3 element to be moved to the front layer of
           # the visualization, which is necessary if that element is to be

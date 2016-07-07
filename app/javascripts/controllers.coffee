@@ -106,6 +106,10 @@ define ['angular', 'lodash', 'ngsanitize', 'ngnvd3', 'resources', 'modelingChart
         # axis to chart.
         $scope.axes = _.clone(Collection.DEFAULT_AXES[collection])
         # Check the validity of the default chart axes.
+        #
+        # TODO - Suppress charts where no data exists for a particular data
+        #   series throughout the collection.
+        #
         checkAxes = (axis) ->
           axis.x in xAxisChoices or
             throw new Error "Invalid #{ collection } X-axis data series: " +

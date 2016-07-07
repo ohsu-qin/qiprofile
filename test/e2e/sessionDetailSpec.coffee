@@ -123,18 +123,11 @@ describe 'E2E Testing Session Detail', ->
     it 'should load the image', ->
       # Find the download/display button pair, then...
       page.scanImageButtons(TEST_VOL_NBR).then (btnGroup) ->
-        # The download button should be displayed.
-        btnGroup.download.then (download) ->
-          expect(download, 'The Download button is missing').to.exist
-          expect(download.isDisplayed(), 'The Download button is initially' +
-                                         ' hidden')
-            .to.eventually.be.true
-
         # The open button should be hidden.
         btnGroup.open.then (open) ->
           expect(open, 'The Open button is missing').to.exist
-          expect(open.isDisplayed(), 'The Open button is initially displayed')
-            .to.eventually.be.false
+          expect(open.isDisplayed(), 'The Open button is initially hidden')
+            .to.eventually.be.true
 
         # FIXME - load is broken after the volume/slice refactoring and
         #   XTK removal.

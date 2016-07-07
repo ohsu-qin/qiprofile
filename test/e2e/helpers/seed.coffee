@@ -1,10 +1,10 @@
-# Calls the qiprofile-rest test seed utilty.
+# Calls the qirest test seed utilty.
 path = require 'path'
 fs = require 'fs'
 exec = require('child_process').exec
 
 script = "from mongoengine import connect;" +
-         "from qiprofile_rest.test.helpers import seed;" +
+         "from qirest.test.helpers import seed;" +
          "connect(db=\"qiprofile_test\");" +
          "seed.seed()"
 

@@ -196,7 +196,7 @@ The ``e2e`` task executes as follows:
 
 * Start a Selenium web server as the Mocha test context
 
-* Run the qiprofile-rest_ test seed program
+* Run the qirest_ test seed program
 
 * Exercise the ``test/e2e/`` test cases
 
@@ -605,8 +605,8 @@ The deployment targets requires two server machines:
 
 * the XNAT server
 
-* the server hosting the qiprofile Express_, qiprofile-rest_ Eve
-  and qiprofile-rest_ MongoDB services
+* the server hosting the qiprofile Express_, qirest_ Eve
+  and qirest_ MongoDB services
 
 Both servers share a Direct Attached Storage (DAS) XNAT archive
 directory, e.g. if the DAS mount point is ``/home/groups/quip``
@@ -648,7 +648,7 @@ symbolic link to the shared XNAT image location, e.g.::
 
     ln -s /home/groups/quip/xnat/archive /var/local/express/webapps/qiprofile/data
 
-The qiprofile-rest data model ``Scan`` and ``Registration`` ``files``
+The qirest data model ``Scan`` and ``Registration`` ``files``
 field consists of the image file path for each volume. A qipipe_ pipeline task
 populates the MongoDB ``qiprofile`` database with new MR session imaging fields,
 filling in the files list with the file paths relative to the parent project
@@ -686,10 +686,10 @@ image download button is hidden and the open button is shown. When the open
 button is clicked, then the Image Detail page is visited with the image file
 content.
 
-The ``qiprofile-rest`` ``test/helpers/seed.py`` script populates the
+The ``qirest`` ``test/helpers/seed.py`` script populates the
 ``ImageContainer`` ``files`` field described above for the 24 Breast and
 Sarcoma test MR sessions. The ``grunt test:e2e`` end-to-end testing task runs
-the ``qiprofile-rest`` seed script and creates a link in the local ``public``
+the ``qirest`` seed script and creates a link in the local ``public``
 web app build to the test image file fixtures location::
 
       public/data -> ../test/fixtures/data
@@ -781,7 +781,7 @@ The test image files conform to the XNAT file location convention, e.g.::
 
 .. _qiprofile installation instructions: https://github.com/ohsu-qin/qiprofile/blob/master/doc/index.rst
 
-.. _qiprofile-rest: https://github.com/ohsu-qin/qiprofile-rest
+.. _qirest: https://github.com/ohsu-qin/qirest
 
 .. _SemVer: http://semver.org/
 

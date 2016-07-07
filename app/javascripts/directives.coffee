@@ -85,16 +85,23 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
           # slider compile must be coordinated with the image display compile.
           # The slider create must then be deferred as a callback after load
           # completes.
+          rangeMax = scope.timeSeries.image.slices.size
+          # Create the slider. Pips are placed at each end of the slider (at
+          # the 0% and 100% positions) and tick marks are added at a density of
+          # one per slider step.
+          #
+          # TODO - Add tooltip to show current slider value.
+          #
           noUiSlider.create sliderAxialPlane,
             start: [ scope.slice.sliceNbr ]
             step: 1
             range:
               'min': 1
-              'max': scope.timeSeries.image.slices.size
+              'max': rangeMax
             pips:
               mode: 'positions'
               values: [0, 100]
-              density: 9
+              density: 100 / (rangeMax - 1)
 
           # When the slider is dragged, get the new slider position and update
           # the image.
@@ -141,7 +148,10 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
         # the create function from being called twice, which may result from an
         # Angular digest anomaly.
         if !sliderTimeSeries.noUiSlider
-          # Configure the slider.
+          rangeMax = scope.timeSeries.image.volumes.size
+          # Create the slider. Pips are placed at each end of the slider (at
+          # the 0% and 100% positions) and tick marks are added at a density of
+          # one per slider step.
           #
           # TODO - Add tooltip to show current slider value.
           #
@@ -150,11 +160,11 @@ define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers
             step: 1
             range:
               'min': 1
-              'max': scope.timeSeries.image.volumes.size
+              'max': rangeMax
             pips:
               mode: 'positions'
               values: [0, 100]
-              density: 4
+              density: 100 / (rangeMax - 1)
 
           # When the slider is dragged, get the new slider position and update
           # the image.

@@ -57,6 +57,12 @@ class Findable
     # @returns the result of calling *elt* on the current
     #   object with the given locator
     next = (current, locator) ->
+      # if current.element
+      #   console.log(">> fndbl n c: #{ current } #{ locator }")
+      # else
+      #   console.log(">>!!!!!!!!! fndbl n c: #{ current } #{ _.keysIn(current) }")
+      #
+      #
       current.element(locator)
 
     # Convert the selectors to locators.
@@ -79,9 +85,17 @@ class Findable
   # @returns a promise which resolves to the target
   #   Findable array
   findAll: (selectors...) ->
-    @_findAll(selectors...).then (target) ->
-      target.map(addFindableMixin)
-    
+    elts = @_findAll(selectors...)
+    # Work around the following bug:
+    # * Protractor 3.x all(...).map(...) hangs after the first
+    #   element is mapped. The work-around is to get the
+    #   all(...).count() and get each element by index.
+    # Thus, the following hangs:
+    #    @_findAll(selectors...).map(addFindableMixin)
+    # TODO - revisit this in 2017.
+    elts.count().then (n) ->
+      (addFindableMixin(elts.get(i)) for i in _.range(n))
+
   # @param selectors the search condition
   # @returns a promise which resolves to the target
   #   WebElement array
@@ -128,7 +142,7 @@ class Findable
     # @returns the URL of the page navigated from
     restore = (prev_url) ->
       # The current URL.
-      browser.getLocationAbsUrl().then (curr_url) ->
+      browser.getCurrentUrl().then (curr_url) ->
         # If the location changed, then navigate back to
         # the previous page.
         if curr_url == prev_url
@@ -139,9 +153,10 @@ class Findable
             curr_url
 
     # Capture the current location.
-    browser.getLocationAbsUrl().then (url) =>
+    browser.getCurrentUrl().then (url) =>
+      url
       # Click the button and resolve to the home page.
-      @click().then -> restore(url)
+      #@click().then -> restore(url)
   
   # Finds a nested hyperlink. The hyperlink is the href
   # attribute of an anchor element (<a href=...></a>) contained
@@ -367,7 +382,19 @@ class Table extends Findable
 # @return an empty new mixin object which delegates to
 #   the given object
 addMixin = (mixin, obj) ->
-  _.extend(new mixin(), obj)
+  extended = _.extend(new mixin(obj), obj)
+  # Work around the following bug:
+  # * lodash only copies the functions defined in the superclass
+  #   WebdriverWebElement of an ElementFinder. The functions defined
+  #   in the ElementFinder class itself are ignored.
+  #   This is a bizarre behavior that only occurs in this case and
+  #   is inexplicable from inspected the lodash source code.
+  # TODO - file and track a lodash bug.
+  for key of obj
+    if _.isUndefined(extended[key])
+      extended[key] = obj[key]
+
+  extended
 
 # Adds Findable methods to the given WebElement.
 addFindableMixin = _.partial(addMixin, Findable)

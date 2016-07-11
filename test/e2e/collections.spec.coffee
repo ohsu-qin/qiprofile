@@ -12,32 +12,37 @@ class CollectionListPage extends Page
     # Call the Page superclass initializer with the helpShown
     # flag set to true, since the help box is displayed on
     # this landing page.
-    super('/qiprofile/QIN_Test',  true)
+    super(Page.HOME,  true)
 
   # @returns the collection {name, description, url} object
   #   array promise
   collections: ->
-    @findAll(By.repeater('collection in collections'), 'li')
-      .then (rows) =>
-        rows.map (row) =>
-          @_parse_row(row)
-      .then (rows) =>
-         webdriver.promise.all(rows)
+    @findAll('qi-collections-collection').then (rows) =>
+      resolvers = rows.map(@_parse_row)
+      Promise.all(resolvers)
 
-  # @returns the collection {name, description, url} promise
-  _parse_row: (row) ->
-    # The detail hyperlink.
-    nameEltFinder = row.find(By.binding('collection.name'))
-    detailFinder = nameEltFinder.then (elt) ->
-      if elt then elt.getAttribute('href') else null
-    nameFinder = nameEltFinder.then (elt) -> elt.text()
-    descFinder = row.text(By.binding('collection.description'))
-    infoFinder = row.find('button')
-    finders = [detailFinder, nameFinder, descFinder, infoFinder]
-    webdriver.promise.all(finders).then (resolved) ->
-      [detail, name, desc, info] = resolved
-      {name: name, description: desc, info: info, detail: detail}
+  # @returns the collection {name, description, url} promises
+  _row_finders: (row) ->
+    name: row.text('.qi-collection-name')
+    description: row.text('span')
+    info: row.find('button')
 
+  # @returns a promise which resolves to the collection
+  #   {name, description, url}
+  _parse_row: (row) =>
+    accumulate = (accum, pair) ->
+      [property, value] = pair
+      accum[property] = value
+      accum
+
+    finders = @_row_finders(row)
+    resolvers = _.pairs(finders).map (pair) ->
+      [property, finder] = pair
+      finder.then (resolved) ->
+        [property, resolved]
+
+    Promise.all(resolvers).then (resolved) =>
+      resolved.reduce(accumulate, {})
 
 describe 'E2E Testing Collection List', ->
   page = null
@@ -78,38 +83,38 @@ describe 'E2E Testing Collection List', ->
           .to.eventually.include(Page.SUGGESTION_BOX_URL)
 
   describe 'Collections', ->
-    collectionsFinder = null
-
+    rows = null
+    
     before ->
-      collectionsFinder = page.collections()
+      page.collections().then (colls) ->
+        rows = colls
 
     it 'should display the Breast and Sarcoma collections', ->
-      names = collectionsFinder.then (collections) ->
-        _.map(collections, 'name')
       # The collections are sorted. The comparison is the Chai
       # deep equals operator eql rather than equal.
+      names = _.map(rows, 'name')
       expect(names, 'The collection names are incorrect')
-        .to.eventually.eql(['Breast', 'Sarcoma'])
+        .to.eql(['Breast', 'Sarcoma'])
 
     it 'should have an info button', ->
-      collectionsFinder.then (collections) ->
-        for coll in collections
-          expect(coll.info, "The #{ coll.name } collection is" +
-                            " missing an info button")
-            .to.exist
+      for row, i in rows
+        expect(row.info, "The #{ row.name } collection #{ i }" +
+                         " is missing an info button")
+          .to.exist
 
-    it 'should link to the collection detail', ->
-      collectionsFinder.then (collections) ->
-        for coll in collections
-          expect(coll.detail, "The #{ coll.name } collection is" +
-                            " missing a detail hyperlink")
-            .to.exist
-          # The collection detail URL is .../quip/<collection name>/....
-          regex = /.*\/quip\/(\w+)/
-          match = regex.exec(coll.detail)
-          expect(match, "The #{ coll.name } collection detail" +
-                            " hyperlink is malformed: #{ coll.detail }")
-            .to.exist
-          expect(match[1], "The #{ coll.name } collection detail" +
-                         " hyperlink is incorrect: #{ coll.detail }")
-            .to.equal(coll.name.toLowerCase())
+    xit 'should link to the collection detail', ->
+      # TODO - Enable when the detail link is enabled.
+      for row, i in rows
+        expect(row.detail, "The #{ row.name } collection #{ i }" +
+                           " is missing a detail hyperlink")
+          .to.exist
+        # The collection detail URL is
+        # .../qiprofile/<project>/<collection>/....
+        regex = RegExp(HOME + '/(\w+)')
+        match = regex.exec(row.detail)
+        expect(match, "The #{ row.name } collection detail" +
+                          " hyperlink is malformed: #{ row.detail }")
+          .to.exist
+        expect(match[1], "The #{ row.name } collection detail" +
+                       " hyperlink is incorrect: #{ row.detail }")
+          .to.equal(row.name.toLowerCase())

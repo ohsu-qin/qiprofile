@@ -14,7 +14,7 @@ exec cmd, (error) ->
   if error
     throw new Error "Test preparation seed script unsuccessful: #{ error }"
 
-# The web app root.
+# The web app partials root.
 root = "#{ __dirname }/../../../public"
 
 # The relative link source test images.
@@ -28,6 +28,6 @@ dest = "#{ root }/data"
 # (http://nodejs.org/api/fs.html#fs_class_fs_stats),
 # this is a proper use case for the exists method.
 unless fs.existsSync(dest)
-  if not fs.existsSync(root)
+  unless fs.existsSync(root)
     throw new Error "Web app root not found: #{ root }"
   fs.symlinkSync(src, dest)

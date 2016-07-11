@@ -74,7 +74,7 @@ class Page extends Findable
     # @returns the Home button
     findHomeButton = =>
       # The home button is the parent of the home icon.
-      @find('button .glyphicon-home', '..')
+      @find('qi-go-home', 'button')
 
     findHomeButton().then (btn) ->
       expect(btn, 'The home button is missing').to.exist
@@ -84,7 +84,7 @@ class Page extends Findable
   @property help: ->
     # Finds the help button.
     findButton = =>
-      @find("[ng-controller='HelpCtrl']")
+      @find('qi-toggle-help', 'button')
     
     @find('.qi-help').then (helpBox) =>
       expect(helpBox, 'The help box is missing').to.exist
@@ -108,7 +108,10 @@ class Page extends Findable
 # The help suggestion box hyperlink constant.
 Page.SUGGESTION_BOX_URL = 'http://qiprofile.idea.informer.com'
 
-# The home page hyperlink pattern.
-Page.HOME_URL_PAT = /.*\/quip\?project=QIN_Test$/
+# The landing page and app URL root.
+Page.HOME = '/qiprofile/QIN_Test'
+
+# The regexp to match a page that ends at home.
+Page.HOME_URL_PAT = new RegExp("http://[-\\w]+:\\d+#{ Page.HOME }$")
 
 module.exports = Page

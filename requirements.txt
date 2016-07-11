@@ -1,3 +1,4 @@
 # This is an advisory requirements file which specifies the
 # REST server version compatible with this qiprofile version.
+qiprofile-rest-client~=5.12.1
 qiprofile-rest~=5.7.5

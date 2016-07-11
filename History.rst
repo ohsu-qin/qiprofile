@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+1.1.1 / 2016-07-11
+-------------------
+* Alpha release.
+
 0.15.1 / 2016-03-22
 -------------------
 * Refactor Router into submodules.

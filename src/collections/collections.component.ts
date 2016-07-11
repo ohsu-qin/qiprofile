@@ -11,8 +11,9 @@ import { GoHomeComponent } from '../common/go-home.component.ts';
 import { ToggleHelpComponent } from '../common/toggle-help.component.ts';
 import { CollectionService } from './collection.service.ts';
 import { CollectionComponent } from './collection.component.ts';
-import { HelpComponent } from './help.component.ts';
+import { HelpComponent } from '../common/help.component.ts';
 import { HelpService } from '../common/help.service.ts';
+import help from './collections.help.md';
 import { Observable } from 'rxjs';
 
 @Component({
@@ -26,9 +27,13 @@ export class CollectionsComponent implements OnInit, OnActivate {
   project: string;
   
   collections: Observable<Object[]>;
+  
+  help: string;
 
   constructor(private dataService: CollectionService,
-              private helpService: HelpService) { }
+              private helpService: HelpService) {
+      this.help = help;
+  }
 
   ngOnInit() {
     this.collections = this.dataService.getCollections(this.project).map(

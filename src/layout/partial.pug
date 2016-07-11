@@ -9,5 +9,7 @@ include header
 // The main partial content.
 .row.qi-main
   .qi-content
-    qi-help
+    // Every page component is responsible for importing its
+    // help text into its help property.
+    qi-help([help]="help")
     block content

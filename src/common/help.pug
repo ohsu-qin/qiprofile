@@ -1,11 +1,16 @@
 .qi-help([hidden]="!showHelp", (close)="toggleHelp()")
   .qi-help-close.glyphicon.glyphicon-remove((click)="toggleHelp()")
-  qi-help-text.qi-help-text
+  // The parent component imports its help file into its help variable.
+  // The layout/partial.pug qi-help element then binds this help variable
+  // to the HelpComponent directive for use in this partial template.
+  // [innerHTML] includes the help content as HTML rather than a
+  // plain string.
+  .qi-help-text([innerHTML]="help")
   .qi-contact-info
-     | We welcome your questions and comments placed in our
-     a(href="http://qiprofile.idea.informer.com")
-       span.qi-over-under
-         span.over Sugg
-         span.under Qu
-       | estion Box
-     | .
+    | We welcome your questions and comments placed in our
+    a(href="http://qiprofile.idea.informer.com")
+      span.qi-over-under
+        span.over Sugg
+        span.under Qu
+      | estion Box
+    | .

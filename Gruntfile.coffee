@@ -244,6 +244,9 @@ module.exports = (grunt) ->
   # Start the server with debug turned on.
   grunt.registerTask 'start:dev', ['express:dev', 'watch']
 
+  # Start the server with debug turned on.
+  grunt.registerTask 'start:test', ['express:test', 'watch']
+
   # Start the server in production mode.
   grunt.registerTask 'start:prod', ['express:prod']
 

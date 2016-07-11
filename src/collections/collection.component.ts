@@ -7,4 +7,8 @@ import { Component, Input } from '@angular/core';
 
 export class CollectionComponent {
   @Input() collection;
+  
+  visitInfo() {
+    window.open(this.collection.url);
+  }
 }

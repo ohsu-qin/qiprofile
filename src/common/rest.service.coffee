@@ -1,6 +1,8 @@
 `import * as _ from "lodash"`
 
 ###*
+ * REST utility functions.
+ *
  * @class Rest
  * @static
 ###

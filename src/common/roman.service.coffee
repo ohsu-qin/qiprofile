@@ -65,6 +65,8 @@ THOUSANDS = genRomans('M', '', '')
 ROMANS = [ONES, TENS, HUNDREDS, THOUSANDS]
 
 ###*
+ * @method incrementMax
+ * @private
  * @return the input `sum` shifted left one unit place
  *   and incremented by the number of roman numerals for
  *   the given `place`.
@@ -118,8 +120,9 @@ Roman =
      * the digits array.
      *
      * @method prepend
+     * @private
      * @param roman the roman numeral to augment
-     * @param place the ROMANS place index
+     * @param place the roman numeral place index
      * @return the augmented roman numeral
     ###
     prepend = (roman, place) ->

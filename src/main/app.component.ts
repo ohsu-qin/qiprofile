@@ -31,14 +31,16 @@ import { HelpService } from '../common/help.service.ts';
  * * Provides the `HelpService` for injection by subcomponents
  * * Includes router directives for use by subcomponents
  * * Defines the main `<qi-app></qi-app>` HTML body context
- * * Navigates to the `CollectionsComponent` on start-up
+ * * Navigates to the {{#crossLink "CollectionsComponent"}}{{/crossLink}}
+ *   on start-up
  *
  * @class AppComponent
  * @constructor
  */
 export class AppComponent implements OnInit {
   /**
-   * Captures the router and location for use in the `ngOnInit`
+   * Captures the router and location for use in the
+   * {{#crossLink "AppComponent/ngOnInit:method"}}{{/crossLink}}
    * initialization callback.
    *
    * @method constructor

@@ -117,10 +117,17 @@ module.exports = (grunt) ->
 
     yuidoc:
       compile:
+        name: '<%= pkg.name %> API',
+        description: '<%= pkg.description %>',
+        version: '<%= pkg.version %>',
+        url: '<%= pkg.homepage %>',
+        configfile: 'doc/yuidoc.json'
         options:
           paths: 'build/src'
-          extension: '.ts,.js'
           outdir: 'build/doc/api'
+          themedir: "node_modules/yuidoc-ember-cli-theme"
+          helpers: ['node_modules/yuidoc-ember-cli-theme/helpers.js']
+          extension: ".ts,.js"
 
     cssmin:
       options:

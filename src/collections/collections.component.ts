@@ -23,11 +23,33 @@ import { Observable } from 'rxjs';
   providers: [CollectionService]
 })
 
+/**
+ * The Collection List main component.
+ *
+ * @class CollectionsComponent
+ * @main
+ */
 export class CollectionsComponent implements OnInit, OnActivate {
+  /**
+   * The project name.
+   *
+   * @property project {string}
+   */
   project: string;
   
+  /**
+   * An Observable that resolves to the collection REST objects.
+   *
+   * @property collections {Observable}
+   */
   collections: Observable<Object[]>;
   
+  
+  /**
+   * The help content.
+   *
+   * @property help {string}
+   */
   help: string;
 
   constructor(private dataService: CollectionService,
@@ -35,15 +57,27 @@ export class CollectionsComponent implements OnInit, OnActivate {
       this.help = help;
   }
 
+  /**
+   * Obtains the collection objects from the data service and sorts
+   * them by collection name.
+   *
+   * @method ngOnInit
+   */
   ngOnInit() {
     this.collections = this.dataService.getCollections(this.project).map(
       collections => _.sortBy(collections, 'name')
     );
   }
 
-  // At startup, the router navigates to the Home destination.
-  // If that is the case, then show the help and clear the _initialShowHelp
-  // flag. Otherwise, clear the help whenever the route changes.
+  /**
+   * At startup, the router navigates to the Home destination.
+   * If that is the case, then show the help.
+   * Otherwise, clear the help whenever the route changes.
+   *
+   * @method routerOnActivate
+   * @param curr the current route
+   * @param [prev] the most recent route, if any
+   */
   routerOnActivate(curr: RouteSegment, prev?: RouteSegment) {
     this.project = curr.getParam('project');
     // There must be a project.

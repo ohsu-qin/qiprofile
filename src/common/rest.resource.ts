@@ -11,6 +11,7 @@ import Rest from './rest.service.coffee';
 
 @Injectable()
 
+// The base params. Subclasses augment these with the path.
 @ResourceParams({
     url: '/qirest',
     responseInterceptor: observable => {
@@ -25,11 +26,29 @@ import Rest from './rest.service.coffee';
     }
 })
 
+/**
+ * The abstract base class for a REST resource. The subclass is
+ * required to augment the `@ResourceParams` with a path.
+ *
+ * @class RestResource
+ */
 export class RestResource extends Resource {
+  /**
+   * @method findOne
+   * @param criterion {string} the search criterion
+   * @return {Observable} an observable which resolves to the
+   *   single search result object
+   */
   findOne(criterion): Observable<Object> {
     return this.get(criterion).$observable;
   }
 
+  /**
+   * @method find
+   * @param criterion {string} the search criterion
+   * @return {Observable} an observable which resolves to the
+   *   array of search result objects
+   */
   find(criterion: Object): Observable<Object[]> {
     return this.query(criterion).$observable;
   }

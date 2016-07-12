@@ -8,7 +8,18 @@ import { CollectionService } from './collection.service.ts';
 import { CollectionsComponent } from './collections.component.ts';
 import { HelpService } from '../common/help.service.ts';
 
+/**
+ * The test mock for a {{#crossLink "CollectionService"}}{{/crossLink}}.
+ *
+ * @class CollectionServiceStub
+ */
 class CollectionServiceStub {
+  /**
+   *
+   * @method getCollections
+   * @param project {string} the project name
+   * @return {Observable} the mock collection objects
+   */
   getCollections(project: string): Observable<Object[]> {
     let values = [{name: 'Sarcoma'}, {name: 'Breast'}];
     return Observable.create((subscriber) => subscriber.next(values));

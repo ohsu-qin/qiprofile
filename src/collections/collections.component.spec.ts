@@ -4,7 +4,7 @@ import {
   describe, it, inject, beforeEachProviders, expect
 } from '@angular/core/testing';
 
-import { CollectionService } from './collection.service.ts';
+import { CollectionService } from '../collection/collection.service.ts';
 import { CollectionsComponent } from './collections.component.ts';
 import { HelpService } from '../common/help.service.ts';
 

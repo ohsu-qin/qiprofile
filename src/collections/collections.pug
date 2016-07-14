@@ -8,4 +8,4 @@ block content
     p(*ngIf="isEmpty() | async")
       | The {{ project }} collection {{ collections.length }} does not have any visits.
     li(*ngFor="let coll of collections | async")
-      qi-collections-collection([collection]="coll")
+      qi-collection-item([collection]="coll")

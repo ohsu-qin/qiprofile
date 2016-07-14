@@ -9,8 +9,8 @@ import * as _ from 'lodash';
 
 import { GoHomeComponent } from '../common/go-home.component.ts';
 import { ToggleHelpComponent } from '../common/toggle-help.component.ts';
-import { CollectionService } from './collection.service.ts';
-import { CollectionComponent } from './collection.component.ts';
+import { CollectionService } from '../collection/collection.service.ts';
+import { CollectionItemComponent } from './collection-item.component.ts';
 import { HelpComponent } from '../common/help.component.ts';
 import { HelpService } from '../common/help.service.ts';
 import help from './collections.help.md';
@@ -19,7 +19,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'qi-collections',
   templateUrl: '/public/html/collections/collections.html',
-  directives: [GoHomeComponent, ToggleHelpComponent, CollectionComponent, HelpComponent],
+  directives: [GoHomeComponent, ToggleHelpComponent, CollectionItemComponent, HelpComponent],
   providers: [CollectionService]
 })
 

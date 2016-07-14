@@ -1,17 +1,17 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  selector: 'qi-collections-collection',
-  templateUrl: '/public/html/collections/collection.html'
+  selector: 'qi-collection-item',
+  templateUrl: '/public/html/collection/collection-item.html'
 })
 
 /**
  * The Collections List collection item component
  *
  * @module collections
- * @class CollectionComponent
+ * @class CollectionItemComponent
  */
-export class CollectionComponent {
+export class CollectionItemComponent {
   @Input() collection;
   
   /**

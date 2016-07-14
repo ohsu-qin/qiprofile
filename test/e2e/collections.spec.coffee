@@ -17,7 +17,7 @@ class CollectionListPage extends Page
   # @returns the collection {name, description, url} object
   #   array promise
   collections: ->
-    @findAll('qi-collections-collection').then (rows) =>
+    @findAll('qi-collection-item').then (rows) =>
       resolvers = rows.map(@_parse_row)
       Promise.all(resolvers)
 

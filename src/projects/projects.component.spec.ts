@@ -4,13 +4,14 @@ import {
   describe, it, inject, beforeEachProviders, expect
 } from '@angular/core/testing';
 
-import { ProjectService } from './project.service.ts';
+import { ProjectService } from '../project/project.service.ts';
 import { ProjectsComponent } from './projects.component.ts';
 import { HelpService } from '../common/help.service.ts';
 
 /**
  * The test mock for a {{#crossLink "ProjectService"}}{{/crossLink}}.
  *
+ * @module projects
  * @class ProjectServiceStub
  */
 class ProjectServiceStub {
@@ -29,11 +30,12 @@ class ProjectServiceStub {
 
 /**
  * The stunt showHelp flag. Note that, unlike
- * {{#crossLink "CollectionComponentSpec"}}{{/crossLink}},
+ * {{#crossLink "CollectionItemComponentSpec"}}{{/crossLink}},
  * this help stub must have the flag, since it is set in
  * the {{#crossLink "ProjectComponent"}}{{/crossLink}}
  * constructor rather than an Angular call-back method.
  *
+ * @module projects
  * @class ProjectsHelpServiceStub
  */
 class ProjectsHelpServiceStub {

@@ -7,9 +7,9 @@ import { CollectionResource } from './collection.resource.ts';
 @Injectable()
 
 /**
- * The collections data access service.
+ * The collection data access service.
  *
- * @module collections
+ * @module collection
  * @class CollectionService
  */
 export class CollectionService {

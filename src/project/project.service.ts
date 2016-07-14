@@ -6,6 +6,12 @@ import { ProjectResource } from './project.resource.ts';
 
 @Injectable()
 
+/**
+ * The project data access service.
+ *
+ * @module project
+ * @class ProjectService
+ */
 export class ProjectService {
   constructor(private resource: ProjectResource) { }
 

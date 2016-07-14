@@ -9,6 +9,7 @@ import { RestResource } from '../common/rest.resource.ts';
 /**
  * The project REST resource.
  *
+ * @module projects
  * @class ProjectResource
  * @extends RestResource
  */

@@ -21,7 +21,7 @@ import { HelpService } from '../common/help.service.ts';
 })
 
 @Routes([
-  {path: '/qiprofile', component: ProjectsComponent},
+  {path: '/qiprofile/projects', component: ProjectsComponent},
   {path: '/qiprofile/:project', component: CollectionsComponent}
 ])
 

@@ -6,8 +6,6 @@ block billboard
 block content
   ul.qi-main-list
     p(*ngIf="isEmpty() | async")
-      | No {{ projects }} were found.
+      | No projects were found.
     li(*ngFor="let project of projects | async")
-      a(
-        (click)="visit(qiprofile.project({project: collection.project, collection: collection.name.toLowerCase()}))"
-      )
+      qi-project-item([project]="project")

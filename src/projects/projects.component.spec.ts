@@ -22,7 +22,10 @@ class ProjectServiceStub {
    * @return {Observable} the mock project objects sequence
    */
   getProjects(project: string): Observable<Object[]> {
-    let values = [{name: 'QIN_Test'}, {name: 'QIN'}];
+    let values = [
+      {name: 'QIN_Test', description: 'Test'},
+      {name: 'QIN', description: 'Production'}
+    ];
 
     return Observable.of(values);
   }

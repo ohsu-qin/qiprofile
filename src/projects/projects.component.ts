@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 
 import { GoHomeComponent } from '../common/go-home.component.ts';
 import { ToggleHelpComponent } from '../common/toggle-help.component.ts';
+import { ProjectItemComponent } from './project-item.component.ts';
 import { ProjectService } from '../project/project.service.ts';
 import { HelpComponent } from '../common/help.component.ts';
 import { HelpService } from '../common/help.service.ts';
@@ -17,7 +18,8 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'qi-projects',
   templateUrl: '/public/html/projects/projects.html',
-  directives: [GoHomeComponent, ToggleHelpComponent, ProjectComponent, HelpComponent],
+  directives: [ProjectItemComponent, GoHomeComponent, ToggleHelpComponent,
+               HelpComponent],
   providers: [ProjectService]
 })
 
@@ -34,6 +36,15 @@ export class ProjectsComponent implements OnInit {
    * @property projects {Observable}
    */
   projects: Observable<Object[]>;
+
+  /**
+   * The Project List page project name is `projects`. This is only
+   * used by the Home button which turns home into a no-op when on
+   * this page.
+   *
+   * @property project {string}
+   */
+  project: string = 'projects';
   
   /**
    * The help content.
@@ -46,6 +57,16 @@ export class ProjectsComponent implements OnInit {
               private helpService: HelpService) {
       this.help = help;
       this.helpService.showHelp = true;
+  }
+  
+  /**
+   * @method isEmpty
+   * @return {Observable<boolean>} whether there any projects
+   */
+  isEmpty(): Observable<boolean> {
+    return this.projects.map(
+      array => array.length === 0
+    );
   }
 
   /**

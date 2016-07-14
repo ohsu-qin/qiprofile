@@ -25,3 +25,8 @@ Every page in this application has a
 help button in the banner like the one above. Clicking the button toggles
 the help display. The help box can also be dismissed by clicking on the
 upper right <span class="glyphicon glyphicon-remove"></span> button.
+
+Home
+----
+Every page also has a <span class="glyphicon glyphicon-home"></span> home
+button that returns to the application landing page.

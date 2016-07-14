@@ -23,7 +23,7 @@ class CollectionListPage extends Page
 
   # @returns the collection {name, description, url} promises
   _row_finders: (row) ->
-    name: row.text('.qi-collection-name')
+    name: row.text('a')
     description: row.text('span')
     info: row.find('button')
 

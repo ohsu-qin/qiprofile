@@ -1,0 +1,13 @@
+extends ../layout/partial
+
+block billboard
+  | Projects
+
+block content
+  ul.qi-main-list
+    p(*ngIf="isEmpty() | async")
+      | No {{ projects }} were found.
+    li(*ngFor="let project of projects | async")
+      a(
+        (click)="visit(qiprofile.project({project: collection.project, collection: collection.name.toLowerCase()}))"
+      )

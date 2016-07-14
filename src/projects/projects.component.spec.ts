@@ -1,0 +1,80 @@
+import { Observable } from 'rxjs';
+import { provide } from '@angular/core';
+import {
+  describe, it, inject, beforeEachProviders, expect
+} from '@angular/core/testing';
+
+import { ProjectService } from './project.service.ts';
+import { ProjectsComponent } from './projects.component.ts';
+import { HelpService } from '../common/help.service.ts';
+
+/**
+ * The test mock for a {{#crossLink "ProjectService"}}{{/crossLink}}.
+ *
+ * @class ProjectServiceStub
+ */
+class ProjectServiceStub {
+  /**
+   *
+   * @method getProjects
+   * @param project {string} the project name
+   * @return {Observable} the mock project objects sequence
+   */
+  getProjects(project: string): Observable<Object[]> {
+    let values = [{name: 'QIN_Test'}, {name: 'QIN'}];
+
+    return Observable.of(values);
+  }
+}
+
+/**
+ * The stunt showHelp flag. Note that, unlike
+ * {{#crossLink "CollectionComponentSpec"}}{{/crossLink}},
+ * this help stub must have the flag, since it is set in
+ * the {{#crossLink "ProjectComponent"}}{{/crossLink}}
+ * constructor rather than an Angular call-back method.
+ *
+ * @class ProjectsHelpServiceStub
+ */
+class ProjectsHelpServiceStub {
+  showHelp: boolean = false;
+}
+
+beforeEachProviders(() => {
+  return [
+    ProjectsComponent,
+    provide(ProjectService, {useClass: ProjectServiceStub}),
+    provide(HelpService, {useClass: ProjectsHelpServiceStub})
+  ];
+});
+
+// A simple heartbeat test suite.
+describe('Projects', () => {
+  let component;
+  
+  beforeEach(inject(
+    [ProjectsComponent],
+    (_component: ProjectsComponent) => {
+      // Manually init the component.
+      _component.ngOnInit();
+      component = _component;
+    }
+  ));
+
+  it('should sort the projects', inject(
+    [ProjectService],
+    (dataService: ProjectService) => {
+      // The mocked projects are in reverse sort order.
+      let expected;
+      dataService.getProjects().subscribe(reversed => {
+        expected = reversed.reverse();
+      });
+      // Compare to the component projects property.
+      component.projects.subscribe(
+        actual => {
+          expect(actual, 'Projects are incorrect').to.eql(expected);
+        }
+      );
+    }
+  ));
+});

@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, Routes, ROUTER_DIRECTIVES } from '@angular/router';
 
+import { ProjectsComponent } from '../projects/projects.component.ts';
 import { CollectionsComponent } from '../collections/collections.component.ts';
 import { HelpService } from '../common/help.service.ts';
 
@@ -20,6 +21,7 @@ import { HelpService } from '../common/help.service.ts';
 })
 
 @Routes([
+  {path: '/qiprofile', component:ProjectsComponent}
   {path: '/qiprofile/:project', component: CollectionsComponent}
 ])
 

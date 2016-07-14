@@ -1,6 +1,4 @@
-a.qi-inline-heading(
-  (click)="visit(qiprofile.collection.detail({project: collection.project, collection: collection.name.toLowerCase()}))"
-)
+a.qi-inline-heading((click)="visitCollectionDetail()")
   | {{ collection.name }}
 span : {{ collection.description }}
 button.btn.btn-med.qi-profile-btn((click)="visitInfo()")

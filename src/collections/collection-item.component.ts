@@ -2,7 +2,7 @@ import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'qi-collection-item',
-  templateUrl: '/public/html/collection/collection-item.html'
+  templateUrl: '/public/html/collections/collection-item.html'
 })
 
 /**

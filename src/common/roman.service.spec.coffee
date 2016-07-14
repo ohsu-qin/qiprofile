@@ -2,7 +2,7 @@
 
 `import Roman from "./roman.service.coffee"`
 
-describe 'Unit Testing the Roman Service', ->
+describe 'The Roman Service', ->
   it 'should convert a string or an integer to a roman numeral', ->
     ONES = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX']
 

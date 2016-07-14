@@ -1,6 +1,6 @@
 `import Rest from "./rest.service.coffee"`
 
-describe 'Unit Testing the REST Service', ->
+describe 'The REST Service', ->
   describe 'where', ->
     it 'should quote strings', ->
       input = a: 'a'

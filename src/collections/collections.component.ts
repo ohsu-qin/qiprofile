@@ -56,6 +56,10 @@ export class CollectionsComponent implements OnInit, OnActivate {
       this.help = help;
   }
   
+  /**
+   * @method isEmpty
+   * @return whether there any collections
+   */
   isEmpty(): Observable<boolean> {
     return this.collections.map(
       array => array.length === 0

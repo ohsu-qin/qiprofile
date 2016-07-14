@@ -6,4 +6,11 @@ import { RestResource } from '../common/rest.resource.ts';
     path: '/imaging-collection/{id}'
 })
 
+/**
+ * The collection REST resource.
+ *
+ * @module collections
+ * @class CollectionResource
+ * @extends RestResource
+ */
 export class CollectionResource extends RestResource {}

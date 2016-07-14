@@ -44,7 +44,6 @@ export class CollectionsComponent implements OnInit, OnActivate {
    */
   collections: Observable<Object[]>;
   
-  
   /**
    * The help content.
    *
@@ -56,6 +55,12 @@ export class CollectionsComponent implements OnInit, OnActivate {
               private helpService: HelpService) {
       this.help = help;
   }
+  
+  isEmpty(): Observable<boolean> {
+    return this.collections.map(
+      array => array.length === 0
+    );
+  }
 
   /**
    * Obtains the collection objects from the data service and sorts
@@ -64,9 +69,12 @@ export class CollectionsComponent implements OnInit, OnActivate {
    * @method ngOnInit
    */
   ngOnInit() {
-    this.collections = this.dataService.getCollections(this.project).map(
-      collections => _.sortBy(collections, 'name')
-    );
+    // The unsorted collection objects.
+    let unsorted: Observable = this.dataService.getCollections(this.project);
+    // A function to sort the collections by name.
+    let sortByName = _.partialRight(_.sortBy, 'name');
+    // Sort the collections.
+    this.collections = unsorted.map(sortByName);
   }
 
   /**

@@ -5,6 +5,7 @@ import { Injectable } from '@angular/core';
 /**
  * This service encapsulates the `showHelp` flag.
  *
+ * @module common
  * @class HelpService
  */
 export class HelpService {

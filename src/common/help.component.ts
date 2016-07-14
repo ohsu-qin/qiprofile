@@ -7,6 +7,12 @@ import { HelpService } from './help.service.ts';
   templateUrl: '/public/html/common/help.html'
 })
 
+/**
+ * The help panel component.
+ *
+ * @module common
+ * @class HelpComponent
+ */
 export class HelpComponent {
   @Input() help: string;
   

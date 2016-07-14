@@ -6,6 +6,12 @@ import { Router } from '@angular/router';
   templateUrl: '/public/html/common/go-home.html'
 })
 
+/**
+ * The home button component.
+ *
+ * @module common
+ * @class GoHomeComponent
+ */
 export class GoHomeComponent {
   @Input() project: string;
 

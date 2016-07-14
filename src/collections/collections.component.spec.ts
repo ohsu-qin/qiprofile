@@ -11,6 +11,7 @@ import { HelpService } from '../common/help.service.ts';
 /**
  * The test mock for a {{#crossLink "CollectionService"}}{{/crossLink}}.
  *
+ * @module collections
  * @class CollectionServiceStub
  */
 class CollectionServiceStub {

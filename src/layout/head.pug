@@ -8,9 +8,9 @@ head
 
   base(href='/')
 
-  // Bootstrap into jspm.
-  script(src='jspm_packages/system.src.js')
-  script(src='jspm.config.js')
+  // Fold the jspm bootstrap into the main app page.
+  // Non-app pages, e.g. the error page, can ignore this.
+  block bootstrap
 
   link(href='public/stylesheets/app.css', rel='stylesheet')
   link(href='public/media/favicon.ico', rel='shortcut icon', type='image/x-icon')

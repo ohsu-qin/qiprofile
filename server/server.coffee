@@ -99,30 +99,31 @@ app.use '/qirest', rest(restUrl)
 app.get '/qiprofile/*', (req, res) ->
   res.sendFile "#{ root }/index.html"
 
-# Nothing else responded; this must be an error.
-app.use errorHandler.httpError(404)
-
-# Enable the error handler.
-errorHandlerConfig =
-  static:
-    '404': "#{ root }/public/html/common/404.html"
-app.use errorHandler(errorHandlerConfig)
-
-# Trigger the error handler.
-app.use (err, req, res, next) ->
-  # Print the error.
-  console.log("Server error: #{ req.body.message }")
-  console.log("See the log at #{ logFile }")
-  # Log the error.
-  req.log.info(req.body)
-  # Pass on to the error handler enabled in the Eve callback
-  # below.
-  next(err)
-
-  # Development error handling.
-if env is 'development'
-  app.use errorHandler()
-  app.set 'pretty', true
+# TODO - enable error handling below.
+# # Log the error.
+# app.use (err, req, res, next) ->
+#   # Print the error.
+#   console.log("Server error: #{ req.body.message }")
+#   console.log("See the log at #{ logFile }")
+#   # Log the error.
+#   req.log.info(req.body)
+#   # Pass on to the error handler enabled in the Eve callback
+#   # below.
+#   next(err)
+#
+# # Nothing else responded; this must be an error.
+# app.use errorHandler.httpError(404)
+#
+# # Enable the error handler.
+# errorHandlerConfig =
+#   static:
+#     '404': "#{ root }/public/html/common/404.html"
+# app.use errorHandler(errorHandlerConfig)
+#
+# # Development error handling.
+# if env is 'development'
+#   app.use errorHandler()
+#   app.set 'pretty', true
 
 # The test port.
 if env is 'test'

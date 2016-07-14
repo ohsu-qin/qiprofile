@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import RestService from '../common/rest.service.coffee';
 import { ProjectResource } from './project.resource.ts';
 
 @Injectable()

@@ -4,7 +4,6 @@
  * @module projects
  */
 import { Component, OnInit } from '@angular/core';
-import { RouteSegment, OnActivate } from '@angular/router';
 import * as _ from 'lodash';
 
 import { GoHomeComponent } from '../common/go-home.component.ts';
@@ -28,7 +27,7 @@ import { Observable } from 'rxjs';
  * @class ProjectsComponent
  * @main
  */
-export class ProjectsComponent implements OnInit, OnActivate {
+export class ProjectsComponent implements OnInit {
   /**
    * An Observable that resolves to the project REST objects.
    *

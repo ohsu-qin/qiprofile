@@ -14,7 +14,7 @@ favicon = require 'serve-favicon'
 bodyParser = require 'body-parser'
 serveStatic = require 'serve-static'
 methodOverride = require 'method-override'
-errorHandler = require 'errorhandler'
+errorHandler = require 'express-error-handler'
 watcher = require 'chokidar-socket-emitter'
 
 # The port assignments.
@@ -30,12 +30,12 @@ root = path.join(__dirname, '..')
 # The REST request handler.
 rest = require './rest'
 
-# The Express server.
-server = express()
+# The Express server app.
+app = express()
 # Set the port.
-server.set 'port', process.env.PORT or PORT
+app.set 'port', process.env.PORT or PORT
 # The run environment.
-env = server.get('env') or 'production'
+env = app.get('env') or 'production'
 
 # @returns /var/log/qiprofile.log, if it is writable,
 #   ./log/qiprofile.log otherwise
@@ -49,14 +49,14 @@ defaultLogFile = ->
  
 # The log file is either set in the environment or defaults to
 # log/qiprofile.log in the current directory.
-relLogFile = server.get('log') or defaultLogFile()
+relLogFile = app.get('log') or defaultLogFile()
 logFile = path.resolve(relLogFile)
 logDir = path.dirname(logFile)
 mkdirp(logDir)
 
 # If the server has the debug flag set, then the log level is debug.
 # Otherwise, the log level is inferred from the environment.
-if server.get('debug') or env is not 'production'
+if app.get('debug') or env is not 'production'
   logLevel = 'debug'
 else
   logLevel = 'info'
@@ -69,20 +69,20 @@ logConfig =
   ]
 
 # Enable the middleware.
-server.use favicon(root + '/static/media/favicon.ico')
-server.use bodyParser.json()
-server.use bodyParser.urlencoded(extended: true)
-server.use methodOverride()
-server.use logger(logConfig)
-server.use serveStatic(root)
-server.use authenticate.middleware(
+app.use favicon("#{ root }/static/media/favicon.ico")
+app.use bodyParser.json()
+app.use bodyParser.urlencoded(extended: true)
+app.use methodOverride()
+app.use logger(logConfig)
+app.use serveStatic(root)
+app.use authenticate.middleware(
   encrypt_key: 'Pa2#a'
   validate_key: 'Fir@n2e'
 )
 
 # Authenticate.
 # Note: authentication is not enabled by default.
-server.get '/login', (req, res) ->
+app.get '/login', (req, res) ->
   res.writeHead 200, ContentType: 'application/json'
   res.write JSON.stringify(
     'access_token': authenticate.serializeToken(req.data.client_id,
@@ -92,35 +92,41 @@ server.get '/login', (req, res) ->
 
 # The REST API route.
 restUrl = process.env.QIREST_HOST or 'localhost'
-server.use '/qirest', rest(restUrl)
+app.use '/qirest', rest(restUrl)
 
 # Strip the app prefix from the request URL and serve up the
 # file in the root directory.
-server.get '/qiprofile/*', (req, res) ->
+app.get '/qiprofile/*', (req, res) ->
   res.sendFile "#{ root }/index.html"
 
-# Kludge to work around repeat requests. See the app
-# error.coffee FIXME.
-lastErrorMsg = null
-server.post '/error', (req, res) ->
-  # Print the error.
-  if req.body.message != lastErrorMsg
-    console.log("Client error: #{ req.body.message }")
-    console.log("See the log at #{ logFile }")
-    # Log the error.
-    req.log.info(req.body)
-    # Send default status code 200 with a 'Logged' message.
-  lastErrorMsg = req.body.message
-  res.send('Logged')
+# Nothing else responded; this must be an error.
+app.use errorHandler.httpError(404)
 
-# Development error handling.
+# Enable the error handler.
+errorHandlerConfig =
+  static:
+    '404': "#{ root }/public/html/common/404.html"
+app.use errorHandler(errorHandlerConfig)
+
+# Trigger the error handler.
+app.use (err, req, res, next) ->
+  # Print the error.
+  console.log("Server error: #{ req.body.message }")
+  console.log("See the log at #{ logFile }")
+  # Log the error.
+  req.log.info(req.body)
+  # Pass on to the error handler enabled in the Eve callback
+  # below.
+  next(err)
+
+  # Development error handling.
 if env is 'development'
-  server.use errorHandler()
-  server.set 'pretty', true
+  app.use errorHandler()
+  app.set 'pretty', true
 
 # The test port.
 if env is 'test'
-  server.set 'port', PORT_TEST
+  app.set 'port', PORT_TEST
 
 # Callback invoked after MongoDB is started.
 mongod_callback = ->
@@ -132,14 +138,14 @@ mongod_callback = ->
   # The callback after the REST server is started.
   eve_callback = ->
     # The server port.
-    port = server.get 'port'
+    port = app.get 'port'
     # Make the server.
-    srv = http.createServer(server)
+    server = http.createServer(app)
     # The watcher hot reloads modules.
-    watcher({app: srv})
+    watcher({app: server})
     # Start the server.
-    srv.listen port, ->
-      env = server.settings.env
+    server.listen port, ->
+      env = app.settings.env
       console.log "The qiprofile server is listening on port #{ port }" +
                   " in #{ env } mode."
   
@@ -149,4 +155,4 @@ mongod_callback = ->
 # Start MongoDB, if necessary, and forward to the callback.
 spawn('mongod', MONGODB_PORT, mongod_callback, {silent: true})
 
-module.exports = server
+module.exports = app

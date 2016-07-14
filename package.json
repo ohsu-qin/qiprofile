@@ -51,6 +51,7 @@
     "csso-stylus": "0.0.3",
     "errorhandler": "^1.4.3",
     "express-bunyan-logger": "^1.2.0",
+    "express-error-handler": "^1.1.0",
     "font-awesome": "^4.6.1",
     "forever-monitor": "^1.7.0",
     "grunt": "^1.0.1",

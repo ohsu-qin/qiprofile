@@ -18,22 +18,33 @@ class CollectionServiceStub {
    *
    * @method getCollections
    * @param project {string} the project name
-   * @return {Observable} the mock collection objects
+   * @return {Observable} the mock collection objects sequence
    */
   getCollections(project: string): Observable<Object[]> {
     let values = [{name: 'Sarcoma'}, {name: 'Breast'}];
-    return Observable.create((subscriber) => subscriber.next(values));
+
+    return Observable.of(values);
   }
 }
 
-class HelpServiceStub {
+/**
+ * The stunt showHelp flag. Note that, unlike
+ * {{#crossLink "ProjectComponentSpec"}}{{/crossLink}},
+ * this help stub is empty, since 
+ * the {{#crossLink "CollectionsComponent"}}{{/crossLink}}
+ * sets the flag in its router activation method, which is
+ * not called in this unit test.
+ *
+ * @class CollectionsHelpServiceStub
+ */
+class CollectionsHelpServiceStub {
 }
 
 beforeEachProviders(() => {
   return [
     CollectionsComponent,
     provide(CollectionService, {useClass: CollectionServiceStub}),
-    provide(HelpService, {useClass: HelpServiceStub})
+    provide(HelpService, {useClass: CollectionsHelpServiceStub})
   ];
 });
 
@@ -41,18 +52,35 @@ beforeEachProviders(() => {
 // can test an observable component property with injected stubs and
 // simulated init.
 describe('Collections', () => {
-  it('should sort the collections', inject(
-    [CollectionService, HelpService, CollectionsComponent],
-    (dataService: CollectionService, helpService: HelpService,
-     collections: CollectionsComponent) => {
+  let component;
+  
+  beforeEach(inject(
+    [CollectionsComponent],
+    (_component: CollectionsComponent) => {
       // Manually init the component.
-      collections.ngOnInit();
-      // The sorted collections.
+      _component.ngOnInit();
+      component = _component;
+    }
+  ));
+
+  it('should not be empty', function() {
+    component.isEmpty().subscribe(
+      empty => {
+        expect(empty, 'Collections are incorrectly empty').to.be.false;
+      }
+    );
+  });
+
+  it('should sort the collections', inject(
+    [CollectionService],
+    (dataService: CollectionService) => {
+      // The mocked collections are in reverse sort order.
       let expected;
-      dataService.getCollections().subscribe(colls => {
-        expected = colls.reverse();
+      dataService.getCollections().subscribe(reversed => {
+        expected = reversed.reverse();
       });
-      collections.collections.subscribe(
+      // Compare to the component collections property.
+      component.collections.subscribe(
         actual => {
           expect(actual, 'Collections are incorrect').to.eql(expected);
         }

@@ -2,72 +2,67 @@ module.exports = (grunt) ->
   grunt.config.init(
     pkg: grunt.file.readJSON('package.json')
 
-    env:
-      dev:
-        NODE_ENV: 'development'
-      prod:
-        NODE_ENV: 'production'
-
-    preprocess:
-      # Note: This 'preprocess' task is actually used to post-process
-      # the Javascript in place after it is compiled from CoffeeScript.
-      js:
-        src: '_public/javascripts/config.js'
-      options:
-        inline: true
-
     clean:
-      # Note: Grunt 0.4.5 file.js has an invalid test for whether the
-      # target is contained in the cwd. Work-around is the force option.
-      derived: ['_build', '_public/*']
+      derived: ['public', 'build', 'typings']
       options:
         force: true
 
-    copy:
-      bower:
+    ts:
+      options:
+        module: "commonjs"
+        emitDecoratorMetadata: true
+        sourceMap: true
+        sourceRoot: 'src'
+        removeComments: false
+        verbose: true
+      app:
         expand: true
-        flatten: true
-        cwd: 'bower_components/'
-        src: [
-          'angular/angular.js'
-          'angular-animate/angular-animate.js'
-          'angular-bootstrap/ui-bootstrap-tpls.js'
-          'angular-dc/dist/angular-dc.js'
-          'angular-resource/angular-resource.js'
-          'angular-route/angular-route.js'
-          'angular-sanitize/angular-sanitize.js'
-          'angular-ui-router/release/angular-ui-router.js'
-          'angular-nvd3/dist/angular-nvd3.js'
-          'cornerstone/dist/cornerstone.js'
-          'crossfilter/crossfilter.js'
-          'd3/d3.js'
-          'dcjs/dc.js'
-          'domready/ready.js'
-          'error-stack-parser/dist/error-stack-parser.js'
-          'eventEmitter/EventEmitter.js'
-          'lodash/lodash.js'
-          'moment/moment.js'
-          'nouislider/distribute/nouislider.js'
-          'nvd3/build/nv.d3.js'
-          'pako/dist/pako_inflate.js'
-          'requirejs/require.js'
-          'source-map/dist/source-map.js'
-          'spin.js/spin.js'
-          'sprintf/src/sprintf.js'
-          'stackframe/dist/stackframe.js'
-          'stack-generator/dist/stack-generator.js'
-          'stacktrace-gps/dist/stacktrace-gps.js'
-          'stacktrace-js/stacktrace.js'
-          'underscore.string/dist/underscore.string.js'
-        ]
-        dest: '_public/javascripts/lib'
+        cwd: 'src/'
+        src: ['**/*.ts']
+        out: 'public/app.ts'
+      tslint:
+        options:
+          sourceMap: false
+          sourceRoot: false
+        src: ['tslint/src/rules/*.ts', 'node_modules/tslint/lib/tslint.d.ts']
+        dest: 'tslint/dist/rules'
 
-      # The non-coffee app javascript files.
-      appjs:
+    tslint:
+      files:
+        src: ['src/**/*.ts']
+    
+    typings:
+      install: {}
+
+    pug:
+      options:
+        pretty: true
+      index:
+        src: 'index.pug'
+        dest: 'index.html'
+      partials:
         expand: true
-        cwd: 'app/'
-        src: ['javascripts/*.js']
-        dest: '_public/'
+        cwd: 'src/'
+        ext: '.html'
+        src: ['*.pug', '*/**.pug', '!layout/*.pug', '!**include/*.pug']
+        dest: 'public/html'
+
+    stylus:
+      options:
+        use: [
+          require('autoprefixer-stylus')
+          require('csso-stylus')
+        ]
+      default:
+        src: ['stylesheets/app.styl']
+        dest: 'public/stylesheets/app.css'
+
+    copy:
+      static:
+        expand: true
+        cwd: 'static/'
+        src: '**/*'
+        dest: 'public/'
 
       # Note: this task is only used to copy CSS map files. The
       # CSS style files themselves are copied to the destination
@@ -79,55 +74,81 @@ module.exports = (grunt) ->
       cssmap:
         expand: true
         flatten: true
-        cwd: 'bower_components/'
+        cwd: 'node_modules/'
         src: ['bootstrap/dist/css/bootstrap.css.map']
-        dest: '_public/stylesheets/'
+        dest: 'public/stylesheets/'
 
       fonts:
         expand: true
         flatten: true
-        cwd: 'bower_components/'
+        cwd: 'node_modules/'
+        # Note: Due to a grunt bug, the font-awesome example subdirectory,
+        #   e.g. 4.0.4/index.html, can't be excluded
+        #   (cf. https://github.com/gruntjs/grunt-contrib-copy/issues/13).
         src: ['bootstrap/dist/fonts/*', 'font-awesome/fonts/*']
-        dest: '_public/fonts/'
-
-      # The images and icons.
-      static:
+        dest: 'public/fonts/'
+      
+      doc:
         expand: true
-        cwd: 'static/'
-        src: ['**']
-        dest: '_public/'
+        src: ['src/**/*.ts']
+        dest: 'build'
+    
+    coffee:
+      doc:
+        expand: true
+        ext: '.js'
+        extDot: 'last'
+        src: ['src/**/*.coffee']
+        dest: 'build'
 
     concat:
       css:
         src: [
-          'bower_components/bootstrap/dist/css/bootstrap.css'
-          'bower_components/cornerstone/dist/cornerstone.css'
-          'bower_components/dcjs/dc.css'
-          'bower_components/font-awesome/css/font-awesome.css'
-          'bower_components/nouislider/src/nouislider.css'
-          'bower_components/nouislider/src/nouislider.pips.css'
-          'bower_components/nouislider/src/nouislider.tooltips.css'
-          'bower_components/nvd3/build/nv.d3.css'
+          'node_modules/bootstrap/dist/css/bootstrap.css'
+          'node_modules/font-awesome/css/font-awesome.css'
         ]
-        dest: '_public/stylesheets/vendor.css'
+        dest: 'public/stylesheets/vendor.css'
 
-    coffee:
-      compile:
-        expand: true
-        ext: '.js'
-        cwd: 'app/'
-        src: ['javascripts/*.coffee']
-        dest: '_public/'
-
-    pug:
+    concurrent:
       options:
-        pretty: true
+        logConcurrentOutput: true
       compile:
-        expand: true
-        ext: '.html'
-        cwd: 'app/'
-        src: ['index.pug', 'partials/**/*.pug', '!**/include/**']
-        dest: '_public/'
+        tasks: ['typings', 'pug', 'stylus']
+
+    yuidoc:
+      compile:
+        name: '<%= pkg.name %> API',
+        description: '<%= pkg.description %>',
+        version: '<%= pkg.version %>',
+        url: '<%= pkg.homepage %>',
+        configfile: 'doc/yuidoc.json'
+        options:
+          paths: 'build/src'
+          outdir: 'build/doc/api'
+          themedir: "node_modules/yuidoc-ember-cli-theme"
+          helpers: ['node_modules/yuidoc-ember-cli-theme/helpers.js']
+          extension: ".ts,.js"
+
+    cssmin:
+      options:
+        'nomunge': true
+        'line-break': 80
+      files:
+        src: ['public/stylesheets/app.css']
+        dest: 'public/stylesheets/app.min.css'
+
+    browserSync:
+      options:
+        watchTask: true
+        proxy: 'http:3000'
+      bsFiles:
+        src:
+          'html/**'
+    
+    jspm:
+      dist:
+        files:
+          "public/app.js": "build/app.js"
 
     karma:
       options:
@@ -138,64 +159,74 @@ module.exports = (grunt) ->
         configFile: 'test/conf/karma-conf.coffee'
 
     exec:
-      # Convert CommonJS modules to AMD.
-      convert:
+      # # Delete the qirest Anaconda environment.
+      # # Note: conda env remove hangs when executed from a script.
+      # # It does not run when executed from a script in background.
+      # # There is no known mechanism to make this work.
+      # cleanqirest:
+      #   command:
+      #     '(source deactivate 2>/dev/null);' +
+      #     '(yes | conda env remove -n qirest)'
+
+      # Clean all installation artifacts, including the qirest Anaconda
+      # environment.
+      cleannpm:
         command:
-          './node_modules/.bin/r.js -convert _build/commonjs _public/javascripts/lib'
+          'rm -rf node_modules/ jspm_packages/'
 
-      selenium:
-        # If selenium is not already running, then start it. Suppress all
-        # output, since there are no documented options to tailor the
-        # selenium log level or log file at the command line. The selenium
-        # server is spawned as a background process that survives the grunt
-        # session. The command pseudo-code is as follows:
-        # * Check for a process which listens on port 4444
-        # * Start the selenium server as a background process
-        # * Suppress non-error output
-        #
-        # The lsof command checks whether a process (hopefully the selenium
-        # server) is already running on port 4444. The server can be killed
-        # by the following command:
-        #
-        #   pkill -f selenium-standalone
-        #
-        # The sleep command pauses one second to allow the server to start.
-        command: 'lsof -i :4444 >/dev/null 2>&1 || ' +
-                 '(./node_modules/selenium-standalone/bin/selenium-standalone' +
-                 '   install --silent && ' +
-                 ' ((./node_modules/selenium-standalone/bin/selenium-standalone' +
-                 '   start >/dev/null 2>&1 &) && sleep 1))'
+      # Build the qirest Anaconda environment and install the application.
+      buildqirest:
+        command:
+          # Note: conda env remove hangs when executed from a script.
+          # There is no known mechanism to make this work.
+          # '(yes | conda create -n qirest pip) && ' +
+          'source activate qirest && ' + 
+          'pip install --upgrade -r requirements.txt'
 
-      bowerinstall:
-        command: './node_modules/.bin/bower update'
-        
-      bowerprune:
-        command: './node_modules/.bin/bower prune'
+      # Build the qirest Anaconda environment and install the application.
+      buildnpm:
+        command:
+          'npm install'
       
+      qirest:
+        command:
+          'pgrep -f qirest || ' +
+          '((qirest >/var/log/qirest.log 2>&1 &) && sleep .5)'
+      
+      # Kill any existing selenium server and install the drivers.
+      installselenium:
+        command: 'pkill -f selenium-standalone >/dev/null 2>&1;' +
+                 './node_modules/selenium-standalone/bin/selenium-standalone' +
+                 '   install --silent'
+
+      # If selenium is not already running, then start it. Suppress all
+      # output, since there are no documented options to tailor the
+      # selenium log level or log file at the command line. The selenium
+      # server is spawned as a background process that survives the grunt
+      # session.
+      #
+      # The pgrep command checks the selenium processes are already running.
+      # The server can be killed by the following command:
+      #
+      #   pkill -f selenium-standalone
+      #
+      # The sleep command pauses half a second to allow the server to start.
+      # Otherwise, grunt might exit and kill the process aborning.
+      #
+      # This task is used in preference to grunt-selenium-standalone to
+      # suppress extraneous console messages and wait for the server to
+      # start.
+      startselenium:
+        command: 'pgrep -f selenium-standalone >/dev/null 2>&1 || ' +
+                 '((./node_modules/selenium-standalone/bin/selenium-standalone' +
+                 '  start >/dev/null 2>&1 &) && sleep .5)'
+
       updatewebdriver:
         command: './node_modules/protractor/bin/webdriver-manager update'
 
     protractor:
       e2e:
         configFile: 'test/conf/protractor-conf.coffee'
-
-    markdown:
-      compile:
-        expand: true
-        ext: '.html'
-        cwd: 'app/'
-        src: ['partials/**/*.md']
-        dest: '_public/'
-
-    stylus:
-      options:
-        use: [
-          require('autoprefixer-stylus')
-          require('csso-stylus')
-        ]
-      compile:
-        src: ['app/stylesheets/app.styl']
-        dest: '_public/stylesheets/app.css'
 
     express:
       options:
@@ -214,103 +245,59 @@ module.exports = (grunt) ->
     watch:
       options:
         livereload: true
-      stylus:
-        files: ['app/**/*.styl']
-        tasks: ['stylus']
       coffee:
-        files: ['app/**/*.coffee']
-        tasks: ['compile:js']
-      javascript:
-        files: ['app/**/*.js']
-        tasks: ['copy:appjs']
+        files: ['coffeescripts/**/*.coffee']
+        tasks: ['coffee']
       pug:
-        files: ['app/**/*.pug', 'test/**/*.pug']
+        files: ['*.pug', '**/*.pug']
         tasks: ['pug']
-      markdown:
-        files: ['app/partials/**/*.md']
-        tasks: ['markdown']
-
-    concurrent:
-      options:
-        logConcurrentOutput: true
-      compile:
-        tasks: ['compile:js', 'pug:compile', 'markdown', 'stylus']
-
-    # TODO - try this.
-    requirejs:
-      compile:
-        options:
-          appDir: "_public"
-          baseUrl: "javascripts"
-          dir: "_build"
-          mainConfigFile:'_public/javascripts/config.js'
-          # Skip the CDN modules.
-          paths:
-            angular: 'empty:'
-            domReady: 'empty:'
-            nganimate: 'empty:'
-            ngresource: 'empty:'
-            ngroute: 'empty:'
-            ngsanitize: 'empty:'
-          modules: [ name:'qiprofile' ]
-          findNestedDependencies: true
-
-    cssmin:
-      options:
-        'nomunge': true
-        'line-break': 80
-      files:
-        src: ['_public/stylesheets/app.css']
-        dest: '_public/stylesheets/app.min.css'
+      stylus:
+        files: ['stylus/**/*.styl']
+        tasks: ['stylus']
   )
 
   # Load all grunt-* tasks.
   require('load-grunt-tasks')(grunt)
 
   # Build for development is the default.
-  grunt.registerTask 'default', ['build:dev']
-
-  # Copy the vendor javascript.
-  grunt.registerTask 'copy:js', ['copy:bower', 'copy:appjs']
-
-  # Assemble the app.
-  grunt.registerTask 'copy:app', ['copy:js', 'copy:cssmap', 'copy:fonts',
-                                  'copy:static']
-
-  # Concatenate the app stylesheets.
-  grunt.registerTask 'concat:app', ['concat:css']
-
-  # Convert vendor modules to AMD as necessary.
-  grunt.registerTask 'amdify', ['browserify', 'exec:convert']
-
-  # Collect the vendor libraries.
-  grunt.registerTask 'vendor:app', ['copy:app', 'concat:app']
-
-  # Compile the app javascript.
-  grunt.registerTask 'compile:js', ['coffee:compile', 'preprocess']
+  grunt.registerTask 'default', ['build']
 
   # Compile the app bits concurrently.
-  grunt.registerTask 'compile', ['concurrent:compile']
+  grunt.registerTask 'compile', ['tslint', 'concurrent:compile']
 
   # Build the application from scratch.
-  grunt.registerTask 'build:app', ['clean', 'vendor:app', 'compile']
+  grunt.registerTask 'copy:dev', ['copy:static', 'copy:cssmap', 'copy:fonts']
 
-  # Build the app and test environment.
-  grunt.registerTask 'build:dev', ['env:dev', 'build:app',
-                                   'exec:updatewebdriver']
+  # Build the application from scratch.
+  grunt.registerTask 'build:dev', ['copy:dev', 'concat:css', 'compile']
 
-  # Build the app for deployment.
-  grunt.registerTask 'build:prod', ['env:prod', 'build:app']
+  # Build the application from scratch.
+  grunt.registerTask 'doc', ['copy:doc', 'coffee:doc', 'yuidoc']
+
+  # Build the application from scratch.
+  grunt.registerTask 'build', ['clean', 'build:dev', 'doc']
+
+  # Build the application release.
+  grunt.registerTask 'bundle', ['build:dev', 'ts:app', 'jspm']
 
   # The npm postinstall task.
-  grunt.registerTask 'postinstall', ['exec:bowerinstall', 'exec:bowerprune',
-                                     'build:prod']
+  grunt.registerTask 'postinstall', ['ts:tslint', 'exec:installselenium',
+                                     'exec:updatewebdriver', 'build']
+
+  # Reinstall from scratch.
+  grunt.registerTask 'cleanall', ['clean', 'exec:cleannpm']
+
+  # Reinstall from scratch.
+  grunt.registerTask 'buildall', ['exec:buildqirest', 'exec:buildnpm']
+
+  # Reinstall from scratch.
+  grunt.registerTask 'reinstall', ['cleanall', 'buildall']
 
   # Start the server with debug turned on.
   grunt.registerTask 'start:dev', ['express:dev', 'watch']
 
-  # Start the server in test mode.
-  grunt.registerTask 'start:test', ['express:test', 'watch']
+  # Start the server with debug turned on.
+  grunt.registerTask 'start:test', ['exec:qirest', 'express:test', 'watch']
 
   # Start the server in production mode.
   grunt.registerTask 'start:prod', ['express:prod']
@@ -322,11 +309,11 @@ module.exports = (grunt) ->
   grunt.registerTask 'test:unit', ['karma:unit']
 
   # Run the Protractor end-to-end tests.
-  grunt.registerTask 'test:e2e', ['exec:selenium', 'express:test',
+  grunt.registerTask 'test:e2e', ['exec:startselenium', 'express:test',
                                   'protractor:e2e']
 
   # Run all tests.
   grunt.registerTask 'test', ['test:unit', 'test:e2e']
 
   # Build the application as a RequireJS AMD module.
-  grunt.registerTask 'release', ['build:prod', 'requirejs', 'cssmin']
+  grunt.registerTask 'release', ['build']

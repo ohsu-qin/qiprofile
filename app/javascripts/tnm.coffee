@@ -7,19 +7,25 @@ define ['angular', 'lodash', 'breast', 'sarcoma'], (ng, _) ->
       Breast: Breast
       Sarcoma: Sarcoma
 
-    # @param tumorType the tumor type name, e.g. 'Breast'
-    # @returns the tumorTypeService factory for that tumor type
+    ###*
+     * @method tumorTypeService
+     * @param tumorType the tumor type name, e.g. 'Breast'
+     * @return the tumorTypeService factory for that tumor type
+    ###
     tumorTypeService = (tumorType) ->
       TUMOR_TYPE_SERVICES[tumorType] or
         throw new ReferenceError("Unsupported tumor type: #{ tumorType }")
 
     # Define here for reuse below.
     _summaryGrade = (tnm) ->
-      # Calculates the cumulative grade as the sum of the component
-      # tumor type factory SCORES property values.
-      #
-      # @param tnm the TNM object
-      # @returns the cumulative grade, or null if a score is missing
+      ###*
+       * Calculates the cumulative grade as the sum of the component
+       * tumor type factory SCORES property values.
+       *
+       * @method cumulativeGrade
+       * @param tnm the TNM object
+       * @return the cumulative grade, or null if a score is missing
+      ###
       cumulativeGrade = ->
         accumulate = (sum, prop) ->
           sum + grade[prop]
@@ -48,9 +54,12 @@ define ['angular', 'lodash', 'breast', 'sarcoma'], (ng, _) ->
       # Return the one-based summary grade value.
       1 + index
 
-    # @param size the size composite object
-    # @returns the standard size string, e.g. 'p2b'
-    # @throws Error if the tumorSize property value is missing
+    ###*
+     * @method formatSize
+     * @param size the size composite object
+     * @return the standard size string, e.g. 'p2b'
+     * @throws Error if the tumorSize property value is missing
+    ###
     formatSize: (size) ->
       sizeSuffix = ->
         inSituSuffix = (inSitu) ->
@@ -77,27 +86,33 @@ define ['angular', 'lodash', 'breast', 'sarcoma'], (ng, _) ->
       suffix  = sizeSuffix()
       "#{ prefix }#{ size.tumorSize }#{ suffix }"
 
-    # Calculates the summary grade based on the cumulative grade
-    # as defined in the tumor type factory RANGES lookup table.
-    #
-    # @param grade the grade composite object
-    # @returns the summary grade
-    # @throws ReferenceError if the grade scores are not supported
+    ###*
+     * Calculates the summary grade based on the cumulative grade
+     * as defined in the tumor type factory RANGES lookup table.
+     *
+     * @method summaryGrade
+     * @param grade the grade composite object
+     * @return the summary grade
+     * @throws ReferenceError if the grade scores are not supported
+    ###
     summaryGrade: _summaryGrade
 
-    # Calculates the tumor stage for the given TNM composite
-    # object.
-    #
-    # This function returns the cancer stage as a string
-    # consisting of a digit in the range 1 to 4 optionally
-    # followed by a suffix A, B or C. This facilitates
-    # accurate comparison, in contrast to the roman numeral
-    # grade, e.g. '1A' < '2B' , but 'IA' > 'IIB'.
-    # The romanize filter can be used to display the stage
-    # in the standard archaic medical format.
-    #
-    # @param tnm the TNM object.
-    # @returns the cancer stage object
+    ###*
+     * Calculates the tumor stage for the given TNM composite
+     * object.
+     *
+     * This function returns the cancer stage as a string
+     * consisting of a digit in the range 1 to 4 optionally
+     * followed by a suffix A, B or C. This facilitates
+     * accurate comparison, in contrast to the roman numeral
+     * grade, e.g. '1A' < '2B' , but 'IA' > 'IIB'.
+     * The romanize filter can be used to display the stage
+     * in the standard archaic medical format.
+     *
+     * @method stage
+     * @param tnm the TNM object.
+     * @return the cancer stage object
+    ###
     stage: (tnm) ->
       grade = _summaryGrade(tnm)
       # Delegate to the tumor type service.

@@ -1,0 +1,11 @@
+extends ../layout/partial
+
+block billboard
+  | Projects
+
+block content
+  ul.qi-main-list
+    p(*ngIf="isEmpty() | async")
+      | No projects were found.
+    li(*ngFor="let project of projects | async")
+      qi-project-item([project]="project")

@@ -31,7 +31,7 @@
 #       # The image state loading flag is set to true while the
 #       # files are being read.
 #       #
-#       # @returns a promise which resolves to this image object
+#       # @return a promise which resolves to this image object
 #       #   when the file is loaded
 #       load: ->
 #         super().then (data) ->

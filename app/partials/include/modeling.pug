@@ -7,6 +7,7 @@
         ng-show='subject.isMultiSession()'
         ng-click='toggleModelingFormat()'
       )
+        // TODO - use the fontawesome bar-chart and list-ul icons instead.
         .glyphicon.glyphicon-list(ng-show="modelingFormat == 'chart'")
         .glyphicon.glyphicon-stats(ng-show="modelingFormat == 'table'")
       button#pk-modeling-help-btn.btn.btn-med.qi-profile-btn(ng-controller='PkModelingHelpCtrl',

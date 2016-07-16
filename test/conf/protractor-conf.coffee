@@ -12,13 +12,17 @@ exports.config =
   seleniumAddress: 'http://localhost:4444/wd/hub'
 
   # The test server is on port 3001, not 3000.
-  baseUrl: 'http://localhost:3001/quip/'
+  baseUrl: 'http://localhost:3001/qiprofile/'
 
   # Run all e2e specs. The command line --specs option overrides
   # this setting.
-  specs: ['../e2e/**Spec.coffee']
+  specs: ['../e2e/**.spec.*']
 
-  # Run the qirest seed and link the test fixtures into _public,
+  # Flag which directs Protractor to wait for the app to be
+  # stable before each action.
+  useAllAngular2AppRoots: true
+
+  # Run the qirest seed and link the test fixtures into public,
   # if necessary.
   onPrepare: '../e2e/helpers/seed'
 

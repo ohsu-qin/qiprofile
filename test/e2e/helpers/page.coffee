@@ -35,7 +35,7 @@ class Page extends Findable
   # @param url the page request URL
   # @param helpShown flag indicating whether the help box is
   #   initially shown (default false)
-  constructor: (url, @helpShown=false) ->
+  constructor: (@url, @helpShown=false) ->
     # Call the Findable superclass initializer. Findable wraps
     # a node which responds to the methods element and all.
     # Thus, Finder can wrap both this Page object as well as
@@ -43,13 +43,22 @@ class Page extends Findable
     super()
     
     # Fire off the browser request.
-    browser.get(url)
+    browser.get(@url)
 
   # Search from the document root.
   element: element
 
   # Search from the document root.
   all: element.all
+  
+  # @param url the URL without host or port
+  #   (default this page's URL)
+  # @returns the full URL matcher
+  url_pattern: (url) ->
+    if not url
+      url = @url
+    pat_str = URL_PAT_PREFIX + url + '$'
+    new RegExp(pat_str)
 
   # @returns the title text
   @property title: ->
@@ -74,7 +83,7 @@ class Page extends Findable
     # @returns the Home button
     findHomeButton = =>
       # The home button is the parent of the home icon.
-      @find('button .glyphicon-home', '..')
+      @find('qi-go-home', 'button')
 
     findHomeButton().then (btn) ->
       expect(btn, 'The home button is missing').to.exist
@@ -84,7 +93,7 @@ class Page extends Findable
   @property help: ->
     # Finds the help button.
     findButton = =>
-      @find("[ng-controller='HelpCtrl']")
+      @find('qi-toggle-help', 'button')
     
     @find('.qi-help').then (helpBox) =>
       expect(helpBox, 'The help box is missing').to.exist
@@ -105,10 +114,17 @@ class Page extends Findable
           btn.click().then ->
             helpBox.getInnerHtml()
 
+
 # The help suggestion box hyperlink constant.
 Page.SUGGESTION_BOX_URL = 'http://qiprofile.idea.informer.com'
 
-# The home page hyperlink pattern.
-Page.HOME_URL_PAT = /.*\/quip\?project=QIN_Test$/
+# The landing page and app URL root.
+Page.HOME = '/qiprofile/QIN_Test'
+
+# The regexp to match a page that ends at home.
+URL_PAT_PREFIX = "http://[-\\w]+:\\d+"
+
+# The regexp to match a page that ends at home.
+Page.HOME_URL_PAT = new RegExp(URL_PAT_PREFIX + "#{ Page.HOME }$")
 
 module.exports = Page

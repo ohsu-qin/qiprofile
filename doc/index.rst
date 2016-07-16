@@ -1,14 +1,14 @@
 .. _index:
 
 ===================================================================================
-*QiPr*
+Quantitative Imaging Profile
 ===================================================================================
 
 ********
 Synopsis
 ********
 
-The *Q*\ uantitative *I*\ maging *PR*\ ofile (*QiPr*\ ) web application displays
+The *Q*\ uantitative *I*\ maging *Pr*\ ofile (*qipr*\ ) web application displays
 medical imaging and clinical data. The intent is to visualize the correlation of
 imaging analysis biomarkers with clinical outcomes.
 
@@ -59,9 +59,6 @@ See the `Developer Guide`_ for starting a development server.
 
 ---------
 
-.. container:: copyright
-
-
 .. Targets:
 
 .. _Developer Guide: https://github.com/ohsu-qin/qiprofile/blob/master/doc/development.rst
@@ -76,11 +73,11 @@ See the `Developer Guide`_ for starting a development server.
 
 .. _qipipe: http://qipipe.readthedocs.org/en/latest/
 
-.. _REST: http://qiprofile-rest.readthedocs.org/en/latest/
+.. _REST: http://qirest.readthedocs.org/en/latest/
 
-.. _REST Development: http://qiprofile-rest.readthedocs.org/en/latest/#development
+.. _REST Development: http://qirest.readthedocs.org/en/latest/#development
 
-.. _REST Usage: http://qiprofile-rest.readthedocs.org/en/latest/#usage
+.. _REST Usage: http://qirest.readthedocs.org/en/latest/#usage
 
 
 .. toctree::

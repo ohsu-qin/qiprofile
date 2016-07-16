@@ -1,5 +1,5 @@
 #
-# The Imaging Profile Express server application.
+# The Quantitative Imaging Profile Express server application.
 #
 express = require 'express'
 http = require 'http'
@@ -8,35 +8,34 @@ mkdirp = require 'mkdirp'
 net = require 'net'
 fs = require 'fs'
 logger = require 'express-bunyan-logger'
-forever = require 'forever-monitor'
 authenticate = require 'authenticate'
 spawn = require './spawn'
 favicon = require 'serve-favicon'
 bodyParser = require 'body-parser'
 serveStatic = require 'serve-static'
 methodOverride = require 'method-override'
-errorHandler = require 'errorhandler'
+errorHandler = require 'express-error-handler'
+watcher = require 'chokidar-socket-emitter'
 
 # The port assignments.
 PORT = 3000
 PORT_TEST = PORT + 1
 MONGODB_PORT = 27017
-EVE_PORT = 5000
+QIREST_PORT = 5000
 
 # The grunt build tasks place all compiled and copied files within
-# the _public directory.
-root = path.join(__dirname, '..', '_public')
+# the public directory.
+root = path.join(__dirname, '..')
 
-# Rewrite all server /api requests to the REST server
-# on the default REST host and port.
-api = require './api'
+# The REST request handler.
+rest = require './rest'
 
-# The Express server.
-server = express()
+# The Express server app.
+app = express()
 # Set the port.
-server.set 'port', process.env.PORT or PORT
+app.set 'port', process.env.PORT or PORT
 # The run environment.
-env = server.get('env') or 'production'
+env = app.get('env') or 'production'
 
 # @returns /var/log/qiprofile.log, if it is writable,
 #   ./log/qiprofile.log otherwise
@@ -50,14 +49,14 @@ defaultLogFile = ->
  
 # The log file is either set in the environment or defaults to
 # log/qiprofile.log in the current directory.
-relLogFile = server.get('log') or defaultLogFile()
+relLogFile = app.get('log') or defaultLogFile()
 logFile = path.resolve(relLogFile)
 logDir = path.dirname(logFile)
 mkdirp(logDir)
 
 # If the server has the debug flag set, then the log level is debug.
 # Otherwise, the log level is inferred from the environment.
-if server.get('debug') or env is not 'production'
+if app.get('debug') or env is not 'production'
   logLevel = 'debug'
 else
   logLevel = 'info'
@@ -70,20 +69,20 @@ logConfig =
   ]
 
 # Enable the middleware.
-server.use favicon(root + '/media/favicon.ico')
-server.use bodyParser.json()
-server.use bodyParser.urlencoded(extended: true)
-server.use methodOverride()
-server.use logger(logConfig)
-server.use serveStatic(root)
-server.use authenticate.middleware(
+app.use favicon("#{ root }/static/media/favicon.ico")
+app.use bodyParser.json()
+app.use bodyParser.urlencoded(extended: true)
+app.use methodOverride()
+app.use logger(logConfig)
+app.use serveStatic(root)
+app.use authenticate.middleware(
   encrypt_key: 'Pa2#a'
   validate_key: 'Fir@n2e'
 )
 
 # Authenticate.
 # Note: authentication is not enabled by default.
-server.get '/login', (req, res) ->
+app.get '/login', (req, res) ->
   res.writeHead 200, ContentType: 'application/json'
   res.write JSON.stringify(
     'access_token': authenticate.serializeToken(req.data.client_id,
@@ -91,67 +90,70 @@ server.get '/login', (req, res) ->
   )
   res.end
 
-# The API route.
+# The REST API route.
 restUrl = process.env.QIREST_HOST or 'localhost'
-server.use '/api', api(restUrl)
+app.use '/qirest', rest(restUrl)
 
-# Serve the static files from root.
-server.get '/static/*', (req, res) ->
-  path = root + req.path.replace('/static', '')
-  res.sendFile path
+# Strip the app prefix from the request URL and serve up the
+# file in the root directory.
+app.get '/qiprofile/*', (req, res) ->
+  res.sendFile "#{ root }/index.html"
 
-# Serve the partial HTML files.
-server.get '/partials/*', (req, res) ->
-  res.sendFile "#{root}/#{req.path}.html"
-
-# Since qiprofile is an Angular Single-Page Application,
-# serve index for all quip routes. The qiprofile
-# application then resolves the URL on the client
-# and requests the partial.
-server.get '/quip*', (req, res) ->
-  res.sendFile "#{root}/index.html"
-
-# Kludge to work around repeat requests. See the app
-# error.coffee FIXME.
-lastErrorMsg = null
-server.post '/error', (req, res) ->
-  # Print the error.
-  if req.body.message != lastErrorMsg
-    console.log("Client error: #{ req.body.message }")
-    console.log("See the log at #{ logFile }")
-    # Log the error.
-    req.log.info(req.body)
-    # Send default status code 200 with a 'Logged' message.
-  lastErrorMsg = req.body.message
-  res.send('Logged')
-
-# Development error handling.
-if env is 'development'
-  server.use errorHandler()
-  server.set 'pretty', true
+# TODO - enable error handling below.
+# # Log the error.
+# app.use (err, req, res, next) ->
+#   # Print the error.
+#   console.log("Server error: #{ req.body.message }")
+#   console.log("See the log at #{ logFile }")
+#   # Log the error.
+#   req.log.info(req.body)
+#   # Pass on to the error handler enabled in the Eve callback
+#   # below.
+#   next(err)
+#
+# # Nothing else responded; this must be an error.
+# app.use errorHandler.httpError(404)
+#
+# # Enable the error handler.
+# errorHandlerConfig =
+#   static:
+#     '404': "#{ root }/public/html/common/404.html"
+# app.use errorHandler(errorHandlerConfig)
+#
+# # Development error handling.
+# if env is 'development'
+#   app.use errorHandler()
+#   app.set 'pretty', true
 
 # The test port.
 if env is 'test'
-  server.set 'port', PORT_TEST
+  app.set 'port', PORT_TEST
 
 # Callback invoked after MongoDB is started.
-mongod_callback = ->
+start_app = ->
   # The REST server start mode, production or development.
   restMode = if env is 'test' then 'development' else env
   # The REST server command.
-  cmd = if restMode? then "qirest --#{ restMode }" else 'qirest'
+  qirest = if restMode? then "qirest --#{ restMode }" else 'qirest'
+  
   # The callback after the REST server is started.
-  eve_callback = ->
-    #...then the Express server.
-    port = server.get 'port'
-    http.createServer(server).listen port, ->
-      env = server.settings.env
-      console.log "The qiprofile server is listening on port #{port}" +
-                  " in #{env} mode."
+  start_eve = ->
+    # The server port.
+    port = app.get 'port'
+    # Make the server.
+    server = http.createServer(app)
+    # The watcher hot reloads modules.
+    watcher({app: server})
+    # Start the server.
+    server.listen port, ->
+      env = app.settings.env
+      console.log "The qiprofile server is listening on port #{ port }" +
+                  " in #{ env } mode."
+  
   # Start the REST app without logging to the console.
-  spawn(cmd, EVE_PORT, eve_callback, {silent: true})
+  spawn(qirest, QIREST_PORT, start_eve, {silent: true})
 
 # Start MongoDB, if necessary, and forward to the callback.
-spawn('mongod', MONGODB_PORT, mongod_callback, {silent: true})
+spawn('mongod', MONGODB_PORT, start_app, {silent: true})
 
-module.exports = server
+module.exports = app

@@ -15,7 +15,7 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
 
     filters.filter 'romanize', ['StringHelper', (StringHelper) ->
       # @param value the input number or string
-      # @returns a string with the leading digit sequence converted
+      # @return a string with the leading digit sequence converted
       #    to a roman numeral
       (value) ->
         if value? then value.toString().replace(/^\d+/, roman.romanize) else value
@@ -73,16 +73,19 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
         else
           _s.capitalize(value) + ' scan'
 
-    # Returns the string representation of the given input value as follows:
-    # * true => 'True'
-    # * false => 'False'
-    # * null or undefined => 'Not Specified'
-    #
-    # @param value the boolean or null input
-    # @param trueStr the true conversion
-    # @param falseStr the false conversion
-    # @returns the string representation
-    # @throws TypeError if the value is not boolean, null or undefined
+    ###*
+     * Returns the string representation of the given input value as follows:
+     * * true => 'True'
+     * * false => 'False'
+     * * null or undefined => 'Not Specified'
+     *
+     * @method booleanFilter
+     * @param value the boolean or null input
+     * @param trueStr the true conversion
+     * @param falseStr the false conversion
+     * @return the string representation
+     * @throws TypeError if the value is not boolean, null or undefined
+    ###
     booleanFilter = (value, trueStr='True', falseStr='False') ->
       if value == true
         trueStr
@@ -101,7 +104,7 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
       # * null or undefined => 'Not Specified'
       #
       # @param value the boolean or null input
-      # @returns the string representation
+      # @return the string representation
       # @throws TypeError if the value is not boolean, null or undefined
       (value) ->
         booleanFilter(value)
@@ -114,7 +117,7 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
       # * null or undefined => 'Not Specified'
       #
       # @param value the boolean or null input
-      # @returns the string representation
+      # @return the string representation
       # @throws TypeError if the value is not boolean, null or undefined
       (value) ->
         booleanFilter(value, 'Present', 'Absent')
@@ -127,7 +130,7 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
       # * null or undefined => 'Not Specified'
       #
       # @param value the boolean or null input
-      # @returns the string representation
+      # @return the string representation
       # @throws TypeError if the value is not boolean, null or undefined
       (value) ->
         booleanFilter(value, 'Positive', 'Negative')
@@ -137,7 +140,7 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
       # If there is a value, then append the percent sign to the value.
       #
       # @param value the input number
-      # @returns the string with a percent sign, or null if no value
+      # @return the string with a percent sign, or null if no value
       (value) ->
         if value? then value.toString().concat('%') else value
 
@@ -147,7 +150,7 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
       #   upper values with an en dash.
       #
       # @param range the range object
-      # @returns the string representation of the percent range
+      # @return the string representation of the percent range
       (range) ->
         if range?
           start = range.start.value.toString()
@@ -219,7 +222,10 @@ define ['angular', 'moment', 'underscore.string', 'roman', 'helpers',
     ]
 
 
-    # @returns [<Saggital> ][<Coronal> ]<Body Part>
+    ###*
+     * @method filters
+     * @return [<Saggital> ][<Coronal> ]<Body Part>
+    ###
     filters.filter 'sarcomaTumorLocation', ->
       # The REST histology fields.
       fields = ['saggitalLocation', 'coronalLocation', 'bodyPart']

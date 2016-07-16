@@ -2,26 +2,32 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart', 'session'], (ng, _, m
   timeline = ng.module 'qiprofile.timeline', ['qiprofile.helpers', 'qiprofile.chart', 'qiprofile.session']
 
   timeline.factory 'Timeline', ['ObjectHelper', 'Chart', 'Session', (ObjectHelper, Chart, Session) ->
-    # A helper function to calculate the effective treatment dates.
-    # This function returns a [start, end] array, where:
-    # * start is the moment start date integer
-    # * end is the moment end date integer
-    # The default end date is today.
-    #
-    # TODO - depict a treatment with no end date as an arrow.
-    #
-    # @param treatment the treatment object
-    # @returns the [start, end] array
+    ###*
+     * A helper function to calculate the effective treatment dates.
+     * This function returns a [start, end] array, where:
+     * * start is the moment start date integer
+     * * end is the moment end date integer
+     * The default end date is today.
+     *
+     * TODO - depict a treatment with no end date as an arrow.
+     *
+     * @method treatmentSpan
+     * @param treatment the treatment object
+     * @return the [start, end] array
+    ###
     treatmentSpan = (treatment) ->
       start = treatment.startDate
       end = treatment.endDate or moment()
       [start, end]
 
-    # Helper function to calculate the earliest and latest session,
-    # encounter and treatment dates.
-    #
-    # @param subject the target subject
-    # @returns the [earliest, latest] X axis range
+    ###*
+     * Helper function to calculate the earliest and latest session,
+     * encounter and treatment dates.
+     *
+     * @method minMax
+     * @param subject the target subject
+     * @return the [earliest, latest] X axis range
+    ###
     minMax = (subject) ->
       values = []
       for trt in subject.treatments
@@ -32,9 +38,12 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart', 'session'], (ng, _, m
         values.push(enc.date)
       # Return the min and max date.
       [_.min(values), _.max(values)]
-    
-    # @param subject the target subject
-    # @returns the date values to plot
+
+    ###*
+     * @method xValues
+     * @param subject the target subject
+     * @return the date values to plot
+    ###
     xValues = (subject) ->
       # The session dates are displayed as X axis tick marks.
       sessionDates = (sess.date for sess in subject.sessions)
@@ -52,56 +61,65 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart', 'session'], (ng, _, m
       # Return the date values.
       values
 
-    # Decorates the timeline as follows:
-    # * Add the session hyperlinks, encounter dates and treatment
-    #   start-end bars.
-    # * Rotate the date x-axis tick labels
-    #
-    # Note: The session hyperlinks are ui-sref attributes. However,
-    # D3 mutates the DOM after the Angular digest cycle. Consequently,
-    # the callback must call Angular $compile with the current scope
-    # on each new hyperlink.ui-sref directive.
-    #
-    # @param chart the timeline chart element
-    # @param subject the displayed subject
-    # @param scope the (isolated) chart scope containing the options
-    #   and data
-    # @param $state the ui-router $state 
+    ###*
+     * Decorates the timeline as follows:
+     * * Add the session hyperlinks, encounter dates and treatment
+     *   start-end bars.
+     * * Rotate the date x-axis tick labels
+     *
+     * Note: The session hyperlinks are ui-sref attributes. However,
+     * D3 mutates the DOM after the Angular digest cycle. Consequently,
+     * the callback must call Angular $compile with the current scope
+     * on each new hyperlink.ui-sref directive.
+     *
+     * @method decorate
+     * @param chart the timeline chart element
+     * @param subject the displayed subject
+     * @param scope the (isolated) chart scope containing the options
+     *   and data
+     * @param $state the ui-router $state
+    ###
     decorate: (chart, subject, scope, $state) ->
       # The min and max X values. The dates are sorted by the
       # configure method.
       values = scope.data[0].values
       low = _.first(values)
       high = _.last(values)
-      
+
       # The treatment bar height, in em units
       TREATMENT_BAR_HEIGHT = 1
-      
+
       # A treatment is designated by the HTML nabla special character
       # (the wedge-like math del operator).
       TREATMENT_SYMBOL = '\u2207'
-      
+
       # The Session Detail state.
       SESSION_DETAIL_STATE = 'quip.collection.subject.session'
 
-      # Adds the session hyperlinks above the timeline. The template
-      # sets the callback attribute to this function. The new anchor
-      # elements are positioned dy em units above the timeline,
-      # plus a small padding. This allows for displaying the treatment
-      # bars and encounter points between the timeline and the
-      # hyperlinks.
-      #
-      # @param sessions the subject sessions
-      # @param xAxis the chart SVG X axis D3 selection
-      # @param low the minimum date
-      # @param high the maximum date
-      # @param dy the optional y offset in em units
+      ###*
+       * Adds the session hyperlinks above the timeline. The template
+       * sets the callback attribute to this function. The new anchor
+       * elements are positioned dy em units above the timeline,
+       * plus a small padding. This allows for displaying the treatment
+       * bars and encounter points between the timeline and the
+       * hyperlinks.
+       *
+       * @method addSessionDetailLinks
+       * @param sessions the subject sessions
+       * @param xAxis the chart SVG X axis D3 selection
+       * @param low the minimum date
+       * @param high the maximum date
+       * @param dy the optional y offset in em units
+      ###
       addSessionDetailLinks = (sessions, xAxis, low, high, dy=0) ->
-        # Makes a new ui-sref anchor element that hyperlinks to the given
-        # session detail page.
-        #
-        # @param session the hyperlink target session
-        # @param tick the X axis tick mark
+        ###*
+         * Makes a new ui-sref anchor element that hyperlinks to the given
+         * session detail page.
+         *
+         * @method createSessionDetailLink
+         * @param session the hyperlink target session
+         * @param tick the X axis tick mark
+        ###
         createSessionDetailLink = (session, tick) ->
           # Make a new SVG text element to hold the session number.
           text = tick.append('text')
@@ -127,8 +145,11 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart', 'session'], (ng, _, m
         # The session milliseconds.
         sessionMillis = (session.date.valueOf() for session in sessions)
 
-        # @param date the date to check
-        # @returns whether the date is a session date
+        ###*
+         * @method isSessionDate
+         * @param date the date to check
+         * @return whether the date is a session date
+        ###
         isSessionDate = (date) -> _.includes(sessionMillis, date.valueOf())
 
         # Make the Session Detail page links.
@@ -150,10 +171,13 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart', 'session'], (ng, _, m
             createSessionDetailLink(sessions[sessionIndex], tick)
             sessionIndex++
 
-      # Inserts an SVG bar for each treatment above the timeline.
-      #
-      # @param xAxisNode the chart SVG x axis element
-      # @param options the chart options
+      ###*
+       * Inserts an SVG bar for each treatment above the timeline.
+       *
+       * @method addTreatmentBars
+       * @param xAxisNode the chart SVG x axis element
+       * @param options the chart options
+      ###
       addTreatmentBars = (xAxis, low, high) ->
         # The .nv-background xAxis contained in the X axis parent
         # spaces the X axis.
@@ -184,12 +208,15 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart', 'session'], (ng, _, m
           bar.attr('x', left)
           bar.attr('y', "-#{ TREATMENT_BAR_HEIGHT }em")
 
-      # Inserts a marker for each clinical encounter above the
-      # timeline.
-      #
-      # @param element the chart X axis D3 selection
-      # @param low the minimum date
-      # @param high the maximum date
+      ###*
+       * Inserts a marker for each clinical encounter above the
+       * timeline.
+       *
+       * @method addClinicalEncounters
+       * @param element the chart X axis D3 selection
+       * @param low the minimum date
+       * @param high the maximum date
+      ###
       addClinicalEncounters = (xAxis, low, high) ->
         # The .nv-background xAxis contained in the X axis parent
         # spaces the X axis.
@@ -220,10 +247,13 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart', 'session'], (ng, _, m
           # nabla math special character (the wedge-like del operator).
           text.text(TREATMENT_SYMBOL)
 
-      # Adds the treatment and encounter legend directly before the
-      # SVG element.
-      #
-      # @param svg the SVG D3 selection
+      ###*
+       * Adds the treatment and encounter legend directly before the
+       * SVG element.
+       *
+       * @method addLegend
+       * @param svg the SVG D3 selection
+      ###
       addLegend = (svg) ->
         addTreatmentLegend = (parent) ->
           # If there are no treatments, then bail out.
@@ -286,7 +316,7 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart', 'session'], (ng, _, m
         dy = TREATMENT_BAR_HEIGHT
       else
         dy = 0
-      
+
       # Scooch the X axis label up to work around the
       # nvd3 or d3 bug described in the config rotateLabels
       # setting below.
@@ -304,12 +334,15 @@ define ['angular', 'lodash', 'moment', 'helpers', 'chart', 'session'], (ng, _, m
       addLegend(svg)
       workAroundAxisLabelBug(xAxis)
 
-    # @param subject the subject to display
-    # @returns the nvd3 chart configuration
+    ###*
+     * @method configure
+     * @param subject the subject to display
+     * @return the nvd3 chart configuration
+    ###
     configure: (subject) ->
       # The values to plot.
       values = xValues(subject)
-      
+
       # Return the {options, data} configuration.
       options:
         chart:

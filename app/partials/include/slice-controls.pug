@@ -1,56 +1,42 @@
 // TODO - shouldn't the divs be inside the uib-accordion-group?
 //
 // The slice controls are organized into accordion groups.
-.qi-panel.qi-slice-ctrl-panel
+.qi-panel.qi-slice-display-ctrl
   uib-accordion(close-others='false')
-    // Note: The orientation is disabled due to the following bug:
-    // * Pressing the orientation buttons has no effect.
-    // TODO - fix and reenable the orientation, then replace the
-    //   group below. See also the group TODO items.
-    //
-    // TODO - Consolidate the element as:
-    //     uib-accordion-group(ng-controller='AccordionGroupCtrl', is-open="isOpen")
-    //   and test this.
-    //
-    //- div(ng-controller='AccordionGroupCtrl')
-    //-   uib-accordion-group(is-open="isOpen")
-    //-     +accordion-heading('Orientation')
-    //-     // The orientation control.
-    //-     .row.qi-slice-sel
-    //-       div.btn-group
-    //-         label.btn.qi-btn.qi-btn-radio(
-    //-           ng-repeat="dim in dimensions"
-    //-           ng-model="dimension"
-    //-           uib-btn-radio="'{{ dim }}'"
-    //-         ) {{ dim }}
-    //-     .row.qi-slice-sel
-    //-       .col-md-2
-    //-         #qi-slider-axial-plane-back.btn.btn-med.qi-profile-btn.glyphicon.glyphicon-step-backward
-    //-       .col-md-8
-    //-         #qi-slider-axial-plane.qi-slider(qi-slider-axial-plane)
-    //-       .col-md-2
-    //-         #qi-slider-axial-plane-fwd.btn.btn-med.qi-profile-btn.glyphicon.glyphicon-step-forward
     div(ng-controller='AccordionGroupCtrl')
       uib-accordion-group(is-open="isOpen")
-        +accordion-heading('Slice')
-        // The axial plane slice control.
-        qi-slider-axial-plane
-          .row
-            .col-md-2
-              #qi-slider-axial-plane-back.btn.btn-med.qi-profile-btn.glyphicon.glyphicon-step-backward
-            .col-md-8
-              #qi-slider-axial-plane.qi-slider(qi-slider-axial-plane)
-            .col-md-2
-              #qi-slider-axial-plane-fwd.btn.btn-med.qi-profile-btn.glyphicon.glyphicon-step-forward
+        +accordion-heading('Orientation')
+        // The orientation control.
+        .row
+          div.btn-group
+            label.btn.qi-btn.qi-btn-radio(
+              ng-repeat="dim in dimensions"
+              ng-model="dimension"
+              uib-btn-radio="'{{ dim }}'"
+            ) {{ dim }}
+        .row.qi-orient-ctrl
+          .col-md-1.btn.btn-med.qi-profile-btn.qi-step-btn(
+              ng-click="slice.sliceNbr = slice.sliceNbr - 1"
+            ).glyphicon.glyphicon-step-backward
+          .col-md-9
+            slider.qi-slider(
+                ng-model="slice.sliceNbr" floor='1' ceiling='12' step='1'
+              )
+          .col-md-1.btn.btn-med.qi-profile-btn.qi-step-btn(
+              ng-click="slice.sliceNbr = slice.sliceNbr + 1"
+            ).glyphicon.glyphicon-step-forward
     div(ng-controller='AccordionGroupCtrl')
       uib-accordion-group(is-open="isOpen")
         +accordion-heading('Time Point')
         // The time point control.
-        qi-slider-time-series
-          .row
-            .col-md-2
-              #qi-slider-time-series-back.btn.btn-med.qi-profile-btn.glyphicon.glyphicon-step-backward
-            .col-md-8
-              #qi-slider-time-series.qi-slider(qi-slider-time-series)
-            .col-md-2
-              #qi-slider-time-series-fwd.btn.btn-med.qi-profile-btn.glyphicon.glyphicon-step-forward
+        .row.qi-orient-ctrl
+          .col-md-1.btn.btn-med.qi-profile-btn.qi-step-btn(
+              ng-click="volume.volumeNbr = volume.volumeNbr - 1"
+            ).glyphicon.glyphicon-step-backward
+          .col-md-9
+            slider.qi-slider(
+                ng-model="volume.volumeNbr" floor='1' ceiling='40' step='1'
+              )
+          .col-md-1.btn.btn-med.qi-profile-btn.qi-step-btn(
+              ng-click="volume.volumeNbr = volume.volumeNbr + 1"
+            ).glyphicon.glyphicon-step-forward

@@ -1,0 +1,15 @@
+// The header, including the nav home and help buttons.
+include header
+
+// The context billboard, e.g. 'Breast Patient 4'.
+.qi-billboard
+  h3
+    block billboard
+
+// The main partial content.
+.row.qi-main
+  .qi-content
+    // Every page component is responsible for importing its
+    // help text into its help property.
+    qi-help([help]="help")
+    block content

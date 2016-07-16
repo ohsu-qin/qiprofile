@@ -15,6 +15,6 @@ mixin modeling-parameter(properties, headings)
     div(ng-switch-when='table')
       +modeling-table(properties, headings)
     div(ng-switch-default)
-      script
-        | console.log(new Error('The modeling chart scope modelingFormat' +
-        |                       ' variable is not set to Chart or Table'))
+      script.
+        console.log(new Error('The modeling chart scope modelingFormat' +
+                              ' variable is not set to Chart or Table'))

@@ -6,7 +6,7 @@ define ['angular'], (ng) ->
   # The race helper functions.
   demographics.factory 'Race', ->
     # The map of database value to display value.
-    # These choices must conform to qiprofile-rest choices.RACE_CHOICES.
+    # These choices must conform to qirest choices.RACE_CHOICES.
     CHOICES =
       White: 'White'
       Black: 'Black or African American'
@@ -24,7 +24,7 @@ define ['angular'], (ng) ->
   # The ethnicity helper functions.
   demographics.factory 'Ethnicity', ->
     # The map of database value to display value.
-    # These choices must conform to qiprofile-rest choices.ETHNICITY_CHOICES.
+    # These choices must conform to qirest choices.ETHNICITY_CHOICES.
     CHOICES =
       Hispanic: 'Hispanic or Latino'
       'Non-Hispanic': 'Not Hispanic or Latino'

@@ -2,17 +2,20 @@ define ['angular', 'lodash', 'underscore.string', 'image'], (ng, _, _s) ->
   volume = ng.module 'qiprofile.volume', ['qiprofile.image']
 
   volume.factory 'Volume', ['Image', (Image) ->
-    # Adds the following volume properties to the given volume
-    # image:
-    # * resource - the image store resource name
-    # * number - the one-based volume number
-    # * scan, if the volume parent is a scan, or
-    # * registration, if the volume parent is a registration
-    # * imageSequence - the parent scan or registration
-    #
-    # @param image the volume image object to extend
-    # @param imageSequence the parent object
-    # @param number the one-based volume number
+    ###*
+     * Adds the following volume properties to the given volume
+     * image:
+     * * resource - the image store resource name
+     * * number - the one-based volume number
+     * * scan, if the volume parent is a scan, or
+     * * registration, if the volume parent is a registration
+     * * imageSequence - the parent scan or registration
+     *
+     * @method extend
+     * @param image the volume image object to extend
+     * @param imageSequence the parent object
+     * @param number the one-based volume number
+    ###
     extend: (volume, imageSequence, number) ->
       # Set the image parent volume reference.
       volume.imageSequence = imageSequence
@@ -29,22 +32,31 @@ define ['angular', 'lodash', 'underscore.string', 'image'], (ng, _, _s) ->
 
       # The volume virtual properties.
       Object.defineProperties volume,
-        # @returns the display title
+        ###*
+         * @method title
+         * @return the display title
+        ###
         title:
           get: -> "#{ @imageSequence.title } Volume #{ @number }"
-        
-        # @returns the volume resource name
+
+        ###*
+         * @method resource
+         * @return the volume resource name
+        ###
         resource:
           get: -> @imageSequence.volumes.name
 
       # Return the augmented Image object.
       volume
 
-    # @param imageSequence the parent scan or registration to search
-    # @param number the volume number
-    # @returns the volume object
-    # @throws ReferenceError if the parent image sequence does not
-    #   have the volume
+    ###*
+     * @method find
+     * @param imageSequence the parent scan or registration to search
+     * @param number the volume number
+     * @return the volume object
+     * @throws ReferenceError if the parent image sequence does not
+     *   have the volume
+    ###
     find: (imageSequence, number) ->
       if imageSequence.volumes?
         target = imageSequence.volumes.images[number - 1]

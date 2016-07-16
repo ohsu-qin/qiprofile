@@ -4,23 +4,29 @@ define ['angular', 'lodash', 'rest', 'ngresource', 'helpers'], (ng, _, REST) ->
 
   # Make the Resources singleton.
   resources.factory 'Resources', ['$resource', 'ObjectHelper', ($resource, ObjectHelper) ->
-    # Adds the following properties to the given resource:
-    # * secondaryKey - the secondary key field array
-    # * find - _find wrapper
-    # * query - _query wrapper
-    #
-    # @param resource the resource object to extend
-    # @param secondaryKey the secondary key field array
-    # @returns the augmented resource object
+    ###*
+     * Adds the following properties to the given resource:
+     * * secondaryKey - the secondary key field array
+     * * find - _find wrapper
+     * * query - _query wrapper
+     *
+     * @method extend
+     * @param resource the resource object to extend
+     * @param secondaryKey the secondary key field array
+     * @return the augmented resource object
+    ###
     extend = (resource, secondaryKey) ->
       # Set the secondary key property.
       resource.secondaryKey = secondaryKey
-      # @param condition the search condition
-      # @returns a promise which resolves to the REST database object
-      # @throws ValueError if the condition does not have a
-      #  searchable key, either the id or the complete
-      #  secondary key
-      # @throws ReferenceError if no such object was found
+      ###*
+       * @method resource
+       * @param condition the search condition
+       * @return a promise which resolves to the REST database object
+       * @throws ValueError if the condition does not have a
+       *  searchable key, either the id or the complete
+       *  secondary key
+       * @throws ReferenceError if no such object was found
+      ###
       resource.find = (condition) ->
         # The id search criterion is either the id or the _id
         # property.
@@ -62,11 +68,14 @@ define ['angular', 'lodash', 'rest', 'ngresource', 'helpers'], (ng, _, REST) ->
               )
             # Resolve to the unique object that matches the query condition.
             result[0]
-      
-      # @param condition the search condition
-      # @param fields the optional fields to return (default all fields)
-      # @returns a promise which resolves to the (possibly empty)
-      #   result object array
+
+      ###*
+       * @method resource
+       * @param condition the search condition
+       * @param fields the optional fields to return (default all fields)
+       * @return a promise which resolves to the (possibly empty)
+       *   result object array
+      ###
       resource.query = (condition, fields) ->
         # The select clause.
         select = REST.where(condition)
@@ -78,14 +87,17 @@ define ['angular', 'lodash', 'rest', 'ngresource', 'helpers'], (ng, _, REST) ->
           param = select
         # Reference the asynchronous $resource call $promise property.
         resource._query(param).$promise
-      
+
       # Return the extended resource object.
       resource
 
-    # @param url the REST access URL
-    # @param secondaryKey the optional secondary key field
-    #   name array
-    # @returns the resource service
+    ###*
+     * @method create
+     * @param url the REST access URL
+     * @param secondaryKey the optional secondary key field
+     *   name array
+     * @return the resource service
+    ###
     create = (url, secondaryKey=[]) ->
       # Make the resource object.
       #
@@ -112,7 +124,7 @@ define ['angular', 'lodash', 'rest', 'ngresource', 'helpers'], (ng, _, REST) ->
           transformResponse: (data) -> ObjectHelper.fromJson(data)
       # Wrap the resource methods.
       extend(resource, secondaryKey)
-    
+
     # Since the REST Session objects are embedded in Subject,
     # this Session factory only operates on the session-detail
     # REST objects. The preferred access method is *detail*, which
@@ -121,18 +133,18 @@ define ['angular', 'lodash', 'rest', 'ngresource', 'helpers'], (ng, _, REST) ->
     # Subject delete, which cascades to its embedded sessions.
     # Thus, the Session wrapper below only as a *detail* method
     # which delegates to sessionDetail.find.
-    sessionDetail = create('/api/session-detail/:id')
+    sessionDetail = create('/qirest/session-detail/:id')
 
     ImagingCollection:
-      create('/api/imaging-collection/:id')
+      create('/qirest/imaging-collection/:id')
     Subject:
-      create('/api/subject/:id', ['project', 'collection', 'number'])
+      create('/qirest/subject/:id', ['project', 'collection', 'number'])
     ScanProtocol:
-      create('/api/scan-protocol/:id')
+      create('/qirest/scan-protocol/:id')
     RegistrationProtocol:
-      create('/api/registration-protocol/:id')
+      create('/qirest/registration-protocol/:id')
     ModelingProtocol:
-      create('/api/modeling-protocol/:id')
+      create('/qirest/modeling-protocol/:id')
     Session:
       detail: sessionDetail.find
   ]

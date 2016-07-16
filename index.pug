@@ -1,0 +1,11 @@
+extends src/layout/main
+
+block bootstrap
+  // Bootstrap into jspm.
+  script(src='jspm_packages/system.src.js')
+  script(src='jspm.config.js')
+
+block body
+  qi-app
+    | Loading...
+  script(type='text/javascript', src='boot.js')

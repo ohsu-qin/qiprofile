@@ -8,24 +8,30 @@ define ['angular', 'lodash', 'moment', 'd3'], (ng, _, moment) ->
   chart = ng.module 'qiprofile.chart', []
 
   chart.factory 'Chart', ->
-    # Returns the smallest number of significant decimals that
-    # captures at least one non-zero digit for all non-zero values,
-    # e.g.:
-    # > Chart.minPrecision(1.373, 0.00542, -4, 0.0, 0.04)
-    # > 3
-    #
-    # @param values the values to chart
-    # @returns the smallest number of significant decimals
-    #   that captures at least one non-zero digit for all values
+    ###*
+     * Returns the smallest number of significant decimals that
+     * captures at least one non-zero digit for all non-zero values,
+     * e.g.:
+     * > Chart.minPrecision(1.373, 0.00542, -4, 0.0, 0.04)
+     * > 3
+     *
+     * @method minPrecision
+     * @param values the values to chart
+     * @return the smallest number of significant decimals
+     *   that captures at least one non-zero digit for all values
+    ###
     minPrecision: (values) ->
-      # Determine the minimum value precision as follows:
-      # * If the value is undefined, null, zero or greater then
-      #   one, then zero
-      # * Otherwise, the number of significant decimal digits
-      #
-      # @param value the numeric value
-      # @returns the number of decimals to display for the
-      #   given value
+      ###*
+       * Determine the minimum value precision as follows:
+       * * If the value is undefined, null, zero or greater then
+       *   one, then zero
+       * * Otherwise, the number of significant decimal digits
+       *
+       * @method minValuePrecision
+       * @param value the numeric value
+       * @return the number of decimals to display for the
+       *   given value
+      ###
       minValuePrecision = (value) ->
         # * Zero has no precision.
         # * Otherwise, if the value is negative, then recurse on the
@@ -58,16 +64,22 @@ define ['angular', 'lodash', 'moment', 'd3'], (ng, _, moment) ->
       # Return the largest of the minimum value precision.
       _.max(precisions)
 
-    # @param date the moment date integer
-    # @returns the formatted date
+    ###*
+     * @method formatDate
+     * @param date the moment date integer
+     * @return the formatted date
+    ###
     formatDate: (date) ->
       moment(date).format('MM/DD/YYYY')
 
-    # Replaces the given text element with a  hyperlink anchor element.
-    #
-    # @param text the text D3 selection
-    # @param handler the click event handler
-    # @returns the new anchor element
+    ###*
+     * Replaces the given text element with a  hyperlink anchor element.
+     *
+     * @method d3Hyperlink
+     * @param text the text D3 selection
+     * @param handler the click event handler
+     * @return the new anchor element
+    ###
     d3Hyperlink: (text, handler) ->
       # Unwrap the DOM element.
       textNode = text.node()
@@ -79,7 +91,7 @@ define ['angular', 'lodash', 'moment', 'd3'], (ng, _, moment) ->
       a = parent.append('svg:a')
       # Add the (unused) href.
       a.attr('href', '#')
-      
+
       # Note: the anchor element is well-formed, but is only partially
       # recognized as such by the browser. The browser changes the cursor
       # on hover as if the anchor element was recognized, but clicking
@@ -88,7 +100,7 @@ define ['angular', 'lodash', 'moment', 'd3'], (ng, _, moment) ->
       # as a svg:a rather than an a. In any case, the work-around is to
       # add an on click event that delegats to the event handler.
       a.on('click', handler)
-      
+
       # Reattach the text element to the anchor.
       # The D3 selection append method takes either a string,
       # in which case it creates a new element as in the above

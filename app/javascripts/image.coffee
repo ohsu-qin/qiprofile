@@ -14,12 +14,15 @@ define ['angular', 'lodash', 'loader', 'imageStore', 'nifti'], (ng, _, Loader) -
           throw new Error("The image format could not be inferred from" +
                           " the image file extension for file #{ @name }")
 
-      # Loads the image file and parses it with the given parser.
-      # This method delegates to Loader.load to load the file
-      # and the parser to parse the file.
-      #
-      # @returns a promise which resolves to this image object
-      #   extended with the parsed {header, data} *contents* property
+      ###*
+       * Loads the image file and parses it with the given parser.
+       * This method delegates to Loader.load to load the file
+       * and the parser to parse the file.
+       *
+       * @method load
+       * @return a promise which resolves to this image object
+       *   extended with the parsed {header, data} *contents* property
+      ###
       load: ->
         # The image content parser service.
         parser = @parser()
@@ -31,12 +34,15 @@ define ['angular', 'lodash', 'loader', 'imageStore', 'nifti'], (ng, _, Loader) -
             @contents = parsed
 
     Object.defineProperties ImageMixin.prototype,
-      # Returns the <parent>/image path, where:
-      # * <parent> is the parent scan or registration image
-      #   sequence path
-      # * *image* is the time series image name
-      #
-      # @returns the ancestor path
+      ###*
+       * Returns the <parent>/image path, where:
+       * * <parent> is the parent scan or registration image
+       *   sequence path
+       * * *image* is the time series image name
+       *
+       * @method path
+       * @return the ancestor path
+      ###
       path:
         get: ->
           # Make and cache the title on demand, since it is
@@ -46,13 +52,16 @@ define ['angular', 'lodash', 'loader', 'imageStore', 'nifti'], (ng, _, Loader) -
             @_path = "#{ @imageSequence.path }/#{ @resource }/#{ @name }"
           @_path
 
-    # Makes the following changes to the given REST Image object:
-    # * adds the generic parent imageSequence reference
-    # * adds the concrete parent scan or registration reference
-    # * adds the Loader functionality
-    #
-    # @param image the REST Image object to extend
-    # @return the extended Image object
+    ###*
+     * Makes the following changes to the given REST Image object:
+     * * adds the generic parent imageSequence reference
+     * * adds the concrete parent scan or registration reference
+     * * adds the Loader functionality
+     *
+     * @method extend
+     * @param image the REST Image object to extend
+     * @return the extended Image object
+    ###
     extend: (image) ->
       # Add the loader functionality.
       _.extend(image, new ImageMixin)

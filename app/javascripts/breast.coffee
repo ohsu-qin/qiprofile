@@ -19,20 +19,26 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
       RANGES: [[3..5], [6..7], [8..9]]
       SCORES: ['tubularFormation', 'mitoticCount', 'nuclearPleomorphism']
 
-    # @returns the sorted stage values
+    ###*
+     * @method stageExtent
+     * @return the sorted stage values
+    ###
     stageExtent: ->
       _.chain(STAGES).flatten().union(['4']).uniq().sort().value()
 
-    # Returns the cancer stage.
-    #
-    # 1f metastasis exists (M1), then the stage is 4.
-    # Otherwise, the stage is determined by T and N scores as
-    # defined in the tumor type factory STAGES associative
-    # lookup table.
-    #
-    # @param tnm the TNM object
-    # @returns the cancer stage object, as described in tnm.coffee
-    #    stage
+    ###*
+     * Returns the cancer stage.
+     *
+     * 1f metastasis exists (M1), then the stage is 4.
+     * Otherwise, the stage is determined by T and N scores as
+     * defined in the tumor type factory STAGES associative
+     * lookup table.
+     *
+     * @method stage
+     * @param tnm the TNM object
+     * @return the cancer stage object, as described in tnm.coffee
+     *    stage
+    ###
     stage: (tnm) ->
       # M1 => stage IV.
       # TODO - shouldn't this be '4'? Is there a test case for this?
@@ -53,25 +59,28 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
                                    " TNM: #{ ObjectHelper.prettyPrint(tnm) }")
 
       _.reduce([t, n], find, STAGES)
-    
 
-    # Returns the cancer recurrence score. This score is calculated from
-    # a genetic expression assay according to algorithm in Figure 1 of
-    # the following paper:
-    #
-    #   Paik, et al., 'A Multigene Assay to Predict Recurrence of
-    #   Tamoxifen-Treated, Node-Negative Breast Cancer',
-    #   N Engl J Med 2004; 351:2817-2826
-    #   (http://www.nejm.org/doi/full/10.1056/NEJMoa041588)
-    #
-    # 1f metastasis exists (M1), then the stage is 4.
-    # Otherwise, the stage is determined by T and N scores as
-    # defined in the tumor type factory STAGES associative
-    # lookup table.
-    #
-    # @param tnm the TNM object
-    # @returns the cancer stage object, as described in tnm.coffee
-    #    stage
+
+    ###*
+     * Returns the cancer recurrence score. This score is calculated from
+     * a genetic expression assay according to algorithm in Figure 1 of
+     * the following paper:
+     *
+     *   Paik, et al., 'A Multigene Assay to Predict Recurrence of
+     *   Tamoxifen-Treated, Node-Negative Breast Cancer',
+     *   N Engl J Med 2004; 351:2817-2826
+     *   (http://www.nejm.org/doi/full/10.1056/NEJMoa041588)
+     *
+     * 1f metastasis exists (M1), then the stage is 4.
+     * Otherwise, the stage is determined by T and N scores as
+     * defined in the tumor type factory STAGES associative
+     * lookup table.
+     *
+     * @method recurrenceScore
+     * @param tnm the TNM object
+     * @return the cancer stage object, as described in tnm.coffee
+     *    stage
+    ###
     recurrenceScore: (assay) ->
       her2Unscaled = (0.9 * assay.her2.grb7) + (0.1 * assay.her2.her2)
       her2 = Math.max(8, her2Unscaled)
@@ -88,26 +97,32 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
       recurrenceUnscaled = (0.47 * her2) - (0.34 * er) + (1.04 * proliferation) +
                            (0.10 * invasion) + (0.05 * assay.cd68) -
                            (0.08 * assay.gstm1) - (0.07 * assay.bag1)
-      
+
       # Guard against missing values.
       if isNaN(recurrenceUnscaled)
         return null
-      
+
       recurrenceScaled = Math.round(20 * (recurrenceUnscaled - 6.7))
-      
+
       # Return the score fit to the range [0, 100].
       Math.max(0, Math.min(recurrenceScaled, 100))
 
 
-    # Calculates the Residual Cancer Burden index and class as described in:
-    #   JCO 25:28 4414-4422 <http://jco.ascopubs.org/content/25/28/4414.full>
-    #
-    # @param tumor the tumor object
-    # @returns the RCB object extended with index and class properties
+    ###*
+     * Calculates the Residual Cancer Burden index and class as described in:
+     *   JCO 25:28 4414-4422 <http://jco.ascopubs.org/content/25/28/4414.full>
+     *
+     * @method residualCancerBurden
+     * @param tumor the tumor object
+     * @return the RCB object extended with index and class properties
+    ###
     residualCancerBurden: (tumor) ->
-      # @param extent the tumor extent {length, width, depth} REST object
-      # @param rcb the RCB REST object
-      # @returns the RCB index
+      ###*
+       * @method rcbIndex
+       * @param extent the tumor extent {length, width, depth} REST object
+       * @param rcb the RCB REST object
+       * @return the RCB index
+      ###
       rcbIndex = (extent, rcb) ->
         # The bidimensional tumor size metric.
         size = Math.sqrt(extent.length * extent.width)
@@ -129,8 +144,11 @@ define ['angular', 'lodash', 'helpers'], (ng, _) ->
         # The RCB index is the sum of the invasion and node components.
         invasionFactor + nodeFactor
 
-      # @param index the calculated RCB index value
-      # @returns the RCB class based on RCB index cut-offs
+      ###*
+       * @method rcbClass
+       * @param index the calculated RCB index value
+       * @return the RCB class based on RCB index cut-offs
+      ###
       rcbClass = (index) ->
         if index == 0
           return 0

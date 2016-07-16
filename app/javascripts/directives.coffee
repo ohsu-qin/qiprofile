@@ -1,10 +1,10 @@
-define ['angular', 'lodash', 'underscore.string', 'spin', 'nouislider', 'helpers',
-        'collection', 'timeline', 'intensityChart', 'modeling', 'SliceDisplay'],
-  (ng, _, _s, Spinner, noUiSlider) ->
+define ['angular', 'lodash', 'underscore.string', 'spin', 'helpers',
+        'collection', 'timeline', 'intensityChart', 'modeling'],
+  (ng, _, _s, Spinner) ->
     directives = ng.module(
       'qiprofile.directives',
       ['qiprofile.helpers', 'qiprofile.collection', 'qiprofile.timeline',
-       'qiprofile.intensitychart', 'qiprofile.modeling', 'qiprofile.slicedisplay']
+       'qiprofile.intensitychart', 'qiprofile.modeling']
     )
 
     # Spinner directive.

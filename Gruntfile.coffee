@@ -3,7 +3,7 @@ module.exports = (grunt) ->
     pkg: grunt.file.readJSON('package.json')
 
     clean:
-      derived: ['public', 'build']
+      derived: ['public', 'build', 'typings']
       options:
         force: true
 
@@ -159,20 +159,33 @@ module.exports = (grunt) ->
         configFile: 'test/conf/karma-conf.coffee'
 
     exec:
+      # # Delete the qirest Anaconda environment.
+      # # Note: conda env remove hangs when executed from a script.
+      # # It does not run when executed from a script in background.
+      # # There is no known mechanism to make this work.
+      # cleanqirest:
+      #   command:
+      #     '(source deactivate 2>/dev/null);' +
+      #     '(yes | conda env remove -n qirest)'
+
       # Clean all installation artifacts, including the qirest Anaconda
       # environment.
-      cleanall:
+      cleannpm:
         command:
-          'rm -rf node_modules/ jspm_packages/ build/ public/ typings/; ' +
-          'source deactivate 2>/dev/null; ' +
-          'conda env remove -n qirest 2>/dev/null'
+          'rm -rf node_modules/ jspm_packages/'
 
       # Build the qirest Anaconda environment and install the application.
-      buildall:
+      buildqirest:
         command:
-          'conda env create -n qirest pip 2>/dev/null; ' +
-          'source activate qirest; ' +
-          'pip install -r requirements.txt; ' +
+          # Note: conda env remove hangs when executed from a script.
+          # There is no known mechanism to make this work.
+          # '(yes | conda create -n qirest pip) && ' +
+          'source activate qirest && ' + 
+          'pip install --upgrade -r requirements.txt'
+
+      # Build the qirest Anaconda environment and install the application.
+      buildnpm:
+        command:
           'npm install'
       
       # Kill any existing selenium server and install the drivers.
@@ -267,7 +280,13 @@ module.exports = (grunt) ->
                                      'exec:updatewebdriver', 'build']
 
   # Reinstall from scratch.
-  grunt.registerTask 'reinstall', ['exec:cleanall', 'exec:buildall']
+  grunt.registerTask 'cleanall', ['clean', 'exec:cleannpm']
+
+  # Reinstall from scratch.
+  grunt.registerTask 'buildall', ['exec:buildqirest', 'exec:buildnpm']
+
+  # Reinstall from scratch.
+  grunt.registerTask 'reinstall', ['cleanall', 'buildall']
 
   # Start the server with debug turned on.
   grunt.registerTask 'start:dev', ['express:dev', 'watch']

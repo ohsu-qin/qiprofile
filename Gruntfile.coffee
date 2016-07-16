@@ -246,7 +246,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'bundle', ['build:dev', 'ts:app', 'jspm']
 
   # The npm postinstall task.
-  grunt.registerTask 'postinstall', ['build', 'ts:tslint']
+  grunt.registerTask 'postinstall', ['ts:tslint', 'build']
 
   # Start the server with debug turned on.
   grunt.registerTask 'start:dev', ['express:dev', 'watch']

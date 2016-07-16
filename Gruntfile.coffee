@@ -188,6 +188,11 @@ module.exports = (grunt) ->
         command:
           'npm install'
       
+      qirest:
+        command:
+          'pgrep -f qirest || ' +
+          '((qirest >/var/log/qirest.log 2>&1 &) && sleep .5)'
+      
       # Kill any existing selenium server and install the drivers.
       installselenium:
         command: 'pkill -f selenium-standalone >/dev/null 2>&1;' +
@@ -292,7 +297,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'start:dev', ['express:dev', 'watch']
 
   # Start the server with debug turned on.
-  grunt.registerTask 'start:test', ['express:test', 'watch']
+  grunt.registerTask 'start:test', ['exec:qirest', 'express:test', 'watch']
 
   # Start the server in production mode.
   grunt.registerTask 'start:prod', ['express:prod']

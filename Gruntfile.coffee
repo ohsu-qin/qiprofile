@@ -54,13 +54,13 @@ module.exports = (grunt) ->
           require('csso-stylus')
         ]
       default:
-        src: ['app/stylesheets/app.styl']
+        src: ['stylesheets/app.styl']
         dest: 'public/stylesheets/app.css'
 
     copy:
       static:
         expand: true
-        cwd: 'app/static/'
+        cwd: 'static/'
         src: '**/*'
         dest: 'public/'
 
@@ -159,32 +159,49 @@ module.exports = (grunt) ->
         configFile: 'test/conf/karma-conf.coffee'
 
     exec:
+      # Clean all installation artifacts, including the qirest Anaconda
+      # environment.
+      cleanall:
+        command:
+          'rm -rf node_modules/ jspm_packages/ build/ public/ typings/; ' +
+          'source deactivate 2>/dev/null; ' +
+          'conda env remove -n qirest 2>/dev/null'
+
+      # Build the qirest Anaconda environment and install the application.
+      buildall:
+        command:
+          'conda env create -n qirest pip 2>/dev/null; ' +
+          'source activate qirest; ' +
+          'pip install -r requirements.txt; ' +
+          'npm install'
+      
+      # Kill any existing selenium server and install the drivers.
+      installselenium:
+        command: 'pkill -f selenium-standalone >/dev/null 2>&1;' +
+                 './node_modules/selenium-standalone/bin/selenium-standalone' +
+                 '   install --silent'
+
+      # If selenium is not already running, then start it. Suppress all
+      # output, since there are no documented options to tailor the
+      # selenium log level or log file at the command line. The selenium
+      # server is spawned as a background process that survives the grunt
+      # session.
+      #
+      # The pgrep command checks the selenium processes are already running.
+      # The server can be killed by the following command:
+      #
+      #   pkill -f selenium-standalone
+      #
+      # The sleep command pauses half a second to allow the server to start.
+      # Otherwise, grunt might exit and kill the process aborning.
+      #
       # This task is used in preference to grunt-selenium-standalone to
       # suppress extraneous console messages and wait for the server to
       # start.
-      selenium:
-        # If selenium is not already running, then start it. Suppress all
-        # output, since there are no documented options to tailor the
-        # selenium log level or log file at the command line. The selenium
-        # server is spawned as a background process that survives the grunt
-        # session. The command pseudo-code is as follows:
-        # * Check for a process which listens on port 4444
-        # * Start the selenium server as a background process
-        # * Suppress non-error output
-        #
-        # The lsof command checks whether a process (hopefully the selenium
-        # server) is already running on port 4444. The server can be killed
-        # by the following command:
-        #
-        #   pkill -f selenium-standalone
-        #
-        # The sleep command pauses half a second to allow the server to start.
-        # Otherwise, grunt might exit and kill the process aborning.
-        command: 'lsof -i :4444 >/dev/null 2>&1 || ' +
-                 '(./node_modules/selenium-standalone/bin/selenium-standalone' +
-                 '   install --silent && ' +
-                 ' ((./node_modules/selenium-standalone/bin/selenium-standalone' +
-                 '   start >/dev/null 2>&1 &) && sleep .5))'
+      startselenium:
+        command: 'pgrep -f selenium-standalone >/dev/null 2>&1 || ' +
+                 '((./node_modules/selenium-standalone/bin/selenium-standalone' +
+                 '  start >/dev/null 2>&1 &) && sleep .5)'
 
       updatewebdriver:
         command: './node_modules/protractor/bin/webdriver-manager update'
@@ -246,7 +263,11 @@ module.exports = (grunt) ->
   grunt.registerTask 'bundle', ['build:dev', 'ts:app', 'jspm']
 
   # The npm postinstall task.
-  grunt.registerTask 'postinstall', ['ts:tslint', 'build']
+  grunt.registerTask 'postinstall', ['ts:tslint', 'exec:installselenium',
+                                     'exec:updatewebdriver', 'build']
+
+  # Reinstall from scratch.
+  grunt.registerTask 'reinstall', ['exec:cleanall', 'exec:buildall']
 
   # Start the server with debug turned on.
   grunt.registerTask 'start:dev', ['express:dev', 'watch']
@@ -264,7 +285,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'test:unit', ['karma:unit']
 
   # Run the Protractor end-to-end tests.
-  grunt.registerTask 'test:e2e', ['exec:updatewebdriver', 'exec:selenium', 'express:test',
+  grunt.registerTask 'test:e2e', ['exec:startselenium', 'express:test',
                                   'protractor:e2e']
 
   # Run all tests.

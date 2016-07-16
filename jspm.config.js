@@ -32,7 +32,7 @@ SystemJS.config({
           'loader': 'ts'
         },
         '*.js': {
-          'loader': 'babel'
+          'loader': 'plugin-babel'
         },
         '*.coffee': {
           'loader': 'coffee'
@@ -72,7 +72,6 @@ SystemJS.config({
     }
   },
   map: {
-    'babel': 'node_modules/babel-core/browser.js',
     'jasmine': 'npm:jasmine@2.4.1'
   }
 });
@@ -148,7 +147,7 @@ SystemJS.config({
     },
     'github:jspm/nodelibs-buffer@0.2.0-alpha': {
       'map': {
-        'buffer-browserify': 'npm:buffer@4.7.0'
+        'buffer-browserify': 'npm:buffer@4.7.1'
       }
     },
     'npm:debug@2.2.0': {
@@ -539,11 +538,11 @@ SystemJS.config({
         'showdown': 'github:showdownjs/showdown@1.4.2'
       }
     },
-    'npm:buffer@4.7.0': {
+    'npm:buffer@4.7.1': {
       'map': {
-        'ieee754': 'npm:ieee754@1.1.6',
+        'isarray': 'npm:isarray@1.0.0',
         'base64-js': 'npm:base64-js@1.1.2',
-        'isarray': 'npm:isarray@1.0.0'
+        'ieee754': 'npm:ieee754@1.1.6'
       }
     }
   }

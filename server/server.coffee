@@ -21,7 +21,7 @@ watcher = require 'chokidar-socket-emitter'
 PORT = 3000
 PORT_TEST = PORT + 1
 MONGODB_PORT = 27017
-EVE_PORT = 5000
+QIREST_PORT = 5000
 
 # The grunt build tasks place all compiled and copied files within
 # the public directory.
@@ -130,14 +130,14 @@ if env is 'test'
   app.set 'port', PORT_TEST
 
 # Callback invoked after MongoDB is started.
-mongod_callback = ->
+start_app = ->
   # The REST server start mode, production or development.
   restMode = if env is 'test' then 'development' else env
   # The REST server command.
-  cmd = if restMode? then "qirest --#{ restMode }" else 'qirest'
+  qirest = if restMode? then "qirest --#{ restMode }" else 'qirest'
   
   # The callback after the REST server is started.
-  eve_callback = ->
+  start_eve = ->
     # The server port.
     port = app.get 'port'
     # Make the server.
@@ -151,9 +151,9 @@ mongod_callback = ->
                   " in #{ env } mode."
   
   # Start the REST app without logging to the console.
-  spawn(cmd, EVE_PORT, eve_callback, {silent: true})
+  spawn(qirest, QIREST_PORT, start_eve, {silent: true})
 
 # Start MongoDB, if necessary, and forward to the callback.
-spawn('mongod', MONGODB_PORT, mongod_callback, {silent: true})
+spawn('mongod', MONGODB_PORT, start_app, {silent: true})
 
 module.exports = app

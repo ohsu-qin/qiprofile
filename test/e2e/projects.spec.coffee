@@ -6,13 +6,12 @@ Page = require './helpers/page'
 
 _ = require 'lodash'
 
-
 class ProjectListPage extends Page
   constructor: ->
     # Call the Page superclass initializer with the helpShown
     # flag set to true, since the help box is displayed on
     # this landing page.
-    super('/qiprofile/projects',  true)
+    super('/qiprofile/projects', true)
 
   # @returns the project {name, description, url} object
   #   array promise
@@ -66,7 +65,7 @@ describe 'E2E Testing Project List', ->
 
     it 'should have a home button', ->
       expect(page.home, 'The home URL is incorrect')
-        .to.eventually.match(Page.HOME_URL_PAT)
+        .to.eventually.match(page.url_pattern())
 
     describe 'Help', ->
       help = null
@@ -89,32 +88,11 @@ describe 'E2E Testing Project List', ->
       page.projects().then (colls) ->
         rows = colls
 
-    it 'should display the Breast and Sarcoma projects', ->
-      # The projects are sorted. The comparison is the Chai
-      # deep equals operator eql rather than equal.
+    it 'should display the QIN_Test project', ->
       names = _.map(rows, 'name')
-      expect(names, 'The project names are incorrect')
-        .to.eql(['Breast', 'Sarcoma'])
+      expect('QIN_Test', 'The project names are incorrect')
+        .to.be.oneOf(names)
 
-    it 'should have an info button', ->
-      for row, i in rows
-        expect(row.info, "The #{ row.name } project #{ i }" +
-                         " is missing an info button")
-          .to.exist
-
-    xit 'should link to the project detail', ->
-      # TODO - Enable when the detail link is enabled.
-      for row, i in rows
-        expect(row.detail, "The #{ row.name } project #{ i }" +
-                           " is missing a detail hyperlink")
-          .to.exist
-        # The project detail URL is
-        # .../qiprofile/<project>/<project>/....
-        regex = RegExp(HOME + '/(\w+)')
-        match = regex.exec(row.detail)
-        expect(match, "The #{ row.name } project detail" +
-                          " hyperlink is malformed: #{ row.detail }")
-          .to.exist
-        expect(match[1], "The #{ row.name } project detail" +
-                       " hyperlink is incorrect: #{ row.detail }")
-          .to.equal(row.name.toLowerCase())
+    xit 'should link to the Collections List page', ->
+      # TODO - test link
+      

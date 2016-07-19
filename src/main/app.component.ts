@@ -5,10 +5,8 @@
  */
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
-import { Router, Routes, ROUTER_DIRECTIVES } from '@angular/router';
+import { Router, ROUTER_DIRECTIVES } from '@angular/router';
 
-import { ProjectsComponent } from '../projects/projects.component.ts';
-import { CollectionsComponent } from '../collections/collections.component.ts';
 import { HelpService } from '../common/help.service.ts';
 
 @Component({
@@ -19,11 +17,6 @@ import { HelpService } from '../common/help.service.ts';
   // should not declare the provider separately.
   providers: [HelpService]
 })
-
-@Routes([
-  {path: '/qiprofile/projects', component: ProjectsComponent},
-  {path: '/qiprofile/:project', component: CollectionsComponent}
-])
 
 /**
  * The boot entry point.

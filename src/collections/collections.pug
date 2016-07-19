@@ -4,8 +4,8 @@ block billboard
   | Collections
 
 block content
+  p(*ngIf="isEmpty() | async")
+    | The {{ project }} collection {{ collections.length }} does not have any visits.
   ul.qi-main-list
-    p(*ngIf="isEmpty() | async")
-      | The {{ project }} collection {{ collections.length }} does not have any visits.
     li(*ngFor="let collection of collections | async")
       qi-collection-item([collection]="collection")

@@ -4,7 +4,7 @@
  * @module collections
  */
 import { Component, OnInit } from '@angular/core';
-import { RouteSegment, OnActivate } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 
 import { GoHomeComponent } from '../common/go-home.component.ts';
@@ -50,8 +50,18 @@ export class CollectionsComponent implements OnInit, OnActivate {
    * @property help {string}
    */
   help: string;
-
-  constructor(private dataService: CollectionService,
+  
+  /**
+   * At startup, the router navigates to this destination.
+   * If that is the case, then show the help.
+   * Otherwise, clear the help whenever the route changes.
+   *
+   * @method routerOnActivate
+   * @param curr the current route
+   * @param [prev] the most recent route, if any
+   */
+  constructor(private route: ActivatedRoute,
+              private dataService: CollectionService,
               private helpService: HelpService) {
       this.help = help;
   }
@@ -65,41 +75,25 @@ export class CollectionsComponent implements OnInit, OnActivate {
       array => array.length === 0
     );
   }
-
+  
   /**
-   * Obtains the collection objects from the data service and sorts
+   * Obtains the REST Collection objects from the data service and sorts
    * them by collection name.
    *
    * @method ngOnInit
    */
   ngOnInit() {
-    // The unsorted collection objects.
-    let unsorted: Observable = this.dataService.getCollections(this.project);
-    // A function to sort the collections by name.
-    let sortByName = _.partialRight(_.sortBy, 'name');
-    // Sort the collections.
-    this.collections = unsorted.map(sortByName);
-  }
-
-  /**
-   * At startup, the router navigates to the Home destination.
-   * If that is the case, then show the help.
-   * Otherwise, clear the help whenever the route changes.
-   *
-   * @method routerOnActivate
-   * @param curr the current route
-   * @param [prev] the most recent route, if any
-   */
-  routerOnActivate(curr: RouteSegment, prev?: RouteSegment) {
-    this.project = curr.getParam('project');
-    // There must be a project.
-    if (!this.project) {
-      let url = curr.stringifiedUrlSegments;
-      throw new Error(`The project is missing in the location ${ url }`);
-    }
-    // If this is the first visit to this home page, then show the help.
-    if (!prev) {
-      this.helpService.showHelp = true;
-    }
+    // Show help if and only if this is the first visit to this page.
+    this.helpService.showHelp = true;
+    // When the route settles, fetch the collections.
+    this.route.params.subscribe(params => {
+      this.project = params.project;
+      // The unsorted collection objects.
+      let unsorted: Observable = this.dataService.getCollections(this.project);
+      // A function to sort the collections by name.
+      let sortByName = _.partialRight(_.sortBy, 'name');
+      // Sort the collections.
+      this.collections = unsorted.map(sortByName);
+    });
   }
 }

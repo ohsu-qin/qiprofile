@@ -256,16 +256,6 @@
           }
         }
       },
-      "npm:@angular/router@2.0.0-rc.2": {
-        "meta": {
-          "src/*.js": {
-            "deps": [
-              "reflect-metadata",
-              "zone.js"
-            ]
-          }
-        }
-      },
       "npm:babel-runtime@5.8.38": {
         "main": false,
         "dependencies": {},

@@ -1,0 +1,9 @@
+extends ../layout/partial
+
+block billboard
+  | {{ collection }} Collection
+
+block content
+  qi-collection-correlation.col-md-6(*ngFor="let chartConfig of chartConfigs")
+
+

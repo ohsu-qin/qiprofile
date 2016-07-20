@@ -31,7 +31,7 @@ import { Observable } from 'rxjs';
  * @class CollectionComponent
  * @main
  */
-export class CollectionComponent implements OnInit, OnActivate {
+export class CollectionComponent implements OnInit {
   /**
    * The project name.
    *
@@ -71,7 +71,7 @@ export class CollectionComponent implements OnInit, OnActivate {
               private dataService: SubjectService,
               private helpService: HelpService) {
       this.help = help;
-      this.chartConfigs = [{}, {}, {}, {}]
+      this.chartConfigs = [{}, {}, {}, {}];
   }
   
   /**

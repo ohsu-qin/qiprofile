@@ -72,7 +72,8 @@ SystemJS.config({
     }
   },
   map: {
-    'jasmine': 'npm:jasmine@2.4.1'
+    'jasmine': 'npm:jasmine@2.4.1',
+    '@angular/core@2.0.0-rc.4': 'npm:@angular/core@2.0.0-rc.4'
   }
 });
 
@@ -83,7 +84,7 @@ SystemJS.config({
     'github:*/*.json'
   ],
   map: {
-    '@angular/core@2.0.0-rc.4': 'npm:@angular/core@2.0.0-rc.4',
+    'd3': 'npm:d3@4.1.1',
     '@angular/common': 'npm:@angular/common@2.0.0-rc.4',
     '@angular/compiler': 'npm:@angular/compiler@2.0.0-rc.4',
     '@angular/core': 'npm:@angular/core@2.0.0-rc.4',
@@ -544,6 +545,132 @@ SystemJS.config({
         'bn.js': 'npm:bn.js@4.11.5',
         'inherits': 'npm:inherits@2.0.1',
         'minimalistic-assert': 'npm:minimalistic-assert@1.0.0'
+      }
+    },
+    'npm:d3@4.1.1': {
+      'map': {
+        'd3-dsv': 'npm:d3-dsv@1.0.0',
+        'd3-array': 'npm:d3-array@1.0.0',
+        'd3-ease': 'npm:d3-ease@1.0.0',
+        'd3-color': 'npm:d3-color@1.0.0',
+        'd3-format': 'npm:d3-format@1.0.0',
+        'd3-hierarchy': 'npm:d3-hierarchy@1.0.0',
+        'd3-brush': 'npm:d3-brush@1.0.1',
+        'd3-time-format': 'npm:d3-time-format@2.0.0',
+        'd3-voronoi': 'npm:d3-voronoi@1.0.1',
+        'd3-time': 'npm:d3-time@1.0.0',
+        'd3-zoom': 'npm:d3-zoom@1.0.2',
+        'd3-selection': 'npm:d3-selection@1.0.0',
+        'd3-polygon': 'npm:d3-polygon@1.0.0',
+        'd3-random': 'npm:d3-random@1.0.0',
+        'd3-shape': 'npm:d3-shape@1.0.0',
+        'd3-transition': 'npm:d3-transition@1.0.0',
+        'd3-axis': 'npm:d3-axis@1.0.0',
+        'd3-queue': 'npm:d3-queue@3.0.1',
+        'd3-quadtree': 'npm:d3-quadtree@1.0.0',
+        'd3-timer': 'npm:d3-timer@1.0.1',
+        'd3-dispatch': 'npm:d3-dispatch@1.0.0',
+        'd3-collection': 'npm:d3-collection@1.0.0',
+        'd3-geo': 'npm:d3-geo@1.1.1',
+        'd3-interpolate': 'npm:d3-interpolate@1.1.0',
+        'd3-force': 'npm:d3-force@1.0.0',
+        'd3-path': 'npm:d3-path@1.0.0',
+        'd3-scale': 'npm:d3-scale@1.0.1',
+        'd3-chord': 'npm:d3-chord@1.0.0',
+        'd3-request': 'npm:d3-request@1.0.1',
+        'd3-drag': 'npm:d3-drag@1.0.0'
+      }
+    },
+    'npm:d3-time-format@2.0.0': {
+      'map': {
+        'd3-time': 'npm:d3-time@1.0.0'
+      }
+    },
+    'npm:d3-brush@1.0.1': {
+      'map': {
+        'd3-selection': 'npm:d3-selection@1.0.0',
+        'd3-transition': 'npm:d3-transition@1.0.0',
+        'd3-dispatch': 'npm:d3-dispatch@1.0.0',
+        'd3-interpolate': 'npm:d3-interpolate@1.1.0',
+        'd3-drag': 'npm:d3-drag@1.0.0'
+      }
+    },
+    'npm:d3-dsv@1.0.0': {
+      'map': {
+        'rw': 'npm:rw@1.3.2'
+      }
+    },
+    'npm:d3-zoom@1.0.2': {
+      'map': {
+        'd3-selection': 'npm:d3-selection@1.0.0',
+        'd3-transition': 'npm:d3-transition@1.0.0',
+        'd3-dispatch': 'npm:d3-dispatch@1.0.0',
+        'd3-interpolate': 'npm:d3-interpolate@1.1.0',
+        'd3-drag': 'npm:d3-drag@1.0.0'
+      }
+    },
+    'npm:d3-transition@1.0.0': {
+      'map': {
+        'd3-color': 'npm:d3-color@1.0.0',
+        'd3-ease': 'npm:d3-ease@1.0.0',
+        'd3-selection': 'npm:d3-selection@1.0.0',
+        'd3-timer': 'npm:d3-timer@1.0.1',
+        'd3-dispatch': 'npm:d3-dispatch@1.0.0',
+        'd3-interpolate': 'npm:d3-interpolate@1.1.0'
+      }
+    },
+    'npm:d3-geo@1.1.1': {
+      'map': {
+        'd3-array': 'npm:d3-array@1.0.0'
+      }
+    },
+    'npm:d3-interpolate@1.1.0': {
+      'map': {
+        'd3-color': 'npm:d3-color@1.0.0'
+      }
+    },
+    'npm:d3-force@1.0.0': {
+      'map': {
+        'd3-collection': 'npm:d3-collection@1.0.0',
+        'd3-dispatch': 'npm:d3-dispatch@1.0.0',
+        'd3-quadtree': 'npm:d3-quadtree@1.0.0',
+        'd3-timer': 'npm:d3-timer@1.0.1'
+      }
+    },
+    'npm:d3-shape@1.0.0': {
+      'map': {
+        'd3-path': 'npm:d3-path@1.0.0'
+      }
+    },
+    'npm:d3-scale@1.0.1': {
+      'map': {
+        'd3-array': 'npm:d3-array@1.0.0',
+        'd3-collection': 'npm:d3-collection@1.0.0',
+        'd3-color': 'npm:d3-color@1.0.0',
+        'd3-format': 'npm:d3-format@1.0.0',
+        'd3-interpolate': 'npm:d3-interpolate@1.1.0',
+        'd3-time': 'npm:d3-time@1.0.0',
+        'd3-time-format': 'npm:d3-time-format@2.0.0'
+      }
+    },
+    'npm:d3-chord@1.0.0': {
+      'map': {
+        'd3-array': 'npm:d3-array@1.0.0',
+        'd3-path': 'npm:d3-path@1.0.0'
+      }
+    },
+    'npm:d3-request@1.0.1': {
+      'map': {
+        'd3-dsv': 'npm:d3-dsv@1.0.0',
+        'd3-collection': 'npm:d3-collection@1.0.0',
+        'd3-dispatch': 'npm:d3-dispatch@1.0.0',
+        'xmlhttprequest': 'npm:xmlhttprequest@1.8.0'
+      }
+    },
+    'npm:d3-drag@1.0.0': {
+      'map': {
+        'd3-dispatch': 'npm:d3-dispatch@1.0.0',
+        'd3-selection': 'npm:d3-selection@1.0.0'
       }
     }
   }

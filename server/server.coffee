@@ -96,7 +96,7 @@ app.use '/qirest', rest(restUrl)
 
 # Strip the app prefix from the request URL and serve up the
 # file in the root directory.
-app.get '/qiprofile/*', (req, res) ->
+app.get '/qiprofile*', (req, res) ->
   res.sendFile "#{ root }/index.html"
 
 # TODO - enable error handling below.

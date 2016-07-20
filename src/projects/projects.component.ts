@@ -36,15 +36,15 @@ export class ProjectsComponent implements OnInit {
    * @property projects {Observable}
    */
   projects: Observable<Object[]>;
-
+  
   /**
-   * The Project List page project name is `projects`. This is only
-   * used by the Home button which turns home into a no-op when on
-   * this page.
+   * The Project List page project name is the empty string. This is
+   * only used by the Home button which turns home into a no-op when
+   * on this page.
    *
    * @property project {string}
    */
-  project: string = 'projects';
+  project: string = '';
   
   /**
    * The help content.
@@ -52,7 +52,7 @@ export class ProjectsComponent implements OnInit {
    * @property help {string}
    */
   help: string;
-
+  
   constructor(private dataService: ProjectService,
               private helpService: HelpService) {
       this.help = help;
@@ -67,7 +67,7 @@ export class ProjectsComponent implements OnInit {
       array => array.length === 0
     );
   }
-
+  
   /**
    * Obtains the project names from the data service and sorts them.
    *

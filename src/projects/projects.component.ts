@@ -10,8 +10,8 @@ import { GoHomeComponent } from '../common/go-home.component.ts';
 import { ToggleHelpComponent } from '../common/toggle-help.component.ts';
 import { ProjectItemComponent } from './project-item.component.ts';
 import { ProjectService } from '../project/project.service.ts';
-import { HelpComponent } from '../common/help.component.ts';
-import { HelpService } from '../common/help.service.ts';
+import { HelpComponent } from '../help/help.component.ts';
+import { HelpService } from '../help/help.service.ts';
 import help from './projects.help.md';
 import { Observable } from 'rxjs';
 

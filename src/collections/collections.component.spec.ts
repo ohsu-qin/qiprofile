@@ -7,7 +7,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { CollectionService } from '../collection/collection.service.ts';
 import { CollectionsComponent } from './collections.component.ts';
-import { HelpService } from '../common/help.service.ts';
+import { HelpService } from '../help/help.service.ts';
 
 /**
  * The test mock for an `ActivatedRoute".

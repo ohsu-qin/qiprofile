@@ -117,7 +117,7 @@ app.get '/qiprofile*', (req, res) ->
 # # Enable the error handler.
 # errorHandlerConfig =
 #   static:
-#     '404': "#{ root }/public/html/common/404.html"
+#     '404': "#{ root }/public/html/error/404.html"
 # app.use errorHandler(errorHandlerConfig)
 #
 # # Development error handling.

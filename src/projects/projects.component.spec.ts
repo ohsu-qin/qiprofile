@@ -6,7 +6,7 @@ import {
 
 import { ProjectService } from '../project/project.service.ts';
 import { ProjectsComponent } from './projects.component.ts';
-import { HelpService } from '../common/help.service.ts';
+import { HelpService } from '../help/help.service.ts';
 
 /**
  * The test mock for a {{#crossLink "ProjectService"}}{{/crossLink}}.

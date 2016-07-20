@@ -7,7 +7,7 @@ import {
 
 import { CollectionService } from '../collection/collection.service.ts';
 import { CollectionComponent } from './collection.component.ts';
-import { HelpService } from '../common/help.service.ts';
+import { HelpService } from '../help/help.service.ts';
 
 /**
  * The test mock for a {{#crossLink "CollectionService"}}{{/crossLink}}.

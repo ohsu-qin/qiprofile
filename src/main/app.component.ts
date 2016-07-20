@@ -7,7 +7,7 @@ import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { Router, ROUTER_DIRECTIVES } from '@angular/router';
 
-import { HelpService } from '../common/help.service.ts';
+import { HelpService } from '../help/help.service.ts';
 
 @Component({
   selector: 'qi-app',

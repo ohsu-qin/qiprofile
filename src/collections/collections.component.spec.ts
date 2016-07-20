@@ -4,9 +4,20 @@ import {
   describe, it, inject, beforeEachProviders, expect
 } from '@angular/core/testing';
 
+import { ActivatedRoute } from '@angular/router';
 import { CollectionService } from '../collection/collection.service.ts';
 import { CollectionsComponent } from './collections.component.ts';
 import { HelpService } from '../common/help.service.ts';
+
+/**
+ * The test mock for an `ActivatedRoute".
+ *
+ * @module collections
+ * @class ActivatedRouteStub
+ */
+class ActivatedRouteStub {
+  params: Observable<Object> = Observable.of({project: 'QIN_Test'});
+}
 
 /**
  * The test mock for a {{#crossLink "CollectionService"}}{{/crossLink}}.
@@ -44,6 +55,7 @@ class CollectionsHelpServiceStub {
 beforeEachProviders(() => {
   return [
     CollectionsComponent,
+    provide(ActivatedRoute, {useClass: ActivatedRouteStub}),
     provide(CollectionService, {useClass: CollectionServiceStub}),
     provide(HelpService, {useClass: CollectionsHelpServiceStub})
   ];

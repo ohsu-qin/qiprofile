@@ -156,7 +156,7 @@ class Findable
     browser.getCurrentUrl().then (url) =>
       url
       # Click the button and resolve to the home page.
-      #@click().then -> restore(url)
+      @click().then -> restore(url)
   
   # Finds a nested hyperlink. The hyperlink is the href
   # attribute of an anchor element (<a href=...></a>) contained

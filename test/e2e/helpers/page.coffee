@@ -8,6 +8,9 @@ require 'coffee-errors'
 
 require './object'
 
+# The regexp to match a page that ends at home.
+URL_PAT_PREFIX = "http://[-\\w]+:\\d+"
+
 
 # Page is the PageObject pattern
 # (https://code.google.com/p/selenium/wiki/PageObjects)
@@ -120,9 +123,6 @@ Page.SUGGESTION_BOX_URL = 'http://qiprofile.idea.informer.com'
 
 # The landing page and app URL root.
 Page.HOME = '/qiprofile/QIN_Test'
-
-# The regexp to match a page that ends at home.
-URL_PAT_PREFIX = "http://[-\\w]+:\\d+"
 
 # The regexp to match a page that ends at home.
 Page.HOME_URL_PAT = new RegExp(URL_PAT_PREFIX + "#{ Page.HOME }$")

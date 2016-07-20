@@ -114,6 +114,7 @@
     "karma-script-launcher": "^0.1.0",
     "karma-sourcemap-loader": "^0.3.5",
     "karma-spec-reporter": "^0.0.23",
+    "lodash": "^4.13.1",
     "mocha": "^2.2.5",
     "mocha-phantomjs": "^4.1.0",
     "pako": "^0.2.8",
@@ -161,13 +162,13 @@
       "plugin-babel": "npm:systemjs-plugin-babel@^0.0.12"
     },
     "peerDependencies": {
-      "@angular/common": "npm:@angular/common@2.0.0-rc.2",
-      "@angular/compiler": "npm:@angular/compiler@2.0.0-rc.2",
-      "@angular/core": "npm:@angular/core@2.0.0-rc.2",
-      "@angular/http": "npm:@angular/http@^2.0.0-rc.2",
-      "@angular/platform-browser": "npm:@angular/platform-browser@2.0.0-rc.2",
-      "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@2.0.0-rc.2",
-      "@angular/router": "npm:@angular/router@3.0.0-alpha.3",
+      "@angular/common": "npm:@angular/common@^2.0.0-rc.4",
+      "@angular/compiler": "npm:@angular/compiler@^2.0.0-rc.4",
+      "@angular/core": "npm:@angular/core@^2.0.0-rc.4",
+      "@angular/http": "npm:@angular/http@^2.0.0-rc.4",
+      "@angular/platform-browser": "npm:@angular/platform-browser@^2.0.0-rc.4",
+      "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@2.0.0-rc.4",
+      "@angular/router": "npm:@angular/router@3.0.0-beta.2",
       "assert": "jspm/nodelibs-assert@^0.2.0-alpha",
       "buffer": "jspm/nodelibs-buffer@^0.2.0-alpha",
       "child_process": "jspm/nodelibs-child_process@^0.2.0-alpha",
@@ -196,7 +197,7 @@
       "zone.js": "npm:zone.js@^0.6.6"
     },
     "overrides": {
-      "npm:@angular/common@2.0.0-rc.2": {
+      "npm:@angular/common@2.0.0-rc.4": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -206,7 +207,7 @@
           }
         }
       },
-      "npm:@angular/compiler@2.0.0-rc.2": {
+      "npm:@angular/compiler@2.0.0-rc.4": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -216,7 +217,7 @@
           }
         }
       },
-      "npm:@angular/core@2.0.0-rc.2": {
+      "npm:@angular/core@2.0.0-rc.4": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -226,7 +227,7 @@
           }
         }
       },
-      "npm:@angular/http@2.0.0-rc.2": {
+      "npm:@angular/http@2.0.0-rc.4": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -236,7 +237,7 @@
           }
         }
       },
-      "npm:@angular/platform-browser-dynamic@2.0.0-rc.2": {
+      "npm:@angular/platform-browser-dynamic@2.0.0-rc.4": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -246,7 +247,7 @@
           }
         }
       },
-      "npm:@angular/platform-browser@2.0.0-rc.2": {
+      "npm:@angular/platform-browser@2.0.0-rc.4": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -286,7 +287,7 @@
           "util": "@node/util"
         }
       },
-      "npm:engine.io@1.6.9": {
+      "npm:engine.io@1.6.11": {
         "dependencies": {
           "base64id": "0.1.0",
           "debug": "2.2.0",
@@ -315,10 +316,10 @@
           "crypto": "@empty"
         }
       },
-      "npm:socket.io-client@1.4.6": {
+      "npm:socket.io-client@1.4.8": {
         "main": "lib/index.js"
       },
-      "npm:socket.io@1.4.6": {
+      "npm:socket.io@1.4.8": {
         "map": {
           "socket.io-client/package": "socket.io-client/package.json"
         }

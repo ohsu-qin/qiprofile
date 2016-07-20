@@ -10,7 +10,7 @@ SystemJS.config({
   devConfig: {
     'map': {
       'babel-runtime': 'npm:babel-runtime@5.8.38',
-      'core-js': 'npm:core-js@1.2.6',
+      'core-js': 'npm:core-js@1.2.7',
       'plugin-babel': 'npm:systemjs-plugin-babel@0.0.12'
     }
   },
@@ -83,21 +83,22 @@ SystemJS.config({
     'github:*/*.json'
   ],
   map: {
-    '@angular/common': 'npm:@angular/common@2.0.0-rc.2',
-    '@angular/compiler': 'npm:@angular/compiler@2.0.0-rc.2',
-    '@angular/core': 'npm:@angular/core@2.0.0-rc.2',
-    '@angular/http': 'npm:@angular/http@2.0.0-rc.2',
-    '@angular/platform-browser': 'npm:@angular/platform-browser@2.0.0-rc.2',
-    '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic@2.0.0-rc.2',
-    '@angular/router': 'npm:@angular/router@3.0.0-alpha.3',
+    '@angular/core@2.0.0-rc.4': 'npm:@angular/core@2.0.0-rc.4',
+    '@angular/common': 'npm:@angular/common@2.0.0-rc.4',
+    '@angular/compiler': 'npm:@angular/compiler@2.0.0-rc.4',
+    '@angular/core': 'npm:@angular/core@2.0.0-rc.4',
+    '@angular/http': 'npm:@angular/http@2.0.0-rc.4',
+    '@angular/platform-browser': 'npm:@angular/platform-browser@2.0.0-rc.4',
+    '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic@2.0.0-rc.4',
+    '@angular/router': 'npm:@angular/router@3.0.0-beta.2',
     'assert': 'github:jspm/nodelibs-assert@0.2.0-alpha',
     'buffer': 'github:jspm/nodelibs-buffer@0.2.0-alpha',
     'child_process': 'github:jspm/nodelibs-child_process@0.2.0-alpha',
     'coffee': 'github:forresto/system-coffee@master',
-    'common': 'npm:@angular/common@2.0.0-rc.2',
-    'compiler': 'npm:@angular/compiler@2.0.0-rc.2',
+    'common': 'npm:@angular/common@2.0.0-rc.4',
+    'compiler': 'npm:@angular/compiler@2.0.0-rc.4',
     'constants': 'github:jspm/nodelibs-constants@0.2.0-alpha',
-    'core': 'npm:@angular/core@2.0.0-rc.2',
+    'core': 'npm:@angular/core@2.0.0-rc.4',
     'crypto': 'github:jspm/nodelibs-crypto@0.2.0-alpha',
     'events': 'github:jspm/nodelibs-events@0.2.0-alpha',
     'https': 'github:jspm/nodelibs-https@0.2.0-alpha',
@@ -109,19 +110,19 @@ SystemJS.config({
     'md': 'github:guybedford/system-md@0.1.0',
     'module': 'github:jspm/nodelibs-module@0.2.0-alpha',
     'net': 'github:jspm/nodelibs-net@0.2.0-alpha',
-    'ng2-resource-rest': 'npm:ng2-resource-rest@0.3.4',
+    'ng2-resource-rest': 'npm:ng2-resource-rest@0.3.6',
     'nouislider': 'npm:nouislider@8.5.1',
     'os': 'github:jspm/nodelibs-os@0.2.0-alpha',
     'path': 'github:jspm/nodelibs-path@0.2.0-alpha',
-    'platform-browser': 'npm:@angular/platform-browser@2.0.0-rc.2',
-    'platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic@2.0.0-rc.2',
+    'platform-browser': 'npm:@angular/platform-browser@2.0.0-rc.4',
+    'platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic@2.0.0-rc.4',
     'requirejs': 'npm:requirejs@2.2.0',
     'process': 'github:jspm/nodelibs-process@0.2.0-alpha',
     'querystring': 'github:jspm/nodelibs-querystring@0.2.0-alpha',
     'reflect-metadata': 'npm:reflect-metadata@0.1.3',
     'rxjs': 'npm:rxjs@5.0.0-beta.6',
-    'socket.io': 'npm:socket.io@1.4.6',
-    'socket.io-client': 'npm:socket.io-client@1.4.6',
+    'socket.io': 'npm:socket.io@1.4.8',
+    'socket.io-client': 'npm:socket.io-client@1.4.8',
     'stream': 'github:jspm/nodelibs-stream@0.2.0-alpha',
     'string_decoder': 'github:jspm/nodelibs-string_decoder@0.2.0-alpha',
     'systemjs-hot-reloader': 'github:capaj/systemjs-hot-reloader@0.6.0',
@@ -224,7 +225,7 @@ SystemJS.config({
         'inherits': 'npm:inherits@2.0.1',
         'create-hash': 'npm:create-hash@1.1.2',
         'browserify-rsa': 'npm:browserify-rsa@4.0.1',
-        'bn.js': 'npm:bn.js@4.11.4',
+        'bn.js': 'npm:bn.js@4.11.5',
         'parse-asn1': 'npm:parse-asn1@5.0.0',
         'elliptic': 'npm:elliptic@6.3.1'
       }
@@ -238,7 +239,7 @@ SystemJS.config({
     'npm:diffie-hellman@5.0.2': {
       'map': {
         'randombytes': 'npm:randombytes@2.0.3',
-        'bn.js': 'npm:bn.js@4.11.4',
+        'bn.js': 'npm:bn.js@4.11.5',
         'miller-rabin': 'npm:miller-rabin@4.0.0'
       }
     },
@@ -260,7 +261,7 @@ SystemJS.config({
         'create-hash': 'npm:create-hash@1.1.2',
         'randombytes': 'npm:randombytes@2.0.3',
         'browserify-rsa': 'npm:browserify-rsa@4.0.1',
-        'bn.js': 'npm:bn.js@4.11.4',
+        'bn.js': 'npm:bn.js@4.11.5',
         'parse-asn1': 'npm:parse-asn1@5.0.0'
       }
     },
@@ -280,7 +281,7 @@ SystemJS.config({
     },
     'npm:create-ecdh@4.0.0': {
       'map': {
-        'bn.js': 'npm:bn.js@4.11.4',
+        'bn.js': 'npm:bn.js@4.11.5',
         'elliptic': 'npm:elliptic@6.3.1'
       }
     },
@@ -301,7 +302,7 @@ SystemJS.config({
     'npm:browserify-rsa@4.0.1': {
       'map': {
         'randombytes': 'npm:randombytes@2.0.3',
-        'bn.js': 'npm:bn.js@4.11.4'
+        'bn.js': 'npm:bn.js@4.11.5'
       }
     },
     'npm:parse-asn1@5.0.0': {
@@ -310,12 +311,12 @@ SystemJS.config({
         'create-hash': 'npm:create-hash@1.1.2',
         'evp_bytestokey': 'npm:evp_bytestokey@1.0.0',
         'pbkdf2': 'npm:pbkdf2@3.0.4',
-        'asn1.js': 'npm:asn1.js@4.6.2'
+        'asn1.js': 'npm:asn1.js@4.8.0'
       }
     },
     'npm:miller-rabin@4.0.0': {
       'map': {
-        'bn.js': 'npm:bn.js@4.11.4',
+        'bn.js': 'npm:bn.js@4.11.5',
         'brorand': 'npm:brorand@1.0.5'
       }
     },
@@ -349,47 +350,13 @@ SystemJS.config({
       'map': {
         'debug': 'npm:debug@2.2.0',
         'weakee': 'npm:weakee@1.0.0',
-        'socket.io-client': 'github:socketio/socket.io-client@1.4.6'
-      }
-    },
-    'npm:socket.io@1.4.6': {
-      'map': {
-        'socket.io-adapter': 'npm:socket.io-adapter@0.4.0',
-        'engine.io': 'npm:engine.io@1.6.9',
-        'socket.io-client': 'npm:socket.io-client@1.4.6',
-        'socket.io-parser': 'npm:socket.io-parser@2.2.6',
-        'has-binary': 'npm:has-binary@0.1.7',
-        'debug': 'npm:debug@2.2.0'
+        'socket.io-client': 'github:socketio/socket.io-client@1.4.8'
       }
     },
     'npm:socket.io-adapter@0.4.0': {
       'map': {
         'socket.io-parser': 'npm:socket.io-parser@2.2.2',
         'debug': 'npm:debug@2.2.0'
-      }
-    },
-    'npm:socket.io-client@1.4.6': {
-      'map': {
-        'socket.io-parser': 'npm:socket.io-parser@2.2.6',
-        'has-binary': 'npm:has-binary@0.1.7',
-        'debug': 'npm:debug@2.2.0',
-        'component-bind': 'npm:component-bind@1.0.0',
-        'object-component': 'npm:object-component@0.0.3',
-        'component-emitter': 'npm:component-emitter@1.2.0',
-        'indexof': 'npm:indexof@0.0.1',
-        'engine.io-client': 'npm:engine.io-client@1.6.9',
-        'parseuri': 'npm:parseuri@0.0.4',
-        'backo2': 'npm:backo2@1.0.2',
-        'to-array': 'npm:to-array@0.1.4'
-      }
-    },
-    'npm:engine.io@1.6.9': {
-      'map': {
-        'debug': 'npm:debug@2.2.0',
-        'ws': 'npm:ws@1.0.1',
-        'engine.io-parser': 'npm:engine.io-parser@1.2.4',
-        'base64id': 'npm:base64id@0.1.0',
-        'accepts': 'npm:accepts@1.3.1'
       }
     },
     'npm:socket.io-parser@2.2.6': {
@@ -428,24 +395,6 @@ SystemJS.config({
     'npm:has-binary@0.1.6': {
       'map': {
         'isarray': 'npm:isarray@0.0.1'
-      }
-    },
-    'npm:engine.io-client@1.6.9': {
-      'map': {
-        'ws': 'npm:ws@1.0.1',
-        'component-emitter': 'npm:component-emitter@1.1.2',
-        'engine.io-parser': 'npm:engine.io-parser@1.2.4',
-        'debug': 'npm:debug@2.2.0',
-        'parseuri': 'npm:parseuri@0.0.4',
-        'node-ws': 'npm:ws@1.0.1',
-        'indexof': 'npm:indexof@0.0.1',
-        'has-cors': 'npm:has-cors@1.1.0',
-        'component-inherit': 'npm:component-inherit@0.0.3',
-        'xmlhttprequest-ssl': 'npm:xmlhttprequest-ssl@1.5.1',
-        'node-xmlhttprequest-ssl': 'npm:xmlhttprequest-ssl@1.5.1',
-        'parseqs': 'npm:parseqs@0.0.2',
-        'parsejson': 'npm:parsejson@0.0.1',
-        'yeast': 'npm:yeast@0.1.2'
       }
     },
     'npm:accepts@1.3.1': {
@@ -490,20 +439,13 @@ SystemJS.config({
     'npm:utf-8-validate@1.2.1': {
       'map': {
         'bindings': 'npm:bindings@1.2.1',
-        'nan': 'npm:nan@2.3.5'
+        'nan': 'npm:nan@2.4.0'
       }
     },
     'npm:bufferutil@1.2.1': {
       'map': {
         'bindings': 'npm:bindings@1.2.1',
-        'nan': 'npm:nan@2.3.5'
-      }
-    },
-    'npm:asn1.js@4.6.2': {
-      'map': {
-        'bn.js': 'npm:bn.js@4.11.4',
-        'inherits': 'npm:inherits@2.0.1',
-        'minimalistic-assert': 'npm:minimalistic-assert@1.0.0'
+        'nan': 'npm:nan@2.4.0'
       }
     },
     'github:jspm/nodelibs-domain@0.2.0-alpha': {
@@ -528,7 +470,7 @@ SystemJS.config({
     'npm:elliptic@6.3.1': {
       'map': {
         'inherits': 'npm:inherits@2.0.1',
-        'bn.js': 'npm:bn.js@4.11.4',
+        'bn.js': 'npm:bn.js@4.11.5',
         'brorand': 'npm:brorand@1.0.5',
         'hash.js': 'npm:hash.js@1.0.3'
       }
@@ -543,6 +485,65 @@ SystemJS.config({
         'isarray': 'npm:isarray@1.0.0',
         'base64-js': 'npm:base64-js@1.1.2',
         'ieee754': 'npm:ieee754@1.1.6'
+      }
+    },
+    'npm:socket.io-client@1.4.8': {
+      'map': {
+        'component-bind': 'npm:component-bind@1.0.0',
+        'object-component': 'npm:object-component@0.0.3',
+        'component-emitter': 'npm:component-emitter@1.2.0',
+        'engine.io-client': 'npm:engine.io-client@1.6.11',
+        'to-array': 'npm:to-array@0.1.4',
+        'debug': 'npm:debug@2.2.0',
+        'indexof': 'npm:indexof@0.0.1',
+        'socket.io-parser': 'npm:socket.io-parser@2.2.6',
+        'backo2': 'npm:backo2@1.0.2',
+        'parseuri': 'npm:parseuri@0.0.4',
+        'has-binary': 'npm:has-binary@0.1.7'
+      }
+    },
+    'npm:socket.io@1.4.8': {
+      'map': {
+        'socket.io-client': 'npm:socket.io-client@1.4.8',
+        'socket.io-adapter': 'npm:socket.io-adapter@0.4.0',
+        'debug': 'npm:debug@2.2.0',
+        'socket.io-parser': 'npm:socket.io-parser@2.2.6',
+        'has-binary': 'npm:has-binary@0.1.7',
+        'engine.io': 'npm:engine.io@1.6.11'
+      }
+    },
+    'npm:engine.io@1.6.11': {
+      'map': {
+        'debug': 'npm:debug@2.2.0',
+        'accepts': 'npm:accepts@1.3.1',
+        'engine.io-parser': 'npm:engine.io-parser@1.2.4',
+        'base64id': 'npm:base64id@0.1.0',
+        'ws': 'npm:ws@1.0.1'
+      }
+    },
+    'npm:engine.io-client@1.6.11': {
+      'map': {
+        'component-emitter': 'npm:component-emitter@1.1.2',
+        'indexof': 'npm:indexof@0.0.1',
+        'debug': 'npm:debug@2.2.0',
+        'parseuri': 'npm:parseuri@0.0.4',
+        'engine.io-parser': 'npm:engine.io-parser@1.2.4',
+        'has-cors': 'npm:has-cors@1.1.0',
+        'yeast': 'npm:yeast@0.1.2',
+        'ws': 'npm:ws@1.0.1',
+        'node-ws': 'npm:ws@1.0.1',
+        'parseqs': 'npm:parseqs@0.0.2',
+        'xmlhttprequest-ssl': 'npm:xmlhttprequest-ssl@1.5.1',
+        'node-xmlhttprequest-ssl': 'npm:xmlhttprequest-ssl@1.5.1',
+        'parsejson': 'npm:parsejson@0.0.1',
+        'component-inherit': 'npm:component-inherit@0.0.3'
+      }
+    },
+    'npm:asn1.js@4.8.0': {
+      'map': {
+        'bn.js': 'npm:bn.js@4.11.5',
+        'inherits': 'npm:inherits@2.0.1',
+        'minimalistic-assert': 'npm:minimalistic-assert@1.0.0'
       }
     }
   }

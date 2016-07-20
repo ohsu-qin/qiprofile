@@ -56,7 +56,6 @@ export class ProjectsComponent implements OnInit {
   constructor(private dataService: ProjectService,
               private helpService: HelpService) {
       this.help = help;
-      this.helpService.showHelp = true;
   }
   
   /**
@@ -75,6 +74,8 @@ export class ProjectsComponent implements OnInit {
    * @method ngOnInit
    */
   ngOnInit() {
+    // Always show the help on this page.
+    this.helpService.showHelp = true;
     // The unsorted project objects.
     let unsorted: Observable = this.dataService.getProjects();
     // A function to sort the projects by name.

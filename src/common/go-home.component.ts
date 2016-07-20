@@ -18,6 +18,6 @@ export class GoHomeComponent {
   constructor(private router: Router) { }
 
   goHome() {
-    this.router.navigate(['/qiprofile', this.project]);
+    this.router.navigate([this.project]);
   }
 }

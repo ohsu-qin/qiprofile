@@ -42,14 +42,10 @@ export class AppComponent implements OnInit {
    * @param router the injected router
    * @param location the injected location
    */
-  constructor(private router: Router, private location: Location) { }
-
-  /**
-   * Kicks the router to get things started.
-   *
-   * @method ngOnInit
-   */
-  ngOnInit() {
-    this.router.navigateByUrl(this.location.path());
+  constructor(private helpService: HelpService, private router: Router,
+              private location: Location) {
+    this.router.events.subscribe(path => {
+      helpService.showHelp = false;
+    });
   }
 }

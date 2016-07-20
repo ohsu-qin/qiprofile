@@ -24,6 +24,6 @@ export class ProjectItemComponent {
    * @param project {string} the project name to visit
    */
   visitCollections() {
-    this.router.navigate(['/qiprofile', this.project.name]);
+    this.router.navigate([this.project.name]);
   }
 }

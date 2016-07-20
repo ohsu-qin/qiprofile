@@ -29,7 +29,7 @@ import { Observable } from 'rxjs';
  * @class CollectionsComponent
  * @main
  */
-export class CollectionsComponent implements OnInit, OnActivate {
+export class CollectionsComponent implements OnInit {
   /**
    * The project name.
    *
@@ -51,15 +51,6 @@ export class CollectionsComponent implements OnInit, OnActivate {
    */
   help: string;
   
-  /**
-   * At startup, the router navigates to this destination.
-   * If that is the case, then show the help.
-   * Otherwise, clear the help whenever the route changes.
-   *
-   * @method routerOnActivate
-   * @param curr the current route
-   * @param [prev] the most recent route, if any
-   */
   constructor(private route: ActivatedRoute,
               private dataService: CollectionService,
               private helpService: HelpService) {
@@ -77,13 +68,15 @@ export class CollectionsComponent implements OnInit, OnActivate {
   }
   
   /**
-   * Obtains the REST Collection objects from the data service and sorts
-   * them by collection name.
+   * Initializes this component as follows:
+   * * Obtains the REST Collection objects from the data service
+   * * Sort the collections by name.
+   * * Always show the help.
    *
    * @method ngOnInit
    */
   ngOnInit() {
-    // Show help if and only if this is the first visit to this page.
+    // Always show the help on this page.
     this.helpService.showHelp = true;
     // When the route settles, fetch the collections.
     this.route.params.subscribe(params => {

@@ -15,7 +15,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class CollectionItemComponent {
   @Input() collection;
 
-  constructor(private router: Router, private route: ActivatedRoute) { }
+  constructor(private route: ActivatedRoute, private router: Router) { }
   
   /**
    * Opens the visit info page.
@@ -32,19 +32,6 @@ export class CollectionItemComponent {
    * @method visitInfo
    */
   visitDetail() {
-    // Note: the explicit route works around the following Angular bug:
-    // * the router@3.0.0-alpha.3 navigate with relativeTo results in the
-    //   error:
-    //      Cannot match any routes
-    //   with no indication of what the offending route is nor any reasonable
-    //   way to idientify it in the traceback.
-    //   The work-around is to build the route piecemeal rather than the
-    //   line commented out below.
-    //this.router.navigate([this.collection.name], {relativeTo: this.route});
-    //
-    // Note: if the initial route node omits the leading slash, then Angular
-    //   raises the following error:
-    //     Invalid number of '../'
-    this.router.navigate(['/qiprofile', this.collection.project, this.collection.name]);
+    this.router.navigate([this.collection.name], {relativeTo: this.route});
   }
 }

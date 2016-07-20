@@ -13,7 +13,7 @@ import { SubjectResource } from './subject.resource.ts';
  * @class SubjectService
  */
 export class SubjectService {
-  constructor(private resource: SubjectResource) { }
+  constructor(private resource: SubjectResource) {}
 
   /**
    * @method getSubjects

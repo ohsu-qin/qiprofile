@@ -15,7 +15,7 @@ import { Router } from '@angular/router';
 export class ProjectItemComponent {
   @Input() project;
   
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
   
   /**
    * Opens the Collections List page for the given project.

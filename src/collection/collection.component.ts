@@ -72,6 +72,7 @@ export class CollectionComponent implements OnInit {
               private helpService: HelpService) {
       this.help = help;
       this.chartConfigs = [{}, {}, {}, {}];
+      this.data = [12, 8, 13, 24];
   }
   
   /**

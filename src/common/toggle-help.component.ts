@@ -14,7 +14,7 @@ import { HelpService } from '../common/help.service.ts';
  * @class ToggleHelpComponent
  */
 export class ToggleHelpComponent {
-  constructor(private service: HelpService) { }
+  constructor(private service: HelpService) {}
   
   /**
    * @method showHelp

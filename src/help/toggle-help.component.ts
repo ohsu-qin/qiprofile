@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 
-import { HelpService } from '../common/help.service.ts';
+import { HelpService } from '../help/help.service.ts';
 
 @Component({
   selector: 'qi-toggle-help',
-  templateUrl: '/public/html/common/toggle-help.html'
+  templateUrl: '/public/html/help/toggle-help.html'
 })
 
 /**

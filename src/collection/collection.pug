@@ -4,6 +4,10 @@ block billboard
   | {{ collection }} Collection
 
 block content
-  qi-collection-correlation.col-md-6(*ngFor="let chartConfig of chartConfigs")
-
+  qi-collection-correlation.col-md-6(
+    *ngFor="let config of chartConfigs",
+    [data]="data",
+    width='800',
+    height='1000'
+  )
 

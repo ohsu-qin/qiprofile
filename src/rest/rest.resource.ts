@@ -1,7 +1,7 @@
 /**
  * The shared utilities module.
  *
- * @module common
+ * @module rest
  * @main
  */
 import { Resource, ResourceParams } from 'ng2-resource-rest';

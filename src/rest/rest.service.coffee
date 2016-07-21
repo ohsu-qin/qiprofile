@@ -3,7 +3,7 @@
 ###*
  * REST utility functions.
  *
- * @module common
+ * @module rest
  * @class RestService
  * @static
 ###

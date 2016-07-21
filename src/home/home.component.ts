@@ -9,7 +9,7 @@ import { Router } from '@angular/router';
 /**
  * The home button component.
  *
- * @module common
+ * @module home
  * @class HomeComponent
  */
 export class HomeComponent {

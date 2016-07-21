@@ -511,8 +511,8 @@ Coding Standards
 
       git checkout -b <branch>
 
-  The branch name is lower case underscore, e.g. ``image_detail``. A
-  long-lived or jointly developed branched is pushed to master, e.g.
+  The branch name is dash-delimited underscore, e.g. ``image-detail``.
+  A long-lived or jointly developed branched is pushed to master, e.g.
 
       git push origin <branch>
 
@@ -556,11 +556,19 @@ Coding Standards
 * Version numbers follow the *major*\ .\ *minor*\ .\ *patch* SemVer_
   scheme, where:
   
-  * *major* is 0 for private development checkpoints, 1 for the initial
-    alpha public release, 2 for the beta public release, and incremented
-    thereafter when a major feature set is introduced
+  * *major* is 0 for pre-release development, 1 for the initial alpha
+    public release, 2 for the beta public release, and incremented
+    thereafter when a major feature set is introduced.
   
-  * *minor* and *patch* are numbers only starting at 1
+  * *minor* is 0 for unstable major version development checkpoints,
+    1 for the initial public major version release, and incremented
+    thereafter for each non-backward-compatible change.
+  
+  * *patch* is a number only starting at 1, and incremented with each
+    backward-compatible change.
+  
+  A release is published to npm if and only if it is a public release,
+  as described below.
 
 * Prepare to publish changes as follows:
 
@@ -569,9 +577,9 @@ Coding Standards
   - Rebase, test and merge the branch as described above.
     You should now be on the ``master`` branch.
 
-* Contributors submit changes by pushing the changes to a
-  GitHub fork and sending a pull request to the main
-  qiprofile GitHub repository.
+* Contributors submit changes by pushing the changes to a GitHub
+  fork and sending a pull request to the main qiprofile GitHub
+  repository.
 
 * Committers add a new version as follows:
 
@@ -588,7 +596,10 @@ Coding Standards
         git push
         git push --tags
 
-  - Publish the new module to NPM (cf. the `NPM Publishing Guide`_)::
+  - Publish the new module to NPM if and only if the release is
+    public, i.e. the version *major* and *minor* are 1 or above.
+    Changes are published to NPM as follows (cf. the `NPM
+    Publishing Guide`_)::
   
         npm publish
 

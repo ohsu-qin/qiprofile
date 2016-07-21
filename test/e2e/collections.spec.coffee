@@ -106,7 +106,7 @@ describe 'E2E Testing Collection List', ->
                          " is missing an info button")
           .to.exist
     
-    it 'should link to the Collection Detail page', ->
+    xit 'should link to the Collection Detail page', ->
       for row, i in rows
         expect(row.link, "The #{ row.name } collection #{ i }" +
                          " is missing a hyperlink")

@@ -42,7 +42,7 @@ export class RestResource extends Resource {
    * search criterion, if any.
    *
    * @example
-   *   import RestService from '../common/rest.service.coffee;'
+   *   import RestService from '../rest/rest.service.coffee;'
    *   criterion = RestService.where({id: id});
    *   subject = resource.findOne(criterion);
    *   subject.subscribe(sbj => console.log('Subject %s', sbj.number));
@@ -67,7 +67,7 @@ export class RestResource extends Resource {
    * which emits one matching REST object array.
    *
    * @example
-   *   import RestService from '../common/rest.service.coffee;'
+   *   import RestService from '../rest/rest.service.coffee;'
    *   criterion = RestService.where({project: projectName});
    *   subjects = resource.find(criterion);
    *   subjects.subscribe(sbjs => console.log('%s subjects', sbjs.length));

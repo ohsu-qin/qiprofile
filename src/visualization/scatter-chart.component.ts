@@ -1,11 +1,11 @@
 import {
   Component, Input, ViewContainerRef, Renderer, AfterViewInit
 } from '@angular/core';
-import * as d3 from 'd3/d3';
+import d3 from 'd3';
 
 @Component({
   selector: 'qi-scatter-chart',
-  template: `div`
+  templateUrl: '/public/html/visualization/scatter-chart.html'
 })
 
 /**
@@ -15,30 +15,26 @@ import * as d3 from 'd3/d3';
  * @class ScatterChartComponent
  */
 export class ScatterChartComponent implements AfterViewInit {
-  @Input() subjects;
+  @Input() data;
   
-  constructor(
-    private renderer: Renderer,
-    private viewContainerRef: ViewContainerRef
-  ) {}
+  /**
+   * The d3 container element.
+   *
+   * @property container
+   */
+  private container: any;
+
+  constructor(private renderer: Renderer,
+              private viewContainerRef: ViewContainerRef): {}
   
   ngAfterViewInit() {
     let elt = this.viewContainerRef.element.nativeElement;
     let graph = d3.select(elt);
-    this.divs = graph
-      .append('div')
-      .attr('class', 'chart')
-      .selectAll('div')
+    this.container = graph.select('div');
   }
   
-  render(data: Object): {
-    if (!data) return;
-    this.divs.data(data)
-      .enter()
-      .append('div')
-      .transition()
-      .ease('elastic')
-      .style('width', d => d + '%')
-      .text(d => d + '%')
+  render() {
+    if (!this.data) { return; }
+    this.container.data(this.data);
   }
 }

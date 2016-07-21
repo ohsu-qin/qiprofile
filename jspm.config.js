@@ -110,6 +110,7 @@ SystemJS.config({
     'lodash': 'npm:lodash@4.13.1',
     'md': 'github:guybedford/system-md@0.1.0',
     'module': 'github:jspm/nodelibs-module@0.2.0-alpha',
+    'moment': 'npm:moment@2.14.1',
     'net': 'github:jspm/nodelibs-net@0.2.0-alpha',
     'ng2-resource-rest': 'npm:ng2-resource-rest@0.3.6',
     'nouislider': 'npm:nouislider@8.5.1',
@@ -130,6 +131,7 @@ SystemJS.config({
     'tls': 'github:jspm/nodelibs-tls@0.2.0-alpha',
     'ts': 'github:frankwallis/plugin-typescript@4.0.16',
     'tty': 'github:jspm/nodelibs-tty@0.2.0-alpha',
+    'underscore.string': 'npm:underscore.string@3.3.4',
     'url': 'github:jspm/nodelibs-url@0.2.0-alpha',
     'util': 'github:jspm/nodelibs-util@0.2.0-alpha',
     'vm': 'github:jspm/nodelibs-vm@0.2.0-alpha',
@@ -671,6 +673,12 @@ SystemJS.config({
       'map': {
         'd3-dispatch': 'npm:d3-dispatch@1.0.0',
         'd3-selection': 'npm:d3-selection@1.0.0'
+      }
+    },
+    'npm:underscore.string@3.3.4': {
+      'map': {
+        'util-deprecate': 'npm:util-deprecate@1.0.2',
+        'sprintf-js': 'npm:sprintf-js@1.0.3'
       }
     }
   }

@@ -146,6 +146,7 @@
       "json": "systemjs/plugin-json@^0.1.2",
       "lodash": "npm:lodash@^4.13.1",
       "md": "guybedford/system-md@^0.1.0",
+      "moment": "npm:moment@^2.14.1",
       "ng2-resource-rest": "npm:ng2-resource-rest@^0.3.4",
       "nouislider": "npm:nouislider@^8.5.1",
       "platform-browser": "npm:@angular/platform-browser@^2.0.0-rc.2",
@@ -155,7 +156,8 @@
       "socket.io": "npm:socket.io@^1.4.6",
       "socket.io-client": "npm:socket.io-client@^1.4.6",
       "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.6.0",
-      "ts": "frankwallis/plugin-typescript@^4.0.16"
+      "ts": "frankwallis/plugin-typescript@^4.0.16",
+      "underscore.string": "npm:underscore.string@^3.3.4"
     },
     "devDependencies": {
       "babel-runtime": "npm:babel-runtime@^5.8.38",
@@ -307,6 +309,9 @@
           "buffer": "@empty",
           "process": "@empty"
         }
+      },
+      "npm:moment@2.14.1": {
+        "jspmNodeConversion": false
       },
       "npm:ms@0.7.1": {
         "jspmNodeConversion": false,

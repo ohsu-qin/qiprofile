@@ -4,7 +4,7 @@ import { HelpService } from './help.service.ts';
 
 @Component({
   selector: 'qi-help',
-  templateUrl: '/public/html/common/help.html'
+  templateUrl: '/public/html/help/help.html'
 })
 
 /**

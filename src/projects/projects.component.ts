@@ -6,8 +6,8 @@
 import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
 
-import { GoHomeComponent } from '../common/go-home.component.ts';
-import { ToggleHelpComponent } from '../common/toggle-help.component.ts';
+import { HomeComponent } from '../home/home.component.ts';
+import { ToggleHelpComponent } from '../help/toggle-help.component.ts';
 import { ProjectItemComponent } from './project-item.component.ts';
 import { ProjectService } from '../project/project.service.ts';
 import { HelpComponent } from '../help/help.component.ts';
@@ -18,7 +18,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'qi-projects',
   templateUrl: '/public/html/projects/projects.html',
-  directives: [ProjectItemComponent, GoHomeComponent, ToggleHelpComponent,
+  directives: [ProjectItemComponent, HomeComponent, ToggleHelpComponent,
                HelpComponent],
   providers: [ProjectService]
 })

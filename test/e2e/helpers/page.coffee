@@ -86,7 +86,7 @@ class Page extends Findable
     # @returns the Home button
     findHomeButton = =>
       # The home button is the parent of the home icon.
-      @find('qi-go-home', 'button')
+      @find('qi-home', 'button')
 
     findHomeButton().then (btn) ->
       expect(btn, 'The home button is missing').to.exist

@@ -6,21 +6,21 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { GoHomeComponent } from '../common/go-home.component.ts';
-import { ToggleHelpComponent } from '../common/toggle-help.component.ts';
+import { HomeComponent } from '../home/home.component.ts';
+import { ToggleHelpComponent } from '../help/toggle-help.component.ts';
 import { SubjectService } from '../subject/subject.service.ts';
 import {
   CollectionCorrelationComponent
 } from './collection-correlation.component.ts';
-import { HelpComponent } from '../common/help.component.ts';
-import { HelpService } from '../common/help.service.ts';
+import { HelpComponent } from '../help/help.component.ts';
+import { HelpService } from '../help/help.service.ts';
 import help from './collection.help.md';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'qi-collection',
   templateUrl: '/public/html/collection/collection.html',
-  directives: [GoHomeComponent, ToggleHelpComponent,
+  directives: [HomeComponent, ToggleHelpComponent,
                CollectionCorrelationComponent, HelpComponent],
   providers: [SubjectService]
 })

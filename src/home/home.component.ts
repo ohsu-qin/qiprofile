@@ -2,17 +2,17 @@ import { Component, Input } from '@angular/core';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'qi-go-home',
-  templateUrl: '/public/html/common/go-home.html'
+  selector: 'qi-home',
+  templateUrl: '/public/html/home/home.html'
 })
 
 /**
  * The home button component.
  *
  * @module common
- * @class GoHomeComponent
+ * @class HomeComponent
  */
-export class GoHomeComponent {
+export class HomeComponent {
   @Input() project: string;
 
   constructor(private router: Router) {}

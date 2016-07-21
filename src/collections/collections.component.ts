@@ -7,8 +7,8 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 
-import { GoHomeComponent } from '../common/go-home.component.ts';
-import { ToggleHelpComponent } from '../common/toggle-help.component.ts';
+import { HomeComponent } from '../home/home.component.ts';
+import { ToggleHelpComponent } from '../help/toggle-help.component.ts';
 import { CollectionService } from '../collection/collection.service.ts';
 import { CollectionItemComponent } from './collection-item.component.ts';
 import { HelpComponent } from '../help/help.component.ts';
@@ -19,7 +19,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'qi-collections',
   templateUrl: '/public/html/collections/collections.html',
-  directives: [GoHomeComponent, ToggleHelpComponent, CollectionItemComponent, HelpComponent],
+  directives: [HomeComponent, ToggleHelpComponent, CollectionItemComponent, HelpComponent],
   providers: [CollectionService]
 })
 

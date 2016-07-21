@@ -10,7 +10,7 @@ import { HelpService } from './help.service.ts';
 /**
  * The help panel component.
  *
- * @module common
+ * @module help
  * @class HelpComponent
  */
 export class HelpComponent {

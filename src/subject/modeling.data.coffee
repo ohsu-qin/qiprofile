@@ -5,7 +5,7 @@
 
 ###*
  * @method associate
- * @private
+ * @protected
  * @param accum the object in which to place the
  *   source type: {source id: result} associations
  * @param session the session object
@@ -38,10 +38,12 @@ associate = (accum, session) ->
 
 ###*
  * @method flattenBySource
- * @private
+ * @protected
  * @param protocolId protocol database id
- * @param the {source type: {source id: results}} object
- * @return the [[{protocol, source, results}, ...], ...] array
+ * @param srcAssoc {Object} the `[[{source type: {source id: results}}`
+ *   object
+ * @return {Object[]} the `[[{protocol, source, results}, ...], ...]`
+ *   array
 ###
 flattenBySource = (protocolId, srcAssoc) ->
   create = (protocolId, sourceType, sourceId, results) ->
@@ -74,7 +76,6 @@ flattenBySource = (protocolId, srcAssoc) ->
  *
  * @module subject
  * @class LabelMap
- * @private
  * @static
 ###
 LabelMap =
@@ -84,6 +85,7 @@ LabelMap =
    * * key - the parent parameterResult key
    *
    * @method extend
+   * @protected
    * @param labelMap the object to extend
    * @param paramResult the parent parameter result
   ###
@@ -101,7 +103,6 @@ LabelMap =
  *
  * @module subject
  * @class ParameterResult
- * @private
  * @static
 ###
 ParameterResult =
@@ -117,6 +118,7 @@ ParameterResult =
    * sets the label map parent modeling parameter reference.
    *
    * @method extend
+   * @protected
    * @param paramResult the object to extend
    * @param modelingResult the parent modeling result object
    * @param key the parameter result access property name
@@ -157,7 +159,6 @@ ParameterResult =
  *
  * @module subject
  * @class ModelingResult
- * @private
  * @static
 ###
 ModelingResult =
@@ -167,6 +168,7 @@ ModelingResult =
    * objects as described in extendParameterResult.
    *
    * @method extend
+   * @protected
    * @param modelingResult the modeling result object to extend
    * @param modeling the parent modeling object
   ###
@@ -257,7 +259,7 @@ Modeling =
     modeling
 
   ###*
-   *  The property metadata, as follows:
+   * The property metadata, as follows:
    * * text - plaintext label
    * * html - HTML label
    * * color - recommended HTML color

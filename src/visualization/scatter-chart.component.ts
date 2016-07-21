@@ -11,7 +11,7 @@ import d3 from 'd3';
 /**
  * The d3 scatter chart component
  *
- * @module common
+ * @module visualization
  * @class ScatterChartComponent
  */
 export class ScatterChartComponent implements AfterViewInit {

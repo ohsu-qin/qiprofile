@@ -12,8 +12,6 @@
     "component-selector-type": [true, "element"],
     "curly": true,
     "directive-class-suffix": true,
-    "directive-selector-name": [true, "camelCase"],
-    "directive-selector-type": [true, "attribute"],
     "directive-selector-prefix": [true, "qi"],
     "eofline": true,
     "import-destructuring-spacing": true,

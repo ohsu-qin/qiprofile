@@ -4,8 +4,7 @@ import {
 import * as d3 from 'd3';
 
 @Directive({
-  selector: 'qi-scatter-chart',
-  inputs: ['data']
+  selector: 'qi-scatter-chart'
 })
 
 /**
@@ -14,7 +13,9 @@ import * as d3 from 'd3';
  * @module visualization
  * @class ScatterChartComponent
  */
-export class ScatterChartComponent implements OnChanges, AfterViewInit {
+export class ScatterChartDirective implements OnChanges, AfterViewInit {
+  @Input() data;
+  
   /**
    * The d3 root element.
    *
@@ -32,7 +33,7 @@ export class ScatterChartComponent implements OnChanges, AfterViewInit {
   }
   
   ngAfterViewInit() {
-    this.data;
+    foo = this.data;
     // TODO - build the d3 container.
   }
   

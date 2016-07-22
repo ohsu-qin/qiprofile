@@ -1,12 +1,12 @@
 import * as _ from 'lodash';
 import { Component, Input, OnInit } from '@angular/core';
 
-import { ScatterChartComponent } from '../visualization/scatter-chart.component.ts';
+import { ScatterChartDirective } from '../visualization/scatter-chart.directive.ts';
 
 @Component({
   selector: 'qi-collection-correlation',
   templateUrl: '/public/html/collection/collection-correlation.html',
-  directives: [ScatterChartComponent]
+  directives: [ScatterChartDirective]
 })
 
 /**

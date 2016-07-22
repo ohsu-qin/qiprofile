@@ -7,7 +7,7 @@
 #
 #   volumedisplay.factory 'VolumeDisplay', ['$rootScope', '$q', 'File', ($rootScope, $q, File) ->
 #     ### This class is broken after the AngularJS 1.4.9 update. ###
-#     # TODO - revisit if XNAT is resurrected.
+#     # TODO - revisit if XTK is resurrected.
 #     #
 #     # TODO - dynamically load XTK. See, e.g.,
 #     # http://www.bennadel.com/blog/2554-loading-angularjs-components-with-requirejs-after-application-bootstrap.htm

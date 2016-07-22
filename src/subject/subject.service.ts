@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 
 import RestService from '../rest/rest.service.coffee';
 import { SubjectResource } from './subject.resource.ts';
+import Subject from './subject.data.coffee';
 
 @Injectable()
 
@@ -30,8 +31,8 @@ export class SubjectService {
     let subjects: Observable<Object[]> = this.resource.find(params);
     // Extend the subjects.
     let extend = _subjects => {
-      for (subject in _subjects) {
-        Subject.extend(_subject);
+      for (let subject of _subjects) {
+        Subject.extend(subject);
       }
     };
     

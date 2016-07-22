@@ -1,11 +1,11 @@
 import {
-  Component, Input, ViewContainerRef, Renderer, AfterViewInit
+  Directive, ElementRef, OnChanges, SimpleChange, AfterViewInit
 } from '@angular/core';
-import d3 from 'd3';
+import * as d3 from 'd3';
 
-@Component({
+@Directive({
   selector: 'qi-scatter-chart',
-  templateUrl: '/public/html/visualization/scatter-chart.html'
+  inputs: ['data']
 })
 
 /**
@@ -14,27 +14,30 @@ import d3 from 'd3';
  * @module visualization
  * @class ScatterChartComponent
  */
-export class ScatterChartComponent implements AfterViewInit {
-  @Input() data;
-  
+export class ScatterChartComponent implements OnChanges, AfterViewInit {
   /**
-   * The d3 container element.
+   * The d3 root element.
    *
-   * @property container
+   * @property root
    */
-  private container: any;
+  private root: d3.Selection<any>;
 
-  constructor(private renderer: Renderer,
-              private viewContainerRef: ViewContainerRef): {}
-  
-  ngAfterViewInit() {
-    let elt = this.viewContainerRef.element.nativeElement;
-    let graph = d3.select(elt);
-    this.container = graph.select('div');
+  constructor(elementRef: ElementRef) {
+    let elt = elementRef.nativeElement;
+    this.root = d3.select(elt);
   }
   
-  render() {
-    if (!this.data) { return; }
-    this.container.data(this.data);
+  ngOnChanges(changes: SimpleChange) {
+    this.render(this.data);
+  }
+  
+  ngAfterViewInit() {
+    this.data;
+    // TODO - build the d3 container.
+  }
+  
+  render(newValue) {
+    if (!newValue) { return; }
+    // TODO
   }
 }

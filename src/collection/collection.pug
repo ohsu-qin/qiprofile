@@ -6,8 +6,6 @@ block billboard
 block content
   qi-collection-correlation.col-md-6(
     *ngFor="let config of chartConfigs",
-    [data]="data",
-    width='800',
-    height='1000'
+    [config]="config",
+    [subjects]="subjects | async"
   )
-

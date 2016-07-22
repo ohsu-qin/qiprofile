@@ -1,4 +1,5 @@
-import { Component, Input } from '@angular/core';
+import * as _ from 'lodash';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { ScatterChartComponent } from '../visualization/scatter-chart.component.ts';
 
@@ -14,12 +15,18 @@ import { ScatterChartComponent } from '../visualization/scatter-chart.component.
  * @module collection-correlation
  * @class CollectionCorrelationComponent
  */
-export class CollectionCorrelationComponent implements AfterViewInit {
+export class CollectionCorrelationComponent implements OnInit {
   @Input() subjects;
+  @Input() config;
   
   data: Array<number>;
-   
-  constructor() {
-    this.data = [];
+  
+  /**
+   * Makes the data accessors.
+   *
+   * @method ngOnInit
+   */
+  ngOnInit() {
+    this.data = _.map(this.subjects, 'number');
   }
 }

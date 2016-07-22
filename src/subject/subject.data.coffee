@@ -2,8 +2,9 @@
 `import * as _s from "underscore.string"`
 
 `import DateHelper from "../common/date-helper.service.coffee"`
-`import Modeling from "./modeling.data.coffee"`
-`import Clinical from "./clinical.data.coffee"`
+`import Session from "../session/session.data.coffee"`
+`import Modeling from "../session/modeling.data.coffee"`
+`import ClinicalEncounter from "./clinical-encounter.data.coffee"`
 
 isSession = (encounter) -> encounter._cls == 'Session'
 
@@ -39,7 +40,7 @@ extendSessions = (subject)  ->
 # Adds the clinical encounter title virtual property.
 extendClincalEncounters = (subject) ->
   for enc in subject.clinicalEncounters
-    Clinical.extend(enc)
+    ClinicalEncounter.extend(enc)
 
 ###*
  * The Subject REST data object extension service.

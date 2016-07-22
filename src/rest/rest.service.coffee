@@ -1,4 +1,5 @@
 `import * as _ from "lodash"`
+`import * as _s from "underscore.string"`
 
 ###*
  * REST utility functions.

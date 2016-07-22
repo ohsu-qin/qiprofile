@@ -47,10 +47,20 @@ export class CollectionComponent implements OnInit {
   name: string;
   
   /**
-   * The chart configurations.
+   * The required initial chart configuration specification objects.
+   * Each specification contains the following properties:
    *
-   * @property chartConfigs {Object[]}
+   * * `x` - the X axis data accessor property naem
+   * * `y` - the Y axis data accessor property name
+   *
+   * There is one specification object per chart.
+   *
+   * @example
+   * [{'deltaKTrans', 'rcb'}, {'vE', 'tumorSize}]
+   *
+   * @property chartAxes {Object[]}
    */
+  // TODO - get this from a user config on a per-user basis.
   chartConfigs: Object[];
   
   /**
@@ -71,7 +81,9 @@ export class CollectionComponent implements OnInit {
               private dataService: SubjectService,
               private helpService: HelpService) {
       this.help = help;
-      this.chartConfigs = [{}, {}, {}, {}];
+      this.chartConfigs = [
+        {x: 'deltaKTrans', y: 'rcb'}
+      ];
       this.data = [12, 8, 13, 24];
   }
   

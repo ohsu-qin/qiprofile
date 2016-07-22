@@ -1,13 +1,11 @@
-`import * as _s from "underscore.string"`
-
 ###*
- * The Clinical REST data object extension service.
+ * The clinical Encounter REST data object extension service.
  *
  * @module subject
- * @class Clinical
+ * @class ClinicalEncounter
  * @static
 ###
-Clinical =
+ClinicalEncounter =
   ###*
    * @method extend
    * @param encounter the clinical encounter
@@ -33,3 +31,5 @@ Clinical =
 
     # Return the augmented clinical encounter object.
     encounter
+
+`export { ClinicalEncounter as default }`

@@ -1,4 +1,4 @@
-`import * as moment from "moment"`
+`import moment from "moment"`
 
 ###*
  * The DateHelper service.
@@ -54,3 +54,5 @@ DateHelper =
       moment([date.year(), 6, 7])
     else
       date
+
+`export { DateHelper as default }`

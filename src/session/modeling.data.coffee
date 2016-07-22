@@ -74,7 +74,7 @@ flattenBySource = (protocolId, srcAssoc) ->
 ###*
  * The modeling LabelMap REST data object extension service.
  *
- * @module subject
+ * @module session
  * @class LabelMap
  * @static
 ###
@@ -101,7 +101,7 @@ LabelMap =
 ###*
  * The modeling ParameterResult REST data object extension service.
  *
- * @module subject
+ * @module session
  * @class ParameterResult
  * @static
 ###
@@ -157,7 +157,7 @@ ParameterResult =
 ###*
  * The ModelingResult REST data object extension service.
  *
- * @module subject
+ * @module session
  * @class ModelingResult
  * @static
 ###
@@ -183,7 +183,7 @@ ModelingResult =
 ###*
  * The Modeling REST data object extension service.
  *
- * @module subject
+ * @module session
  * @class Modeling
  * @static
 ###
@@ -287,3 +287,5 @@ Modeling =
       text: 'v_e'
       html: 'v<sub>e</sub>'
       color: 'MediumSeaGreen'
+
+`export { Modeling as default }`

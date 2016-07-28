@@ -11,7 +11,6 @@
 ###*
  * {{#crossLink "XnatService"}}{{/crossLink}} validator.
  *
- * @module image
  * @class XnatServiceSpec
 ###
 xdescribe 'The XNAT service', ->

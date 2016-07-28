@@ -5,7 +5,6 @@
 ###*
  * {{#crossLink "ConfigurationService"}}{{/crossLink}} validator.
  *
- * @module configuration
  * @class ConfigurationServiceSpec
 ###
 describe 'The Configuration service', ->

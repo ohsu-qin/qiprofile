@@ -9,7 +9,6 @@ import { Router, ActivatedRoute } from '@angular/router';
 /**
  * The Collections List collection item component
  *
- * @module collections
  * @class CollectionItemComponent
  */
 export class CollectionItemComponent {

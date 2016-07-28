@@ -1,9 +1,14 @@
+###*
+ * String utilities.
+ *
+ * @module string
+###
+
 `import * as _s from "underscore.string"`
 
 ###*
  * The static StringHelper utility.
  *
- * @module common
  * @class StringHelper
  * @static
 ###

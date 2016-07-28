@@ -10,7 +10,6 @@ import { SubjectResource } from './subject.resource.ts';
 /**
  * The test mock for a `SubjectResource`.
  *
- * @module subject
  * @class SubjectResourceStub
  */
 class SubjectResourceStub {
@@ -27,7 +26,6 @@ class SubjectResourceStub {
 /**
  * {{#crossLink "SubjectService"}}{{/crossLink}} validator.
  *
- * @module subject
  * @class SubjectServiceSpec
  */
 describe('The Subject service', function() {

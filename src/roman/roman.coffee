@@ -1,3 +1,9 @@
+###*
+ * Roman numeral conversion utilities.
+ *
+ * @module roman
+###
+
 `import * as _ from "lodash"`
 
 ###*
@@ -84,6 +90,7 @@ MAX = _.reduceRight([0...ROMANS.length], incrementMax, 0)
  *
  * This module is freely adapted from the suggestions offered at
  * http://stackoverflow.com/questions/9083037/convert-a-number-into-a-roman-numeral-in-javascript.
+ *
  * @class Roman
  * @static
 ###

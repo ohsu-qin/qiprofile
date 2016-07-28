@@ -1,3 +1,9 @@
+###*
+ * Object utilities.
+ *
+ * @module object
+###
+
 `import * as _ from "lodash"`
 `import * as _s from "underscore.string"`
 
@@ -14,7 +20,6 @@ _sortValuesByKey = (obj) ->
 ###*
  * The static ObjectHelper utility.
  *
- * @module common
  * @class ObjectHelper
  * @static
 ###

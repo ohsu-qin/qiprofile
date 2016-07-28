@@ -2,6 +2,11 @@
 
 `import Roman from "./roman.coffee"`
 
+###*
+ *  {{#crossLink "Roman"}}{{/crossLink}} validator.
+ *
+ * @class RomanSpec
+###
 describe 'The Roman service' , ->
   it 'should convert a string or an integer to a roman numeral', ->
     ONES = ['', 'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX']

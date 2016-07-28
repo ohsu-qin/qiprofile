@@ -17,7 +17,6 @@ import {
 /**
  * The Collection Correlations component.
  *
- * @module collection
  * @class CollectionCorrelationsComponent
  */
 export class CollectionCorrelationsComponent {

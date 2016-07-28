@@ -1,3 +1,9 @@
+/**
+ * The file access utilities.
+ *
+ * @module file
+ */
+
 import * as _s from "underscore.string";
 import pako from "pako";
 import { Injectable } from "@angular/core";
@@ -8,9 +14,7 @@ import { Http } from "@angular/http";
 /**
  * The file access service.
  *
- * @module file
  * @class FileService
- * @main
  */
 export class FileService {
   constructor(private http: Http) {}

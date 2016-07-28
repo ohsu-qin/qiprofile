@@ -10,7 +10,6 @@ import { HelpService } from '../help/help.service.ts';
 /**
  * The help toggle button component.
  *
- * @module help
  * @class ToggleHelpComponent
  */
 export class ToggleHelpComponent {

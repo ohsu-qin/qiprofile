@@ -1,8 +1,7 @@
 /**
- * The shared utilities module.
+ * The REST utilities.
  *
  * @module rest
- * @main
  */
 import { Resource, ResourceParams } from 'ng2-resource-rest';
 import { Injectable } from '@angular/core';

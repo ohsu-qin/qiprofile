@@ -1,6 +1,6 @@
 `import * as _ from "lodash"`
 
-`import ObjectHelper from "../common/object-helper.coffee"`
+`import ObjectHelper from "../object/object-helper.coffee"`
 
 # The cancer stages correspond to TNM scores, assuming no
 # metastasis (M0). Source:
@@ -18,7 +18,6 @@ STAGES =
 ###*
  * The static sarcoma utility.
  *
- * @module clinical
  * @class Sarcoma
  * @static
 ###

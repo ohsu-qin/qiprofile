@@ -1,9 +1,14 @@
+###*
+ * Date utilities.
+ *
+ * @module date
+###
+
 `import moment from "moment"`
 
 ###*
  * The static DateHelper utility.
  *
- * @module common
  * @class DateHelper
  * @static
 ###

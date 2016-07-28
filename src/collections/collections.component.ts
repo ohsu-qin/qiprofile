@@ -27,7 +27,6 @@ import { Observable } from 'rxjs';
  * The Collection List main component.
  *
  * @class CollectionsComponent
- * @main
  */
 export class CollectionsComponent implements OnInit {
   /**

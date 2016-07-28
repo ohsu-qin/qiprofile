@@ -27,7 +27,6 @@ import { Observable } from 'rxjs';
  * The Project List main component.
  *
  * @class ProjectsComponent
- * @main
  */
 export class ProjectsComponent implements OnInit {
   /**

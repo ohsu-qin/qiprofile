@@ -1,7 +1,7 @@
 `import * as _ from "lodash"`
 `import * as _s from "underscore.string"`
 
-`import ObjectHelper from "../common/object-helper.coffee"`
+`import ObjectHelper from "../object/object-helper.coffee"`
 
 ###*
  * @method associate
@@ -74,7 +74,6 @@ flattenBySource = (protocolId, srcAssoc) ->
 ###*
  * The modeling LabelMap REST data object extension utility.
  *
- * @module session
  * @class LabelMap
  * @static
 ###
@@ -101,7 +100,6 @@ LabelMap =
 ###*
  * The modeling ParameterResult REST data object extension utility.
  *
- * @module session
  * @class ParameterResult
  * @static
 ###
@@ -157,7 +155,6 @@ ParameterResult =
 ###*
  * The ModelingResult REST data object extension utility.
  *
- * @module session
  * @class ModelingResult
  * @static
 ###
@@ -183,7 +180,6 @@ ModelingResult =
 ###*
  * The Modeling REST data object extension utility.
  *
- * @module session
  * @class Modeling
  * @static
 ###

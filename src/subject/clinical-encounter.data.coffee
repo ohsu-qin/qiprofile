@@ -3,7 +3,6 @@
 ###*
  * The clinical Encounter REST data object extension utility.
  *
- * @module subject
  * @class ClinicalEncounter
  * @static
 ###

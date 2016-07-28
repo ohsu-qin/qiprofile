@@ -9,7 +9,6 @@ import { Router } from '@angular/router';
 /**
  * The Projects List project item component
  *
- * @module projects
  * @class ProjectItemComponent
  */
 export class ProjectItemComponent {

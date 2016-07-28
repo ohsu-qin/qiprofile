@@ -3,7 +3,6 @@
 ###*
  * The ObjectHelper validator.
  *
- * @module common
  * @class ObjectHelper
  * @static
 ###

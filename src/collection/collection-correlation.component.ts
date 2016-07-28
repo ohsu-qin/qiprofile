@@ -12,7 +12,6 @@ import { ScatterChartDirective } from '../visualization/scatter-chart.directive.
 /**
  * The Collection Detail correlation component
  *
- * @module collection
  * @class CollectionCorrelationComponent
  */
 export class CollectionCorrelationComponent {

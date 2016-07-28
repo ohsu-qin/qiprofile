@@ -5,7 +5,6 @@
 ###*
  * The Registration REST data object extension utility.
  *
- * @module session
  * @class Registration
  * @static
 ###

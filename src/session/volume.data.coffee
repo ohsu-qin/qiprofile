@@ -6,7 +6,6 @@
 ###*
  * The Volume REST data object extension utility.
  *
- * @module session
  * @class Volume
  * @static
 ###

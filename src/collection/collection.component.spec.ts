@@ -11,7 +11,6 @@ import { SubjectService } from '../subject/subject.service.ts';
 /**
  * The test mock for a {{#crossLink "SubectService"}}{{/crossLink}}.
  *
- * @module collections
  * @class SubectServiceStub
  */
 class CollectionSubectServiceStub {

@@ -1,6 +1,12 @@
+###*
+ * The Session module.
+ *
+ * @module session
+###
+
 `import * as _ from "lodash"`
 
-`import ObjectHelper from "../common/object-helper.coffee"`
+`import ObjectHelper from "../object/object-helper.coffee"`
 `import Scan from "./scan.data.coffee"`
 `import Modeling from "./modeling.data.coffee"`
 
@@ -37,7 +43,6 @@ getOverlays = (session) ->
 ###*
  * The Session REST data object extension utility.
  *
- * @module session
  * @class Session
  * @static
 ###

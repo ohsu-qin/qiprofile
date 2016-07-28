@@ -3,7 +3,6 @@
  * Data services can extend REST objects with this class
  * to enable file loading capability.  
  *
- * @module file
  * @class Loader
 ###
 class Loader

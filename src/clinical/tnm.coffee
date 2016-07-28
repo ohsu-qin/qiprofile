@@ -1,3 +1,9 @@
+###*
+ * The static clinical utilities.
+ *
+ * @module clinical
+ * @main clinical
+###
 `import * as _ from "lodash"`
 
 `import Breast from "./breast.coffee"`
@@ -60,7 +66,6 @@ _summaryGrade = (tnm) ->
 ###*
  * The static TNM utility.
  *
- * @module clinical
  * @class TNM
  * @static
 ###

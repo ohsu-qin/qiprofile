@@ -10,7 +10,6 @@
  * this service to its own image store manager by replacing Xnat
  * with its own service.
  *
- * @module image
  * @class ImageStore
  * @static
 ###

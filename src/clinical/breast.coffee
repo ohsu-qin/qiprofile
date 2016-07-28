@@ -1,4 +1,4 @@
-`import ObjectHelper from "../common/object-helper.coffee"`
+`import ObjectHelper from "../object/object-helper.coffee"`
 
 # The cancer stages correspond to TNM scores, assuming no
 # metastasis (M0).
@@ -16,7 +16,6 @@ STAGES = [
 ###*
  * The static breast utility.
  *
- * @module clinical
  * @class Breast
  * @static
 ###

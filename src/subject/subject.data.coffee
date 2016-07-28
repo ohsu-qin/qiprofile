@@ -1,7 +1,7 @@
 `import * as _ from "lodash"`
 `import * as _s from "underscore.string"`
 
-`import DateHelper from "../common/date-helper.coffee"`
+`import DateHelper from "../date/date-helper.coffee"`
 `import Session from "../session/session.data.coffee"`
 `import Modeling from "../session/modeling.data.coffee"`
 `import ClinicalEncounter from "./clinical-encounter.data.coffee"`
@@ -45,7 +45,6 @@ extendClincalEncounters = (subject) ->
 ###*
  * The Subject REST data object extension utility.
  *
- * @module subject
  * @class Subject
  * @static
 ###

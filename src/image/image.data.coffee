@@ -1,3 +1,9 @@
+###*
+ * Image load and parsing module.
+ *
+ * @module image
+###
+
 `import * as _ from "lodash"`
 
 `import Loader from "../file/loader.data.coffee"`
@@ -10,7 +16,6 @@ NIFTI_REGEX = /\.nii(\.gz)?$/
 ###*
  * An image representation which can load an image file.
  *
- * @module image
  * @class ImageMixin
  * @static
 ###

@@ -1,3 +1,9 @@
+/**
+ * The application configuration reader.
+ *
+ * @module configuration
+ */
+
 import { Injectable } from '@angular/core';
 import { parse } from 'ini-parser';
 
@@ -8,9 +14,7 @@ import config from '../conf/qiprofile.cfg';
 /**
  * The application configuration service.
  *
- * @module common
  * @class ConfigurationService
- * @main
  */
 export class ConfigurationService {
   /**

@@ -7,7 +7,6 @@ WHITESPACE_REGEX = /\s+(?=([^"]*"[^"]*")*[^"]*$)/g
 ###*
  * The Nifti parser facade.
  *
- * @module session
  * @class Nifti
  * @static
 ###

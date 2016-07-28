@@ -70,7 +70,6 @@ location = (image) ->
 ###*
  * The XNAT image repository file loader utility.
  *
- * @module image
  * @class XnatService
  * @static
 ###

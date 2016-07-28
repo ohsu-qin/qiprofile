@@ -11,7 +11,6 @@ import { CollectionService } from '../collection/collection.service.ts';
 /**
  * The test mock for an `ActivatedRoute".
  *
- * @module collections
  * @class CollectionsActivatedRouteStub
  */
 class CollectionsActivatedRouteStub {
@@ -23,7 +22,6 @@ class CollectionsActivatedRouteStub {
 /**
  * The test mock for a {{#crossLink "CollectionService"}}{{/crossLink}}.
  *
- * @module collections
  * @class CollectionServiceStub
  */
 class CollectionsCollectionServiceStub {
@@ -46,7 +44,6 @@ class CollectionsCollectionServiceStub {
  * can test an observable component property with injected stubs and
  * simulated init.
  *
- * @module collections
  * @class CollectionsComponentSpec
  */
 describe('The Collections component', function() {

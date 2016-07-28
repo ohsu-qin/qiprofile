@@ -28,7 +28,6 @@ import { Observable } from 'rxjs';
  * The Collection Detail main component.
  *
  * @class CollectionComponent
- * @main
  */
 export class CollectionComponent implements OnInit {
   /**

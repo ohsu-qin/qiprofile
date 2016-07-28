@@ -9,7 +9,6 @@ import { CollectionResource } from './collection.resource.ts';
 /**
  * The collection data access service.
  *
- * @module collection
  * @class CollectionService
  */
 export class CollectionService {

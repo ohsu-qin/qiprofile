@@ -1,3 +1,9 @@
+/**
+ * Project data access module.
+ *
+ * @module project
+ */
+
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -8,7 +14,6 @@ import { ProjectResource } from './project.resource.ts';
 /**
  * The project data access service.
  *
- * @module project
  * @class ProjectService
  */
 export class ProjectService {

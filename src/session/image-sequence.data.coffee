@@ -6,7 +6,6 @@
 ###*
  * The ImageSequence REST data object extension utility.
  *
- * @module session
  * @class ImageSequence
  * @static
 ###

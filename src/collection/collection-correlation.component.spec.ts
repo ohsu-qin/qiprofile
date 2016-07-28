@@ -9,7 +9,6 @@ import { CollectionCorrelationComponent } from './collection-correlation.compone
 /**
  * {{#crossLink "CollectionCorrelationComponent"}}{{/crossLink}} validator.
  *
- * @module collection
  * @class CollectionCorrelationComponentSpec
  */
 describe('The CollectionCorrelation component', function() {

@@ -16,7 +16,7 @@ exports.config =
 
   # Run all e2e specs. The command line --specs option overrides
   # this setting.
-  specs: ['../e2e/**.spec.*']
+  specs: ['../e2e/*.spec.*']
 
   # Flag which directs Protractor to wait for the app to be
   # stable before each action.

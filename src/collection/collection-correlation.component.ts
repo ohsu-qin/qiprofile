@@ -1,6 +1,6 @@
-import * as _ from 'lodash';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 
+//import { Axis } from '../visualization/axis.ts';
 import { ScatterChartDirective } from '../visualization/scatter-chart.directive.ts';
 
 @Component({
@@ -15,18 +15,39 @@ import { ScatterChartDirective } from '../visualization/scatter-chart.directive.
  * @module collection-correlation
  * @class CollectionCorrelationComponent
  */
-export class CollectionCorrelationComponent implements OnInit {
-  @Input() subjects;
-  @Input() config;
-  
-  data: Array<number>;
+export class CollectionCorrelationComponent {
+  /**
+   * The augmented {{#crossLink "Axis"}}{{/crossLink}} {x, y} axis settings.
+   *
+   * @property _config {Object}
+   * @private
+   */
+  private _config: Object;
   
   /**
-   * Makes the data accessors.
+   * The {{#crossLink "Subject"}}{{/crossLink}} REST data objects.
    *
-   * @method ngOnInit
+   * @property subjects {Object[]}
    */
-  ngOnInit() {
-    this.data = _.map(this.subjects, 'number');
+  @Input() subjects: Object[];
+
+  /**
+   * The partial {{#crossLink "Axis"}}{{/crossLink}} {x, y} axis settings.
+   * The input consists of a partial {x, y} key-value object, where each axis value
+   * is a property path. This input is flushed out as follows:
+   * * *label* is inferred from the *value* property path
+   * * *orientation* is `bottom` for the X axis and `left` for the Y axis
+   * * *transformation* is a 90 degree rotation for the Y axis
+   *
+   * @property config {Object}
+   */
+  @Input()
+  set config(config: Object) {
+    // TODO - convert each {x, y} input config to an Axis config.
+    this._config = config;
+  }
+  
+  get config() {
+    return this._config;
   }
 }

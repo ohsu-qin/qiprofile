@@ -10,7 +10,7 @@ TUMOR_TYPE_SERVICES =
 
 ###*
  * @method tumorTypeService
- * @static
+ * @protected
  * @param tumorType the tumor type name, e.g. 'Breast'
  * @return the tumorTypeService factory for that tumor type
 ###
@@ -25,7 +25,7 @@ _summaryGrade = (tnm) ->
    * tumor type factory SCORES property values.
    *
    * @method cumulativeGrade
-   * @static
+   * @protected
    * @param tnm the TNM object
    * @return the cumulative grade, or null if a score is missing
   ###
@@ -58,7 +58,7 @@ _summaryGrade = (tnm) ->
   1 + index
 
 ###*
- * The TNM helper service.
+ * The static TNM utility service.
  *
  * @module clinical
  * @class TNM

@@ -16,7 +16,7 @@ STAGES =
   ]
 
 ###*
- * The sarcoma TNM helper service.
+ * The static sarcoma utility service.
  *
  * @module clinical
  * @class Sarcoma

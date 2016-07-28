@@ -14,7 +14,7 @@ STAGES = [
 ]
 
 ###*
- * The breast TNM helper service.
+ * The static breast utility service.
  *
  * @module clinical
  * @class Breast

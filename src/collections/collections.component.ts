@@ -55,6 +55,14 @@ export class CollectionsComponent implements OnInit {
               private dataService: CollectionService,
               private helpService: HelpService) {
       this.help = help;
+      let params = this.route.params.value;
+      this.project = params.project;
+      // The unsorted collection objects.
+      let unsorted: Observable = this.dataService.getCollections(this.project);
+      // A function to sort the collections by name.
+      let sortByName = _.partialRight(_.sortBy, 'name');
+      // Sort the collections.
+      this.collections = unsorted.map(sortByName);
   }
   
   /**
@@ -78,15 +86,5 @@ export class CollectionsComponent implements OnInit {
   ngOnInit() {
     // Always show the help on this page.
     this.helpService.showHelp = true;
-    // When the route settles, fetch the collections.
-    this.route.params.subscribe(params => {
-      this.project = params.project;
-      // The unsorted collection objects.
-      let unsorted: Observable = this.dataService.getCollections(this.project);
-      // A function to sort the collections by name.
-      let sortByName = _.partialRight(_.sortBy, 'name');
-      // Sort the collections.
-      this.collections = unsorted.map(sortByName);
-    });
   }
 }

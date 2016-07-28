@@ -10,10 +10,9 @@ import { HomeComponent } from '../home/home.component.ts';
 import { ToggleHelpComponent } from '../help/toggle-help.component.ts';
 import { SubjectService } from '../subject/subject.service.ts';
 import {
-  CollectionCorrelationComponent
-} from './collection-correlation.component.ts';
+  CollectionCorrelationsComponent
+} from './collection-correlations.component.ts';
 import { HelpComponent } from '../help/help.component.ts';
-import { HelpService } from '../help/help.service.ts';
 import help from './collection.help.md';
 import { Observable } from 'rxjs';
 
@@ -21,7 +20,7 @@ import { Observable } from 'rxjs';
   selector: 'qi-collection',
   templateUrl: '/public/html/collection/collection.html',
   directives: [HomeComponent, ToggleHelpComponent,
-               CollectionCorrelationComponent, HelpComponent],
+               CollectionCorrelationsComponent, HelpComponent],
   providers: [SubjectService]
 })
 
@@ -32,6 +31,13 @@ import { Observable } from 'rxjs';
  * @main
  */
 export class CollectionComponent implements OnInit {
+  /**
+   * The help content.
+   *
+   * @property help {string}
+   */
+  help: string;
+
   /**
    * The project name.
    *
@@ -45,6 +51,13 @@ export class CollectionComponent implements OnInit {
    * @property name {string}
    */
   name: string;
+
+  /**
+   * The subject REST objects.
+   *
+   * @property subjects {Observable<Object[]>}
+   */
+  subjects: Observable<Object[]>;
   
   /**
    * The required initial chart configuration specification objects.
@@ -63,44 +76,16 @@ export class CollectionComponent implements OnInit {
   // TODO - get this from a user config on a per-user basis.
   chartConfigs: Object[];
   
-  /**
-   * The subject REST objects.
-   *
-   * @property subjects {Observable<Object[]>}
-   */
-  subjects: Observable<Object[]>;
-  
-  /**
-   * The help content.
-   *
-   * @property help {string}
-   */
-  help: string;
-  
   constructor(private route: ActivatedRoute,
-              private dataService: SubjectService,
-              private helpService: HelpService) {
-      this.help = help;
-      this.chartConfigs = [
-        {x: 'deltaKTrans', y: 'rcb'}
-      ];
-      this.data = [12, 8, 13, 24];
-  }
-  
-  /**
-   * Obtains the REST Subject objects from the data service.
-   *
-   * @method ngOnInit
-   */
-  ngOnInit() {
-    // When the route settles, fetch the subjects.
-    this.route.params.subscribe(params => {
-      this.project = params.project;
-      this.collection = params.collection;
-      // The subject REST objects.
-      this.subjects = this.dataService.getSubjects(
-        this.project, this.collection
-      );
-    });
+              private dataService: SubjectService) {
+    this.help = help;
+    this.chartConfigs = [
+      {x: 'deltaKTrans', y: 'rcb'},
+      {x: 'deltaKTrans', y: 'rcb'}
+    ];
+    let params = this.route.params.value;
+    this.project = params.project;
+    this.name = params.collection;
+    this.subjects = this.dataService.getSubjects(this.project, this.name);
   }
 }

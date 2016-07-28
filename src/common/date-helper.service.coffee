@@ -1,7 +1,7 @@
 `import moment from "moment"`
 
 ###*
- * The DateHelper service.
+ * The static DateHelper service.
  *
  * @module common
  * @class DateHelper

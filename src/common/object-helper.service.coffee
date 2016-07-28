@@ -12,7 +12,7 @@ _sortValuesByKey = (obj) ->
     []
 
 ###*
- * The ObjectHelper service.
+ * The static ObjectHelper service.
  *
  * @module common
  * @class ObjectHelper
@@ -241,7 +241,7 @@ ObjectHelper =
       # End of camelizeProperties.
 
     # The initial parsed Javascript object.
-    obj = ng.fromJson(data)
+    obj = JSON.parse(data)
     # If the object is a REST array with _items, then return
     # the camelized items. Otherwise, returns the camelized
     # object.

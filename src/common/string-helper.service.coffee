@@ -1,7 +1,7 @@
 `import * as _s from "underscore.string"`
 
 ###*
- * The StringHelper service.
+ * The static StringHelper service.
  *
  * @module common
  * @class StringHelper

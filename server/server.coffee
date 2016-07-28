@@ -69,7 +69,7 @@ logConfig =
   ]
 
 # Enable the middleware.
-app.use favicon("#{ root }/static/media/favicon.ico")
+app.use favicon("#{ root }/public/media/favicon.ico")
 app.use bodyParser.json()
 app.use bodyParser.urlencoded(extended: true)
 app.use methodOverride()
@@ -94,10 +94,36 @@ app.get '/login', (req, res) ->
 restUrl = process.env.QIREST_HOST or 'localhost'
 app.use '/qirest', rest(restUrl)
 
-# Strip the app prefix from the request URL and serve up the
-# file in the root directory.
+# /qiprofile always serves the SAP index page.
+# The app then routes to the correct partial.
 app.get '/qiprofile*', (req, res) ->
   res.sendFile "#{ root }/index.html"
+
+# All other files are served up relative to the public directory.
+#
+# TODO - this is not the final route, e.g. /stylesheets/app.css
+#   resolves correctly to /public/stylesheets/app.css, but
+#   /stylesheets/app.styl should result in a 404, but instead
+#   resolves to /stylesheets/app.styl.
+app.get '/*', (req, res) ->
+  res.sendFile "#{ root }/public#{ req.path }"
+
+# Log the error.
+app.use (err, req, res, next) ->
+  # Print the error.
+  console.log("Server error: #{ err }")
+  console.log("See the log at #{ logFile }")
+  # Log the error.
+  req.log.error(req.body)
+  # Pass on to the error handler enabled in the Eve callback
+  # below.
+  next(err)
+
+# Nothing else responded; this must be a 404.
+errorHandlerConfig =
+  static:
+    '404': "#{ root }/public/html/error/404.html"
+app.use errorHandler(errorHandlerConfig)
 
 # TODO - enable error handling below.
 # # Log the error.

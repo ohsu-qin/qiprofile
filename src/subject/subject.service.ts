@@ -29,14 +29,8 @@ export class SubjectService {
     );
     // Fetch the subjects.
     let subjects: Observable<Object[]> = this.resource.find(params);
-    // Extend the subjects.
-    let extend = _subjects => {
-      for (let subject of _subjects) {
-        Subject.extend(subject);
-      }
-    };
-    
+
     // Return the extended subjects.
-    return subjects.map(fetched => { extend(fetched); });
+    return subjects.map(fetched => fetched.map(Subject.extend));
   }
 }

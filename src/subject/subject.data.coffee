@@ -40,7 +40,7 @@ extendSessions = (subject)  ->
 # Adds the clinical encounter title virtual property.
 extendClincalEncounters = (subject) ->
   for enc in subject.clinicalEncounters
-    ClinicalEncounter.extend(enc)
+    ClinicalEncounter.extend(enc, subject)
 
 ###*
  * The Subject REST data object extension service.

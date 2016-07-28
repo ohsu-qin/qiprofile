@@ -46,7 +46,7 @@ describe('The Subject service', function() {
         body(service);
       }
     );
-  };
+  }
   
   beforeEach(() => {
     addProviders([

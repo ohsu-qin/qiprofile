@@ -88,8 +88,8 @@ describe('The Collection component', function() {
     let expected: string = CollectionSubectServiceStub.subjects;
     component.subjects.subscribe((actual) => {
       expect(actual, 'The subjects are missing').to.exist;
-      expect(actual, 'The subjects are incorrect').to.eql(expected);      
-    })
+      expect(actual, 'The subjects are incorrect').to.eql(expected);
+    });
   }));
 
   xit('should have correlation charts', test((component, service) => {

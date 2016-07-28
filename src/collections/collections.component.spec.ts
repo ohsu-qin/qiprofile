@@ -27,7 +27,7 @@ class CollectionsActivatedRouteStub {
  * @class CollectionServiceStub
  */
 class CollectionsCollectionServiceStub {
-  static collections: Object[] = [{name: 'Sarcoma'}, {name: 'Breast'}]
+  static collections: Object[] = [{name: 'Sarcoma'}, {name: 'Breast'}];
   
   /**
    *
@@ -67,7 +67,7 @@ describe('The Collections component', function() {
         body(component, dataService);
       }
     );
-  };
+  }
   
   beforeEach(() => {
     addProviders([

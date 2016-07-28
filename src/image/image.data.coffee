@@ -1,6 +1,6 @@
 `import * as _ from "lodash"`
 
-`import Loader from "../common/loader.data.coffee"`
+`import Loader from "../file/loader.data.coffee"`
 `import Nifti from "./nifti.service.coffee"`
 `import ImageStore from "./image-store.service.coffee"`
 

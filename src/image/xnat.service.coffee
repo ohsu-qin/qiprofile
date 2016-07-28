@@ -1,6 +1,6 @@
 `import sprintf from "sprintf"`
 
-`import File from "../common/file.service.coffee"`
+`import FileService from "../file/file.service.ts"`
 
 # The image store location relative to the web app root.
 # This is a symbolic link to the image store root directory
@@ -87,6 +87,6 @@ XNAT =
     # The image file path.
     path = location(image)
     # Read the file into an ArrayBuffer.
-    File.readBinary(path)
+    FileService.readBinary(path)
 
 `export { XNAT as default }`

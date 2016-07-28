@@ -1,6 +1,6 @@
-`import { describe, it, expect, inject, addProviders } from '@angular/core/testing'`
+`import { describe, it, expect, inject, addProviders } from "@angular/core/testing"`
 
-`import { ConfigurationService } from './configuration.service.ts'`
+`import { ConfigurationService } from "./configuration.service.ts"`
 
 ###*
  * {{#crossLink "ConfigurationService"}}{{/crossLink}} validator.

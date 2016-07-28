@@ -1,5 +1,5 @@
 /**
- * The application configuration reader.
+ * The application configuration module.
  *
  * @module configuration
  */
@@ -23,7 +23,7 @@ export class ConfigurationService {
    * @property configuration
    */
   configuration: Object;
-  
+
   constructor() {
     this.configuration = parse(config);
   }

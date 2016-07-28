@@ -1,13 +1,12 @@
 import { Observable } from 'rxjs';
 import { provide } from '@angular/core';
 import {
-  describe, it, inject, beforeEachProviders, expect
+  describe, it, expect, inject, addProviders
 } from '@angular/core/testing';
 
 import { ActivatedRoute } from '@angular/router';
-import { CollectionService } from '../collection/collection.service.ts';
 import { CollectionsComponent } from './collections.component.ts';
-import { HelpService } from '../help/help.service.ts';
+import { CollectionService } from '../collection/collection.service.ts';
 
 /**
  * The test mock for an `ActivatedRoute".
@@ -15,8 +14,10 @@ import { HelpService } from '../help/help.service.ts';
  * @module collections
  * @class ActivatedRouteStub
  */
-class ActivatedRouteStub {
-  params: Observable<Object> = Observable.of({project: 'QIN_Test'});
+class CollectionsActivatedRouteStub {
+  static paramsValue: Object = {project: 'QIN_Test'};
+  
+  params: Observable<Object> = Observable.of(CollectionsActivatedRouteStub.paramsValue);
 }
 
 /**
@@ -25,7 +26,9 @@ class ActivatedRouteStub {
  * @module collections
  * @class CollectionServiceStub
  */
-class CollectionServiceStub {
+class CollectionsCollectionServiceStub {
+  static collections: Object[] = [{name: 'Sarcoma'}, {name: 'Breast'}]
+  
   /**
    *
    * @method getCollections
@@ -33,71 +36,69 @@ class CollectionServiceStub {
    * @return {Observable} the mock collection objects sequence
    */
   getCollections(project: string): Observable<Object[]> {
-    let values = [{name: 'Sarcoma'}, {name: 'Breast'}];
-
-    return Observable.of(values);
+    return Observable.of(CollectionsCollectionServiceStub.collections);
   }
 }
 
 /**
- * The stunt showHelp flag. Note that, unlike
- * {{#crossLink "ProjectComponentSpec"}}{{/crossLink}},
- * this help stub is empty, since 
- * the {{#crossLink "CollectionsComponent"}}{{/crossLink}}
- * sets the flag in its router activation method, which is
- * not called in this unit test.
+ * {{#crossLink "CollectionsComponent"}}{{/crossLink}} validator.
+ * This test is better suited for E2E testing, but confirms that we
+ * can test an observable component property with injected stubs and
+ * simulated init.
  *
- * @class CollectionsHelpServiceStub
+ * @module collections
+ * @class CollectionsComponentSpec
  */
-class CollectionsHelpServiceStub {
-}
-
-beforeEachProviders(() => {
-  return [
-    CollectionsComponent,
-    provide(ActivatedRoute, {useClass: ActivatedRouteStub}),
-    provide(CollectionService, {useClass: CollectionServiceStub}),
-    provide(HelpService, {useClass: CollectionsHelpServiceStub})
-  ];
-});
-
-// This test is better suited for E2E testing, but confirms that we
-// can test an observable component property with injected stubs and
-// simulated init.
-describe('Collections', () => {
-  let component;
+describe('The Collections component', function() {
+  /**
+   * Runs the given test body on the injected component and service.
+   *
+   * @function test
+   * @param body {function(CollectionsComponent, CollectionService)} the test body
+   * @private
+   */
+  function test(body) {
+    return inject(
+      [CollectionsComponent, CollectionService],
+      (component: CollectionsComponent, dataService: CollectionService) => {
+        // Manually init the component.
+        component.ngOnInit();
+        // Run the test.
+        body(component, dataService);
+      }
+    );
+  };
   
-  beforeEach(inject(
-    [CollectionsComponent],
-    (_component: CollectionsComponent) => {
-      // Manually init the component.
-      _component.ngOnInit();
-      component = _component;
-    }
-  ));
+  beforeEach(() => {
+    addProviders([
+      CollectionsComponent,
+      provide(ActivatedRoute, {useClass: CollectionsActivatedRouteStub}),
+      provide(CollectionService, {useClass: CollectionsCollectionServiceStub})
+    ]);
+  });
 
-  it('should not be empty', function() {
+  it('should have a project', test((component, service) => {
+    expect(component.project, 'The project is missing').to.exist;
+    let expected: string = CollectionsActivatedRouteStub.paramsValue.project;
+    expect(component.project, 'The project is incorrect').to.equal(expected);
+  }));
+  
+  it('should not be empty', test((component, dataService) => {
     component.isEmpty().subscribe(
       empty => {
         expect(empty, 'Collections are incorrectly empty').to.be.false;
       }
     );
-  });
-
-  it('should sort the collections', inject(
-    [CollectionService],
-    (dataService: CollectionService) => {
-      // The mocked collections are in reverse sort order.
-      let expected;
-      dataService.getCollections().subscribe(reversed => {
-        expected = reversed.reverse();
-      });
-      // Compare to the component collections property.
-      component.collections.subscribe(
-        actual => {
-          expect(actual, 'Collections are incorrect').to.eql(expected);
-        }
-      );
-    }
-  ));
+  }));
+  
+  it('should sort the collections', test((component, dataService) => {
+    // The mocked collections are in reverse sort order.
+    let expected = CollectionsCollectionServiceStub.collections.reverse();
+    // Compare to the component collections property.
+    component.collections.subscribe(
+      actual => {
+        expect(actual, 'Collections are incorrect').to.eql(expected);
+      }
+    );
+  }));
 });

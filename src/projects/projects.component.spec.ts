@@ -32,10 +32,10 @@ class ProjectServiceStub {
 }
 
 /**
- * The stunt showHelp flag. Note that, unlike
- * {{#crossLink "CollectionItemComponentSpec"}}{{/crossLink}},
+ * The stunt showHelp flag service. Note that, unlike
+ * {{#crossLink "CollectionsHelpServiceStub"}}{{/crossLink}},
  * this help stub must have the flag, since it is set in
- * the {{#crossLink "ProjectComponent"}}{{/crossLink}}
+ * the {{#crossLink "ProjectsComponent"}}{{/crossLink}}
  * constructor rather than an Angular call-back method.
  *
  * @module projects
@@ -53,8 +53,14 @@ beforeEachProviders(() => {
   ];
 });
 
-// A simple heartbeat test suite.
-describe('Projects', () => {
+/**
+ * {{#crossLink "ProjectsComponent"}}{{/crossLink}} validator.
+ * This test validates that the projects are listed in sort order.
+ *
+ * @module projects
+ * @class ProjectsComponentSpec
+ */
+describe('The Projects component', function() {
   let component;
   
   beforeEach(inject(

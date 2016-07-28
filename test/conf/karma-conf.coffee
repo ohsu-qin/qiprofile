@@ -41,10 +41,11 @@ module.exports = (config) ->
     jspm:
       # The jspm config is in the conventional location.
       config: 'jspm.config.js'
-      # The test suites.
+      # The unit test suites. Note that neither the tests nor the serveFiles
+      # match the *.e2e-spec.* integration tests.
       loadFiles: ['src/**/*.spec.*']
       # The app, TypeScript config and typings are loaded on demand.
-      serveFiles: ['src/**/*!(.spec).*', 'tsconfig.json', 'typings/**/*.d.ts']
+      serveFiles: ['src/**/*!(.spec)*.*', 'tsconfig.json', 'typings/**/*.d.ts']
 
     # The test results reporter.
     # Possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
@@ -79,16 +80,27 @@ module.exports = (config) ->
     browsers: ['PhantomJS']
 
     # Print messages.
+    #
+    # Note: Doesn't work. Console log isn't printed. The work-around is to
+    # launch karma in debug and open Chrome Developer console tab.
+    #
+    # TODO - Revisit when karma releases 1.2 with reference to
+    #  the link below. Since we use a GitHub karma patch fork, the fork would
+    #  need to merge the official release.
     client:
       captureConsole: true
+      # Mocha setting which mysteriously enables printing the console log per
+      # https://github.com/karma-runner/karma-mocha/issues/47.
+      mocha:
+        bail: true
 
     # If the browser does not capture output in the given number of 
     # milliseconds, then kill it.
     # Note: timeout doesn't necessarily mean the test fails, but guards
-    # against hanging test cases. Chances are if it takes more than 2
+    # against hanging test cases. Chances are if it takes more than 5
     # seconds to run the test, the test either hangs or needs to be
     # refactored. 
-    captureTimeout: 2000
+    captureTimeout: 5000
     
     # Allowing empty test suites is useful when commenting out tests. The
     # default is true.

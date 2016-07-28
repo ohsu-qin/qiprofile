@@ -11,7 +11,16 @@ SystemJS.config({
     'map': {
       'babel-runtime': 'npm:babel-runtime@5.8.38',
       'core-js': 'npm:core-js@1.2.7',
-      'plugin-babel': 'npm:systemjs-plugin-babel@0.0.12'
+      'plugin-babel': 'npm:systemjs-plugin-babel@0.0.12',
+      'encoding': 'npm:encoding@0.1.12',
+      'text-encoding': 'npm:text-encoding@0.6.0'
+    },
+    'packages': {
+      'npm:encoding@0.1.12': {
+        'map': {
+          'iconv-lite': 'npm:iconv-lite@0.4.13'
+        }
+      }
     }
   },
   transpiler: 'plugin-babel',
@@ -44,6 +53,9 @@ SystemJS.config({
           'loader': 'css'
         },
         '*.html': {
+          'loader': 'text'
+        },
+        '*.cfg': {
           'loader': 'text'
         },
         '*.json': {
@@ -84,6 +96,7 @@ SystemJS.config({
     'github:*/*.json'
   ],
   map: {
+    'ini-parser': 'npm:ini-parser@0.0.2',
     'd3': 'npm:d3@4.1.1',
     '@angular/common': 'npm:@angular/common@2.0.0-rc.4',
     '@angular/compiler': 'npm:@angular/compiler@2.0.0-rc.4',
@@ -130,6 +143,7 @@ SystemJS.config({
     'stream': 'github:jspm/nodelibs-stream@0.2.0-alpha',
     'string_decoder': 'github:jspm/nodelibs-string_decoder@0.2.0-alpha',
     'systemjs-hot-reloader': 'github:capaj/systemjs-hot-reloader@0.6.0',
+    'text': 'github:systemjs/plugin-text@0.0.8',
     'tls': 'github:jspm/nodelibs-tls@0.2.0-alpha',
     'ts': 'github:frankwallis/plugin-typescript@4.0.16',
     'tty': 'github:jspm/nodelibs-tty@0.2.0-alpha',

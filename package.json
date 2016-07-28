@@ -143,6 +143,7 @@
       "compiler": "npm:@angular/compiler@^2.0.0-rc.2",
       "core": "npm:@angular/core@^2.0.0-rc.2",
       "d3": "npm:d3@^4.1.1",
+      "ini-parser": "npm:ini-parser@^0.0.2",
       "json": "systemjs/plugin-json@^0.1.2",
       "lodash": "npm:lodash@^4.13.1",
       "md": "guybedford/system-md@^0.1.0",
@@ -158,13 +159,16 @@
       "socket.io-client": "npm:socket.io-client@^1.4.6",
       "sprintf": "npm:sprintf@^0.1.5",
       "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.6.0",
+      "text": "systemjs/plugin-text@^0.0.8",
       "ts": "frankwallis/plugin-typescript@^4.0.16",
       "underscore.string": "npm:underscore.string@^3.3.4"
     },
     "devDependencies": {
       "babel-runtime": "npm:babel-runtime@^5.8.38",
       "core-js": "npm:core-js@^1.1.1",
-      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.12"
+      "encoding": "npm:encoding@^0.1.12",
+      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.12",
+      "text-encoding": "npm:text-encoding@^0.6.0"
     },
     "peerDependencies": {
       "@angular/common": "npm:@angular/common@^2.0.0-rc.4",

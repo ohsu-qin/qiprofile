@@ -7,7 +7,7 @@
 import { Injectable } from '@angular/core';
 import { parse } from 'ini-parser';
 
-import config from '../conf/qiprofile.cfg';
+import config from './qiprofile.cfg';
 
 @Injectable()
 

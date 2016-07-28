@@ -1,5 +1,5 @@
 import {
-  Directive, ElementRef, OnChanges, SimpleChange, AfterViewInit
+  Directive, Input, ElementRef, OnChanges, SimpleChange, AfterViewInit
 } from '@angular/core';
 import * as d3 from 'd3';
 
@@ -14,7 +14,19 @@ import * as d3 from 'd3';
  * @class ScatterChartComponent
  */
 export class ScatterChartDirective implements OnChanges, AfterViewInit {
+  /**
+   * The data object array.
+   *
+   * @property data {Object[]}
+   */
   @Input() data;
+
+  /**
+   * The {#crossLink "Axis"}}{{/crossLink}} {x, y} axis settings
+   *
+   * @property axes {Object}
+   */
+  @Input() config;
   
   /**
    * The d3 root element.
@@ -33,7 +45,6 @@ export class ScatterChartDirective implements OnChanges, AfterViewInit {
   }
   
   ngAfterViewInit() {
-    foo = this.data;
     // TODO - build the d3 container.
   }
   

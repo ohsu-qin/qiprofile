@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 /**
  * The value accessor signature.
  *
+ * @module visualization
  * @class ValueAccessor
  * @function value
  * @param data {Object} the input data object
@@ -15,6 +16,7 @@ interface ValueAccessor {
 /**
  * The d3 axis setting.
  *
+ * @module visualization
  * @class Axis
  */
 export class Axis {

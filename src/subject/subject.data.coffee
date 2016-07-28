@@ -45,6 +45,7 @@ extendClincalEncounters = (subject) ->
 ###*
  * The Subject REST data object extension utility.
  *
+ * @module subject
  * @class Subject
  * @static
 ###

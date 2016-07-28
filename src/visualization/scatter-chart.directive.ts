@@ -1,3 +1,9 @@
+/**
+ * The D3 charting module.
+ *
+ * @module visualization
+ */
+
 import {
   Directive, Input, ElementRef, OnChanges, SimpleChange, AfterViewInit
 } from '@angular/core';
@@ -8,10 +14,9 @@ import * as d3 from 'd3';
 })
 
 /**
- * The d3 scatter chart component
+ * The d3 scatter chart directive
  *
- * @module visualization
- * @class ScatterChartComponent
+ * @class ScatterChartDirective
  */
 export class ScatterChartDirective implements OnChanges, AfterViewInit {
   /**

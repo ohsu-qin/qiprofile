@@ -1,3 +1,10 @@
+/**
+ * The Subject data access module.
+ *
+ * @module subject
+ * @main subject
+ */
+
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -8,9 +15,8 @@ import Subject from './subject.data.coffee';
 @Injectable()
 
 /**
- * The subject data access service.
+ * The Subject data access service.
  *
- * @module subject
  * @class SubjectService
  */
 export class SubjectService {

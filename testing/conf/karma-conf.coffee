@@ -43,9 +43,9 @@ module.exports = (config) ->
       config: 'jspm.config.js'
       # The unit test suites. Note that neither the tests nor the serveFiles
       # match the *.e2e-spec.* integration tests.
-      loadFiles: ['src/**/*.spec.*']
+      loadFiles: ['src/*/*.spec.*']
       # The app, TypeScript config and typings are loaded on demand.
-      serveFiles: ['src/**/*!(.spec)*.*', 'tsconfig.json', 'typings/**/*.d.ts']
+      serveFiles: ['src/*/*!(spec).*', 'tsconfig.json', 'typings/**/*.d.ts']
 
     # The test results reporter.
     # Possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'

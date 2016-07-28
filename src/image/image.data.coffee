@@ -1,8 +1,8 @@
 `import * as _ from "lodash"`
 
 `import Loader from "../file/loader.data.coffee"`
-`import Nifti from "./nifti.service.coffee"`
-`import ImageStore from "./image-store.service.coffee"`
+`import Nifti from "./nifti.coffee"`
+`import ImageStore from "./image-store.coffee"`
 
 # Matches a NIfTI file extension.
 NIFTI_REGEX = /\.nii(\.gz)?$/

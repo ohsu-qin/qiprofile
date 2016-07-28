@@ -1,7 +1,7 @@
 `import * as _ from "lodash"`
 `import moment from "moment"`
 
-`import Rest from "../rest/rest.service.coffee"`
+`import REST from "../rest/rest.coffee"`
 `import Subject from "./subject.data.coffee"`
 
 describe 'The Subject Data Service', ->
@@ -94,7 +94,7 @@ describe 'The Subject Data Service', ->
       ]
 
   beforeEach ->
-    data = Rest.transformResponse(mock)
+    data = REST.transformResponse(mock)
     subject = Subject.extend(data)
 
   describe 'Demographics', ->

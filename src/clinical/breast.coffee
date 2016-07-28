@@ -1,4 +1,4 @@
-`import ObjectHelper from "../common/object-helper.service.coffee"`
+`import ObjectHelper from "../common/object-helper.coffee"`
 
 # The cancer stages correspond to TNM scores, assuming no
 # metastasis (M0).

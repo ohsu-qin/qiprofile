@@ -1,10 +1,10 @@
 `import * as _ from "lodash"`
 
-`import Breast from "./breast.service.coffee"`
-`import Sarcoma from "./sarcoma.service.coffee"`
+`import Breast from "./breast.coffee"`
+`import Sarcoma from "./sarcoma.coffee"`
 
-# The supported tumor type-specific services.
-TUMOR_TYPE_SERVICES =
+# The supported tumor type-specific factories.
+SERVICES =
   Breast: Breast
   Sarcoma: Sarcoma
 
@@ -15,7 +15,7 @@ TUMOR_TYPE_SERVICES =
  * @return the tumorTypeService factory for that tumor type
 ###
 tumorTypeService = (tumorType) ->
-  TUMOR_TYPE_SERVICES[tumorType] or
+  SERVICES[tumorType] or
     throw new ReferenceError("Unsupported tumor type: #{ tumorType }")
 
 # Define here for reuse below.

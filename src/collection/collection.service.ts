@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import RestService from '../rest/rest.service.coffee';
+import REST from '../rest/rest.coffee';
 import { CollectionResource } from './collection.resource.ts';
 
 @Injectable()
@@ -21,7 +21,7 @@ export class CollectionService {
    * @return {Observable} the REST collection objects
    */
   getCollections(project: string): Observable<Object[]> {
-    let params: string = RestService.where({project: project});
+    let params: string = REST.where({project: project});
 
     return this.resource.find(params);
   }

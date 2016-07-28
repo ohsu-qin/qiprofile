@@ -1,7 +1,7 @@
 `import * as _s from "underscore.string"`
 
 `import Image from "../image/image.data.coffee"`
-`import Nifti from "../image/nifti.service.coffee"`
+`import Nifti from "../image/nifti.coffee"`
 
 ###*
  * Adds the following properties to the given REST Image

@@ -45,7 +45,7 @@ Setup
 
    This command installs the necessary packages [#xtk_fork]_.
 
-4. Read ``test/e2e/README.rst`` for additional
+4. Read ``testing/e2e/README.rst`` for additional
    testing notes.
 
 5. Run the following Grunt_ script::
@@ -110,7 +110,7 @@ The project is organized as follows::
       server.js       # Express server startup script
       static/         # Source static content
         media/        # Images, icons and videos
-      test/           # Top-level test directory
+      testing/           # Top-level test directory
         conf/         # Test configuration files
         e2e/          # End-to-end tests
         unit/         # Unit tests
@@ -150,11 +150,11 @@ Chai_ frameworks and the PhantomJS_ headless server. The command::
 
 runs the grunt karma ``unit`` task as follows:
 
-* Read the ``test/conf/karma-conf.coffee`` configuration file
+* Read the ``testing/conf/karma-conf.coffee`` configuration file
 
 * Start a headless web server as the Mocha test context
 
-* Exercise the ``test/unit/`` test cases
+* Exercise the ``src/**/*.spec.*`` test cases
 
 * Print the result to the console
 
@@ -190,7 +190,7 @@ running when ``e2e`` is started.
 
 The ``e2e`` task executes as follows:
 
-* Read the ``test/conf/protractor-conf.coffee`` configuration file
+* Read the ``testing/conf/protractor-conf.coffee`` configuration file
 
 * Start the Express test server on port 3001
 
@@ -198,7 +198,7 @@ The ``e2e`` task executes as follows:
 
 * Run the qirest_ test seed program
 
-* Exercise the ``test/e2e/`` test cases
+* Exercise the ``src/**/*.e2e-spec.*`` test cases
 
 * Print the result to the console
 
@@ -207,10 +207,10 @@ If the test results in a failed connection error, the rerun the task.
 
 A single end-to-end test spec can be run with the ``--specs`` option::
 
-      grunt --specs test/e2e/<spec> test:e2e
+      grunt --specs <spec> test:e2e
 
 The best way to create an end-to-end test is to copy an existing test.
-``test/e2e/subjectListSpec.coffee`` is a good example. The ``Page``
+``src/projects/projects.e2e-test.coffee`` is a good example. The ``Page``
 helper encapsulates the page being tested.
 
 
@@ -232,8 +232,8 @@ Coding Standards
 * CoffeeScript import and export statements are escaped in order to pass
   them on to JavaScript, e.g.::
 
-      `import Rest from "./rest.resource/coffee"`
-      `export { Rest as default }`
+      `import REST from "./rest.coffee"`
+      `export { REST as default }`
   
   The export ``as default`` ensures ES6 and TypeScript interoperability.
   Libraries with an ``index.js`` in the package root folder, e.g. ``lodash``,
@@ -311,7 +311,7 @@ Coding Standards
 
 * Test case file names are camelCase beginning with the application
   module or partial being tested and ending in ``Spec``, e.g.
-  ``test/e2e/subjectListSpec.coffee``.
+  ``testing/e2e/subjectListSpec.coffee``.
 
 * CoffeeScript follows the `CoffeeScript Style Guide`_.
 
@@ -328,35 +328,35 @@ Coding Standards
 * Each application CoffeeScript file makes an object that is exported
   with an escaped ``export`` statement, e.g.::
   
-      Rest =
+      REST =
         ... # the service definition
         
-      `export { Rest as default }`
+      `export { REST as default }`
   
   The service can then be imported by a TypeScript file with import, 
   e.g.::
   
-      import Rest from './rest.service.coffee';
+      import REST from '../rest/rest.ts';
   
   CoffeeScript unit test suites do not need to be exported. 
 
 * Each intra-``src/`` import is relative, e.g.::
 
-      import Rest from './rest.service.coffee';  // good
+      import REST from './rest.coffee';  // good
   
   rather than::
   
-      import Rest from 'src/rest.service.coffee'; // bad!
+      import REST from 'src/rest/rest.coffee'; // bad!
 
 * Outside imports of source files, e.g. from a test suite, are rooted at
   ``app/``, e.g.::
 
-      import Rest from 'app/rest.service.coffee';  // good from test/
+      import REST from 'app/rest.coffee';  // good from testing/
   
   rather than::
   
-      import Rest from '../../src/rest.service.coffee'; // bad from test/!
-      import Rest from 'src/rest.service.coffee'; // bad from test/!
+      import REST from '../../src/rest/rest.coffee'; // bad from testing/!
+      import REST from 'src/rest/rest.coffee'; // bad from testing/!
       
   ``app/`` is a ``src/`` alias defined in the jspm ``paths`` option.
 
@@ -697,17 +697,17 @@ image download button is hidden and the open button is shown. When the open
 button is clicked, then the Image Detail page is visited with the image file
 content.
 
-The ``qirest`` ``test/helpers/seed.py`` script populates the
+The ``qirest`` ``testing/helpers/seed.py`` script populates the
 ``ImageContainer`` ``files`` field described above for the 24 Breast and
 Sarcoma test MR sessions. The ``grunt test:e2e`` end-to-end testing task runs
 the ``qirest`` seed script and creates a link in the local ``public``
 web app build to the test image file fixtures location::
 
-      public/data -> ../test/fixtures/data
+      public/data -> ../testing/fixtures/data
 
 The test image files conform to the XNAT file location convention, e.g.::
 
-      test/fixtures/data/
+      testing/fixtures/data/
         QIN_Test/arc001/Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz
 
 

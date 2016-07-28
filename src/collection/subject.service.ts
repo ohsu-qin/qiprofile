@@ -7,7 +7,7 @@ export class SubjectService {
    */
   getSubjects(project: string, collection: string): Observable<Object[]> {
     // The selection query parameters.
-    let params: string = RestService.where(
+    let params: string = REST.where(
       {project: project, collection: collection}
     );
     // Fetch the subjects.

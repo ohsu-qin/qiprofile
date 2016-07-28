@@ -70,11 +70,11 @@ location = (image) ->
 ###*
  * The XNAT image repository file loader service.
  *
- * @module session
+ * @module image
  * @class XnatService
  * @static
 ###
-XnatService =
+XNAT =
   ###*
    * Loads the image file content.
    *
@@ -89,4 +89,4 @@ XnatService =
     # Read the file into an ArrayBuffer.
     FileService.readBinary(path)
 
-`export { XnatService as default }`
+`export { XNAT as default }`

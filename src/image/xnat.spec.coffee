@@ -6,7 +6,7 @@
 `import { describe, it, inject, expect, addProviders } from "@angular/core/testing"`
 `import { MockBackend } from "@angular/http/testing"`
 
-`import { XnatService } from "./xnat.service.coffee"`
+`import { XnatService } from "./xnat.coffee"`
 
 ###*
  * {{#crossLink "XnatService"}}{{/crossLink}} validator.

@@ -5,10 +5,10 @@
  * REST utility functions.
  *
  * @module rest
- * @class RestService
+ * @class REST
  * @static
 ###
-RestService =
+REST =
   ###*
    * Formats the {where: condition} Eve REST query parameter. Each key
    * in the condition parameters is quoted. The condition value is
@@ -166,4 +166,4 @@ RestService =
     else
       camelizeProperties(obj)
 
-`export { RestService as default }`
+`export { REST as default }`

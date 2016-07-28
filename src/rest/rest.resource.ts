@@ -8,7 +8,7 @@ import { Resource, ResourceParams } from 'ng2-resource-rest';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as _ from 'lodash';
-import Rest from './rest.service.coffee';
+import REST from './rest.coffee';
 
 @Injectable()
 
@@ -19,7 +19,7 @@ import Rest from './rest.service.coffee';
     url: '/qirest',
     responseInterceptor: observable => {
       return observable.map(response => {
-        let value = Rest.transformResponse(response);
+        let value = REST.transformResponse(response);
         if (_.isArray(value)) {
           return Array.from(value);
         } else {
@@ -42,8 +42,8 @@ export class RestResource extends Resource {
    * search criterion, if any.
    *
    * @example
-   *   import RestService from '../rest/rest.service.coffee;'
-   *   criterion = RestService.where({id: id});
+   *   import REST from '../rest/rest.coffee;'
+   *   criterion = REST.where({id: id});
    *   subject = resource.findOne(criterion);
    *   subject.subscribe(sbj => console.log('Subject %s', sbj.number));
    *
@@ -67,8 +67,8 @@ export class RestResource extends Resource {
    * which emits one matching REST object array.
    *
    * @example
-   *   import RestService from '../rest/rest.service.coffee;'
-   *   criterion = RestService.where({project: projectName});
+   *   import REST from '../rest/rest.coffee;'
+   *   criterion = REST.where({project: projectName});
    *   subjects = resource.find(criterion);
    *   subjects.subscribe(sbjs => console.log('%s subjects', sbjs.length));
    *

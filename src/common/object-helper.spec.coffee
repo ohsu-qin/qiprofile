@@ -1,4 +1,4 @@
-`import ObjectHelper from './object-helper.service.coffee'`
+`import ObjectHelper from './object-helper.coffee'`
 
 describe 'ObjectHelper', ->
 

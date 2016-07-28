@@ -1,6 +1,6 @@
 `import moment from "moment"`
 
-`import DateHelper from './date-helper.coffee'`
+`import DateHelper from "./date-helper.coffee"`
 
 describe 'DateHelper', ->
 

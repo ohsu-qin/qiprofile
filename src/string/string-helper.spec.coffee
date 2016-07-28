@@ -1,4 +1,4 @@
-`import StringHelper from './string-helper.coffee'`
+`import StringHelper from "./string-helper.coffee"`
 
 describe 'StringHelper', ->
 

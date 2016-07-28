@@ -1,12 +1,12 @@
 `import * as _ from "lodash"`
 `import pako from "pako"`
-`import { TextEncoder } from 'text-encoding'`
-`import { provide } from '@angular/core'`
-`import { Http, BaseRequestOptions, ResponseOptions } from '@angular/http'`
-`import { describe, it, inject, expect, addProviders } from '@angular/core/testing'`
-`import { MockBackend } from '@angular/http/testing'`
+`import { TextEncoder } from "text-encoding"`
+`import { provide } from "@angular/core"`
+`import { Http, BaseRequestOptions, ResponseOptions } from "@angular/http"`
+`import { describe, it, inject, expect, addProviders } from "@angular/core/testing"`
+`import { MockBackend } from "@angular/http/testing"`
 
-`import { FileService } from './file.service.ts'`
+`import { FileService } from "./file.service.ts"`
 
 ###*
  * {{#crossLink "FileService"}}{{/crossLink}} validator.

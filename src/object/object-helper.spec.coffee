@@ -1,4 +1,4 @@
-`import ObjectHelper from './object-helper.coffee'`
+`import ObjectHelper from "./object-helper.coffee"`
 
 ###*
  * The ObjectHelper validator.

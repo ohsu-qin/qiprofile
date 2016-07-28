@@ -1,7 +1,8 @@
 extends ../layout/main
 
 block body
-  - var url = "/qiprofile/<project>";
+  - var home = "/qiprofile/";
+  - var support = "http://qiprofile.idea.informer.com/";
   
   .qi-billboard
     h3 Oops
@@ -9,13 +10,13 @@ block body
     <em>
     Q<span class='qi-x-smaller'>I</span>P<span class='qi-x-smaller'>R</span>
     </em>
-    encountered the following error:
-  p
-    code {{ error }}
+    could not satisy your request.
   p
     | Click on the back button to return to the previous page
-    | or visit
-    code #{ url }
-    | to open the application landing page.
+    | or open the <a href="#{ url }"> Project List </a>
+    | page to display the imaging projects which you can visit.
+  p
+    | Additional support is available from our
+    | <a href="#{ support}"> Support Page</a>.
 
-  img(src='static/media/error.jpg')
+  img(src='/static/media/broken.jpg')

@@ -39,7 +39,7 @@ module.exports = (grunt) ->
         pretty: true
       index:
         src: 'index.pug'
-        dest: 'index.html'
+        dest: 'public/html/index.html'
       partials:
         expand: true
         cwd: 'src/'

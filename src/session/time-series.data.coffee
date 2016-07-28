@@ -37,7 +37,7 @@ extendImage = (image, timeSeries) ->
       get: -> @timeSeries.imageSequence
 
 ###*
- * The TimeSeries REST data object extension service.
+ * The TimeSeries REST data object extension utility.
  *
  * @module session
  * @class TimeSeries

@@ -24,7 +24,7 @@ define ['angular', 'lodash', 'loader', 'imageStore', 'nifti'], (ng, _, Loader) -
        *   extended with the parsed {header, data} *contents* property
       ###
       load: ->
-        # The image content parser service.
+        # The image content parser.
         parser = @parser()
         # Delegate to the Loader.load function.
         super(this, ImageStore)

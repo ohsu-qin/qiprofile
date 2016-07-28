@@ -43,7 +43,7 @@ extendClincalEncounters = (subject) ->
     ClinicalEncounter.extend(enc, subject)
 
 ###*
- * The Subject REST data object extension service.
+ * The Subject REST data object extension utility.
  *
  * @module subject
  * @class Subject

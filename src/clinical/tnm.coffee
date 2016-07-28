@@ -58,7 +58,7 @@ _summaryGrade = (tnm) ->
   1 + index
 
 ###*
- * The static TNM utility service.
+ * The static TNM utility.
  *
  * @module clinical
  * @class TNM
@@ -126,7 +126,7 @@ TNM =
   ###
   stage: (tnm) ->
     grade = _summaryGrade(tnm)
-    # Delegate to the tumor type service.
+    # Delegate to the tumor type utility.
     tumorTypeService(tnm.tumorType).stage(tnm, grade)
 
 `export { TNM as default }`

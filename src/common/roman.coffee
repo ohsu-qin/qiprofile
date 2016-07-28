@@ -78,7 +78,7 @@ incrementMax = (sum, place) ->
 MAX = _.reduceRight([0...ROMANS.length], incrementMax, 0)
 
 ###*
- * The static Roman service.
+ * The static Roman utility.
  * Provides the `romanize`  function to convert between an
  * integer and a roman numeral.
  *

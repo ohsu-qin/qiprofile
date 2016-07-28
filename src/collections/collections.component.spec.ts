@@ -12,7 +12,7 @@ import { CollectionService } from '../collection/collection.service.ts';
  * The test mock for an `ActivatedRoute".
  *
  * @module collections
- * @class ActivatedRouteStub
+ * @class CollectionsActivatedRouteStub
  */
 class CollectionsActivatedRouteStub {
   static paramsValue: Object = {project: 'QIN_Test'};

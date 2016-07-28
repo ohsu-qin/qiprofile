@@ -4,7 +4,7 @@
 `import Registration from "./registration.data.coffee"`
 
 ###*
- * The Scan REST data object extension service.
+ * The Scan REST data object extension utility.
  *
  * @module session
  * @class Scan

@@ -1,5 +1,5 @@
 ###*
- * The Loader helper data service.
+ * The Loader helper data utility.
  * Data services can extend REST objects with this class
  * to enable file loading capability.  
  *

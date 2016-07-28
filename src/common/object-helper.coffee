@@ -12,7 +12,7 @@ _sortValuesByKey = (obj) ->
     []
 
 ###*
- * The static ObjectHelper service.
+ * The static ObjectHelper utility.
  *
  * @module common
  * @class ObjectHelper

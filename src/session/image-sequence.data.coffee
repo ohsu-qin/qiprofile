@@ -4,7 +4,7 @@
 `import Volume from "./volume.data.coffee"`
 
 ###*
- * The ImageSequence REST data object extension service.
+ * The ImageSequence REST data object extension utility.
  *
  * @module session
  * @class ImageSequence

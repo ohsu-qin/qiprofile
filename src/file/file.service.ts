@@ -6,7 +6,7 @@ import { Http } from "@angular/http";
 @Injectable()
 
 /**
- * The File utility service.
+ * The file access service.
  *
  * @module file
  * @class FileService

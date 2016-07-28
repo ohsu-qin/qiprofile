@@ -4,7 +4,7 @@
 `import Image from "../image/image.data.coffee"`
 
 ###*
- * The Volume REST data object extension service.
+ * The Volume REST data object extension utility.
  *
  * @module session
  * @class Volume

@@ -68,7 +68,7 @@ location = (image) ->
   "#{ projectDir }/#{ expLabel }/#{ scanDir }/#{ resource }/#{ image.name }"
 
 ###*
- * The XNAT image repository file loader service.
+ * The XNAT image repository file loader utility.
  *
  * @module image
  * @class XnatService

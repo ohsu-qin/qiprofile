@@ -14,7 +14,7 @@ STAGES = [
 ]
 
 ###*
- * The static breast utility service.
+ * The static breast utility.
  *
  * @module clinical
  * @class Breast

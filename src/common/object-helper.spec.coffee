@@ -1,5 +1,12 @@
 `import ObjectHelper from './object-helper.coffee'`
 
+###*
+ * The ObjectHelper validator.
+ *
+ * @module common
+ * @class ObjectHelper
+ * @static
+###
 describe 'ObjectHelper', ->
 
   describe 'fromJSON', ->

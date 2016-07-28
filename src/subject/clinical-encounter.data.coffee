@@ -1,7 +1,7 @@
 `import * as _s from "underscore.string"`
 
 ###*
- * The clinical Encounter REST data object extension service.
+ * The clinical Encounter REST data object extension utility.
  *
  * @module subject
  * @class ClinicalEncounter

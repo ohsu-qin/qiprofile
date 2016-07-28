@@ -35,7 +35,7 @@ getOverlays = (session) ->
     null
 
 ###*
- * The Session REST data object extension service.
+ * The Session REST data object extension utility.
  *
  * @module session
  * @class Session

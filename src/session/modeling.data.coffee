@@ -72,7 +72,7 @@ flattenBySource = (protocolId, srcAssoc) ->
   _.flatten(modelingArrays)
 
 ###*
- * The modeling LabelMap REST data object extension service.
+ * The modeling LabelMap REST data object extension utility.
  *
  * @module session
  * @class LabelMap
@@ -99,7 +99,7 @@ LabelMap =
           @parameterResult.key
 
 ###*
- * The modeling ParameterResult REST data object extension service.
+ * The modeling ParameterResult REST data object extension utility.
  *
  * @module session
  * @class ParameterResult
@@ -155,7 +155,7 @@ ParameterResult =
       paramResult.labelMap.parameterResult = paramResult
 
 ###*
- * The ModelingResult REST data object extension service.
+ * The ModelingResult REST data object extension utility.
  *
  * @module session
  * @class ModelingResult
@@ -181,7 +181,7 @@ ModelingResult =
       ParameterResult.extend(paramResult, modelingResult, key)
 
 ###*
- * The Modeling REST data object extension service.
+ * The Modeling REST data object extension utility.
  *
  * @module session
  * @class Modeling

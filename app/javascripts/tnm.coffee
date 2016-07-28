@@ -115,6 +115,6 @@ define ['angular', 'lodash', 'breast', 'sarcoma'], (ng, _) ->
     ###
     stage: (tnm) ->
       grade = _summaryGrade(tnm)
-      # Delegate to the tumor type service.
+      # Delegate to the tumor type utility.
       tumorTypeService(tnm.tumorType).stage(tnm, grade)
   ]

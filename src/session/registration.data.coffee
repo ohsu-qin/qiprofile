@@ -3,7 +3,7 @@
 `import ImageSequence from "./image-sequence.data.coffee"`
 
 ###*
- * The Registration REST data object extension service.
+ * The Registration REST data object extension utility.
  *
  * @module session
  * @class Registration

@@ -16,7 +16,7 @@ STAGES =
   ]
 
 ###*
- * The static sarcoma utility service.
+ * The static sarcoma utility.
  *
  * @module clinical
  * @class Sarcoma

@@ -33,7 +33,7 @@ class ImageMixin extends Loader
    *   extended with the parsed {header, data} *contents* property
   ###
   load: ->
-    # The image content parser service.
+    # The image content parser.
     parser = @parser()
     # Delegate to the Loader.load function.
     super(this, ImageStore)
@@ -63,9 +63,7 @@ Object.defineProperties ImageMixin.prototype,
       @_path
 
 ###*
- * The Image REST data object extension service.
- *
- * @module imagre
+ * The Image REST data object extension service utility.module imagre
  * @class Image
  * @static
 ###

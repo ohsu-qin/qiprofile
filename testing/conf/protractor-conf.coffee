@@ -1,4 +1,7 @@
 exports.config =
+  # Note: unlike the karma config, protractor config files
+  # are relative to the config file location.
+  #
   # Note: the debug and logLevel options are set in the grunt
   # protractor task based on whether the grunt command is
   # executed with the --debug option.
@@ -16,7 +19,7 @@ exports.config =
 
   # Run all e2e specs. The command line --specs option overrides
   # this setting.
-  specs: ['../e2e/*.spec.*']
+  specs: ['../../src/**/*.e2e-spec.*']
 
   # Flag which directs Protractor to wait for the app to be
   # stable before each action.
@@ -24,7 +27,7 @@ exports.config =
 
   # Run the qirest seed and link the test fixtures into public,
   # if necessary.
-  onPrepare: '../e2e/helpers/seed'
+  onPrepare: '../helpers/seed'
 
   # Pass options into mocha.
   mochaOpts:

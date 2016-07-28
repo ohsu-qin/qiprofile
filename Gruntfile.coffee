@@ -156,7 +156,7 @@ module.exports = (grunt) ->
         browsers: [if grunt.option('debug') then 'Chrome' else 'PhantomJS']
         logLevel: [if grunt.option('debug') then 'DEBUG' else 'ERROR']
       unit:
-        configFile: 'test/conf/karma-conf.coffee'
+        configFile: 'testing/conf/karma-conf.coffee'
 
     exec:
       # # Delete the qirest Anaconda environment.
@@ -226,7 +226,7 @@ module.exports = (grunt) ->
 
     protractor:
       e2e:
-        configFile: 'test/conf/protractor-conf.coffee'
+        configFile: 'testing/conf/protractor-conf.coffee'
 
     express:
       options:

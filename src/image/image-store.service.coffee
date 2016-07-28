@@ -1,6 +1,6 @@
 `import * as _ from "lodash"`
 
-`import XNAT from "./xnat.service.coffee"`
+`import XnatService from "./xnat.service.coffee"`
 
 ###*
  * The ImageStore service.
@@ -14,6 +14,6 @@
  * @class ImageStore
  * @static
 ###
-ImageStore = XNAT
+ImageStoreService = XnatService
 
-`export { ImageStore as default }`
+`export { ImageStoreService as default }`

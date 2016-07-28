@@ -15,7 +15,7 @@ exec cmd, (error) ->
     throw new Error "Test preparation seed script unsuccessful: #{ error }"
 
 # The web app partials root.
-root = "#{ __dirname }/../../../public"
+root = "#{ __dirname }/../../public"
 
 # The relative link source test images.
 src = '../test/fixtures/data'

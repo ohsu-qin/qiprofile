@@ -1,59 +1,59 @@
 webdriver = require 'selenium-webdriver'
 
-expect = require('./helpers/expect')()
+expect = require('../../testing/helpers/expect')()
 
-Page = require './helpers/page'
+Page = require '../../testing/helpers/page'
 
 _ = require 'lodash'
 
-class ProjectListPage extends Page
+
+class CollectionListPage extends Page
   constructor: ->
     # Call the Page superclass initializer with the helpShown
     # flag set to true, since the help box is displayed on
     # this landing page.
-    #
     # FIXME - help is initially shown, but is hidden by the
     # time the help isDisplayed is checked. Why?
-    #super('/qiprofile/', true)
-    super('/qiprofile/', false)
-
-  # @returns the project {name, description, url} object
+    #super(Page.HOME, true)
+    super(Page.HOME,  false)
+  
+  # @returns the collection {name, description, url} object
   #   array promise
-  projects: ->
-    @findAll('qi-project-item').then (rows) =>
+  collections: ->
+    @findAll('qi-collection-item').then (rows) =>
       resolvers = rows.map(@_parse_row)
       Promise.all(resolvers)
-
-  # @returns the project {name, description, url} promises
+  
+  # @returns the collection {name, description, url} promises
   _row_finders: (row) ->
     link: row.find('a')
     name: row.text('a')
     description: row.text('span')
     info: row.find('button')
-
-  # @returns a promise which resolves to the project
+  
+  # @returns a promise which resolves to the collection
   #   {name, description, url}
   _parse_row: (row) =>
     accumulate = (accum, pair) ->
       [property, value] = pair
       accum[property] = value
       accum
-
+    
     finders = @_row_finders(row)
     resolvers = _.toPairs(finders).map (pair) ->
       [property, finder] = pair
       finder.then (resolved) ->
         [property, resolved]
-
+    
     Promise.all(resolvers).then (resolved) =>
       resolved.reduce(accumulate, {})
 
-describe 'E2E Testing Project List', ->
+describe 'E2E Testing Collection List', ->
   page = null
-
+  
   before ->
-    page = new ProjectListPage
-
+    page = new CollectionListPage
+  
   it 'should load the page', ->
     expect(page.content, 'The page was not loaded')
       .to.eventually.exist
@@ -61,53 +61,62 @@ describe 'E2E Testing Project List', ->
   # Note - it would be nice to test whether a trailing slash
   # resolves to the same page, but the many attempts to build
   # such a test case were unsuccessful. Test manually instead.
-
+  
   # The page header test cases.
   describe 'Header', ->
     it 'should display the billboard', ->
       expect(page.billboard, 'The billboard is incorrect')
-        .to.eventually.equal('Projects')
-
+        .to.eventually.equal('Collections')
+    
     it 'should have a home button', ->
       expect(page.home, 'The home URL is incorrect')
-        .to.eventually.match(page.url_pattern())
-
+        .to.eventually.match(Page.HOME_URL_PAT)
+    
     describe 'Help', ->
       help = null
-    
+      
       before ->
         help = page.help
-
+      
       it 'should have help text', ->
         expect(help, 'The help text is missing')
           .to.eventually.exist.and.not.be.empty
-
+      
       it 'should display a {qu,sugg}estion box hyperlink', ->
         expect(help, 'The {qu,sugg}estion box hyperlink is missing')
           .to.eventually.include(Page.SUGGESTION_BOX_URL)
-
-  describe 'Projects', ->
+  
+  describe 'Collections', ->
     rows = null
     
     before ->
-      page.projects().then (colls) ->
-        rows = colls
-
-    it 'should display the QIN_Test project', ->
+      page.collections().then (_rows) ->
+        rows = _rows
+    
+    it 'should display the Breast and Sarcoma collections', ->
+      # The collections are sorted. The comparison is the Chai
+      # deep equals operator eql rather than equal.
       names = _.map(rows, 'name')
-      expect('QIN_Test', 'The project names are incorrect')
-        .to.be.oneOf(names)
-
-    it 'should link to the Collections List page', ->
+      expect(names, 'The collection names are incorrect')
+        .to.eql(['Breast', 'Sarcoma'])
+    
+    it 'should have an info button', ->
+      for row, i in rows
+        expect(row.info, "The #{ row.name } collection #{ i }" +
+                         " is missing an info button")
+          .to.exist
+        expect(row.info.visit(), "The info link doesn't exist")
+          .to.eventually.exist
+    
+    xit 'should link to the Collection Detail page', ->
       for row, i in rows
         expect(row.link, "The #{ row.name } collection #{ i }" +
                          " is missing a hyperlink")
           .to.exist
-        # The Collection List page URL is
-        # .../qiprofile/<project>
-        matcher = page.url_pattern("#{ page.url }#{ row.name }")
+        # The Collection Detail page URL is
+        # .../qiprofile/<project>/<collection>
+        matcher = page.url_pattern("#{ page.url }/#{ row.name }")
         actual = row.link.visit()
-        expect(actual, "The visited #{ row.name } Collection List" +
+        expect(actual, "The visited #{ row.name } Collection Detail" +
                        " page URL is incorrect")
           .to.eventually.match(matcher)
-      

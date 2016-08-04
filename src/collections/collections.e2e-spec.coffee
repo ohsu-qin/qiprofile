@@ -14,8 +14,7 @@ class CollectionListPage extends Page
     # this landing page.
     # FIXME - help is initially shown, but is hidden by the
     # time the help isDisplayed is checked. Why?
-    #super(Page.HOME, true)
-    super(Page.HOME,  false)
+    super(Page.HOME, true)
   
   # @returns the collection {name, description, url} object
   #   array promise
@@ -48,7 +47,7 @@ class CollectionListPage extends Page
     Promise.all(resolvers).then (resolved) =>
       resolved.reduce(accumulate, {})
 
-describe 'E2E Testing Collection List', ->
+describe.only 'E2E Testing Collection List', ->
   page = null
   
   before ->
@@ -66,7 +65,7 @@ describe 'E2E Testing Collection List', ->
   describe 'Header', ->
     it 'should display the billboard', ->
       expect(page.billboard, 'The billboard is incorrect')
-        .to.eventually.equal('Collections')
+        .to.eventually.equal('QIN_Test Collections')
     
     it 'should have a home button', ->
       expect(page.home, 'The home URL is incorrect')

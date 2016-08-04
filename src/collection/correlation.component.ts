@@ -5,7 +5,7 @@ import { ScatterChartDirective } from '../visualization/scatter-chart.directive.
 
 @Component({
   selector: 'qi-collection-correlation',
-  templateUrl: '/public/html/collection/collection-correlation.html',
+  templateUrl: '/public/html/collection/correlation.html',
   directives: [ScatterChartDirective]
 })
 

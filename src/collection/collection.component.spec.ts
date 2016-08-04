@@ -4,12 +4,12 @@ import {
   describe, it, expect, inject, addProviders
 } from '@angular/core/testing';
 
-import { ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { CollectionComponent } from './collection.component.ts';
 import { SubjectService } from '../subject/subject.service.ts';
 
 /**
- * The test mock for a {{#crossLink "SubectService"}}{{/crossLink}}.
+ * The stunt {{#crossLink "SubectService"}}{{/crossLink}}.
  *
  * @class SubectServiceStub
  */
@@ -30,6 +30,14 @@ class CollectionSubectServiceStub {
 /**
  * The stunt router.
  *
+ * @class CollectiondRouterStub
+ */
+class CollectionRouterStub {
+}
+
+/**
+ * The stunt route.
+ *
  * @class CollectionActivatedRouteStub
  */
 class CollectionActivatedRouteStub {
@@ -41,10 +49,12 @@ class CollectionActivatedRouteStub {
    */
   params: Observable<Object> = Observable.of(CollectionActivatedRouteStub.paramsValue);
 }
- 
-// This test is better suited for E2E testing, but confirms that we
-// can test an observable component property with injected stubs and
-// simulated init.
+
+/**
+ * The {{#crossLink "CollectionComponent"}}{{/crossLink}} validator.
+ *
+ * @class CollectionComponentSpec
+ */
 describe('The Collection component', function() {
   /**
    * Runs the given test body on the injected component and service.
@@ -66,8 +76,9 @@ describe('The Collection component', function() {
   beforeEach(() => {
     addProviders([
       CollectionComponent,
-      provide(SubjectService, {useClass: CollectionSubectServiceStub}),
-      provide(ActivatedRoute, {useClass: CollectionActivatedRouteStub})
+      provide(Router, {useClass: CollectionRouterStub}),
+      provide(ActivatedRoute, {useClass: CollectionActivatedRouteStub}),
+      provide(SubjectService, {useClass: CollectionSubectServiceStub})
     ]);
   });
 
@@ -85,10 +96,8 @@ describe('The Collection component', function() {
 
   it('should have subjects', test((component, service) => {
     let expected: string = CollectionSubectServiceStub.subjects;
-    component.subjects.subscribe((actual) => {
-      expect(actual, 'The subjects are missing').to.exist;
-      expect(actual, 'The subjects are incorrect').to.eql(expected);
-    });
+    expect(component.subjects, 'The subjects are missing').to.exist;
+    expect(component.subjects, 'The subjects are incorrect').to.eql(expected);
   }));
 
   xit('should have correlation charts', test((component, service) => {

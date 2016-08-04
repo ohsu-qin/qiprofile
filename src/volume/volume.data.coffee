@@ -25,6 +25,7 @@ Volume =
    * @param number the one-based volume number
   ###
   extend: (volume, imageSequence, number) ->
+    return volume if not volume
     # Set the image parent volume reference.
     volume.imageSequence = imageSequence
     # Add the image load capability.

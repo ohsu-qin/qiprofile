@@ -6,7 +6,6 @@
 import { Resource, ResourceParams } from 'ng2-resource-rest';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import * as _ from 'lodash';
 import REST from './rest.coffee';
 
 @Injectable()
@@ -18,13 +17,8 @@ import REST from './rest.coffee';
     url: '/qirest',
     responseInterceptor: observable => {
       return observable.map(response => {
-        let value = REST.transformResponse(response);
-        if (_.isArray(value)) {
-          return Array.from(value);
-        } else {
-          return value;
-        }
-      });
+        return REST.transformResponse(response);
+        });
     }
 })
 
@@ -44,15 +38,17 @@ export class RestResource extends Resource {
    *   import REST from '../rest/rest.coffee;'
    *   criterion = REST.where({id: id});
    *   subject = resource.findOne(criterion);
-   *   subject.subscribe(sbj => console.log('Subject %s', sbj.number));
+   *   subject.subscribe(sbj => console.log("Subject ", sbj.number));
    *
    * @method findOne
    * @param criterion {string} the search criterion
-   * @return {Observable} an observable which resolves to the
-   *   single search result object
+   * @return {Observable<any} an observable which resolves to the
+   *   single search result object, or null if no match
    */
-  findOne(criterion: string): Observable<Object> {
-    return this.get(criterion).$observable;
+  findOne(criterion: string): Observable<any> {
+    return this.query(criterion).$observable.map(result => {
+      return result[0];
+    });
   }
 
   /**

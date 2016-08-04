@@ -44,7 +44,7 @@ export class FileService {
   private read(url: string, options: Object = {}): Observable<any> {
     options.method = 'GET';
     // Read the file.
-    return this.http.get(url, options).map((res) => res.body);
+    return this.http.get(url, options).map(res => res.body);
   }
   
   /**
@@ -60,7 +60,7 @@ export class FileService {
   readBinary(url: string, options: Object = {}): Observable<any> {
     options.responseType = 'arraybuffer';
     // Delegate to the base read.
-    return this.read(url, options).map((bytes) => {
+    return this.read(url, options).map(bytes => {
       // If this file is compressed, then uncompress the byte
       // array. Otherwise, pass through the bytes unchanged.
       let isCompressed = _s.endsWith(url, '.gz') || _s.endsWith(url, '.zip');
@@ -81,6 +81,6 @@ export class FileService {
   send(url: string, data: Object) {
     let options = {contentType: 'application/json'};
     let post = this.http.post(url, JSON.stringify(data), options);
-    return post.map((res) => res.body);
+    return post.map(res => res.body);
   }
 }

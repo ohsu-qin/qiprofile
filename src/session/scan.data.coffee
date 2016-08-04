@@ -24,6 +24,7 @@ Scan =
    * @return the extended scan object
   ###
   extend: (scan, session) ->
+    return scan if not scan
     # Add the general image sequence properties.
     ImageSequence.extend(scan)
     # Set the session reference.
@@ -55,6 +56,8 @@ Scan =
           "#{ @ssession.path }/#{ @number }"
 
     # Add the scan registration properties.
+    if not scan.registrations?
+      scan.registrations = []
     for reg, i in scan.registrations
       Registration.extend(reg, session, scan, i + 1)
 

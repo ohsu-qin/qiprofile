@@ -6,7 +6,17 @@ import {
 
 import { ActivatedRoute } from '@angular/router';
 import { CollectionsComponent } from './collections.component.ts';
+import { HelpService } from '../help/help.service.ts';
 import { CollectionService } from '../collection/collection.service.ts';
+
+/**
+ * The stunt showHelp flag service.
+ *
+ * @class CollectionsHelpServiceStub
+ */
+class CollectionsHelpServiceStub {
+  showHelp: boolean = false;
+}
 
 /**
  * The test mock for an `ActivatedRoute".
@@ -57,11 +67,9 @@ describe('The Collections component', function() {
   function test(body) {
     return inject(
       [CollectionsComponent, CollectionService],
-      (component: CollectionsComponent, dataService: CollectionService) => {
-        // Manually init the component.
-        component.ngOnInit();
+      (component: CollectionsComponent, service: CollectionService) => {
         // Run the test.
-        body(component, dataService);
+        body(component, service);
       }
     );
   }
@@ -70,6 +78,7 @@ describe('The Collections component', function() {
     addProviders([
       CollectionsComponent,
       provide(ActivatedRoute, {useClass: CollectionsActivatedRouteStub}),
+      provide(HelpService, {useClass: CollectionsHelpServiceStub}),
       provide(CollectionService, {useClass: CollectionsCollectionServiceStub})
     ]);
   });
@@ -80,22 +89,10 @@ describe('The Collections component', function() {
     expect(component.project, 'The project is incorrect').to.equal(expected);
   }));
   
-  it('should not be empty', test((component, dataService) => {
-    component.isEmpty().subscribe(
-      empty => {
-        expect(empty, 'Collections are incorrectly empty').to.be.false;
-      }
-    );
-  }));
-  
-  it('should sort the collections', test((component, dataService) => {
+  it('should sort the collections', test((component) => {
     // The mocked collections are in reverse sort order.
-    let expected = CollectionsCollectionServiceStub.collections.reverse();
+    let expected: Object[] = CollectionsCollectionServiceStub.collections.reverse();
     // Compare to the component collections property.
-    component.collections.subscribe(
-      actual => {
-        expect(actual, 'Collections are incorrect').to.eql(expected);
-      }
-    );
+    expect(component.collections, 'Collections are incorrect').to.eql(expected);
   }));
 });

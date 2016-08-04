@@ -5,6 +5,6 @@ block billboard
 
 block content
   ul.qi-main-list
-    li(*ngFor="let subject of subjects | async")
+    li(*ngFor="let subject of subjects", (click)="visitSubject(subject)")
       | {{ subject.number }}
-  //- qi-collection-correlations([subjects]="subjects | async")
+  //- qi-collection-correlations([subjects]="subjects")

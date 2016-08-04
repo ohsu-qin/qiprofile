@@ -59,6 +59,7 @@ TimeSeries =
    * @return the extended TimeSeries
   ###
   extend: (timeSeries, imageSequence) ->
+    return timeSeries if not timeSeries
     # The generic parent reference property.
     timeSeries.imageSequence = imageSequence
 

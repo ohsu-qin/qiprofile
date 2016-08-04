@@ -62,85 +62,89 @@ Session =
    * @return the extended session object
   ###
   extend: (session, subject, number) ->
+    return session if not session?
     # Set the session subject property.
     session.subject = subject
     # Set the session number property.
     session.number = number
+    # Add the default empty modeling array, if necessary.
+    if not session.modelings?
+      session.modelings = []
     # Augment the modeling objects.
     for modeling in session.modelings
       Modeling.extend(modeling, session)
     # Add the overlays property.
     session.overlays = getOverlays(session)
-    # Add the virtual properties.
-    Object.defineProperties session,
-      ###*
-       * @method title
-       * @return the display title
-      ###
-      title:
-        # TODO - get the Session display text from a config,
-        #   e.g.:
-        #     label = config.session.label
-        #     "#{ @collection } #{ label } #{ @number }"
-        #   Thus, the label could be, say, 'Visit', rather than
-        #   'Session', and externally configurable. See also
-        #   the subject.coffee title TODO.
-        #
-        get: -> "#{ @subject.title } Session #{ @number }"
 
     ###*
-     * Returns the <parent>/session path, where:
-     * * <parent> is the parent subject path
-     * * *session* is the session number
+     * Fetches the session detail REST object for the given session.
+     * The session object is extended with the detail properties.
      *
-     * @method path
-     * @return the session path
+     * @method extendDetail
+     * @param detail the detail object fetched from the database
+     * @return a promise which resolves to the extended session
+     *   object
+     * @throws ReferenceError if the detail was not found
     ###
-    path:
-      get: ->
-        "#{ @subject.path }/#{ @number }"
-
-    # Return the augmented session object.
-    session
-
-  ###*
-   * Fetches the session detail REST object for the given session.
-   * The session object is extended with the detail properties.
-   *
-   * @method detail
-   * @param session the session object with a detail database id
-   * @return a promise which resolves to the extended session
-   *   object
-   * @throws ReferenceError if the detail was not found
-  ###
-  detail: (session) ->
-    # The session object must have a detail reference.
-    if not session.detail?
-      throw new ReferenceError(
-        "#{ session.title } does not reference a detail object"
-      )
-
-    # Return a promise to fetch the session detail.
-    Resources.Session.detail(id: session.detail).then (detail) ->
-      # Copy the fetched detail into the session.
+    session.extendDetail = (detail) ->
+      # The session object must have a detail reference.
+      if not detail?
+        throw new ReferenceError(
+          "The #{ @title } detail object is missing"
+        )
+      # The detail scans are an empty array by default.
+      if not detail.scans?
+        detail.scans = []
+      # Copy the fetched detail into the session object.
       ObjectHelper.aliasPublicDataProperties(detail, session)
-      # Add properties to the scans and their registration.
+      # Extend the scans.
       for scan in session.scans
-        # Add properties.
         Scan.extend(scan, session)
+
       # Resolve to the extended session object.
       session
 
-  ###*
-   * @method hyperlink
-   * @param session the session object
-   * @return the href to the session detail page
-  ###
-  hyperlink: (session) ->
-    subject = session.subject
-    sbjRefUrl = "/quip/#{ subject.collection }/subject/#{ subject.number }"
+    # Add the virtual properties.
+    Object.defineProperties session,
+      ###*
+       * The display title.
+       *
+       * @property title
+      ###
+      title:
+        # TODO - get the Session title template from a labels.cfg
+        # entry:
+        #   [Session]
+        #   label=Session
+        # and include the label in the format below. Thus, the
+        # title could be externally configurable to include, say,
+        # 'Visit', rather than 'Session'. See also the subject.data.coffee
+        # title TODO.
+        get: ->
+          "#{ @subject.title } Session #{ @number }"
 
-    "#{ sbjRefUrl }/session/#{ session.number }?project=#{ subject.project }"
+      ###*
+       * The <parent>/session path, where:
+       * * <parent> is the parent subject path
+       * * *session* is the session number
+       *
+       * @property path
+      ###
+      path:
+        get: ->
+          "#{ @subject.path }/#{ @number }"
+
+    ###*
+     * @method hasDetailProperties
+     * @return whether this session is extended with the session
+     *   detail REST database object
+    ###
+    session.hasDetailProperties = ->
+      # scans is the extended session signature property
+      @scans?
+
+    # Return the augmented session object.
+    session
 
 `export { Session as default }`
 

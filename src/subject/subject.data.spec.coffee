@@ -4,7 +4,16 @@
 `import REST from "../rest/rest.coffee"`
 `import Subject from "./subject.data.coffee"`
 
-describe 'The Subject Data Service', ->
+###*
+ * The {{#crossLink "Subject"}}{{/crossLink}} validator.
+ *
+ * Note: image load cannot be unit-tested, since it requires an
+ *   active browser.
+ *
+ * @module subject
+ * @class SubjectSpec
+###
+describe 'The Subject data utility', ->
   # The fetched subject
   subject = null
 
@@ -123,19 +132,19 @@ describe 'The Subject Data Service', ->
         encounter = subject.clinicalEncounters[0]
 
       it 'should set the clinical encounter title', ->
-        expect(encounter.title, "Encounter is missing a title").to.exist
-        expect(encounter.title, "Encounter title is incorrect")
+        expect(encounter.title, "The encounter is missing a title").to.exist
+        expect(encounter.title, "The encounter title is incorrect")
           .to.equal('Surgery')
       it 'should set the clinical encounter age', ->
-        expect(encounter.title, "Encounter is missing a title").to.exist
-        expect(encounter.title, "Encounter title is incorrect")
+        expect(encounter.title, "The encounter is missing a title").to.exist
+        expect(encounter.title, "The encounter title is incorrect")
           .to.equal('Surgery')
 
     # Validate the treatments.
     it 'should extend the subject treatments', ->
-      expect(subject.treatments, "Subject is missing treatments")
+      expect(subject.treatments, "The subject is missing treatments")
         .to.exist
-      expect(subject.treatments.length, "Subject encounters length" +
+      expect(subject.treatments.length, "The subject encounters length" +
                                         " is incorrect").to.equal(1)
 
     describe 'Treatment', ->
@@ -147,17 +156,17 @@ describe 'The Subject Data Service', ->
         mockTreatment = mock.json().treatments[0]
 
       it 'should have a type', ->
-        expect(treatment.treatmentType, "Treatment type is missing").to.exist
-        expect(treatment.treatmentType, "Treatment type is incorrect")
+        expect(treatment.treatmentType, "The treatment type is missing").to.exist
+        expect(treatment.treatmentType, "The treatment type is incorrect")
           .to.equal(mockTreatment.treatment_type)
       it 'should have a start data', ->
         expect(treatment.start_date.valueOf(),
                "Treatment start date is incorrect")
           .to.equal(mockTreatment.start_date)
       it 'should have dosages', ->
-        expect(treatment.dosages, "Treatment dosages is missing")
+        expect(treatment.dosages, "The treatment dosages is missing")
           .to.exist.and.not.be.empty
-        expect(treatment.dosages.length, "Treatment dosages count is incorrect")
+        expect(treatment.dosages.length, "The treatment dosages count is incorrect")
           .to.equal(2)
 
       describe 'Dosage', ->
@@ -169,25 +178,31 @@ describe 'The Subject Data Service', ->
           mockDosage = mockTreatment.dosages[0]
 
         it 'should have an agent', ->
-          expect(dosage.agent, "Dosage agent is missing").to.exist
-          expect(dosage.agent.name, "Dosage agent name is missing").to.exist
+          expect(dosage.agent, "The dosage agent is missing").to.exist
+          expect(dosage.agent.name, "The dosage agent name is missing").to.exist
         it 'should have a start date', ->
-          expect(dosage.start_date.valueOf(),  "Treatment dosage start date" +
+          expect(dosage.start_date.valueOf(),  "The treatment dosage start date" +
                                             " is incorrect")
             .to.equal(mockDosage.start_date)
         it 'should have a duration', ->
-          expect(dosage.duration,  "Treatment dosage duration is incorrect")
+          expect(dosage.duration,  "The treatment dosage duration is incorrect")
             .to.equal(mockDosage.duration)
 
     describe 'Session', ->
       # Validate the sessions (without detail).
       it 'should have a subject session', ->
-        expect(subject.sessions, "Subject is missing sessions").to.exist
-        expect(subject.sessions.length, "Subject session count is" +
+        expect(subject.sessions, "The subject is missing sessions").to.exist
+        expect(subject.sessions.length, "The subject session count is" +
                                         " incorrect")
           .to.equal(2)
 
       it 'should set the subject multiSession flag', ->
-        expect(subject.isMultiSession(), "Subject multi-session flag" +
+        expect(subject.isMultiSession(), "The subject multi-session flag" +
                                          " is incorrect")
           .to.be.true
+
+      it 'should set the session number', ->
+        sessionNbr = subject.sessions[0].number
+        expect(sessionNbr, "The session is missing a number").to.exist
+        expect(sessionNbr, "The subject session number is incorrect")
+          .to.equal(1)

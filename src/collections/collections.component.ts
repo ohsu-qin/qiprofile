@@ -3,7 +3,7 @@
  *
  * @module collections
  */
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 
@@ -28,7 +28,7 @@ import { Observable } from 'rxjs';
  *
  * @class CollectionsComponent
  */
-export class CollectionsComponent implements OnInit {
+export class CollectionsComponent {
   /**
    * The project name.
    *
@@ -37,11 +37,22 @@ export class CollectionsComponent implements OnInit {
   project: string;
   
   /**
-   * An Observable that resolves to the collection REST objects.
+   * The collection REST objects.
    *
-   * @property collections {Observable}
+   * @property collections {Object[]}
    */
-  collections: Observable<Object[]>;
+  collections: Object[];
+  
+  /**
+   * Flag indicating whether there are no collections.
+   * This property is necessary in order to asynchronously convey
+   * to the view whether there are subjects. The view cannot test
+   * `collections.length` directly, since `collections` is only
+   * set when the collections are fetched.
+   * 
+   * @property isEmpty {boolean}
+   */
+  isEmpty: boolean;
   
   /**
    * The help content.
@@ -54,6 +65,8 @@ export class CollectionsComponent implements OnInit {
               private dataService: CollectionService,
               private helpService: HelpService) {
       this.help = help;
+      // Always show the help on this page.
+      this.helpService.showHelp = true;
       let params = this.route.params.value;
       this.project = params.project;
       // The unsorted collection objects.
@@ -61,29 +74,9 @@ export class CollectionsComponent implements OnInit {
       // A function to sort the collections by name.
       let sortByName = _.partialRight(_.sortBy, 'name');
       // Sort the collections.
-      this.collections = unsorted.map(sortByName);
-  }
-  
-  /**
-   * @method isEmpty
-   * @return whether there any collections
-   */
-  isEmpty(): Observable<boolean> {
-    return this.collections.map(
-      array => array.length === 0
-    );
-  }
-  
-  /**
-   * Initializes this component as follows:
-   * * Obtains the REST Collection objects from the data service
-   * * Sort the collections by name.
-   * * Always show the help.
-   *
-   * @method ngOnInit
-   */
-  ngOnInit() {
-    // Always show the help on this page.
-    this.helpService.showHelp = true;
+      unsorted.map(sortByName).subscribe(collections => {
+        this.collections = collections.sort(sortByName);
+        this.isEmpty = collections.length === 0;
+      });
   }
 }

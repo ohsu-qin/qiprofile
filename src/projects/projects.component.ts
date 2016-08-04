@@ -3,7 +3,7 @@
  *
  * @module projects
  */
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import * as _ from 'lodash';
 
 import { HomeComponent } from '../home/home.component.ts';
@@ -28,13 +28,22 @@ import { Observable } from 'rxjs';
  *
  * @class ProjectsComponent
  */
-export class ProjectsComponent implements OnInit {
+export class ProjectsComponent {
   /**
-   * An Observable that resolves to the project REST objects.
+   * The project REST objects.
    *
-   * @property projects {Observable}
+   * @property projects {Object[]}
    */
-  projects: Observable<Object[]>;
+  projects: Object[];
+
+  /**
+   * Flag indicating whether there are no projects.
+   * See {{#crossLink "CollectionsComponent"}}{{/crossLink}}
+   * for the rationale for this property.
+   *
+   * @property isEmpty {boolean}
+   */
+  isEmpty: boolean;
   
   /**
    * The Project List page project name is the empty string. This is
@@ -55,31 +64,16 @@ export class ProjectsComponent implements OnInit {
   constructor(private dataService: ProjectService,
               private helpService: HelpService) {
       this.help = help;
-  }
-  
-  /**
-   * @method isEmpty
-   * @return {Observable<boolean>} whether there any projects
-   */
-  isEmpty(): Observable<boolean> {
-    return this.projects.map(
-      array => array.length === 0
-    );
-  }
-  
-  /**
-   * Obtains the project names from the data service and sorts them.
-   *
-   * @method ngOnInit
-   */
-  ngOnInit() {
-    // Always show the help on this page.
-    this.helpService.showHelp = true;
-    // The unsorted project objects.
-    let unsorted: Observable = this.dataService.getProjects();
-    // A function to sort the projects by name.
-    let sortByName = _.partialRight(_.sortBy, 'name');
-    // Sort the projects.
-    this.projects = unsorted.map(sortByName);
+      // Always show the help on this page.
+      this.helpService.showHelp = true;
+      // The unsorted project objects.
+      let unsorted: Observable = this.dataService.getProjects();
+      // A function to sort the projects by name.
+      let sortByName = _.partialRight(_.sortBy, 'name');
+      // Sort the projects.
+      unsorted.map(sortByName).subscribe(projects => {
+        this.projects = projects;
+        this.isEmpty = projects.length === 0;
+      });
   }
 }

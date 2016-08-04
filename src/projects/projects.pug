@@ -5,7 +5,7 @@ block billboard
 
 block content
   ul.qi-main-list
-    p(*ngIf="isEmpty() | async")
+    p(*ngIf="isEmpty")
       | No projects were found.
-    li(*ngFor="let project of projects | async")
+    li(*ngFor="let project of projects")
       qi-project-item([project]="project")

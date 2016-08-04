@@ -6,11 +6,11 @@ import { Component } from '@angular/core';
 
 import {
   CollectionCorrelationComponent
-} from './collection-correlation.component.ts';
+} from './correlation.component.ts';
 
 @Component({
   selector: 'qi-collection-correlations',
-  templateUrl: '/public/html/collection/collection-correlations.html',
+  templateUrl: '/public/html/collection/correlations.html',
   directives: [CollectionCorrelationComponent],
 })
 

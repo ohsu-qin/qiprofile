@@ -1,11 +1,11 @@
 extends ../layout/partial
 
 block billboard
-  | Collections
+  | {{ project }} Collections
 
 block content
-  p(*ngIf="isEmpty() | async")
-    | The {{ project }} collection {{ collections.length }} does not have any visits.
+  p(*ngIf="isEmpty")
+    | The {{ project }} does not have any collections.
   ul.qi-main-list
-    li(*ngFor="let collection of collections | async")
+    li(*ngFor="let collection of collections")
       qi-collection-item([collection]="collection")

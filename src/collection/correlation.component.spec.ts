@@ -4,7 +4,7 @@ import {
   describe, it, expect
 } from '@angular/core/testing';
 
-import { CollectionCorrelationComponent } from './collection-correlation.component.ts';
+import { CollectionCorrelationComponent } from './correlation.component.ts';
 
 /**
  * {{#crossLink "CollectionCorrelationComponent"}}{{/crossLink}} validator.

@@ -31,11 +31,7 @@ class ProjectServiceStub {
 }
 
 /**
- * The stunt showHelp flag service. Note that, unlike
- * {{#crossLink "CollectionsHelpServiceStub"}}{{/crossLink}},
- * this help stub must have the flag, since it is set in
- * the {{#crossLink "ProjectsComponent"}}{{/crossLink}}
- * constructor rather than an Angular call-back method.
+ * The stunt showHelp flag service.
  *
  * @class ProjectsHelpServiceStub
  */
@@ -52,37 +48,34 @@ beforeEachProviders(() => {
 });
 
 /**
+ * Runs the given test body on the injected component and service.
+ *
+ * @function test
+ * @param body {function(CollectionsComponent, CollectionService)} the test body
+ * @private
+ */
+function test(body) {
+  return inject(
+    [ProjectsComponent, ProjectService],
+    (component: ProjectsComponent, service: ProjectService) => {
+      body(component, service);
+    }
+  );
+}
+
+/**
  * {{#crossLink "ProjectsComponent"}}{{/crossLink}} validator.
  * This test validates that the projects are listed in sort order.
  *
  * @class ProjectsComponentSpec
  */
 describe('The Projects component', function() {
-  let component;
-  
-  beforeEach(inject(
-    [ProjectsComponent],
-    (_component: ProjectsComponent) => {
-      // Manually init the component.
-      _component.ngOnInit();
-      component = _component;
-    }
-  ));
-
-  it('should sort the projects', inject(
-    [ProjectService],
-    (dataService: ProjectService) => {
-      // The mocked projects are in reverse sort order.
-      let expected;
-      dataService.getProjects().subscribe(reversed => {
-        expected = reversed.reverse();
-      });
+  it('should sort the projects', test((component, service) => {
+    // The mocked projects are in reverse sort order.
+    service.getProjects().subscribe(projects => {
+      let expected = projects.reverse();
       // Compare to the component projects property.
-      component.projects.subscribe(
-        actual => {
-          expect(actual, 'Projects are incorrect').to.eql(expected);
-        }
-      );
-    }
-  ));
+      expect(component.projects, 'Projects are incorrect').to.eql(expected);
+    });
+  }));
 });

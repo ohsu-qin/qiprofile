@@ -4,7 +4,7 @@
 `import DateHelper from "../date/date-helper.coffee"`
 `import Session from "../session/session.data.coffee"`
 `import Modeling from "../session/modeling.data.coffee"`
-`import ClinicalEncounter from "./clinical-encounter.data.coffee"`
+`import ClinicalEncounter from "../clinical/encounter.data.coffee"`
 
 isSession = (encounter) -> encounter._cls == 'Session'
 
@@ -64,6 +64,7 @@ Subject =
    * @return the extended Subject
   ###
   extend: (subject) ->
+    return subject if not subject
     # Add the virtual properties.
     Object.defineProperties subject,
       ###*
@@ -72,11 +73,12 @@ Subject =
       ###
       title:
         get: ->
-          # TODO - get the Subject display text from a config,
-          #   e.g.:
-          #     label = config.subject.label
-          #     "#{ @collection } #{ label } #{ @number }"
-          #   See also the subject.coffee title TODO.
+          # TODO - get the Subject label from a labels.cfg
+          # entry:
+          #   [Subject]
+          #   label=Patient
+          # and include the label in the format below.
+          # See also the session.data.coffee title TODO.
           "#{ @collection } Patient #{ @number }"
 
       ###*
@@ -118,6 +120,13 @@ Subject =
           if not @_modelings?
             @_modelings = Modeling.collect(this)
           @_modelings
+
+    # Add the default empty encounters array, if necessary.
+    if not subject.encounters?
+      subject.encounters = []
+    # Add the default empty treatments arrays, if necessary.
+    if not subject.treatments?
+      subject.treatments = []
 
     # Add the isMultiSession method.
     subject.isMultiSession = -> @sessions.length > 1

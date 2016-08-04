@@ -1,7 +1,7 @@
 `import * as _ from "lodash"`
 
-`import TimeSeries from "./time-series.data.coffee"`
-`import Volume from "./volume.data.coffee"`
+`import TimeSeries from "../time-series/time-series.data.coffee"`
+`import Volume from "../volume/volume.data.coffee"`
 
 ###*
  * The ImageSequence REST data object extension utility.
@@ -20,6 +20,7 @@ ImageSequence =
    * @return the extended REST image sequence object
   ###
   extend: (imageSequence) ->
+    return imageSequence if not imageSequence
     # Extend the time series.
     if imageSequence.timeSeries?
       TimeSeries.extend(imageSequence.timeSeries, imageSequence)

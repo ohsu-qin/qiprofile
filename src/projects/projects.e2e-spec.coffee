@@ -11,11 +11,7 @@ class ProjectListPage extends Page
     # Call the Page superclass initializer with the helpShown
     # flag set to true, since the help box is displayed on
     # this landing page.
-    #
-    # FIXME - help is initially shown, but is hidden by the
-    # time the help isDisplayed is checked. Why?
-    #super('/qiprofile/', true)
-    super('/qiprofile/', false)
+    super('/qiprofile/', true)
 
   # @returns the project {name, description, url} object
   #   array promise

@@ -12,8 +12,6 @@ class CollectionListPage extends Page
     # Call the Page superclass initializer with the helpShown
     # flag set to true, since the help box is displayed on
     # this landing page.
-    # FIXME - help is initially shown, but is hidden by the
-    # time the help isDisplayed is checked. Why?
     super(Page.HOME, true)
   
   # @returns the collection {name, description, url} object
@@ -47,7 +45,7 @@ class CollectionListPage extends Page
     Promise.all(resolvers).then (resolved) =>
       resolved.reduce(accumulate, {})
 
-describe.only 'E2E Testing Collection List', ->
+describe 'E2E Testing Collection List', ->
   page = null
   
   before ->

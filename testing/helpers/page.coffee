@@ -103,7 +103,8 @@ class Page extends Findable
       # Help is initially hidden or shown, depending on the
       # helpShown property.
       state = if @helpShown then 'shown' else 'hidden'
-      expect(helpBox.isDisplayed(), "The help box is initially #{ state }")
+      expect(helpBox.isDisplayed(),
+             "The help box is not initially #{ state }")
         .to.eventually.equal(@helpShown)
       findButton().then (btn) ->
         expect(btn, 'The help button is missing').to.exist
@@ -111,7 +112,8 @@ class Page extends Findable
         btn.click().then =>
           # Verify that the help is toggled.
           state = if @helpShown then 'hidden' else 'shown'
-          expect(helpBox.isDisplayed(), "The help box is #{ state } after click")
+          expect(helpBox.isDisplayed(),
+                 "The help box is not #{ state } after click")
             .to.eventually.not.equal(@helpShown)
           # Click again to restore the initial state.
           btn.click().then ->

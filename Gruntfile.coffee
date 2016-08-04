@@ -249,7 +249,7 @@ module.exports = (grunt) ->
         files: ['coffeescripts/**/*.coffee']
         tasks: ['coffee']
       pug:
-        files: ['*.pug', '**/*.pug']
+        files: ['*.pug', 'src/**/*.pug']
         tasks: ['pug']
       stylus:
         files: ['stylus/**/*.styl']

@@ -39,6 +39,7 @@ extendImage = (image, timeSeries) ->
 ###*
  * The TimeSeries REST data object extension utility.
  *
+ * @module session
  * @class TimeSeries
  * @static
 ###

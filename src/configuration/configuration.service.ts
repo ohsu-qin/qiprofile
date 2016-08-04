@@ -50,8 +50,7 @@ export class ConfigurationService {
       section = _.capitalize(section);
       let label = this.labels[section][attribute];
       if (label) { return label; }
-    }
-    else {
+      } else {
       for (let _section in this.labels) {
         let label = this.labels[_section][attribute];
         if (label) { return label; }

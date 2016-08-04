@@ -3,7 +3,7 @@
 `import XNAT from "./xnat.coffee"`
 
 ###*
- *  {{#crossLink "XNAT"}}{{/crossLink}} validator.
+ *  The {{#crossLink "XNAT"}}{{/crossLink}} validator.
  *
  * @class XNATSpec
 ###

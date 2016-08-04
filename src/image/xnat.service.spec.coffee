@@ -10,7 +10,7 @@
 `import { XNATService } from "./xnat.service.ts"`
 
 ###*
- * {{#crossLink "XNATService"}}{{/crossLink}} validator.
+ * The {{#crossLink "Scan"}}{{/crossLink}} validator.
  *
  * This test is effectively a union of the {{#crossLink "XNATSpec"}}{{/crossLink}}
  * and {{#crossLink "FileServiceSpec"}}{{/crossLink}} tests, which reflects the

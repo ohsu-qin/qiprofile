@@ -6,7 +6,7 @@
 
 `import * as _ from "lodash"`
 
-`import Loader from "../file/loader.data.coffee"`
+`import Loader from "./loader.data.coffee"`
 `import Nifti from "./nifti.coffee"`
 `import ImageStore from "./image-store.coffee"`
 
@@ -84,6 +84,7 @@ Image =
    * @return the extended Image object
   ###
   extend: (image) ->
+    return image if not image
     # Add the loader functionality.
     _.extend(image, new ImageMixin)
 

@@ -2,50 +2,32 @@
  * The application entry module.
  *
  * @module main
+ * @main
  */
-import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
-import { Router, ROUTER_DIRECTIVES } from '@angular/router';
+import { Component } from '@angular/core';
+import { ROUTER_DIRECTIVES } from '@angular/router';
 
 import { HelpService } from '../help/help.service.ts';
+import { SubjectService } from '../subject/subject.service.ts';
+import { SessionService } from '../session/session.service.ts';
 
 @Component({
   selector: 'qi-app',
   templateUrl: '/public/html/main/app.html',
   directives: [ROUTER_DIRECTIVES],
-  // The HelpService singleton is shared by subcomponents, which
-  // should not declare the provider separately.
-  providers: [HelpService]
+  // These services are shared by subcomponents, which should not
+  // declare the provider separately.
+  providers: [HelpService, SubjectService, SessionService]
 })
 
 /**
  * The boot entry point.
  *
- * This component provides the following services:
- * * Sets the application routes
- * * Provides the `HelpService` for injection by subcomponents
- * * Includes router directives for use by subcomponents
- * * Defines the main `<qi-app></qi-app>` HTML body context
- * * Navigates to the {{#crossLink "CollectionsComponent"}}{{/crossLink}}
- *   on start-up
+ * This component defines the main `<qi-app></qi-app>` HTML body context
+ * and provides the following services:
+ * * {{#crossLink "HelpService"}}{{/crossLink}}
+ * * {{#crossLink "SubjectService"}}{{/crossLink}}
  *
  * @class AppComponent
- * @constructor
  */
-export class AppComponent implements OnInit {
-  /**
-   * Captures the router and location for use in the
-   * {{#crossLink "AppComponent/ngOnInit:method"}}{{/crossLink}}
-   * initialization callback.
-   *
-   * @method constructor
-   * @param router the injected router
-   * @param location the injected location
-   */
-  constructor(private helpService: HelpService, private router: Router,
-              private location: Location) {
-    this.router.events.subscribe(path => {
-      helpService.showHelp = false;
-    });
-  }
-}
+export class AppComponent {}

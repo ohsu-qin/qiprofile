@@ -7,7 +7,7 @@ import {
 import { CollectionCorrelationComponent } from './correlation.component.ts';
 
 /**
- * {{#crossLink "CollectionCorrelationComponent"}}{{/crossLink}} validator.
+ * The {{#crossLink "CollectionCorrelationComponent"}}{{/crossLink}} validator.
  *
  * @class CollectionCorrelationComponentSpec
  */

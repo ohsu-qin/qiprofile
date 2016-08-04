@@ -3,8 +3,9 @@
 `import { ConfigurationService } from "./configuration.service.ts"`
 
 ###*
- * {{#crossLink "ConfigurationService"}}{{/crossLink}} validator.
+ * The {{#crossLink "ConfigurationService"}}{{/crossLink}} validator.
  *
+ * @module configuration
  * @class ConfigurationServiceSpec
 ###
 describe 'The Configuration service', ->

@@ -5,11 +5,13 @@ import * as _ from 'lodash';
  *
  * @module visualization
  * @class ValueAccessor
- * @function value
- * @param data {Object} the input data object
- * @return {number} the data value to display
  */
 interface ValueAccessor {
+  /**
+   * @function anonymous
+   * @param data {Object} the input data object
+   * @return {number} the data value to display
+   */
   (data: Object): number;
 }
 
@@ -23,7 +25,7 @@ export class Axis {
   /**
    * The required axis size in pixels.
    *
-   * @property size
+   * @property size {number}
    */
   size: number;
   
@@ -32,7 +34,7 @@ export class Axis {
    * property specification, e.g. `name.last` to access the
    * data object *d* *d.name.last* value.
    *
-   * @property {string | ValueAccessor} value
+   * @property value {string | ValueAccessor}
    */
   value: string | ValueAccessor;
 
@@ -44,7 +46,7 @@ export class Axis {
    *
    * The default label is inferred from 
    *
-   * @property opts
+   * @property opts {Object}
    */
   opts: Object;
 
@@ -54,9 +56,9 @@ export class Axis {
    * the `value` property path terminal property.
    *
    * @example
-   * axis = new Axis(600, ') 
+   *     axis = new Axis(600, ') 
    *
-   * @property orientation
+   * @property label {string}
    */
   label: string;
 
@@ -64,14 +66,14 @@ export class Axis {
    * The required axis orientation
    * (`top`, 'bottom`, 'left` or 'right`).
    *
-   * @property orientation
+   * @property orientation {string}
    */
   orientation: string;
 
   /**
    * The optional axis transform, e.g. `rotate(-90)`.
    *
-   * @property transform
+   * @property transform {string}
    */
   transform: string;
   

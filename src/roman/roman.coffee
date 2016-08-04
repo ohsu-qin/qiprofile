@@ -2,6 +2,7 @@
  * Roman numeral conversion utilities.
  *
  * @module roman
+ * @main
 ###
 
 `import * as _ from "lodash"`

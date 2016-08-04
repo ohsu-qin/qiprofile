@@ -18,6 +18,7 @@ import Subject from './subject.data.coffee';
 /**
  * The Subject data access service.
  *
+ * @module subject
  * @class SubjectService
  */
 export class SubjectService {
@@ -69,7 +70,7 @@ export class SubjectService {
    *
    * @method secondaryKey
    * @param params {Object} the route parameters
-   * @returns {Object} the corresponding secondary key
+   * @return {Object} the corresponding secondary key
    */
   secondaryKey(routeParams: Object) {
     if (!routeParams.project) {
@@ -101,7 +102,7 @@ export class SubjectService {
    *
    * @method searchCriterion
    * @param routeParams {Object} the route parameters
-   * @returns {Object} the search criterion object
+   * @return {Object} the search criterion object
    */
   private searchCriterion(routeParams: Object) {
     let subjectId = routeParams.subjectid;

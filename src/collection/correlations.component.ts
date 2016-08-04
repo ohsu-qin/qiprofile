@@ -33,7 +33,7 @@ export class CollectionCorrelationsComponent {
    * There is one specification object per chart.
    *
    * @example
-   * [{'deltaKTrans', 'rcb'}, {'vE', 'tumorSize}]
+   *      [{'deltaKTrans', 'rcb'}, {'vE', 'tumorSize}]
    *
    * @property chartAxes {Object[]}
    */

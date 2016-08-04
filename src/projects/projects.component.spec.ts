@@ -11,6 +11,7 @@ import { HelpService } from '../help/help.service.ts';
 /**
  * The test mock for a {{#crossLink "ProjectService"}}{{/crossLink}}.
  *
+ * @module projects
  * @class ProjectServiceStub
  */
 class ProjectServiceStub {
@@ -33,6 +34,7 @@ class ProjectServiceStub {
 /**
  * The stunt showHelp flag service.
  *
+ * @module projects
  * @class ProjectsHelpServiceStub
  */
 class ProjectsHelpServiceStub {
@@ -51,7 +53,8 @@ beforeEachProviders(() => {
  * Runs the given test body on the injected component and service.
  *
  * @function test
- * @param body {function(CollectionsComponent, CollectionService)} the test body
+ * @param body {function(CollectionsComponent, CollectionService)} the 
+ *   test body
  * @private
  */
 function test(body) {
@@ -64,9 +67,10 @@ function test(body) {
 }
 
 /**
- * {{#crossLink "ProjectsComponent"}}{{/crossLink}} validator.
+ * The {{#crossLink "ProjectsComponent"}}{{/crossLink}} validator.
  * This test validates that the projects are listed in sort order.
  *
+ * @module projects
  * @class ProjectsComponentSpec
  */
 describe('The Projects component', function() {

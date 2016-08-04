@@ -6,13 +6,13 @@ class SessionDetailPage extends Page
   constructor: ->
     super('/quip/sarcoma/subject/1/session/1?project=QIN_Test')
 
-  # @returns the line chart promise
+  # @return the line chart promise
   @property chart: ->
     # Perform a XSL search for the chart element.
     @find('//div[@ng-controller="IntensityChartCtrl"]')
 
   # @param number the volume number
-  # @returns the {download: ElementFinder, display: ElementFinder}
+  # @return the {download: ElementFinder, display: ElementFinder}
   #   associative object, where each ElementFinder resolves
   #   to the respective button
   scanImageButtons: (number) ->
@@ -34,7 +34,7 @@ class SessionDetailPage extends Page
   # Loads the image by clicking the given download button.
   #
   # @param button the image download button
-  # @returns a promise that resolves to true if the button
+  # @return a promise that resolves to true if the button
   #   is eventually hidden on image load or false if roughly
   #   one second has expired
   loadScanImage: (button) ->
@@ -48,7 +48,7 @@ class SessionDetailPage extends Page
     # @param button the scan image download button
     # @param retry the maximum number of times to reiterate
     #   until the image is loaded (default 10)
-    # @returns a promise that resolves to true if the button
+    # @return a promise that resolves to true if the button
     #   is hidden or false if the retry limit is reached
     waitWhileVisible = (button, retry=10) ->
       # Wait a while, then check if the button is visible.

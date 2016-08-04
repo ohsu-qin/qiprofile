@@ -2,6 +2,7 @@
  * The REST utilities.
  *
  * @module rest
+ * @main
  */
 import { Resource, ResourceParams } from 'ng2-resource-rest';
 import { Injectable } from '@angular/core';
@@ -35,10 +36,10 @@ export class RestResource extends Resource {
    * search criterion, if any.
    *
    * @example
-   *   import REST from '../rest/rest.coffee;'
-   *   criterion = REST.where({id: id});
-   *   subject = resource.findOne(criterion);
-   *   subject.subscribe(sbj => console.log("Subject ", sbj.number));
+   *     import REST from '../rest/rest.coffee;'
+   *     criterion = REST.where({id: id});
+   *     subject = resource.findOne(criterion);
+   *     subject.subscribe(sbj => console.log("Subject ", sbj.number));
    *
    * @method findOne
    * @param criterion {string} the search criterion
@@ -62,10 +63,10 @@ export class RestResource extends Resource {
    * which emits one matching REST object array.
    *
    * @example
-   *   import REST from '../rest/rest.coffee;'
-   *   criterion = REST.where({project: projectName});
-   *   subjects = resource.find(criterion);
-   *   subjects.subscribe(sbjs => console.log('%s subjects', sbjs.length));
+   *     import REST from '../rest/rest.coffee;'
+   *     criterion = REST.where({project: projectName});
+   *     subjects = resource.find(criterion);
+   *     subjects.subscribe(sbjs => console.log('%s subjects', sbjs.length));
    *
    * @method find
    * @param criterion {string} the optional search criterion

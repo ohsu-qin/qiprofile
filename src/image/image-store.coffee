@@ -11,6 +11,7 @@
  * with its own service.
  *
  * @class ImageStore
+ * @module image
  * @static
 ###
 ImageStore = XNAT

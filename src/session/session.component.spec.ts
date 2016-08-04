@@ -11,6 +11,7 @@ import { SessionService } from './session.service.ts';
 /**
  * The stunt {{#crossLink "SessionService"}}{{/crossLink}}.
  *
+ * @module session
  * @class SessionServiceStub
  */
 class SessionServiceStub {
@@ -43,6 +44,7 @@ class SessionServiceStub {
 /**
  * The stunt router.
  *
+ * @module session
  * @class SessiondRouterStub
  */
 class SessionRouterStub {
@@ -51,6 +53,7 @@ class SessionRouterStub {
 /**
  * The stunt route.
  *
+ * @module session
  * @class SessionActivatedRouteStub
  */
 class SessionActivatedRouteStub {
@@ -69,6 +72,7 @@ class SessionActivatedRouteStub {
 /**
  * The stunt change detector.
  *
+ * @module session
  * @class SubjectChangeDetectorRefStub
  */
 class SessionChangeDetectorRefStub {

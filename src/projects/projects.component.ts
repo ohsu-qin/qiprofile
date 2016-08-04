@@ -2,6 +2,7 @@
  * The Projects List module.
  *
  * @module projects
+ * @main
  */
 import { Component } from '@angular/core';
 import * as _ from 'lodash';

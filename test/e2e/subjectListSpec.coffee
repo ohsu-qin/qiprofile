@@ -13,12 +13,12 @@ class SubjectListPage extends Page
   # Hyperlink locator.
   ANCHOR_LOCATOR = By.tagName('a')
 
-  # @returns a promise resolving to the asssociative collection
+  # @return a promise resolving to the asssociative collection
   #   {name: subjects} object
   @property collectionSubjects: ->
     # @param assoc the associate accumulator object
     # @param pair the [name, subjects] array
-    # @returns the accumulator object
+    # @return the accumulator object
     merge = (assoc, pair) ->
       [name, subjects] = pair
       assoc[name] = subjects

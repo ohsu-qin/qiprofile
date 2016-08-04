@@ -1,5 +1,11 @@
 `import StringHelper from "./string-helper.coffee"`
 
+###*
+ * The {{#crossLink "StringHelper"}}{{/crossLink}} validator.
+ *
+ * @module string
+ * @class StringHelperSpec
+###
 describe 'StringHelper', ->
 
   describe 'dasherize', ->

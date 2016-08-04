@@ -4,7 +4,7 @@
 `import Registration from "./registration.data.coffee"`
 
 ###*
- * The {{#crossLink "Registratio"}}{{/crossLink}} validator.
+ * The {{#crossLink "Registration"}}{{/crossLink}} validator.
  *
  * @module session
  * @class RegistrationSpec

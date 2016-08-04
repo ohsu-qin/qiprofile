@@ -43,6 +43,7 @@ getOverlays = (session) ->
 ###*
  * The Session REST data object extension utility.
  *
+ * @module session
  * @class Session
  * @static
 ###

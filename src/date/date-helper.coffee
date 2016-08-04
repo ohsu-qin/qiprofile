@@ -1,5 +1,5 @@
 ###*
- * Date utilities.
+ * The date utilities.
  *
  * @module date
 ###

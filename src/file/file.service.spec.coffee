@@ -9,8 +9,9 @@
 `import { FileService } from "./file.service.ts"`
 
 ###*
- * {{#crossLink "FileService"}}{{/crossLink}} validator.
+ * The {{#crossLink "FileService"}}{{/crossLink}} validator.
  *
+ * @module file
  * @class FileServiceSpec
 ###
 describe 'The File service', ->

@@ -10,33 +10,33 @@ class CollectionDetailPage extends Page
   constructor: ->
     super('/quip/breast?project=QIN_Test')
 
-  # @returns a promise which resolves to the subject table
+  # @return a promise which resolves to the subject table
   #   ElementFinder
   @property subjectTable: ->
     @find('#qi-subject-table')
 
-  # @returns a promise which resolves to the subject chart
+  # @return a promise which resolves to the subject chart
   #   ElementFinder
   @property subjectChart: ->
     @find('#qi-subject-chart')
 
-  # @returns the subject table group promise
+  # @return the subject table group promise
   @property subjectTableGroups: ->
     @findAll('.dc-table-label')
 
-  # @returns the subject table column promise
+  # @return the subject table column promise
   @property subjectTableColumns: ->
     @findAll('.dc-table-column')
 
-  # @returns the collection charts promise
+  # @return the collection charts promise
   @property collectionCharts: ->
     @findAll('.qi-collection-chart')
 
-  # @returns the X-axis dropdown promise
+  # @return the X-axis dropdown promise
   @property xAxisDropdowns: ->
     @findAll('.qi-x-axis-dropdown')
 
-  # @returns the Y-axis dropdown promise
+  # @return the Y-axis dropdown promise
   @property yAxisDropdowns: ->
     @findAll('.qi-y-axis-dropdown')
 

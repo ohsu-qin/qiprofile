@@ -2,6 +2,7 @@
  * The Collections List module.
  *
  * @module collections
+ * @main
  */
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';

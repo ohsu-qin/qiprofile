@@ -4,6 +4,7 @@
 ###*
  * REST utility functions.
  *
+ * @module rest
  * @class REST
  * @static
 ###

@@ -479,7 +479,7 @@ niftiParser.parseHeader = niftiParser.parseNRRDHeader
 // Parses both the header and data.
 //
 // @param buffer_org the raw ArrayBuffer or (Node.js) Buffer
-// @returns the NRRD header extended with the following properties:
+// @return the NRRD header extended with the following properties:
 //   *buffer* - the input buffer as a byte array
 //   *data* - the parsed raw data
 niftiParser.parse = function (buffer_org) {

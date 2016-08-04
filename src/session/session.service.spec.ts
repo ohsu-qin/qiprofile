@@ -83,7 +83,7 @@ class SessionDetailResourceStub {
 }
 
 /**
- * {{#crossLink "SessionService"}}{{/crossLink}} validator.
+ * The {{#crossLink "SessionService"}}{{/crossLink}} validator.
  *
  * @module session
  * @class SessionServiceSpec

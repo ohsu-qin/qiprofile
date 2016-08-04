@@ -1,11 +1,12 @@
 `import * as _ from "lodash"`
 
-`import TimeSeries from "../time-series/time-series.data.coffee"`
+`import TimeSeries from "./time-series.data.coffee"`
 `import Volume from "../volume/volume.data.coffee"`
 
 ###*
  * The ImageSequence REST data object extension utility.
  *
+ * @module session
  * @class ImageSequence
  * @static
 ###

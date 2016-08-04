@@ -2,6 +2,7 @@
  * String utilities.
  *
  * @module string
+ * @main
 ###
 
 `import * as _s from "underscore.string"`

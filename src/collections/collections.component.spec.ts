@@ -12,6 +12,7 @@ import { CollectionService } from '../collection/collection.service.ts';
 /**
  * The stunt showHelp flag service.
  *
+ * @module collections
  * @class CollectionsHelpServiceStub
  */
 class CollectionsHelpServiceStub {
@@ -21,6 +22,7 @@ class CollectionsHelpServiceStub {
 /**
  * The test mock for an `ActivatedRoute".
  *
+ * @module collections
  * @class CollectionsActivatedRouteStub
  */
 class CollectionsActivatedRouteStub {
@@ -32,6 +34,7 @@ class CollectionsActivatedRouteStub {
 /**
  * The test mock for a {{#crossLink "CollectionService"}}{{/crossLink}}.
  *
+ * @module collections
  * @class CollectionServiceStub
  */
 class CollectionsCollectionServiceStub {
@@ -49,11 +52,12 @@ class CollectionsCollectionServiceStub {
 }
 
 /**
- * {{#crossLink "CollectionsComponent"}}{{/crossLink}} validator.
+ * The {{#crossLink "CollectionsComponent"}}{{/crossLink}} validator.
  * This test is better suited for E2E testing, but confirms that we
  * can test an observable component property with injected stubs and
  * simulated init.
  *
+ * @module collections
  * @class CollectionsComponentSpec
  */
 describe('The Collections component', function() {

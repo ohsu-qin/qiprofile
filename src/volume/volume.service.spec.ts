@@ -44,7 +44,7 @@ class VolumeSessionServiceStub {
 }
 
 /**
- * {{#crossLink "VolumeService"}}{{/crossLink}} validator.
+ * The {{#crossLink "VolumeService"}}{{/crossLink}} validator.
  *
  * FIXME - fails with error:
  *    Cannot resolve all parameters for 'VolumeService'

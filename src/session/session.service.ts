@@ -1,3 +1,9 @@
+/**
+ * The Session Detail module.
+ *
+ * @module session
+ * @main
+ */
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
@@ -8,9 +14,9 @@ import { SessionDetailResource } from './session-detail.resource.ts';
 @Injectable()
 
 /**
- * The volume data access service.
+ * The session data access service.
  *
- * @class VolumeService
+ * @class SessionService
  */
 export class SessionService {
   constructor(
@@ -27,7 +33,7 @@ export class SessionService {
    *
    * @method secondaryKey
    * @param params {Object} the route parameters
-   * @returns {Object} the corresponding secondary key
+   * @return {Object} the corresponding secondary key
    */
   secondaryKey(routeParams: Object) {
     // The subject secondary key.

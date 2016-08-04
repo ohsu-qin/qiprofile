@@ -16,7 +16,7 @@
  * and {{#crossLink "FileServiceSpec"}}{{/crossLink}} tests, which reflects the
  * fact that {{#crossLink "XNATService"}}{{/crossLink}} is effectively a union
  * of {{#crossLink "XNAT"}}{{/crossLink}} and
- * {{#crossLink "FileService"}}{{/crossLink}}.
+ * The {{#crossLink "FileService"}}{{/crossLink}}.
  *
  * @class XNATServiceSpec
 ###

@@ -37,7 +37,7 @@ app.set 'port', process.env.PORT or PORT
 # The run environment.
 env = app.get('env') or 'production'
 
-# @returns /var/log/qiprofile.log, if it is writable,
+# @return /var/log/qiprofile.log, if it is writable,
 #   ./log/qiprofile.log otherwise
 defaultLogFile = ->
   try

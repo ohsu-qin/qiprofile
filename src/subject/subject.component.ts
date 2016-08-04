@@ -1,7 +1,7 @@
 /**
  * The Subject module.
  *
- * @module volume
+ * @module subject
  * @main
  */
 import {

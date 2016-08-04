@@ -2,6 +2,12 @@
 
 `import DateHelper from "./date-helper.coffee"`
 
+###*
+ * The {{#crossLink "DateHelper"}}{{/crossLink}} validator.
+ *
+ * @module data
+ * @class DateHelperSpec
+###
 describe 'DateHelper', ->
 
   describe 'asMoment', ->

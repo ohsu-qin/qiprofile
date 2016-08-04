@@ -11,6 +11,7 @@ import { SubjectService } from './subject.service.ts';
 /**
  * The stunt {{#crossLink "SubjectService"}}{{/crossLink}}.
  *
+ * @module subject
  * @class SubjectServiceStub
  */
 class SubjectServiceStub {
@@ -42,6 +43,7 @@ class SubjectServiceStub {
 /**
  * The stunt router.
  *
+ * @module subject
  * @class SubjectdRouterStub
  */
 class SubjectRouterStub {
@@ -50,6 +52,7 @@ class SubjectRouterStub {
 /**
  * The stunt route.
  *
+ * @module subject
  * @class SubjectActivatedRouteStub
  */
 class SubjectActivatedRouteStub {
@@ -65,6 +68,7 @@ class SubjectActivatedRouteStub {
 /**
  * The stunt change detector.
  *
+ * @module subject
  * @class SubjectChangeDetectorRefStub
  */
 class SubjectChangeDetectorRefStub {
@@ -74,6 +78,7 @@ class SubjectChangeDetectorRefStub {
 /**
  * The {{#crossLink "SubjectComponent"}}{{/crossLink}} validator.
  *
+ * @module subject
  * @class SubjectComponentSpec
  */
 describe('The Subject component', function() {

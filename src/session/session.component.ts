@@ -1,5 +1,5 @@
 /**
- * The Session module.
+ * The Session Detail module.
  *
  * @module session
  * @main

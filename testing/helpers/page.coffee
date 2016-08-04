@@ -12,39 +12,47 @@ require './object'
 URL_PAT_PREFIX = "http://[-\\w]+:\\d+"
 
 
-# Page is the PageObject pattern
-# (https://code.google.com/p/selenium/wiki/PageObjects)
-# base class. If the Page is instantiated with an url argument,
-# then the given url is visited. The Page class has accessors for
-# the common qiprofile layout elements, e.g. the billboard text and
-# help alert.
-#
-# Page is intended to encapsulate structural HTML access. Extend Page
-# for each partial to be tested. Each Page accessor function should
-# validate that an element which should always be present exists,
-# but should not validate that the element content reflects the model.
-# Element content validation is the responsibility of the Mocha 'it'
-# clauses.
-#
-# Example:
-#   Page = require '../helpers/page'
-#   class LoginPage extends Page
-#     constructor: ->
-#       super('/login.html')
-#     ...
-#   login = new LoginPage()
-#   expect(login.billboard).to.eventually.equal('Login')
+###*
+ * The E2E page base encapsulation. Page folows the PageObject pattern
+ * (https://code.google.com/p/selenium/wiki/PageObjects). If the Page
+ * is instantiated with an url argument, then the given url is visited.
+ * The Page class has accessors for the common qiprofile layout elements,
+ * e.g. the billboard text and help pane.
+ *
+ * Page is intended to encapsulate structural HTML access. Extend Page
+ * for each partial to be tested. Each Page accessor function should
+ * validate that an element which should always be present exists,
+ * but should not validate that the element content reflects the model.
+ * Element content validation is the responsibility of the Mocha 'it'
+ * clauses.
+ *
+ * @example
+ *     Page = require '../helpers/page'
+ *     class LoginPage extends Page
+ *       constructor: ->
+ *         super('/login.html')
+ *       ...
+ *     login = new LoginPage()
+ *     expect(login.billboard).to.eventually.equal('Login')
+ *
+ * @module testing
+ * @class Page
+ * @extends Findable
+###
 class Page extends Findable
-  # @param url the page request URL
-  # @param helpShown flag indicating whether the help box is
-  #   initially shown (default false)
+  ###*
+   * @method constructor
+   * @param url the page request URL
+   * @param helpShown flag indicating whether the help box is
+   *   initially shown (default false)
+  ###
   constructor: (@url, @helpShown=false) ->
     # Call the Findable superclass initializer. Findable wraps
     # a node which responds to the methods element and all.
     # Thus, Finder can wrap both this Page object as well as
     # any WebElement search result.
     super()
-    
+
     # Fire off the browser request.
     browser.get(@url)
 
@@ -53,37 +61,43 @@ class Page extends Findable
 
   # Search from the document root.
   all: element.all
-  
-  # @param url the URL without host or port
-  #   (default this page's URL)
-  # @returns the full URL matcher
+
+  ###*
+   * @method url_pattern
+   * @param url the URL without host or port
+   *   (default this page's URL)
+   * @return the full URL matcher
+  ###
   url_pattern: (url) ->
     if not url
       url = @url
     pat_str = URL_PAT_PREFIX + url + '$'
     new RegExp(pat_str)
 
-  # @returns the title text
+  # @return the title text
   @property title: ->
     browser.getTitle()
 
-  # @returns the billboard text
+  # @return the billboard text
   @property billboard: ->
     @text('.qi-billboard', 'h3')
 
   # Find the partial content. The page is loaded if and and only if
   # the return value is not null.
   #
-  # @returns the qi-content WebElement holding the partial content
+  # @return the qi-content WebElement holding the partial content
   @property content: ->
     @find('.qi-content')
 
   # Navigate to the home page by clicking the home button.
   #
-  # @returns the home URL
+  # @return the home URL
   # @throws an expectation error if the home button is missing
   @property home: ->
-    # @returns the Home button
+    ###*
+     * @method findHomeButton
+     * @return the Home button
+    ###
     findHomeButton = =>
       # The home button is the parent of the home icon.
       @find('qi-home', 'button')
@@ -92,12 +106,12 @@ class Page extends Findable
       expect(btn, 'The home button is missing').to.exist
       btn.visit()
 
-  # @returns the help text
+  # @return the help text
   @property help: ->
     # Finds the help button.
     findButton = =>
       @find('qi-toggle-help', 'button')
-    
+
     @find('.qi-help').then (helpBox) =>
       expect(helpBox, 'The help box is missing').to.exist
       # Help is initially hidden or shown, depending on the

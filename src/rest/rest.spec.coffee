@@ -1,5 +1,11 @@
 `import REST from "./rest.coffee"`
 
+###*
+ * The {{#crossLink "REST"}}{{/crossLink}} validator.
+ *
+ * @module rest
+ * @class RESTSpec
+###
 describe 'The REST Service', ->
   describe 'where', ->
     it 'should quote strings', ->

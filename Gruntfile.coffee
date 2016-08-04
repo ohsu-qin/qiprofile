@@ -98,7 +98,7 @@ module.exports = (grunt) ->
         expand: true
         ext: '.js'
         extDot: 'last'
-        src: ['src/**/*.coffee']
+        src: ['src/**/*.coffee', 'testing/helpers/*.coffee']
         dest: 'build'
 
     concat:
@@ -123,7 +123,7 @@ module.exports = (grunt) ->
         url: '<%= pkg.homepage %>',
         configfile: 'doc/yuidoc.json'
         options:
-          paths: 'build/src'
+          paths: ['build/src', 'build/testing']
           outdir: 'build/doc/api'
           themedir: "node_modules/yuidoc-ember-cli-theme"
           helpers: ['node_modules/yuidoc-ember-cli-theme/helpers.js']

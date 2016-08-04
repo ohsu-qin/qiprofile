@@ -44,7 +44,7 @@ define ['ngmocks', 'tnm', 'helpers'], ->
 
       describe 'grade', ->
         # @param the grade composite object
-        # @returns the expected summary grade
+        # @return the expected summary grade
         expectedSummaryGrade = (grade) ->
           cumulativeGrade = grade.tubularFormation + grade.mitoticCount +
             grade.nuclearPleomorphism
@@ -112,7 +112,7 @@ define ['ngmocks', 'tnm', 'helpers'], ->
 
       describe 'grade', ->
         # @param grade the composite grade object
-        # @returns the expected summary grade
+        # @return the expected summary grade
         expectedSummaryGrade = (grade) ->
           cumulativeGrade = grade.differentiation + grade.mitoticCount +
             grade.necrosisScore

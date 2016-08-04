@@ -11,7 +11,8 @@ import { SubjectService } from '../subject/subject.service.ts';
 /**
  * The stunt {{#crossLink "SubectService"}}{{/crossLink}}.
  *
- * @class SubectServiceStub
+ * @class CollectionSubectServiceStub
+ * @module collection
  */
 class CollectionSubectServiceStub {
   static subjects: Object[] = [{number: 1}, {number: 2}];
@@ -30,7 +31,8 @@ class CollectionSubectServiceStub {
 /**
  * The stunt router.
  *
- * @class CollectiondRouterStub
+ * @class CollectionRouterStub
+ * @module collection
  */
 class CollectionRouterStub {
 }
@@ -39,6 +41,7 @@ class CollectionRouterStub {
  * The stunt route.
  *
  * @class CollectionActivatedRouteStub
+ * @module collection
  */
 class CollectionActivatedRouteStub {
   static paramsValue: Object = {project: 'QIN_Test', collection: 'Breast'};
@@ -54,6 +57,7 @@ class CollectionActivatedRouteStub {
  * The {{#crossLink "CollectionComponent"}}{{/crossLink}} validator.
  *
  * @class CollectionComponentSpec
+ * @module collection
  */
 describe('The Collection component', function() {
   /**

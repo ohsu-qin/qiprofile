@@ -10,22 +10,22 @@ class SubjectDetailPage extends Page
   constructor: (collection) ->
     super("/quip/#{ collection }/subject/1?project=QIN_Test")
 
-  # @returns a promise which resolves to the image profile button
+  # @return a promise which resolves to the image profile button
   #   ElementFinder
   @property imageProfileFormatButton: ->
     @find('#modeling-format-btn')
     
-  # @returns a promise which resolves to the PK modeling help button
+  # @return a promise which resolves to the PK modeling help button
   #   ElementFinder
   @property pkModelingHelpButton: ->
     @find('#pk-modeling-help-btn')
 
-  # @returns a promise which resolves to the TNM stage help button
+  # @return a promise which resolves to the TNM stage help button
   #   ElementFinder
   @property tnmStageHelpButton: ->
     @find('.tnm-stage-help-btn')
 
-  # @returns a promise which resolves to the modeling accordion panel
+  # @return a promise which resolves to the modeling accordion panel
   #   ElementFinder
   @property modelingAccordionPanel: ->
     @find('#modeling-accordion-panel')
@@ -33,19 +33,19 @@ class SubjectDetailPage extends Page
   # Finds the modeling table WebElements.
   # See profileTables.
   #
-  # @returns the modeling tables promise
+  # @return the modeling tables promise
   @property modelingTables: ->
     @findTables('.qi-modeling-table')
 
-  # @returns the modeling charts promise
+  # @return the modeling charts promise
   @property modelingCharts: ->
     @findAll('.qi-modeling-chart')
 
-  # @returns the date line chart promise
+  # @return the date line chart promise
   @property timeline: ->
     @find('//div[@ng-controller="TimelineCtrl"]')
 
-  # @returns the clinical profile panel promise
+  # @return the clinical profile panel promise
   @property clinicalProfile: ->
     # The table specifications as described in the getTable()
     # function below.

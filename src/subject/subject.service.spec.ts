@@ -46,7 +46,7 @@ class SubjectResourceStub {
 }
 
 /**
- * {{#crossLink "SubjectService"}}{{/crossLink}} validator.
+ * The {{#crossLink "SubjectService"}}{{/crossLink}} validator.
  *
  * @module subject
  * @class SubjectServiceSpec

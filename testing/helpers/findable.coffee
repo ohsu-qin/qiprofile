@@ -57,12 +57,6 @@ class Findable
     # @returns the result of calling *elt* on the current
     #   object with the given locator
     next = (current, locator) ->
-      # if current.element
-      #   console.log(">> fndbl n c: #{ current } #{ locator }")
-      # else
-      #   console.log(">>!!!!!!!!! fndbl n c: #{ current } #{ _.keysIn(current) }")
-      #
-      #
       current.element(locator)
 
     # Convert the selectors to locators.

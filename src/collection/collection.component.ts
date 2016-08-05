@@ -2,23 +2,20 @@
  * The Collection Detail module.
  *
  * @module collection
- * @main
+ * @main collection
  */
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { HomeComponent } from '../home/home.component.ts';
-import { ToggleHelpComponent } from '../help/toggle-help.component.ts';
+import { PAGE_DIRECTIVES } from '../main/page.ts';
 import { SubjectService } from '../subject/subject.service.ts';
 import { CollectionCorrelationsComponent } from './correlations.component.ts';
-import { HelpComponent } from '../help/help.component.ts';
 import help from './collection.help.md';
 
 @Component({
   selector: 'qi-collection',
   templateUrl: '/public/html/collection/collection.html',
-  directives: [HomeComponent, ToggleHelpComponent,
-               CollectionCorrelationsComponent, HelpComponent],
+  directives: PAGE_DIRECTIVES.concat([CollectionCorrelationsComponent]),
   providers: []
 })
 
@@ -34,6 +31,12 @@ export class CollectionComponent {
    * @property help {string}
    */
   help: string;
+  /**
+   * A fetch error.
+   *
+   * @property error {string}
+   */
+  error: string;
 
   /**
    * The project name.

@@ -2,25 +2,22 @@
  * The Projects List module.
  *
  * @module projects
- * @main
+ * @main projects
  */
-import { Component } from '@angular/core';
 import * as _ from 'lodash';
+import { Observable } from 'rxjs';
+import { Component } from '@angular/core';
 
-import { HomeComponent } from '../home/home.component.ts';
-import { ToggleHelpComponent } from '../help/toggle-help.component.ts';
-import { ProjectItemComponent } from './project-item.component.ts';
+import { PAGE_DIRECTIVES } from '../main/page.ts';
 import { ProjectService } from '../project/project.service.ts';
-import { HelpComponent } from '../help/help.component.ts';
 import { HelpService } from '../help/help.service.ts';
 import help from './projects.help.md';
-import { Observable } from 'rxjs';
+import { ProjectItemComponent } from './project-item.component.ts';
 
 @Component({
   selector: 'qi-projects',
   templateUrl: '/public/html/projects/projects.html',
-  directives: [ProjectItemComponent, HomeComponent, ToggleHelpComponent,
-               HelpComponent],
+  directives: PAGE_DIRECTIVES.concat([ProjectItemComponent]),
   providers: [ProjectService]
 })
 
@@ -30,6 +27,20 @@ import { Observable } from 'rxjs';
  * @class ProjectsComponent
  */
 export class ProjectsComponent {
+  /**
+   * The help content.
+   *
+   * @property help {string}
+   */
+  help: string;
+
+  /**
+   * A fetch error.
+   *
+   * @property error {string}
+   */
+  error: string;
+  
   /**
    * The project REST objects.
    *
@@ -45,22 +56,6 @@ export class ProjectsComponent {
    * @property isEmpty {boolean}
    */
   isEmpty: boolean;
-  
-  /**
-   * The Project List page project name is the empty string. This is
-   * only used by the Home button which turns home into a no-op when
-   * on this page.
-   *
-   * @property project {string}
-   */
-  project: string = '';
-  
-  /**
-   * The help content.
-   *
-   * @property help {string}
-   */
-  help: string;
   
   constructor(private dataService: ProjectService,
               private helpService: HelpService) {

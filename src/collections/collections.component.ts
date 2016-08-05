@@ -2,25 +2,23 @@
  * The Collections List module.
  *
  * @module collections
- * @main
+ * @main collections
  */
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 
-import { HomeComponent } from '../home/home.component.ts';
-import { ToggleHelpComponent } from '../help/toggle-help.component.ts';
+import { PAGE_DIRECTIVES } from '../main/page.ts';
 import { CollectionService } from '../collection/collection.service.ts';
 import { CollectionItemComponent } from './collection-item.component.ts';
-import { HelpComponent } from '../help/help.component.ts';
+import { CollectionsHelpComponent } from './help.component.ts';
 import { HelpService } from '../help/help.service.ts';
-import help from './collections.help.md';
 import { Observable } from 'rxjs';
 
 @Component({
   selector: 'qi-collections',
   templateUrl: '/public/html/collections/collections.html',
-  directives: [HomeComponent, ToggleHelpComponent, CollectionItemComponent, HelpComponent],
+  directives: PAGE_DIRECTIVES.concat([CollectionItemComponent, CollectionsHelpComponent]),
   providers: [CollectionService]
 })
 
@@ -31,11 +29,12 @@ import { Observable } from 'rxjs';
  */
 export class CollectionsComponent {
   /**
-   * The project name.
+   * A fetch error.
    *
-   * @property project {string}
+   * @property error {string}
    */
-  project: string;
+  error: string;
+  
   
   /**
    * The collection REST objects.
@@ -55,17 +54,9 @@ export class CollectionsComponent {
    */
   isEmpty: boolean;
   
-  /**
-   * The help content.
-   *
-   * @property help {string}
-   */
-  help: string;
-  
   constructor(private route: ActivatedRoute,
               private dataService: CollectionService,
               private helpService: HelpService) {
-      this.help = help;
       // Always show the help on this page.
       this.helpService.showHelp = true;
       let params = this.route.params.value;

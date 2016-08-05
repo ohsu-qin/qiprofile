@@ -2,15 +2,13 @@
  * The Volume module.
  *
  * @module volume
- * @main
+ * @main volume
  */
 import { Component } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
-import { HomeComponent } from '../home/home.component.ts';
-import { ToggleHelpComponent } from '../help/toggle-help.component.ts';
-import { HelpComponent } from '../help/help.component.ts';
+import { PAGE_DIRECTIVES } from '../main/page.ts';
 import { VolumeService } from './volume.service.ts';
 import { VolumeImageComponent } from './image.component.ts';
 import help from './volume.help.md';
@@ -18,8 +16,7 @@ import help from './volume.help.md';
 @Component({
   selector: 'qi-volume',
   templateUrl: '/public/html/volume/volume.html',
-  directives: [HomeComponent, ToggleHelpComponent,
-               VolumeImageComponent, HelpComponent],
+  directives: PAGE_DIRECTIVES.concat([VolumeImageComponent]),
   providers: [VolumeService]
 })
 
@@ -37,11 +34,27 @@ export class VolumeComponent {
   help: string;
 
   /**
+   * A fetch error.
+   *
+   * @property error {string}
+   */
+  error: string;
+  
+  /**
    * The volume REST object.
    *
    * @property volume {Object}
    */
   volume: Object;
+
+  /**
+   * The project name.
+   *
+   * @property project {string}
+   */
+  get project(): string {
+    return this.volume ? this.volume.imageSequence.session.subject.project : null;
+  }
 
   constructor(
     private route: ActivatedRoute,

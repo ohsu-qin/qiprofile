@@ -53,7 +53,7 @@ class VolumeSessionServiceStub {
  * @module volume
  * @class VolumeServiceSpec
  */
-xdescribe('The Volume service', function() {
+describe.only('The Volume service', function() {
   /**
    * Runs the given test body on the injected component and service.
    *
@@ -69,8 +69,12 @@ xdescribe('The Volume service', function() {
   
   beforeEach(() => {
     addProviders([
-      VolumeService,
       provide(SessionService, {useClass: VolumeSessionServiceStub}),
+      {
+        provide: VolumeService,
+        useFactory: sessionService => new VolumeService(sessionService),
+        deps: [SessionService]
+      }
     ]);
   });
 

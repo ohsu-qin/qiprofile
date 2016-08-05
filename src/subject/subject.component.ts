@@ -1,17 +1,15 @@
 /**
- * The Subject module.
+ * The Subject Detail module.
  *
  * @module subject
- * @main
+ * @main subject
  */
 import {
   Component, ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { HomeComponent } from '../home/home.component.ts';
-import { ToggleHelpComponent } from '../help/toggle-help.component.ts';
-import { HelpComponent } from '../help/help.component.ts';
+import { PAGE_DIRECTIVES } from '../main/page.ts';
 import Subject from './subject.data.coffee';
 import { SubjectService } from './subject.service.ts';
 import help from './subject.help.md';
@@ -19,7 +17,7 @@ import help from './subject.help.md';
 @Component({
   selector: 'qi-subject',
   templateUrl: '/public/html/subject/subject.html',
-  directives: [HomeComponent, ToggleHelpComponent, HelpComponent],
+  directives: PAGE_DIRECTIVES,
   providers: [],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -38,6 +36,13 @@ export class SubjectComponent {
   help: string;
 
   /**
+   * A fetch error.
+   *
+   * @property error {string}
+   */
+  error: string;
+
+  /**
    * The subject to display.
    *
    * @property subject {Object}
@@ -45,11 +50,13 @@ export class SubjectComponent {
   subject: Object;
   
   /**
-   * A fetch error.
+   * The project name.
    *
-   * @property error {string}
+   * @property project {string}
    */
-  error: string;
+  get project(): string {
+    return this.subject ? this.subject.project : null;
+  }
   
   constructor(
     private router: Router,

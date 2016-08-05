@@ -2,16 +2,14 @@
  * The Session Detail module.
  *
  * @module session
- * @main
+ * @main session
  */
 import {
   Component, ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { HomeComponent } from '../home/home.component.ts';
-import { ToggleHelpComponent } from '../help/toggle-help.component.ts';
-import { HelpComponent } from '../help/help.component.ts';
+import { PAGE_DIRECTIVES } from '../main/page.ts';
 import Subject from '../subject/subject.data.coffee';
 import Session from './session.data.coffee';
 import { SessionService } from './session.service.ts';
@@ -20,7 +18,7 @@ import help from './session.help.md';
 @Component({
   selector: 'qi-session',
   templateUrl: '/public/html/session/session.html',
-  directives: [HomeComponent, ToggleHelpComponent, HelpComponent],
+  directives: PAGE_DIRECTIVES,
   providers: [],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -39,18 +37,27 @@ export class SessionComponent {
   help: string;
 
   /**
-   * The session REST object.
-   *
-   * @property session {Object}
-   */
-  session: Object;
-  
-  /**
    * A fetch error.
    *
    * @property error {string}
    */
   error: string;
+
+  /**
+   * The session REST object.
+   *
+   * @property session {Object}
+   */
+  session: Object;
+
+  /**
+   * The project name.
+   *
+   * @property project {string}
+   */
+  get project(): string {
+    return this.session ? this.session.subject.project : null;
+  }
   
   constructor(
     private router: Router,

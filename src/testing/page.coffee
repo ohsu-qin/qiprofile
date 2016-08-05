@@ -1,11 +1,13 @@
+###*
+ * The test helper module.
+ *
+ * @module testing
+###
+
 _ = require 'lodash'
-
 expect = require('./expect')()
-
 Findable = require './findable'
-
 require 'coffee-errors'
-
 require './object'
 
 # The regexp to match a page that ends at home.
@@ -27,7 +29,7 @@ URL_PAT_PREFIX = "http://[-\\w]+:\\d+"
  * clauses.
  *
  * @example
- *     Page = require '../helpers/page'
+ *     Page = require '../testing/page'
  *     class LoginPage extends Page
  *       constructor: ->
  *         super('/login.html')

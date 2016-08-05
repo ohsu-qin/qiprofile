@@ -1,7 +1,6 @@
 ###*
  * The Function test helper.
  *
- * @module testing
  * @class Function
 ###
 

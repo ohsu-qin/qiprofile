@@ -1,7 +1,7 @@
 # Exports the Chai expect function augmented with eventually.
 #
 # Example:
-#   expect = require('../helpers/expect')()
+#   expect = require('../testing/expect')()
 #   expect(promise).to.eventually.exist
 #
 # Note: this module is the Protractor version of the unit test

@@ -19,7 +19,7 @@ exports.config =
 
   # Run all e2e specs. The command line --specs option overrides
   # this setting.
-  specs: ['../../src/**/*.e2e-spec.*']
+  specs: ['src/**/*.e2e-spec.*']
 
   # Flag which directs Protractor to wait for the app to be
   # stable before each action.
@@ -27,7 +27,7 @@ exports.config =
 
   # Run the qirest seed and link the test fixtures into public,
   # if necessary.
-  onPrepare: '../helpers/seed'
+  onPrepare: 'src/testing/seed'
 
   # Pass options into mocha.
   mochaOpts:

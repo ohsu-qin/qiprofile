@@ -1,16 +1,6 @@
-###*
- * The test helper module.
- *
- * @module testing
- * @main
-###
-
 _ = require 'lodash'
-
 webdriver = require 'selenium-webdriver'
-
 expect = require('./expect')()
-
 require './object'
 
 ###*

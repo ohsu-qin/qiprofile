@@ -1,7 +1,7 @@
 module.exports = (config) ->
   config.set
     # The base path to resolve files is the top-level qiprofile directory.
-    basePath: '../..'
+    basePath: '.'
     
     # The karma adapter frameworks to use.
     frameworks: ['jspm', 'mocha', 'chai']

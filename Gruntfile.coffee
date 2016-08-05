@@ -47,6 +47,15 @@ module.exports = (grunt) ->
         src: ['*.pug', '*/**.pug', '!layout/*.pug', '!**include/*.pug']
         dest: 'public/html'
 
+    showdown:
+      files:
+        expand: true
+        ext: '.html'
+        extDot: 'last'
+        cwd: 'src/'
+        src: ['collections/*help*.md']
+        dest: 'public/html/'
+
     stylus:
       options:
         use: [
@@ -81,24 +90,27 @@ module.exports = (grunt) ->
       fonts:
         expand: true
         flatten: true
-        cwd: 'node_modules/'
         # Note: Due to a grunt bug, the font-awesome example subdirectory,
         #   e.g. 4.0.4/index.html, can't be excluded
         #   (cf. https://github.com/gruntjs/grunt-contrib-copy/issues/13).
-        src: ['bootstrap/dist/fonts/*', 'font-awesome/fonts/*']
+        src: [
+          'node_modules/bootstrap/dist/fonts/*'
+          'node_modules/font-awesome/fonts/*'
+          'fonts/google/*'
+        ]
         dest: 'public/fonts/'
       
       doc:
         expand: true
         src: ['src/**/*.ts']
         dest: 'build'
-    
+
     coffee:
       doc:
         expand: true
         ext: '.js'
         extDot: 'last'
-        src: ['src/**/*.coffee', 'testing/helpers/*.coffee']
+        src: ['src/**/*.coffee']
         dest: 'build'
 
     concat:
@@ -112,8 +124,8 @@ module.exports = (grunt) ->
     concurrent:
       options:
         logConcurrentOutput: true
-      compile:
-        tasks: ['typings', 'pug', 'stylus']
+      default:
+        tasks: ['typings', 'pug', 'showdown', 'stylus']
 
     yuidoc:
       compile:
@@ -123,7 +135,7 @@ module.exports = (grunt) ->
         url: '<%= pkg.homepage %>',
         configfile: 'doc/yuidoc.json'
         options:
-          paths: ['build/src', 'build/testing']
+          paths: 'build/src'
           outdir: 'build/doc/api'
           themedir: "node_modules/yuidoc-ember-cli-theme"
           helpers: ['node_modules/yuidoc-ember-cli-theme/helpers.js']
@@ -156,7 +168,7 @@ module.exports = (grunt) ->
         browsers: [if grunt.option('debug') then 'Chrome' else 'PhantomJS']
         logLevel: [if grunt.option('debug') then 'DEBUG' else 'ERROR']
       unit:
-        configFile: 'testing/conf/karma-conf.coffee'
+        configFile: 'karma-conf.coffee'
 
     exec:
       # # Delete the qirest Anaconda environment.
@@ -226,7 +238,7 @@ module.exports = (grunt) ->
 
     protractor:
       e2e:
-        configFile: 'testing/conf/protractor-conf.coffee'
+        configFile: 'protractor-conf.coffee'
 
     express:
       options:
@@ -251,8 +263,11 @@ module.exports = (grunt) ->
       pug:
         files: ['*.pug', 'src/**/*.pug']
         tasks: ['pug']
+      showdown:
+        files: ['src/collections/*help*.md']
+        tasks: ['showdown']
       stylus:
-        files: ['stylus/**/*.styl']
+        files: ['stylesheets/**/*.styl']
         tasks: ['stylus']
   )
 
@@ -263,15 +278,15 @@ module.exports = (grunt) ->
   grunt.registerTask 'default', ['build']
 
   # Compile the app bits concurrently.
-  grunt.registerTask 'compile', ['tslint', 'concurrent:compile']
+  grunt.registerTask 'compile', ['tslint', 'concurrent']
 
   # Build the application from scratch.
   grunt.registerTask 'copy:dev', ['copy:static', 'copy:cssmap', 'copy:fonts']
 
-  # Build the application from scratch.
+  # Build the application server.
   grunt.registerTask 'build:dev', ['copy:dev', 'concat:css', 'compile']
 
-  # Build the application from scratch.
+  # Build the application documentation.
   grunt.registerTask 'doc', ['copy:doc', 'coffee:doc', 'yuidoc']
 
   # Build the application from scratch.

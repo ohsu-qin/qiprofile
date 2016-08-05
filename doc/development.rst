@@ -697,7 +697,7 @@ image download button is hidden and the open button is shown. When the open
 button is clicked, then the Image Detail page is visited with the image file
 content.
 
-The ``qirest`` ``testing/helpers/seed.py`` script populates the
+The ``qirest`` ``testing/seed.py`` script populates the
 ``ImageContainer`` ``files`` field described above for the 24 Breast and
 Sarcoma test MR sessions. The ``grunt test:e2e`` end-to-end testing task runs
 the ``qirest`` seed script and creates a link in the local ``public``

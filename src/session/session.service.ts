@@ -1,9 +1,3 @@
-/**
- * The Session Detail module.
- *
- * @module session
- * @main
- */
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 

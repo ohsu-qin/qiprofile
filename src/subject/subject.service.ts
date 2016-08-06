@@ -1,10 +1,3 @@
-/**
- * The Subject data access module.
- *
- * @module subject
- * @main subject
- */
-
 import * as _ from 'lodash';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';

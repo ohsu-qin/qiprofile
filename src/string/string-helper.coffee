@@ -2,7 +2,7 @@
  * String utilities.
  *
  * @module string
- * @main
+ * @main string
 ###
 
 `import * as _s from "underscore.string"`

@@ -2,7 +2,7 @@
  * The REST utilities.
  *
  * @module rest
- * @main
+ * @main rest
  */
 import { Resource, ResourceParams } from 'ng2-resource-rest';
 import { Injectable } from '@angular/core';

@@ -1,8 +1,8 @@
 webdriver = require 'selenium-webdriver'
 
-expect = require('../../testing/helpers/expect')()
+expect = require('../testing/expect')()
 
-Page = require '../../testing/helpers/page'
+Page = require '../testing/page'
 
 _ = require 'lodash'
 
@@ -19,12 +19,7 @@ class CollectionListPage extends Page
     # Call the Page superclass initializer with the helpShown
     # flag set to true, since the help box is displayed on
     # this landing page.
-    #super(Page.HOME, true)
-    #
-    # FIXME - the line commented out above fails. For some
-    #   reason, the help is shown in the app but not shown
-    #   in the E2E test. See also projects.e2e.spec.
-    super(Page.HOME, false)
+    super(Page.HOME, true)
   
   # @return the collection {name, description, url} object
   #   array promise

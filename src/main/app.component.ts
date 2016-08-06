@@ -2,7 +2,7 @@
  * The application entry module.
  *
  * @module main
- * @main
+ * @main main
  */
 import { Component } from '@angular/core';
 import { Router, NavigationStart, ROUTER_DIRECTIVES } from '@angular/router';
@@ -36,6 +36,12 @@ import { SessionService } from '../session/session.service.ts';
 export class AppComponent {
   constructor(router: Router, helpService: HelpService) {
     let start = router.events.filter(event => event instanceof NavigationStart);
-    start.subscribe(event => { helpService.showHelp = false; });
+    start.subscribe(event => {
+      // Don't change the help state if the navigation is a no-op.
+      // Otherwise, clear the help state.
+      if (router.url !== event.url) {
+        helpService.showHelp = false;
+      }
+    });
   }
 }

@@ -3,6 +3,9 @@ extends ../layout/partial
 block billboard
   | {{ project }} Collections
 
+block help
+  qi-collections-help
+
 block content
   p(*ngIf="isEmpty")
     | The {{ project }} does not have any collections.

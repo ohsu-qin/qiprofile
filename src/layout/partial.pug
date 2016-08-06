@@ -11,5 +11,6 @@ include header
   .qi-content
     // Every page component is responsible for importing its
     // help text into its help property.
-    qi-help([help]="help")
+    block help 
+      qi-help([help]="help")
     block content

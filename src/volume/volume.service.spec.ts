@@ -48,7 +48,7 @@ class VolumeSessionServiceStub {
  * @module volume
  * @class VolumeServiceSpec
  */
-describe.only('The Volume service', function() {
+describe('The Volume service', function() {
   /**
    * Runs the given test body on the injected component and service.
    *
@@ -73,8 +73,11 @@ describe.only('The Volume service', function() {
     ]);
   });
 
-  it('should fetch the volume', test(service => {
-    service.getVolume({project: 'QIN_Test', collection: 'Breast', subject: 1, volume: 1})
+  xit('should fetch the volume', test(service => {
+    service.getVolume(
+      {project: 'QIN_Test', collection: 'Breast', subject: 1, session: 1,
+       scan: 1, volume: 1}
+    )
       .subscribe(function (volume) {
           expect(volume, "The volume was not found").to.exist;
         }

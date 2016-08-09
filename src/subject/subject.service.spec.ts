@@ -22,8 +22,8 @@ class SubjectResourceStub {
   find(params: Object): Observable<Object[]> {
     return Observable.of(
       [
-        {_id: 1, number: 1},
-        {_id: 2, number: 2}
+        {_id: 1, project: 'QIN_Test', collection: 'Breast', number: 1},
+        {_id: 2, project: 'QIN_Test', collection: 'Breast', number: 2}
       ]
     );
   }
@@ -37,7 +37,7 @@ class SubjectResourceStub {
     let match = params.where.match(/^.*"(_id|number)":1.*/);
     if (match) {
       return Observable.of(
-        {_id: 1, number: 1}
+        {_id: 1, project: 'QIN_Test', collection: 'Breast', number: 1}
       );
     } else {
       return Observable.of(null);
@@ -90,23 +90,14 @@ describe('The Subject service', function() {
       );
   }));
 
-  it('should fetch a single subject by id', test(service => {
-    service.getSubject({subjectid: 1})
-      .subscribe(function (subject) {
-          expect(subject, "The subject was not foundd").to.exist;
-          expect(subject.number, "The subject number is incorrect").to.equal(1);
-        }
-      );
-  }));
-
-  it('should cache and find a new subject', test(service => {
-    service.getSubject({subjectid: 2})
+  it('should cache and find a subject', test(service => {
+    service.getSubject({project: 'QIN_Test', collection: 'Breast', subject: 2})
       .subscribe(function (subject) {
           expect(subject, "The subject was incorrectly found").to.not.exist;
         }
       );
-    service.cache({_id: 2, number: 2});
-    service.getSubject({subjectid: 2})
+    service.cache({project: 'QIN_Test', collection: 'Breast', number: 2});
+    service.getSubject({project: 'QIN_Test', collection: 'Breast', subject: 2})
       .subscribe(function (subject) {
           expect(subject, "The cached subject was not found").to.exist;
           expect(subject.number, "The subject number is incorrect").to.equal(2);

@@ -15,6 +15,8 @@ describe 'The Registration data utility', ->
     scan:
       _cls: 'Scan'
       title: 'Breast Patient 1 Session 1 Scan 1'
+      path: [{project: 'QIN_Test'}, {collection: 'Breast'}, {subject: 1},
+             {session: 1}, {scan: 1}]
       registrations: [
         _cls: 'Registration'
         protocol: 'rp1'
@@ -28,6 +30,16 @@ describe 'The Registration data utility', ->
     registration = scan.registrations[0]
     # Extend the test registration.
     Registration.extend(registration, scan, 1)
+
+  describe 'Path', ->
+    it 'should have a path', ->
+      expected = [{project: 'QIN_Test'}, {collection: 'Breast'}, {subject: 1},
+                  {session: 1}, {scan: 1}, {registration: 1}]
+      expect(registration.path, "The registration is missing a path").to.exist
+      expect(
+        registration.path,
+        "The registration path is incorrect: #{ JSON.stringify(registration.path) }"
+      ).to.eql(expected)
 
   describe 'find', ->
     it 'should find the scan registration', ->

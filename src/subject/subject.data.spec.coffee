@@ -5,7 +5,7 @@
 `import Subject from "./subject.data.coffee"`
 
 ###*
- * The {{#crossLink "Subject"}}{{/crossLink}} validator.
+ * The {{#crossLink "The subject"}}{{/crossLink}} validator.
  *
  * Note: image load cannot be unit-tested, since it requires an
  *   active browser.
@@ -106,12 +106,21 @@ describe 'The Subject data utility', ->
     data = REST.transformResponse(mock)
     subject = Subject.extend(data)
 
+  describe 'Path', ->
+    it 'should have a path', ->
+      expected = [{project: 'QIN_Test'}, {collection: 'Breast'}, {subject: 1}]
+      expect(subject.path, "The subject is missing a path").to.exist
+      expect(
+        subject.path,
+        "The subject path is incorrect: #{ JSON.stringify(subject.path) }"
+      ).to.eql(expected)
+
   describe 'Demographics', ->
     # Validate the birth date.
     it 'should anonymize the subject birth date', ->
-      expect(subject.birthDate, "Subject is missing a birth date")
+      expect(subject.birthDate, "The subject is missing a birth date")
         .to.exist
-      expect(subject.birthDate.valueOf(), "Subject birth date is" +
+      expect(subject.birthDate.valueOf(), "The subject birth date is" +
                                           " incorrect")
         .to.equal(moment('Jul 7, 1986', 'MMM DD, YYYY').valueOf())
 
@@ -119,10 +128,10 @@ describe 'The Subject data utility', ->
     # Validate the clinical encounters.
     it 'should set the clinical encounters', ->
       expect(subject.clinicalEncounters,
-             "Subject is missing clinical encounters")
+             "The subject is missing clinical encounters")
         .to.exist
       expect(subject.clinicalEncounters.length,
-             "Subject clinical encounters length is incorrect")
+             "The subject clinical encounters length is incorrect")
         .to.equal(1)
     
     describe 'Encounter', ->

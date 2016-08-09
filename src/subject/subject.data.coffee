@@ -82,17 +82,19 @@ Subject =
           "#{ @collection } Patient #{ @number }"
 
       ###*
-       * Returns the /project/collection/subject path, where:
-       * * *project* is the lower-case project name
-       * * *collection* is the lower-case collection name
-       * * *subject* is the subject number
+       * Returns the
+       * [{project: _project_}, {collection:/_collection_}, {subject: _subject_}]
+       * array, where:
+       * * _project_ is the project name
+       * * _collection_ is the collection name
+       * * _subject_ is the subject number
        *
        * @method path
        * @return the session path
       ###
       path:
         get: ->
-          "#{ @project.toLowerCase() }/#{ @collection.toLowerCase() }/#{ @number }"
+          [{project: @project}, {collection: @collection}, {subject: @number}]
 
       ###*
        * @method clinicalEncounters

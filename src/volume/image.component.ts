@@ -14,7 +14,14 @@ import { Component, Input, AfterViewChecked } from '@angular/core';
 export class VolumeImageComponent implements AfterViewChecked {
   @Input() image;
 
-  constructor() { }
+  dataParams: Object;
+  
+  constructor() {
+    this.dataParams = {
+      worldSpace: true
+      images: [image.]
+    }
+  }
   
   ngAfterViewChecked() {
     papaya.ui.Toolbar.MENU_DATA.menus.splice(1, 4);

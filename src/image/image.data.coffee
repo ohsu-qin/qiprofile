@@ -49,10 +49,10 @@ class ImageMixin extends Loader
 
 Object.defineProperties ImageMixin.prototype,
   ###*
-   * Returns the <parent>/image path, where:
-   * * <parent> is the parent scan or registration image
+   * Returns the _parent_/_image_ path, where:
+   * * _parent_ is the parent scan or registration image
    *   sequence path
-   * * *image* is the time series image name
+   * * _image_ is the time series image name
    *
    * @method path
    * @protected

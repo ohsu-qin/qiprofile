@@ -58,6 +58,17 @@ Volume =
         get: -> "#{ @imageSequence.title } Volume #{ @number }"
 
       ###*
+       * The [_parent_, {volume: _volume_}] path, where:
+       * * _parent_ is the parent image sequence path items
+       * * _volume_ is the volume number
+       *
+       * @property path
+      ###
+      path:
+        get: ->
+          @imageSequence.path.concat([{volume: @number }])
+
+      ###*
        * @method resource
        * @return the volume resource name
       ###

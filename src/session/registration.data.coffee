@@ -41,16 +41,15 @@ Registration =
           "#{ @scan.title } Registration #{ @number }"
 
       ###*
-       * Returns the <parent>/session path, where:
-       * * <parent> is the parent scan path
-       * * *registration* is the registration number
+       * The [_parent_, {registration: _registration_}] path, where:
+       * * _parent_ is the parent scan path items
+       * * _registration_ is the registration number
        *
-       * @method path
-       * @return the registration path
+       * @property path
       ###
       path:
         get: ->
-          "#{ @scan.path }/reg/#{ @number }"
+          @scan.path.concat([{registration: @number }])
 
       ###*
        * An ImageSequence present a uniform interface, which

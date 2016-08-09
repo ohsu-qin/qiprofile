@@ -45,16 +45,15 @@ Scan =
         get: -> "#{ @session.title } Scan #{ @number }"
 
       ###*
-       * Returns the <parent>/scan path, where:
-       * * <parent> is the parent session path
-       * * *scan* is the scan number
+       * The [_parent_, {scan: _scan_}] path, where:
+       * * _parent_ is the parent session path items
+       * * _scan_ is the scan number
        *
-       * @method path
-       * @return the scan path
+       * @property path
       ###
       path:
         get: ->
-          "#{ @ssession.path }/#{ @number }"
+          @session.path.concat([{scan: @number }])
 
     # Add the scan registration properties.
     if not scan.registrations?

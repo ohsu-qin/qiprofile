@@ -95,8 +95,6 @@ export class SessionComponent {
    */
   visitVolume(volume) {
     let scan = volume.scan;
-    let session = scan.session;
-    let subject = session.subject;
     this.router.navigate(
       ['scan', scan.number, 'volume', volume.number],
       {relativeTo: this.route}

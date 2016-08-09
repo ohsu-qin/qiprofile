@@ -125,15 +125,15 @@ Session =
           "#{ @subject.title } Session #{ @number }"
 
       ###*
-       * The <parent>/session path, where:
-       * * <parent> is the parent subject path
-       * * *session* is the session number
+       * The [_parent_, {session: _session_}] path, where:
+       * * _parent_ is the parent subject path items
+       * * _session_ is the session number
        *
        * @property path
       ###
       path:
         get: ->
-          "#{ @subject.path }/#{ @number }"
+          @subject.path.concat([{session: @number }])
 
     ###*
      * @method hasDetailProperties

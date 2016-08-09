@@ -47,15 +47,6 @@ module.exports = (grunt) ->
         src: ['*.pug', '*/**.pug', '!layout/*.pug', '!**include/*.pug']
         dest: 'public/html'
 
-    showdown:
-      files:
-        expand: true
-        ext: '.html'
-        extDot: 'last'
-        cwd: 'src/'
-        src: ['collections/*help*.md']
-        dest: 'public/html/'
-
     stylus:
       options:
         use: [
@@ -125,7 +116,7 @@ module.exports = (grunt) ->
       options:
         logConcurrentOutput: true
       default:
-        tasks: ['typings', 'pug', 'showdown', 'stylus']
+        tasks: ['typings', 'pug', 'stylus']
 
     yuidoc:
       compile:
@@ -285,6 +276,11 @@ module.exports = (grunt) ->
 
   # Build the application server.
   grunt.registerTask 'build:dev', ['copy:dev', 'concat:css', 'compile']
+
+  # Compile the collections help.
+  # Note: unlike the other compile tasks, the brain-dead showdown task
+  #   requires have an existing directory.
+  grunt.registerTask 'help', ['mkdir:collections', 'showdown']
 
   # Build the application documentation.
   grunt.registerTask 'doc', ['copy:doc', 'coffee:doc', 'yuidoc']

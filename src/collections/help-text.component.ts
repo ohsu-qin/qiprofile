@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 
+import help from './collections.help.md';
+
 @Component({
   selector: 'qi-collections-help-text',
-  templateUrl: '/public/html/collections/help-text.html'
+  template: help
 })
 
 /**

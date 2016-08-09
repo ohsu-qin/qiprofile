@@ -13,12 +13,12 @@ WHITESPACE_REGEX = /\s+(?=([^"]*"[^"]*")*[^"]*$)/g
 Nifti =
   ###*
    * Parses the image file content. Returns the
-   * {header, data}, where:
-   * * *header* is an object {nifti, nrrd, dicom}, where *nifti* is
-   *   is the NIfTI header, NRRD is the NRRD header and *dicom* is
+   * {_header_, _data_} object, where:
+   * * _header_ is the {nifti, nrrd, dicom} object, where nifti is
+   *   is the NIfTI header, nrrd is the NRRD header and dicom is
    *   the embedded DICOM meta-data object
-   * * *data* is the image binary ndarray in dimension order
-   *   [x, y, z, time], where *z* is the slice index and *time*
+   * * _data_ is the image binary ndarray in dimension order
+   *   [_x_, _y_, _z_, _time_], where _z_ is the slice index and _time_
    *   is the volume index.
    *
    * @method parse

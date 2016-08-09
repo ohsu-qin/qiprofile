@@ -7,8 +7,8 @@
  * Adds the following properties to the given REST Image
  * object:
  * * the Image.extend properties
- * * *timeSeries* - the parent time series
- * * *resource* - the parent time series name
+ * * _timeSeries_ - the parent time series
+ * * _resource_ - the parent time series name
  *
  * @method extendImage
  * @protected
@@ -47,7 +47,7 @@ TimeSeries =
   ###*
    * Adds the following properties to the given REST TimeSeries
    * object:
-   * * *imageSequence* - the abstract parent image sequence
+   * * _imageSequence_ - the abstract parent image sequence
    *   reference
    * * the concrete parent *scan* or *registration* reference
    *

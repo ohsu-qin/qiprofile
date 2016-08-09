@@ -34,9 +34,9 @@ export class CollectionCorrelationComponent {
    * The partial {{#crossLink "Axis"}}{{/crossLink}} {x, y} axis settings.
    * The input consists of a partial {x, y} key-value object, where each axis value
    * is a property path. This input is flushed out as follows:
-   * * *label* is inferred from the *value* property path
-   * * *orientation* is `bottom` for the X axis and `left` for the Y axis
-   * * *transformation* is a 90 degree rotation for the Y axis
+   * * _label_ is inferred from the *value* property path
+   * * _orientation_ is `bottom` for the X axis and `left` for the Y axis
+   * * _transformation_ is a 90 degree rotation for the Y axis
    *
    * @property config {Object}
    */

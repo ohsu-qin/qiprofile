@@ -19,11 +19,11 @@ export class SessionService {
   ) {}
   
   /**
-   * Makes the {subject, number} secondary key from the
+   * Makes the {_subject_, number: _number_} secondary key from the
    * given route parameters, where:
-   * * *subject* is the {{#crossLink "SubjectService"}}{{/crossLink}}
+   * * _subject_ is the {{#crossLink "SubjectService"}}{{/crossLink}}
    *   secondary key
-   * * *number* is the *session* parameter
+   * * _number_ is the _session_ parameter
    *
    * @method secondaryKey
    * @param params {Object} the route parameters

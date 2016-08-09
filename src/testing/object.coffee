@@ -8,10 +8,10 @@
  * A convenience function for defining an instance property
  * on the class prototype.
  *
- * The definition argument is a property {name: descriptor} object,
+ * The definition argument is a property {_name_: _descriptor_} object,
  * where:
- * * *name* is the property name
- * * *descriptor* is the property getter function or
+ * * _name_ is the property name
+ * * _descriptor_ is the property getter function or
  *   {get: getter, set: setter} object
  *
  * The property is enumerable by default.

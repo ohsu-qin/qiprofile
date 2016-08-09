@@ -15,10 +15,10 @@ export class VolumeService {
   constructor(private sessionService: SessionService) {}
   
   /**
-   * Makes the {sequence, number} secondary
+   * Makes the {_sequence_, _number_} secondary
    * key from the given route parameters, where:
-   * * *sequence* is the parent image sequence secondary key
-   * * *number* is the *volume* parameter
+   * * _sequence_ is the parent image sequence secondary key
+   * * _number_ is the _volume_ parameter
    * The image sequence secondary key is the scan or registration
    * number and the sequence parent secondary key, recursively
    * defined up to the subject secondary key.

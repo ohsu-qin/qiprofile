@@ -26,11 +26,11 @@ Sarcoma =
     ###*
      * The sarcoma cancer grade determinants, consisting of the
      * following properties:
-     * * *RANGES* - the three grade score ranges, as follows:
+     * * _RANGES_ - the three grade score ranges, as follows:
      *   - Grade 1: score 2,3
      *   - Grade 2: score 4,5
      *   - Grade 3: score 6,8
-     * * *SCORES* - the grade score factor properties
+     * * _SCORES_ - the grade score factor properties
      *   `differentiation`, `mitoticCount` and `necrosisScore`
      *
      * @property Grade

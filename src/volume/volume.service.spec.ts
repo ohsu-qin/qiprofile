@@ -9,19 +9,14 @@ import { VolumeService } from './volume.service.ts';
 
 const TEST_SESSION = {
   title: 'QIN_Test Breast Patient 1 Session 1',
-  encounters: [
+  scans: [
     {
-      _cls: 'Session',
-      scans: [
+      number: '1',
+      volumes:
         {
-          number: '1',
-          volumes:
-          {
-            name: 'NIFTI',
-            images: [{name: 'volume001.nii.gz'}]
-          }
+          name: 'NIFTI',
+          images: [{name: 'volume001.nii.gz'}]
         }
-      ]
     }
   ]
 };

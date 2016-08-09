@@ -28,6 +28,15 @@ Volume =
     return volume if not volume
     # Set the image parent volume reference.
     volume.imageSequence = imageSequence
+    
+    # If the volume parent is not a scan, then make a
+    # scan virtual property that delegates to the parent
+    # image sequence.
+    if not volume.scan?
+      Object.defineProperties volume,
+        scan:
+          get: -> @imageSequence.scan
+
     # Add the image load capability.
     Image.extend(volume)
 

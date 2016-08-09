@@ -34,7 +34,7 @@ let routes: RouterConfig = [
     component: SessionComponent
   },
   {
-    path: ':project/:collection/subject/:subject/session/:session/volume/:volume',
+    path: ':project/:collection/subject/:subject/session/:session/scan/:scan/volume/:volume',
     component: VolumeComponent
   }
 ];

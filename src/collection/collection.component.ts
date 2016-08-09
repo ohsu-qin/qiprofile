@@ -110,24 +110,4 @@ export class CollectionComponent {
       {relativeTo: this.route}
     );
   }
-  
-  /**
-   * Opens the Volume Detail page.
-   *
-   *
-   * TODO - this belongs in the list pane item component.
-   *
-   * @method visitSubject
-   * @param volume {Object} the volume REST object
-   */
-  visitVolume(volume) {
-    let session = volume.imageSequence.session;
-    let subject = session.subject;
-    this.subjectService.cache(subject);
-    this.router.navigate(
-      ['subject', subject.number, 'session', session.number, 'volume', number,
-       {subjectid: subject._id}],
-      {relativeTo: this.route}
-    );
-  }
 }

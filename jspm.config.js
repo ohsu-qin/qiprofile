@@ -62,30 +62,12 @@ SystemJS.config({
           'loader': 'json'
         }
       }
-    },
-    'npm:jasmine@2.4.1': {
-      'map': {
-        'exit': 'npm:exit@0.1.2',
-        'glob': 'npm:glob@3.2.11',
-        'jasmine-core': 'npm:jasmine-core@2.4.1'
-      }
-    },
-    'npm:glob@3.2.11': {
-      'map': {
-        'minimatch': 'npm:minimatch@0.3.0',
-        'inherits': 'npm:inherits@2.0.1'
-      }
-    },
-    'npm:minimatch@0.3.0': {
-      'map': {
-        'sigmund': 'npm:sigmund@1.0.1',
-        'lru-cache': 'npm:lru-cache@2.7.3'
-      }
     }
   },
   map: {
     'jasmine': 'npm:jasmine@2.4.1',
-    '@angular/core@2.0.0-rc.4': 'npm:@angular/core@2.0.0-rc.4'
+    '@angular/core@2.0.0-rc.4': 'npm:@angular/core@2.0.0-rc.4',
+    'nifti-reader-js': 'github:rii-mango/NIFTI-Reader-JS@0.5.3'
   }
 });
 
@@ -96,6 +78,11 @@ SystemJS.config({
     'github:*/*.json'
   ],
   map: {
+    'bowser': 'npm:bowser@1.4.3',
+    'gifti-reader-js': 'npm:gifti-reader-js@0.4.3',
+    'isarray': 'npm:isarray@1.0.0',
+    'ieee754': 'npm:ieee754@1.1.6',
+    'base64-js': 'npm:base64-js@1.1.2',
     'ini-parser': 'npm:ini-parser@0.0.2',
     'd3': 'npm:d3@4.1.1',
     '@angular/common': 'npm:@angular/common@2.0.0-rc.4',
@@ -119,6 +106,7 @@ SystemJS.config({
     'domain': 'github:jspm/nodelibs-domain@0.2.0-alpha',
     'fs': 'github:jspm/nodelibs-fs@0.2.0-alpha',
     'http': 'github:jspm/nodelibs-http@0.2.0-alpha',
+    'jquery': 'npm:jquery@3.1.0',
     'json': 'github:systemjs/plugin-json@0.1.2',
     'lodash': 'npm:lodash@4.13.1',
     'md': 'github:guybedford/system-md@0.1.0',
@@ -136,6 +124,7 @@ SystemJS.config({
     'process': 'github:jspm/nodelibs-process@0.2.0-alpha',
     'querystring': 'github:jspm/nodelibs-querystring@0.2.0-alpha',
     'reflect-metadata': 'npm:reflect-metadata@0.1.3',
+    'rii-mango/NIFTI-Reader-JS': 'github:rii-mango/NIFTI-Reader-JS@0.5.3',
     'rxjs': 'npm:rxjs@5.0.0-beta.6',
     'socket.io': 'npm:socket.io@1.4.8',
     'socket.io-client': 'npm:socket.io-client@1.4.8',
@@ -155,6 +144,25 @@ SystemJS.config({
     'zone.js': 'npm:zone.js@0.6.12'
   },
   packages: {
+    'npm:jasmine@2.4.1': {
+      'map': {
+        'exit': 'npm:exit@0.1.2',
+        'glob': 'npm:glob@3.2.11',
+        'jasmine-core': 'npm:jasmine-core@2.4.1'
+      }
+    },
+    'npm:glob@3.2.11': {
+      'map': {
+        'minimatch': 'npm:minimatch@0.3.0',
+        'inherits': 'npm:inherits@2.0.1'
+      }
+    },
+    'npm:minimatch@0.3.0': {
+      'map': {
+        'sigmund': 'npm:sigmund@1.0.1',
+        'lru-cache': 'npm:lru-cache@2.7.3'
+      }
+    },
     'github:frankwallis/plugin-typescript@4.0.16': {
       'map': {
         'typescript': 'npm:typescript@1.8.10'
@@ -167,7 +175,7 @@ SystemJS.config({
     },
     'github:jspm/nodelibs-buffer@0.2.0-alpha': {
       'map': {
-        'buffer-browserify': 'npm:buffer@4.7.1'
+        'buffer-browserify': 'npm:buffer@4.9.0'
       }
     },
     'npm:debug@2.2.0': {
@@ -244,7 +252,7 @@ SystemJS.config({
         'inherits': 'npm:inherits@2.0.1',
         'create-hash': 'npm:create-hash@1.1.2',
         'browserify-rsa': 'npm:browserify-rsa@4.0.1',
-        'bn.js': 'npm:bn.js@4.11.5',
+        'bn.js': 'npm:bn.js@4.11.6',
         'parse-asn1': 'npm:parse-asn1@5.0.0',
         'elliptic': 'npm:elliptic@6.3.1'
       }
@@ -258,7 +266,7 @@ SystemJS.config({
     'npm:diffie-hellman@5.0.2': {
       'map': {
         'randombytes': 'npm:randombytes@2.0.3',
-        'bn.js': 'npm:bn.js@4.11.5',
+        'bn.js': 'npm:bn.js@4.11.6',
         'miller-rabin': 'npm:miller-rabin@4.0.0'
       }
     },
@@ -280,7 +288,7 @@ SystemJS.config({
         'create-hash': 'npm:create-hash@1.1.2',
         'randombytes': 'npm:randombytes@2.0.3',
         'browserify-rsa': 'npm:browserify-rsa@4.0.1',
-        'bn.js': 'npm:bn.js@4.11.5',
+        'bn.js': 'npm:bn.js@4.11.6',
         'parse-asn1': 'npm:parse-asn1@5.0.0'
       }
     },
@@ -300,7 +308,7 @@ SystemJS.config({
     },
     'npm:create-ecdh@4.0.0': {
       'map': {
-        'bn.js': 'npm:bn.js@4.11.5',
+        'bn.js': 'npm:bn.js@4.11.6',
         'elliptic': 'npm:elliptic@6.3.1'
       }
     },
@@ -321,7 +329,7 @@ SystemJS.config({
     'npm:browserify-rsa@4.0.1': {
       'map': {
         'randombytes': 'npm:randombytes@2.0.3',
-        'bn.js': 'npm:bn.js@4.11.5'
+        'bn.js': 'npm:bn.js@4.11.6'
       }
     },
     'npm:parse-asn1@5.0.0': {
@@ -335,7 +343,7 @@ SystemJS.config({
     },
     'npm:miller-rabin@4.0.0': {
       'map': {
-        'bn.js': 'npm:bn.js@4.11.5',
+        'bn.js': 'npm:bn.js@4.11.6',
         'brorand': 'npm:brorand@1.0.5'
       }
     },
@@ -489,7 +497,7 @@ SystemJS.config({
     'npm:elliptic@6.3.1': {
       'map': {
         'inherits': 'npm:inherits@2.0.1',
-        'bn.js': 'npm:bn.js@4.11.5',
+        'bn.js': 'npm:bn.js@4.11.6',
         'brorand': 'npm:brorand@1.0.5',
         'hash.js': 'npm:hash.js@1.0.3'
       }
@@ -497,13 +505,6 @@ SystemJS.config({
     'github:guybedford/system-md@0.1.0': {
       'map': {
         'showdown': 'github:showdownjs/showdown@1.4.2'
-      }
-    },
-    'npm:buffer@4.7.1': {
-      'map': {
-        'isarray': 'npm:isarray@1.0.0',
-        'base64-js': 'npm:base64-js@1.1.2',
-        'ieee754': 'npm:ieee754@1.1.6'
       }
     },
     'npm:socket.io-client@1.4.8': {
@@ -560,7 +561,7 @@ SystemJS.config({
     },
     'npm:asn1.js@4.8.0': {
       'map': {
-        'bn.js': 'npm:bn.js@4.11.5',
+        'bn.js': 'npm:bn.js@4.11.6',
         'inherits': 'npm:inherits@2.0.1',
         'minimalistic-assert': 'npm:minimalistic-assert@1.0.0'
       }
@@ -695,6 +696,19 @@ SystemJS.config({
       'map': {
         'util-deprecate': 'npm:util-deprecate@1.0.2',
         'sprintf-js': 'npm:sprintf-js@1.0.3'
+      }
+    },
+    'npm:buffer@4.9.0': {
+      'map': {
+        'ieee754': 'npm:ieee754@1.1.6',
+        'isarray': 'npm:isarray@1.0.0',
+        'base64-js': 'npm:base64-js@1.1.2'
+      }
+    },
+    'npm:gifti-reader-js@0.4.3': {
+      'map': {
+        'sax': 'npm:sax@1.2.1',
+        'pako': 'npm:pako@0.2.9'
       }
     }
   }

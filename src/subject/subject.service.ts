@@ -17,7 +17,7 @@ import Subject from './subject.data.coffee';
 export class SubjectService {
   constructor(private resource: SubjectResource) {}
     
-  private _subject: Object;
+  private subject: Object;
   
   /**
    * @method getSubjects
@@ -45,7 +45,7 @@ export class SubjectService {
    * @param subject {Object} the subject REST object to cache
    */
   cache(subject: Object) {
-    this._subject = subject;
+    this.subject = subject;
   }
   
   /**
@@ -54,12 +54,12 @@ export class SubjectService {
    * @method cache
    */
   clearCache() {
-    this._subject = null;
+    this.subject = null;
   }
   
   /**
-   * Picks the {project, collection} secondary key from the
-   * given route parameters.
+   * Picks the {project, collection, subject number} secondary
+   * key from the given route parameters.
    *
    * @method secondaryKey
    * @param params {Object} the route parameters
@@ -85,33 +85,13 @@ export class SubjectService {
     secondaryKey.number = +routeParams.subject;
     return secondaryKey;
   }
-  
-  /**
-   * Determines the search criterion as follows:
-   * * If there is a `subjectid` route parameter, then the search
-   *   criterion is the {`_id`: *value*} for that parameter value.
-   * * Otherwise, the criterion is the secondary key determined
-   *   in the `secondaryKey` method.
-   *
-   * @method searchCriterion
-   * @param routeParams {Object} the route parameters
-   * @return {Object} the search criterion object
-   */
-  private searchCriterion(routeParams: Object) {
-    let subjectId = routeParams.subjectid;
-    if (subjectId) {
-      return {_id: subjectId};
-    } else {
-      return this.secondaryKey(routeParams);
-    }
-  }
 
   /**
    * Fetches the subject based on the given route parameters.
-   * The search criterion is built as described in
-   * {{#crossLink "SubjectService/searchCriterion"}}{{/crossLink}}.
-   * If the criterion includes an *id* parameter and this service
-   * has cached a subject with that id, then that object is returned.
+   * The search criterion is the
+   * {{#crossLink "SubjectService/secondaryKey"}}{{/crossLink}}.
+   * If this service has a cached subject which matches that key,
+   * then that object is returned.
    * Otherwise, the object is fetched from the database and cached.
    *
    * @method getSubject
@@ -120,16 +100,16 @@ export class SubjectService {
    *   otherwise null
    */
   getSubject(routeParams: Object): Observable<any> {
-    let criterion = this.searchCriterion(routeParams);
+    let criterion = this.secondaryKey(routeParams);
     // Check the cache first.
-    if (this._subject) {
+    if (this.subject) {
       let keys = Object.keys(criterion);
-      let key = _.pick(this._subject, keys);
-      if (_.every(keys, prop => key[prop] === criterion[prop])) {
-        return Observable.of(this._subject);
+      if (_.every(keys, prop => this.subject[prop] === criterion[prop])) {
+        return Observable.of(this.subject);
       }
     }
     
+    // Not cached; hit the database.
     // The search parameter.
     let searchParam: string = REST.where(criterion);
     // Fetch the subject.
@@ -138,8 +118,10 @@ export class SubjectService {
     // Return the extended, cached subject.
     return subject.map(fetched => {
       if (fetched) {
-       return fetched ? Subject.extend(fetched) : fetched;
+        Subject.extend(fetched);
+        this.subject = fetched;
       }
+      return fetched;
     });
   }
 }

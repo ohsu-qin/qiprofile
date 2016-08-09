@@ -35,21 +35,21 @@ export class SessionComponent {
    * @property help {string}
    */
   help: string;
-
+  
   /**
    * A fetch error.
    *
    * @property error {string}
    */
   error: string;
-
+  
   /**
    * The session REST object.
    *
    * @property session {Object}
    */
   session: Object;
-
+  
   /**
    * The project name.
    *
@@ -61,22 +61,22 @@ export class SessionComponent {
   
   constructor(
     private router: Router,
-    route: ActivatedRoute,
+    private route: ActivatedRoute,
     service: SessionService,
     changeDetector: ChangeDetectorRef
   ) {
     this.help = help;
     // The route/query parameters.
     let params = route.params.value;
-
+    
     // Make a place-holder session sufficient to display a title.
     // The secondary key consists of the subject and the session number.
     this.session = service.secondaryKey(params);
     // Fill in enough of the session to display a title.
     Subject.extend(this.session.subject);
     Session.extend(this.session, this.session.subject, this.session.number);
-
-    // Fetch the real session.
+    
+    // Fetch the session.
     service.getSession(params, true).subscribe(session => {
       if (session) {
         this.session = session;
@@ -85,5 +85,21 @@ export class SessionComponent {
       }
       changeDetector.markForCheck();
     });
+  }
+  
+  /**
+   * Opens the Volume Detail page.
+   *
+   * @method visitVolume
+   * @param volume {Object} the volume REST object
+   */
+  visitVolume(volume) {
+    let scan = volume.scan;
+    let session = scan.session;
+    let subject = session.subject;
+    this.router.navigate(
+      ['scan', scan.number, 'volume', volume.number],
+      {relativeTo: this.route}
+    );
   }
 }

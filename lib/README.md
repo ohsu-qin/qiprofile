@@ -14,7 +14,7 @@ libraries:
 * Make the directory `release/current/plain`.
 
 * Execute the following from the Papaya root directory:
-  
+
       mkdir -p release/current/plain
       cat lib/jquery.js lib/GLU.js lib/numerics.js src/js/constants.js src/js/utilities/* \
         src/js/core/* src/js/volume/nifti/* src/js/volume/*.js src/js/surface/* \

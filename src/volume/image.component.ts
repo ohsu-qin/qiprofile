@@ -9,17 +9,30 @@ import ImageStore from '../image/image-store.coffee';
 })
 
 /**
- * The Volume image display component
+ * The Volume image display component.
  *
+ * @module volume
  * @class VolumeImageComponent
  */
 export class VolumeImageComponent implements AfterViewChecked {
   @Input() image;
 
+  /**
+   * Flag indicating whether Papaya has started.
+   *
+   * @property started
+   * @private
+   */
   private started = false;
   
+  /**
+   * Start Papaya.
+   *
+   * @method ngAfterViewChecked
+   */
   ngAfterViewChecked() {
-    // If the input is a place-holder without a file name, then bail.
+    // If the input is a place-holder without a file name or if
+    // Papaya is already displayed, then bail.
     if (!this.image.name || this.started) {
       return;
     }
@@ -34,6 +47,7 @@ export class VolumeImageComponent implements AfterViewChecked {
       showOrientation: true,
       images: [url]
     };
+
     // Start the renderer.
     papaya.Container.startPapaya();
     // Resize the viewer to work around the following Papaya bug:

@@ -51,19 +51,19 @@ describe 'The XNAT utility', ->
               project: 'QIN_Test'
 
   it 'should convert a scan time series image name to an XNAT location', ->
-    expected = '/data/QIN_Test/arc001/Breast001_Session01/SCANS/1/scan_ts/scan_ts.nii.gz'
+    expected = 'data/QIN_Test/arc001/Breast001_Session01/SCANS/1/scan_ts/scan_ts.nii.gz'
     actual = XNAT.location(mock.scan.timeSeries)
     expect(actual, "The XNAT location is incorrect")
       .to.equal(expected)
 
   it 'should convert a scan volume image name to an XNAT location', ->
-    expected = '/data/QIN_Test/arc001/Breast001_Session01/SCANS/1/volume01/volume01.nii.gz'
+    expected = 'data/QIN_Test/arc001/Breast001_Session01/SCANS/1/volume01/volume01.nii.gz'
     actual = XNAT.location(mock.scan.volume)
     expect(actual, "The XNAT location is incorrect")
       .to.equal(expected)
 
   it 'should convert a registration volume image name to an XNAT location', ->
-    expected = '/data/QIN_Test/arc001/Breast001_Session01/SCANS/1/reg_01/volume01.nii.gz'
+    expected = 'data/QIN_Test/arc001/Breast001_Session01/SCANS/1/reg_01/volume01.nii.gz'
     actual = XNAT.location(mock.registration.volume)
     expect(actual, "The XNAT location is incorrect")
       .to.equal(expected)

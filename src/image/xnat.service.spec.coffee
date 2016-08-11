@@ -90,7 +90,7 @@ describe 'The XNAT service', ->
       inject [XNATService], (service) ->
         service.load(mock.volume).subscribe (data) ->
           expect(url, 'The image server file path is incorrect')
-            .to.equal('/data/QIN_Test/arc001/Breast001_Session01/SCANS/1/volume01/volume01.nii.gz')
+            .to.equal('data/QIN_Test/arc001/Breast001_Session01/SCANS/1/volume01/volume01.nii.gz')
           expect(data, 'The image load result is incorrect')
             .to.eql(uncompressed)
         # Dispatch the backend request.

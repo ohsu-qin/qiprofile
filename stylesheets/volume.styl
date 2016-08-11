@@ -1,0 +1,21 @@
+// Full height 60% width centered with a light background. The background is adapted from
+// http://stackoverflow.com/questions/14628601/can-i-add-background-color-only-for-padding.
+.qi-papaya-parent
+  height 100%
+  padding 0 20% 0 20% 
+  background-image linear-gradient(#000, #000), linear-gradient(Lavender, Lavender)
+  background-clip content-box, padding-box
+
+// The default papaya style has a nearly invisible menu when papaya is embedded.
+// Override with a better text color.
+.papaya-menu-label
+  color: CadetBlue
+
+.papaya-toolbar
+  background-color MintCream
+  // Clobber the File menu item.
+  & #File
+    display none
+
+.papaya-display
+  background-color MintCream

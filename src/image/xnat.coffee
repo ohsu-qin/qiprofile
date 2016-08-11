@@ -1,9 +1,7 @@
 `import { sprintf } from "sprintf"`
 
 # The image store location relative to the web app root.
-# This is a symbolic link to the image store root directory
-# on the server.
-IMAGE_STORE_ROOT = '/data'
+IMAGE_STORE_ROOT = 'data'
 
 ###*
  * @method projectLocation
@@ -46,6 +44,7 @@ XNAT =
    * @return the image file path relative to the web app root
   ###
   location: (image) ->
+    return if not image
     # The image parent is either a scan or registration image
     # sequence.
     resource = image.resource

@@ -11,7 +11,7 @@ const TEST_SESSION = {
   title: 'QIN_Test Breast Patient 1 Session 1',
   scans: [
     {
-      number: '1',
+      number: 1,
       volumes:
         {
           name: 'NIFTI',
@@ -41,10 +41,6 @@ class VolumeSessionServiceStub {
 /**
  * The {{#crossLink "VolumeService"}}{{/crossLink}} validator.
  *
- * FIXME - fails with error:
- *    Cannot resolve all parameters for 'VolumeService'
- *  even though this is not true of the other analogous service.spec setups. 
- *
  * @module volume
  * @class VolumeServiceSpec
  */
@@ -63,6 +59,12 @@ describe('The Volume service', function() {
   }
   
   beforeEach(() => {
+    // Note - supplying only the mock SessionService fails with the error:
+    //     Cannot resolve all parameters for 'VolumeService'
+    //   even though this is not true of the other analogous service.spec
+    //   setups. The work-around is to hard-code the VolumeService provider
+    //   as shown below.
+    // TODO - revisit this with the production Angular release in 2017.
     addProviders([
       provide(SessionService, {useClass: VolumeSessionServiceStub}),
       {
@@ -73,7 +75,7 @@ describe('The Volume service', function() {
     ]);
   });
 
-  xit('should fetch the volume', test(service => {
+  it('should fetch the volume', test(service => {
     service.getVolume(
       {project: 'QIN_Test', collection: 'Breast', subject: 1, session: 1,
        scan: 1, volume: 1}

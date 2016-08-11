@@ -62,6 +62,25 @@ SystemJS.config({
           'loader': 'json'
         }
       }
+    },
+    'npm:jasmine@2.4.1': {
+      'map': {
+        'exit': 'npm:exit@0.1.2',
+        'glob': 'npm:glob@3.2.11',
+        'jasmine-core': 'npm:jasmine-core@2.4.1'
+      }
+    },
+    'npm:glob@3.2.11': {
+      'map': {
+        'minimatch': 'npm:minimatch@0.3.0',
+        'inherits': 'npm:inherits@2.0.1'
+      }
+    },
+    'npm:minimatch@0.3.0': {
+      'map': {
+        'sigmund': 'npm:sigmund@1.0.1',
+        'lru-cache': 'npm:lru-cache@2.7.3'
+      }
     }
   },
   map: {
@@ -106,7 +125,6 @@ SystemJS.config({
     'domain': 'github:jspm/nodelibs-domain@0.2.0-alpha',
     'fs': 'github:jspm/nodelibs-fs@0.2.0-alpha',
     'http': 'github:jspm/nodelibs-http@0.2.0-alpha',
-    'jquery': 'npm:jquery@3.1.0',
     'json': 'github:systemjs/plugin-json@0.1.2',
     'lodash': 'npm:lodash@4.13.1',
     'md': 'github:guybedford/system-md@0.1.0',
@@ -144,25 +162,6 @@ SystemJS.config({
     'zone.js': 'npm:zone.js@0.6.12'
   },
   packages: {
-    'npm:jasmine@2.4.1': {
-      'map': {
-        'exit': 'npm:exit@0.1.2',
-        'glob': 'npm:glob@3.2.11',
-        'jasmine-core': 'npm:jasmine-core@2.4.1'
-      }
-    },
-    'npm:glob@3.2.11': {
-      'map': {
-        'minimatch': 'npm:minimatch@0.3.0',
-        'inherits': 'npm:inherits@2.0.1'
-      }
-    },
-    'npm:minimatch@0.3.0': {
-      'map': {
-        'sigmund': 'npm:sigmund@1.0.1',
-        'lru-cache': 'npm:lru-cache@2.7.3'
-      }
-    },
     'github:frankwallis/plugin-typescript@4.0.16': {
       'map': {
         'typescript': 'npm:typescript@1.8.10'

@@ -1,3 +1,15 @@
-#papaya.papaya(ddata-params="dataParams")
-
-
+// Note - Papaya sets its container size based on the parent of the
+// .payapa element as follows:
+// * the width is the parent width
+// * the height is the width / 1.5
+//
+// This is a peculiar choice, since the standard LCD aspect ratio
+// is 16:9, or a 1.78 factor. Perhaps Papaya made this undocumented
+// choice to allow for the left and right padding preferred by its
+// demo app.  
+//
+// Since the Papaya viewport should fit comfortably within the
+// visible display, we make a parent styled to be centered 75% width
+// with a neutral background.
+.qi-papaya-parent
+  .papaya(data-params="papayaParams")

@@ -91,9 +91,14 @@ export class VolumeService {
     } else {
       imageSequence = scan;
     }
+    // The volumes object holds the volume images array.
+    let volumes = imageSequence.volumes;
+    if (!volumes || !volumes.images) {
+      return null;
+    }
     // The volume index is one less than the volume number.
-    let volNdx = +routeParams.volume;
+    let volNdx = +routeParams.volume - 1;
     
-    return imageSequence.volumes[volNdx];
+    return volumes.images[volNdx];
   }
 }

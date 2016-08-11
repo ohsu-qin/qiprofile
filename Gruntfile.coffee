@@ -107,6 +107,7 @@ module.exports = (grunt) ->
     concat:
       css:
         src: [
+          'lib/papaya.css'
           'node_modules/bootstrap/dist/css/bootstrap.css'
           'node_modules/font-awesome/css/font-awesome.css'
         ]

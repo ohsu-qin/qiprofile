@@ -14,26 +14,26 @@ libraries:
 * Make the directory `release/current/plain`.
 
 * Execute the following from the Papaya root directory:
-
+    ```
       mkdir -p release/current/plain
       cat lib/jquery.js lib/GLU.js lib/numerics.js src/js/constants.js src/js/utilities/* \
         src/js/core/* src/js/volume/nifti/* src/js/volume/*.js src/js/surface/* \
         src/js/ui/* src/js/viewer/* src/js/main.js >release/current/plain/papaya.js
       cp lib/pako-inflate.js release/current/standard/papaya.css release/current/plain/
-
+    ```
 * Edit `release/current/plain/papaya.js` as follows:
   
   - Fix a Papaya bug described in the start comment below by moving the
     following lines:
-    
+    ```
         this.context.fillStyle = this.bgColor;
         this.context.fillRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
-    
+    ```
     from `initializeViewer()` to `resizeViewer()` after the canvas width
     and height are reset.
   
   - Prepend the following:
-    
+    ```
         import bowser from 'bowser';
         import gifti from 'gifti-reader-js';
         import nifti from 'nifti-reader-js';
@@ -41,7 +41,7 @@ libraries:
         
         var glMatrixArrayType;
         var quat4;
-    
+    ```
     The `bowser`, `gifti` and `nifti` libraries are loaded by jspm as
     part of the qiprofile install. `pako-inflate` is a version of `pako`
     modified by the Papaya developers. `jquery` is the 1.9.1 version used
@@ -53,14 +53,14 @@ libraries:
     that will otherwise result in a jspm load error.
   
   - Postpend the following export:
-    
+    ```
         export { papaya as default };
-
+    ```
 * Copy the Papaya `release/current/plain/` contents to the qiprofile `lib/`
   directory.
 
 * Papaya is started as follows:
-
+    ```
       // Start the renderer.
       papaya.Container.startPapaya();
       // Resize the viewer to work around the following Papaya bug:
@@ -77,3 +77,4 @@ libraries:
       //   to resize the viewer after the initial display, as shown below. That
       //   causes a slight flicker, but we can live with that.
       papaya.Container.resizePapaya(null, true);
+    ```

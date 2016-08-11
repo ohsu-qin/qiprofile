@@ -63,25 +63,6 @@ SystemJS.config({
         }
       }
     },
-    'npm:jasmine@2.4.1': {
-      'map': {
-        'exit': 'npm:exit@0.1.2',
-        'glob': 'npm:glob@3.2.11',
-        'jasmine-core': 'npm:jasmine-core@2.4.1'
-      }
-    },
-    'npm:glob@3.2.11': {
-      'map': {
-        'minimatch': 'npm:minimatch@0.3.0',
-        'inherits': 'npm:inherits@2.0.1'
-      }
-    },
-    'npm:minimatch@0.3.0': {
-      'map': {
-        'sigmund': 'npm:sigmund@1.0.1',
-        'lru-cache': 'npm:lru-cache@2.7.3'
-      }
-    }
   },
   map: {
     'jasmine': 'npm:jasmine@2.4.1',
@@ -162,6 +143,25 @@ SystemJS.config({
     'zone.js': 'npm:zone.js@0.6.12'
   },
   packages: {
+    'npm:jasmine@2.4.1': {
+      'map': {
+        'exit': 'npm:exit@0.1.2',
+        'glob': 'npm:glob@3.2.11',
+        'jasmine-core': 'npm:jasmine-core@2.4.1'
+      }
+    },
+    'npm:glob@3.2.11': {
+      'map': {
+        'minimatch': 'npm:minimatch@0.3.0',
+        'inherits': 'npm:inherits@2.0.1'
+      }
+    },
+    'npm:minimatch@0.3.0': {
+      'map': {
+        'sigmund': 'npm:sigmund@1.0.1',
+        'lru-cache': 'npm:lru-cache@2.7.3'
+      }
+    },
     'github:frankwallis/plugin-typescript@4.0.16': {
       'map': {
         'typescript': 'npm:typescript@1.8.10'

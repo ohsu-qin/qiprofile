@@ -2,6 +2,11 @@ import * as _ from 'lodash';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
+import Subject from '../subject/subject.data.coffee';
+import Session from '../session/session.data.coffee';
+import Scan from '../session/scan.data.coffee';
+import Registration from '../session/registration.data.coffee';
+import Volume from './volume.data.coffee';
 import { SessionService } from '../session/session.service.ts';
 
 @Injectable()
@@ -52,6 +57,42 @@ export class VolumeService {
     } else {
       return {scan: scan, number: volume};
     }
+  }
+  
+  /**
+   * Makes a place-holder volume sufficient to display a title.
+   * The place-holder extends the
+   * {{#crossLink "VolumeService/secondaryKey"}}{{/crossLink}}
+   * using the various data utility service `extend` methods,
+   * which in turn enables the {{#crossLink "Volume/title"}}{{/crossLink}}
+   * virtual property.
+   *
+   * @method placeHolder
+   * @param routeParams {Object} the route parameters
+   * @return {Volume} the place-holder volume object
+   */
+  placeHolder(routeParams: Object) {
+    // The bare-bones volume object.
+    let volume = this.secondaryKey(routeParams);
+    // Fill in enough of the volume hierarchy to display a title.
+    let scan;
+    let reg = volume.registration;
+    if (reg) {
+      scan = reg.scan;
+      Scan.extend(scan, scan.session);
+      reg._cls = 'Registration';
+      Registration.extend(reg, scan, reg.number);
+      Volume.extend(volume, reg, volume.number);
+    } else {
+      scan = volume.scan;
+      scan._cls = 'Scan';
+      Scan.extend(scan, scan.session);
+      Volume.extend(volume, scan, volume.number);
+    }
+    Subject.extend(scan.session.subject);
+    Session.extend(scan.session, scan.session.subject, scan.session.number);
+    
+    return volume;
   }
 
   /**

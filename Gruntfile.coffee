@@ -187,10 +187,16 @@ module.exports = (grunt) ->
           'source activate qirest && ' + 
           'pip install --upgrade -r requirements.txt'
 
-      # Build the qirest Anaconda environment and install the application.
+      # Install the npm packages.
       buildnpm:
         command:
-          'npm install'
+          # Note: the first install fails to completely install secondary
+          #   lodash dependencies. The second install remedies this npm bug.
+          # TODO - revisit this with a new npm release in 2017. Try deleting
+          #   the second install below, running npm run reinstall and then
+          #   grunt start. If grunt fails with a missing babel lodash error,
+          #   then raise this issue with the npm dev team.
+          'npm install && npm install lodash'
       
       qirest:
         command:

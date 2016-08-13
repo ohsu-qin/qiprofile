@@ -362,6 +362,7 @@ class Findable
  *
  * @module testing
  * @class Table
+ * @extends Findable
 ###
 class Table extends Findable
   ###*

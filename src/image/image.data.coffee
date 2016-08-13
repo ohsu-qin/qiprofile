@@ -17,7 +17,8 @@ NIFTI_REGEX = /\.nii(\.gz)?$/
  * An image representation which can load an image file.
  *
  * @class ImageMixin
- * @static
+ * @extends Loader
+ * @extension Image
 ###
 class ImageMixin extends Loader
   parser: ->
@@ -47,26 +48,6 @@ class ImageMixin extends Loader
       .then (parsed) =>
         @contents = parsed
 
-Object.defineProperties ImageMixin.prototype,
-  ###*
-   * Returns the _parent_/_image_ path, where:
-   * * _parent_ is the parent scan or registration image
-   *   sequence path
-   * * _image_ is the time series image name
-   *
-   * @method path
-   * @protected
-   * @return the ancestor path
-  ###
-  path:
-    get: ->
-      # Make and cache the title on demand, since it is
-      # potentially called frequently as the basis for
-      # an image id.
-      if not @_path?
-        @_path = "#{ @imageSequence.path }/#{ @resource }/#{ @name }"
-      @_path
-
 ###*
  * The Image REST data object extension service utility.module imagre
  * @class Image
@@ -87,5 +68,27 @@ Image =
     return image if not image
     # Add the loader functionality.
     _.extend(image, new ImageMixin)
+    
+    Object.defineProperties image,
+      ###*
+       * A string that uniquely and durably identifies this image
+       * in the scope of the database. The path is the image
+       * hierarchy, e.g.
+       * `QIN_Test/Breast/1/1/1/reg_7ka3z/volume001.nii.gz`
+       * for the first volume of the Subject 1 Session 1 Scan 1
+       * registration with name `reg_7ka3z`.
+       *
+       * @property identifier {string}
+      ###
+      identifier:
+        get: ->
+          session = @imageSequence.session
+          subject = session.subject
+          project = subject.project
+          collection = subject.collection
+          prefix = "/#{ project }/#{ collection }/#{ subject.number }/#{ session.number }"
+          "#{ prefix }/#{ @scan.number }/#{ @resource }/#{ @name }"
+    
+    image
 
 `export { Image as default }`

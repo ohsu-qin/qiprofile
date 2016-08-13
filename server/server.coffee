@@ -106,7 +106,16 @@ app.get '/qiprofile*', (req, res) ->
 #   /stylesheets/app.styl should result in a 404, but instead
 #   resolves to /stylesheets/app.styl.
 app.get '/*', (req, res) ->
-  res.sendFile "#{ root }/public#{ req.path }"
+  file = "#{ root }/public#{ req.path }"
+  options =
+    headers:
+      'x-timestamp': Date.now()
+      'x-sent': true
+    
+  res.sendFile file, options, (err) ->
+    if err
+      console.log(err)
+      res.status(err.status).end()
 
 # Log the error.
 app.use (err, req, res, next) ->

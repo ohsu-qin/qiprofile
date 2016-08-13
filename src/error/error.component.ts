@@ -5,7 +5,7 @@
  * @main error
  */
 
-import { Component, Input } from '@angular/core';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'qi-error',
@@ -26,5 +26,17 @@ export class ErrorComponent {
    */
   @Input() error: string;
   
-  constructor() {}
+  /**
+   * The error pop-up dismissal event.
+   *
+   * @property dismissed {EventEmitter}
+   */
+  @Output() dismissed = new EventEmitter();
+  
+  constructor() {
+  }
+  
+  dismiss() {
+    this.dismissed.emit();
+  }
 }

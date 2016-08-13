@@ -1,5 +1,7 @@
 import papaya from '../../lib/papaya.js';
-import { Component, Input, AfterViewChecked } from '@angular/core';
+import {
+  Component, Input, Output, EventEmitter, AfterViewChecked
+} from '@angular/core';
 
 import ImageStore from '../image/image-store.coffee';
 
@@ -15,7 +17,19 @@ import ImageStore from '../image/image-store.coffee';
  * @class VolumeImageComponent
  */
 export class VolumeImageComponent implements AfterViewChecked {
+  /**
+   * The input image data object.
+   *
+   * @property image {Image}
+   */
   @Input() image;
+  
+  /**
+   * The error event.
+   *
+   * @property error {EventEmitter}
+   */
+  @Output() error = new EventEmitter();
 
   /**
    * Flag indicating whether Papaya has started.
@@ -26,17 +40,43 @@ export class VolumeImageComponent implements AfterViewChecked {
   private started = false;
   
   /**
-   * Start Papaya.
+   *  Monkey-patches the Papaya error handler to delegate to
+   * the parent component error handler.
+   *
+   * @method constructor
+   */
+  constructor() {
+    //
+    papaya.viewer.Display.prototype.drawError = (message) => {
+      // Improve a file read error.
+      const notFoundPrefix = /^There was a problem reading that file \(.*\)/;
+      let better = `The server could not read the ${ this.image.title } file ${ this.image.name }`;
+      message = message.replace(notFoundPrefix, better);
+      this.error.emit(message);
+    };
+  }
+  
+  /**
+   *Render the volume image in the Papaya container.
    *
    * @method ngAfterViewChecked
    */
   ngAfterViewChecked() {
     // If the input is a place-holder without a file name or if
     // Papaya is already displayed, then bail.
-    if (!this.image.name || this.started) {
-      return;
+    if (this.image.name && !this.started) {
+      this.startPapaya();
+      this.started = true;
     }
-    
+  }
+  
+  /**
+   * Start Papaya.
+   *
+   * @method startPapaya
+   * @private
+   */
+  private startPapaya() {
     // The image url.
     let url = ImageStore.location(this.image);
     
@@ -60,6 +100,5 @@ export class VolumeImageComponent implements AfterViewChecked {
     //   The work-around is to resize the viewer after the initial display.
     //   That causes a slight flicker, but we can live with that.
     papaya.Container.resizePapaya(null, true);
-    this.started = true;
   }
 }

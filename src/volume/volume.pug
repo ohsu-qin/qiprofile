@@ -4,4 +4,4 @@ block billboard
   | {{ volume.title }} 
 
 block content
-  qi-volume-image([image]="volume")
+  qi-volume-image([image]="volume", (error)="onError($event)")

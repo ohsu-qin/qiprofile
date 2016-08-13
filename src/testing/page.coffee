@@ -114,23 +114,19 @@ class Page extends Findable
     findButton = =>
       @find('qi-toggle-help', 'button')
 
-    @find('.qi-help').then (helpBox) =>
-      expect(helpBox, 'The help box is missing').to.exist
-      # Help is initially hidden or shown, depending on the
-      # helpShown property.
-      state = if @helpShown then 'shown' else 'hidden'
-      expect(helpBox.isDisplayed(),
-             "The help box is not initially #{ state }")
-        .to.eventually.equal(@helpShown)
+    if @helpShown
+      @find('.qi-help').then (helpBox) =>
+        expect(helpBox, 'The help box is missing').to.exist
+        helpBox.getInnerHtml()
+    else
       findButton().then (btn) ->
         expect(btn, 'The help button is missing').to.exist
         # Open the help box...
         btn.click().then =>
           # Verify that the help is toggled.
-          state = if @helpShown then 'hidden' else 'shown'
-          expect(helpBox.isDisplayed(),
-                 "The help box is not #{ state } after click")
-            .to.eventually.not.equal(@helpShown)
+          @find('.qi-help').then (helpBox) =>
+            expect(helpBox, "The help box is not shown after click")
+              .to.exist
           # Click again to restore the initial state.
           btn.click().then ->
             helpBox.getInnerHtml()

@@ -31,16 +31,6 @@ describe 'The Registration data utility', ->
     # Extend the test registration.
     Registration.extend(registration, scan, 1)
 
-  describe 'Path', ->
-    it 'should have a path', ->
-      expected = [{project: 'QIN_Test'}, {collection: 'Breast'}, {subject: 1},
-                  {session: 1}, {scan: 1}, {registration: 1}]
-      expect(registration.path, "The registration is missing a path").to.exist
-      expect(
-        registration.path,
-        "The registration path is incorrect: #{ JSON.stringify(registration.path) }"
-      ).to.eql(expected)
-
   describe 'find', ->
     it 'should find the scan registration', ->
       target = Registration.find(scan, 1)

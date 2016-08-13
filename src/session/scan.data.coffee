@@ -44,17 +44,6 @@ Scan =
         #   once the scan protocol is fetched and cached.
         get: -> "#{ @session.title } Scan #{ @number }"
 
-      ###*
-       * The [_parent_, {scan: _scan_}] path, where:
-       * * _parent_ is the parent session path items
-       * * _scan_ is the scan number
-       *
-       * @property path
-      ###
-      path:
-        get: ->
-          @session.path.concat([{scan: @number }])
-
     # Add the scan registration properties.
     if not scan.registrations?
       scan.registrations = []

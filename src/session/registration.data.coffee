@@ -41,17 +41,6 @@ Registration =
           "#{ @scan.title } Registration #{ @number }"
 
       ###*
-       * The [_parent_, {registration: _registration_}] path, where:
-       * * _parent_ is the parent scan path items
-       * * _registration_ is the registration number
-       *
-       * @property path
-      ###
-      path:
-        get: ->
-          @scan.path.concat([{registration: @number }])
-
-      ###*
        * An ImageSequence present a uniform interface, which
        * includes a bolus arrival index and session reference.
        *

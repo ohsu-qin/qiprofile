@@ -5,7 +5,7 @@
 `import Subject from "./subject.data.coffee"`
 
 ###*
- * The {{#crossLink "The subject"}}{{/crossLink}} validator.
+ * The {{#crossLink "Subject"}}{{/crossLink}} validator.
  *
  * Note: image load cannot be unit-tested, since it requires an
  *   active browser.
@@ -105,15 +105,6 @@ describe 'The Subject data utility', ->
   beforeEach ->
     data = REST.transformResponse(mock)
     subject = Subject.extend(data)
-
-  describe 'Path', ->
-    it 'should have a path', ->
-      expected = [{project: 'QIN_Test'}, {collection: 'Breast'}, {subject: 1}]
-      expect(subject.path, "The subject is missing a path").to.exist
-      expect(
-        subject.path,
-        "The subject path is incorrect: #{ JSON.stringify(subject.path) }"
-      ).to.eql(expected)
 
   describe 'Demographics', ->
     # Validate the birth date.

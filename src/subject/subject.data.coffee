@@ -82,21 +82,6 @@ Subject =
           "#{ @collection } Patient #{ @number }"
 
       ###*
-       * Returns the
-       * [{project: _project_}, {collection:/_collection_}, {subject: _subject_}]
-       * array, where:
-       * * _project_ is the project name
-       * * _collection_ is the collection name
-       * * _subject_ is the subject number
-       *
-       * @method path
-       * @return the session path
-      ###
-      path:
-        get: ->
-          [{project: @project}, {collection: @collection}, {subject: @number}]
-
-      ###*
        * @method clinicalEncounters
        * @return the clinical encounters
       ###

@@ -45,16 +45,6 @@ describe 'The Scan utility', ->
     # Extend the test scan.
     Scan.extend(scan, session)
 
-  describe 'Path', ->
-    it 'should have a path', ->
-      expected = [{project: 'QIN_Test'}, {collection: 'Breast'}, {subject: 1},
-                  {session: 1}, {scan: 1}]
-      expect(scan.path, "The scan is missing a path").to.exist
-      expect(
-        scan.path,
-        "The scan path is incorrect: #{ JSON.stringify(scan.path) }"
-      ).to.eql(expected)
-
   describe 'find', ->
     it 'should find the session scan', ->
       target = Scan.find(session, 1)

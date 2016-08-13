@@ -27,15 +27,28 @@ Volume =
   extend: (volume, imageSequence, number) ->
     return volume if not volume
     # Set the image parent volume reference.
+    ###*
+     * The parent scan or registration.
+     * 
+     * @property imageSequence {ImageSequence} 
+    ###
     volume.imageSequence = imageSequence
-    
-    # If the volume parent is not a scan, then make a
-    # scan virtual property that delegates to the parent
-    # image sequence.
-    if not volume.scan?
-      Object.defineProperties volume,
-        scan:
-          get: -> @imageSequence.scan
+        
+    ###*
+     * The scan which contains this volume. If the parent
+     * {{#crossLink "ImageSequence"}}{{/crossLink}} is a
+     * {{#crossLink "Registration"}}{{/crossLink}}, then
+     * this volume's scan is the parent registration's scan.
+     * 
+     * @property scan {Scan} 
+    ###
+    Object.defineProperties volume,
+      scan:
+        get: ->
+          if @imageSequence._cls is 'Scan'
+            @imageSequence
+          else
+            @imageSequence.scan
 
     # Add the image load capability.
     Image.extend(volume)
@@ -51,26 +64,13 @@ Volume =
     # The volume virtual properties.
     Object.defineProperties volume,
       ###*
-       * @method title
-       * @return the display title
+       * @property title {string} the display title
       ###
       title:
         get: -> "#{ @imageSequence.title } Volume #{ @number }"
 
       ###*
-       * The [_parent_, {volume: _volume_}] path, where:
-       * * _parent_ is the parent image sequence path items
-       * * _volume_ is the volume number
-       *
-       * @property path
-      ###
-      path:
-        get: ->
-          @imageSequence.path.concat([{volume: @number }])
-
-      ###*
-       * @method resource
-       * @return the volume resource name
+       * @property resource {string} the volume resource name
       ###
       resource:
         get: -> @imageSequence.volumes.name

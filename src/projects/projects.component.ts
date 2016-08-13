@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { Component } from '@angular/core';
 
-import { PAGE_DIRECTIVES } from '../main/page.ts';
+import { PageComponent } from '../page/page.component.ts';
 import { ProjectService } from '../project/project.service.ts';
 import { HelpService } from '../help/help.service.ts';
 import help from './projects.help.md';
@@ -17,7 +17,7 @@ import { ProjectItemComponent } from './project-item.component.ts';
 @Component({
   selector: 'qi-projects',
   templateUrl: '/public/html/projects/projects.html',
-  directives: PAGE_DIRECTIVES.concat([ProjectItemComponent]),
+  directives: PageComponent.DIRECTIVES.concat([ProjectItemComponent]),
   providers: [ProjectService]
 })
 
@@ -26,21 +26,7 @@ import { ProjectItemComponent } from './project-item.component.ts';
  *
  * @class ProjectsComponent
  */
-export class ProjectsComponent {
-  /**
-   * The help content.
-   *
-   * @property help {string}
-   */
-  help: string;
-
-  /**
-   * A fetch error.
-   *
-   * @property error {string}
-   */
-  error: string;
-  
+export class ProjectsComponent extends PageComponent {
   /**
    * The project REST objects.
    *
@@ -59,7 +45,7 @@ export class ProjectsComponent {
   
   constructor(private dataService: ProjectService,
               private helpService: HelpService) {
-      this.help = help;
+      super(help);
       // Always show the help on this page.
       this.helpService.showHelp = true;
       // The unsorted project objects.

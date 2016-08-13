@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { PAGE_DIRECTIVES } from '../main/page.ts';
+import { PageComponent } from '../page/page.component.ts';
 import Subject from '../subject/subject.data.coffee';
 import Session from './session.data.coffee';
 import { SessionService } from './session.service.ts';
@@ -18,7 +18,7 @@ import help from './session.help.md';
 @Component({
   selector: 'qi-session',
   templateUrl: '/public/html/session/session.html',
-  directives: PAGE_DIRECTIVES,
+  directives: PageComponent.DIRECTIVES,
   providers: [],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
@@ -28,21 +28,7 @@ import help from './session.help.md';
  *
  * @class SessionComponent
  */
-export class SessionComponent {
-  /**
-   * The help content.
-   *
-   * @property help {string}
-   */
-  help: string;
-  
-  /**
-   * A fetch error.
-   *
-   * @property error {string}
-   */
-  error: string;
-  
+export class SessionComponent extends PageComponent {
   /**
    * The session REST object.
    *
@@ -65,7 +51,8 @@ export class SessionComponent {
     service: SessionService,
     changeDetector: ChangeDetectorRef
   ) {
-    this.help = help;
+    super(help);
+    
     // The route/query parameters.
     let params = route.params.value;
     

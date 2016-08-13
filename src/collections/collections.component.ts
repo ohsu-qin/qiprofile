@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import * as _ from 'lodash';
 
-import { PAGE_DIRECTIVES } from '../main/page.ts';
+import { PageComponent } from '../page/page.component.ts';
 import { CollectionService } from '../collection/collection.service.ts';
 import { CollectionItemComponent } from './collection-item.component.ts';
 import { CollectionsHelpComponent } from './help.component.ts';
@@ -18,7 +18,7 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'qi-collections',
   templateUrl: '/public/html/collections/collections.html',
-  directives: PAGE_DIRECTIVES.concat([CollectionItemComponent, CollectionsHelpComponent]),
+  directives: PageComponent.DIRECTIVES.concat([CollectionItemComponent, CollectionsHelpComponent]),
   providers: [CollectionService]
 })
 
@@ -27,15 +27,7 @@ import { Observable } from 'rxjs';
  *
  * @class CollectionsComponent
  */
-export class CollectionsComponent {
-  /**
-   * A fetch error.
-   *
-   * @property error {string}
-   */
-  error: string;
-  
-  
+export class CollectionsComponent extends PageComponent {
   /**
    * The collection REST objects.
    *
@@ -57,6 +49,11 @@ export class CollectionsComponent {
   constructor(private route: ActivatedRoute,
               private dataService: CollectionService,
               private helpService: HelpService) {
+      // Pass null help argument to the superclass constructor, since
+      // this component overrides the standard help block with its own
+      // directive.
+      super(); 
+      
       // Always show the help on this page.
       this.helpService.showHelp = true;
       let params = this.route.params.value;

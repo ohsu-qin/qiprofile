@@ -8,6 +8,10 @@ include header
 
 // The main partial content.
 .row.qi-main
+  // The error pop-up is shown if and only if the error property
+  // is set. When the pop-up is closed, the error property is
+  // unset via the PageComponent.clearError callback. 
+  qi-error(*ngIf="error", [error]="error", (dismissed)="clearError()")
   .qi-content
     // Every page component is responsible for importing its
     // help text into its help property.

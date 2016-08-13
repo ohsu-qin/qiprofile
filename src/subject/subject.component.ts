@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { PAGE_DIRECTIVES } from '../main/page.ts';
+import { PageComponent } from '../page/page.component.ts';
 import Subject from './subject.data.coffee';
 import { SubjectService } from './subject.service.ts';
 import help from './subject.help.md';
@@ -17,8 +17,10 @@ import help from './subject.help.md';
 @Component({
   selector: 'qi-subject',
   templateUrl: '/public/html/subject/subject.html',
-  directives: PAGE_DIRECTIVES,
+  directives: PageComponent.DIRECTIVES,
   providers: [],
+  // Instruct Angular to disable change detection until this
+  // component tells it to do so.
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -27,21 +29,7 @@ import help from './subject.help.md';
  *
  * @class SubjectComponent
  */
-export class SubjectComponent {
-  /**
-   * The help content.
-   *
-   * @property help {string}
-   */
-  help: string;
-
-  /**
-   * A fetch error.
-   *
-   * @property error {string}
-   */
-  error: string;
-
+export class SubjectComponent extends PageComponent {
   /**
    * The subject to display.
    *
@@ -64,7 +52,8 @@ export class SubjectComponent {
     service: SubjectService,
     changeDetector: ChangeDetectorRef
   ) {
-    this.help = help;
+    super(help);
+    
     // The route/query parameters.
     let params = this.route.params.value;
 
@@ -79,8 +68,18 @@ export class SubjectComponent {
       } else {
         this.error = `${ this.subject.title } was not found`;
       }
+      // Tell Angular to digest the change.
       changeDetector.markForCheck();
     });
+  }
+
+  /**
+   * Unsets the error property.
+   *
+   * @method clearError
+   */  
+  clearError() {
+    this.error = null;
   }
   
   /**

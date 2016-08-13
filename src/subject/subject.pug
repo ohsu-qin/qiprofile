@@ -4,7 +4,6 @@ block billboard
   | {{ subject.title }}
 
 block content
-  qi-error(*ngIf="error", [error]="error")
   ul.qi-main-list
     li(*ngFor="let session of subject.sessions", (click)="visitSession(session)")
       | {{ session.number }}

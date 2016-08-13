@@ -36,8 +36,30 @@
 ul.qi-clean-list
   clean-list()
 
-.qi-close-icon
+// The pop-up panel is shown on the right side of the window
+// in a rounded rectangle box. This style can be augmented
+// with a specialized context-specific style, e.g. .qi-error
+// or .qi-help.
+.qi-popup
+  // The z-index is set to a high number so it is always in
+  // front, e.g. of the volume page image display.
+  z-index 110
+  background OldLace
+  border 1px solid Brown
+  border-radius 0.4em 0.4em 0.4em 0.4em
+  padding 0.5em
+  position fixed
+  right 1em
+  max-height 80%
+  overflow-y auto
+  qi-transition(linear, med-transition)
+
+// The close icon is on the top right of the pop-up panel.
+.qi-popup-close
   text-align right
+  width 100%
+  padding-right 1em
+  cursor pointer
 
 .qi-transparent
   background: transparent
@@ -61,6 +83,16 @@ ul.qi-clean-list
 .qi-bottom-buffer
   margin-bottom 0.5em
 
+// Align at the bottom.
+.qi-bottom
+  position absolute
+  bottom 0
+
+// Align at the top.
+.qi-top
+  position absolute
+  top 0
+
 // Add some vertical space between successive elements.
 .qi-ver-space
   & + .qi-ver-space
@@ -73,15 +105,6 @@ ul.qi-clean-list
 
 .qi-inline-heading
   display inline-block
-
-// An informal font.
-.qi-error-home
-  font-family sans-serif
-  font-style italic
-  font-size large
-  text-align center
-  padding-top 1em
-  color IndianRed
 
 // Override the bootstrap button as follows:
 // * remove the border and outline

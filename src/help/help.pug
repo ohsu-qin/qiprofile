@@ -1,5 +1,5 @@
-.qi-help([hidden]="!showHelp", (close)="toggleHelp()")
-  .qi-help-close.glyphicon.glyphicon-remove((click)="toggleHelp()")
+.qi-popup.qi-help(*ngIf="showHelp", (close)="toggleHelp()")
+  .qi-popup-close.glyphicon.glyphicon-remove((click)="toggleHelp()")
   // The parent component imports its help file into its help variable.
   // The layout/partial.pug qi-help element then binds this help variable
   // to the HelpComponent directive for use in this partial template.

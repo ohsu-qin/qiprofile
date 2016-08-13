@@ -26,29 +26,25 @@
 .qi-main-list
   clean-list()
 
-.qi-help
-  // The z-index is set to a high number so it is always in front of slider
-  // controls on the volume page.
-  z-index 99
-  background OldLace
-  border 1px solid Brown
-  border-radius 0.4em 0.4em 0.4em 0.4em
-  // padding 1em 1em 0 1em
-  position fixed
-  right 1em
-  padding 0.5em
-  // top 8em
-  // right 1.1em
-  max-height 80%
-  width 25%
-  overflow-y auto
-  qi-transition(linear, med-transition)
+// The error panel specializes the .qi-popup panel.
+.qi-error
+  //Offset from the right.
+  right 3em
 
-.qi-help-close
-  text-align right
-  width 100%
-  padding-right 1em
-  cursor pointer
+.qi-error-remedy
+  font-family sans-serif
+  font-style italic
+  text-align center
+  color IndianRed
+
+// The help panel specializes the .qi-popup panel.
+.qi-help
+  // Scooch up the bottom a bit to allow the special
+  // over-under (Qu/Sugg)estion Box text to spill down
+  // over the baseline.
+  padding-bottom 1em
+  // Don't make the help panel too obtrusive.
+  width 25%
 
 .qi-help-text
   // Downsize headers

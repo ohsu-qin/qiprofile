@@ -1,5 +1,5 @@
-.qi-help([hidden]="!showHelp", (close)="toggleHelp()")
-  .qi-help-close.glyphicon.glyphicon-remove((click)="toggleHelp()")
+.qi-popup.qi-help(*ngIf="showHelp", (close)="toggleHelp()")
+  .qi-popup-close.glyphicon.glyphicon-remove((click)="toggleHelp()")
   qi-collections-help-text.qi-help-text
   .qi-contact-info
     | We welcome your questions and comments placed in our
@@ -9,5 +9,3 @@
         span.under Qu
       | estion Box
     | .
-
-

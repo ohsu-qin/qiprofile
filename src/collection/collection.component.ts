@@ -7,7 +7,7 @@
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { PAGE_DIRECTIVES } from '../main/page.ts';
+import { PageComponent } from '../page/page.component.ts';
 import { SubjectService } from '../subject/subject.service.ts';
 import { CollectionCorrelationsComponent } from './correlations.component.ts';
 import help from './collection.help.md';
@@ -15,7 +15,7 @@ import help from './collection.help.md';
 @Component({
   selector: 'qi-collection',
   templateUrl: '/public/html/collection/collection.html',
-  directives: PAGE_DIRECTIVES.concat([CollectionCorrelationsComponent]),
+  directives: PageComponent.DIRECTIVES.concat([CollectionCorrelationsComponent]),
   providers: []
 })
 
@@ -24,20 +24,7 @@ import help from './collection.help.md';
  *
  * @class CollectionComponent
  */
-export class CollectionComponent {
-  /**
-   * The help content.
-   *
-   * @property help {string}
-   */
-  help: string;
-  /**
-   * A fetch error.
-   *
-   * @property error {string}
-   */
-  error: string;
-
+export class CollectionComponent extends PageComponent {
   /**
    * The project name.
    *
@@ -81,11 +68,15 @@ export class CollectionComponent {
     private route: ActivatedRoute,
     private subjectService: SubjectService
   ) {
-    this.help = help;
+    super(help);
+    
+    // The initial chart data point accessors.
     this.chartConfigs = [
       {x: 'deltaKTrans', y: 'rcb'},
       {x: 'deltaKTrans', y: 'rcb'}
     ];
+    
+    // Get the subjects to display.
     let params = route.params.value;
     this.project = params.project;
     this.name = params.collection;

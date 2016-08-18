@@ -9,9 +9,10 @@ libraries:
 
 `papaya.js` is built as follows:
 
-* Clone the Papaya repository.
+* Clone the Papaya Git repository.
 
-* Make the directory `release/current/plain`.
+* In the cloned project directory, make the subdirectory
+  `release/current/plain`.
 
 * Execute the following from the Papaya root directory:
     ```
@@ -19,7 +20,8 @@ libraries:
       cat lib/jquery.js lib/GLU.js lib/numerics.js src/js/constants.js src/js/utilities/* \
         src/js/core/* src/js/volume/nifti/* src/js/volume/*.js src/js/surface/* \
         src/js/ui/* src/js/viewer/* src/js/main.js >release/current/plain/papaya.js
-      cp lib/pako-inflate.js release/current/standard/papaya.css release/current/plain/
+      cp lib/pako-inflate.js lib/nifti-reader.js release/current/standard/papaya.css \
+        release/current/plain/
     ```
 * Edit `release/current/plain/papaya.js` as follows:
   
@@ -36,26 +38,32 @@ libraries:
     ```
         import bowser from 'bowser';
         import gifti from 'gifti-reader-js';
-        import nifti from 'nifti-reader-js';
+        import nifti from './nifti-reader.js';
         import pako from './pako-inflate.js';
         
         var glMatrixArrayType;
         var quat4;
     ```
-    The `bowser`, `gifti` and `nifti` libraries are loaded by jspm as
-    part of the qiprofile install. `pako-inflate` is a version of `pako`
-    modified by the Papaya developers. `jquery` is the 1.9.1 version used
-    by Papaya, but that version installed with `jspm install jquery@1.9.1`
-    cannot be imported without an error. Papapya is not compatible with the
-    current jquery 3.x version. 
+    The `bowser` and `gifti` libraries are loaded by jspm as part of the
+    qiprofile install. `pako-inflate` is a version of `pako` modified by
+    the Papaya developers. `jquery` is the 1.9.1 version used by Papaya,
+    but that version installed with `jspm install jquery@1.9.1` cannot
+    be imported without an error. Papapya is not compatible with the
+    current jquery 3.x version. jspm install of the `nifti` library
+    fails with an out-of-memory error, and therefore must be copied into
+    the lib/ directory and loaded from there.
     
     The variable declarations compensate for two lax GLU library declarations
     that will otherwise result in a jspm load error.
   
-  - Postpend the following export:
+  - Postpend the following:
     ```
+        // Make the containers visible.
+        papaya.papayaContainers = papayaContainers;
+        
         export { papaya as default };
     ```
+
 * Copy the Papaya `release/current/plain/` contents to the qiprofile `lib/`
   directory.
 

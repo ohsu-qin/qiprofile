@@ -5,13 +5,10 @@
 ###*
  * The {{#crossLink "Scan"}}{{/crossLink}} validator.
  *
- * Note: image load cannot be unit-tested, since it requires an
- *   active browser.
- *
  * @module session
  * @class ScanSpec
 ###
-describe 'The Scan utility', ->
+describe 'The Scan data utility', ->
   # The mock session object.
   # Note: the scan number is a string because it is fetched as
   #  such from the REST database and transformed to a number
@@ -19,7 +16,6 @@ describe 'The Scan utility', ->
   mock =
     session:
       title: 'Breast Patient 1 Session 1'
-      path: [{project: 'QIN_Test'}, {collection: 'Breast'}, {subject: 1}, {session: 1}]
       scans: [
         _cls: 'Scan'
         number: '1'

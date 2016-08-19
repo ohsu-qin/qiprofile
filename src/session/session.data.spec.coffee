@@ -17,7 +17,6 @@ describe 'The Session data utility', ->
   mock =
     subject:
       title: 'Breast Patient 1'
-      path: [{project: 'QIN_Test'}, {collection: 'Breast'}, {subject: 1}]
 
     session:
       acquisitionDate: moment('Jul 1, 2013', 'MMM DD, YYYY').valueOf()
@@ -58,16 +57,6 @@ describe 'The Session data utility', ->
     session = _.cloneDeep(mock.session)
     # Extend the mock session.
     Session.extend(session, subject, 1)
-
-  describe 'Path', ->
-    it 'should have a path', ->
-      expected = [{project: 'QIN_Test'}, {collection: 'Breast'}, {subject: 1},
-                  {session: 1}]
-      expect(session.path, "The session is missing a path").to.exist
-      expect(
-        session.path,
-        "The session path is incorrect: #{ JSON.stringify(session.path) }"
-      ).to.eql(expected)
 
   describe 'extend', ->
     it 'should reference the parent subject', ->

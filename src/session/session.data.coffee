@@ -64,10 +64,23 @@ Session =
   ###
   extend: (session, subject, number) ->
     return session if not session?
+
     # Set the session subject property.
+    ###*
+     * The parent {{#crossLink "Subject"}}{{/crossLink}}.
+     * 
+     * @property subject {Object} 
+    ###
     session.subject = subject
+
     # Set the session number property.
+    ###*
+     * The one-based subject session index in date order.
+     * 
+     * @property number {number} 
+    ###
     session.number = number
+
     # Add the default empty modeling array, if necessary.
     if not session.modelings?
       session.modelings = []

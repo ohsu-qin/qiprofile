@@ -116,6 +116,18 @@ describe('The Session service', function() {
     ]);
   });
 
+  it('should make a secondary key from the route parameters', test(service => {
+    let params = {project: 'QIN_Test', collection: 'Breast', subject: '1',
+                  session: '1', extra: 'bogus'};
+    let secondaryKey = service.secondaryKey(params);
+    const expected = {
+      subject: {project: 'QIN_Test', collection: 'Breast', number: 1},
+      number: 1
+    };
+    expect(secondaryKey, 'The secondary key is incorrect')
+      .to.eql(expected);
+  }));
+
   it('should fetch the session', test(service => {
     service.getSession({project: 'QIN_Test', collection: 'Breast', subject: 1, session: 1})
       .subscribe(function (session) {

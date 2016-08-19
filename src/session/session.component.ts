@@ -83,7 +83,7 @@ export class SessionComponent extends PageComponent {
   visitVolume(volume) {
     let scan = volume.scan;
     this.router.navigate(
-      ['scan', scan.number, 'volume', volume.number],
+      ['scan', scan.number, 'volumes', {volume: volume.number}],
       {relativeTo: this.route}
     );
   }

@@ -1,7 +1,6 @@
 `import * as _s from "underscore.string"`
 
 `import Image from "../image/image.data.coffee"`
-`import Nifti from "../image/nifti.coffee"`
 
 ###*
  * Adds the following properties to the given REST Image
@@ -16,10 +15,10 @@
  * @param timeSeries the parent TimeSeries object
 ###
 extendImage = (image, timeSeries) ->
-  # Extend the image with load capability.
-  Image.extend(timeSeries.image)
   # Add the parent reference.
   image.timeSeries = timeSeries
+  # Extend the image.
+  Image.extend(timeSeries.image)
   # Add the virtual properties.
   Object.defineProperties image,
     ###*
@@ -60,7 +59,7 @@ TimeSeries =
    * @return the extended TimeSeries
   ###
   extend: (timeSeries, imageSequence) ->
-    return timeSeries if not timeSeries
+    return timeSeries unless timeSeries?
     # The generic parent reference property.
     timeSeries.imageSequence = imageSequence
 

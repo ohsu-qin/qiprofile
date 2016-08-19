@@ -15,8 +15,6 @@ describe 'The Registration data utility', ->
     scan:
       _cls: 'Scan'
       title: 'Breast Patient 1 Session 1 Scan 1'
-      path: [{project: 'QIN_Test'}, {collection: 'Breast'}, {subject: 1},
-             {session: 1}, {scan: 1}]
       registrations: [
         _cls: 'Registration'
         protocol: 'rp1'

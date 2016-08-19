@@ -25,14 +25,28 @@ Scan =
    * @return the extended scan object
   ###
   extend: (scan, session) ->
-    return scan if not scan
+    return scan unless scan?
+
     # Add the general image sequence properties.
     ImageSequence.extend(scan)
+
     # Set the session reference.
+    ###*
+     * The parent {{#crossLink "Session"}}{{/crossLink}}.
+     * 
+     * @property session {Object} 
+    ###
     scan.session = session
+
     # The number is read as a string, as with all JSON values.
     # Convert it to an integer.
-    scan.number = parseInt(scan.number)
+    ###*
+     * The DICOM scan number.
+     * 
+     * @property number {number} 
+    ###
+    scan.number = +scan.number
+
     # Add the virtual properties.
     Object.defineProperties scan,
       ###*

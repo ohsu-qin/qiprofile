@@ -21,7 +21,7 @@ ImageSequence =
    * @return the extended REST image sequence object
   ###
   extend: (imageSequence) ->
-    return imageSequence if not imageSequence
+    return imageSequence unless imageSequence
     # Extend the time series.
     if imageSequence.timeSeries?
       TimeSeries.extend(imageSequence.timeSeries, imageSequence)
@@ -32,12 +32,38 @@ ImageSequence =
         Volume.extend(image, imageSequence, index + 1)
 
     ###*
-     * @method imageSequence
+     * @method isMultiVolume
      * @return whether this image sequence contain more than one
      *   volume
     ###
     imageSequence.isMultiVolume = ->
-      imageSequence.volumes? and imageSequence.volumes.images.length > 1
+      @volumes? and @volumes.images.length > 1
+
+    ###*
+     * Determines the volume with maximal intensity, determined as
+     * follows:
+     * * If there is only one volume, then return that volume.
+     * * Otherwise, if at least one volume has an `averageIntensity`
+     *   property value, then return the volume with the maximal
+     *   intensity value.
+     * * Otherwise, return null.
+     * 
+     * @method maximalIntensityVolume
+     * @return the  volume with maximal intensity, or null if 
+     *   such a volume could not be determined
+    ###
+    imageSequence.maximalIntensityVolume = ->
+      return unless @volumes
+      return @volumes.images[0] unless @isMultiVolume()
+      target = null
+      for volume in @volumes.images
+        intensity = volume.averageIntensity
+        if intensity?
+          if not target? or intensity > target.averageIntensity
+            target = volume
+
+      # Return the target volume.
+      target
 
     # Return the augmented image sequence.
     imageSequence

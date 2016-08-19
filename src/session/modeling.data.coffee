@@ -90,7 +90,7 @@ LabelMap =
    * @param paramResult the parent parameter result
   ###
   extend: (labelMap, paramResult) ->
-    return labelMap if not labelMap
+    return labelMap unless labelMap?
     # Set the parent reference.
     labelMap.parameterResult = paramResult
     # Define the virtual properties.
@@ -125,7 +125,7 @@ ParameterResult =
    * @param key the parameter result access property name
   ###
   extend: (paramResult, modelingResult, key) ->
-    return paramResult if not paramResult
+    return paramResult unless paramResult?
     # The parameter key property identifies the
     # parameter, e.g. ktrans.
     paramResult.key = key
@@ -175,7 +175,7 @@ ModelingResult =
    * @param modeling the parent modeling object
   ###
   extend: (modelingResult, modeling) ->
-    return modelingResult if not modelingResult
+    return modelingResult unless modelingResult?
     # Set the modeling result parent reference.
     modelingResult.modeling = modeling
 
@@ -228,7 +228,7 @@ Modeling =
    * @param session the parent session object
   ###
   extend: (modeling, session) ->
-    return modeling if not modeling
+    return modeling unless modeling?
     # Set the modeling parent session reference.
     modeling.session = session
     # Extend the modeling result object.

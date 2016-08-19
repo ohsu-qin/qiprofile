@@ -108,6 +108,7 @@ module.exports = (grunt) ->
       css:
         src: [
           'lib/papaya.css'
+          'jspm_packages/npm/nouislider*/distribute/nouislider.min.css'
           'node_modules/bootstrap/dist/css/bootstrap.css'
           'node_modules/font-awesome/css/font-awesome.css'
         ]

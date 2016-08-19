@@ -1,0 +1,5 @@
+.qi-volume-slider-heading Time Point
+.qi-volume-slider(
+  nouislider, [min]="1", [max]="volumeCount()", [config]="config",
+  [(ngModel)]="volumeNumber", (ngModelChange)="onChange($event)"
+)

@@ -4,4 +4,10 @@ block billboard
   | {{ volume.title }} 
 
 block content
+  // The if test checks whether the volume is a place-holder
+  // that doesn't yet have volumes or is the fetched volume. 
+  qi-volume-chooser(
+    *ngIf="volume.imageSequence.volumes", [volume]="volume",
+    (changed)="onVolumeChange($event)"
+  )
   qi-volume-image([image]="volume", (error)="onError($event)")

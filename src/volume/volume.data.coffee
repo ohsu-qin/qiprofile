@@ -25,7 +25,16 @@ Volume =
    * @param number the one-based volume number
   ###
   extend: (volume, imageSequence, number) ->
-    return volume if not volume
+    return volume unless volume?
+
+    # The volume number property.
+    ###*
+     * The one-based volume index relative to the parent image sequence.
+     * 
+     * @property number {number} 
+    ###
+    volume.number = number
+
     # Set the image parent volume reference.
     ###*
      * The parent scan or registration.
@@ -57,9 +66,6 @@ Volume =
     propertyName = _s.decapitalize(imageSequence._cls)
     Object.defineProperty volume, propertyName,
       get: -> @imageSequence
-
-    # The volume number property.
-    volume.number = number
 
     # The volume virtual properties.
     Object.defineProperties volume,

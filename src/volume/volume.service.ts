@@ -2,12 +2,8 @@ import * as _ from 'lodash';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import Subject from '../subject/subject.data.coffee';
-import Session from '../session/session.data.coffee';
-import Scan from '../session/scan.data.coffee';
-import Registration from '../session/registration.data.coffee';
+import { ImageSequenceService } from '../session/image-sequence.service.ts';
 import Volume from './volume.data.coffee';
-import { SessionService } from '../session/session.service.ts';
 
 @Injectable()
 
@@ -17,7 +13,8 @@ import { SessionService } from '../session/session.service.ts';
  * @class VolumeService
  */
 export class VolumeService {
-  constructor(private sessionService: SessionService) {}
+  
+  constructor(private sequenceService: ImageSequenceService) {}
   
   /**
    * Makes the {_sequence_, _number_} secondary
@@ -46,7 +43,7 @@ export class VolumeService {
    */
   secondaryKey(routeParams: Object) {
     // The subject secondary key.
-    let session = this.sessionService.secondaryKey(routeParams);
+    let session = this.sequenceService.secondaryKey(routeParams);
     let scan = {session: session, number: +routeParams.scan};
     // The volume number.
     let volume = +routeParams.volume;
@@ -72,25 +69,14 @@ export class VolumeService {
    * @return {Volume} the place-holder volume object
    */
   placeHolder(routeParams: Object) {
-    // The bare-bones volume object.
-    let volume = this.secondaryKey(routeParams);
-    // Fill in enough of the volume hierarchy to display a title.
-    let scan;
-    let reg = volume.registration;
-    if (reg) {
-      scan = reg.scan;
-      Scan.extend(scan, scan.session);
-      reg._cls = 'Registration';
-      Registration.extend(reg, scan, reg.number);
-      Volume.extend(volume, reg, volume.number);
-    } else {
-      scan = volume.scan;
-      scan._cls = 'Scan';
-      Scan.extend(scan, scan.session);
-      Volume.extend(volume, scan, volume.number);
-    }
-    Subject.extend(scan.session.subject);
-    Session.extend(scan.session, scan.session.subject, scan.session.number);
+    // The parent place-holder object.
+    let imageSequence = this.sequenceService.placeHolder(routeParams);
+    // The volume index is one less than the volume paramter.
+    let volumeNdx = +routeParams.volume - 1;
+    // Extend an empty volume object with the image sequence
+    // parent reference and the volume number.
+    let volume = {};
+    Volume.extend(volume, imageSequence, volumeNdx);
     
     return volume;
   }
@@ -101,45 +87,46 @@ export class VolumeService {
    * @return {any} the REST volume image object, or null if not found
    */
   getVolume(routeParams: Object): Observable<any> {
-    // Fetch the session detail.
-    let sessionFinder = this.sessionService.getSession(routeParams, true);
+    // The image sequence.
+    let sequenceFinder = this.sequenceService.getImageSequence(routeParams);
     
     // Find the volume.
-    return sessionFinder.map(
-      session => session ? this.findVolume(routeParams, session) : session
+    let volumeNbr = routeParams.volume;
+    return sequenceFinder.map(
+      imageSequence => imageSequence ? this.findVolume(imageSequence, volumeNbr) : imageSequence
     );
   }
   
   /**
+   * Finds the volume in the given image sequence.
+   * The default volume is the
+   * {{#crossLink "ImageSequence/maximalIntensityVolume"}}{{/crossLink}}.
+   *
    * @method findVolume
-   * @param routeParams {Object} the route parameters
-   * @param session {Object} the session object holding the volume
+   * @param imageSequence {Object} the image sequence object holding the volume
+   * @param volume {number} the optional one-based volume number
    * @return {any} the REST volume image object, or null if not found
    */
-  private findVolume(routeParams: Object, session: Object) {
-    // There must be a scan.
-    let scanNbr = +routeParams.scan;
-    let scan = _.find(session.scans, s => s.number === scanNbr);
-    if (!scan) {
-      return null;
-    }
-    // The parent is either the scan or a registration.
-    let imageSequence;
-    let regParam = routeParams.registration;
-    if (regParam) {
-      let regNdx = +regParam - 1;
-      imageSequence = scan.registrations[regNdx];
-    } else {
-      imageSequence = scan;
-    }
+  findVolume(imageSequence: Object, volume?: number) {
     // The volumes object holds the volume images array.
     let volumes = imageSequence.volumes;
     if (!volumes || !volumes.images) {
       return null;
     }
-    // The volume index is one less than the volume number.
-    let volNdx = +routeParams.volume - 1;
-    
-    return volumes.images[volNdx];
+
+    // Return the indicated volume.
+    if (!_.isNil(volume)) {
+      // Allow for a string volume, e.g. from the route.
+      let volumeNbr = +volume;
+      // The number is one-based.
+      if (volumeNbr === 0) {
+        throw new ValueError("The volume number cannot be zero");
+      }
+      // The volume index is one less than the volume number.
+      let volNdx = volume - 1;
+      return volumes.images[volNdx];
+    } else {
+      return imageSequence.maximalIntensityVolume();
+    }
   }
 }

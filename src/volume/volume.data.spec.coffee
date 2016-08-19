@@ -27,6 +27,7 @@ describe 'The Volume data utility', ->
           name: 'volume001.nii.gz'
           averageIntensity: 3.1
         ]
+
   volume = null
   scan = null
 
@@ -42,7 +43,7 @@ describe 'The Volume data utility', ->
       expect(target, "The target was not found").to.exist
       expect(target, "The target is incorrect").to.equal(volume)
 
-  describe 'extend', ->
+  describe.only 'extend', ->
     it 'should reference the parent scan', ->
       expect(volume.scan, "The volume is missing the scan reference")
         .to.exist

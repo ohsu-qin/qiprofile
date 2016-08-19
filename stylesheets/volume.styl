@@ -1,4 +1,5 @@
-// Full height 60% width centered with a light background. The background is adapted from
+// Full height 60% width centered with a light background. The
+// background is adapted from
 // http://stackoverflow.com/questions/14628601/can-i-add-background-color-only-for-padding.
 .qi-papaya-parent
   height 100%
@@ -19,3 +20,17 @@
 
 .papaya-display
   background-color MintCream
+
+// Because Papaya positions absolutely based on calculated dimensions,
+// the sliders must also be absolute
+.qi-volume-slider
+  position absolute
+  left 0
+  margin 5% 5% 5% 10%
+  height 60%
+
+.qi-volume-slider-heading
+  position absolute
+  left 0
+  margin 3% 5% 5% 10%
+  color DarkCyan

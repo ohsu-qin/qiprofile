@@ -26,16 +26,17 @@
 .qi-main-list
   clean-list()
 
-// The error panel specializes the .qi-popup panel.
-.qi-error
-  //Offset from the right.
-  right 3em
-
 .qi-error-remedy
   font-family sans-serif
   font-style italic
   text-align center
   color IndianRed
+
+// Align under the close icon.
+.qi-error-right
+  padding-right 1em
+  & img
+    float right
 
 // The help panel specializes the .qi-popup panel.
 .qi-help

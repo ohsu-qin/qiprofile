@@ -1,7 +1,8 @@
 ###*
  * The Function test helper.
  *
- * @class Function
+ * @class ObjectHelper
+ * @static
 ###
 
 ###*

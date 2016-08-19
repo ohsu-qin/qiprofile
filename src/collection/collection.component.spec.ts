@@ -1,8 +1,6 @@
 import { Observable } from 'rxjs';
 import { provide } from '@angular/core';
-import {
-  describe, it, expect, inject, addProviders
-} from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
 import { Router, ActivatedRoute } from '@angular/router';
 import { CollectionComponent } from './collection.component.ts';
@@ -56,6 +54,10 @@ class CollectionActivatedRouteStub {
 /**
  * The {{#crossLink "CollectionComponent"}}{{/crossLink}} validator.
  *
+ * FIXME - this first attempt to test in Angular rc.5 results in the
+ *   following error:
+ *     null is not an object (evaluating 'this.platform.injector')
+ *
  * @class CollectionComponentSpec
  * @module collection
  */
@@ -68,43 +70,48 @@ describe('The Collection component', function() {
    * @param body {function(CollectionComponent, SubectService)} the test body
    */
   function test(body) {
-    return inject(
-      [CollectionComponent, SubjectService],
-      (component: CollectionComponent, dataService: SubjectService) => {
-        // Run the test.
-        body(component, dataService);
-      }
-    );
+    TestBed.compileComponents().then(() => {
+      const fixture = TestBed.createComponent(CollectionComponent);
+      const component = fixture.componentInstance;
+      // Run the test.
+      body(component, dataService);
+    });
    }
 
-  beforeEach(() => {
-    addProviders([
-      CollectionComponent,
-      provide(Router, {useClass: CollectionRouterStub}),
-      provide(ActivatedRoute, {useClass: CollectionActivatedRouteStub}),
-      provide(SubjectService, {useClass: CollectionSubectServiceStub})
-    ]);
-  });
+   beforeEach(() => {
+     TestBed.configureTestingModule({
+       declarations: [
+         CollectionComponent
+       ],
+       imports: [
+       ],
+       providers: [
+         provide(Router, {useClass: CollectionRouterStub}),
+         provide(ActivatedRoute, {useClass: CollectionActivatedRouteStub}),
+         provide(SubjectService, {useClass: CollectionSubectServiceStub})
+       ]
+     });
+   });
 
-  it('should have a project', test((component, service) => {
+  it('should have a project', test((component) => {
     expect(component.project, 'The project is missing').to.exist;
     let expected: string = CollectionActivatedRouteStub.paramsValue.project;
     expect(component.project, 'The project is incorrect').to.equal(expected);
   }));
 
-  it('should have a name', test((component, service) => {
+  it('should have a name', test((component) => {
     expect(component.name, 'The collection name is missing').to.exist;
     let expected: string = CollectionActivatedRouteStub.paramsValue.collection;
     expect(component.name, 'The collection name is incorrect').to.equal(expected);
   }));
 
-  it('should have subjects', test((component, service) => {
+  it('should have subjects', test((component) => {
     let expected: string = CollectionSubectServiceStub.subjects;
     expect(component.subjects, 'The subjects are missing').to.exist;
     expect(component.subjects, 'The subjects are incorrect').to.eql(expected);
   }));
 
-  xit('should have correlation charts', test((component, service) => {
+  xit('should have correlation charts', test((component) => {
     // TODO - flush out.
     expect(4, 'Correlation chart count is incorrect').to.equal(4);
   }));

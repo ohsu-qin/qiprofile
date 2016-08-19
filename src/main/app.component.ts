@@ -10,6 +10,7 @@ import { Router, NavigationStart, ROUTER_DIRECTIVES } from '@angular/router';
 import { HelpService } from '../help/help.service.ts';
 import { SubjectService } from '../subject/subject.service.ts';
 import { SessionService } from '../session/session.service.ts';
+import { PapayaService } from '../image/papaya.service.ts';
 
 @Component({
   selector: 'qi-app',
@@ -17,7 +18,7 @@ import { SessionService } from '../session/session.service.ts';
   directives: [ROUTER_DIRECTIVES],
   // These services are shared by subcomponents, which should not
   // declare the provider separately.
-  providers: [HelpService, SubjectService, SessionService]
+  providers: [HelpService, SubjectService, SessionService, PapayaService]
 })
 
 /**

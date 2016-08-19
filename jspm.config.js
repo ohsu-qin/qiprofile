@@ -62,12 +62,7 @@ SystemJS.config({
           'loader': 'json'
         }
       }
-    },
-  },
-  map: {
-    'jasmine': 'npm:jasmine@2.4.1',
-    '@angular/core@2.0.0-rc.4': 'npm:@angular/core@2.0.0-rc.4',
-    'nifti-reader-js': 'github:rii-mango/NIFTI-Reader-JS@0.5.3'
+    }
   }
 });
 
@@ -78,28 +73,30 @@ SystemJS.config({
     'github:*/*.json'
   ],
   map: {
-    'bowser': 'npm:bowser@1.4.3',
+    '@angular/forms': 'npm:@angular/forms@0.3.0',
+    'css': 'github:systemjs/plugin-css@0.1.26',
+    'bowser': 'npm:bowser@1.4.4',
     'gifti-reader-js': 'npm:gifti-reader-js@0.4.3',
     'isarray': 'npm:isarray@1.0.0',
     'ieee754': 'npm:ieee754@1.1.6',
     'base64-js': 'npm:base64-js@1.1.2',
     'ini-parser': 'npm:ini-parser@0.0.2',
-    'd3': 'npm:d3@4.1.1',
-    '@angular/common': 'npm:@angular/common@2.0.0-rc.4',
-    '@angular/compiler': 'npm:@angular/compiler@2.0.0-rc.4',
-    '@angular/core': 'npm:@angular/core@2.0.0-rc.4',
-    '@angular/http': 'npm:@angular/http@2.0.0-rc.4',
-    '@angular/platform-browser': 'npm:@angular/platform-browser@2.0.0-rc.4',
-    '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic@2.0.0-rc.4',
+    'd3': 'npm:d3@4.2.2',
+    '@angular/common': 'npm:@angular/common@2.0.0-rc.5',
+    '@angular/compiler': 'npm:@angular/compiler@2.0.0-rc.5',
+    '@angular/core': 'npm:@angular/core@2.0.0-rc.5',
+    '@angular/http': 'npm:@angular/http@2.0.0-rc.5',
+    '@angular/platform-browser': 'npm:@angular/platform-browser@2.0.0-rc.5',
+    '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic@2.0.0-rc.5',
     '@angular/router': 'npm:@angular/router@3.0.0-beta.2',
     'assert': 'github:jspm/nodelibs-assert@0.2.0-alpha',
     'buffer': 'github:jspm/nodelibs-buffer@0.2.0-alpha',
     'child_process': 'github:jspm/nodelibs-child_process@0.2.0-alpha',
     'coffee': 'github:forresto/system-coffee@master',
-    'common': 'npm:@angular/common@2.0.0-rc.4',
-    'compiler': 'npm:@angular/compiler@2.0.0-rc.4',
+    'common': 'npm:@angular/common@2.0.0-rc.5',
+    'compiler': 'npm:@angular/compiler@2.0.0-rc.5',
     'constants': 'github:jspm/nodelibs-constants@0.2.0-alpha',
-    'core': 'npm:@angular/core@2.0.0-rc.4',
+    'core': 'npm:@angular/core@2.0.0-rc.5',
     'crypto': 'github:jspm/nodelibs-crypto@0.2.0-alpha',
     'events': 'github:jspm/nodelibs-events@0.2.0-alpha',
     'https': 'github:jspm/nodelibs-https@0.2.0-alpha',
@@ -107,22 +104,23 @@ SystemJS.config({
     'fs': 'github:jspm/nodelibs-fs@0.2.0-alpha',
     'http': 'github:jspm/nodelibs-http@0.2.0-alpha',
     'json': 'github:systemjs/plugin-json@0.1.2',
-    'lodash': 'npm:lodash@4.13.1',
+    'lodash': 'npm:lodash@4.15.0',
     'md': 'github:guybedford/system-md@0.1.0',
     'module': 'github:jspm/nodelibs-module@0.2.0-alpha',
     'moment': 'npm:moment@2.14.1',
     'net': 'github:jspm/nodelibs-net@0.2.0-alpha',
-    'ng2-resource-rest': 'npm:ng2-resource-rest@0.3.6',
+    'ng2-nouislider': 'npm:ng2-nouislider@0.5.0',
+    'ng2-resource-rest': 'npm:ng2-resource-rest@0.3.7',
     'nouislider': 'npm:nouislider@8.5.1',
     'os': 'github:jspm/nodelibs-os@0.2.0-alpha',
     'pako': 'npm:pako@0.2.9',
     'path': 'github:jspm/nodelibs-path@0.2.0-alpha',
-    'platform-browser': 'npm:@angular/platform-browser@2.0.0-rc.4',
-    'platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic@2.0.0-rc.4',
+    'platform-browser': 'npm:@angular/platform-browser@2.0.0-rc.5',
+    'platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic@2.0.0-rc.5',
     'requirejs': 'npm:requirejs@2.2.0',
     'process': 'github:jspm/nodelibs-process@0.2.0-alpha',
     'querystring': 'github:jspm/nodelibs-querystring@0.2.0-alpha',
-    'reflect-metadata': 'npm:reflect-metadata@0.1.3',
+    'reflect-metadata': 'npm:reflect-metadata@0.1.8',
     'rii-mango/NIFTI-Reader-JS': 'github:rii-mango/NIFTI-Reader-JS@0.5.3',
     'rxjs': 'npm:rxjs@5.0.0-beta.6',
     'socket.io': 'npm:socket.io@1.4.8',
@@ -140,28 +138,9 @@ SystemJS.config({
     'util': 'github:jspm/nodelibs-util@0.2.0-alpha',
     'vm': 'github:jspm/nodelibs-vm@0.2.0-alpha',
     'zlib': 'github:jspm/nodelibs-zlib@0.2.0-alpha',
-    'zone.js': 'npm:zone.js@0.6.12'
+    'zone.js': 'npm:zone.js@0.6.13'
   },
   packages: {
-    'npm:jasmine@2.4.1': {
-      'map': {
-        'exit': 'npm:exit@0.1.2',
-        'glob': 'npm:glob@3.2.11',
-        'jasmine-core': 'npm:jasmine-core@2.4.1'
-      }
-    },
-    'npm:glob@3.2.11': {
-      'map': {
-        'minimatch': 'npm:minimatch@0.3.0',
-        'inherits': 'npm:inherits@2.0.1'
-      }
-    },
-    'npm:minimatch@0.3.0': {
-      'map': {
-        'sigmund': 'npm:sigmund@1.0.1',
-        'lru-cache': 'npm:lru-cache@2.7.3'
-      }
-    },
     'github:frankwallis/plugin-typescript@4.0.16': {
       'map': {
         'typescript': 'npm:typescript@1.8.10'
@@ -217,7 +196,7 @@ SystemJS.config({
     'npm:browserify-zlib@0.1.4': {
       'map': {
         'readable-stream': 'npm:readable-stream@2.1.4',
-        'pako': 'npm:pako@0.2.8'
+        'pako': 'npm:pako@0.2.9'
       }
     },
     'npm:url@0.11.0': {
@@ -481,16 +460,7 @@ SystemJS.config({
     },
     'github:jspm/nodelibs-http@0.2.0-alpha': {
       'map': {
-        'http-browserify': 'npm:stream-http@2.3.0'
-      }
-    },
-    'npm:stream-http@2.3.0': {
-      'map': {
-        'inherits': 'npm:inherits@2.0.1',
-        'readable-stream': 'npm:readable-stream@2.1.4',
-        'to-arraybuffer': 'npm:to-arraybuffer@1.0.1',
-        'builtin-status-codes': 'npm:builtin-status-codes@2.0.0',
-        'xtend': 'npm:xtend@4.0.1'
+        'http-browserify': 'npm:stream-http@2.3.1'
       }
     },
     'npm:elliptic@6.3.1': {
@@ -565,132 +535,6 @@ SystemJS.config({
         'minimalistic-assert': 'npm:minimalistic-assert@1.0.0'
       }
     },
-    'npm:d3@4.1.1': {
-      'map': {
-        'd3-dsv': 'npm:d3-dsv@1.0.0',
-        'd3-array': 'npm:d3-array@1.0.0',
-        'd3-ease': 'npm:d3-ease@1.0.0',
-        'd3-color': 'npm:d3-color@1.0.0',
-        'd3-format': 'npm:d3-format@1.0.0',
-        'd3-hierarchy': 'npm:d3-hierarchy@1.0.0',
-        'd3-brush': 'npm:d3-brush@1.0.1',
-        'd3-time-format': 'npm:d3-time-format@2.0.0',
-        'd3-voronoi': 'npm:d3-voronoi@1.0.1',
-        'd3-time': 'npm:d3-time@1.0.0',
-        'd3-zoom': 'npm:d3-zoom@1.0.2',
-        'd3-selection': 'npm:d3-selection@1.0.0',
-        'd3-polygon': 'npm:d3-polygon@1.0.0',
-        'd3-random': 'npm:d3-random@1.0.0',
-        'd3-shape': 'npm:d3-shape@1.0.0',
-        'd3-transition': 'npm:d3-transition@1.0.0',
-        'd3-axis': 'npm:d3-axis@1.0.0',
-        'd3-queue': 'npm:d3-queue@3.0.1',
-        'd3-quadtree': 'npm:d3-quadtree@1.0.0',
-        'd3-timer': 'npm:d3-timer@1.0.1',
-        'd3-dispatch': 'npm:d3-dispatch@1.0.0',
-        'd3-collection': 'npm:d3-collection@1.0.0',
-        'd3-geo': 'npm:d3-geo@1.1.1',
-        'd3-interpolate': 'npm:d3-interpolate@1.1.0',
-        'd3-force': 'npm:d3-force@1.0.0',
-        'd3-path': 'npm:d3-path@1.0.0',
-        'd3-scale': 'npm:d3-scale@1.0.1',
-        'd3-chord': 'npm:d3-chord@1.0.0',
-        'd3-request': 'npm:d3-request@1.0.1',
-        'd3-drag': 'npm:d3-drag@1.0.0'
-      }
-    },
-    'npm:d3-time-format@2.0.0': {
-      'map': {
-        'd3-time': 'npm:d3-time@1.0.0'
-      }
-    },
-    'npm:d3-brush@1.0.1': {
-      'map': {
-        'd3-selection': 'npm:d3-selection@1.0.0',
-        'd3-transition': 'npm:d3-transition@1.0.0',
-        'd3-dispatch': 'npm:d3-dispatch@1.0.0',
-        'd3-interpolate': 'npm:d3-interpolate@1.1.0',
-        'd3-drag': 'npm:d3-drag@1.0.0'
-      }
-    },
-    'npm:d3-dsv@1.0.0': {
-      'map': {
-        'rw': 'npm:rw@1.3.2'
-      }
-    },
-    'npm:d3-zoom@1.0.2': {
-      'map': {
-        'd3-selection': 'npm:d3-selection@1.0.0',
-        'd3-transition': 'npm:d3-transition@1.0.0',
-        'd3-dispatch': 'npm:d3-dispatch@1.0.0',
-        'd3-interpolate': 'npm:d3-interpolate@1.1.0',
-        'd3-drag': 'npm:d3-drag@1.0.0'
-      }
-    },
-    'npm:d3-transition@1.0.0': {
-      'map': {
-        'd3-color': 'npm:d3-color@1.0.0',
-        'd3-ease': 'npm:d3-ease@1.0.0',
-        'd3-selection': 'npm:d3-selection@1.0.0',
-        'd3-timer': 'npm:d3-timer@1.0.1',
-        'd3-dispatch': 'npm:d3-dispatch@1.0.0',
-        'd3-interpolate': 'npm:d3-interpolate@1.1.0'
-      }
-    },
-    'npm:d3-geo@1.1.1': {
-      'map': {
-        'd3-array': 'npm:d3-array@1.0.0'
-      }
-    },
-    'npm:d3-interpolate@1.1.0': {
-      'map': {
-        'd3-color': 'npm:d3-color@1.0.0'
-      }
-    },
-    'npm:d3-force@1.0.0': {
-      'map': {
-        'd3-collection': 'npm:d3-collection@1.0.0',
-        'd3-dispatch': 'npm:d3-dispatch@1.0.0',
-        'd3-quadtree': 'npm:d3-quadtree@1.0.0',
-        'd3-timer': 'npm:d3-timer@1.0.1'
-      }
-    },
-    'npm:d3-shape@1.0.0': {
-      'map': {
-        'd3-path': 'npm:d3-path@1.0.0'
-      }
-    },
-    'npm:d3-scale@1.0.1': {
-      'map': {
-        'd3-array': 'npm:d3-array@1.0.0',
-        'd3-collection': 'npm:d3-collection@1.0.0',
-        'd3-color': 'npm:d3-color@1.0.0',
-        'd3-format': 'npm:d3-format@1.0.0',
-        'd3-interpolate': 'npm:d3-interpolate@1.1.0',
-        'd3-time': 'npm:d3-time@1.0.0',
-        'd3-time-format': 'npm:d3-time-format@2.0.0'
-      }
-    },
-    'npm:d3-chord@1.0.0': {
-      'map': {
-        'd3-array': 'npm:d3-array@1.0.0',
-        'd3-path': 'npm:d3-path@1.0.0'
-      }
-    },
-    'npm:d3-request@1.0.1': {
-      'map': {
-        'd3-dsv': 'npm:d3-dsv@1.0.0',
-        'd3-collection': 'npm:d3-collection@1.0.0',
-        'd3-dispatch': 'npm:d3-dispatch@1.0.0',
-        'xmlhttprequest': 'npm:xmlhttprequest@1.8.0'
-      }
-    },
-    'npm:d3-drag@1.0.0': {
-      'map': {
-        'd3-dispatch': 'npm:d3-dispatch@1.0.0',
-        'd3-selection': 'npm:d3-selection@1.0.0'
-      }
-    },
     'npm:underscore.string@3.3.4': {
       'map': {
         'util-deprecate': 'npm:util-deprecate@1.0.2',
@@ -708,6 +552,141 @@ SystemJS.config({
       'map': {
         'sax': 'npm:sax@1.2.1',
         'pako': 'npm:pako@0.2.9'
+      }
+    },
+    'npm:d3@4.2.2': {
+      'map': {
+        'd3-brush': 'npm:d3-brush@1.0.2',
+        'd3-axis': 'npm:d3-axis@1.0.3',
+        'd3-array': 'npm:d3-array@1.0.1',
+        'd3-ease': 'npm:d3-ease@1.0.1',
+        'd3-path': 'npm:d3-path@1.0.1',
+        'd3-dsv': 'npm:d3-dsv@1.0.1',
+        'd3-polygon': 'npm:d3-polygon@1.0.1',
+        'd3-collection': 'npm:d3-collection@1.0.1',
+        'd3-force': 'npm:d3-force@1.0.2',
+        'd3-interpolate': 'npm:d3-interpolate@1.1.1',
+        'd3-geo': 'npm:d3-geo@1.2.3',
+        'd3-selection': 'npm:d3-selection@1.0.2',
+        'd3-shape': 'npm:d3-shape@1.0.2',
+        'd3-time-format': 'npm:d3-time-format@2.0.2',
+        'd3-drag': 'npm:d3-drag@1.0.1',
+        'd3-dispatch': 'npm:d3-dispatch@1.0.1',
+        'd3-queue': 'npm:d3-queue@3.0.2',
+        'd3-scale': 'npm:d3-scale@1.0.3',
+        'd3-timer': 'npm:d3-timer@1.0.2',
+        'd3-format': 'npm:d3-format@1.0.2',
+        'd3-voronoi': 'npm:d3-voronoi@1.0.2',
+        'd3-zoom': 'npm:d3-zoom@1.0.3',
+        'd3-quadtree': 'npm:d3-quadtree@1.0.1',
+        'd3-color': 'npm:d3-color@1.0.1',
+        'd3-time': 'npm:d3-time@1.0.2',
+        'd3-random': 'npm:d3-random@1.0.1',
+        'd3-transition': 'npm:d3-transition@1.0.1',
+        'd3-chord': 'npm:d3-chord@1.0.2',
+        'd3-hierarchy': 'npm:d3-hierarchy@1.0.2',
+        'd3-request': 'npm:d3-request@1.0.2'
+      }
+    },
+    'npm:d3-brush@1.0.2': {
+      'map': {
+        'd3-dispatch': 'npm:d3-dispatch@1.0.1',
+        'd3-drag': 'npm:d3-drag@1.0.1',
+        'd3-interpolate': 'npm:d3-interpolate@1.1.1',
+        'd3-selection': 'npm:d3-selection@1.0.2',
+        'd3-transition': 'npm:d3-transition@1.0.1'
+      }
+    },
+    'npm:d3-force@1.0.2': {
+      'map': {
+        'd3-collection': 'npm:d3-collection@1.0.1',
+        'd3-dispatch': 'npm:d3-dispatch@1.0.1',
+        'd3-quadtree': 'npm:d3-quadtree@1.0.1',
+        'd3-timer': 'npm:d3-timer@1.0.2'
+      }
+    },
+    'npm:d3-interpolate@1.1.1': {
+      'map': {
+        'd3-color': 'npm:d3-color@1.0.1'
+      }
+    },
+    'npm:d3-geo@1.2.3': {
+      'map': {
+        'd3-array': 'npm:d3-array@1.0.1'
+      }
+    },
+    'npm:d3-shape@1.0.2': {
+      'map': {
+        'd3-path': 'npm:d3-path@1.0.1'
+      }
+    },
+    'npm:d3-time-format@2.0.2': {
+      'map': {
+        'd3-time': 'npm:d3-time@1.0.2'
+      }
+    },
+    'npm:d3-drag@1.0.1': {
+      'map': {
+        'd3-dispatch': 'npm:d3-dispatch@1.0.1',
+        'd3-selection': 'npm:d3-selection@1.0.2'
+      }
+    },
+    'npm:d3-zoom@1.0.3': {
+      'map': {
+        'd3-transition': 'npm:d3-transition@1.0.1',
+        'd3-dispatch': 'npm:d3-dispatch@1.0.1',
+        'd3-drag': 'npm:d3-drag@1.0.1',
+        'd3-interpolate': 'npm:d3-interpolate@1.1.1',
+        'd3-selection': 'npm:d3-selection@1.0.2'
+      }
+    },
+    'npm:d3-scale@1.0.3': {
+      'map': {
+        'd3-array': 'npm:d3-array@1.0.1',
+        'd3-collection': 'npm:d3-collection@1.0.1',
+        'd3-color': 'npm:d3-color@1.0.1',
+        'd3-format': 'npm:d3-format@1.0.2',
+        'd3-interpolate': 'npm:d3-interpolate@1.1.1',
+        'd3-time': 'npm:d3-time@1.0.2',
+        'd3-time-format': 'npm:d3-time-format@2.0.2'
+      }
+    },
+    'npm:d3-transition@1.0.1': {
+      'map': {
+        'd3-color': 'npm:d3-color@1.0.1',
+        'd3-dispatch': 'npm:d3-dispatch@1.0.1',
+        'd3-ease': 'npm:d3-ease@1.0.1',
+        'd3-interpolate': 'npm:d3-interpolate@1.1.1',
+        'd3-selection': 'npm:d3-selection@1.0.2',
+        'd3-timer': 'npm:d3-timer@1.0.2'
+      }
+    },
+    'npm:d3-dsv@1.0.1': {
+      'map': {
+        'rw': 'npm:rw@1.3.2'
+      }
+    },
+    'npm:d3-chord@1.0.2': {
+      'map': {
+        'd3-array': 'npm:d3-array@1.0.1',
+        'd3-path': 'npm:d3-path@1.0.1'
+      }
+    },
+    'npm:d3-request@1.0.2': {
+      'map': {
+        'd3-collection': 'npm:d3-collection@1.0.1',
+        'd3-dispatch': 'npm:d3-dispatch@1.0.1',
+        'd3-dsv': 'npm:d3-dsv@1.0.1',
+        'xmlhttprequest': 'npm:xmlhttprequest@1.8.0'
+      }
+    },
+    'npm:stream-http@2.3.1': {
+      'map': {
+        'readable-stream': 'npm:readable-stream@2.1.4',
+        'to-arraybuffer': 'npm:to-arraybuffer@1.0.1',
+        'builtin-status-codes': 'npm:builtin-status-codes@2.0.0',
+        'xtend': 'npm:xtend@4.0.1',
+        'inherits': 'npm:inherits@2.0.1'
       }
     }
   }

@@ -1,5 +1,3 @@
-webdriver = require 'selenium-webdriver'
-
 expect = require('../testing/expect')()
 
 Page = require '../testing/page'

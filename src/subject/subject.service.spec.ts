@@ -73,6 +73,13 @@ describe('The Subject service', function() {
     ]);
   });
 
+  it('should make a secondary key from the route parameters', test(service => {
+    let params = {project: 'QIN_Test', collection: 'Breast', subject: '1', extra: 'bogus'};
+    let secondaryKey = service.secondaryKey(params);
+    expect(secondaryKey, 'The secondary key is incorrect')
+      .to.eql({project: 'QIN_Test', collection: 'Breast', number: 1});
+  }));
+
   it('should fetch the subjects', test(service => {
     service.getSubjects({project: 'QIN_Test', collection: 'Breast'})
       .subscribe(function (subjects) {

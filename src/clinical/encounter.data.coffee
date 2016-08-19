@@ -15,7 +15,7 @@ ClinicalEncounter =
    * @return the augmented clinical encounter object
   ###
   extend: (encounter, subject) ->
-    return encounter if not encounter
+    return encounter unless encounter?
     ###*
      * The parent subject REST object
      *

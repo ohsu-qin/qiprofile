@@ -83,6 +83,7 @@ export class SubjectService {
     }
     let secondaryKey = _.pick(routeParams, ['project', 'collection']);
     secondaryKey.number = +routeParams.subject;
+    
     return secondaryKey;
   }
 

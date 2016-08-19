@@ -64,7 +64,10 @@ export abstract class PageComponent {
   
   /**
    * Sets the error property which triggers the error pop-pup.
-   * The subclass has the responsibility of adding
+   * The subclass has the responsibility of binding an error event
+   * to this handler, e.g.:
+   *
+   *     qi-some-directive((error)="onError($event)") 
    *
    * @method onError
    * @param message {string} the error messaage
@@ -77,7 +80,7 @@ export abstract class PageComponent {
    * Unsets the error property.
    *
    * @method clearError
-   */  
+   */
   clearError() {
     this.error = null;
   }

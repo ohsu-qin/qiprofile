@@ -64,7 +64,7 @@ Subject =
    * @return the extended Subject
   ###
   extend: (subject) ->
-    return subject if not subject
+    return subject unless subject?
     # Add the virtual properties.
     Object.defineProperties subject,
       ###*

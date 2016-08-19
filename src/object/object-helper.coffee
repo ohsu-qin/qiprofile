@@ -2,6 +2,7 @@
  * Object utilities.
  *
  * @module object
+ * @main object
 ###
 
 `import * as _ from "lodash"`
@@ -28,7 +29,7 @@ ObjectHelper =
    * @method associate
    * @param key the property name
    * @param value the property value
-   * @return the {key, value} object
+   * @return {Object} the {key, value} object
   ###
   associate: (key, value) ->
     obj = {}

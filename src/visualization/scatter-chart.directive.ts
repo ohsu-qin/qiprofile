@@ -10,7 +10,7 @@ import {
 import * as d3 from 'd3';
 
 @Directive({
-  selector: 'qi-scatter-chart'
+  selector: '[qi-scatter]'
 })
 
 /**

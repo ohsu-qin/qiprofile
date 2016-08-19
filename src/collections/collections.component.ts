@@ -52,7 +52,7 @@ export class CollectionsComponent extends PageComponent {
       // Pass null help argument to the superclass constructor, since
       // this component overrides the standard help block with its own
       // directive.
-      super(); 
+      super();
       
       // Always show the help on this page.
       this.helpService.showHelp = true;

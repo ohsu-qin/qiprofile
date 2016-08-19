@@ -77,7 +77,7 @@ export class SubjectComponent extends PageComponent {
    * Unsets the error property.
    *
    * @method clearError
-   */  
+   */
   clearError() {
     this.error = null;
   }

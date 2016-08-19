@@ -155,7 +155,7 @@ export class PapayaService {
       volume.onFinishedRead = () => {
         this.viewer.drawEmptyViewer();
         this.viewer.drawViewer(true, false);
-      }
+      };
       // Simulate load finish.
       volume.finishedLoad();
     } else {

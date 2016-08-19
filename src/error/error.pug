@@ -1,4 +1,4 @@
-.qi-popup.qi-error
+.qi-popup
   .qi-popup-close.glyphicon.glyphicon-remove((click)="dismiss()")
   .alert.alert-danger Oops: {{ error }}
   table.table.qi-borderless.qi-error-remedy
@@ -11,9 +11,9 @@
             img(src='/static/media/arrow-right.png')
           .col-md-4
             img(src='/static/media/arrow-up-left.png')
-          .col-md-4
+          .col-md-4.qi-error-right
             img(src='/static/media/arrow-up.png')
         .row
           .col-md-4 Go Back,
           .col-md-4 Go Home
-          .col-md-4 or Try Again
+          .col-md-4.qi-error-right or Try Again

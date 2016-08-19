@@ -67,22 +67,26 @@ libraries:
 * Copy the Papaya `release/current/plain/` contents to the qiprofile `lib/`
   directory.
 
-* Papaya is started as follows:
-    ```
-      // Start the renderer.
-      papaya.Container.startPapaya();
-      // Resize the viewer to work around the following Papaya bug:
-      // * Papaya initial display fills in the canvas with the body element
-      //   background color, but then resizes the canvas to a smaller dimension,
-      //   which automatically refills it to black. That wipes out the padding
-      //   between the slice views. This bug is fixed by moving the fillRect
-      //   from initializeViewer() to resizeViewer() after the canvas width
-      //   and height are reset.
-      //
-      //   However, that fix reveals another bug. When Papaya sets the Swap
-      //   button css, a black strip on the right is mysteriously created.
-      //   Filling that strip has no effect for some reason. The work-around is
-      //   to resize the viewer after the initial display, as shown below. That
-      //   causes a slight flicker, but we can live with that.
-      papaya.Container.resizePapaya(null, true);
-    ```
+Papaya is started as follows:
+```
+  // Start the renderer.
+  papaya.Container.startPapaya();
+  // Resize the viewer to work around the following Papaya bug:
+  // * Papaya initial display fills in the canvas with the body element
+  //   background color, but then resizes the canvas to a smaller dimension,
+  //   which automatically refills it to black. That wipes out the padding
+  //   between the slice views. This bug is fixed by moving the fillRect
+  //   from initializeViewer() to resizeViewer() after the canvas width
+  //   and height are reset.
+  //
+  //   However, that fix reveals another bug. When Papaya sets the Swap
+  //   button css, a black strip on the right is mysteriously created.
+  //   Filling that strip has no effect for some reason. The work-around is
+  //   to resize the viewer after the initial display, as shown below. That
+  //   causes a slight flicker, but we can live with that.
+  papaya.Container.resizePapaya(null, true);
+```
+
+Note that the above Papaya source modifications are the minimal changes
+necessary that cannot be made at run-time. Several additional changes
+are made at run-time by the 

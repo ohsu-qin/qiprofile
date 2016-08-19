@@ -47,12 +47,12 @@ export class ConfigurationService {
    */
   getLabel(attribute: string, section?: string): string {
     if (section) {
-      section = _.capitalize(section);
+      section = _s.capitalize(section);
       let label = this.labels[section][attribute];
       if (label) { return label; }
       } else {
-      for (let _section in this.labels) {
-        let label = this.labels[_section][attribute];
+      for (let lblSection in this.labels) {
+        let label = this.labels[lblSection][attribute];
         if (label) { return label; }
       }
     }

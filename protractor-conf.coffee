@@ -31,8 +31,8 @@ exports.config =
 
   # Pass options into mocha.
   mochaOpts:
-    # Allow five seconds per test rather than the default two seconds.
-    timeout: 15000
+    # Allow 20 seconds per test rather than the default two seconds.
+    timeout: 20000
 
     # The spec reporter has nice checkmarks.
     reporter: 'spec'

@@ -4,8 +4,6 @@ block billboard
   | {{ session.title }}
 
 block content
-  .alert.alert-danger(*ngIf="error")
-    | {{ error }}
   ul.qi-main-list(*ngIf="session.scans")
     li(*ngFor="let volume of session.scans[0].volumes.images", (click)="visitVolume(volume)")
        | {{ volume.number }}

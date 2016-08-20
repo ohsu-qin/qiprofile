@@ -40,6 +40,7 @@ export class SessionComponent extends PageComponent {
    * The project name.
    *
    * @property project {string}
+   * @readOnly
    */
   get project(): string {
     return this.session ? this.session.subject.project : null;

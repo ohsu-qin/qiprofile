@@ -119,7 +119,7 @@ class Page extends Findable
         expect(helpBox, 'The help box is missing').to.exist
         helpBox.getInnerHtml()
     else
-      findButton().then (btn) ->
+      findButton().then (btn) =>
         expect(btn, 'The help button is missing').to.exist
         # Open the help box...
         btn.click().then =>
@@ -127,9 +127,10 @@ class Page extends Findable
           @find('.qi-help').then (helpBox) =>
             expect(helpBox, "The help box is not shown after click")
               .to.exist
-          # Click again to restore the initial state.
-          btn.click().then ->
-            helpBox.getInnerHtml()
+            help = helpBox.getInnerHtml()
+            # Click again to restore the initial state.
+            btn.click().then =>
+              help
 
 
 # The help suggestion box hyperlink constant.

@@ -3,9 +3,9 @@ libraries:
 
 * Papaya (https://github.com/rii-mango/Papaya)
 
-* bowser (from Papaya lib/)
+* nifti-reader.js (from Papaya lib/)
 
-* nifti-reader (from Papaya lib/)
+* pako-inflate.js (from Papaya lib/)
 
 `papaya.js` is built as follows:
 
@@ -49,9 +49,9 @@ libraries:
     the Papaya developers. `jquery` is the 1.9.1 version used by Papaya,
     but that version installed with `jspm install jquery@1.9.1` cannot
     be imported without an error. Papapya is not compatible with the
-    current jquery 3.x version. jspm install of the `nifti` library
-    fails with an out-of-memory error, and therefore must be copied into
-    the lib/ directory and loaded from there.
+    current jquery 3.x version. jspm install of the `nifti-reader-js`
+    package fails for an unknown reason with an out-of-memory error, and
+    therefore must be copied into the lib/ directory and loaded from there.
     
     The variable declarations compensate for two lax GLU library declarations
     that will otherwise result in a jspm load error.

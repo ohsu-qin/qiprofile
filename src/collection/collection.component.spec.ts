@@ -1,6 +1,6 @@
 import { Observable } from 'rxjs';
 import { provide } from '@angular/core';
-import { TestBed } from '@angular/core/testing';
+import { async, inject, TestBed } from '@angular/core/testing';
 
 import { Router, ActivatedRoute } from '@angular/router';
 import { CollectionComponent } from './collection.component.ts';
@@ -54,9 +54,11 @@ class CollectionActivatedRouteStub {
 /**
  * The {{#crossLink "CollectionComponent"}}{{/crossLink}} validator.
  *
- * FIXME - this first attempt to test in Angular rc.5 results in the
+ * FIXME - this second attempt to test in Angular rc.5 results in the
  *   following error:
- *     null is not an object (evaluating 'this.platform.injector')
+ *     undefined is not a constructor (evaluating 'describe')
+ *   Although the karma plug-ins should provide describe, et al. as globals,
+ *   perhaps they must be grabbed from some import.
  *
  * @class CollectionComponentSpec
  * @module collection
@@ -70,12 +72,15 @@ describe('The Collection component', function() {
    * @param body {function(CollectionComponent, SubectService)} the test body
    */
   function test(body) {
-    TestBed.compileComponents().then(() => {
-      const fixture = TestBed.createComponent(CollectionComponent);
-      const component = fixture.componentInstance;
-      // Run the test.
-      body(component, dataService);
-    });
+    async(inject([], () => {
+      let fixture = TestBed.createComponent(CollectionComponent);
+      fixture.detectChanges();
+      fixture.whenStable().then(() => {
+        let component = fixture.componentInstance;
+        // Run the test.
+        body(component);
+      });
+    }));
    }
 
    beforeEach(() => {
@@ -84,6 +89,7 @@ describe('The Collection component', function() {
          CollectionComponent
        ],
        imports: [
+         BrowserModule
        ],
        providers: [
          provide(Router, {useClass: CollectionRouterStub}),

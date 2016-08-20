@@ -1,7 +1,9 @@
-import { Nouislider } from 'ng2-nouislider';
 import {
-  Component, OnInit, Input, Output, EventEmitter
+  Component, OnInit, OnChanges, SimpleChanges, Input, Output, EventEmitter
 } from '@angular/core';
+
+import { Nouislider } from './nouislider.ts';
+
 
 @Component({
   selector: 'qi-volume-chooser',
@@ -15,7 +17,7 @@ import {
  * @module volume
  * @class VolumeVolumeChooserComponent
  */
-export class VolumeVolumeChooserComponent implements OnInit {
+export class VolumeVolumeChooserComponent implements OnInit, OnChanges {
   /**
    * The volume object input.
    *
@@ -24,19 +26,48 @@ export class VolumeVolumeChooserComponent implements OnInit {
   @Input() volume;
 
   /**
-   * The volume number change event. This property is bound to
-   * the `Nouislider.ngModelChange` callback.
+   * The button enabled state.
+   *
+   * @property isEnabled {boolean}
+   */
+  @Input() isEnabled;
+
+  /**
+   * Forces the play state off.
+   *
+   * @property stopPlay {boolean}
+   */
+  @Input() stopPlay;
+
+  /**
+   * The volume number change event. This event is triggered by
+   * {{#crossLink "VolumeVolumeChooserComponent/onChange"}}{{/crossLink}}.
    *
    * @property changed {EventEmitter}
    */
   @Output() changed: EventEmitter<number> = new EventEmitter(true);
   
   /**
+   * This play event emits `true` to start looping over the time points,
+   * `false` to stop.
+   *
+   * @property play {EventEmitter<boolean>}
+   */
+  @Output() play: EventEmitter<boolean> = new EventEmitter(true);
+  
+  /**
    * The selected volume number.
    *
-   * @property onChange {number}
+   * @property volumeNumber {number}
    */
   volumeNumber: number;
+  
+  /**
+   * Flag indicating whether to loop over the volumes.
+   *
+   * @property isPlaying {boolean}
+   */
+  isPlaying = false;
   
   /**
    * The slider configuration.
@@ -62,7 +93,11 @@ export class VolumeVolumeChooserComponent implements OnInit {
   };
   
   /**
-   * Sets the *volumeNumber* model property.
+   * Sets the
+   * {{#crossLink "VolumeVolumeChooserComponent/volumeNumber:property"}}{{/crossLink}}
+   * model property to the input
+   * {{#crossLink "VolumeVolumeChooserComponent/volume:property"}}{{/crossLink}}
+   * _number_.
    *
    * @method ngOnInit
    */
@@ -71,15 +106,48 @@ export class VolumeVolumeChooserComponent implements OnInit {
   }
   
   /**
-   * Forwards the volume number change to this component's
-   * {{#crossLink "VolumeVolumeChooserComponent/changed:property"}}{{/crossLink}}
-   * callback.
+   * If the input volume changed, then reset the
+   * {{#crossLink "VolumeVolumeChooserComponent/volumeNumber:property"}}{{/crossLink}}
+   * value.
+   *
+   * @method ngOnChange
+   */
+  ngOnChanges(changes: SimpleChanges) {
+    let volChange = changes['volume'];
+    if (volChange && !volChange.isFirstChange()) {
+      let value = volChange.currentValue.number;
+      if (value !== this.volumeNumber) {
+        this.volumeNumber = value;
+      }
+    }
+    
+    let stopChange = changes['stopPlay'];
+    if (stopChange && !stopChange.isFirstChange()) {
+      if (stopChange.currentValue) {
+        this.isPlaying = false;
+      }
+    }
+  }
+  
+  /**
+   * Forwards the volume number change event. This method
+   * is bound to the `Nouislider.ngModelChange` callback.
    *
    * @method onChange
-   * @param event {EventEmitter} the slider value change event
+   * @param value the new volume number
    */
   onChange(value: number) {
     this.changed.emit(value);
+  }
+  
+  /**
+   * Toggles looping over the time points.
+   *
+   * @method togglePlay
+   */
+  togglePlay() {
+    this.isPlaying = !this.isPlaying;
+    this.play.emit(this.isPlaying);
   }
   
   /**

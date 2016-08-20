@@ -16,8 +16,10 @@ export class ToggleHelpComponent {
   constructor(private service: HelpService) {}
   
   /**
-   * @method showHelp
-   * @return {boolean} whether the help is shown
+   * Flag indicating whether the help is shown.
+   *
+   * @property showHelp  {boolean}
+   * @readOnly
    */
   get showHelp(): boolean {
     return this.service.showHelp;

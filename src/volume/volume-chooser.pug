@@ -3,3 +3,9 @@
   nouislider, [min]="1", [max]="volumeCount()", [config]="config",
   [(ngModel)]="volumeNumber", (ngModelChange)="onChange($event)"
 )
+.qi-volume-player
+  button.btn.btn-default.btn-lg.qi-btn(
+    type='button', [disabled]="!isEnabled", (click)="togglePlay()"
+  )
+    .glyphicon.glyphicon-play(*ngIf="!isPlaying")
+    .glyphicon.glyphicon-pause(*ngIf="isPlaying")

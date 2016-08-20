@@ -11,7 +11,7 @@ Page = require '../testing/page'
 ###
 class VolumeDetailPage extends Page
   constructor: ->
-    super('/qiprofile/QIN_Test/Breast/subject/1/session/1/scan/1/volumes')
+    super('/qiprofile/QIN_Test/Breast/subject/1/session/1/scan/1/volumes;volume=1')
 
   # Volume display panel.
   imagePanel: ->
@@ -32,7 +32,7 @@ describe.only 'E2E Testing Volume Display', ->
   describe 'Header', ->
     it 'should display the billboard', ->
       expect(page.billboard, 'The billboard is incorrect')
-        .to.eventually.equal('Sarcoma Patient 1 Session 1 Scan 1')
+        .to.eventually.equal('Breast Patient 1 Session 1 Scan 1 Volume 1')
   
     it 'should have a home button', ->
       expect(page.home, 'The home URL is incorrect')

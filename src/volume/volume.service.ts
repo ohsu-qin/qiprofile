@@ -126,7 +126,8 @@ export class VolumeService {
       let volNdx = volume - 1;
       return volumes.images[volNdx];
     } else {
-      return imageSequence.maximalIntensityVolume();
+      let maxVol = imageSequence.maximalIntensityVolume();
+      return maxVol ? maxVol : volumes.images[0];
     }
   }
 }

@@ -20,9 +20,15 @@ export class PapayaService {
   errorHandler: (message: string) => {};
   
   /**
-   * The function called when image load is completed.
-   * The *contents* function parameter is the loaded
-   * Papaya volume {header, data} object.
+   * The function called when image load is successfully completed.
+   * The *contents* callback parameter is a {header, data} object,
+   * where *header* is the loaded Papaya volume header and *data*
+   * is the Papaya volume *imageData*.
+   *
+   * Note: this callback is called if and only if there is not an
+   * image load error. The client is responsible for capturing an
+   * error in the 
+   * {{#crossLink "PapayaService/errorHandler:property"}}{{/crossLink}}.
    *
    * @property finishedLoadingCallback {function}
    */
@@ -33,6 +39,7 @@ export class PapayaService {
    * The Papaya viewer controls the display.
    *
    * @property viewer {any}
+   * @readOnly
    */
   get viewer(): any {
     if (papaya.papayaContainers && papaya.papayaContainers[0]) {
@@ -157,7 +164,12 @@ export class PapayaService {
         this.viewer.drawViewer(true, false);
       };
       // Simulate load finish.
+      // Note: the Papaya undocumented viewer.finishedLoading function
+      // is quited different from the undocumented volume.finishedLoad
+      // function. We call finishedLoadingCallback as well to simulate
+      // a complete Papaya image load async trigger chain.
       volume.finishedLoad();
+      this.finishedLoadingCallback(image.contents);
     } else {
       // Adapted from the Volume ctor.
       let pad: boolean = volume.params && volume.params.padAllImages;

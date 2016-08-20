@@ -30,6 +30,13 @@ implements OnChanges, AfterViewChecked, OnDestroy {
    *
    * @property error {EventEmitter}
    */
+  @Output() loaded = new EventEmitter();
+  
+  /**
+   * The error event.
+   *
+   * @property error {EventEmitter}
+   */
   @Output() error = new EventEmitter();
 
   /**
@@ -60,9 +67,12 @@ implements OnChanges, AfterViewChecked, OnDestroy {
     };
     this.papaya.errorHandler = onError;
 
-    // Set the image contents property when loaded.
+    // Post-load processing.
     let onFinishedLoading = (contents: Object) => {
+      // Set the image contents property when loaded.
       this.image.contents = contents;
+      // Trigger the bound loaded output.
+      this.loaded.emit(this.image);
     };
     this.papaya.finishedLoadingCallback = onFinishedLoading;
   }

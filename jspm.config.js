@@ -73,7 +73,6 @@ SystemJS.config({
     'github:*/*.json'
   ],
   map: {
-    '@angular/forms': 'npm:@angular/forms@0.3.0',
     'css': 'github:systemjs/plugin-css@0.1.26',
     'bowser': 'npm:bowser@1.4.4',
     'gifti-reader-js': 'npm:gifti-reader-js@0.4.3',
@@ -85,6 +84,7 @@ SystemJS.config({
     '@angular/common': 'npm:@angular/common@2.0.0-rc.5',
     '@angular/compiler': 'npm:@angular/compiler@2.0.0-rc.5',
     '@angular/core': 'npm:@angular/core@2.0.0-rc.5',
+    '@angular/forms': 'npm:@angular/forms@0.3.0',
     '@angular/http': 'npm:@angular/http@2.0.0-rc.5',
     '@angular/platform-browser': 'npm:@angular/platform-browser@2.0.0-rc.5',
     '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic@2.0.0-rc.5',
@@ -109,7 +109,6 @@ SystemJS.config({
     'module': 'github:jspm/nodelibs-module@0.2.0-alpha',
     'moment': 'npm:moment@2.14.1',
     'net': 'github:jspm/nodelibs-net@0.2.0-alpha',
-    'ng2-nouislider': 'npm:ng2-nouislider@0.5.0',
     'ng2-resource-rest': 'npm:ng2-resource-rest@0.3.7',
     'nouislider': 'npm:nouislider@8.5.1',
     'os': 'github:jspm/nodelibs-os@0.2.0-alpha',
@@ -121,7 +120,6 @@ SystemJS.config({
     'process': 'github:jspm/nodelibs-process@0.2.0-alpha',
     'querystring': 'github:jspm/nodelibs-querystring@0.2.0-alpha',
     'reflect-metadata': 'npm:reflect-metadata@0.1.8',
-    'rii-mango/NIFTI-Reader-JS': 'github:rii-mango/NIFTI-Reader-JS@0.5.3',
     'rxjs': 'npm:rxjs@5.0.0-beta.6',
     'socket.io': 'npm:socket.io@1.4.8',
     'socket.io-client': 'npm:socket.io-client@1.4.8',

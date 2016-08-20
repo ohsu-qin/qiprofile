@@ -8,6 +8,9 @@ block content
   // that doesn't yet have volumes or is the fetched volume. 
   qi-volume-chooser(
     *ngIf="volume.imageSequence.volumes", [volume]="volume",
-    (changed)="onVolumeChange($event)"
+    [isEnabled]="isVolumePlayEnabled", (play)="onVolumePlay($event)",
+    [stopPlay]="stopVolumePlay", (changed)="onVolumeChange($event)"
   )
-  qi-volume-image([image]="volume", (error)="onError($event)")
+  qi-volume-image(
+    [image]="volume", (loaded)="onLoaded($event)", (error)="onLoadError($event)"
+  )

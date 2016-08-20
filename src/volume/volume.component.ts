@@ -32,7 +32,8 @@ import help from './volume.help.md';
  */
 export class VolumeComponent extends PageComponent {
   /**
-   * The route parameters are retained in case the session or volume changes.
+   * The route parameters are retained in case the session or
+   * volume changes.
    *
    * @property routeParams {Object}
    */
@@ -44,11 +45,52 @@ export class VolumeComponent extends PageComponent {
    * @property volume {Object}
    */
   volume: Object;
+  
+  /**
+   * Flag indicating whether the volume player is enabled.
+   *
+   * @property isVolumePlayEnabled {boolean}
+   */
+  isVolumePlayEnabled = true;
+  
+  /**
+   * Flag indicating whether to force the volume player to stop.
+   *
+   * @property stopVolumePlay {boolean}
+   */
+  stopVolumePlay = false;
+  
+  /**
+   * Flag indicating whether to loop over the volumes.
+   *
+   * @property isVolumePlaying {boolean}
+   * @private
+   */
+  private isVolumePlaying = false;
+  
+  /**
+   * Flag indicating whether the
+   * {{#crossLink "VolumeComponent/volume:property"}}{{/crossLink}}
+   * REST object is being fetched or the image file is being loaded.
+   *
+   * @property isLoading {boolean}
+   * @private
+   */
+  private isLoading = false;
+  
+  /**
+   * The time of the last player iteration, or zero to start.
+   *
+   * @property stopWatch {number}
+   * @private
+   */
+  private stopWatch = 0;
 
   /**
    * The project name.
    *
    * @property project {string}
+   * @readOnly
    */
   get project(): string {
     return this.volume ? this.volume.imageSequence.session.subject.project : null;
@@ -79,6 +121,71 @@ export class VolumeComponent extends PageComponent {
   }
   
   /**
+   * If the volume player is on, then turn it off.
+   * Note that the error is already displayed by the image
+   * component.
+   *
+   * @method onLoadError
+   * @param message {string} the error message
+   */
+  onLoadError(message: string) {
+    this.isLoading = false;
+    if (this.isVolumePlaying) {
+      this.stopVolumePlay = true;
+      this.isVolumePlaying = false;
+    }
+    // Delegate to the standard error handler.
+    this.onError(message);
+  }
+  
+  /**
+   *  If the volume player is on, then queue up the next volume.
+   *
+   * @method onLoaded
+   * @param volume {Object} the loaded volume
+   */
+  onLoaded(volume: Object) {
+    this.isLoading = false;
+    if (this.isVolumePlaying) {
+      this.playNextVolume();
+    }
+  }
+  
+  /**
+   *  Starts or stops the volume player.
+   *
+   * @method onVolumePlay
+   * @param volume {boolean} `true` to start playing,
+   *    `false` to stop playing
+   */
+  onVolumePlay(value: boolean) {
+    this.isVolumePlaying = value;
+    if (value) {
+      this.playNextVolume();
+    }
+  }
+  
+  /**
+   * Queues up the next volume.
+   *
+   * @method playNextVolume
+   * @private
+   */
+  private playNextVolume() {
+    let nextNdx = this.volume.number %
+          this.volume.imageSequence.volumes.images.length;
+    let nextNbr = nextNdx + 1;
+    // Wait if necessary.
+    let next = () => {
+      this.stopWatch = Date.now();
+      this.onVolumeChange(nextNbr);
+    };
+    let delta = Date.now() - this.stopWatch;
+    let pause = Math.max(500 - delta, 0);
+    setTimeout(next, pause);
+  }
+  
+  /**
    * Swaps in the new volume image. 
    *
    * @method onVolumeChange
@@ -86,6 +193,7 @@ export class VolumeComponent extends PageComponent {
    */
   onVolumeChange(value: number) {
     let imageSequence = this.volume.imageSequence;
+    this.isLoading = true;
     let volume = this.service.findVolume(imageSequence, value);
     if (volume) {
       this.volume = volume;
@@ -105,24 +213,5 @@ export class VolumeComponent extends PageComponent {
    */
   onSessionChange(session: number) {
     // TODO
-  }
-  
-  /**
-   * Fetches the new volume image, if necessary, and swaps in
-   * the new volume. 
-   *
-   * @method getVolume
-   * @param volume {number} the new volume number
-   */
-  getVolume(volume: number) {
-    // Fetch the real volume.
-    service.getVolume(this.routeParams).subscribe(fetched => {
-      if (fetched) {
-        this.volume = fetched;
-      } else {
-        this.error = `${ this.volume.title } was not found`;
-      }
-    });
-    
   }
 }

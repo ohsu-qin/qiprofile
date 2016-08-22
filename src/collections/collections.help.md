@@ -10,13 +10,21 @@ correlate imaging analysis results with clinical outcomes.
 
 Collections
 -----------
-The imaging collections are listed with a brief description.
+The imaging collections are listed with a brief description. Click
+on the collection name to view the summary patient clinical and
+imaging information. Click on the
+<span class="glyphicon glyphicon-info-sign"></span> button to the
+right of the row to view the collection acquisition method details.
 
-Click on the collection name to view the summary patient clinical and
-imaging information.
-
-Click on the <span class="glyphicon glyphicon-info-sign"></span> button
-to the right of the row to view the collection acquisition method details.
+Navigation
+----------
+<em>Q<span class='qi-x-smaller'>I</span>P<span class='qi-x-smaller'>R</span></em>
+is intended to be used in its own tab. Navigation between
+<em>Q<span class='qi-x-smaller'>I</span>P<span class='qi-x-smaller'>R</span></em>
+pages within the browser history is nearly instantaneous.
+Open a non-<em>Q<span class='qi-x-smaller'>I</span>P<span class='qi-x-smaller'>R</span></em>
+page in a different tab in order to ensure the application
+continuity and performance.
 
 Help
 ----

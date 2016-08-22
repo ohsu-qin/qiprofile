@@ -262,9 +262,6 @@ module.exports = (grunt) ->
       pug:
         files: ['*.pug', 'src/**/*.pug']
         tasks: ['pug']
-      showdown:
-        files: ['src/collections/*help*.md']
-        tasks: ['showdown']
       stylus:
         files: ['stylesheets/**/*.styl']
         tasks: ['stylus']
@@ -284,11 +281,6 @@ module.exports = (grunt) ->
 
   # Build the application server.
   grunt.registerTask 'build:dev', ['copy:dev', 'concat:css', 'compile']
-
-  # Compile the collections help.
-  # Note: unlike the other compile tasks, the brain-dead showdown task
-  #   requires have an existing directory.
-  grunt.registerTask 'help', ['mkdir:collections', 'showdown']
 
   # Build the application documentation.
   grunt.registerTask 'doc', ['copy:doc', 'coffee:doc', 'yuidoc']

@@ -2,13 +2,13 @@ import {
   Component, OnInit, OnChanges, SimpleChanges, Input, Output, EventEmitter
 } from '@angular/core';
 
-import { Nouislider } from './nouislider.ts';
+import { NouisliderDirective } from './nouislider.directive.ts';
 
 
 @Component({
   selector: 'qi-volume-chooser',
   templateUrl: '/public/html/volume/volume-chooser.html',
-  directives: [Nouislider]
+  directives: [NouisliderDirective]
 })
 
 /**

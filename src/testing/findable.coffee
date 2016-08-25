@@ -431,7 +431,7 @@ class Table extends Findable
 #   the given object
 #
 addMixin = (mixin, obj) ->
-  extended = _.extend(new mixin(obj), obj)
+  extended = _.extend(new mixin, obj)
   # Work around the following bug:
   # * lodash only copies the functions defined in the superclass
   #   WebdriverWebElement of an ElementFinder. The functions defined

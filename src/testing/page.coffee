@@ -115,7 +115,7 @@ class Page extends Findable
       @find('qi-toggle-help', 'button')
 
     if @helpShown
-      @find('.qi-help').then (helpBox) =>
+      @find('.qi-help').then (helpBox) ->
         expect(helpBox, 'The help box is missing').to.exist
         helpBox.getInnerHtml()
     else
@@ -124,12 +124,12 @@ class Page extends Findable
         # Open the help box...
         btn.click().then =>
           # Verify that the help is toggled.
-          @find('.qi-help').then (helpBox) =>
+          @find('.qi-help').then (helpBox) ->
             expect(helpBox, "The help box is not shown after click")
               .to.exist
             help = helpBox.getInnerHtml()
             # Click again to restore the initial state.
-            btn.click().then =>
+            btn.click().then ->
               help
 
 

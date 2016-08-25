@@ -8,9 +8,6 @@
     "experimentalDecorators": true,
     "outFile": "public/app.js"
   },
-  "exclude": [
-    "node_modules"
-  ],
   "files": [
     "typings/index.d.ts"
   ]

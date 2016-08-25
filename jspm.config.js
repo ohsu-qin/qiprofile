@@ -151,7 +151,7 @@ SystemJS.config({
     },
     'github:jspm/nodelibs-buffer@0.2.0-alpha': {
       'map': {
-        'buffer-browserify': 'npm:buffer@4.9.0'
+        'buffer-browserify': 'npm:buffer@4.9.1'
       }
     },
     'npm:debug@2.2.0': {
@@ -167,7 +167,7 @@ SystemJS.config({
     'npm:stream-browserify@2.0.1': {
       'map': {
         'inherits': 'npm:inherits@2.0.1',
-        'readable-stream': 'npm:readable-stream@2.1.4'
+        'readable-stream': 'npm:readable-stream@2.1.5'
       }
     },
     'npm:readable-stream@2.1.4': {
@@ -539,7 +539,7 @@ SystemJS.config({
         'sprintf-js': 'npm:sprintf-js@1.0.3'
       }
     },
-    'npm:buffer@4.9.0': {
+    'npm:buffer@4.9.1': {
       'map': {
         'ieee754': 'npm:ieee754@1.1.6',
         'isarray': 'npm:isarray@1.0.0',
@@ -685,6 +685,17 @@ SystemJS.config({
         'builtin-status-codes': 'npm:builtin-status-codes@2.0.0',
         'xtend': 'npm:xtend@4.0.1',
         'inherits': 'npm:inherits@2.0.1'
+      }
+    },
+    'npm:readable-stream@2.1.5': {
+      'map': {
+        'inherits': 'npm:inherits@2.0.1',
+        'isarray': 'npm:isarray@1.0.0',
+        'string_decoder': 'npm:string_decoder@0.10.31',
+        'process-nextick-args': 'npm:process-nextick-args@1.0.7',
+        'buffer-shims': 'npm:buffer-shims@1.0.0',
+        'core-util-is': 'npm:core-util-is@1.0.2',
+        'util-deprecate': 'npm:util-deprecate@1.0.2'
       }
     }
   }

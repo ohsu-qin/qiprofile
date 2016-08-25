@@ -19,7 +19,11 @@ exports.config =
 
   # Run all e2e specs. The command line --specs option overrides
   # this setting.
-  specs: ['src/**/*.e2e-spec.*']
+  #
+  # Note: When the volume E2E test is run last, it doesn't load
+  # in any reasonable time. Bumping the time-out from 11 to 20
+  # seconds doesn't help. The work-around is to run it first.
+  specs: ['src/**/volume.e2e-spec.*', 'src/**/!(volume).e2e-spec.*']
 
   # Flag which directs Protractor to wait for the app to be
   # stable before each action.
@@ -28,6 +32,9 @@ exports.config =
   # Run the qirest seed and link the test fixtures into public,
   # if necessary.
   onPrepare: 'src/testing/seed'
+  
+  # Increase time-out from the default 11 seconds to 20 seconds.
+  allScriptsTimeout: 20000
 
   # Pass options into mocha.
   mochaOpts:

@@ -46,7 +46,7 @@ class ProjectListPage extends Page
       finder.then (resolved) ->
         [property, resolved]
 
-    Promise.all(resolvers).then (resolved) =>
+    Promise.all(resolvers).then (resolved) ->
       resolved.reduce(accumulate, {})
 
 ###*
@@ -64,7 +64,7 @@ describe 'E2E Testing Project List', ->
   it 'should load the page', ->
     expect(page.content, 'The page was not loaded')
       .to.eventually.exist
-  
+
   # Note - it would be nice to test whether a trailing slash
   # resolves to the same page, but the many attempts to build
   # such a test case were unsuccessful. Test manually instead.
@@ -81,7 +81,7 @@ describe 'E2E Testing Project List', ->
 
     describe 'Help', ->
       help = null
-    
+
       before ->
         help = page.help
 
@@ -95,7 +95,7 @@ describe 'E2E Testing Project List', ->
 
   describe 'Projects', ->
     rows = null
-    
+
     before ->
       page.projects().then (colls) ->
         rows = colls
@@ -117,4 +117,3 @@ describe 'E2E Testing Project List', ->
         expect(actual, "The visited #{ row.name } Collection List" +
                        " page URL is incorrect")
           .to.eventually.match(matcher)
-      

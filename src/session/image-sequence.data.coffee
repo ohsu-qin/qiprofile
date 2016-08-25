@@ -47,9 +47,9 @@ ImageSequence =
      *   property value, then return the volume with the maximal
      *   intensity value.
      * * Otherwise, return null.
-     * 
+     *
      * @method maximalIntensityVolume
-     * @return the  volume with maximal intensity, or null if 
+     * @return the  volume with maximal intensity, or null if
      *   such a volume could not be determined
     ###
     imageSequence.maximalIntensityVolume = ->

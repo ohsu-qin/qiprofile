@@ -16,8 +16,8 @@ import { SessionService } from '../session/session.service.ts';
  * @class IamgeSequenceService
  */
 export class ImageSequenceService {
-  constructor(private sessionService: SessionService) {}
-  
+  constructor(private sessionService: SessionService) { }
+
   /**
    * Makes the image sequence secondary key from the given
    * route parameters. The image sequence secondary key is
@@ -42,17 +42,17 @@ export class ImageSequenceService {
    *     }
    *
    * @method secondaryKey
-   * @param params {Object} the route parameters
+   * @param routeParams {Object} the route parameters
    * @return {Object} the corresponding secondary key
    */
   secondaryKey(routeParams: Object) {
     // The subject secondary key.
     let session = this.sessionService.secondaryKey(routeParams);
-    let scan = {_cls: 'Scan', session: session, number: +routeParams.scan};
+    let scan = { _cls: 'Scan', session: session, number: +routeParams.scan };
     // The parent is either the scan or a registration.
     let regParam = routeParams.registration;
     if (regParam) {
-      return {_cls: 'Registration', scan: scan, number: +regParam};
+      return { _cls: 'Registration', scan: scan, number: +regParam };
     } else {
       return scan;
     }
@@ -83,7 +83,7 @@ export class ImageSequenceService {
     Scan.extend(scan, scan.session);
     Subject.extend(scan.session.subject);
     Session.extend(scan.session, scan.session.subject, scan.session.number);
-    
+
     return imageSequence;
   }
 
@@ -95,13 +95,13 @@ export class ImageSequenceService {
   getImageSequence(routeParams: Object): Observable<any> {
     // Fetch the session detail.
     let sessionFinder = this.sessionService.getSession(routeParams, true);
-    
+
     // Find the volume.
     return sessionFinder.map(
       session => session ? this.findImageSequence(routeParams, session) : session
     );
   }
-  
+
   /**
    * @method findImageSequence
    * @param routeParams {Object} the route parameters

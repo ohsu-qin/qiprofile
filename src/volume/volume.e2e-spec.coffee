@@ -3,11 +3,11 @@ expect = require('../testing/expect')()
 Page = require '../testing/page'
 
 ###*
- * The Volume Detail E2E page encapsulation.
- *
- * @module volume
- * @class VolumeDetailPage
- * @extends Page
+  * The Volume Detail E2E page encapsulation.
+  *
+  * @module volume
+  * @class VolumeDetailPage
+  * @extends Page
 ###
 class VolumeDetailPage extends Page
   constructor: ->
@@ -17,8 +17,16 @@ class VolumeDetailPage extends Page
   imagePanel: ->
     @find('qi-volume-image')
 
+  # The volume slider-player combo.
+  volumeChooser: ->
+    @find('.qi-volume-chooser-heading', '..')
+
+  # The session slider.
+  sessionChooser: ->
+    @find('qi-session-chooser-heading', '..')
+
 # Enable the describe below to enable XTK.
-describe.only 'E2E Testing Volume Display', ->
+describe 'E2E Testing Volume Display', ->
   page = null
 
   before ->
@@ -27,20 +35,20 @@ describe.only 'E2E Testing Volume Display', ->
   it 'should load the page', ->
     expect(page.content, 'The page was not loaded')
       .to.eventually.exist
-  
+
   # The page header test cases.
   describe 'Header', ->
     it 'should display the billboard', ->
       expect(page.billboard, 'The billboard is incorrect')
         .to.eventually.equal('Breast Patient 1 Session 1 Scan 1 Volume 1')
-  
+
     it 'should have a home button', ->
       expect(page.home, 'The home URL is incorrect')
         .to.eventually.match(Page.HOME_URL_PAT)
-  
+
     describe 'Help', ->
       help = null
-    
+
       before ->
         help = page.help
 
@@ -51,21 +59,50 @@ describe.only 'E2E Testing Volume Display', ->
       it 'should display a {qu,sugg}estion box hyperlink', ->
         expect(help, 'The {qu,sugg}estion box hyperlink is missing')
           .to.eventually.include(Page.SUGGESTION_BOX_URL)
-  
-  describe 'Image Display', ->
-    panel = null
-  
-    beforeEach ->
-      panel = page.imagePanel()
-  
-    it 'should display the image', ->
-      expect(panel, 'The image panel is missing').to.eventually.exist
 
-  xdescribe 'Volume Chooser', ->
-    panel = null
-  
+  describe 'Image Display', ->
+    pane = null
+
     beforeEach ->
-      panel = page.volumeChooser()
-  
+      pane = page.imagePanel()
+
+    it 'should display the image', ->
+      expect(pane, 'The image panel is missing').to.eventually.exist
+
+  # Verify the volume chooser heading. We can only detect the
+  # volume slider and player.
+  describe 'Volume Chooser', ->
+    chooser = null
+
+    beforeEach ->
+      page.volumeChooser().then (resolved) ->
+        chooser = resolved
+
     it 'should display the volume chooser', ->
-      expect(panel, 'The volume chooser is missing').to.eventually.exist
+      expect(chooser, 'The volume chooser is missing').to.exist
+
+    it 'should display the volume chooser heading', ->
+      heading = chooser.text('.qi-volume-chooser-heading')
+      expect(heading, 'The volume chooser heading is missing')
+        .to.eventually.exist
+      expect(heading, 'The volume chooser heading is incorrect')
+        .to.eventually.equal('Time Point')
+
+  # TODO - Verify the volume chooser heading in the same manner as the
+  # Volume Chooser.
+  xdescribe 'Session Chooser', ->
+    chooser = null
+
+    beforeEach ->
+      page.volumeChooser().then (resolved) ->
+        chooser = resolved
+
+    it 'should display the session chooser', ->
+      expect(chooser, 'The session chooser is missing').to.eventually.exist
+
+    it 'should display the session chooser heading', ->
+      heading = chooser.text('.qi-session-chooser-heading')
+      expect(heading, 'The session chooser heading is missing')
+        .to.eventually.exist
+      expect(heading, 'The session chooser heading is incorrect')
+        .to.eventually.equal('Session')

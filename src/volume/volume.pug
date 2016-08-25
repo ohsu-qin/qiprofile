@@ -1,16 +1,31 @@
 extends ../layout/partial
 
 block billboard
-  | {{ volume.title }} 
+  | {{ volume.title }}
 
 block content
+  // The volume number chooser slider-player combo.
   // The if test checks whether the volume is a place-holder
-  // that doesn't yet have volumes or is the fetched volume. 
-  qi-volume-chooser(
-    *ngIf="volume.imageSequence.volumes", [volume]="volume",
-    [isEnabled]="isVolumePlayEnabled", (play)="onVolumePlay($event)",
-    [stopPlay]="stopVolumePlay", (changed)="onVolumeChange($event)"
-  )
+  // whose parent image sequence doesn't yet have volumes or
+  // is the fetched volume.
+  div(*ngIf="volume.imageSequence.volumes")
+    .qi-volume-chooser-heading Time Point
+    // Note: although qi-slider supports two-way data binding,
+    // it is not used here, since the VolumeComponent handles
+    // the slider model change via the change event instead.
+    .qi-volume-slider(
+      qi-slider, [min]="1", [max]="volumeCount()", [config]="config",
+      [value]="volumeNumber", (changed)="onVolumeChange($event)"
+    )
+    qi-player.qi-volume-player(
+      [stopPlay]="stopVolumePlay", [isEnabled]="isVolumePlayEnabled",
+      (play)="onVolumePlay($event)"
+    )
+
+  // The volume image display view.
   qi-volume-image(
     [image]="volume", (loaded)="onLoaded($event)", (error)="onLoadError($event)"
   )
+
+  // The session number chooser slider-player combo.
+  // TODO - copy and change the volume number chooser.

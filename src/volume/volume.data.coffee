@@ -30,26 +30,26 @@ Volume =
     # The volume number property.
     ###*
      * The one-based volume index relative to the parent image sequence.
-     * 
-     * @property number {number} 
+     *
+     * @property number {number}
     ###
     volume.number = number
 
     # Set the image parent volume reference.
     ###*
      * The parent scan or registration.
-     * 
-     * @property imageSequence {ImageSequence} 
+     *
+     * @property imageSequence {ImageSequence}
     ###
     volume.imageSequence = imageSequence
-        
+
     ###*
      * The scan which contains this volume. If the parent
      * {{#crossLink "ImageSequence"}}{{/crossLink}} is a
      * {{#crossLink "Registration"}}{{/crossLink}}, then
      * this volume's scan is the parent registration's scan.
-     * 
-     * @property scan {Scan} 
+     *
+     * @property scan {Scan}
     ###
     Object.defineProperties volume,
       scan:

@@ -11,7 +11,6 @@ import {
   Directive,
   ElementRef,
   HostBinding,
-  HostListener,
   EventEmitter,
   Input,
   OnInit,
@@ -31,10 +30,7 @@ function toValue(value: string[]): number|number[] {
 }
 
 @Directive({
-  selector: '[qi-slider]',
-  host: {
-    '(input)': 'setHeight()'
-  }
+  selector: '[qi-slider]'
 })
 
 /**

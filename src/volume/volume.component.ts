@@ -5,7 +5,7 @@
  * @main volume
  */
 import * as _ from 'lodash';
-import { Component,  } from '@angular/core';
+import { Component } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
@@ -61,6 +61,13 @@ export class VolumeComponent extends PageComponent {
    * @property sessionNumber {number}
    */
   sessionNumber: number;
+
+  /**
+   * The slider height is computed to match the Papaya height.
+   *
+   * @property sliderHeight {string}
+   */
+  sliderHeight: string;
 
   /**
    * The slider configuration.
@@ -150,12 +157,22 @@ export class VolumeComponent extends PageComponent {
     private service: VolumeService
   ) {
     super(help);
-
-    // The route parameters.
+    // Set the slider height manually.
+    this.sliderHeight = `${ this.calculateSliderHeight() }`;
+    // Capture the route parameters.
     this.routeParams = route.params.value;
-
-    // Delegate to the helper method.
+    // Fetch the volume.
     this.getVolume(this.routeParams);
+  }
+
+  /**
+   * Adjusts the slider height.
+   *
+   * @method onResize
+   */
+  onResize() {
+    // Adjust the slider height.
+    this.sliderHeight = `${ this.calculateSliderHeight() }`;
   }
 
   /**
@@ -195,6 +212,24 @@ export class VolumeComponent extends PageComponent {
    */
   volumeCount(): number {
     return this.volume.imageSequence.volumes.images.length;
+  }
+
+  /**
+   * Mimic the Papaya container height = base width / 1.5.
+   * The Papaya parent element width is specified in the
+   * CSS as 60% of the base width. Nothing is laid out at
+   * this point, so we can't set the height to a percent
+   * in the CSS. If we hook into the digest cycle after
+   * layout, we run the risk of an infinite redigest loop.
+   * A 24 pixel padding is added as well.
+   *
+   * @method calculateSliderHeight
+   * @return the intended slider height
+   */
+  private calculateSliderHeight(): number {
+    const padding = 24;
+    let unpadded = (window.innerWidth * 0.6) / 1.5;
+    return Math.round(unpadded - padding);
   }
 
   /**

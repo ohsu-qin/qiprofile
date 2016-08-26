@@ -5,11 +5,13 @@
  * @main slider
  */
 
- import * as _ from 'lodash';
+import * as _ from 'lodash';
 import * as noUiSlider from 'nouislider';
 import {
   Directive,
   ElementRef,
+  HostBinding,
+  HostListener,
   EventEmitter,
   Input,
   OnInit,
@@ -30,7 +32,9 @@ function toValue(value: string[]): number|number[] {
 
 @Directive({
   selector: '[qi-slider]',
-  providers: []
+  host: {
+    '(input)': 'setHeight()'
+  }
 })
 
 /**
@@ -96,6 +100,11 @@ export class SliderDirective implements OnInit, OnChanges {
   public constructor(el: ElementRef) {
     this.el = el;
   }
+
+  @HostBinding('style.height.px')
+  height: number;
+
+  @Input() height;
 
   ngOnInit(): void {
     let inputsConfig = JSON.parse(JSON.stringify({

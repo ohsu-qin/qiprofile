@@ -259,6 +259,20 @@ ul.qi-hor-list
   &:after
     empty-line()
 
+.qi-vertical-chooser
+  height 100%
+  margin 2em 0 3em 0
+  display inline-block
+  color DarkCyan
+  & qi-player button
+    // The slider handle .row has a -15px margin.
+    // Compensate for the button by shifting it
+    // to the left 20px. For some reason, it needs
+    // to be 20 rather than 15.
+    margin-left -20px
+  & .row
+    padding 0.5em 0
+
 span.qi-over-under
   font-size smaller
   position relative

@@ -8,14 +8,17 @@ block content
   // The if test checks whether the volume is a place-holder
   // whose parent image sequence doesn't yet have volumes or
   // is the fetched volume.
-  .qi-volume-chooser(*ngIf="volume.imageSequence.volumes")
+  .qi-vertical-chooser.qi-volume-chooser-left(
+    *ngIf="volume.imageSequence.volumes"
+  )
     .row Time Point
     // Note: although qi-slider supports two-way data binding,
     // it is not used here, since the VolumeComponent handles
     // the slider model change via the change event instead.
-    .row.qi-volume-slider(
+    .row.qi-vertical-slider(
       qi-slider, [min]="1", [max]="volumeCount()", [config]="config",
-      [value]="volumeNumber", (changed)="onVolumeChange($event)"
+      [value]="volumeNumber", (changed)="onVolumeChange($event)",
+      [height]="sliderHeight", (window:resize)="onResize($event.target)"
     )
     qi-player.row(
       [stopPlay]="stopVolumePlay", [isEnabled]="isVolumePlayEnabled",
@@ -23,7 +26,7 @@ block content
     )
 
   // The volume image display view.
-  qi-volume-image(
+  qi-image(
     [image]="volume", (loaded)="onLoaded($event)", (error)="onLoadError($event)"
   )
 

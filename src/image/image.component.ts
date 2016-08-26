@@ -6,7 +6,7 @@ import {
 import { PapayaService } from './papaya.service.ts';
 
 @Component({
-  selector: 'qi-volume-image',
+  selector: 'qi-image',
   templateUrl: '/public/html/image/image.html'
 })
 
@@ -24,14 +24,14 @@ implements OnChanges, AfterViewChecked, OnDestroy {
    * @property image {Image}
    */
   @Input() image;
-  
+
   /**
    * The error event.
    *
    * @property error {EventEmitter}
    */
   @Output() loaded = new EventEmitter();
-  
+
   /**
    * The error event.
    *
@@ -46,7 +46,7 @@ implements OnChanges, AfterViewChecked, OnDestroy {
    * @private
    */
   private isStarted = false;
-  
+
   /**
    * Monkey-patches the Papaya file loader and error handler.
    *
@@ -76,7 +76,7 @@ implements OnChanges, AfterViewChecked, OnDestroy {
     };
     this.papaya.finishedLoadingCallback = onFinishedLoading;
   }
-  
+
   /**
    * Unsets the
    * {{#crossLink "PapayaService/errorHandler:property"}}{{/crossLink}}
@@ -90,7 +90,7 @@ implements OnChanges, AfterViewChecked, OnDestroy {
     this.papaya.errorHandler = null;
     this.papaya.finishedLoadingCallback = null;
   }
-  
+
   /**
    * Render the image in the Papaya container.
    *
@@ -104,7 +104,7 @@ implements OnChanges, AfterViewChecked, OnDestroy {
       this.isStarted = true;
     }
   }
-  
+
   /**
    * If the image changed after the initial display, then swap in
    * the new image.
@@ -121,7 +121,7 @@ implements OnChanges, AfterViewChecked, OnDestroy {
     //   image, even though display of the slider is guarded
     //   by an ngIf.
     if (change && this.isStarted && !change.isFirstChange()) {
-      // A bound image value was changed to the current value.  
+      // A bound image value was changed to the current value.
       let image = change.currentValue;
       // Papaya might have started with an invalid initial image.
       // In that case, it is not yet initialized, so do that now.

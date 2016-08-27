@@ -267,9 +267,12 @@ ul.qi-hor-list
   & qi-player button
     // The slider handle .row has a -15px margin.
     // Compensate for the button by shifting it
-    // to the left 20px. For some reason, it needs
-    // to be 20 rather than 15.
-    margin-left -20px
+    // to the left 25px, which (hopefully) aligns
+    // the buttons under the slider. Do this for
+    // the first button only.
+    margin-left -47px
+    & ~ button
+      margin-left 0.2em
   & .row
     padding 0.5em 0
 

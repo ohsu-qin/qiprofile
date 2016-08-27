@@ -37,6 +37,22 @@ export class PlayerComponent implements OnInit, OnChanges {
   @Output() play: EventEmitter<boolean> = new EventEmitter(true);
 
   /**
+   * This previous event is triggered when the user presses the back
+   * button.
+   *
+   * @property previous {EventEmitter<boolean>}
+   */
+  @Output() previous: EventEmitter<boolean> = new EventEmitter(true);
+
+  /**
+   * This next event is triggered when the user presses the forward
+   * button.
+   *
+   * @property next {EventEmitter<boolean>}
+   */
+  @Output() next: EventEmitter<boolean> = new EventEmitter(true);
+
+  /**
    * Flag indicating whether to loop over the values.
    *
    * @property isPlaying {boolean}
@@ -67,5 +83,23 @@ export class PlayerComponent implements OnInit, OnChanges {
   togglePlay() {
     this.isPlaying = !this.isPlaying;
     this.play.emit(this.isPlaying);
+  }
+
+  /**
+   * Goes back one value.
+   *
+   * @method previous
+   */
+  previousTick() {
+    this.previous.emit();
+  }
+
+  /**
+   * Advances the value.
+   *
+   * @method next
+   */
+  nextTick() {
+    this.next.emit();
   }
 }

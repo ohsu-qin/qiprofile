@@ -22,7 +22,8 @@ block content
     )
     qi-player.row(
       [stopPlay]="stopVolumePlay", [isEnabled]="isVolumePlayEnabled",
-      (play)="onVolumePlay($event)"
+      (play)="onVolumePlay($event)", (next)="onVolumeStepForward()",
+      (previous)="onVolumeStepBackward()"
     )
 
   // The volume image display view.

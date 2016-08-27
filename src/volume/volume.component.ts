@@ -273,17 +273,54 @@ export class VolumeComponent extends PageComponent {
    * @private
    */
   private playNextVolume() {
-    let nextNdx = this.volume.number %
-      this.volume.imageSequence.volumes.images.length;
-    let nextNbr = nextNdx + 1;
     // Wait if necessary.
     let next = () => {
       this.stopWatch = Date.now();
-      this.onVolumeChange(nextNbr);
+      this.advanceVolume();
     };
     let delta = Date.now() - this.stopWatch;
     let pause = Math.max(500 - delta, 0);
     setTimeout(next, pause);
+  }
+
+  /**
+   *  Advances the volume.
+   *
+   * @method onVolumeStepForward
+   */
+  onVolumeStepForward() {
+    // Stop the player, if necessary.
+    this.isVolumePlaying = false;
+    // Fetch the next volume.
+    this.advanceVolume();
+  }
+
+  /**
+   * Queues up the next volume.
+   *
+   * @method advanceVolume
+   * @private
+   */
+  private advanceVolume() {
+    let nextNdx = this.volume.number %
+      this.volume.imageSequence.volumes.images.length;
+    let nextNbr = nextNdx + 1;
+    this.onVolumeChange(nextNbr);
+  }
+
+  /**
+   *  Decrements the volume.
+   *
+   * @method onVolumeStepBackward
+   */
+  onVolumeStepBackward() {
+    // Stop the player, if necessary.
+    this.isVolumePlaying = false;
+    // Fetch the previous volume.
+    let prevNbr = this.volume.number === 1 ?
+      this.volume.imageSequence.volumes.images.length :
+      this.volume.number - 1;
+    this.onVolumeChange(prevNbr);
   }
 
   /**

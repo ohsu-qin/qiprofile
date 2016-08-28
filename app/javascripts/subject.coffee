@@ -140,7 +140,7 @@ define ['angular', 'lodash', 'underscore.string', 'resources', 'session', 'model
        *   condition
        * @return a promise which resolves to the extended subject
        *   REST object
-       * @throws ValueError if the template does not have a searchable
+       * @throws Error if the template does not have a searchable
        *  key, either the id or the complete secondary key
        * @throws ReferenceError if no such subject was found
       ###

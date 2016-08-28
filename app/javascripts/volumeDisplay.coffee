@@ -139,7 +139,7 @@
 #
 #         # The label map must have a color table.
 #         if not labelMap.colorTable?
-#           throw new ValueError("The label map is missing a color table:" +
+#           throw new Error("The label map is missing a color table:" +
 #                                " #{ labelMap.name } ")
 #
 #         # Set the XTK volume labelmap visible flag to false.

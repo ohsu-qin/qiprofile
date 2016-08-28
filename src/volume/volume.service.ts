@@ -13,9 +13,9 @@ import Volume from './volume.data.coffee';
  * @class VolumeService
  */
 export class VolumeService {
-  
+
   constructor(private sequenceService: ImageSequenceService) {}
-  
+
   /**
    * Makes the {_sequence_, _number_} secondary
    * key from the given route parameters, where:
@@ -55,7 +55,7 @@ export class VolumeService {
       return {scan: scan, number: volume};
     }
   }
-  
+
   /**
    * Makes a place-holder volume sufficient to display a title.
    * The place-holder extends the
@@ -77,7 +77,7 @@ export class VolumeService {
     // parent reference and the volume number.
     let volume = {};
     Volume.extend(volume, imageSequence, volumeNdx);
-    
+
     return volume;
   }
 
@@ -89,14 +89,14 @@ export class VolumeService {
   getVolume(routeParams: Object): Observable<any> {
     // The image sequence.
     let sequenceFinder = this.sequenceService.getImageSequence(routeParams);
-    
+
     // Find the volume.
     let volumeNbr = routeParams.volume;
     return sequenceFinder.map(
       imageSequence => imageSequence ? this.findVolume(imageSequence, volumeNbr) : imageSequence
     );
   }
-  
+
   /**
    * Finds the volume in the given image sequence.
    * The default volume is the
@@ -120,7 +120,7 @@ export class VolumeService {
       let volumeNbr = +volume;
       // The number is one-based.
       if (volumeNbr === 0) {
-        throw new ValueError("The volume number cannot be zero");
+        throw new RangeError("The volume number cannot be zero");
       }
       // The volume index is one less than the volume number.
       let volNdx = volume - 1;

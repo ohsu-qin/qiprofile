@@ -22,7 +22,7 @@ define ['angular', 'lodash', 'rest', 'ngresource', 'helpers'], (ng, _, REST) ->
        * @method resource
        * @param condition the search condition
        * @return a promise which resolves to the REST database object
-       * @throws ValueError if the condition does not have a
+       * @throws Error if the condition does not have a
        *  searchable key, either the id or the complete
        *  secondary key
        * @throws ReferenceError if no such object was found
@@ -49,7 +49,7 @@ define ['angular', 'lodash', 'rest', 'ngresource', 'helpers'], (ng, _, REST) ->
           # key fields. Any other field will show up as an empty
           # criteria _.pick value.
           if not _.every(_.values(criterion))
-            throw new ValueError(
+            throw new Error(
               "The search condition is missing both an id" +
               " value and a complete secondary key: #{ condition }"
             )

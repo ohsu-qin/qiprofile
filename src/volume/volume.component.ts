@@ -49,20 +49,6 @@ export class VolumeComponent extends PageComponent {
   volume: Object;
 
   /**
-   * The volume number bound to the volume slider.
-   *
-   * @property volumeNumber {number}
-   */
-  volumeNumber: number;
-
-  /**
-   * The session number bound to the session slider.
-   *
-   * @property sessionNumber {number}
-   */
-  sessionNumber: number;
-
-  /**
    * The slider height is computed to match the Papaya height.
    *
    * @property sliderHeight {string}
@@ -72,9 +58,9 @@ export class VolumeComponent extends PageComponent {
   /**
    * The slider configuration.
    *
-   * @property config {Object}
+   * @property sliderConfig {Object}
    */
-  config = {
+  sliderConfig = {
     orientation: 'vertical',
     direction: 'rtl',
     connect: 'lower',
@@ -95,44 +81,18 @@ export class VolumeComponent extends PageComponent {
   };
 
   /**
-   * Flag indicating whether the volume player is enabled.
+   * Flag indicating whether to stop an active time point player.
    *
-   * @property isVolumePlayEnabled {boolean}
+   * @property cancelTimePointPlayer {boolean}
    */
-  isVolumePlayEnabled = true;
+  cancelTimePointPlayer = false;
 
   /**
-   * Flag indicating whether to force the volume player to stop.
+   * Flag indicating whether to stop an active session player.
    *
-   * @property stopVolumePlay {boolean}
+   * @property cancelSessionPlayer {boolean}
    */
-  stopVolumePlay = false;
-
-  /**
-   * Flag indicating whether to loop over the volumes.
-   *
-   * @property isVolumePlaying {boolean}
-   * @private
-   */
-  private isVolumePlaying = false;
-
-  /**
-   * Flag indicating whether the
-   * {{#crossLink "VolumeComponent/volume:property"}}{{/crossLink}}
-   * REST object is being fetched or the image file is being loaded.
-   *
-   * @property isLoading {boolean}
-   * @private
-   */
-  private isLoading = false;
-
-  /**
-   * The time of the last player iteration, or zero to start.
-   *
-   * @property stopWatch {number}
-   * @private
-   */
-  private stopWatch = 0;
+  cancelSessionPlayer = false;
 
   /**
    * The project name.
@@ -176,34 +136,34 @@ export class VolumeComponent extends PageComponent {
   }
 
   /**
-   * If the volume player is on, then turn it off.
-   * Note that the error is already displayed by the image
-   * component.
-   *
-   * @method onLoadError
-   * @param message {string} the error message
-   */
-  onLoadError(message: string) {
-    this.isLoading = false;
-    if (this.isVolumePlaying) {
-      this.stopVolumePlay = true;
-      this.isVolumePlaying = false;
-    }
-    // Delegate to the standard error handler.
-    this.onError(message);
-  }
-
-  /**
-   *  If the volume player is on, then queue up the next volume.
+   * Sets the
+   * {{#crossLink "VolumeComponent/volume:property"}}{{/crossLink}}
+   * property to notify the respective choosers.
    *
    * @method onLoaded
    * @param volume {Object} the loaded volume
    */
   onLoaded(volume: Object) {
-    this.isLoading = false;
-    if (this.isVolumePlaying) {
-      this.playNextVolume();
-    }
+    this.volume = volume;
+  }
+
+  /**
+   * Turn off any active player and display the standard error
+   * pop-up.
+   *
+   * @method onLoadError
+   * @param message {string} the error message
+   */
+  onLoadError(message: string) {
+    // Cancel any active player.
+    this.cancelTimePointPlayer = true;
+    // Reset on the next cycle.
+    let clear = () => {
+      this.cancelTimePointPlayer = false;
+    };
+    setTimeout(clear, 0);
+    // Delegate to the standard error handler.
+    this.onError(message);
   }
 
   /**
@@ -211,116 +171,44 @@ export class VolumeComponent extends PageComponent {
    * @return {number} the number of volume parent images
    */
   volumeCount(): number {
-    return this.volume.imageSequence.volumes.images.length;
+    let volumes = this.volume.imageSequence.volumes;
+    return volumes ? volumes.images.length : 0;
   }
 
   /**
-   * Mimic the Papaya container height = base width / 1.5.
-   * The Papaya parent element width is specified in the
-   * CSS as 60% of the base width. Nothing is laid out at
-   * this point, so we can't set the height to a percent
-   * in the CSS. If we hook into the digest cycle after
-   * layout, we run the risk of an infinite redigest loop.
-   * A 24 pixel padding is added as well.
+   * Fetches the requested volume. The request can be the
+   * number, `previous` or `next`.
    *
-   * @method calculateSliderHeight
-   * @return the intended slider height
-   */
-  private calculateSliderHeight(): number {
-    const padding = 24;
-    let unpadded = (window.innerWidth * 0.6) / 1.5;
-    return Math.round(unpadded - padding);
-  }
-
-  /**
-   * Swaps in the indicated volume image.
    * This change resets the title by virtue of loading the
    * volume but does not reroute the app or change the page.
    *
-   * @method onVolumeChange
-   * @param value {number} the new volume number
+   * @method onTimePointRequest
+   * @param request {string|number} the number request
    */
-  private onVolumeChange(value: number) {
+  onTimePointRequest(request: string|number) {
+    // Cancel the other player, if active.
+    this.cancelSessionPlayer = true;
+    // Reset on the next cycle.
+    let clear = () => {
+      this.cancelSessionPlayer = false;
+    };
+    setTimeout(clear, 0);
+
+    // The target volume number.
+    let volumeNbr = this.requestedVolumeNumber(request);
+    // The parent image sequence.
     let imageSequence = this.volume.imageSequence;
-    this.isLoading = true;
-    let volume = this.service.findVolume(imageSequence, value);
+    // Find the requested volume.
+    let volume = this.service.findVolume(imageSequence, volumeNbr);
+    // If the volume was found, then capture the new volume
+    // and propagate the changed volume number to the chooser.
+    // Otherwise, post an error message.
     if (volume) {
       this.volume = volume;
-      this.volumeNumber = volume.number;
     } else {
-      this.error = `${this.imageSequence.title} Volume ${value}`;
+      this.error = `${this.imageSequence.title} Volume ${volumeNbr}` +
+                   'was not found';
     }
-  }
-
-  /**
-   *  Starts or stops the volume player.
-   *
-   * @method onVolumePlay
-   * @param volume {boolean} `true` to start playing,
-   *    `false` to stop playing
-   */
-  onVolumePlay(value: boolean) {
-    this.isVolumePlaying = value;
-    if (value) {
-      this.playNextVolume();
-    }
-  }
-
-  /**
-   * Queues up the next volume.
-   *
-   * @method playNextVolume
-   * @private
-   */
-  private playNextVolume() {
-    // Wait if necessary.
-    let next = () => {
-      this.stopWatch = Date.now();
-      this.advanceVolume();
-    };
-    let delta = Date.now() - this.stopWatch;
-    let pause = Math.max(500 - delta, 0);
-    setTimeout(next, pause);
-  }
-
-  /**
-   *  Advances the volume.
-   *
-   * @method onVolumeStepForward
-   */
-  onVolumeStepForward() {
-    // Stop the player, if necessary.
-    this.isVolumePlaying = false;
-    // Fetch the next volume.
-    this.advanceVolume();
-  }
-
-  /**
-   * Queues up the next volume.
-   *
-   * @method advanceVolume
-   * @private
-   */
-  private advanceVolume() {
-    let nextNdx = this.volume.number %
-      this.volume.imageSequence.volumes.images.length;
-    let nextNbr = nextNdx + 1;
-    this.onVolumeChange(nextNbr);
-  }
-
-  /**
-   *  Decrements the volume.
-   *
-   * @method onVolumeStepBackward
-   */
-  onVolumeStepBackward() {
-    // Stop the player, if necessary.
-    this.isVolumePlaying = false;
-    // Fetch the previous volume.
-    let prevNbr = this.volume.number === 1 ?
-      this.volume.imageSequence.volumes.images.length :
-      this.volume.number - 1;
-    this.onVolumeChange(prevNbr);
   }
 
   /**
@@ -335,7 +223,8 @@ export class VolumeComponent extends PageComponent {
    * Replaces the current
    * {{#crossLink "VolumeComponent/volume:property"}}{{/crossLink}}
    * with a comparable session image sequence volume. The volume
-   * hierarchy is the same except for the session number.
+   * hierarchy is the same except for the session number. The request
+   * can be the session number, `previous` or `next`.
    *
    * For example, if the current volume has hierarchy:
    *
@@ -349,11 +238,62 @@ export class VolumeComponent extends PageComponent {
    * new session but does not reroute the app or change the page.
    *
    * @method onSessionChange
-   * @param value {number} the new session number
+   * @param request {string|number} the number request
    */
-  onSessionChange(value: number) {
-    let params = _.merge({}, this.routeParams, { session: value });
-    this.getVolume(params);
+  onSessionRequest(request: string|number) {
+    // Cancel the other player, if active.
+    this.cancelTimePointPlayer = true;
+    // Reset on the next cycle.
+    let clear = () => {
+      this.cancelTimePointPlayer = false;
+    };
+    setTimeout(clear, 0);
+
+    //
+    // TODO - flush this out as with onTimePointRequest.
+    //
+  }
+
+  /**
+   * Mimic the Papaya container height = base width / 1.5.
+   * The Papaya parent element width is specified in the
+   * CSS as 60% of the base width. Nothing is laid out at
+   * this point, so we can't set the height to a percent
+   * in the CSS. If we hook into the digest cycle after
+   * layout, we run the risk of an infinite redigest loop.
+   * A 36 pixel bottom margin is added as well.
+   *
+   * @method calculateSliderHeight
+   * @return the intended slider height
+   */
+  private calculateSliderHeight(): number {
+    const margin = 36;
+    let unpadded = (window.innerWidth * 0.6) / 1.5;
+    return Math.round(unpadded - margin);
+  }
+
+  /**
+   * Determines the requested volume number. The request
+   * can be the number, `previous` or `next`.
+   *
+   * @method timePointRequestVolume
+   * @param request {string|number} the number request
+   * @private
+   */
+  private requestedVolumeNumber(request: string|number) {
+    if (_.isInteger(request)) {
+      return request;
+    } else if (request === 'previous') {
+      return this.volume.number === 1 ?
+        this.volume.imageSequence.volumes.images.length :
+        this.volume.number - 1;
+    } else if (request === 'next') {
+      let nextNdx = this.volume.number %
+            this.volume.imageSequence.volumes.images.length;
+      return nextNdx + 1;
+    } else  {
+      throw new Error(`Time point request not supported: ${ request }`);
+    }
   }
 
   /**
@@ -367,6 +307,13 @@ export class VolumeComponent extends PageComponent {
    * {{#crossLink "PageComponent/error:property"}}{{/crossLink}} is
    * set to an error message, which is then displayed in a pop-up.
    *
+   * Setting the
+   * {{#crossLink "VolumeComponent/volume:property"}}{{/crossLink}}
+   * property value triggers the image component image load. When
+   * the image is loaded the
+   * {{#crossLink "PageComponent/onLoaded"}}{{/crossLink}} callback
+   * notifies the choosers.
+   *
    * @method getVolume
    * @param params {Object} the search parameters
    */
@@ -374,15 +321,11 @@ export class VolumeComponent extends PageComponent {
     // The place-holder volume to fill in the title until the real
     // volume is fetched.
     this.volume = this.service.placeHolder(params);
-    this.volumeNumber = this.volume.number;
-    this.sessionNumber = this.volume.imageSequence.session.number;
 
     // Fetch the real volume.
     this.service.getVolume(params).subscribe(volume => {
       if (volume) {
         this.volume = volume;
-        this.volumeNumber = this.volume.number;
-        this.sessionNumber = this.volume.imageSequence.session.number;
       } else {
         this.error = `${this.volume.title} was not found`;
       }

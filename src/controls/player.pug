@@ -1,16 +1,16 @@
-// Go back.
+// Previous volume.
 button.btn.btn-default.btn-med.qi-btn(
-  type='button', (click)="previousTick()"
+  type='button', (click)="onPrevious()"
 )
   .glyphicon.glyphicon-step-backward
-// Play.
+// Cycle over the volumes.
 button.btn.btn-default.btn-med.qi-btn(
-  type='button', [disabled]="!isEnabled", (click)="togglePlay()"
+  type='button', (click)="togglePlay()"
 )
   .glyphicon.glyphicon-play(*ngIf="!isPlaying")
   .glyphicon.glyphicon-pause(*ngIf="isPlaying")
-// Advance.
+// Next volume.
 button.btn.btn-default.btn-med.qi-btn(
-  type='button', (click)="nextTick()"
+  type='button', (click)="onNext()"
 )
   .glyphicon.glyphicon-step-forward

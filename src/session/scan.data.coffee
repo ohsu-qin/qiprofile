@@ -33,8 +33,8 @@ Scan =
     # Set the session reference.
     ###*
      * The parent {{#crossLink "Session"}}{{/crossLink}}.
-     * 
-     * @property session {Object} 
+     *
+     * @property session {Object}
     ###
     scan.session = session
 
@@ -42,8 +42,8 @@ Scan =
     # Convert it to an integer.
     ###*
      * The DICOM scan number.
-     * 
-     * @property number {number} 
+     *
+     * @property number {number}
     ###
     scan.number = +scan.number
 

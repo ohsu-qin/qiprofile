@@ -260,21 +260,31 @@ ul.qi-hor-list
     empty-line()
 
 .qi-vertical-chooser
+  // Note: the view height is reset by the parent component
+  // to mimic the image display view. Consequently, the
+  // bottom margin has no effect.
   height 100%
-  margin 2em 0 3em 0
+  margin 8em 5% 0 5%
   display inline-block
   color DarkCyan
+  & .qi-vertical-slider
+    margin-top 1em
   & qi-player button
     // The slider handle .row has a -15px margin.
-    // Compensate for the button by shifting it
-    // to the left 25px, which (hopefully) aligns
-    // the buttons under the slider. Do this for
-    // the first button only.
+    // Compensate for the button by shifting it to
+    // the left, which (hopefully) aligns the buttons
+    // under the slider. Do this for the first button
+    // only.
     margin-left -47px
     & ~ button
       margin-left 0.2em
-  & .row
-    padding 0.5em 0
+
+// The slider handle no longer aligns with the tick marks
+// after .qi-vertical-chooser is applied. The base CSS
+// specifies top -17px. Override this with a factor that
+// aligns properly.
+// .noUi-vertical .noUi-handle
+//   top -10px
 
 span.qi-over-under
   font-size smaller

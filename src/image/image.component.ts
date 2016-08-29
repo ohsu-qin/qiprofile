@@ -115,11 +115,10 @@ implements OnChanges, AfterViewChecked, OnDestroy {
     // The image change. This should exist and should be the only
     // change, but it doesn't hurt to check.
     let change = changes['image'];
-    // Note - we need to check the isStarted flag rather than
-    //   change.isFirstChange() because a change is already issued
-    //   when the place-holder image is replaced by the fetched
-    //   image, even though display of the slider is guarded
-    //   by an ngIf.
+    // Note - we need to check the isStarted flag as well as
+    //   change.isFirstChange() because a change might already be
+    //   issued when the place-holder image is replaced by the
+    //   fetched image.
     if (change && this.isStarted && !change.isFirstChange()) {
       // A bound image value was changed to the current value.
       let image = change.currentValue;

@@ -26,13 +26,6 @@ export class VolumeVolumeChooserComponent implements OnInit, OnChanges {
   @Input() volume;
 
   /**
-   * The button enabled state.
-   *
-   * @property isEnabled {boolean}
-   */
-  @Input() isEnabled;
-
-  /**
    * Forces the play state off.
    *
    * @property stopPlay {boolean}
@@ -46,7 +39,7 @@ export class VolumeVolumeChooserComponent implements OnInit, OnChanges {
    * @property changed {EventEmitter}
    */
   @Output() changed: EventEmitter<number> = new EventEmitter(true);
-  
+
   /**
    * This play event emits `true` to start looping over the time points,
    * `false` to stop.
@@ -54,21 +47,21 @@ export class VolumeVolumeChooserComponent implements OnInit, OnChanges {
    * @property play {EventEmitter<boolean>}
    */
   @Output() play: EventEmitter<boolean> = new EventEmitter(true);
-  
+
   /**
    * The selected volume number.
    *
    * @property volumeNumber {number}
    */
   volumeNumber: number;
-  
+
   /**
    * Flag indicating whether to loop over the volumes.
    *
    * @property isPlaying {boolean}
    */
   isPlaying = false;
-  
+
   /**
    * The slider configuration.
    *
@@ -91,7 +84,7 @@ export class VolumeVolumeChooserComponent implements OnInit, OnChanges {
       density: 5
     }
   };
-  
+
   /**
    * Sets the
    * {{#crossLink "VolumeVolumeChooserComponent/volumeNumber:property"}}{{/crossLink}}
@@ -104,7 +97,7 @@ export class VolumeVolumeChooserComponent implements OnInit, OnChanges {
   ngOnInit() {
     this.volumeNumber = this.volume.number;
   }
-  
+
   /**
    * If the input volume changed, then reset the
    * {{#crossLink "VolumeVolumeChooserComponent/volumeNumber:property"}}{{/crossLink}}
@@ -120,7 +113,7 @@ export class VolumeVolumeChooserComponent implements OnInit, OnChanges {
         this.volumeNumber = value;
       }
     }
-    
+
     let stopChange = changes['stopPlay'];
     if (stopChange && !stopChange.isFirstChange()) {
       if (stopChange.currentValue) {
@@ -128,7 +121,7 @@ export class VolumeVolumeChooserComponent implements OnInit, OnChanges {
       }
     }
   }
-  
+
   /**
    * Forwards the volume number change event. This method
    * is bound to the `Nouislider.ngModelChange` callback.
@@ -139,7 +132,7 @@ export class VolumeVolumeChooserComponent implements OnInit, OnChanges {
   onChange(value: number) {
     this.changed.emit(value);
   }
-  
+
   /**
    * Toggles looping over the time points.
    *
@@ -149,7 +142,7 @@ export class VolumeVolumeChooserComponent implements OnInit, OnChanges {
     this.isPlaying = !this.isPlaying;
     this.play.emit(this.isPlaying);
   }
-  
+
   /**
    * @method volumeCount
    * @return {number} the number of volume parent images

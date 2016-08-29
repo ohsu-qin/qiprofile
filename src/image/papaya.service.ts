@@ -18,7 +18,7 @@ export class PapayaService {
    * @property errorHandler {function}
    */
   errorHandler: (message: string) => {};
-  
+
   /**
    * The function called when image load is successfully completed.
    * The *contents* callback parameter is a {header, data} object,
@@ -27,7 +27,7 @@ export class PapayaService {
    *
    * Note: this callback is called if and only if there is not an
    * image load error. The client is responsible for capturing an
-   * error in the 
+   * error in the
    * {{#crossLink "PapayaService/errorHandler:property"}}{{/crossLink}}.
    *
    * @property finishedLoadingCallback {function}
@@ -77,7 +77,7 @@ export class PapayaService {
   private isPapayaPatched(): boolean {
     return !!papaya.viewer.Viewer.prototype._finishedLoading;
   }
-  
+
   /**
    * Returns whether the
    * {{#crossLink "PapayaService/viewer:property"}}{{/crossLink}}
@@ -89,7 +89,7 @@ export class PapayaService {
   isInitialized(): boolean {
     return this.viewer && this.viewer.initialized;
   }
-  
+
   /**
    * Starts Papaya on the given image and overlays.
    *
@@ -107,7 +107,7 @@ export class PapayaService {
     // Delegate to the helper method.
     this.startPapaya(urls);
   }
-  
+
   /**
    * Restarts Papaya on the given image and overlays.
    *
@@ -139,7 +139,7 @@ export class PapayaService {
     }
     // The Papaya volume (not the parent VolumeComponent volume).
     let volume = this.viewer.volume;
-    
+
     let url = ImageStore.location(image);
     // Prepare for the swap.
     volume.urls = [];
@@ -165,9 +165,9 @@ export class PapayaService {
       };
       // Simulate load finish.
       // Note: the Papaya undocumented viewer.finishedLoading function
-      // is quited different from the undocumented volume.finishedLoad
-      // function. We call finishedLoadingCallback as well to simulate
-      // a complete Papaya image load async trigger chain.
+      // differs from the undocumented volume.finishedLoad function.
+      // We call finishedLoadingCallback as well to simulate a
+      // complete Papaya image load async trigger chain.
       volume.finishedLoad();
       this.finishedLoadingCallback(image.contents);
     } else {
@@ -202,7 +202,7 @@ export class PapayaService {
       volume.readURLs([url], onLoaded);
     }
   }
-  
+
   /**
    * Starts Papaya on the given image URLs.
    *
@@ -232,7 +232,7 @@ export class PapayaService {
     //   That causes a slight flicker, but we can live with that.
     papaya.Container.resizePapaya(null, true);
   }
-  
+
   /**
    * Removes the 'Drag a file' message from the Papaya Viewer.drawEmptyViewer
    * function. Adds a new Viewer.drawHelpMessage function that displays a
@@ -252,7 +252,7 @@ export class PapayaService {
       this.context.fillStyle = color;
       this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
     };
-    
+
     papaya.viewer.Viewer.prototype.drawHelpMessage = function () {
       // The message text padding size.
       const pad = 6;
@@ -287,7 +287,7 @@ export class PapayaService {
       this.context.fillText(text, locX + offset, locY);
     };
   }
-  
+
   /**
    * Monkey-patches the Papaya image loader to call the
    * {{#crossLink "PapayaService/errorHandler:property"}}{{/crossLink}},
@@ -313,7 +313,7 @@ export class PapayaService {
     };
     papaya.viewer.Display.prototype.drawError = onError;
   }
-  
+
   /**
    * Monkey-patches the Papaya image loader to call the
    * {{#crossLink "PapayaService/finishedLoadingCallback:property"}}{{/crossLink}}

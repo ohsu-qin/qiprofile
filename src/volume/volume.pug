@@ -4,32 +4,12 @@ block billboard
   | {{ volume.title }}
 
 block content
-  // The volume number chooser slider-player combo.
-  // The if test checks whether the volume is a place-holder
-  // whose parent image sequence doesn't yet have volumes or
-  // is the fetched volume.
-  .qi-vertical-chooser.qi-volume-chooser-left(
-    *ngIf="volume.imageSequence.volumes"
-  )
-    .row Time Point
-    // Note: although qi-slider supports two-way data binding,
-    // it is not used here, since the VolumeComponent handles
-    // the slider model change via the change event instead.
-    .row.qi-vertical-slider(
-      qi-slider, [min]="1", [max]="volumeCount()", [config]="config",
-      [value]="volumeNumber", (changed)="onVolumeChange($event)",
-      [height]="sliderHeight", (window:resize)="onResize($event.target)"
-    )
-    qi-player.row(
-      [stopPlay]="stopVolumePlay", [isEnabled]="isVolumePlayEnabled",
-      (play)="onVolumePlay($event)", (next)="onVolumeStepForward()",
-      (previous)="onVolumeStepBackward()"
-    )
-
+  // The time point number chooser slider-player combo.
+  include ./time-point-chooser
   // The volume image display view.
   qi-image(
-    [image]="volume", (loaded)="onLoaded($event)", (error)="onLoadError($event)"
+    [image]="volume", (loaded)="onLoaded($event)",
+    (error)="onLoadError($event)"
   )
-
   // The session number chooser slider-player combo.
-  // TODO - copy and change the volume number chooser.
+  // TODO - copy and change the time point number chooser.

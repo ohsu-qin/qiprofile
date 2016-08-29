@@ -19,13 +19,12 @@ class VolumeDetailPage extends Page
 
   # The volume slider-player combo.
   volumeChooser: ->
-    @find('.qi-volume-chooser-heading', '..')
+    @find('.qi-volume-chooser-left')
 
-  # The session slider.
+  # The session slider-player combo.
   sessionChooser: ->
-    @find('qi-session-chooser-heading', '..')
+    @find('.qi-volume-chooser-right')
 
-# Enable the describe below to enable XTK.
 describe 'E2E Testing Volume Display', ->
   page = null
 
@@ -71,7 +70,7 @@ describe 'E2E Testing Volume Display', ->
 
   # Verify the volume chooser heading. We can only detect the
   # volume slider and player.
-  describe 'Volume Chooser', ->
+  describe.only 'Volume Chooser', ->
     chooser = null
 
     beforeEach ->
@@ -82,11 +81,30 @@ describe 'E2E Testing Volume Display', ->
       expect(chooser, 'The volume chooser is missing').to.exist
 
     it 'should display the volume chooser heading', ->
-      heading = chooser.text('.qi-volume-chooser-heading')
+      # The heading is the first row.
+      heading = chooser.findAll('.row').then (rows) ->
+        rows[0].text()
       expect(heading, 'The volume chooser heading is missing')
         .to.eventually.exist
       expect(heading, 'The volume chooser heading is incorrect')
         .to.eventually.equal('Time Point')
+
+    it 'should display the volume chooser slider', ->
+      slider = chooser.find('.qi-vertical-slider')
+      expect(slider, 'The volume chooser slider is missing')
+        .to.eventually.exist
+
+    it 'should display the volume chooser player', ->
+      player = chooser.find('qi-player')
+      expect(player, 'The player is missing')
+        .to.eventually.exist
+      player.findAll('button').then (buttons) ->
+        expect(buttons, 'The player buttons are missing')
+          .to.not.be.empty
+        expect(buttons.length, 'The player buttons count is incorrect')
+          .to.equal(3)
+        [previous, play, next] = buttons
+        
 
   # TODO - Verify the volume chooser heading in the same manner as the
   # Volume Chooser.

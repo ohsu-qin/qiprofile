@@ -1,14 +1,14 @@
 extends ../layout/partial
 
 block billboard
-  | {{ volume.title }}
+  | {{ placeHolder.title }}
 
 block content
   // The time point number chooser slider-player combo.
   include ./time-point-chooser
   // The volume image display view.
   qi-image(
-    [image]="volume", (loaded)="onLoaded($event)",
+    *ngIf="image", [image]="image", (loaded)="onLoaded($event)",
     (error)="onLoadError($event)"
   )
   // The session number chooser slider-player combo.

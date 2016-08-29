@@ -71,12 +71,12 @@ export class VolumeService {
   placeHolder(routeParams: Object) {
     // The parent place-holder object.
     let imageSequence = this.sequenceService.placeHolder(routeParams);
-    // The volume index is one less than the volume paramter.
-    let volumeNdx = +routeParams.volume - 1;
+    // The volume number is the volume route parameter.
+    let volumeNbr = +routeParams.volume;
     // Extend an empty volume object with the image sequence
     // parent reference and the volume number.
     let volume = {};
-    Volume.extend(volume, imageSequence, volumeNdx);
+    Volume.extend(volume, imageSequence, volumeNbr);
 
     return volume;
   }

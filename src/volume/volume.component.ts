@@ -42,7 +42,22 @@ export class VolumeComponent extends PageComponent {
   routeParams: Object;
 
   /**
-   * The volume REST object.
+   * The place-holder object for the display title and home
+   * navigation project.
+   *
+   * @property placeHolder {string}
+   */
+  placeHolder: Object;
+
+  /**
+   * The image to display.
+   *
+   * @property image {Object}
+   */
+  image: Object;
+
+  /**
+   * The loaded volume REST object.
    *
    * @property volume {Object}
    */
@@ -101,7 +116,7 @@ export class VolumeComponent extends PageComponent {
    * @readOnly
    */
   get project(): string {
-    return this.volume.imageSequence.session.subject.project;
+    return this.placeHolder.imageSequence.session.subject.project;
   }
 
   /**
@@ -171,8 +186,9 @@ export class VolumeComponent extends PageComponent {
    * @return {number} the number of volume parent images
    */
   volumeCount(): number {
-    let volumes = this.volume.imageSequence.volumes;
-    return volumes ? volumes.images.length : 0;
+    return this.volume ?
+           this.volume.imageSequence.volumes.images.length :
+           0;
   }
 
   /**
@@ -204,9 +220,10 @@ export class VolumeComponent extends PageComponent {
     // and propagate the changed volume number to the chooser.
     // Otherwise, post an error message.
     if (volume) {
-      this.volume = volume;
+      this.placeHolder = volume;
+      this.image = volume;
     } else {
-      this.error = `${this.imageSequence.title} Volume ${volumeNbr}` +
+      this.error = `${imageSequence.title} Volume ${volumeNbr}` +
                    'was not found';
     }
   }
@@ -216,7 +233,9 @@ export class VolumeComponent extends PageComponent {
    * @return {number} the number of parent subject sessions
    */
   sessionCount(): number {
-    return this.volume.imageSequence.session.subject.sessions.length;
+    return this.volume ?
+           this.volume.imageSequence.session.subject.sessions.length :
+           0;
   }
 
   /**
@@ -318,16 +337,17 @@ export class VolumeComponent extends PageComponent {
    * @param params {Object} the search parameters
    */
   private getVolume(params) {
-    // The place-holder volume to fill in the title until the real
+    // The place-holder volume fills in the title until the real
     // volume is fetched.
-    this.volume = this.service.placeHolder(params);
+    this.placeHolder = this.service.placeHolder(params);
 
     // Fetch the real volume.
     this.service.getVolume(params).subscribe(volume => {
       if (volume) {
-        this.volume = volume;
+        // Set the image, which will trigger image load.
+        this.image = volume;
       } else {
-        this.error = `${this.volume.title} was not found`;
+        this.error = `${this.placeHolder.title} was not found`;
       }
     });
   }

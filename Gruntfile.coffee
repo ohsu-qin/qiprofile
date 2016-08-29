@@ -30,7 +30,7 @@ module.exports = (grunt) ->
     tslint:
       files:
         src: ['src/**/*.ts']
-    
+
     typings:
       install: {}
 
@@ -68,7 +68,7 @@ module.exports = (grunt) ->
       # CSS style files themselves are copied to the destination
       # in the concat:css task.
       #
-      # This task is only used to copy the Bootstrap map file. 
+      # This task is only used to copy the Bootstrap map file.
       # Since the non-minimized Bootstrap module references the
       # CSS map, the map must be colocated with the stylesheets.
       cssmap:
@@ -90,7 +90,7 @@ module.exports = (grunt) ->
           'fonts/google/*'
         ]
         dest: 'public/fonts/'
-      
+
       doc:
         expand: true
         src: ['src/**/*.ts']
@@ -149,7 +149,7 @@ module.exports = (grunt) ->
       bsFiles:
         src:
           'html/**'
-    
+
     jspm:
       dist:
         files:
@@ -185,7 +185,7 @@ module.exports = (grunt) ->
           # Note: conda env remove hangs when executed from a script.
           # There is no known mechanism to make this work.
           # '(yes | conda create -n qirest pip) && ' +
-          'source activate qirest && ' + 
+          'source activate qirest && ' +
           'pip install --upgrade -r requirements.txt'
 
       # Install the npm packages.
@@ -198,12 +198,12 @@ module.exports = (grunt) ->
           #   grunt start. If grunt fails with a missing babel lodash error,
           #   then raise this issue with the npm dev team.
           'npm install && npm install lodash'
-      
+
       qirest:
         command:
           'pgrep -f qirest || ' +
           '((qirest >/var/log/qirest.log 2>&1 &) && sleep .5)'
-      
+
       # Kill any existing selenium server and install the drivers.
       installselenium:
         command: 'pkill -f selenium-standalone >/dev/null 2>&1;' +

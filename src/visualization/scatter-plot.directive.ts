@@ -14,11 +14,11 @@ import * as d3 from 'd3';
 })
 
 /**
- * The d3 scatter chart directive
+ * Draws a D3 scatter plot.
  *
- * @class ScatterChartDirective
+ * @class ScatterPlotDirective
  */
-export class ScatterChartDirective implements OnChanges, AfterViewInit {
+export class ScatterPlotDirective implements OnChanges, AfterViewInit {
   /**
    * The data object array.
    *
@@ -32,7 +32,7 @@ export class ScatterChartDirective implements OnChanges, AfterViewInit {
    * @property axes {Object}
    */
   @Input() config;
-  
+
   /**
    * The d3 root element.
    *
@@ -43,16 +43,19 @@ export class ScatterChartDirective implements OnChanges, AfterViewInit {
   constructor(elementRef: ElementRef) {
     let elt = elementRef.nativeElement;
     this.root = d3.select(elt);
+    let svg = this.root.append('svg');
+    svg.attr('width', width).attr('height', height);
+
   }
-  
+
   ngOnChanges(changes: SimpleChange) {
     this.render(this.data);
   }
-  
+
   ngAfterViewInit() {
     // TODO - build the d3 container.
   }
-  
+
   render(newValue) {
     if (!newValue) { return; }
     // TODO

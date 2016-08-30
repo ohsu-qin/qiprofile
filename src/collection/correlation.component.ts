@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 //import { Axis } from '../visualization/axis.ts';
-import { ScatterChartDirective } from '../visualization/scatter-chart.directive.ts';
+import { ScatterChartDirective } from '../visualization/scatter-plot.directive.ts';
 
 @Component({
   selector: 'qi-collection-correlation',
@@ -22,7 +22,7 @@ export class CollectionCorrelationComponent {
    * @private
    */
   private config: Object;
-  
+
   /**
    * The {{#crossLink "Subject"}}{{/crossLink}} REST data objects.
    *
@@ -46,7 +46,7 @@ export class CollectionCorrelationComponent {
     // TODO - convert each {x, y} input config to an Axis config.
     this.config = config;
   }
-  
+
   get config() {
     return this.config;
   }

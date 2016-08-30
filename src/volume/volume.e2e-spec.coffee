@@ -1,5 +1,4 @@
 _ = require('lodash')
-promiseRetry = require('../testing/promise-retry')
 
 expect = require('../testing/expect')()
 Page = require '../testing/page'

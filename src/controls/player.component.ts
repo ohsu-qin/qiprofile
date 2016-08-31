@@ -111,11 +111,21 @@ export class PlayerComponent implements OnInit, OnChanges {
       return;
     }
     let valueChange = changes['value'];
+    // If the value request was initiated by this player component,
+    // then the waiting flag is set. However, a value request
+    // might have been initiated elsewhere, e.g. by a slider,
+    // and then reflected back to this player component's input.
+    // In that case, the waiting flag is not set and we can
+    // ignore the value change.
     if (!valueChange.isFirstChange()) {
-      // We must be awaiting a value. If this error occurs, then
-      // there is a bug in the player activation or change handler.
       if (!this.isWaiting) {
-        throw new Error('The player received an unexpected value change.');
+        // All we need to do is a consistency check. It is an
+        // error to not be waiting but have a request queued.
+        if (this.queued) {
+          throw new Error('The player is not waiting but has a' +
+                          ' request queued');
+        }
+        return;
       }
       // Clear the waiting flag.
       this.isWaiting = false;

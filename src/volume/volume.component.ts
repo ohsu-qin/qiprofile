@@ -160,6 +160,10 @@ export class VolumeComponent extends PageComponent {
    */
   onLoaded(volume: Object) {
     this.volume = volume;
+    // Temporarily set session number to an arbitrary value.
+    //
+    // TODO - Obtain this from the route parameters.
+    this.sessionNbr = 4;
   }
 
   /**
@@ -256,10 +260,16 @@ export class VolumeComponent extends PageComponent {
    * This change resets the title by virtue of loading the
    * new session but does not reroute the app or change the page.
    *
-   * @method onSessionChange
+   * @method onSessionRequest
    * @param request {string|number} the number request
    */
   onSessionRequest(request: string|number) {
+    // TODO -
+    //   Obtain the session number.
+    //   Obtain the requested volume number.
+    //   Update the session in routeParams.
+    //   Set volume: this.getVolume
+    //
     // Cancel the other player, if active.
     this.cancelTimePointPlayer = true;
     // Reset on the next cycle.
@@ -268,9 +278,24 @@ export class VolumeComponent extends PageComponent {
     };
     setTimeout(clear, 0);
 
-    //
-    // TODO - flush this out as with onTimePointRequest.
-    //
+    let sessionNbr = this.requestedSessionNumber(request);
+
+    // The target volume number.
+    //-let volumeNbr = this.requestedVolumeNumber(request);
+    // The parent image sequence.
+    //-let imageSequence = this.volume.imageSequence;
+    // Find the requested volume.
+    //-let volume = this.service.findVolume(imageSequence, volumeNbr);
+    // If the volume was found, then capture the new volume
+    // and propagate the changed volume number to the chooser.
+    // Otherwise, post an error message.
+    if (volume) {
+      this.placeHolder = volume;
+      this.image = volume;
+    } else {
+      this.error = `${imageSequence.title} Volume ${volumeNbr}` +
+                   'was not found';
+    }
   }
 
   /**
@@ -312,6 +337,30 @@ export class VolumeComponent extends PageComponent {
       return nextNdx + 1;
     } else  {
       throw new Error(`Time point request not supported: ${ request }`);
+    }
+  }
+
+  /**
+   * Determines the requested session number. The request
+   * can be the number, `previous` or `next`.
+   *
+   * @method requestedSessionNumber
+   * @param request {string|number} the number request
+   * @private
+   */
+  private requestedSessionNumber(request: string|number) {
+    if (_.isInteger(request)) {
+      return request;
+    } else if (request === 'previous') {
+      return this.sessionNbr === 1 ?
+        this.volume.imageSequence.session.subject.sessions.length :
+        this.sessionNbr - 1;
+    } else if (request === 'next') {
+      let nextNdx = this.sessionNbr %
+            this.volume.imageSequence.session.subject.sessions.length;
+      return nextNdx + 1;
+    } else  {
+      throw new Error(`Session request not supported: ${ request }`);
     }
   }
 

@@ -1,0 +1,19 @@
+// The if test checks for a loaded volume.
+.qi-vertical-chooser.qi-volume-chooser-right(
+  *ngIf="volume"
+)
+  // The chooser heading.
+  .row Session
+  // The value slider.
+  .row.qi-vertical-slider(
+    qi-slider, [min]="1", [max]="sessionCount()",
+    [config]="sliderConfig", [height]="sliderHeight",
+    [value]="sessionNbr",
+    (changed)="onSessionRequest($event)",
+    (window:resize)="onResize($event.target)"
+  )
+  // The [previous, play, next] buttons.
+  qi-player.row(
+    [value]="sessionNbr",
+    [cancel]="isError", (action)="onSessionRequest($event)"
+  )

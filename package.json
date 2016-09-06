@@ -16,7 +16,7 @@
     "imaging"
   ],
   "author": "Fred Loney <loneyf@ohsu.edu>",
-  "license": "MIT",
+  "license": "BSD",
   "bin": "./bin/qiprofile",
   "scripts": {
     "reinstall": "./node_modules/grunt-cli/bin/grunt reinstall",

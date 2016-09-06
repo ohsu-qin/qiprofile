@@ -80,7 +80,7 @@ export class SliderDirective implements OnInit, OnChanges {
    * Subsequently, the value is changed when either the slider
    * value or the `value` property is changed.
    */
-  private _value: any;
+  private _value: number;
 
   @Input() name: string;
   @Input() behaviour: string;
@@ -103,19 +103,17 @@ export class SliderDirective implements OnInit, OnChanges {
   @Input() height;
 
   ngOnInit(): void {
-    let inputsConfig = JSON.parse(JSON.stringify({
+    let config = JSON.parse(JSON.stringify({
       behaviour: this.behaviour,
       connect: this.connect,
       limit: this.limit,
       start: this._value,
       step: this.step,
-      range: this.config.range || {min: this.min, max: this.max}
+      range: {min: this.min, max: this.max}
     }));
+    Object.assign(config, this.config);
 
-    this.slider = noUiSlider.create(
-      this.el.nativeElement,
-      Object.assign(this.config, inputsConfig)
-    );
+    this.slider = noUiSlider.create(this.el.nativeElement, config);
 
     this.slider.on('set', (sliderValue: any) => {
       let value = toValue(sliderValue);
@@ -134,9 +132,9 @@ export class SliderDirective implements OnInit, OnChanges {
    * @method ngOnChanges
    */
   public ngOnChanges(changes: SimpleChanges) {
-    let change = changes['value'];
-    if (change) {
-      this._value = change.currentValue;
+    let valueChange = changes['value'];
+    if (valueChange) {
+      this._value = valueChange.currentValue;
       if (this.slider) {
         this.slider.set(this._value);
       }

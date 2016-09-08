@@ -256,7 +256,7 @@ export class VolumeComponent extends PageComponent {
    * This change resets the title by virtue of loading the
    * new session but does not reroute the app or change the page.
    *
-   * @method onSessionChange
+   * @method onSessionRequest
    * @param request {string|number} the number request
    */
   onSessionRequest(request: string|number) {
@@ -268,9 +268,13 @@ export class VolumeComponent extends PageComponent {
     };
     setTimeout(clear, 0);
 
-    //
-    // TODO - flush this out as with onTimePointRequest.
-    //
+    // The target session number.
+    let sessionNbr = this.requestedSessionNumber(request);
+    // Update the route params.
+    this.routeParams.session = sessionNbr;
+    this.routeParams.volume = this.volume.number;
+    // Fetch the volume.
+    this.getVolume(this.routeParams);
   }
 
   /**
@@ -312,6 +316,30 @@ export class VolumeComponent extends PageComponent {
       return nextNdx + 1;
     } else  {
       throw new Error(`Time point request not supported: ${ request }`);
+    }
+  }
+
+  /**
+   * Determines the requested session number. The request
+   * can be the number, `previous` or `next`.
+   *
+   * @method requestedSessionNumber
+   * @param request {string|number} the number request
+   * @private
+   */
+  private requestedSessionNumber(request: string|number) {
+    if (_.isInteger(request)) {
+      return request;
+    } else if (request === 'previous') {
+      return this.routeParams.session == 1 ?
+        this.volume.imageSequence.session.subject.sessions.length :
+        this.routeParams.session - 1;
+    } else if (request === 'next') {
+      let nextNdx = this.routeParams.session %
+            this.volume.imageSequence.session.subject.sessions.length;
+      return nextNdx + 1;
+    } else  {
+      throw new Error(`Session request not supported: ${ request }`);
     }
   }
 

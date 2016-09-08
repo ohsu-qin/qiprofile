@@ -130,9 +130,51 @@ describe 'E2E Testing Volume Display', ->
                 expect(page.billboard, 'The previous button did not change the billboard')
                   .to.eventually.equal('Breast Patient 1 Session 1 Scan 1 Volume 1')
 
-  # TODO - flush out this test similar to the Time Point chooser test.
-  xdescribe 'Session Chooser', ->
+  describe 'Session Chooser', ->
     chooser = null
 
     beforeEach ->
       chooser = page.sessionChooser()
+
+    # Oddly, this simple existence test fails but the following
+    # tests which use the chooser succeed.
+    # TODO - reinvestigate this anomaly.
+    xit 'should display the volume chooser', ->
+      expect(chooser, 'The chooser is missing').to.eventually.exist
+
+    it 'should display the volume chooser heading', ->
+      # The heading is the first row.
+      heading = chooser
+        .then (resolved) ->
+          resolved.findAll('.row')
+        .then (rows) ->
+          rows[0].text()
+      expect(heading, 'The chooser heading is missing')
+        .to.eventually.exist
+      expect(heading, 'The chooser heading is incorrect')
+        .to.eventually.equal('Session')
+
+    it 'should display the volume chooser slider', ->
+      slider = chooser.then (resolved) ->
+        resolved.find('.qi-vertical-slider')
+      expect(slider, 'The chooser slider is missing')
+        .to.eventually.exist
+
+    it 'should display the volume chooser player', ->
+      chooser
+        .then (resolved) ->
+          resolved.find('qi-player')
+        .then (player) ->
+          expect(player, 'The player is missing').to.exist
+          player.findAll('button').then (buttons) ->
+            expect(buttons, 'The player buttons are missing')
+              .to.not.be.empty
+            expect(buttons.length, 'The player buttons count is incorrect')
+              .to.equal(3)
+            [previous, play, next] = buttons
+            next.click().then ->
+              expect(page.billboard, 'The next button did not change the billboard')
+                .to.eventually.equal('Breast Patient 1 Session 2 Scan 1 Volume 1')
+              previous.click().then ->
+                expect(page.billboard, 'The previous button did not change the billboard')
+                  .to.eventually.equal('Breast Patient 1 Session 1 Scan 1 Volume 1')

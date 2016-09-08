@@ -8,12 +8,12 @@
   .row.qi-vertical-slider(
     qi-slider, [min]="1", [max]="sessionCount()",
     [config]="sliderConfig", [height]="sliderHeight",
-    [value]="sessionNbr",
+    [value]="routeParams.session",
     (changed)="onSessionRequest($event)",
     (window:resize)="onResize($event.target)"
   )
   // The [previous, play, next] buttons.
   qi-player.row(
-    [value]="sessionNbr",
+    [value]="routeParams.session",
     [cancel]="isError", (action)="onSessionRequest($event)"
   )

@@ -160,10 +160,6 @@ export class VolumeComponent extends PageComponent {
    */
   onLoaded(volume: Object) {
     this.volume = volume;
-    // Temporarily set session number to an arbitrary value.
-    //
-    // TODO - Obtain this from the route parameters.
-    this.sessionNbr = 4;
   }
 
   /**
@@ -264,12 +260,6 @@ export class VolumeComponent extends PageComponent {
    * @param request {string|number} the number request
    */
   onSessionRequest(request: string|number) {
-    // TODO -
-    //   Obtain the session number.
-    //   Obtain the requested volume number.
-    //   Update the session in routeParams.
-    //   Set volume: this.getVolume
-    //
     // Cancel the other player, if active.
     this.cancelTimePointPlayer = true;
     // Reset on the next cycle.
@@ -278,24 +268,13 @@ export class VolumeComponent extends PageComponent {
     };
     setTimeout(clear, 0);
 
+    // The target session number.
     let sessionNbr = this.requestedSessionNumber(request);
-
-    // The target volume number.
-    //-let volumeNbr = this.requestedVolumeNumber(request);
-    // The parent image sequence.
-    //-let imageSequence = this.volume.imageSequence;
-    // Find the requested volume.
-    //-let volume = this.service.findVolume(imageSequence, volumeNbr);
-    // If the volume was found, then capture the new volume
-    // and propagate the changed volume number to the chooser.
-    // Otherwise, post an error message.
-    if (volume) {
-      this.placeHolder = volume;
-      this.image = volume;
-    } else {
-      this.error = `${imageSequence.title} Volume ${volumeNbr}` +
-                   'was not found';
-    }
+    // Update the route params.
+    this.routeParams.session = sessionNbr;
+    this.routeParams.volume = this.volume.number;
+    // Fetch the volume.
+    this.getVolume(this.routeParams);
   }
 
   /**
@@ -352,11 +331,11 @@ export class VolumeComponent extends PageComponent {
     if (_.isInteger(request)) {
       return request;
     } else if (request === 'previous') {
-      return this.sessionNbr === 1 ?
+      return this.routeParams.session == 1 ?
         this.volume.imageSequence.session.subject.sessions.length :
-        this.sessionNbr - 1;
+        this.routeParams.session - 1;
     } else if (request === 'next') {
-      let nextNdx = this.sessionNbr %
+      let nextNdx = this.routeParams.session %
             this.volume.imageSequence.session.subject.sessions.length;
       return nextNdx + 1;
     } else  {

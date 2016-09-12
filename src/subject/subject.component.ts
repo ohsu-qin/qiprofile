@@ -17,8 +17,6 @@ import help from './subject.help.md';
 @Component({
   selector: 'qi-subject',
   templateUrl: '/public/html/subject/subject.html',
-  directives: PageComponent.DIRECTIVES,
-  providers: [],
   // Instruct Angular to disable change detection until this
   // component tells it to do so.
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -36,7 +34,7 @@ export class SubjectComponent extends PageComponent {
    * @property subject {Object}
    */
   subject: Object;
-  
+
   /**
    * The project name.
    *
@@ -46,7 +44,7 @@ export class SubjectComponent extends PageComponent {
   get project(): string {
     return this.subject ? this.subject.project : null;
   }
-  
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -54,7 +52,7 @@ export class SubjectComponent extends PageComponent {
     changeDetector: ChangeDetectorRef
   ) {
     super(help);
-    
+
     // The route/query parameters.
     let params = this.route.params.value;
 
@@ -82,7 +80,7 @@ export class SubjectComponent extends PageComponent {
   clearError() {
     this.error = null;
   }
-  
+
   /**
    * Opens the Session Detail page.
    *

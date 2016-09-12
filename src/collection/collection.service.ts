@@ -12,7 +12,7 @@ import { CollectionResource } from './collection.resource.ts';
  * @class CollectionService
  */
 export class CollectionService {
-  constructor(private resource: CollectionResource) {}
+  constructor(private resource: CollectionResource) { }
 
   /**
    * @method getCollections

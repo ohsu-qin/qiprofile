@@ -12,13 +12,10 @@ import { PageComponent } from '../page/page.component.ts';
 import { ProjectService } from '../project/project.service.ts';
 import { HelpService } from '../help/help.service.ts';
 import help from './projects.help.md';
-import { ProjectItemComponent } from './project-item.component.ts';
 
 @Component({
   selector: 'qi-projects',
-  templateUrl: '/public/html/projects/projects.html',
-  directives: PageComponent.DIRECTIVES.concat([ProjectItemComponent]),
-  providers: [ProjectService]
+  templateUrl: '/public/html/projects/projects.html'
 })
 
 /**
@@ -42,7 +39,7 @@ export class ProjectsComponent extends PageComponent {
    * @property isEmpty {boolean}
    */
   isEmpty: boolean;
-  
+
   constructor(private dataService: ProjectService,
               private helpService: HelpService) {
       super(help);

@@ -14,8 +14,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 export class CollectionItemComponent {
   @Input() collection;
 
-  constructor(private route: ActivatedRoute, private router: Router) {}
-  
+  constructor(private route: ActivatedRoute, private router: Router) { }
+
   /**
    * Opens the visit info page.
    *
@@ -24,7 +24,7 @@ export class CollectionItemComponent {
   visitInfo() {
     window.open(this.collection.url);
   }
-  
+
   /**
    * Opens the visit info page.
    *

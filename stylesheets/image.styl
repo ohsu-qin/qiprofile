@@ -12,12 +12,15 @@
 // The default papaya style has a nearly invisible menu when papaya is embedded.
 // Override with a better text color.
 .papaya-menu-label
-  color: CadetBlue
+  color CadetBlue
 
 .papaya-toolbar
   background-color MintCream
   // Clobber the File menu item.
-  & #File
+  // Note: the #File selector is untenable, since for some reason the id
+  // changes to File1 when the page is revisited via a forward or back.
+  // Therefore, use the first child selector instead.
+  & span:first-child
     display none
 
 .papaya-display

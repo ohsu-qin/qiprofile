@@ -36,7 +36,7 @@
         ng-click="open()" ng-controller='ScanProtocolCtrl'
       )
         .glyphicon.glyphicon-info-sign()
-    ul.qi-hor-list.qi-scan-vol-btn-group
+    ul.qi-horizontal-list.qi-scan-vol-btn-group
       // Note: The artificial intermediate ul-li span element works 
       //around the AngularJS bug described in the leading comment above.
       // The title attribute displays the volume number tooltip. 
@@ -57,7 +57,7 @@
         ng-click="open()" ng-controller='RegistrationProtocolCtrl'
       )
         .glyphicon.glyphicon-info-sign()
-    ul.qi-hor-list.qi-reg-vol-btn-group
+    ul.qi-horizontal-list.qi-reg-vol-btn-group
       // See the comments for the scan selection list above.
       span(ng-repeat="volume in registration.volumes.images" title="{{ $index + 1 }}"
            ng-controller='VolumeDisplayCtrl')

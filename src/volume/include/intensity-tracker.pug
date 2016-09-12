@@ -1,0 +1,21 @@
+// The if test checks for a loaded volume with intensity values.
+.qi-intensity-tracker(*ngIf="intensities")
+  // The tracker heading.
+  .row.qi-title
+    | Intensity
+    button.btn.btn-sm.qi-btn(
+      (click)="intensityHelp()"
+    )
+      .glyphicon.glyphicon-question-sign
+
+  // The spark line.
+  .row(
+    qi-spark-line, [width]=200, [height]=100, [domain]="domain",
+    [data]="intensities"
+  )
+
+  // The color bar.
+  .row(
+    qi-color-bar, [width]=200, [height]=40, [domain]="domain",
+    [data]="intensities"
+  )

@@ -13,8 +13,8 @@ import { PapayaService } from './papaya.service.ts';
 /**
  * The image display component.
  *
- * @module volume
  * @class ImageComponent
+ * @module image
  */
 export class ImageComponent
 implements OnChanges, AfterViewChecked, OnDestroy {
@@ -26,11 +26,18 @@ implements OnChanges, AfterViewChecked, OnDestroy {
   @Input() image;
 
   /**
-   * The error event.
+   * The loaded event.
    *
-   * @property error {EventEmitter}
+   * @property loaded {EventEmitter}
    */
   @Output() loaded = new EventEmitter();
+
+  /**
+   * The coordinate change event.
+   *
+   * @property coordinateChanged {EventEmitter}
+   */
+  @Output() coordinateChanged = new EventEmitter();
 
   /**
    * The error event.
@@ -40,7 +47,16 @@ implements OnChanges, AfterViewChecked, OnDestroy {
   @Output() error = new EventEmitter();
 
   /**
-   * Flag indicating whether Papaya has started.
+   * Flag indicating whether this component has already
+   * started (or restarted) Papaya.
+   *
+   * Note: a new component instance is created when the browser returns
+   * to the parent page. However, Papaya is a global service and
+   * retains the Papaya viewer and content during the navigation.
+   * Therefore, this flag marks whether *this instance* called the
+   * {{#crossLink "PapayaService/start"}}{{/crossLink}} method.
+   * That service method calls Papaya restart if Papaya is already
+   * started.
    *
    * @property isStarted
    * @private
@@ -60,7 +76,8 @@ implements OnChanges, AfterViewChecked, OnDestroy {
     let onError = (message: string) => {
       // Improve the file read error.
       const notFoundPrefix = /^There was a problem reading that file \(.*\)/;
-      let better = `The server could not read the ${ this.image.title } file ${ this.image.name }`;
+      let better = 'The server could not read the' +
+                   ` ${ this.image.title } file ${ this.image.name }`;
       message = message.replace(notFoundPrefix, better);
       // Trigger the bound error output.
       this.error.emit(message);
@@ -73,8 +90,28 @@ implements OnChanges, AfterViewChecked, OnDestroy {
       this.image.contents = contents;
       // Trigger the bound loaded output.
       this.loaded.emit(this.image);
+      // // Papaya triggers this loaded callback with a null volume
+      // // on viewer refresh, even though no file is loaded. In
+      // // that case, the Papaya callback contents argument has
+      // // a data field whose data property is empty.
+      // // Guard against this case.
+      // if (contents && contents.data && contents.data.data) {
+      //   // Set the image contents property when loaded.
+      //   this.image.contents = contents;
+      //   // Trigger the bound loaded output.
+      //   this.loaded.emit(this.image);
+      // } else {
+      //   this.papaya.replaceImage(this.image);
+      // }
     };
     this.papaya.finishedLoadingCallback = onFinishedLoading;
+
+    // Coordinate change processing.
+    let onCoordinateChanged = (coordinate: Object) => {
+      // Trigger the bound output.
+      this.coordinateChanged.emit(coordinate);
+    };
+    this.papaya.coordinateChangedCallback = onCoordinateChanged;
   }
 
   /**
@@ -97,11 +134,17 @@ implements OnChanges, AfterViewChecked, OnDestroy {
    * @method ngAfterViewChecked
    */
   ngAfterViewChecked() {
-    // If the input is a place-holder without a file name or if
-    // Papaya is already displayed, then bail.
+    // If the input is not a place-holder without a file name
+    // and this component instance has not already started
+    // Papaya, then start or refresh Papaya. See the isStarted
+    // property doc for more information.
     if (this.image.name && !this.isStarted) {
-      this.papaya.start(this.image);
-      this.isStarted = true;
+      if (this.papaya.isInitialized()) {
+        this.papaya.restart(this.image);
+      } else {
+        this.papaya.start(this.image);
+        this.isStarted = true;
+      }
     }
   }
 

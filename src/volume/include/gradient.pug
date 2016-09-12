@@ -1,0 +1,15 @@
+// The if test checks for a loaded volume with gradient values.
+.qi-intensity-gradient(*ngIf="gradient")
+  // The gradient heading.
+  .row.qi-title
+    | Gradient
+    button.btn.btn-sm.qi-btn(
+      (click)="gradientHelp()"
+    )
+      .glyphicon.glyphicon-question-sign
+
+  // The gradient lines.
+  .row(
+    qi-spark-line, [width]=200, [height]=100, [domain]="domain",
+    [data]="gradient", [legend]="gradientLegend", [guide]=true
+  )

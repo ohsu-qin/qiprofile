@@ -1,0 +1,18 @@
+// The if test checks for a loaded volume.
+.table.qi-volume-chooser(*ngIf="volume")
+  // The chooser heading.
+  .row.qi-title Time Point
+
+  // The value slider.
+  .row.qi-slider(
+    qi-slider, [min]="1", [max]="volumeCount()", [config]="sliderConfig",
+    [height]="sliderHeight", [value]="volume.number",
+    (changed)="onTimePointRequest($event)",
+    (window:resize)="onResize($event.target)"
+  )
+
+  // The [previous, play, next] buttons.
+  qi-player.row(
+    [value]="volume.number", [cancel]="isError",
+    (action)="onTimePointRequest($event)"
+  )

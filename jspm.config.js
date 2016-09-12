@@ -35,7 +35,7 @@ SystemJS.config({
   },
   packages: {
     'src': {
-      'main': 'main/main.js',
+      'main': 'main/main.ts',
       'meta': {
         '*.ts': {
           'loader': 'ts'
@@ -73,30 +73,30 @@ SystemJS.config({
     'github:*/*.json'
   ],
   map: {
-    'css': 'github:systemjs/plugin-css@0.1.26',
-    'bowser': 'npm:bowser@1.4.4',
+    '@angular/router': 'npm:@angular/router@3.0.0-rc.2',
+    'angular2-modal': 'npm:angular2-modal@2.0.0-beta.12',
+    'css': 'github:systemjs/plugin-css@0.1.27',
+    'bowser': 'npm:bowser@1.4.5',
     'gifti-reader-js': 'npm:gifti-reader-js@0.4.3',
     'isarray': 'npm:isarray@1.0.0',
     'ieee754': 'npm:ieee754@1.1.6',
     'base64-js': 'npm:base64-js@1.1.2',
     'ini-parser': 'npm:ini-parser@0.0.2',
     'd3': 'npm:d3@4.2.2',
-    '@angular/common': 'npm:@angular/common@2.0.0-rc.5',
-    '@angular/compiler': 'npm:@angular/compiler@2.0.0-rc.5',
-    '@angular/core': 'npm:@angular/core@2.0.0-rc.5',
-    '@angular/forms': 'npm:@angular/forms@0.3.0',
-    '@angular/http': 'npm:@angular/http@2.0.0-rc.5',
-    '@angular/platform-browser': 'npm:@angular/platform-browser@2.0.0-rc.5',
-    '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic@2.0.0-rc.5',
-    '@angular/router': 'npm:@angular/router@3.0.0-beta.2',
+    '@angular/common': 'npm:@angular/common@2.0.0-rc.6',
+    '@angular/compiler': 'npm:@angular/compiler@2.0.0-rc.6',
+    '@angular/core': 'npm:@angular/core@2.0.0-rc.6',
+    '@angular/http': 'npm:@angular/http@2.0.0-rc.6',
+    '@angular/platform-browser': 'npm:@angular/platform-browser@2.0.0-rc.6',
+    '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic@2.0.0-rc.6',
     'assert': 'github:jspm/nodelibs-assert@0.2.0-alpha',
     'buffer': 'github:jspm/nodelibs-buffer@0.2.0-alpha',
     'child_process': 'github:jspm/nodelibs-child_process@0.2.0-alpha',
     'coffee': 'github:forresto/system-coffee@master',
-    'common': 'npm:@angular/common@2.0.0-rc.5',
-    'compiler': 'npm:@angular/compiler@2.0.0-rc.5',
+    'common': 'npm:@angular/common@2.0.0-rc.6',
+    'compiler': 'npm:@angular/compiler@2.0.0-rc.6',
     'constants': 'github:jspm/nodelibs-constants@0.2.0-alpha',
-    'core': 'npm:@angular/core@2.0.0-rc.5',
+    'core': 'npm:@angular/core@2.0.0-rc.6',
     'crypto': 'github:jspm/nodelibs-crypto@0.2.0-alpha',
     'events': 'github:jspm/nodelibs-events@0.2.0-alpha',
     'https': 'github:jspm/nodelibs-https@0.2.0-alpha',
@@ -109,18 +109,19 @@ SystemJS.config({
     'module': 'github:jspm/nodelibs-module@0.2.0-alpha',
     'moment': 'npm:moment@2.14.1',
     'net': 'github:jspm/nodelibs-net@0.2.0-alpha',
-    'ng2-resource-rest': 'npm:ng2-resource-rest@0.3.7',
+    'ng2-resource-rest': 'npm:ng2-resource-rest@0.5.6',
     'nouislider': 'npm:nouislider@8.5.1',
+    'ohsu-qin/ng2-nouislider': 'github:ohsu-qin/ng2-nouislider@0.3.0',
     'os': 'github:jspm/nodelibs-os@0.2.0-alpha',
     'pako': 'npm:pako@0.2.9',
     'path': 'github:jspm/nodelibs-path@0.2.0-alpha',
-    'platform-browser': 'npm:@angular/platform-browser@2.0.0-rc.5',
-    'platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic@2.0.0-rc.5',
-    'requirejs': 'npm:requirejs@2.2.0',
+    'platform-browser': 'npm:@angular/platform-browser@2.0.0-rc.6',
+    'platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic@2.0.0-rc.6',
+    'requirejs': 'npm:requirejs@2.3.1',
     'process': 'github:jspm/nodelibs-process@0.2.0-alpha',
     'querystring': 'github:jspm/nodelibs-querystring@0.2.0-alpha',
     'reflect-metadata': 'npm:reflect-metadata@0.1.8',
-    'rxjs': 'npm:rxjs@5.0.0-beta.6',
+    'rxjs': 'npm:rxjs@5.0.0-beta.11',
     'socket.io': 'npm:socket.io@1.4.8',
     'socket.io-client': 'npm:socket.io-client@1.4.8',
     'sprintf': 'npm:sprintf@0.1.5',
@@ -136,7 +137,7 @@ SystemJS.config({
     'util': 'github:jspm/nodelibs-util@0.2.0-alpha',
     'vm': 'github:jspm/nodelibs-vm@0.2.0-alpha',
     'zlib': 'github:jspm/nodelibs-zlib@0.2.0-alpha',
-    'zone.js': 'npm:zone.js@0.6.15'
+    'zone.js': 'npm:zone.js@0.6.17'
   },
   packages: {
     'github:frankwallis/plugin-typescript@4.0.16': {
@@ -170,17 +171,6 @@ SystemJS.config({
         'readable-stream': 'npm:readable-stream@2.1.5'
       }
     },
-    'npm:readable-stream@2.1.4': {
-      'map': {
-        'inherits': 'npm:inherits@2.0.1',
-        'isarray': 'npm:isarray@1.0.0',
-        'core-util-is': 'npm:core-util-is@1.0.2',
-        'process-nextick-args': 'npm:process-nextick-args@1.0.7',
-        'buffer-shims': 'npm:buffer-shims@1.0.0',
-        'string_decoder': 'npm:string_decoder@0.10.31',
-        'util-deprecate': 'npm:util-deprecate@1.0.2'
-      }
-    },
     'github:jspm/nodelibs-url@0.2.0-alpha': {
       'map': {
         'url-browserify': 'npm:url@0.11.0'
@@ -193,7 +183,7 @@ SystemJS.config({
     },
     'npm:browserify-zlib@0.1.4': {
       'map': {
-        'readable-stream': 'npm:readable-stream@2.1.4',
+        'readable-stream': 'npm:readable-stream@2.1.5',
         'pako': 'npm:pako@0.2.9'
       }
     },
@@ -471,7 +461,7 @@ SystemJS.config({
     },
     'github:guybedford/system-md@0.1.0': {
       'map': {
-        'showdown': 'github:showdownjs/showdown@1.4.2'
+        'showdown': 'github:showdownjs/showdown@1.4.3'
       }
     },
     'npm:socket.io-client@1.4.8': {
@@ -592,7 +582,7 @@ SystemJS.config({
         'd3-drag': 'npm:d3-drag@1.0.1',
         'd3-interpolate': 'npm:d3-interpolate@1.1.1',
         'd3-selection': 'npm:d3-selection@1.0.2',
-        'd3-transition': 'npm:d3-transition@1.0.1'
+        'd3-transition': 'npm:d3-transition@1.0.2'
       }
     },
     'npm:d3-force@1.0.2': {
@@ -600,7 +590,7 @@ SystemJS.config({
         'd3-collection': 'npm:d3-collection@1.0.1',
         'd3-dispatch': 'npm:d3-dispatch@1.0.1',
         'd3-quadtree': 'npm:d3-quadtree@1.0.1',
-        'd3-timer': 'npm:d3-timer@1.0.2'
+        'd3-timer': 'npm:d3-timer@1.0.3'
       }
     },
     'npm:d3-interpolate@1.1.1': {
@@ -631,7 +621,7 @@ SystemJS.config({
     },
     'npm:d3-zoom@1.0.3': {
       'map': {
-        'd3-transition': 'npm:d3-transition@1.0.1',
+        'd3-transition': 'npm:d3-transition@1.0.2',
         'd3-dispatch': 'npm:d3-dispatch@1.0.1',
         'd3-drag': 'npm:d3-drag@1.0.1',
         'd3-interpolate': 'npm:d3-interpolate@1.1.1',
@@ -656,7 +646,7 @@ SystemJS.config({
         'd3-ease': 'npm:d3-ease@1.0.1',
         'd3-interpolate': 'npm:d3-interpolate@1.1.1',
         'd3-selection': 'npm:d3-selection@1.0.2',
-        'd3-timer': 'npm:d3-timer@1.0.2'
+        'd3-timer': 'npm:d3-timer@1.0.3'
       }
     },
     'npm:d3-dsv@1.0.1': {
@@ -680,7 +670,7 @@ SystemJS.config({
     },
     'npm:stream-http@2.3.1': {
       'map': {
-        'readable-stream': 'npm:readable-stream@2.1.4',
+        'readable-stream': 'npm:readable-stream@2.1.5',
         'to-arraybuffer': 'npm:to-arraybuffer@1.0.1',
         'builtin-status-codes': 'npm:builtin-status-codes@2.0.0',
         'xtend': 'npm:xtend@4.0.1',
@@ -696,6 +686,21 @@ SystemJS.config({
         'buffer-shims': 'npm:buffer-shims@1.0.0',
         'core-util-is': 'npm:core-util-is@1.0.2',
         'util-deprecate': 'npm:util-deprecate@1.0.2'
+      }
+    },
+    'npm:d3-transition@1.0.2': {
+      'map': {
+        'd3-color': 'npm:d3-color@1.0.1',
+        'd3-dispatch': 'npm:d3-dispatch@1.0.1',
+        'd3-ease': 'npm:d3-ease@1.0.1',
+        'd3-interpolate': 'npm:d3-interpolate@1.1.1',
+        'd3-selection': 'npm:d3-selection@1.0.2',
+        'd3-timer': 'npm:d3-timer@1.0.3'
+      }
+    },
+    'npm:rxjs@5.0.0-beta.11': {
+      'map': {
+        'symbol-observable': 'npm:symbol-observable@1.0.2'
       }
     }
   }

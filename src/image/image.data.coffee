@@ -1,14 +1,8 @@
 ###*
- * Image load and parsing module.
- *
- * @module image
- * @main image
-###
-
-###*
  * The Image REST data object extension service utility.
  *
  * @class Image
+ * @module image
  * @static
 ###
 Image =
@@ -22,7 +16,7 @@ Image =
   ###
   extend: (image) ->
     return image unless image?
-    
+
     Object.defineProperties image,
       ###*
        * A string that uniquely and durably identifies this image
@@ -42,7 +36,7 @@ Image =
           collection = subject.collection
           prefix = "/#{ project }/#{ collection }/#{ subject.number }/#{ session.number }"
           "#{ prefix }/#{ @scan.number }/#{ @resource }/#{ @name }"
-    
+
     image
 
 `export { Image as default }`

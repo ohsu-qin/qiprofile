@@ -4,6 +4,7 @@ block billboard
   | {{ placeHolder.title }}
 
 block content
+<<<<<<< HEAD
   // The time point number chooser slider-player combo.
   include ./time-point-chooser
   // The volume image display view.
@@ -13,3 +14,27 @@ block content
   )
   // The session number chooser slider-player combo.
   include ./session-chooser
+=======
+  .qi-time-series
+    .qi-vertical.qi-left
+      // The time point number chooser slider-player combo.
+      include ./include/time-point-chooser
+
+    // The volume image display view.
+    qi-image(
+      *ngIf="image", [image]="image", (loaded)="onLoaded($event)",
+      (coordinateChanged)="onCoordinateChanged($event)",
+      (error)="onLoadError($event)"
+    )
+
+    .qi-vertical.qi-right
+      // The session number chooser slider-player combo.
+      // TODO - merge.
+      .qi-intensity-charts
+        // The gradient lines.
+        .qi-panel
+          include ./include/gradient
+        // The intensity spark line and color bar.
+        .qi-panel
+          include ./include/intensity-tracker
+>>>>>>> intensity

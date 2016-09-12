@@ -1,28 +1,28 @@
-/**
- * The Volume module.
- *
- * @module volume
- * @main volume
- */
 import * as _ from 'lodash';
-import { Component } from '@angular/core';
-import { Location } from '@angular/common';
+import { Component, ViewContainerRef } from '@angular/core';
+import { Overlay } from 'angular2-modal';
+import { Modal } from 'angular2-modal/plugins/bootstrap';
+
 import { ActivatedRoute } from '@angular/router';
 
 import { PageComponent } from '../page/page.component.ts';
-import { SliderDirective } from '../controls/slider.directive.ts';
-import { PlayerComponent } from '../controls/player.component.ts';
-import { ImageComponent } from '../image/image.component.ts';
+import { PapayaService } from '../image/papaya.service.ts';
 import { ImageSequenceService } from '../session/image-sequence.service.ts';
 import { VolumeService } from './volume.service.ts';
 import help from './volume.help.md';
+import intensityHelp from './intensity.help.md';
+
+
+
+
+import ObjectHelper from '../object/object-helper.coffee';
+
+
+
 
 @Component({
   selector: 'qi-volume',
   templateUrl: '/public/html/volume/volume.html',
-  directives: PageComponent.DIRECTIVES.concat(
-    [SliderDirective, PlayerComponent, ImageComponent]
-  ),
   providers: [ImageSequenceService, VolumeService]
 })
 
@@ -30,6 +30,7 @@ import help from './volume.help.md';
  * The Volume main component.
  *
  * @class VolumeComponent
+ * @module volume
  * @extends PageComponent
  */
 export class VolumeComponent extends PageComponent {
@@ -62,6 +63,31 @@ export class VolumeComponent extends PageComponent {
    * @property volume {Object}
    */
   volume: Object;
+
+  /**
+   * The current coordinate time series voxel values.
+   *
+   * @property intensities {number[]}
+   */
+  intensities: number[];
+
+  /**
+   * The gradient voxel values about the current coordinate.
+   *
+   * @property gradient {number[]}
+   */
+  gradient: number[];
+
+  /**
+   * The gradient legend.
+   *
+   * @property gradientLegend {Object}
+   */
+  gradientLegend = {
+    axial: 'R-L',
+    coronal: 'P-A',
+    sagittal: 'I-S'
+  };
 
   /**
    * The slider height is computed to match the Papaya height.
@@ -110,6 +136,13 @@ export class VolumeComponent extends PageComponent {
   cancelSessionPlayer = false;
 
   /**
+   * The intensity [min, max].
+   *
+   * @property domain {number[]}
+   */
+  domain = [0, 400];
+
+  /**
    * The project name.
    *
    * @property project {string}
@@ -120,6 +153,17 @@ export class VolumeComponent extends PageComponent {
   }
 
   /**
+   * The _coordinate_ => {_orientation_: _intensities_, ...}
+   * function described in
+   * {{#crossLink "VolumeComponent/createGradientFactory"}}{{/crossLink}}
+   *
+   * @property createGradient
+   * @private
+   * @static
+   */
+  private createGradient: Function;
+
+  /**
    * Fetches the volume specified by the route parameters as
    * described in
    * {{#crossLink "VolumeComponent/getVolume"}}{{/crossLink}}.
@@ -128,14 +172,18 @@ export class VolumeComponent extends PageComponent {
    */
   constructor(
     route: ActivatedRoute,
-    private location: Location,
-    private service: VolumeService
+    vcRef: ViewContainerRef, overlay: Overlay, private modal: Modal,
+    private papaya: PapayaService, private service: VolumeService
   ) {
     super(help);
-    // Set the slider height manually.
-    this.sliderHeight = `${ this.calculateSliderHeight() }`;
     // Capture the route parameters.
     this.routeParams = route.params.value;
+    // Prep the modal.
+    overlay.defaultViewContainer = vcRef;
+    // Make the gradient factory.
+    this.createGradient = this.createGradientFactory();
+    // Set the slider height manually.
+    this.sliderHeight = `${ this.calculateSliderHeight() }`;
     // Fetch the volume.
     this.getVolume(this.routeParams);
   }
@@ -160,6 +208,10 @@ export class VolumeComponent extends PageComponent {
    */
   onLoaded(volume: Object) {
     this.volume = volume;
+    // Set the initial intensities.
+    let coord = this.papaya.currentCoordinate;
+    this.intensities = this.timeSeriesVoxelValues(coord);
+    this.gradient = this.gradientVoxelValues(coord);
   }
 
   /**
@@ -278,6 +330,112 @@ export class VolumeComponent extends PageComponent {
   }
 
   /**
+   * Sets the
+   * {{#crossLink "VolumeComponent/intensities:property"}}{{/crossLink}}
+   * property for the new coordinate.
+   *
+   * @method onCoordinateChanged
+   * @param coordinate {Object} the new coordinate
+   */
+  onCoordinateChanged(coordinate: Object) {
+    // Papaya centers the coordinate before it invokes the
+    // finishedLoading callback. Since the volume variable is
+    // not set until the image is loaded, the intensity will
+    // not be available on the first call to this coordinate
+    // change callback. The loaded callback is therefore
+    // also responsible for setting the initial intensities.
+    if (this.volume) {
+      this.intensities = this.timeSeriesVoxelValues(coordinate);
+      this.gradient = this.gradientVoxelValues(coordinate);
+    }
+  }
+
+  /**
+   * Shows the Intensity Tracker modal help pop-up.
+   *
+   * @method intensityHelp
+   */
+  intensityHelp() {
+    this.modal.alert()
+      .size('med')
+      .showClose(true)
+      .title('Intensity Tracker')
+      .body(intensityHelp)
+      .open();
+  }
+
+  private timeSeriesVoxelValues(coordinate: Object): number[] {
+    let value = volume => this.volumeVoxelValue(coordinate, volume);
+    return this.volume.imageSequence.volumes.images.map(value);
+  }
+
+  private volumeVoxelValue(coordinate, volume): number {
+    let data = volume.contents && volume.contents.data;
+    return data && this.papaya.getVoxelValue(coordinate, data);
+  }
+
+  /**
+   * The gradient domain is the 101 voxels centered at the current
+   * coordinate.
+   *
+   * @property GRADIENT_DOMAIN
+   * @private
+   * @static
+   */
+  private static const GRADIENT_DOMAIN = _.range(50, -51, -1);
+
+  /**
+   * Makes the _coordinate_ => {_orientation_: _intensities_, ...}
+   * function, where
+   * * _orientation_ is `axial`, `coronal` or `sagittal`
+   * * _intensities_ is the voxel values over the
+   *   {{#crossLink "VolumeComponent/GRADIENT_DOMAIN:property"}}{{/crossLink}}
+   *   offset from the _coordinate_ _orientation_ x, y or z index.
+   *
+   * @method createGradientFactory
+   * @private
+   * @return {function} the gradient voxel values factory
+   */
+  private createGradientFactory() {
+    // The value functions vary over one axis and fix the
+    // other axes.
+    let axialValueFunction = (coordinate, dx) => {
+      let x = coordinate.x + dx;
+      let y = coordinate.y;
+      let z = coordinate.z;
+      return x < 0 ? null : this.papaya.getVoxelValueAt(x, y, z);
+    };
+    let coronalValueFunction = (coordinate, dy) => {
+      let x = coordinate.x;
+      let y = coordinate.y + dy;
+      let z = coordinate.z;
+      return y < 0 ? null : this.papaya.getVoxelValueAt(x, y, z);
+    };
+    let sagittalValueFunction = (coordinate, dz) => {
+      let x = coordinate.x;
+      let y = coordinate.y;
+      let z = coordinate.z + dz;
+      return z < 0 ? null : this.papaya.getVoxelValueAt(x, y, z);
+    };
+
+    // The coordinate => {axial, coronal, sagittal} function.
+    return (coordinate) => {
+      let axial = _.partial(axialValueFunction, coordinate);
+      let coronal = _.partial(coronalValueFunction, coordinate);
+      let sagittal = _.partial(sagittalValueFunction, coordinate);
+      return {
+        axial: VolumeComponent.GRADIENT_DOMAIN.map(axial),
+        coronal: VolumeComponent.GRADIENT_DOMAIN.map(coronal),
+        sagittal: VolumeComponent.GRADIENT_DOMAIN.map(sagittal)
+      };
+    };
+  }
+
+  private gradientVoxelValues(coordinate: Object): Object {
+    return this.createGradient(coordinate);
+  }
+
+  /**
    * Mimic the Papaya container height = base width / 1.5.
    * The Papaya parent element width is specified in the
    * CSS as 60% of the base width. Nothing is laid out at
@@ -290,7 +448,7 @@ export class VolumeComponent extends PageComponent {
    * @return the intended slider height
    */
   private calculateSliderHeight(): number {
-    const margin = 36;
+    const margin = 48;
     let unpadded = (window.innerWidth * 0.6) / 1.5;
     return Math.round(unpadded - margin);
   }

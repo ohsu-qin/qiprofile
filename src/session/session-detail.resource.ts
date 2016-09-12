@@ -13,4 +13,4 @@ import { RestResource } from '../rest/rest.resource.ts';
  * @class SessionDetailResource
  * @extends RestResource
  */
-export class SessionDetailResource extends RestResource {}
+export class SessionDetailResource extends RestResource { }

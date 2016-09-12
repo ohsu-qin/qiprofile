@@ -1,9 +1,3 @@
-/**
- * The Session Detail module.
- *
- * @module session
- * @main session
- */
 import {
   Component, ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core';
@@ -18,8 +12,6 @@ import help from './session.help.md';
 @Component({
   selector: 'qi-session',
   templateUrl: '/public/html/session/session.html',
-  directives: PageComponent.DIRECTIVES,
-  providers: [],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 
@@ -27,6 +19,7 @@ import help from './session.help.md';
  * The Session Detail page main component.
  *
  * @class SessionComponent
+ * @module session
  */
 export class SessionComponent extends PageComponent {
   /**
@@ -35,7 +28,7 @@ export class SessionComponent extends PageComponent {
    * @property session {Object}
    */
   session: Object;
-  
+
   /**
    * The project name.
    *
@@ -45,7 +38,7 @@ export class SessionComponent extends PageComponent {
   get project(): string {
     return this.session ? this.session.subject.project : null;
   }
-  
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -53,17 +46,17 @@ export class SessionComponent extends PageComponent {
     changeDetector: ChangeDetectorRef
   ) {
     super(help);
-    
+
     // The route/query parameters.
     let params = route.params.value;
-    
+
     // Make a place-holder session sufficient to display a title.
     // The secondary key consists of the subject and the session number.
     this.session = service.secondaryKey(params);
     // Fill in enough of the session to display a title.
     Subject.extend(this.session.subject);
     Session.extend(this.session, this.session.subject, this.session.number);
-    
+
     // Fetch the session.
     service.getSession(params, true).subscribe(session => {
       if (session) {
@@ -74,7 +67,7 @@ export class SessionComponent extends PageComponent {
       changeDetector.markForCheck();
     });
   }
-  
+
   /**
    * Opens the Volume Detail page.
    *

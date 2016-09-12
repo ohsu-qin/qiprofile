@@ -17,7 +17,7 @@ import { ProjectResource } from './project.resource.ts';
  * @class ProjectService
  */
 export class ProjectService {
-  constructor(private resource: ProjectResource) {}
+  constructor(private resource: ProjectResource) { }
 
   /**
    * @method getProjects

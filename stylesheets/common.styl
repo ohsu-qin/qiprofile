@@ -2,8 +2,13 @@
 
 @require 'helpers'
 
+.qi-title
+  font-weight bold
+  white-space nowrap
+
 .qi-label
-  font-weight: bold
+  font-weight bold
+  white-space nowrap
 
 .qi-x-smaller
   font-size 75%
@@ -97,8 +102,8 @@ ul.qi-clean-list
     margin-top 0.5em
 
 // Add some horizontal space between successive elements.
-.qi-hor-space
-  & + .qi-hor-space
+.qi-horizontal-space
+  & + .qi-horizontal-space
     margin-left 0.5em
 
 .qi-inline
@@ -111,7 +116,6 @@ ul.qi-clean-list
 //   to the compact 2px 4px.
 .qi-btn
   border 0
-  padding 2px 4px
   background-color Moccasin
   &:hover
     background-color Peru
@@ -158,6 +162,8 @@ ul.qi-clean-list
 .qi-panel
   border 1px solid SlateGray
   border-radius: 0.4em
+  & ~ .qi-panel
+    margin-top 0.2em
 
 // The table panel style adds background color
 // to offset the table. Nested tables have
@@ -248,7 +254,7 @@ thead.qi-thead-underlined
   margin-left 0.5 em
 
 // Horizontal list with justified items.
-ul.qi-hor-list
+ul.qi-horizontal-list
   // The negative bottom margin corrects for the spacing
   // injected after the list.
   margin-bottom -1.2em
@@ -259,42 +265,27 @@ ul.qi-hor-list
   &:after
     empty-line()
 
-.qi-vertical-chooser
-  // Note: the view height is reset by the parent component
-  // to mimic the image display view. Consequently, the
-  // bottom margin has no effect.
+.qi-horizontal
+  width 100%
+
+.qi-vertical
   height 100%
-  margin 8em 5% 0 5%
-  display inline-block
-  color DarkCyan
-  & .qi-vertical-slider
-    margin-top 1em
-  & qi-player button
-    // The slider handle .row has a -15px margin.
-    // Compensate for the button by shifting it to
-    // the left, which (hopefully) aligns the buttons
-    // under the slider. Do this for the first button
-    // only.
-    margin-left -47px
-    & ~ button
-      margin-left 0.2em
+  // A vertical slider should have room at the top.
+  .qi-slider
+    // Position the middle button of a player below
+    // a vertical slider under the slider handle.
+    // For some reason, positioning the player
+    // itself has no effect, but positioning the
+    // first button does.
+    & + qi-player button:first-child
+      margin-left -36px
 
-// The slider handle no longer aligns with the tick marks
-// after .qi-vertical-chooser is applied. The base CSS
-// specifies top -17px. Override this with a factor that
-// aligns properly.
-// .noUi-vertical .noUi-handle
-//   top -10px
+.qi-left
+  position absolute
+  top 0
+  left 0
 
-span.qi-over-under
-  font-size smaller
-  position relative
-  top 1em
-  padding-left 0.2em
-  display inline-block
-  text-align right
-  & > .over
-    display table-row
-  & > .under
-    position relative
-    bottom 0.5em
+.qi-right
+  position absolute
+  top 0
+  right 0

@@ -35,6 +35,13 @@ export class PapayaService {
   finishedLoadingCallback: (contents: Object) => {};
 
   /**
+   * The function called when the viewer coordinate has changed.
+   *
+   * @property coordinateChangedCallback {function}
+   */
+  coordinateChangedCallback: (coordinate: Object) => {};
+
+  /**
    * The Papaya viewer if Papaya is started, undefined otherwise.
    * The Papaya viewer controls the display.
    *
@@ -42,9 +49,36 @@ export class PapayaService {
    * @readOnly
    */
   get viewer(): any {
-    if (papaya.papayaContainers && papaya.papayaContainers[0]) {
-      return papaya.papayaContainers[0].viewer;
+    let container = _.last(papaya.papayaContainers);
+    if (container) {
+      return container.viewer;
     }
+  }
+
+  /**
+   * Flag indicating whether Papaya has started.
+   *
+   * @property isPapayaStarted
+   * @private
+   */
+  private isPapayaStarted = false;
+
+  /**
+   * This flag is set while a volume is being replaced in
+   * order to disable Papaya mouse event handlers during
+   * the swap.
+   *
+   * @property isSwappingVolume {boolean}
+   * @private
+   */
+  private isSwappingVolume = false;
+
+  /**
+   * @property currentCoordinate {number[]} the [x, y, z] coordinate
+   *   in the cross-hairs
+   */
+  private get currentCoordinate(): number[] {
+    return this.viewer.currentCoord;
   }
 
   /**
@@ -58,24 +92,11 @@ export class PapayaService {
     //   Guard against that with the isPatched function.
     if (!this.isPapayaPatched()) {
       this.disableDnD();
+      this.disableMouseEventsWhileLoading();
       this.replaceErrorHandler();
       this.injectFinishedLoadingCallback();
+      this.injectCoordinateChangedCallback();
     }
-  }
-
-  /**
-   * In the case of a hot reload, a new PapayaService is created but
-   * the previous patched Papaya library is retaioned. If that is the
-   * case, the papaya.viewer.Viewer.prototype._finishedLoading patch
-   * function already exists. This method returns whether that function
-   * exists, which serves as a proxy for whether Papaya is already
-   * monkey-patched.
-   *
-   * @method isPapayaPatched
-   * @return {boolean} whether Papaya has already been monkey-patched
-   */
-  private isPapayaPatched(): boolean {
-    return !!papaya.viewer.Viewer.prototype._finishedLoading;
   }
 
   /**
@@ -93,6 +114,11 @@ export class PapayaService {
   /**
    * Starts Papaya on the given image and overlays.
    *
+   * If Papaya was already successfully started on an image,
+   * then this method delegates to the
+   * {{#crossLink "PapayaService/restart"}}{{/crossLink}} method
+   * instead.
+   *
    * @method start
    * @param image {Image} the {{#crossLink "Image"}}{{/crossLink}}
    *   to display
@@ -106,6 +132,16 @@ export class PapayaService {
     let urls = images.map(ImageStore.location);
     // Delegate to the helper method.
     this.startPapaya(urls);
+    // Set the started flag.
+    this.isPapayaStarted = true;
+  }
+
+  refresh() {
+    let params = papaya.papayaContainers[0].params;
+    let stashed = _.cloneDeep(params.images);
+    delete params.images;
+    papaya.Container.resetViewer(0);
+    params.images = stashed;
   }
 
   /**
@@ -117,11 +153,12 @@ export class PapayaService {
    * @param overlays {Image[]} the image overlays
    */
   restart(image: Object, overlays=[]) {
-    // Make the urls array as in the start method above.
-    let images = [image].concat(overlays);
-    let urls = images.map(ImageStore.location);
-    // Restart the viewer.
-    this.viewer.restart(urls, true, false);
+    papaya.Container.resetViewer(papaya.papayaContainers.length - 1);
+    // // Make the urls array as in the start method above.
+    // let images = [image].concat(overlays);
+    // let urls = images.map(ImageStore.location);
+    // // Restart the viewer.
+    // this.viewer.restart(urls, true, false);
   }
 
   /**
@@ -171,6 +208,9 @@ export class PapayaService {
       volume.finishedLoad();
       this.finishedLoadingCallback(image.contents);
     } else {
+      // Guard against mouse move cursor update while
+      // the volume is being swapped in.
+      this.isSwappingVolume = true;
       // Adapted from the Volume ctor.
       let pad: boolean = volume.params && volume.params.padAllImages;
       volume.header = new papaya.volume.Header(pad);
@@ -197,10 +237,61 @@ export class PapayaService {
             this.finishedLoadingCallback(contents);
           }
         }
+        // Reenable the Papaya mouse handler.
+        this.isSwappingVolume = false;
       };
       // Load the image.
       volume.readURLs([url], onLoaded);
     }
+  }
+
+  /**
+   * Gets the voxel value for the current or cached image data.
+   *
+   * @method getVoxelValue
+   * @param coordinate {number[]} the [x, y, z] coordinate
+   * @param imageData {Object} the cached volume image data to reference
+   *    (default is the current volume)
+   * @return {number} the voxel value in the image data
+   */
+  getVoxelValue(coordinate: number[], imageData?: Object) {
+    // For some reason, refresh doesn't have a transform on the
+    // first call via the callback, but then is immediately
+    // called again and does have a transform. Perhaps the
+    // load callback is called twice in succession on refresh?
+    // Don't know, but the guard below apparently works in
+    // the end for a refresh.
+    if (!this.viewer.volume.transform) {
+      return null;
+    }
+    let value;
+    if (imageData) {
+      // Stash the current image data.
+      let currentImageData = this.viewer.volume.transform.voxelValue.imageData;
+      // Swizzle the image data (dangerous!).
+      this.viewer.volume.transform.voxelValue.imageData = imageData;
+      // Delegate to the viewer fooled by the swapped image data.
+      value = this.getVoxelValueAt(coordinate.x, coordinate.y, coordinate.z);
+      // Restore the current image data (important!).
+      this.viewer.volume.transform.voxelValue.imageData = currentImageData;
+    } else {
+      value = this.getVoxelValueAt(coordinate.x, coordinate.y, coordinate.z);
+    }
+
+    return value;
+  }
+
+  /**
+   * Gets the voxel value for the current image at the given coordinates.
+   *
+   * @method getVoxelValueAt
+   * @param x {number} the X coordinate
+   * @param y {number} the Y coordinate
+   * @param z {number} the Z coordinate
+   * @return {number} the voxel value
+   */
+  getVoxelValueAt(x: number, y: number, z: number) {
+    return this.viewer.getCurrentValueAt(x, y, z);
   }
 
   /**
@@ -231,6 +322,21 @@ export class PapayaService {
     //   The work-around is to resize the viewer after the initial display.
     //   That causes a slight flicker, but we can live with that.
     papaya.Container.resizePapaya(null, true);
+  }
+
+  /**
+   * In the case of a hot reload, a new PapayaService is created but
+   * the previous patched Papaya library is retaioned. If that is the
+   * case, the papaya.viewer.Viewer.prototype._finishedLoading patch
+   * function already exists. This method returns whether that function
+   * exists, which serves as a proxy for whether Papaya is already
+   * monkey-patched.
+   *
+   * @method isPapayaPatched
+   * @return {boolean} whether Papaya has already been monkey-patched
+   */
+  private isPapayaPatched(): boolean {
+    return !!papaya.viewer.Viewer.prototype._finishedLoading;
   }
 
   /**
@@ -279,13 +385,73 @@ export class PapayaService {
       let arrow = new Image(arrowWidth, fontSize);
       // Point to the Time Point slider.
       arrow.src = 'static/media/arrow-right.png';
-      arrow.onload = () => { this.context.drawImage(arrow, locX, locY - pad - fontSize); };
+      arrow.onload = () => {
+        this.context.drawImage(arrow, locX, locY - pad - fontSize);
+      };
 
       // Draw the revised help text.
       this.context.fillStyle = "MediumSpringGreen";
       let offset = arrowWidth + (6 * pad);
       this.context.fillText(text, locX + offset, locY);
     };
+  }
+
+  /**
+   * Guard against the following behavior:
+   * * When the mouse moves or is clicked outside of the image viewport
+   *   while a volume is being loaded, Papaya sporadically
+   *   tries to dereference an empty viewer volume header, resulting
+   *   in the following error message:
+   *
+   *       Cannot read property 'xDim' of null
+   *
+   * The remedy is to check the
+   * {{#crossLink "PapayaService/isSwappingVolume:property"}}{{/crossLink}}
+   * flag.
+   *
+   * @method disableMouseEventsWhileLoading
+   */
+  private disableMouseEventsWhileLoading() {
+    let self = this;
+
+    papaya.viewer.Viewer.prototype._mouseMoveEvent =
+      papaya.viewer.Viewer.prototype.mouseMoveEvent;
+    papaya.viewer.Viewer.prototype.mouseMoveEvent =
+      function(me) {
+        if (!self.isSwappingVolume) {
+          this._mouseMoveEvent(me);
+        }
+      };
+
+    papaya.viewer.Viewer.prototype._mouseDownEvent =
+      papaya.viewer.Viewer.prototype.mouseDownEvent;
+    papaya.viewer.Viewer.prototype.mouseDownEvent =
+      function(me) {
+        if (!self.isSwappingVolume) {
+          this._mouseDownEvent(me);
+        }
+      };
+
+    papaya.viewer.Viewer.prototype._mouseUpEvent =
+      papaya.viewer.Viewer.prototype.mouseUpEvent;
+    papaya.viewer.Viewer.prototype.mouseUpEvent =
+      function(me) {
+        if (!self.isSwappingVolume) {
+          this._mouseUpEvent(me);
+        }
+      };
+
+    // A Papaya mouse event handler delays an updatePosition
+    // on a timer. The volume might be ok in the handler but
+    // swapping out by the time the update is called.
+    papaya.viewer.Viewer.prototype._updatePosition =
+      papaya.viewer.Viewer.prototype.updatePosition;
+    papaya.viewer.Viewer.prototype.updatePosition =
+      function() {
+        if (!self.isSwappingVolume) {
+          this._updatePosition.apply(this, arguments);
+        }
+      };
   }
 
   /**
@@ -338,6 +504,32 @@ export class PapayaService {
         };
         // Delegate to the callback.
         self.finishedLoadingCallback(contents);
+      }
+    };
+  }
+
+  /**
+   * Monkey-patches the Papaya cross-hair reposition handlers
+   * to call the
+   * {{#crossLink "PapayaService/coordinateChangedCallback:property"}}{{/crossLink}}
+   * with the new coordinate.
+   *
+   * @method injectFinishedLoadingCallback
+   * @private
+   */
+  private injectCoordinateChangedCallback() {
+    // The base implementation.
+    papaya.Container.prototype._coordinateChanged =
+      papaya.Container.prototype.coordinateChanged;
+    // Clobber the Papaya function. In the function body,
+    // *self* is this service.
+    let self = this;
+    papaya.Container.prototype.coordinateChanged = function(viewer) {
+      papaya.Container.prototype._coordinateChanged(viewer);
+      if (self.coordinateChangedCallback) {
+        // Delegate to the callback.
+        let coord = _.clone(viewer.currentCoord);
+        self.coordinateChangedCallback(coord);
       }
     };
   }

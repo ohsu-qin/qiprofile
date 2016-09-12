@@ -1,12 +1,8 @@
 import { Component, Input } from '@angular/core';
 
-//import { Axis } from '../visualization/axis.ts';
-import { ScatterChartDirective } from '../visualization/scatter-plot.directive.ts';
-
 @Component({
   selector: 'qi-collection-correlation',
-  templateUrl: '/public/html/collection/correlation.html',
-  directives: [ScatterChartDirective]
+  templateUrl: '/public/html/collection/correlation.html'
 })
 
 /**
@@ -16,14 +12,6 @@ import { ScatterChartDirective } from '../visualization/scatter-plot.directive.t
  */
 export class CollectionCorrelationComponent {
   /**
-   * The augmented {{#crossLink "Axis"}}{{/crossLink}} {x, y} axis settings.
-   *
-   * @property _config {Object}
-   * @private
-   */
-  private config: Object;
-
-  /**
    * The {{#crossLink "Subject"}}{{/crossLink}} REST data objects.
    *
    * @property subjects {Object[]}
@@ -31,23 +19,28 @@ export class CollectionCorrelationComponent {
   @Input() subjects: Object[];
 
   /**
-   * The partial {{#crossLink "Axis"}}{{/crossLink}} {x, y} axis
-   * settings. The input consists of a partial {x, y} key-value
-   * object, where each axis value is a property path. This input
-   * is flushed out as follows:
-   * * _label_ is inferred from the _value_ property path
-   * * _orientation_ is `bottom` for the X axis and `left` for the Y axis
-   * * _transformation_ is a 90 degree rotation for the Y axis
+   * The plot configuration [{x, y}, ...] specification objects.
+   * Each specification contains the following properties:
    *
-   * @property config {Object}
+   * * _x_: the X axis data accessor property name
+   * * _y_: the Y axis data accessor property name
+   *
+   * There is one specification object per chart.
+   *
+   * @example
+   *      [{x: 'deltaKTrans', y: 'rcb'}, {x: 'vE', y: 'tumorSize}]
+   *
+   * @property config {Object[]}
    */
-  @Input()
-  set config(config: Object) {
-    // TODO - convert each {x, y} input config to an Axis config.
-    this.config = config;
-  }
+  @Input() config: Object[];
 
-  get config() {
-    return this.config;
-  }
+  /**
+   * The
+   * {{#crossLink "CollectionCorrelationComponent/subjects:property"}}{{/crossLink}}
+   * subset selected for display.
+   *
+   * @property selection {Object[]}
+   * @private
+   */
+  //private selection: Object[];
 }

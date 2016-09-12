@@ -15,10 +15,10 @@ import Subject from './subject.data.coffee';
  * @class SubjectService
  */
 export class SubjectService {
-  constructor(private resource: SubjectResource) {}
-    
+  constructor(private resource: SubjectResource) { }
+
   private subject: Object;
-  
+
   /**
    * @method getSubjects
    * @param project {string} the project name
@@ -36,7 +36,7 @@ export class SubjectService {
     // Return the extended subjects.
     return subjects.map(fetched => fetched.map(Subject.extend));
   }
-  
+
   /**
    * Caches the given subject in this service. There is only one object
    * in the cache. Retrieve the object with `getSubject(id)`.
@@ -47,7 +47,7 @@ export class SubjectService {
   cache(subject: Object) {
     this.subject = subject;
   }
-  
+
   /**
    * Clears the cached subject in this service, if there is one.
    *
@@ -56,7 +56,7 @@ export class SubjectService {
   clearCache() {
     this.subject = null;
   }
-  
+
   /**
    * Picks the {project, collection, subject number} secondary
    * key from the given route parameters.
@@ -83,7 +83,7 @@ export class SubjectService {
     }
     let secondaryKey = _.pick(routeParams, ['project', 'collection']);
     secondaryKey.number = +routeParams.subject;
-    
+
     return secondaryKey;
   }
 
@@ -109,7 +109,7 @@ export class SubjectService {
         return Observable.of(this.subject);
       }
     }
-    
+
     // Not cached; hit the database.
     // The search parameter.
     let searchParam: string = REST.where(criterion);

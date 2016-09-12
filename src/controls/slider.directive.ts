@@ -114,7 +114,6 @@ export class SliderDirective implements OnInit, OnChanges {
     Object.assign(config, this.config);
 
     this.slider = noUiSlider.create(this.el.nativeElement, config);
-
     this.slider.on('set', (sliderValue: any) => {
       let value = toValue(sliderValue);
       if (!_.isEqual(this._value, value)) {

@@ -4,7 +4,7 @@ block billboard
   | {{ name }} Collection
 
 block content
+  qi-collection-correlation([subjects]="subjects")
   ul.qi-main-list
     li(*ngFor="let subject of subjects", (click)="visitSubject(subject)")
       | {{ subject.number }}
-  //- qi-collection-correlations([subjects]="subjects")

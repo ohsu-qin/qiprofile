@@ -12,4 +12,4 @@ import { RestResource } from '../rest/rest.resource.ts';
  * @class CollectionResource
  * @extends RestResource
  */
-export class CollectionResource extends RestResource {}
+export class CollectionResource extends RestResource { }

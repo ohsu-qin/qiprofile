@@ -1,16 +1,60 @@
 // Because Papaya positions absolutely based on calculated dimensions,
 // the choosers must also be absolute.
 
-.qi-volume-chooser-left
-  position absolute
-  top 0
-  left 0
-  // Move the left chooser closer to the image display.
-  margin-left 10%
+.qi-volume-chooser
+  // Note: the view height is reset by the parent component
+  // to mimic the image display view. Consequently, the
+  // bottom margin has no effect.
+  margin 8em 5% 0 5%
+  display inline-block
+  color DarkCyan
 
-.qi-volume-chooser-right
+.qi-time-series
+  // Disable the .row 15px margins
+  & .row
+    margin-left inherit
+    margin-right inherit
+  & .qi-title
+    text-align center
+    margin-bottom 0.5em
+  & .qi-left
+    margin-left 7%
+  & .qi-right
+    margin-right 20%
+
+.qi-intensity-gradient
+  margin 0.2em
+  & .guide
+    stroke DarkSlateGray
+    stroke-dasharray 3, 3
+  & .legend
+    font-size smaller
+    text-align center
+    & text.axial
+      fill Indigo
+    & text.sagittal
+      fill ForestGreen
+    & text.coronal
+      fill DarkOrange
+  & .plot
+    & path.axial
+      stroke Indigo
+    & path.sagittal
+      stroke ForestGreen
+    & path.coronal
+      stroke DarkOrange
+
+.qi-intensity-tracker
+  margin 0.2em
+
+qi-volume [qi-spark-line] path
+  stroke: SteelBlue
+  stroke-width: 2
+  fill: none
+
+// The intensity charts are placed near the bottom of the
+// right gutter.
+.qi-intensity-charts
   position absolute
-  top 0
-  right 0
-  // Move the right chooser closer to the image display.
-  margin-right 10%
+  bottom 6em
+  color DarkCyan

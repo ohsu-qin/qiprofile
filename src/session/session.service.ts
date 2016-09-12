@@ -16,8 +16,8 @@ export class SessionService {
   constructor(
     private subjectService: SubjectService,
     private resource: SessionDetailResource
-  ) {}
-  
+  ) { }
+
   /**
    * Makes the {_subject_, number: _number_} secondary key from the
    * given route parameters, where:
@@ -65,7 +65,7 @@ export class SessionService {
       return session;
     }
   }
-  
+
   /**
    * Fetches the detail REST object for the given session object.
    *
@@ -85,7 +85,7 @@ export class SessionService {
     // The search parameter.
     let searchParam: string = REST.where({_id: session.detail});
     let detail = this.resource.findOne(searchParam);
-    
+
     return detail.map(_detail => session.extendDetail(_detail));
   }
 }

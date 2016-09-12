@@ -13,8 +13,8 @@ import { HelpService } from '../help/help.service.ts';
  * @class ToggleHelpComponent
  */
 export class ToggleHelpComponent {
-  constructor(private service: HelpService) {}
-  
+  constructor(private service: HelpService) { }
+
   /**
    * Flag indicating whether the help is shown.
    *

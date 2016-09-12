@@ -14,7 +14,7 @@ import Volume from './volume.data.coffee';
  */
 export class VolumeService {
 
-  constructor(private sequenceService: ImageSequenceService) {}
+  constructor(private sequenceService: ImageSequenceService) { }
 
   /**
    * Makes the {_sequence_, _number_} secondary

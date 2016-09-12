@@ -13,4 +13,4 @@ import { RestResource } from '../rest/rest.resource.ts';
  * @class ProjectResource
  * @extends RestResource
  */
-export class ProjectResource extends RestResource {}
+export class ProjectResource extends RestResource { }

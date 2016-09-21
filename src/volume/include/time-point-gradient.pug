@@ -1,0 +1,21 @@
+// The if test checks for a loaded volume with intensity values.
+.qi-time-point-gradient(*ngIf="timePointIntensities")
+  // The gradient heading.
+  .qi-title
+    | Time Point
+    button.btn.btn-sm.qi-btn(
+      (click)="timePointIntensityHelp()"
+    )
+      .glyphicon.glyphicon-question-sign
+
+  // The spark line.
+  div(
+    qi-spark-line, [width]="gradientWidth", [height]=100, [domain]="domain",
+    [data]="timePointIntensities"
+  )
+
+  // The color bar.
+  div(
+    qi-color-bar, [width]="gradientWidth", [height]=40, [domain]="domain",
+    [data]="timePointIntensities"
+  )

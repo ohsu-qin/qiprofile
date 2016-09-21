@@ -1,0 +1,16 @@
+// The if test checks for a loaded volume with intensity values.
+.qi-physical-gradient(*ngIf="physicalIntensities")
+  // The gradient heading.
+  .qi-title
+    | Physical
+    button.btn.btn-sm.qi-btn(
+      (click)="physicalIntensitiesHelp()"
+    )
+      .glyphicon.glyphicon-question-sign
+
+  // The gradient lines.
+  div(
+    qi-spark-line, [width]="gradientWidth", [height]=100,
+    [domain]="domain", [data]="physicalIntensities",
+    [legend]="physicalIntensitiesLegend", [guide]=true
+  )

@@ -14,7 +14,7 @@ describe 'The Configuration service', ->
    *
    * @method test
    * @private
-   * @param body {function(CollectionsComponent, CollectionService)} the test body
+   * @param body {function(CollectionsComponent, CollectionsService)} the test body
   ###
   test = (body) ->
     inject [ConfigurationService], (service) ->

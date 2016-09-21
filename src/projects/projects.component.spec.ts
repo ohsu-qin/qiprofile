@@ -4,17 +4,17 @@ import {
   describe, it, inject, beforeEachProviders, expect
 } from '@angular/core/testing';
 
-import { ProjectService } from '../project/project.service.ts';
+import { ProjectsService } from './projects.service.ts';
 import { ProjectsComponent } from './projects.component.ts';
 import { HelpService } from '../help/help.service.ts';
 
 /**
- * The test mock for a {{#crossLink "ProjectService"}}{{/crossLink}}.
+ * The test mock for a {{#crossLink "ProjectsService"}}{{/crossLink}}.
  *
  * @module projects
- * @class ProjectServiceStub
+ * @class ProjectsServiceStub
  */
-class ProjectServiceStub {
+class ProjectsServiceStub {
   /**
    *
    * @method getProjects
@@ -44,7 +44,7 @@ class ProjectsHelpServiceStub {
 beforeEachProviders(() => {
   return [
     ProjectsComponent,
-    provide(ProjectService, {useClass: ProjectServiceStub}),
+    provide(ProjectsService, {useClass: ProjectsServiceStub}),
     provide(HelpService, {useClass: ProjectsHelpServiceStub})
   ];
 });
@@ -53,14 +53,14 @@ beforeEachProviders(() => {
  * Runs the given test body on the injected component and service.
  *
  * @function test
- * @param body {function(CollectionsComponent, CollectionService)} the 
+ * @param body {function(CollectionsComponent, CollectionsService)} the
  *   test body
  * @private
  */
 function test(body) {
   return inject(
-    [ProjectsComponent, ProjectService],
-    (component: ProjectsComponent, service: ProjectService) => {
+    [ProjectsComponent, ProjectsService],
+    (component: ProjectsComponent, service: ProjectsService) => {
       body(component, service);
     }
   );

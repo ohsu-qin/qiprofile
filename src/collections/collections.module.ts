@@ -13,6 +13,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { PageModule } from '../page/page.module.ts';
 import { CollectionsComponent } from './collections.component.ts';
 import { CollectionItemComponent } from './collection-item.component.ts';
+import { CollectionItemComponent } from './collection-item.component.ts';
 import { CollectionsHelpComponent } from './help.component.ts';
 import { CollectionsHelpTextComponent } from './help-text.component.ts';
 
@@ -24,7 +25,9 @@ const ROUTE_CONFIG: Routes = [
 ];
 
 @NgModule({
-  imports: [CommonModule, PageModule, RouterModule.forChild(ROUTE_CONFIG)],
+  imports: [
+    CommonModule, PageModule, RouterModule.forChild(ROUTE_CONFIG)
+  ],
   declarations: [
     CollectionsComponent,
     CollectionItemComponent, CollectionsHelpComponent, CollectionsHelpTextComponent

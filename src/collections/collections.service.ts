@@ -2,17 +2,17 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import REST from '../rest/rest.coffee';
-import { CollectionResource } from './collection.resource.ts';
+import { CollectionsResource } from './collections.resource.ts';
 
 @Injectable()
 
 /**
  * The collection data access service.
  *
- * @class CollectionService
+ * @class CollectionsService
  */
-export class CollectionService {
-  constructor(private resource: CollectionResource) { }
+export class CollectionsService {
+  constructor(private resource: CollectionsResource) { }
 
   /**
    * @method getCollections

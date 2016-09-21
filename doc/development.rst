@@ -362,7 +362,7 @@ Coding Standards
    in the file name, e.g. ``app.component.ts``.
 
 * Every application Angular service file is indicated by ``.service.``
-   in the file name, e.g. ``collection.service.ts``.
+   in the file name, e.g. ``collections.service.ts``.
 
 * Every application Angular data file is indicated by a simple file name
   without a qualifier, e.g. ``collection.ts``.

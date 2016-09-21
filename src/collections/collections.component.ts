@@ -4,13 +4,12 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { PageComponent } from '../page/page.component.ts';
-import { CollectionService } from '../collection/collection.service.ts';
+import { CollectionsService } from './collections.service.ts';
 import { HelpService } from '../help/help.service.ts';
 
 @Component({
   selector: 'qi-collections',
-  templateUrl: '/public/html/collections/collections.html',
-  providers: [CollectionService]
+  templateUrl: '/public/html/collections/collections.html'
 })
 
 /**
@@ -38,7 +37,7 @@ export class CollectionsComponent extends PageComponent {
   isEmpty: boolean;
 
   constructor(route: ActivatedRoute,
-              dataService: CollectionService,
+              dataService: CollectionsService,
               helpService: HelpService) {
       // Omit the superclass constructor help argument, since this
       // component overrides the standard help block with its own

@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 import { Component } from '@angular/core';
 
 import { PageComponent } from '../page/page.component.ts';
-import { ProjectService } from '../project/project.service.ts';
+import { ProjectsService } from './projects.service.ts';
 import { HelpService } from '../help/help.service.ts';
 import help from './projects.help.md';
 
@@ -40,7 +40,7 @@ export class ProjectsComponent extends PageComponent {
    */
   isEmpty: boolean;
 
-  constructor(private dataService: ProjectService,
+  constructor(private dataService: ProjectsService,
               private helpService: HelpService) {
       super(help);
       // Always show the help on this page.

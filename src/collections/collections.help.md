@@ -2,7 +2,7 @@ Overview
 --------
 The Quantitative Imaging Profile
 (<em>Q<span class='qi-x-smaller'>I</span>P<span class='qi-x-smaller'>R</span></em>
- <button class="btn btn-small qi-btn" type='button' onclick='new Audio("static/media/QiPr1.mp3").play()'>
+ <button class="btn btn-sm qi-btn" type='button' onclick='new Audio("static/media/QiPr1.mp3").play()'>
    <span class="glyphicon glyphicon-volume-up"></span>
  </button>)
 application helps clinicians and imaging scientists

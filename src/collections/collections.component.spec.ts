@@ -7,7 +7,7 @@ import {
 import { ActivatedRoute } from '@angular/router';
 import { CollectionsComponent } from './collections.component.ts';
 import { HelpService } from '../help/help.service.ts';
-import { CollectionService } from '../collection/collection.service.ts';
+import { CollectionsService } from './collections.service.ts';
 
 /**
  * The stunt showHelp flag service.
@@ -27,19 +27,19 @@ class CollectionsHelpServiceStub {
  */
 class CollectionsActivatedRouteStub {
   static paramsValue: Object = {project: 'QIN_Test'};
-  
+
   params: Observable<Object> = Observable.of(CollectionsActivatedRouteStub.paramsValue);
 }
 
 /**
- * The test mock for a {{#crossLink "CollectionService"}}{{/crossLink}}.
+ * The test mock for a {{#crossLink "CollectionsService"}}{{/crossLink}}.
  *
  * @module collections
- * @class CollectionServiceStub
+ * @class CollectionsServiceStub
  */
-class CollectionsCollectionServiceStub {
+class CollectionsCollectionsServiceStub {
   static collections: Object[] = [{name: 'Sarcoma'}, {name: 'Breast'}];
-  
+
   /**
    *
    * @method getCollections
@@ -47,7 +47,7 @@ class CollectionsCollectionServiceStub {
    * @return {Observable} the mock collection objects sequence
    */
   getCollections(project: string): Observable<Object[]> {
-    return Observable.of(CollectionsCollectionServiceStub.collections);
+    return Observable.of(CollectionsCollectionsServiceStub.collections);
   }
 }
 
@@ -65,25 +65,25 @@ describe('The Collections component', function() {
    * Runs the given test body on the injected component and service.
    *
    * @function test
-   * @param body {function(CollectionsComponent, CollectionService)} the test body
+   * @param body {function(CollectionsComponent, CollectionsService)} the test body
    * @private
    */
   function test(body) {
     return inject(
-      [CollectionsComponent, CollectionService],
-      (component: CollectionsComponent, service: CollectionService) => {
+      [CollectionsComponent, CollectionsService],
+      (component: CollectionsComponent, service: CollectionsService) => {
         // Run the test.
         body(component, service);
       }
     );
   }
-  
+
   beforeEach(() => {
     addProviders([
       CollectionsComponent,
       provide(ActivatedRoute, {useClass: CollectionsActivatedRouteStub}),
       provide(HelpService, {useClass: CollectionsHelpServiceStub}),
-      provide(CollectionService, {useClass: CollectionsCollectionServiceStub})
+      provide(CollectionsService, {useClass: CollectionsCollectionsServiceStub})
     ]);
   });
 
@@ -92,10 +92,10 @@ describe('The Collections component', function() {
     let expected: string = CollectionsActivatedRouteStub.paramsValue.project;
     expect(component.project, 'The project is incorrect').to.equal(expected);
   }));
-  
+
   it('should sort the collections', test((component) => {
     // The mocked collections are in reverse sort order.
-    let expected: Object[] = CollectionsCollectionServiceStub.collections.reverse();
+    let expected: Object[] = CollectionsCollectionsServiceStub.collections.reverse();
     // Compare to the component collections property.
     expect(component.collections, 'Collections are incorrect').to.eql(expected);
   }));

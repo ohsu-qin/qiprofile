@@ -34,7 +34,8 @@ import { AppComponent } from './app.component.ts';
 
 // The global services.
 import { HelpService } from '../help/help.service.ts';
-import { CollectionService } from '../collection/collection.service.ts';
+import { ProjectsService } from '../projects/projects.service.ts';
+import { CollectionsService } from '../collections/collections.service.ts';
 import { SubjectService } from '../subject/subject.service.ts';
 import { SessionService } from '../session/session.service.ts';
 import { PapayaService } from '../image/papaya.service.ts';
@@ -43,8 +44,8 @@ import { PapayaService } from '../image/papaya.service.ts';
 import { ROUTES } from './app.routes.ts';
 
 const SHARED_SERVICES = [
-  HelpService, CollectionService, SubjectService, SessionService,
-  PapayaService
+  HelpService, CollectionsService, ProjectsService, SubjectService,
+  SessionService, PapayaService
 ];
 
 @NgModule({

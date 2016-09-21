@@ -1,7 +1,7 @@
 .qi-subtable-title TNM
 
 .qi-panel.qi-nested(ng-controller='TNMCtrl')
-  table.table.qi-table.qi-ver-space
+  table.table.qi-table.qi-vertical-space
     tr
       th Stage
       td {{ tnm | tnmStage | romanize }}
@@ -17,10 +17,10 @@
           )
           .glyphicon.glyphicon-question-sign
 
-  .qi-ver-space(ng-show='!!tnm.grade')
+  .qi-vertical-space(ng-show='!!tnm.grade')
     include grade
 
-  table.table.table.qi-table.qi-spaced-table.qi-ver-space
+  table.table.table.qi-table.qi-spaced-table.qi-vertical-space
     tr
       th Size
       td {{ tnm.size | tnmSize }}

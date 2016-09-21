@@ -5,7 +5,7 @@ include accordion-heading-mixin
 //-
 +accordion-heading('{{ encounter.title }}')
 
-table.table.qi-table.qi-ver-space
+table.table.qi-table.qi-vertical-space
   tr
     th Date
     td {{ encounter.date | moment }}
@@ -14,7 +14,7 @@ table.table.qi-table.qi-ver-space
     th Patient Weight
     td {{ encounter.weight }}
 
-.qi-ver-space(ng-switch="encounter.title")
+.qi-vertical-space(ng-switch="encounter.title")
   div(ng-switch-when='Biopsy')
     include pathology
   div(ng-switch-when='Surgery')

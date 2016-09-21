@@ -5,7 +5,7 @@ include accordion-heading-mixin
 //-
 +accordion-heading('{{ treatment.treatment_type | capitalize }} Treatment')
 
-table.treatment.table.qi-table.qi-ver-space
+table.treatment.table.qi-table.qi-vertical-space
   // Vertically align the date (label, value) pairs with separation.
   tr
     th Start Date
@@ -16,9 +16,9 @@ table.treatment.table.qi-table.qi-ver-space
     td {{ treatment.endDate | moment }}
 
 // The chemotherapy partial.
-.qi-ver-space(ng-show="chemotherapy" ng-controller='ChemotherapyCtrl')
+.qi-vertical-space(ng-show="chemotherapy" ng-controller='ChemotherapyCtrl')
   include chemotherapy
 
 // The radiotherapy partial.
-.qi-ver-space(ng-show="radiotherapy" ng-controller='RadiotherapyCtrl')
+.qi-vertical-space(ng-show="radiotherapy" ng-controller='RadiotherapyCtrl')
   include radiotherapy

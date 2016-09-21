@@ -1,5 +1,5 @@
 // The tumor site and histology.
-table.table.qi-table.qi-spaced-table.qi-ver-space
+table.table.qi-table.qi-spaced-table.qi-vertical-space
   tr(ng-show='tumor.location != null')
     th Site
     td {{ tumor.location | sarcomaTumorLocation }}
@@ -9,13 +9,13 @@ table.table.qi-table.qi-spaced-table.qi-ver-space
     td {{ tumor.histology }}
 
 // The tumor extent partial.
-.qi-ver-space(ng-show='tumor.extent != null')
+.qi-vertical-space(ng-show='tumor.extent != null')
   include tumor-extent
 
 // The TNM partial.
-.qi-ver-space(ng-show='tumor.tnm != null')
+.qi-vertical-space(ng-show='tumor.tnm != null')
   include tnm
 
 // The necrosis percent partial.
-.qi-ver-space(ng-show='tumor.necrosis_percent != null')
+.qi-vertical-space(ng-show='tumor.necrosis_percent != null')
   include necrosis-percent

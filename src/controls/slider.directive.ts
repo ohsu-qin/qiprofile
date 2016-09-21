@@ -1,10 +1,3 @@
-/**
- * The slider components.
- *
- * @module slider
- * @main slider
- */
-
 import * as _ from 'lodash';
 import * as noUiSlider from 'nouislider';
 import {
@@ -74,14 +67,6 @@ export class SliderDirective implements OnInit, OnChanges {
   public el: ElementRef;
   public slider: any;
 
-  /**
-   * The slider value. This value is initially set to the
-   * `value` input property bound in the parent view.
-   * Subsequently, the value is changed when either the slider
-   * value or the `value` property is changed.
-   */
-  private _value: number;
-
   @Input() name: string;
   @Input() behaviour: string;
   @Input() connect: boolean;
@@ -97,10 +82,34 @@ export class SliderDirective implements OnInit, OnChanges {
     this.el = el;
   }
 
-  @HostBinding('style.height.px')
-  height: number;
+  @HostBinding('style.height.px') height;
 
-  @Input() height;
+  /**
+   * The optional slider height in pixels.
+   *
+   * @property height
+   */
+  @Input() height: number;
+
+  @HostBinding('style.width.px') width;
+
+  /**
+   * The optional slider width in pixels.
+   *
+   * @property width
+   */
+  @Input() width: number;
+
+  /**
+   * The slider value. This value is initially set to the
+   * *value* input property bound in the parent view.
+   * Subsequently, the value is changed when either the slider
+   * value or the *value* property is changed.
+   *
+   * @property _value
+   * @private
+   */
+  private _value: number;
 
   ngOnInit(): void {
     let config = JSON.parse(JSON.stringify({

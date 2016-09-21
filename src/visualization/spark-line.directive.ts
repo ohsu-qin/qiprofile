@@ -146,30 +146,6 @@ export class SparkLineDirective implements OnChanges, OnInit {
   }
 
   /**
-   * Handle the following changes:
-   * * If the data changed, then reset the line data, which will
-   *   induce d3 to replot the line.
-   *
-   * _Note_: the other inputs are for initialization only, and
-   * changes to them are ignored. For example, resizing the window
-   * resets the width input, but that is ignored. Handling a resize
-   * necessitates detaching and recreating the entire plot, which
-   * results in a DOM memory leak.
-   */
-  ngOnChanges(changes: SimpleChange) {
-    let dataChange = changes['data'];
-    if (dataChange && !dataChange.isFirstChange()) {
-      // Draw the new values.
-      let input = dataChange.currentValue;
-      let data = _.isArray(input) ? {series: input} : input;
-      for (let key in data) {
-        this.svg.select(`path.${ key }`)
-          .attr('d', this.line(data[key]));
-      }
-    }
-  }
-
-  /**
    * Makes a new D3 SVG root group element and draws the plot.
    */
   ngOnInit() {
@@ -288,6 +264,30 @@ export class SparkLineDirective implements OnChanges, OnInit {
         .enter().append('path')
           .attr('class', d => d.id)
           .attr('d', d => this.line(d.values));
+  }
+
+  /**
+   * Handle the following changes:
+   * * If the data changed, then reset the line data, which will
+   *   induce d3 to replot the line.
+   *
+   * _Note_: the other inputs are for initialization only, and
+   * changes to them are ignored. For example, resizing the window
+   * resets the width input, but that is ignored. Handling a resize
+   * necessitates detaching and recreating the entire plot, which
+   * results in a DOM memory leak.
+   */
+  ngOnChanges(changes: SimpleChange) {
+    let dataChange = changes['data'];
+    if (dataChange && !dataChange.isFirstChange()) {
+      // Draw the new values.
+      let input = dataChange.currentValue;
+      let data = _.isArray(input) ? {series: input} : input;
+      for (let key in data) {
+        this.svg.select(`path.${ key }`)
+          .attr('d', this.line(data[key]));
+      }
+    }
   }
 
   private valueFunction(definition: string|number|Function) {

@@ -1,9 +1,8 @@
 import * as _ from 'lodash';
-import { Component, ViewContainerRef } from '@angular/core';
+import { Component, ViewContainerRef, HostListener } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Overlay } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap';
-
-import { ActivatedRoute } from '@angular/router';
 
 import { PageComponent } from '../page/page.component.ts';
 import { PapayaService } from '../image/papaya.service.ts';
@@ -11,14 +10,6 @@ import { ImageSequenceService } from '../session/image-sequence.service.ts';
 import { VolumeService } from './volume.service.ts';
 import help from './volume.help.md';
 import intensityHelp from './intensity.help.md';
-
-
-
-
-import ObjectHelper from '../object/object-helper.coffee';
-
-
-
 
 @Component({
   selector: 'qi-volume',
@@ -34,6 +25,31 @@ import ObjectHelper from '../object/object-helper.coffee';
  * @extends PageComponent
  */
 export class VolumeComponent extends PageComponent {
+  /**
+   * The default horizontal slider configuration.
+   *
+   * @property HORIZONTAL_SLIDER_CONFIG {Object}
+   * @static
+   */
+  static const HORIZONTAL_SLIDER_CONFIG = {
+    connect: 'lower',
+    step: 1,
+    pips: {
+      mode: 'steps',
+    }
+  };
+
+  /**
+   * The default vertical slider configuration.
+   *
+   * @property VERTICAL_SLIDER_CONFIG {Object}
+   * @static
+   */
+  static const VERTICAL_SLIDER_CONFIG = _.defaults(
+    {orientation: 'vertical', direction: 'rtl'},
+    VolumeComponent.HORIZONTAL_SLIDER_CONFIG
+  );
+
   /**
    * The route parameters are retained in case the session or
    * volume changes.
@@ -67,59 +83,67 @@ export class VolumeComponent extends PageComponent {
   /**
    * The current coordinate time series voxel values.
    *
-   * @property intensities {number[]}
+   * @property timePointIntensities {number[]}
    */
-  intensities: number[];
+  timePointIntensities: number[];
 
   /**
-   * The gradient voxel values about the current coordinate.
+   * The physical space voxel values about the current coordinate.
    *
-   * @property gradient {number[]}
+   * @property physicalIntensities {number[]}
    */
-  gradient: number[];
+  physicalIntensities: number[];
 
   /**
-   * The gradient legend.
+   * The physical intensity gradient chart legend.
    *
-   * @property gradientLegend {Object}
+   * @property physicalIntensitiesLegend {Object}
    */
-  gradientLegend = {
+  physicalIntensitiesLegend = {
     axial: 'R-L',
     coronal: 'P-A',
     sagittal: 'I-S'
   };
 
   /**
-   * The slider height is computed to match the Papaya height.
+   * The physical intensity gradient chart width in pixels
+   * is a bit less than 20% of the window width to match
+   * the CSS .qi-time-series .qi-right setting and allow
+   * for a small right margin.
    *
-   * @property sliderHeight {string}
+   * @property gradientWidth {number}
    */
-  sliderHeight: string;
+  gradientWidth: number;
 
   /**
-   * The slider configuration.
+   * The intensity charts top position is the image view base
+   * plus a small margin.
    *
-   * @property sliderConfig {Object}
+   * @property intensityGradientsTop{number}
    */
-  sliderConfig = {
-    orientation: 'vertical',
-    direction: 'rtl',
-    connect: 'lower',
-    behaviour: 'tap-drag',
-    step: 1,
-    pips: {
-      mode: 'steps',
-      // TODO - what does density do?
-      //   http://refreshless.com/nouislider/pips/ claims that density
-      //   "pre-scale[s] the number of pips", whatever that means.
-      //   Removing density here or setting it to 1 or 2 introduces
-      //   extraneous pips. Setting it to 3 or above shows only the
-      //   volume number, which is the desired behavior. Does this
-      //   setting work with other volume counts? Why does it work
-      //   how it does?
-      density: 5
-    }
-  };
+   intensityGradientsTop: number;
+
+  /**
+   * The vertical time point slider height is calculated
+   * to span the image view height minus a small margin.
+   *
+   * @property timePointSliderHeight {number}
+   */
+  timePointSliderHeight: number;
+
+  /**
+   * The time point slider configuration.
+   *
+   * @property timePointSliderConfig {Object}
+   */
+  timePointSliderConfig: Object;
+
+  /**
+   * The session slider configuration.
+   *
+   * @property sessionSliderConfig {Object}
+   */
+  sessionSliderConfig: Object;
 
   /**
    * Flag indicating whether to stop an active time point player.
@@ -155,13 +179,13 @@ export class VolumeComponent extends PageComponent {
   /**
    * The _coordinate_ => {_orientation_: _intensities_, ...}
    * function described in
-   * {{#crossLink "VolumeComponent/createGradientFactory"}}{{/crossLink}}
+   * {{#crossLink "VolumeComponent/createPhysicalIntensitiesFactory"}}{{/crossLink}}
    *
-   * @property createGradient
+   * @property createPhysicalIntensities
    * @private
    * @static
    */
-  private createGradient: Function;
+  private createPhysicalIntensities: Function;
 
   /**
    * Fetches the volume specified by the route parameters as
@@ -180,22 +204,39 @@ export class VolumeComponent extends PageComponent {
     this.routeParams = route.params.value;
     // Prep the modal.
     overlay.defaultViewContainer = vcRef;
-    // Make the gradient factory.
-    this.createGradient = this.createGradientFactory();
-    // Set the slider height manually.
-    this.sliderHeight = `${ this.calculateSliderHeight() }`;
+    // Make the physical intensity gradient factory.
+    this.createPhysicalIntensities = this.createPhysicalIntensitiesFactory();
+    // Set the dynamic styles.
+    this.calibrateStyles();
     // Fetch the volume.
     this.getVolume(this.routeParams);
   }
 
   /**
-   * Adjusts the slider height.
+   * Adjusts the slider and intensity chart placement and dimensions.
    *
    * @method onResize
    */
-  onResize() {
-    // Adjust the slider height.
-    this.sliderHeight = `${ this.calculateSliderHeight() }`;
+   @HostListener('window:resize', ['$event'])
+   onResize() {
+    this.calibrateStyles();
+  }
+
+  /**
+   * Sets the following style properties:
+   * * {{#crossLink "VolumeComponent/timePointSliderHeight:property"}}{{/crossLink}}
+   * * {{#crossLink "VolumeComponent/intensityGradientsBottom:property"}}{{/crossLink}}
+   * * {{#crossLink "VolumeComponent/intensityGradientsWidth:property"}}{{/crossLink}}
+   *
+   * @method calibrateStyles
+   * @private
+   */
+  private calibrateStyles() {
+    let imageViewHeight = this.imageViewHeight();
+    this.timePointSliderHeight =
+      this.calculateTimePointSliderHeight(imageViewHeight);
+    this.gradientWidth =
+      this.calculateIntensityGradientWidth();
   }
 
   /**
@@ -207,11 +248,32 @@ export class VolumeComponent extends PageComponent {
    * @param volume {Object} the loaded volume
    */
   onLoaded(volume: Object) {
+    // Create the slider configurations, if necessary.
+    if (!this.timePointSliderConfig) {
+      this.timePointSliderConfig = this.createTimePointSliderConfig(volume);
+      this.sessionSliderConfig = this.createSessionSliderConfig(volume);
+    }
+
+    // Update the volume-based variables.
     this.volume = volume;
-    // Set the initial intensities.
-    let coord = this.papaya.currentCoordinate;
-    this.intensities = this.timeSeriesVoxelValues(coord);
-    this.gradient = this.gradientVoxelValues(coord);
+    // Set the intensities in the next cycle to avoid the infamous
+    // Angular "Expression has changed after it was checked" error
+    // (cf. https://github.com/angular/angular/issues/6005). Angular's
+    // obscure, fragile change detector can't deal with changes
+    // to a watched variable during change processing. The intensities
+    // change below induces this error, but only when the session player
+    // is advanced and then reset to the previous value. Perhaps this
+    // change confuses Angular because setting volume above triggers
+    // a redigest in the next cycle, so the intensities change must be
+    // deferred to a cycle after that. However, why this error does not
+    // occur on the initial advance is a mystery. Ah well, whatever
+    // appeases the Angular gods.
+    let setIntensities = () => {
+      let coord = this.papaya.currentCoordinate;
+      this.timePointIntensities = this.timePointVoxelValues(coord);
+      this.physicalIntensities = this.physicalVoxelValues(coord);
+    };
+    setTimeout(setIntensities, 0);
   }
 
   /**
@@ -269,8 +331,13 @@ export class VolumeComponent extends PageComponent {
     // Find the requested volume.
     let volume = this.service.findVolume(imageSequence, volumeNbr);
     // If the volume was found, then capture the new volume
-    // and propagate the changed volume number to the chooser.
+    // and trigger the image swap or load.
     // Otherwise, post an error message.
+    //
+    // Image swap or load triggers the onLoaded callback,
+    // which in turn sets the volume instance variable,
+    // which in turn propagates the volume change to the
+    // intensity charts.
     if (volume) {
       this.placeHolder = volume;
       this.image = volume;
@@ -322,11 +389,13 @@ export class VolumeComponent extends PageComponent {
 
     // The target session number.
     let sessionNbr = this.requestedSessionNumber(request);
-    // Update the route params.
-    this.routeParams.session = sessionNbr;
-    this.routeParams.volume = this.volume.number;
+    // Copy and adjust the route parameters.
+    let params = _.defaults(
+      {session: sessionNbr, volume: this.volume.number},
+      this.routeParams
+    );
     // Fetch the volume.
-    this.getVolume(this.routeParams);
+    this.getVolume(params);
   }
 
   /**
@@ -345,8 +414,8 @@ export class VolumeComponent extends PageComponent {
     // change callback. The loaded callback is therefore
     // also responsible for setting the initial intensities.
     if (this.volume) {
-      this.intensities = this.timeSeriesVoxelValues(coordinate);
-      this.gradient = this.gradientVoxelValues(coordinate);
+      this.timePointIntensities = this.timePointVoxelValues(coordinate);
+      this.physicalIntensities = this.physicalVoxelValues(coordinate);
     }
   }
 
@@ -364,7 +433,7 @@ export class VolumeComponent extends PageComponent {
       .open();
   }
 
-  private timeSeriesVoxelValues(coordinate: Object): number[] {
+  private timePointVoxelValues(coordinate: Object): number[] {
     let value = volume => this.volumeVoxelValue(coordinate, volume);
     return this.volume.imageSequence.volumes.images.map(value);
   }
@@ -374,29 +443,128 @@ export class VolumeComponent extends PageComponent {
     return data && this.papaya.getVoxelValue(coordinate, data);
   }
 
+  private createTimePointSliderConfig(volume: Object) {
+    // The volume count can be deferred in the filter, but not
+    // the density.
+    let volumeCnt = volume.imageSequence.volumes.images.length;
+    // Wrap count to work around the silly Javascript *this* confusion.
+    let count = () => this.volumeCount();
+    let filter = _.partial(this.pipFilter, count);
+    let override = {
+      pips: {
+        filter: filter,
+        density: this.pipDensity(volumeCnt)
+      }
+    };
+
+    return _.defaultsDeep(override, VolumeComponent.VERTICAL_SLIDER_CONFIG);
+  }
+
+  private createSessionSliderConfig(volume: Object) {
+    // The session count can be deferred in the filter, but not
+    // the density.
+    let sessionCnt = volume.imageSequence.session.subject.sessions.length;
+    // Wrap count to work around the silly Javascript *this* confusion.
+    let count = () => this.sessionCount();
+    let filter = _.partial(this.pipFilter, count);
+    let override = {
+      pips: {
+        filter: filter,
+        density: this.pipDensity(sessionCnt)
+      }
+    };
+
+    return _.defaultsDeep(override, VolumeComponent.HORIZONTAL_SLIDER_CONFIG);
+  }
+
   /**
-   * The gradient domain is the 101 voxels centered at the current
-   * coordinate.
+   * The pip density is the larger of 10 or (100 / *count*()).
    *
-   * @property GRADIENT_DOMAIN
+   * @method pipDensity
+   * @private
+   * @param count {number} the number of slider values
+   * @return {number} the preferred pip density
+   */
+  private pipDensity(count: number) {
+    let n = Math.max(1, count);
+
+    return Math.max(10, 100 / n);
+  }
+
+  /**
+   * The _value_ => 0|1|2 slider pip function, where
+   * * 0 => don't show the value
+   * * 1 => show a value in large text
+   * * 2 => show a value in small text
+   *
+   * The values in large text are as follows:
+   * * the start and end
+   * * if there are 5 or fewer values, then all remaining values
+   * * if there are 6-20 values, then every fifth value
+   * * if there are more than 20 values, then every tenth value
+   * The remaining values are in small text, unless there are more
+   * than 20 values, in which case only intermittent values are
+   * displayed in small text and the remaining values are not
+   * displayed next to their pip.
+   *
+   * @method pipFilter
+   * @private
+   * @param count {() => number} a function returning the number of
+   *   slider values
+   * @param value {number} the input slider value
+   * @return {number} the pip display designator
+   */
+  private pipFilter(count: () => number, value: number): number {
+    // If the volume is not yet loaded, then the count is zero.
+    // In that case, set the range to one rather than zero.
+    // The resulting filter will hide the slider entirely.
+    // In fact, the filter will not be employed unless the volume
+    // is loaded, but it doesn't hurt to guard against this case.
+    let n = Math.max(1, count());
+    // The value offset in the range.
+    let index = value - 1;
+    // The small text is most of the remainder.
+    let small = Math.ceil(n / 20);
+
+    // The first, last and quartile pips are large.
+    // The pips at the small increment are small.
+    // The remainder are not displayed.
+    if (value === 1 || value === n || n < 5) {
+      return 1;
+    } else if (n < 20 && value % 5 === 0 && value < (n * 0.9)) {
+      return 1;
+    } else if (value % 10 === 0 && value < (n * 0.8)) {
+      return 1;
+    } else if (index % small === 0) {
+      return 2;
+    } else {
+      return 0;
+    }
+  }
+
+  /**
+   * The physical intensity gradient domain is the 101 voxels centered
+   * at the current coordinate.
+   *
+   * @property PHYSICAL_GRADIENT_DOMAIN
    * @private
    * @static
    */
-  private static const GRADIENT_DOMAIN = _.range(50, -51, -1);
+  private static const PHYSICAL_GRADIENT_DOMAIN = _.range(50, -51, -1);
 
   /**
    * Makes the _coordinate_ => {_orientation_: _intensities_, ...}
    * function, where
    * * _orientation_ is `axial`, `coronal` or `sagittal`
    * * _intensities_ is the voxel values over the
-   *   {{#crossLink "VolumeComponent/GRADIENT_DOMAIN:property"}}{{/crossLink}}
+   *   {{#crossLink "VolumeComponent/PHYSICAL_GRADIENT_DOMAIN:property"}}{{/crossLink}}
    *   offset from the _coordinate_ _orientation_ x, y or z index.
    *
-   * @method createGradientFactory
+   * @method createPhysicalIntensitiesFactory
    * @private
    * @return {function} the gradient voxel values factory
    */
-  private createGradientFactory() {
+  private createPhysicalIntensitiesFactory() {
     // The value functions vary over one axis and fix the
     // other axes.
     let axialValueFunction = (coordinate, dx) => {
@@ -424,33 +592,86 @@ export class VolumeComponent extends PageComponent {
       let coronal = _.partial(coronalValueFunction, coordinate);
       let sagittal = _.partial(sagittalValueFunction, coordinate);
       return {
-        axial: VolumeComponent.GRADIENT_DOMAIN.map(axial),
-        coronal: VolumeComponent.GRADIENT_DOMAIN.map(coronal),
-        sagittal: VolumeComponent.GRADIENT_DOMAIN.map(sagittal)
+        axial: VolumeComponent.PHYSICAL_GRADIENT_DOMAIN.map(axial),
+        coronal: VolumeComponent.PHYSICAL_GRADIENT_DOMAIN.map(coronal),
+        sagittal: VolumeComponent.PHYSICAL_GRADIENT_DOMAIN.map(sagittal)
       };
     };
   }
 
-  private gradientVoxelValues(coordinate: Object): Object {
-    return this.createGradient(coordinate);
+  private physicalVoxelValues(coordinate: Object): Object {
+    return this.createPhysicalIntensities(coordinate);
   }
 
   /**
-   * Mimic the Papaya container height = base width / 1.5.
+   * Mimic the Papaya container height = body width / 1.5.
    * The Papaya parent element width is specified in the
-   * CSS as 60% of the base width. Nothing is laid out at
-   * this point, so we can't set the height to a percent
-   * in the CSS. If we hook into the digest cycle after
-   * layout, we run the risk of an infinite redigest loop.
-   * A 36 pixel bottom margin is added as well.
+   * CSS as 60% of the body width.
    *
-   * @method calculateSliderHeight
-   * @return the intended slider height
+   * Nothing is laid out when this method is initially called,
+   * so we can't rely on
+   * {{#crossLink "PapayaService/viewerDimensions"}}{{/crossLink}}.
+   *
+   * @method imageViewHeight
+   * @return the image view height truncated to the nearest
+   *   integer
    */
-  private calculateSliderHeight(): number {
-    const margin = 48;
-    let unpadded = (window.innerWidth * 0.6) / 1.5;
-    return Math.round(unpadded - margin);
+  private imageViewHeight(): number {
+    let viewerDims = this.papaya.viewerDimensions();
+    if (viewerDims) {
+      return viewerDims[1];
+    } else {
+      return Math.floor((document.body.clientWidth * 0.6) / 1.5);
+    }
+  }
+
+  /**
+   * The body width exclusive of the 15px left and right paddding.
+   *
+   * @method bodyInnerWidth
+   * @return the body inner width in pixels
+   */
+  private bodyInnerWidth(): number {
+    return document.body.clientWidth - 30;
+  }
+
+  /**
+   * The gutters on either side of the image display are 20%
+   * of the
+   * {{#crossLink "VolumeComponent/bodyInnerWidth"}}{{/crossLink}}.
+   *
+   * @method gutterWidth
+   * @return the width of the gutter in pixels
+   */
+  private gutterWidth(): number {
+    return Math.floor(this.bodyInnerWidth() * 0.2);
+  }
+
+  /**
+   * The slider height is the image view height less the
+   * title and player heights.
+   *
+   * @method calculateTimePointSliderHeight
+   * @param imageViewHeight {number}
+   * @return the preferred slider height
+   */
+  private calculateTimePointSliderHeight(
+    imageViewHeight: number
+  ): number {
+    // The title is 20 pixels and the player is 28 pixels.
+    // Knock out off an inexplicable fudge factor.
+    const margin = 24;
+    return imageViewHeight - margin;
+  }
+
+  /**
+   * @method calculateIntensityGradientWidth
+   * @return the preferred gradient width
+   */
+  private calculateIntensityGradientWidth(): number {
+    // The margin is an inexplicable fudge factor.
+    const margin = 24;
+    return this.gutterWidth() - margin;
   }
 
   /**
@@ -489,11 +710,11 @@ export class VolumeComponent extends PageComponent {
     if (_.isInteger(request)) {
       return request;
     } else if (request === 'previous') {
-      return this.routeParams.session == 1 ?
+      return this.volume.imageSequence.session.number === 1 ?
         this.volume.imageSequence.session.subject.sessions.length :
-        this.routeParams.session - 1;
+        this.volume.imageSequence.session.number - 1;
     } else if (request === 'next') {
-      let nextNdx = this.routeParams.session %
+      let nextNdx = this.volume.imageSequence.session.number %
             this.volume.imageSequence.session.subject.sessions.length;
       return nextNdx + 1;
     } else  {

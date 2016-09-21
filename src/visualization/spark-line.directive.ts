@@ -145,11 +145,22 @@ export class SparkLineDirective implements OnChanges, OnInit {
     this.elementRef = elementRef;
   }
 
+  /**
+   * Handle the following changes:
+   * * If the data changed, then reset the line data, which will
+   *   induce d3 to replot the line.
+   *
+   * _Note_: the other inputs are for initialization only, and
+   * changes to them are ignored. For example, resizing the window
+   * resets the width input, but that is ignored. Handling a resize
+   * necessitates detaching and recreating the entire plot, which
+   * results in a DOM memory leak.
+   */
   ngOnChanges(changes: SimpleChange) {
-    let change = changes['data'];
-    if (change && !change.isFirstChange()) {
+    let dataChange = changes['data'];
+    if (dataChange && !dataChange.isFirstChange()) {
       // Draw the new values.
-      let input = change.currentValue;
+      let input = dataChange.currentValue;
       let data = _.isArray(input) ? {series: input} : input;
       for (let key in data) {
         this.svg.select(`path.${ key }`)
@@ -158,9 +169,11 @@ export class SparkLineDirective implements OnChanges, OnInit {
     }
   }
 
+  /**
+   * Makes a new D3 SVG root group element and draws the plot.
+   */
   ngOnInit() {
-    // Convert a simple array data input to a legendless
-    // {data: input} object.
+    // Convert simple array input to a {series: data} specification.
     let dataSpec = _.isArray(this.data) ? {series: this.data} : this.data;
     let keys = _.keys(dataSpec);
     let values = _.values(dataSpec);

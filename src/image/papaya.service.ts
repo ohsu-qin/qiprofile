@@ -83,7 +83,8 @@ export class PapayaService {
 
   /**
    * Monkey-patches Papaya to disable drag-and-drop, replace the
-   * error handler and inject a finished load callback.
+   * error handler, disable the non-View menu items, inject a finished
+   * load callback and fix several bugs.
    */
   constructor() {
     // Note: this constructor is called on refresh. In that case,
@@ -91,6 +92,8 @@ export class PapayaService {
     //   the finishedLoad recursion will result in an infinite loop.
     //   Guard against that with the isPatched function.
     if (!this.isPapayaPatched()) {
+      this.fixResize();
+      this.fixShowMenu();
       this.disableDnD();
       this.disableMouseEventsWhileLoading();
       this.replaceErrorHandler();
@@ -159,6 +162,14 @@ export class PapayaService {
     // let urls = images.map(ImageStore.location);
     // // Restart the viewer.
     // this.viewer.restart(urls, true, false);
+  }
+
+  /**
+   * @method viewerDimensions
+   * @return the viewer [width, height], if known, otherwise null
+   */
+  viewerDimensions(): number[] {
+    return this.viewer ? this.viewer.container.getViewerDimensions() : null;
   }
 
   /**
@@ -291,6 +302,12 @@ export class PapayaService {
    * @return {number} the voxel value
    */
   getVoxelValueAt(x: number, y: number, z: number) {
+    // In some yet to be determined cirucumstances, Papaya is corrupted.
+    // Forestall the meaningless Papaya error message with a slightly
+    // more useful message.
+    if (!this.viewer.currentScreenVolume) {
+      throw new Error('The viewer does not have a screen volume');
+    }
     return this.viewer.getCurrentValueAt(x, y, z);
   }
 
@@ -312,6 +329,7 @@ export class PapayaService {
 
     // Start the renderer.
     papaya.Container.startPapaya();
+
     // Resize the viewer to work around the following Papaya bug:
     // * Papaya initial display fills in the canvas with the body element
     //   background color, but then resizes the canvas to a smaller dimension,
@@ -337,6 +355,120 @@ export class PapayaService {
    */
   private isPapayaPatched(): boolean {
     return !!papaya.viewer.Viewer.prototype._finishedLoading;
+  }
+
+  /**
+   * Monkey-patches the misplaced Papaya resize button and kills
+   * the other misplaced and/or irrelevant "main" buttons.
+   *
+   * @method fixResize
+   * @private
+   */
+  private fixResize() {
+    const PAPAYA_PADDING = 0;
+    const PAPAYA_CONTROL_MAIN_INCREMENT_BUTTON_CSS = "papaya-main-increment";
+    const PAPAYA_CONTROL_MAIN_DECREMENT_BUTTON_CSS = "papaya-main-decrement";
+    const PAPAYA_CONTROL_MAIN_SWAP_BUTTON_CSS = "papaya-main-swap";
+    const PAPAYA_CONTROL_MAIN_GOTO_CENTER_BUTTON_CSS = "papaya-main-goto-center";
+    const PAPAYA_CONTROL_MAIN_GOTO_ORIGIN_BUTTON_CSS = "papaya-main-goto-origin";
+
+    papaya.viewer.Viewer.prototype.resizeViewer = function (dims) {
+
+      let halfPadding = PAPAYA_PADDING / 2, offset, swapButton, originButton;
+      let incButton, decButton, centerButton;
+
+      this.canvas.width = dims[0];
+      this.canvas.height = dims[1];
+
+      this.context.fillStyle = this.bgColor;
+      this.context.fillRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
+
+      if (this.initialized) {
+          this.calculateScreenSliceTransforms();
+          this.canvasRect = this.canvas.getBoundingClientRect();
+          this.drawViewer(true);
+
+          if (this.container.showControls) {
+              offset = $(this.canvas).offset();
+
+              incButton = $("#" + PAPAYA_CONTROL_MAIN_INCREMENT_BUTTON_CSS +
+                            this.container.containerIndex);
+              incButton.css({
+                  top: offset.top + halfPadding,
+                  left: offset.left + this.mainImage.screenDim -
+                        incButton.outerWidth() - halfPadding,
+                  position: 'absolute'});
+
+              decButton = $("#" + PAPAYA_CONTROL_MAIN_DECREMENT_BUTTON_CSS +
+                            this.container.containerIndex);
+              decButton.css({
+                  top: offset.top + decButton.outerHeight() + PAPAYA_PADDING,
+                  left: offset.left + this.mainImage.screenDim -
+                        decButton.outerWidth() - halfPadding,
+                  position: 'absolute'});
+
+              swapButton = $("#" + PAPAYA_CONTROL_MAIN_SWAP_BUTTON_CSS +
+                             this.container.containerIndex);
+              swapButton.css({
+                  //** Kludge fix replace top by bottom. **//
+                  // top: offset.top + this.mainImage.screenDim -
+                  //      swapButton.outerHeight() - halfPadding,
+                  bottom: 55,
+                  left: offset.left + this.mainImage.screenDim -
+                        swapButton.outerWidth() - halfPadding,
+                  position: 'absolute'});
+
+              centerButton = $("#" + PAPAYA_CONTROL_MAIN_GOTO_CENTER_BUTTON_CSS +
+                               this.container.containerIndex);
+              centerButton.css({
+                  //** Kludge fix replace top by bottom. **//
+                  // top: offset.top + this.mainImage.screenDim -
+                  //      centerButton.outerHeight() - halfPadding,
+                  bottom: 55,
+                  left: offset.left + halfPadding,
+                  position: 'absolute'});
+
+              originButton = $("#" + PAPAYA_CONTROL_MAIN_GOTO_ORIGIN_BUTTON_CSS +
+                               this.container.containerIndex);
+              originButton.css({
+                  //** Kludge fix replace top by bottom. **//
+                  // top: offset.top + this.mainImage.screenDim -
+                  //      originButton.outerHeight() - halfPadding,
+                  bottom: 55,
+                  left: offset.left + halfPadding + originButton.outerWidth() + PAPAYA_PADDING,
+                  position: 'absolute'});
+          }
+      }
+    };
+  }
+
+  private fixShowMenu() {
+    papaya.ui.Menu.doShowMenu = function (viewer, el, menu, right) {
+      let posV, pos, eWidth, mWidth, mHeight, left, top, dHeight;
+
+      //get the position of the placeholder element
+      posV = $(viewer.canvas).offset();
+      dHeight = $(viewer.container.display.canvas).outerHeight();
+      pos = $(el).offset();
+      eWidth = $(el).outerWidth();
+      mWidth = $(menu).outerWidth();
+      mHeight = $(menu).outerHeight();
+      //left = pos.left + (right ? ((-1 * mWidth) + eWidth) : 5) + "px";
+      left = pos.left - 12;
+
+      //top = (posV.top) + "px";
+      top = 24;
+
+      //show the menu directly under the placeholder
+      $(menu).css({
+          position: 'absolute',
+          zIndex: 100,
+          left: left,
+          top: top
+      });
+
+      $(menu).hide().fadeIn(200);
+    };
   }
 
   /**
@@ -410,46 +542,52 @@ export class PapayaService {
    * flag.
    *
    * @method disableMouseEventsWhileLoading
+   * @private
    */
   private disableMouseEventsWhileLoading() {
     let self = this;
 
-    papaya.viewer.Viewer.prototype._mouseMoveEvent =
+  // Be careful here, because we are already monkey patching
+  // at least one of these functions elsewhere. To avoid an
+  // infinite loop, rename the base methods to a __ prefix
+  // rather than _.
+
+    papaya.viewer.Viewer.prototype.__mouseMoveEvent =
       papaya.viewer.Viewer.prototype.mouseMoveEvent;
     papaya.viewer.Viewer.prototype.mouseMoveEvent =
       function(me) {
         if (!self.isSwappingVolume) {
-          this._mouseMoveEvent(me);
+          this.__mouseMoveEvent(me);
         }
       };
 
-    papaya.viewer.Viewer.prototype._mouseDownEvent =
+    papaya.viewer.Viewer.prototype.__mouseDownEvent =
       papaya.viewer.Viewer.prototype.mouseDownEvent;
     papaya.viewer.Viewer.prototype.mouseDownEvent =
       function(me) {
         if (!self.isSwappingVolume) {
-          this._mouseDownEvent(me);
+          this.__mouseDownEvent(me);
         }
       };
 
-    papaya.viewer.Viewer.prototype._mouseUpEvent =
+    papaya.viewer.Viewer.prototype.__mouseUpEvent =
       papaya.viewer.Viewer.prototype.mouseUpEvent;
     papaya.viewer.Viewer.prototype.mouseUpEvent =
       function(me) {
         if (!self.isSwappingVolume) {
-          this._mouseUpEvent(me);
+          this.__mouseUpEvent(me);
         }
       };
 
     // A Papaya mouse event handler delays an updatePosition
     // on a timer. The volume might be ok in the handler but
     // swapping out by the time the update is called.
-    papaya.viewer.Viewer.prototype._updatePosition =
+    papaya.viewer.Viewer.prototype.__updatePosition =
       papaya.viewer.Viewer.prototype.updatePosition;
     papaya.viewer.Viewer.prototype.updatePosition =
       function() {
         if (!self.isSwappingVolume) {
-          this._updatePosition.apply(this, arguments);
+          this.__updatePosition.apply(this, arguments);
         }
       };
   }

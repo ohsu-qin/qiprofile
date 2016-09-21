@@ -7,17 +7,17 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import { ProjectResource } from './project.resource.ts';
+import { ProjectsResource } from './projects.resource.ts';
 
 @Injectable()
 
 /**
  * The project data access service.
  *
- * @class ProjectService
+ * @class ProjectsService
  */
-export class ProjectService {
-  constructor(private resource: ProjectResource) { }
+export class ProjectsService {
+  constructor(private resource: ProjectsResource) { }
 
   /**
    * @method getProjects

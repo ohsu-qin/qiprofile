@@ -10,7 +10,7 @@ import { RestResource } from '../rest/rest.resource.ts';
  * The project REST resource.
  *
  * @module project
- * @class ProjectResource
+ * @class ProjectsResource
  * @extends RestResource
  */
-export class ProjectResource extends RestResource { }
+export class ProjectsResource extends RestResource { }

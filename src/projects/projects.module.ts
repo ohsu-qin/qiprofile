@@ -11,9 +11,10 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 
 import { PageModule } from '../page/page.module.ts';
-import { ProjectService } from '../project/project.service.ts';
 import { ProjectsComponent } from './projects.component.ts';
 import { ProjectItemComponent } from './project-item.component.ts';
+import { ProjectsHelpComponent } from './help.component.ts';
+import { ProjectsHelpTextComponent } from './help-text.component.ts';
 
 const ROUTE_CONFIG: Routes = [
   {
@@ -24,8 +25,10 @@ const ROUTE_CONFIG: Routes = [
 
 @NgModule({
   imports: [CommonModule, PageModule, RouterModule.forChild(ROUTE_CONFIG)],
-  declarations: [ProjectsComponent, ProjectItemComponent],
-  providers: [ProjectService],
+  declarations: [
+    ProjectsComponent, ProjectItemComponent,
+    ProjectsHelpComponent, ProjectsHelpTextComponent
+  ],
   exports: [ProjectsComponent]
 })
 

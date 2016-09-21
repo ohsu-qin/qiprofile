@@ -16,12 +16,16 @@
 
 .papaya-toolbar
   background-color MintCream
-  // Clobber the File menu item.
+  // Clobber the File, Settings and Help menu items.
   // Note: the #File selector is untenable, since for some reason the id
   // changes to File1 when the page is revisited via a forward or back.
-  // Therefore, use the first child selector instead.
-  & span:first-child
+  // Therefore, use the first third and fourth child selectors instead.
+  & .papaya-menu-label:first-child
     display none
+    & + span + span
+      display none
+      & + span
+        display none
 
 .papaya-display
   background-color MintCream

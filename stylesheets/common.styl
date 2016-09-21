@@ -97,8 +97,8 @@ ul.qi-clean-list
   top 0
 
 // Add some vertical space between successive elements.
-.qi-ver-space
-  & + .qi-ver-space
+.qi-vertical-space
+  & + .qi-vertical-space
     margin-top 0.5em
 
 // Add some horizontal space between successive elements.
@@ -270,22 +270,16 @@ ul.qi-horizontal-list
 
 .qi-vertical
   height 100%
-  // A vertical slider should have room at the top.
-  .qi-slider
-    // Position the middle button of a player below
-    // a vertical slider under the slider handle.
-    // For some reason, positioning the player
-    // itself has no effect, but positioning the
-    // first button does.
-    & + qi-player button:first-child
-      margin-left -36px
 
 .qi-left
   position absolute
-  top 0
   left 0
 
 .qi-right
   position absolute
-  top 0
   right 0
+
+[qi-spark-line] path
+  stroke: SteelBlue
+  stroke-width: 2
+  fill: none

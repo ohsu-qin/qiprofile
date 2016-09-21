@@ -18,6 +18,7 @@
   margin 0
 
 .qi-content
+  position relative
   overflow hide
 
 .qi-main
@@ -53,6 +54,9 @@
     h{n}
       font-size (125% - (5 * n))
       text-decoration underline
+  // Reduce the largish .btn in-line padding.
+  & .qi-btn
+    padding 2px 5px
 
 .qi-contact-info
   padding-top 1em

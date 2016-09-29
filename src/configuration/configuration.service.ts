@@ -53,72 +53,45 @@ export class ConfigurationService {
 
   /**
    * Determines the label for the given property as follows:
-   * * If the topic is provided, then the label is looked up
-   *   in the `labels.cfg` file.
-   * * Otherwise, the right-most item in the property path with
-   *   a comparable topic in `labels.cfg` is used, e.g. if
-   *   the path is `subject.biopsy.pathology.tnm.tumorSize`
-   *   then a `[Pathology]` topic would scope the subpath
-   *  `tnm.tumorSize`.
-   * * If no topic could be determined, then all topics in
-   *   the configuration file are consulted.
-   *
-   * The label match for a given topic is determined as follows:
    * * If there is an entry for the property within the topic, then
    *   that configuration entry value is the label.
    * * Otherwise, the label is the capitalized, space-separated
-   *   lookup of each item in the property path, e.g.
-   * * If there is no configuration match, then the default is
-   *   the capitalized, space-separated "humanized" parse of the
-   *   property, e.g. `tumorSize` => `Tumor Size`.
+   *   "humanized" parse of the property or property path, e.g.
+   * `tumorSize` => `Tumor Size`.
    *
    * The label match is applied element-wise in the property path,
    * e.g. if there is a `[Pathology]` `tnm = TNM` entry, then the
-   * label for path `subject.biopsy.pathology.tnm.tumorSize` is
+   * label for path `tnm.tumorSize` in section `Pathology` is
    * `TNM Tumor Size`.
    *
    * @method getLabel
-   * @param property {string} the property name
-   * @param topic {string} the optional configuration topic
+   * @param property {string} the property name or path
+   * @param topic {string} the required configuration topic
    * @return {string} the property label
    */
-  getLabel(property: string, topic?: string): string {
+  getLabel(property: string, topic: string): string {
     let path = property.split('.');
-    if (topic) {
-      return this.getPathLabel(path, topic);
-    } else {
-      let caps = path.map(_.s.capitalize);
-      let topicNdx = _.findLastIndex(caps, s => s in this.labels);
-      if (topicNdx === -1) {
-        return getPathLabel(path);
-      } else {
-        let prefix = _.take(caps, topicNdx + 1).join(' ');
-        topic = caps[topicNdx];
-        let subpath = path.slice(topicNdx + 1).join('.');
-        let suffix = this.getPathLabel(subpath, topic);
-        return `${ prefix } ${ suffix }`;
-      }
-    }
+    let labelize = s => this.getAtomicLabel(s, topic);
+
+    return path.map(labelize).join(' ');
   }
 
-  private getPathLabel(path: string[], topic?: string): string {
-    // If no topic given, then check all topics.
-    let topics = topic ? [topic] : this.labels.keys();
-    let labels = path.map(prop => this.getConfigLabel(prop, topics));
+  /**
+   * Returns the label of the given simple property name as
+   * described in
+   * {{#crossLink "ConfigurationService/getLabel"}}{{/crossLink}}.
+   *
+   * @method getAtomicLabel
+   * @private
+   * @param property {string} the property name
+   * @param topic {string} the configuration topic
+   * @return {string} the property label
+   */
+  private getAtomicLabel(property: string, topic: string): string {
+    let section = this.labels[topic];
+    let configLabel = section ? section[property] : null;
 
-    return labels.join(' ');
-  }
-
-  private getConfigLabel(property: string, topics: string[]): string {
-    // Look in each relevant topic for the label.
-    for (topic in topics) {
-      let label = this.labels[topic][property];
-      if (label) {
-        return label;
-      }
-    }
-    // Not found: make the default label.
-    return this.defaultLabel(property);
+    return configLabel || this.defaultLabel(property);
   }
 
   /**
@@ -126,10 +99,14 @@ export class ConfigurationService {
    * {{#crossLink "ConfigurationService/getLabel"}}{{/crossLink}}.
    *
    * @method defaultLabel
-   * @param {string} the property name
+   * @private
+   * @param property {string} the property name
    * @return {string} the default property label
    */
   private defaultLabel(property: string): string {
-    return _s.humanize(property).split(' ').map(_s.capitalize).join(' ');
+    // The humanized uncapitalized array.
+    let lc = _s.humanize(property).split(' ');
+
+    return lc.map(_s.capitalize).join(' ');
   }
 }

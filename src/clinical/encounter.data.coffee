@@ -1,4 +1,4 @@
-`import * as _s from "underscore.string"`
+`import Pathology from "./pathology.data.coffee"`
 
 ###*
  * The clinical Encounter REST data object extension utility.
@@ -15,19 +15,17 @@ ClinicalEncounter =
    * @return the augmented clinical encounter object
   ###
   extend: (encounter, subject) ->
-    return encounter unless encounter?
     ###*
-     * The parent subject REST object
-     *
-     * @property subject
+     * @method isBiopsy
+     * @return whether the encounter class is `Biopsy`
     ###
-    encounter.subject = subject
-    
+    encounter.isBiopsy = -> @_cls is 'Biopsy'
+
     ###*
      * @method isSurgery
-     * @return whether the encounter class ends in 'Surgery'
+     * @return whether the encounter class ends in `Surgery`
     ###
-    encounter.isSurgery = -> _s.endsWith(@_cls, 'Surgery')
+    encounter.isSurgery = -> @_cls.endsWith('Surgery')
 
     # Add the virtual properties.
     Object.defineProperties encounter,
@@ -41,15 +39,9 @@ ClinicalEncounter =
         get: ->
           if @isSurgery() then 'Surgery' else @_cls
 
-      ###*
-       * The patient age at the time of the encounter.
-       *
-       * @property age
-      ###
-      age:
-        get: ->
-          if @date and @subject.birthDate
-            @date - @subject.birthDate
+    # Extend the pathology object.
+    if encounter.pathology
+      Pathology.extend(encounter.pathology)
 
     # Return the augmented clinical encounter object.
     encounter

@@ -5,10 +5,7 @@
 `import Session from "../session/session.data.coffee"`
 `import Modeling from "../session/modeling.data.coffee"`
 `import ClinicalEncounter from "../clinical/encounter.data.coffee"`
-
-isSession = (encounter) -> encounter._cls == 'Session'
-
-isClinical = (encounter) -> not isSession(encounter)
+`import Encounter from "./encounter.data.coffee"`
 
 # Fixes the subject date properties.
 fixDates = (subject)  ->
@@ -32,13 +29,14 @@ fixDates = (subject)  ->
 
 # Makes the changes to the subject session objects
 # described in Session.extend.
-extendSessions = (subject)  ->
-  # Extend each session.
+extendEncounters = (subject) ->
+  # Extend the base encounters.
+  for enc in subject.encounters
+    Encounter.extend(enc, subject)
+  # Further extend each session.
   for session, i in subject.sessions
     Session.extend(session, subject, i+1)
-
-# Adds the clinical encounter title virtual property.
-extendClincalEncounters = (subject) ->
+  # Further extend each clinical encounter.
   for enc in subject.clinicalEncounters
     ClinicalEncounter.extend(enc, subject)
 
@@ -68,7 +66,7 @@ Subject =
     # Add the virtual properties.
     Object.defineProperties subject,
       ###*
-       * @method title
+       * @property title
        * @return the subject display title
       ###
       title:
@@ -82,23 +80,64 @@ Subject =
           "#{ @collection } Patient #{ @number }"
 
       ###*
-       * @method clinicalEncounters
+       * Determines this subject's age relative to the preferred
+       * reference date, determined as follows:
+       * * the diagnosis date, if available
+       * * otherwise, the first encounter date, if any
+       * * otherwise, today if there are no encounters
+       *
+       * @method age
+      ###
+      age:
+        get: ->
+          if @birthDate
+            # The reference date.
+            ref = @diagnosisDate or @_firstEncounterDate or moment()
+            # The year difference from the birth date.
+            ref.diff(@birthDate, 'years')
+
+      _firstEncounterDate:
+        get: ->
+          _.minBy(@encounters, 'date').date if @encounters
+
+      ###*
+       * @property clinicalEncounters
        * @return the clinical encounters
       ###
       clinicalEncounters:
         get: ->
-          (enc for enc in @encounters when isClinical(enc))
+          (enc for enc in @encounters when enc.isClinical())
 
       ###*
-       * @method sessions
+       * @property sessions
        * @return the session encounters
       ###
       sessions:
         get: ->
-          (enc for enc in @encounters when isSession(enc))
+          (enc for enc in @encounters when enc.isSession())
 
       ###*
-       * @method modelings
+       * @property biopsy
+       * @return the unique biopsy encounter, if there is exactly
+       *   one, otherwise null
+      ###
+      biopsy:
+        get: ->
+          biopsies = (enc for enc in @clinicalEncounters when enc.isBiopsy())
+          if biopsies.length is 1 then biopsies[0] else null
+
+      ###*
+       * @property surgery
+       * @return the unique surgery encounter, if there is exactly
+       *   one, otherwise null
+      ###
+      surgery:
+        get: ->
+          surgeries = (enc for enc in @clinicalEncounters when enc.isSurgery())
+          if surgeries.length is 1 then surgeries[0] else null
+
+      ###*
+       * @property modelings
        * @return the modelings array
       ###
       modelings:
@@ -121,11 +160,9 @@ Subject =
     # Fix the subject dates.
     fixDates(subject)
     # Doctor the encounters.
-    extendSessions(subject)
-    extendClincalEncounters(subject)
+    extendEncounters(subject)
 
     # Return the extended subject.
     subject
 
 `export { Subject as default }`
-

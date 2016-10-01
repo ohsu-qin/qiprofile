@@ -25,18 +25,13 @@ export class ColorBarDirective implements OnChanges, OnInit {
   @Input() data;
 
   /**
-   * The optional value accessor, used as follows:
-   * * If the input is a string, the accessor is the
-   *   property path accessor.
-   * * Otherwise, if the input is a
-   *   {{#crossLink "ValueAccessor"}}{{/crossLink}},
-   *   then the accessor is that function,
-   * * Otherwise, if the input is missing, then the
-   *   default accessor is the identity function.
+   * The optional value accessor property name or
+   * property path. The default is to use the input
+   * data directly.
    *
-   * @property accessor {any}
+   * @property property {string}
    */
-  @Input() accessor: any;
+  @Input() property: string;
 
   /**
    * The additional data access argument.
@@ -104,17 +99,14 @@ export class ColorBarDirective implements OnChanges, OnInit {
 
   ngOnInit() {
     // The value access function.
-    let accessor = this.accessor;
-    if (!accessor) {
-      accessor = _.identity;
-    } else if (_.isString(accessor)) {
-      accessor = _.partialRight(_.get, accessor);
-    } else if (this.extra) {
-      accessor = (d) => this.accessor(d, extra);
-    }
+    let accessor = this.property ?
+                   d => _.get(d, this.property) :
+                   _.identity;
 
     // The domain.
-    let domain = this.domain || [d3.min(this.data, accessor), d3.max(this.data, accessor)];
+    let domain =
+      this.domain ||
+      [d3.min(this.data, accessor), d3.max(this.data, accessor)];
 
     // The color mapper.
     let color = d3.scaleSequential(d3.interpolateInferno)

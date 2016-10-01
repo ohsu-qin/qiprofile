@@ -4,7 +4,18 @@ block billboard
   | {{ name }} Collection
 
 block content
-  qi-collection-correlation([subjects]="subjects")
-  ul.qi-main-list
-    li(*ngFor="let subject of subjects", (click)="visitSubject(subject)")
-      | {{ subject.number }}
+  .row
+    .col-md-2.qi-align-top
+      div(
+        qi-scatter-plot, [height]="sessionsChartHeight",
+        [data]="sessions", [axis]="axis", [color]="'subject.number'",
+        [x]="'day'", [y]="'subject.number'"
+      )
+    .col-md-10
+      // Double up the correlation charts.
+      .col-md-6(
+        *ngFor="let correlation of correlations",
+        qi-scatter-plot, [data]="sessions", [axis]="axis",
+        [color]="'subject.number'",
+        [x]="correlation.x", [y]="correlation.y"
+      )

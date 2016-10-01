@@ -4,6 +4,7 @@
  * provides the following shared services:
  * * the REST resource providers
  * * {{#crossLink "HelpService"}}{{/crossLink}}
+ * * {{#crossLink "ConfigurationService"}}{{/crossLink}}
  * * {{#crossLink "SubjectService"}}{{/crossLink}}
  * * {{#crossLink "SessionService"}}{{/crossLink}}
  * * {{#crossLink "PapayaService"}}{{/crossLink}}
@@ -34,6 +35,7 @@ import { AppComponent } from './app.component.ts';
 
 // The global services.
 import { HelpService } from '../help/help.service.ts';
+import { ConfigurationService } from '../configuration/configuration.service.ts';
 import { ProjectsService } from '../projects/projects.service.ts';
 import { CollectionsService } from '../collections/collections.service.ts';
 import { SubjectService } from '../subject/subject.service.ts';
@@ -44,8 +46,8 @@ import { PapayaService } from '../image/papaya.service.ts';
 import { ROUTES } from './app.routes.ts';
 
 const SHARED_SERVICES = [
-  HelpService, CollectionsService, ProjectsService, SubjectService,
-  SessionService, PapayaService
+  HelpService, ConfigurationService, CollectionsService, ProjectsService,
+  SubjectService, SessionService, PapayaService
 ];
 
 @NgModule({

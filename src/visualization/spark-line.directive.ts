@@ -23,8 +23,8 @@ import {
 export class SparkLineDirective implements OnChanges, OnInit {
   /**
    * The data objects. The data can be either an input array for
-   * a single data series or a {_series_: array, ...} for one or
-   * more data series.
+   * a single data series or a {_key_: array, ...} for one or
+   * more data series, where _key_ is the data series designator.
    *
    * @property data {Object|Object[]}
    */
@@ -39,30 +39,20 @@ export class SparkLineDirective implements OnChanges, OnInit {
   @Input() domain: number[];
 
   /**
-   * The optional X value accessor, used as follows:
-   * * If the input is a string, the X accessor is the
-   *   property path accessor.
-   * * Otherwise, if the input is a
-   *   {{#crossLink "ValueAccessor"}}{{/crossLink}},
-   *   then the X accessor is that function,
-   * * Otherwise, if the input is missing, then the
-   *   default X accessor is the data point index.
+   * The optional X value access property name or
+   * property path. The default is to input data
+   * point index.
    *
-   * @property x {any}
+   * @property x {string}
    */
   @Input() x: any;
 
   /**
-   * The optional Y value accessor, used as follows:
-   * * If the input is a string, the Y accessor is the
-   *   property path accessor.
-   * * Otherwise, if the input is a
-   *   {{#crossLink "ValueAccessor"}}{{/crossLink}},
-   *   then the Y accessor is that function,
-   * * Otherwise, if the input is missing, then the
-   *   default Y accessor is the identity function.
+   * The optional Y value accessor property name or
+   * property path. The default is to use the input
+   * data directly.
    *
-   * @property y {any}
+   * @property y {string}
    */
   @Input() y: any;
 
@@ -112,9 +102,9 @@ export class SparkLineDirective implements OnChanges, OnInit {
   @Input() guide;
 
   /**
-   * The {_series_: _label_} legend. Default for a
-   * single series is no legend, otherwise the default
-   * is the data key.
+   * The optional {_key_: _label_} legend, where _key_ is the
+   * data series designator. The default for a single series is
+   * no legend, otherwise the default is the capitalized data key.
    *
    * @property legend {Object}
    */
@@ -134,19 +124,11 @@ export class SparkLineDirective implements OnChanges, OnInit {
    */
   private line: d3.Line<number, number>;
 
-  /**
-   * The directive element.
-   *
-   * @property elementRef {ElementRef}
-   */
-  private elementRef: ElementRef;
-
-  constructor(elementRef: ElementRef) {
-    this.elementRef = elementRef;
+  constructor(private elementRef: ElementRef) {
   }
 
   /**
-   * Makes a new D3 SVG root group element and draws the plot.
+   * Makes the D3 SVG root group element and draws the plot.
    */
   ngOnInit() {
     // Convert simple array input to a {series: data} specification.
@@ -188,13 +170,13 @@ export class SparkLineDirective implements OnChanges, OnInit {
     if (!xDomain) {
       xDomain = [
         d3.min(values, (v) => d3.min(v, xValue)),
-        d3.max(values, (v) => d3.max(v, xValue)),
+        d3.max(values, (v) => d3.max(v, xValue))
       ];
     }
     if (!yDomain) {
       yDomain = [
         d3.min(values, (v) => d3.min(v, yValue)),
-        d3.max(values, (v) => d3.max(v, yValue)),
+        d3.max(values, (v) => d3.max(v, yValue))
       ];
     }
 
@@ -261,9 +243,9 @@ export class SparkLineDirective implements OnChanges, OnInit {
       .attr('class', 'plot')
       .selectAll('path')
       .data(data)
-        .enter().append('path')
-          .attr('class', d => d.id)
-          .attr('d', d => this.line(d.values));
+      .enter().append('path')
+        .attr('class', d => d.id)
+        .attr('d', d => this.line(d.values));
   }
 
   /**
@@ -292,7 +274,7 @@ export class SparkLineDirective implements OnChanges, OnInit {
 
   private valueFunction(definition: string|number|Function) {
     if (_.isString(definition)) {
-      return _.partialRight(_.get, input);
+      return _.partialRight(_.get, definition);
     } else if (_.isNumber(definition)) {
       return _.constant(definition);
     } else if (this.extra) {

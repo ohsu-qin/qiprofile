@@ -164,7 +164,8 @@ export class VolumeComponent extends PageComponent {
    *
    * @property domain {number[]}
    */
-  domain = [0, 400];
+  // TODO - get this from the pipeline.
+  domain = [0, 480];
 
   /**
    * The project name.

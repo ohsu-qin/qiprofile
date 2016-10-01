@@ -63,21 +63,11 @@ Session =
    * @return the extended session object
   ###
   extend: (session, subject, number) ->
-    return session if not session?
-
-    # Set the session subject property.
-    ###*
-     * The parent {{#crossLink "Subject"}}{{/crossLink}}.
-     * 
-     * @property subject {Object} 
-    ###
-    session.subject = subject
-
     # Set the session number property.
     ###*
      * The one-based subject session index in date order.
-     * 
-     * @property number {number} 
+     *
+     * @property number {number}
     ###
     session.number = number
 
@@ -126,16 +116,18 @@ Session =
        * @property title
       ###
       title:
-        # TODO - get the Session title template from a labels.cfg
-        # entry:
-        #   [Session]
-        #   label=Session
-        # and include the label in the format below. Thus, the
-        # title could be externally configurable to include, say,
-        # 'Visit', rather than 'Session'. See also the subject.data.coffee
-        # title TODO.
         get: ->
           "#{ @subject.title } Session #{ @number }"
+
+      ###*
+       * The inclusive one-based number of days from the first
+       * session date to this session date.
+       *
+       * @property day
+      ###
+      day:
+        get: ->
+          @date.diff(@subject.sessions[0].date, 'days') + 1
 
       ###*
        * The [_parent_, {session: _session_}] path, where:
@@ -147,6 +139,24 @@ Session =
       path:
         get: ->
           @subject.path.concat([{session: @number }])
+
+      ###*
+       * The first modeling with a scan source.
+       *
+       * @property scanModeling
+      ###
+      scanModeling:
+        get: ->
+          _.find(@modelings, 'source.scan')
+
+      ###*
+       * The first modeling with a registration source.
+       *
+       * @property registrationModeling
+      ###
+      registrationModeling:
+        get: ->
+          _.find(@modelings, 'source.registration')
 
     ###*
      * @method hasDetailProperties
@@ -161,4 +171,3 @@ Session =
     session
 
 `export { Session as default }`
-

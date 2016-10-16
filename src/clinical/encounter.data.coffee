@@ -1,4 +1,5 @@
 `import Pathology from "./pathology.data.coffee"`
+`import Breast from "./breast.coffee"`
 
 ###*
  * The clinical Encounter REST data object extension utility.
@@ -42,6 +43,10 @@ ClinicalEncounter =
     # Extend the pathology object.
     if encounter.pathology
       Pathology.extend(encounter.pathology)
+
+    # Breast augments clinical encounters with virtual properties.
+    if encounter.subject.collection is 'Breast'
+      Breast.extend(encounter)
 
     # Return the augmented clinical encounter object.
     encounter

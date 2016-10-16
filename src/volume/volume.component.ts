@@ -622,7 +622,8 @@ export class VolumeComponent extends PageComponent {
     if (viewerDims) {
       return viewerDims[1];
     } else {
-      return Math.floor((document.body.clientWidth * 0.6) / 1.5);
+      let rect = document.body.getBoundingClientRect();
+      return Math.floor((rect.width * 0.6) / 1.5);
     }
   }
 
@@ -633,7 +634,8 @@ export class VolumeComponent extends PageComponent {
    * @return the body inner width in pixels
    */
   private bodyInnerWidth(): number {
-    return document.body.clientWidth - 30;
+    let rect = document.body.getBoundingClientRect();
+    return rect.width - 30;
   }
 
   /**

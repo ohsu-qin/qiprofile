@@ -27,11 +27,16 @@
 
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+// Angular forms is broken; cf. controls/cascade-select.pug.
+//import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { ResourceProviders } from 'ng2-resource-rest';
 
 // The app root.
 import { AppComponent } from './app.component.ts';
+
+// The app routes.
+import { ROUTES } from './app.routes.ts';
 
 // The global services.
 import { HelpService } from '../help/help.service.ts';
@@ -42,15 +47,13 @@ import { SubjectService } from '../subject/subject.service.ts';
 import { SessionService } from '../session/session.service.ts';
 import { PapayaService } from '../image/papaya.service.ts';
 
-// The shared utility modules.
-import { ROUTES } from './app.routes.ts';
-
 const SHARED_SERVICES = [
   HelpService, ConfigurationService, CollectionsService, ProjectsService,
   SubjectService, SessionService, PapayaService
 ];
 
 @NgModule({
+  //imports: [BrowserModule, FormsModule, HttpModule, ROUTES],
   imports: [BrowserModule, HttpModule, ROUTES],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

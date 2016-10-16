@@ -1,15 +1,8 @@
 import * as _ from 'lodash';
 import * as noUiSlider from 'nouislider';
 import {
-  Directive,
-  ElementRef,
-  HostBinding,
-  EventEmitter,
-  Input,
-  OnInit,
-  OnChanges,
-  SimpleChanges,
-  Output
+  Directive, ElementRef, HostBinding, EventEmitter,
+  Input, Output, OnInit, OnChanges, SimpleChanges
 } from '@angular/core';
 
 function toValue(value: string[]): number|number[] {

@@ -2,6 +2,7 @@
  * The controls module exports the following directives:
  * {{#crossLink "SliderDirective"}}{{/crossLink}}
  * {{#crossLink "PlayerComponent"}}{{/crossLink}}
+ * {{#crossLink "CascadeSelectComponent"}}{{/crossLink}}
  *
  * @module controls
  * @main controls
@@ -12,9 +13,10 @@ import { CommonModule } from '@angular/common';
 
 import { SliderDirective } from './slider.directive.ts';
 import { PlayerComponent } from './player.component.ts';
+import { CascadeSelectComponent } from './cascade-select.component.ts';
 
 const DIRECTIVES = [
-  SliderDirective, PlayerComponent
+  SliderDirective, PlayerComponent, CascadeSelectComponent
 ];
 
 @NgModule({

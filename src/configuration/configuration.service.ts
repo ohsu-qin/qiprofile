@@ -7,7 +7,7 @@
 import { Injectable } from '@angular/core';
 import { parse } from 'ini-parser';
 
-import correlation from './correlation.cfg';
+import dataModel from './data-model.cfg';
 
 @Injectable()
 
@@ -18,15 +18,15 @@ import correlation from './correlation.cfg';
  */
 export class ConfigurationService {
   /**
-   * The correlation configuration {topic: {label: path}}
+   * The data model configuration {topic: {label: path}}
    * object.
    *
-   * @property correlation
+   * @property dataModel
    */
-  correlation: Object;
+  dataModel: Object;
 
   constructor() {
     // TODO - merge an admin-defined server file path.
-    this.correlation = parse(correlation);
+    this.dataModel = parse(dataModel);
   }
 }

@@ -1,0 +1,26 @@
+// The conventional Angular FormsModule [(ngModel)] [ngValue]
+// magic incantation results in the following errors:
+//   Can't bind to 'ngModel' since it isn't a known property of 'select'
+//   Can't bind to 'ngValue' since it isn't a known property of 'option'
+// Many variations and much debugging were tried without success.
+// Consequently, the useless FormsModule is relegated to the
+// heaping trashbin of Angular failed experiments.
+//
+// However, the primitive [value], [selected] and (change) incantation
+// below works, and is much simpler than the Angular twittering machine.
+// The component mediates between the option text string value and
+// the intended option object. So much for the highly-touted Angular
+// two-way data binding.
+select((change)="onSelect($event.target.value)")
+  option(
+    *ngFor="let option of optionKeys()",
+    [value]="option", [selected]="option === selOption",
+  )
+    | {{ option }}
+// Recurse to the child selector, if there is one.
+qi-cascade-select(
+  *ngIf="childOptions",
+  [options]="childOptions",
+  [selOptionPath]="selOptionPath.slice(1)",
+  (value)="onTerminalValue($event)"
+)

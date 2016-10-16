@@ -42,11 +42,39 @@ export class CollectionComponent extends PageComponent {
   sessions: Object[];
 
   /**
-   * The subject vs visit day sessions chart height allots
-   * 18 pixels per subject.
+   * The sessions display state (or null to display all session data).
    *
-   * @property sessionsChartHeight {number}
+   * @property selection {boolean[]}
    */
+  selection: boolean[];
+
+  /**
+   * The subject vs visit day sessions chart {x, y, height}
+   * configuration. The X and Y values are constants.
+   * The height is determined after the sessions are fetched
+   * from the database, alloting 24 pixels per subject.
+   *
+   * @property sessionsChart {Object}
+   */
+  sessionsChart: Object = {
+    x: {property: 'day', legend: 'Day'},
+    y: {property: 'subject.number', legend: 'Subject'},
+    margin: [20, 6, 6, 6]
+  };
+
+  /**
+   * The axis callback sets the axis label and ticks.
+   *
+   * @method _onAxis
+   * @private
+   * @param property {string} the axis property
+   * @param axis {Object} the D3 axis object
+   */
+  onAxis = (property, axis) => {
+    // Wrap the private function in this fat arrow function
+    // to ensure that `this` binds correctly.
+    this._onAxis(property, axis);
+  };
 
   /**
    * The correlation chart height apportions the remainder
@@ -65,21 +93,21 @@ export class CollectionComponent extends PageComponent {
   correlations: Object[];
 
   /**
+   * The {`Clinical`: _options_, `Imaging`: _options_} correlation
+   * options, where each _options_ is a {topic: {path: label}}
+   * configuration.
+   *
+   * @property correlationConfig {Object}
+   */
+  correlationConfig: Object;
+
+  /**
    * The subject objects.
    *
    * @property subjects {Object[]}
    * @private
    */
   private subjects: Object[];
-
-  /**
-   * The {topic: {path: label}} configuration.
-   *
-   * @property correlationConfig
-   * @private
-   */
-  private correlationConfig: Object;
-
 
   /**
    * The tick values for a subject number axis.
@@ -89,16 +117,6 @@ export class CollectionComponent extends PageComponent {
    */
   private subjectAxisTickValues: number[];
 
-  /**
-   * The axis callback sets the axis label and ticks.
-   *
-   * @property axis {function}
-   */
-   // Bind this to this rather than the caller in the
-   // silly Javascript function dance.
-   axis = (property: string, axis: Object) =>
-    this._axis(property, axis);
-
   constructor(
     // private elementRef: ElementRef,
     private router: Router,
@@ -107,32 +125,14 @@ export class CollectionComponent extends PageComponent {
     private configService: ConfigurationService
   ) {
     super(help);
-
-    // The initial chart data point accessors.
-    //
-    // TODO - get the Collection Correlation and Subject Detail
-    // properties from the config file properties.cfg, e.g.:
-    // [Demographics]
-    // age
-    // [Clinical]
-    // tumorSize
-    // [Modeling]
-    // deltaKTrans
-    //
-    // pluck and plot all cln enc values.
-    // for each node in path,
-    // if value is array, collect from each item in array
-    // make function getRecursive
-    //
-
-    // Get the sessions to display.
+    // The project and collection name are displayed in the banner.
     let params = route.params.value;
     this.project = params.project;
     this.name = params.collection;
+    // Fetch the subjects.
     subjectService.getSubjects(
       this.project, this.name
     ).do(subjects => {
-      // Grab the subjects.
       this.subjects = subjects;
     }).map(subjects => {
       // Collect the sessions.
@@ -141,33 +141,171 @@ export class CollectionComponent extends PageComponent {
       );
     }).subscribe(sessions => {
       this.sessions = sessions;
+      // Initialize the charts.
       this.initSessionChart();
       this.initCorrelationCharts();
     });
   }
 
+  /**
+   * The axis callback sets the axis label and ticks.
+   *
+   * @method onAxes
+   * @param axes {Object} the {`x`: _axis_, `y`: _axis_}
+   *   object, where each _axis_ is a {`property`, `axis`}
+   *   object
+   */
+   onAxes(axes: Object) {
+     let onAxis = axis => this.onAxis(axis.property, axis.axis);
+     _.flow(_.values, _.each, onAxis)(axes);
+  }
+
+  /**
+   * The session chart callback adds axis labels.
+   *
+   * @method onSessionsChartPlotted
+   * @param svg {Object} the root SVG group D3 selection
+   */
+   onSessionsChartPlotted(svg: Object) {
+    // Make the X axis legend.
+    let xData = [[100, 10, this.sessionsChart.x.legend]];
+    svg.selectAll('text.x.legend')
+      .data(xData)
+      .enter().append('text')
+        .attr('class', 'legend x')
+        .text(d => d[2])
+        .attr('x', d => d[0])
+        .attr('y', d => d[1]);
+
+    // Make the Y axis legend.
+    let yData = [[this.sessionsChart.y.legend]];
+    let y = Math.max(80, Math.floor(this.sessionsChart.height / 3));
+    svg.selectAll('text.y.legend')
+      .data(yData)
+      .enter().append('text')
+        .attr('class', 'legend y')
+        .attr('transform', `translate(10,${ y })rotate(-90)`)
+        .text(d => d[0]);
+  }
+
+  /**
+   * Relays a brush selection to all charts.
+   *
+   * @method onBrushSelect
+   * @param selection {boolean[]} the selection state array
+   */
+  onBrushSelect(selection: boolean[]) {
+    this.selection = selection;
+  }
+
+  /**
+   * Returns the label for the given property name or property path.
+   *
+   * @method getLabel
+   * @param property {Object} the property name or path
+   */
+  getLabel(property: string) {
+    let terminal = _.last(property.split('.'));
+    return this.configService.getLabel(terminal);
+  }
+
+  /**
+   * Opens the Subect Detail page.
+   *
+   *
+   * TODO - this belongs in the list pane item component.
+   *
+   * @method visitSubject
+   * @param subject {Object} the subject REST object
+   */
+  visitSubject(subject) {
+    this.subjectService.cache(subject);
+    this.router.navigate(
+      ['subject', subject.number],
+      {relativeTo: this.route}
+    );
+  }
+
   private initSessionChart() {
+    // Each subject has a tick mark.
     this.subjectAxisTickValues = _.range(1, this.subjects.length + 1);
-    // "nice" the ticks by adding a lower and upper tick.
-    let yTickCnt = this.subjectAxisTickValues.length + 2;
+    let yTickCnt = this.subjectAxisTickValues.length;
+    // The chart padding.
+    const chartPad = 18;
+    // The axis vertical padding.
+    const axisPad = 8;
+    // The axis legend character size.
+    const legendCharSize = 12;
+    // The subject tick button size.
+    const tickCharSize = 24;
+    // The sessions chart vertical legend size.
+    let yLegend = this.sessionsChart.y.legend;
+    let yLegendSize = (yLegend.length * legendCharSize) + axisPad;
+    // The sessions chart plot vertical size.
+    let plotHeight = (yTickCnt * tickCharSize) + axisPad;
     // The sessions chart accomodates both the axis label and the
-    // session buttons along the axis.
-    let yLegendSize = ('Subject'.length * 12) + 8;
-    let plotHeight = (yTickCnt * 18) + 8;
-    const pad = 18;
-    this.sessionsChartHeight = pad + Math.max(yLegendSize, plotHeight);
+    // session buttons along the axis, along with a small padding.
+    let height =  chartPad + Math.max(yLegendSize, plotHeight);
+    this.sessionsChart.height = height;
+  }
+
+  /**
+   * Helper utility to expand an object to a depth-first expansion
+   * of the object's property hierarchy, e.g.:
+   *
+   *     expandHierarchy({a: {b: 2}, c: {d: {e: 3}}})
+   *     // -> [['a', 'b'], ['a', 'c', 'd', 'e']]
+   *
+   * @method
+   * @private
+   * @param obj {Object} the object to expand
+   * @return {Array[]} the sorted hierarchical paths
+   */
+  private expandHierarchy(obj: Object) {
+    let expand;
+
+    let expandProperty = (v, k) => {
+      let paths = expand(v);
+      if (paths.length === 0) {
+        paths.push([]);
+      }
+      for (let path of paths) { path.unshift(k); }
+      return paths;
+    };
+    let accumExpansions = (accum, v, k) =>
+      accum.concat(expandProperty(v, k));
+
+    // Expand a plain object to path arrays.
+    expand = (o) =>
+      _.isPlainObject(o) ? _.reduce(o, accumExpansions, []) : [];
+
+    return expand(obj).sort();
   }
 
   private initCorrelationCharts() {
     // The {topic: {label: path}} configuration.
-    this.correlationConfig = this.createCorrelationConfiguration();
-    // The default correlation property paths.
-    this.correlations = [
-      {
-        x: this.correlationConfig.Clinical.Surgery['Tumor Length'],
-        y: this.correlationConfig.Imaging.Registration['delta Ktrans']
-      }
-    ];
+    let config = this.createCorrelationConfiguration();
+
+    // The hierarchical config text paths.
+    let xPaths = this.expandHierarchy(config.Clinical);
+    let yPaths = this.expandHierarchy(config.Imaging);
+    // Draw at most four correlation charts.
+    const correlationCnt = Math.min(
+      xPaths.length + yPaths.length,
+      4
+    );
+    // The initial ith correlation setting.
+    let initialSetting = (i) => {
+      return {
+        xPath: xPaths[i % xPaths.length],
+        yPath: yPaths[i % yPaths.length]
+      };
+    };
+
+    // Set the correlation configuration input.
+    this.correlationConfig = config;
+    // Make the initial correlation settings.
+    this.correlations = _.range(correlationCnt).map(initialSetting);
   }
 
   /**
@@ -208,7 +346,7 @@ export class CollectionComponent extends PageComponent {
    */
   private createCorrelationConfiguration() {
     // The {topic: {label: path}} configuration.
-    let baseConfig = this.configService.correlation;
+    let baseConfig = this.configService.dataModel;
     // Merge sections for this collection, e.g. if
     // this collection's name is 'Breast', then
     // [TNM] and [TNM:Breast] are merged into one
@@ -230,19 +368,87 @@ export class CollectionComponent extends PageComponent {
     // The consolidated configuration with merged specialized
     // topics.
     let filtered = _.transform(baseConfig, accumSections);
-    // The top-level entries.
-    let top = _.pick(filtered, ['Clinical', 'Imaging']);
-    // Fill out the top-level section.
-    let flatten = (path, topic) => {
-      let subsection = filtered[topic];
-      return this.flattenSection(subsection, path, filtered);
-    };
-    // Each top-level section consists of {topic, path}
-    // rather than {label, path} entries.
-    let expand = section => _.mapValues(section, flatten);
 
-    // Return the filtered, merged, flattened configuration.
-    return _.mapValues(top, expand);
+    // The top-level entries are not referenced by another entry.
+    let isChild = topic => _.find(filtered, other => _.has(other, topic));
+    let isTop = (value, key) => !isChild(key);
+    let top = _.pickBy(filtered, isTop);
+
+    // Flattens subtopics.
+    let flatten = (path, topic) => {
+      let section = filtered[topic];
+      return this.flattenSection(section, filtered, path);
+    }
+    // Fill out the top subsections.
+    let flattenValues = (section) => _.mapValues(section, flatten);
+    let flattened = _.mapValues(top, flattenValues);
+
+    // Delete unavailable properties and empty sections.
+    let cleaned = this.cleanCorrelationConfiguration(flattened);
+
+    // Return the filtered, merged, flattened, cleaned configuration.
+    return cleaned;
+  }
+
+  /**
+   * Returns a new configuration without unavailable properties and
+   * empty sections removed from the given configuration.
+   *
+   * @method cleanCorrelationConfiguration
+   * @param config {Object} the input configuration
+   * @return {Object} the new cleaned configuration
+   */
+  private cleanCorrelationConfiguration(config: Object) {
+    let accumClean = (accum, value, key) => {
+      let cleanedValue = this.cleanCorrelationConfigurationValue(value);
+      if (!_.isEmpty(cleanedValue)) {
+        accum[key] = cleanedValue;
+      }
+    };
+
+    return _.transform(config, accumClean);
+  }
+
+  /**
+   * "Cleans" the given value as follows:
+   * * If the value is an Object, then this method cleans
+   *   the value using
+   *   {{#crossLink "CollectionComponent/cleanCorrelationConfiguration}}{{/crossLink}}.
+   * * Otherwise, the input value is a property path. In that case,
+   *   if there is at least one
+   *   {{#crossLink "CollectionComponent/sessions:property}}{{/crossLink}}
+   *   data object which has the property value, then the input
+   *   property path is returned.
+   * * Otherwise, null is returned.
+   *
+   *
+   * @method cleanCorrelationConfigurationValue
+   * @param value {any} the sub-configuration or property path to check
+   * @return {any} the cleaned value
+   */
+  private cleanCorrelationConfigurationValue(value: any) {
+    if (_.isPlainObject(value)) {
+      return this.cleanCorrelationConfiguration(value);
+    } else if (this.isPropertyinSomeSession(value)) {
+      return value;
+    } else {
+      return null;
+    }
+  }
+
+  /**
+   * Returns whether there is at least one
+   * {{#crossLink "CollectionComponent/sessions:property}}{{/crossLink}}
+   * data object which has a non-nil value for the given property.
+   *
+   * @method isPropertyinSomeSession
+   * @param path {string} the property path to check
+   * @return {boolean} whether some session has a non-nil
+   *   value for the property
+   */
+  private isPropertyinSomeSession(path: string) {
+    let hasValue = session => !_.isNil(_.get(session, path));
+    return _.some(this.sessions, hasValue);
   }
 
   /**
@@ -251,21 +457,32 @@ export class CollectionComponent extends PageComponent {
    *
    * @method flattenSection
    * @private
-   * @param section {string} the configuration section
-   * @param path {string} the property path to the section
+   * @param section {Object} the configuration section
    * @param config {Object} the {topic, section} configuration
+   * @param path {string} the property path to the section
    */
-  private flattenSection(section, path, config) {
-    let flatten = (accum, entryPath, labelOrTopic) => {
-      let flatPath = `${ path }.${ entryPath }`;
-      let subsection = config[labelOrTopic];
+  private flattenSection(section: Object, config: Object, path: string) {
+    let flatten = (accum, value, key) => {
+      let subpath;
+      // The section entry "this" implies the section is
+      // an alias for the parent section, so ignore it in
+      // the path.
+      if (path === 'this') {
+        subpath = value;
+      } else {
+        subpath = `${ path }.${ value }`;
+      }
+      // If the property key references a config section,
+      // then recursively flatten the subsection.
+      // Otherwise, the result is the value.
+      let subsection = config[key];
       if (subsection) {
-        let flattened = this.flattenSection(subsection, flatPath, config);
+        let flattened = this.flattenSection(subsection, config, subpath);
         _.assign(accum, flattened);
       } else {
-        accum[labelOrTopic] = flatPath;
+        accum[key] = subpath;
       }
-    };
+    }
 
     return _.transform(section, flatten);
   }
@@ -273,44 +490,18 @@ export class CollectionComponent extends PageComponent {
   /**
    * The axis callback sets the axis label and ticks.
    *
-   * @method axis
+   * @method _onAxis
    * @private
    * @param property {string} the axis property
    * @param axis {Object} the D3 axis object
    */
-  private _axis(property: string, axis: Object) {
-    if (property.endsWith('subject.number')) {
+   private _onAxis(property: string, axis: Object) {
+    if (property.endsWith('date')) {
+      // Date ticks are formatted as mm/dd/yyyy.
+      axis.tickFormat(d3.timeFormat('%m/%d/%Y'));
+    } else if (property.endsWith('subject.number')) {
+      // There is one tick per subject.
       axis.tickValues(this.subjectAxisTickValues);
-      // The ticks are integers.
-      axis.tickFormat(d3.format('.0f'));
     }
-  }
-
-  /**
-   * Returns the label for the given property name or property path.
-   *
-   * @method getLabel
-   * @param property {Object} the property name or path
-   */
-  getLabel(property: string) {
-    let terminal = _.last(property.split('.'));
-    return this.configService.getLabel(terminal);
-  }
-
-  /**
-   * Opens the Subect Detail page.
-   *
-   *
-   * TODO - this belongs in the list pane item component.
-   *
-   * @method visitSubject
-   * @param subject {Object} the subject REST object
-   */
-  visitSubject(subject) {
-    this.subjectService.cache(subject);
-    this.router.navigate(
-      ['subject', subject.number],
-      {relativeTo: this.route}
-    );
   }
 }

@@ -1,93 +1,15 @@
+[qi-scatter-plot] .legend
+  font-size smaller
+  fill RebeccaPurple
+
 //** The Collection Detail page styles. **//
-
-
-
-
-// TODO - are below still relevant?
-
-.qi-subject-charts
-  height 12em
-  margin 0.8em 0 0 0
-
-.qi-subject-table
-  height 75%
-  overflow-y scroll
-
-.qi-subject-table-col
-  padding-left 0.8em
-
-.qi-collection-chart
-  margin-top 1em
-
-// The dropdown height should not exceed that of the chart.
-.qi-collection-chart, .qi-dropdown-content
-  height 20em
-
-// The X/Y-axis dropdown picklist styles. The dropdown container includes the
-// dropdown button element and the dropdown content.
-.qi-dropdown
-  position relative
-  display inline-block
-  &:hover
-    cursor pointer
-    .qi-dropbtn
-      background-color SeaGreen
-    .qi-dropdown-content
+qi-collection-correlation
+  // The select groups are in a row.
+  & > qi-cascade-select
+    display inline-block
+    // The first select group is aligned over the axis.
+    &:first-child
+      padding-left 0
+    // Nested selects are stacked vertically under the parent.
+    & > qi-cascade-select
       display block
-
-.qi-dropbtn, .qi-dropdown-content
-  width 18em
-  border-radius 0.4em
-  font-size smaller
-
-.qi-dropbtn, .qi-dropdown-item, .qi-dropdown-icon
-  padding 0.2em 0.4em 0.2em 0.4em
-
-.qi-dropbtn
-  margin-bottom 0.2em
-  border 0
-  border-radius 0.4em
-  color White
-  text-align left
-  background-color Teal
-
-.qi-dropdown-content
-  display none
-  position absolute
-  overflow-y scroll
-  background-color GhostWhite
-  box-shadow 0 0.8em 1.6em 0 rgba(0,0,0,0.2)
-  // Use the Z-index to layer the content over the chart body.
-  z-index 1
-  .qi-dropdown-item
-    display block
-    &:hover
-      background-color OldLace
-      .qi-check-hide
-        color OldLace
-
-.qi-dropdown-icon
-  margin-right 0.8em
-  border-radius 0.6em
-  font-size smaller
-  &.qi-xy
-    color Teal
-    background-color SeaShell
-  &.qi-check-show
-    color Teal
-  &.qi-check-hide
-    color GhostWhite
-
-.qi-caret
-  margin-top 0.4em
-  margin-right 0.4em
-  float right
-
-// The chart tooltips.
-.qi-collection-tooltip
-  & .tooltip
-    border 0.1em solid SlateGray
-    padding 0.4em
-    font-size inherit
-    background White
-    pointer-events none

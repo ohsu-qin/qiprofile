@@ -1,7 +1,8 @@
 import * as _ from 'lodash';
 import * as d3 from 'd3';
 import {
-  Directive, Input, ElementRef, OnChanges, SimpleChange
+  Directive, Input, Output, ElementRef, EventEmitter,
+  OnChanges, SimpleChange
 } from '@angular/core';
 
 @Directive({
@@ -30,15 +31,15 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
    *
    * @property data {Object[]}
    */
-  @Input() data: Object[];
+  @Input() data;
 
   /**
-   * The optional selection function filters the data domain. The default
+   * The optional selection array filters the data domain. The default
    * is to use all of the data objects. Missing inputs are always ignored.
    *
-   * @property selection {function}
+   * @property selection {boolean[]}
    */
-  @Input() selection: (input: Object) => boolean;
+  @Input() selection: boolean[];
 
   /**
    * The required X value property name or path.
@@ -53,13 +54,6 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
    * @property y {string}
    */
   @Input() y: string;
-
-  /**
-   * The optional axis callback function.
-   *
-   * @property axis {function}
-   */
-  @Input() axis: Function;
 
   /**
    * The optional property name or path whose value determines the data point
@@ -82,7 +76,7 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
    *
    * @property width {number}
    */
-  @Input() width;
+  @Input() width: number;
 
   /**
    * The optional chart height. The default height is the
@@ -92,19 +86,101 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
    *
    * @property height {number}
    */
-  @Input() height;
+  @Input() height: number;
 
   /**
-   * The optional chart width:height ratio. The default is 1.
+   * The optional chart [top, left, bottom, right] margin within the SVG
+   * root element.
    *
-   * @property height {number}
+   * _Note_: D3 clips the top and right X axis tick, so the margin
+   * should be at least 6 pixels.
+   *
+   * @property margin {number[]}
    */
-  @Input() aspect;
+  @Input() margin: number[] = [6, 6, 6, 6];
+
+  /**
+   * The optional chart width:height ratio. The default is the window
+   * aspect.
+   *
+   * @property aspect {number}
+   */
+  @Input() aspect: number;
+
+  /**
+   * The optional least squares trend line flag. The default is `false`.
+   *
+   * @property trendLine {boolean}
+   */
+  @Input() trendLine: boolean = false;
+
+  /**
+   * The axis customization callback.
+   *
+   * @property onAxis {function}
+   */
+  @Input() onAxis: (property: string, axis: Object) => void;
+
+  /**
+   * The plotted event transmits the root SVG group D3 selection
+   * after the chart is drawn.
+   *
+   * @property plotted {EventEmitter<Object>}
+   */
+  @Output() plotted: EventEmitter<Object> = new EventEmitter(true);
+
+  /**
+   * The select event transmits the domain object selection state.
+   *
+   * @property select {EventEmitter<boolean[]>}
+   */
+  @Output() select: EventEmitter<boolean[]> = new EventEmitter(true);
+
+  /**
+   * The valid array flags whether the values are valid.
+   *
+   * @property valid {boolean[]}
+   * @private
+   */
+  private valid: boolean[];
+
+  /**
+   * The X values [min, max] array.
+   *
+   * @property xDomain {number[]}
+   * @private
+   */
+  private xDomain: number[];
+
+  /**
+   * The Y values [min, max] array.
+   *
+   * @property yDomain {number[]}
+   * @private
+   */
+  private yDomain: number[];
+
+  /**
+   * The D3 X scale.
+   *
+   * @property xScale {Object}
+   * @private
+   */
+  private xScale: Object;
+
+  /**
+   * The D3 Y scale.
+   *
+   * @property yScale {Object}
+   * @private
+   */
+  private yScale: Object;
 
   /**
    * The D3 SVG root group element.
    *
    * @property svg {d3.Selection<any>}
+   * @private
    */
   private svg: d3.Selection<any>;
 
@@ -112,6 +188,7 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
    * The data point X cooordinate function.
    *
    * @property cx {function}
+   * @private
    */
   private cx: (d: Object) => number;
 
@@ -119,11 +196,26 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
    * The data point Y cooordinate function.
    *
    * @property cy {function}
+   * @private
    */
   private cy: (d: Object) => number;
 
-  constructor(private elementRef: ElementRef) {
-  }
+  /**
+   * The time of the transitions in progress.
+   *
+   * @property pendingTransitionTime {number}
+   * @private
+   */
+  private pendingTransitionTime: number = 0;
+
+  /**
+   * Pad the D3 charts by 40 pixels to accomodate the axes.
+   *
+   * @property pad
+   */
+  private const pad = 30;
+
+  constructor(private elementRef: ElementRef) {}
 
   /**
    * Handle the following changes:
@@ -153,30 +245,141 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
     let isChanged = (key) =>
       changes[key] && !changes[key].isFirstChange();
 
-    if (isChanged('selection')) {
+    if (isChanged('x') || isChanged('y')) {
+      this.updatePlot();
+    } else if (isChanged('selection')) {
       // Reset the visibility.
-      this.svg.selectAll('circle')
-        .transition()
-        .duration(500)
-        .style('visibility', this.visibility);
+      this.resetVisibility();
+    }
+  }
+
+  private updatePlot() {
+    // Reconfigure the plot.
+    this.configurePlot();
+
+    // Remove the existing axes.
+    this.svg.selectAll('g.axis').remove();
+    // Draw the axes.
+    this.drawAxes();
+
+    // Reset the data points with a fancy index-dependent
+    // delay/duration.
+    let n = this.data.length;
+    const total = 500;
+    const avg = Math.floor(total / n);
+    let pending = this.pendingTransitionTime;
+    let delay = (d, i) => i * avg;
+    let duration = (d, i) => (n - i) * avg;
+    let remaining = n;
+    let onEnd = () => {
+      remaining -= 1;
+      if (!remaining) {
+        this.pendingTransitionTime -= total;
+      }
+    };
+    this.pendingTransitionTime += total;
+    this.svg.selectAll('circle')
+      .transition()
+      .delay(delay)
+      .duration(duration)
+      .on('end', onEnd)
+      .attr('cx', this.cx)
+      .attr('cy', this.cy);
+
+    // Recalculate the correlation.
+    if (this.trendLine) {
+      let plot = this.svg.select('.plot');
+      plot.selectAll('.trendline').remove();
+      plot.selectAll('.r-squared').remove();
+      this.drawTrendLine(plot);
     }
 
-    if (isChanged('x') || isChanged('y')) {
-      // Reset the scale domains.
-      this.xScale.domain(this.getDomain(this.xValue));
-      this.yScale.domain(this.getDomain(this.yValue));
-      // Reset the data points.
-      this.svg.selectAll('circle')
-        .transition()
-        .duration(500)
-        .ease()
-        .attr('cx', this.cx)
-        .attr('cy', this.cy);
+    // Reset the visibility.
+    this.resetVisibility();
+  }
+
+  /**
+   * Filters the data points to select only those
+   * {{#crossLink "ScatterPlotDirective/data:property"}}{{/crossLink}}
+   * which have a valid X and Y value.
+   *
+   * @method filterValidData
+   * @private
+   */
+  private filterValidData() {
+    // The X and Y value accessors.
+    let x = d => _.get(d, this.x);
+    let y = d => _.get(d, this.y);
+    // The validity checkers.
+    let validX = _.flow(x, _.isFinite);
+    let validY = _.flow(y, _.isFinite);
+    let isValid = d => validX(d) && validY(d);
+    // The validity flag array.
+    this.valid = this.data.map(isValid);
+    if (!_.some(this.valid)) {
+      throw new Error("There is no valid data point for properties" +
+                      ` X ${ this.x } and Y ${ this.y } `);
     }
   }
 
   /**
+   * Resets the data point visibility style based on the
+   * {{#crossLink "ScatterPlotDirective/isVisible"}}{{/crossLink}}
+   * value.
+   *
+   * @method resetVisibility
+   * @private
+   */
+  private resetVisibility() {
+    let isVisible = (d, i) => this.isVisible(i);
+    let isHidden = _.negate(isVisible);
+    let delay = this.pendingTransitionTime;
+    const duration = 200;
+    let remaining = this.data.length;
+    let onEnd = () => {
+      remaining -= 1;
+      if (!remaining) {
+        this.pendingTransitionTime -= duration;
+      }
+    };
+    this.pendingTransitionTime += duration;
+    this.svg.selectAll('circle')
+      .filter(isHidden)
+      .transition()
+      .delay(delay)
+      .duration(duration)
+      .on('end', onEnd)
+      .style('visibility', 'hidden');
+    this.svg.selectAll('circle')
+      .filter(isVisible)
+      .transition()
+      .delay(delay)
+      .duration(duration)
+      .on('end', onEnd)
+      .style('visibility', null);
+  }
+
+  /**
+   * Returns whether the given
+   * {{#crossLink "ScatterPlotDirective/data:property"}}{{/crossLink}}
+   * item is selected.
+   * The selection flag array determines whether to show a data
+   * point (default is to show the point).
+   *
+   * @method isVisible
+   * @private
+   * @param i {number} the *data* array index
+   * @return {boolean} whether the data point is selected and valid
+   */
+  private isVisible(i): boolean {
+    return this.valid[i] && (!this.selection || this.selection[i]);
+  }
+
+  /**
    * Makes the D3 SVG root group element and draws the plot.
+   *
+   * @method createChart
+   * @private
    */
   private createChart() {
     // The effective width and height.
@@ -184,50 +387,45 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
     // default size, often 300px wide by 150px tall. A better
     // default size is based on the width as described in the height
     // property apidoc.
-    let defWidth = this.elementRef.nativeElement.clientWidth;
-    let width = this.width || defWidth;
-    let aspect = this.aspect || 1;
-    let defHeight = Math.floor(width / aspect);
-    let height = this.height || defHeight;
-
-    // The value accessors.
-    this.xValue = d => _.get(d, this.x);
-    this.yValue = d => _.get(d, this.y);
-
-    // The scales.
-    const pad = 40;
-    // d3 clips the right-most X tick, so pad out
-    // the X scale an additional 6 pixels.
-    const xPad = pad + 6;
-    this.xScale = d3.scaleLinear()
-      .domain(this.getDomain(this.xValue))
-      .nice()
-      .range([0, width - xPad]);
-    this.yScale = d3.scaleLinear()
-      .domain(this.getDomain(this.yValue))
-      .nice()
-      .range([height - pad, 0]);
-
-    // The data point coordinate functions.
-    this.cx = _.flow(this.xValue, this.xScale);
-    this.cy = _.flow(this.yValue, this.yScale);
-
-    // The axes.
-    let xAxis = d3.axisBottom(this.xScale);
-    let yAxis = d3.axisLeft(this.yScale);
-    if (this.axis) {
-      this.axis(this.x, xAxis);
-      this.axis(this.y, yAxis);
+    // Note: use getBoundingClientRect() rather than clientWidth per
+    // https://github.com/d3/d3-brush/blob/master/README.md#brushExtent.
+    // Set the default width, if necessary.
+    if (!this.width) {
+      let rect = this.elementRef.nativeElement.getBoundingClientRect();
+      this.width = rect.width;
+    }
+    // Set the default height, if necessary.
+    if (!this.height) {
+      let rect = document.body.getBoundingClientRect();
+      let defAspect = rect.width / rect.height;
+      let aspect = this.aspect || defAspect;
+      this.height = Math.floor(this.width / aspect);
     }
 
-    // The selection function filters whether to show a data point.
-    let isSelected = i => this.selection ? this.selection[i] : true;
+    this.xScale = d3.scaleLinear()
+      .nice()
+      .range([this.margin[3], this.width - this.pad - this.margin[1]]);
+    this.yScale = d3.scaleLinear()
+      .nice()
+      .range([this.height - this.pad - this.margin[2], this.margin[0]]);
 
-    // The visibility chooser maps the input to the CSS visibility state.
-    let hasDataPoint = (d) =>
-      _.isFinite(this.xValue(d)) && _.isFinite(this.yValue(d));
-    let isVisible = (d, i) => isSelected(i) && hasDataPoint(d);
-    this.visibility = (d, i) => isVisible(d, i) ? 'visibile' : 'hidden';
+    // Define the domains and accessors.
+    this.configurePlot();
+
+    // The value accessors.
+    let xValue = (d, i) => {
+      return this.valid[i] ? _.get(d, this.x) : this.xDomain[0];
+    }
+    let yValue = (d, i) => {
+      return this.valid[i] ? _.get(d, this.y) : this.yDomain[0];
+    }
+
+    // The data point coordinate functions.
+    this.cx = (d, i) => this.xScale(xValue(d, i));
+    this.cy = (d, i) => this.yScale(yValue(d, i));
+
+    this.visibility = (d, i) =>
+      this.isVisible(i) ? 'visibile' : 'hidden';
 
     // The color index function maps the input to a color reference value.
     // The default index function assigns each object to its position in
@@ -260,27 +458,20 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
     this.svg = d3.select(this.elementRef.nativeElement)
       .append('svg')
       .attr('class', 'scatter-plot')
-      .attr('viewBox', `0 0 ${ width } ${ height }`)
-      .attr('width', width)
-      .attr('height', height);
+      .attr('viewBox', `0 0 ${ this.width } ${ this.height }`)
+      .attr('width', this.width)
+      .attr('height', this.height);
 
     // Draw the axes.
-    this.svg.append('g')
-      .attr('transform', `translate(${ pad },${ height - 40 })`)
-      .attr('class', 'axis')
-      .attr('class', 'x')
-      .call(xAxis);
-    this.svg.append('g')
-      .attr('transform', `translate(${ pad },0)`)
-      .attr('class', 'axis')
-      .attr('class', 'y')
-      .call(yAxis);
+    this.drawAxes();
 
-    // Draw the data points.
-    this.svg.append('g')
-      .attr('transform', `translate(${ pad },0)`)
-      .attr('class', 'plot')
-      .selectAll('circle')
+    // The data points plot portion of the chart.
+    let plot = this.svg.append('g')
+      .attr('transform', `translate(${ this.pad },0)`)
+      .attr('class', 'plot');
+
+    // Draw the plot.
+    plot.selectAll('circle')
       .data(this.data)
       .enter().append('circle')
         .style('visibility', this.visibility)
@@ -289,6 +480,243 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
         .attr('r', 4)
         .attr('cx', this.cx)
         .attr('cy', this.cy);
+
+    // The optional trend line.
+    if (this.trendLine) {
+      this.drawTrendLine(plot);
+    }
+
+    // Make a brush.
+    let brush = this.createBrush();
+    // Apply the brush to the plot.
+    plot.append('g')
+      .attr('class', 'brush')
+      .call(brush);
+
+    // Give watchers a change to bang on the chart.
+    this.plotted.emit(this.svg);
+  }
+
+  /**
+   * Sets the value-dependent portion of the plot.
+   *
+   * @method configurePlot
+   * @private
+   */
+  private configurePlot() {
+    // The X and Y [min, max] domains.
+    this.xDomain = this.getDomain(this.x);
+    this.yDomain = this.getDomain(this.y);
+    this.xScale.domain(this.xDomain);
+    this.yScale.domain(this.yDomain);
+
+    // Filter for the well-defined data points.
+    this.filterValidData();
+  }
+
+  /**
+   * Draws the correlation trend line and correlation
+   * coefficient, if the correlation is well-defined, as
+   * described in
+   * {{#crossLink "ScatterPlotDirective/leastSquares"}}{{/crossLink}}.
+   *
+   * @method drawTrendLine
+   * @private
+   * @param plot {Object} the plot SVG element
+   * @return the data selection
+   */
+  private drawTrendLine(plot) {
+    let lsq = this.leastSquares();
+    // If no correlation can be determined, then bail.
+    if (!lsq) {
+      return;
+    }
+    // The trend end-points.
+    let x1 = _.first(this.xDomain);
+    let x2 = _.last(this.xDomain);
+    let y1 = (lsq.slope * x1) + lsq.intercept;
+    let y2 = (lsq.slope * x2) + lsq.intercept;
+
+    // The sole trend line datum is the array of line start
+    // and end point domain values. The coordinates are then
+    // scaled from this array.
+    let trendData = [[x1, y1, x2, y2]];
+    // Draw the trend line.
+    plot.selectAll('.trendline')
+      .data(trendData)
+      .enter().append('line')
+        .attr('class', 'trendline')
+        .attr('x1', d => this.xScale(d[0]))
+        .attr('y1', d => this.yScale(d[1]))
+        .attr('x2', d => this.xScale(d[2]))
+        .attr('y2', d => this.yScale(d[3]));
+
+    // Show the r-square value.
+    let rSquareData = [[lsq.rSquare, x2, y2]];
+    plot.selectAll('.r-squared')
+      .data(rSquareData)
+      .enter().append('text')
+        .text(d => `r² = ${ d[0].toFixed(2) }`)
+        .attr('class', 'r-squared')
+        .attr('x', d => this.xScale(d[1]) - 40)
+        .attr('y', d => this.yScale(d[2]) - 10);
+  }
+
+  private drawAxes() {
+    // Make the axes.
+    let xAxis = d3.axisBottom(this.xScale);
+    let yAxis = d3.axisLeft(this.yScale);
+
+    // Allow for a callback.
+    if (this.onAxis) {
+      this.onAxis(this.x, xAxis);
+      this.onAxis(this.y, yAxis);
+    }
+
+    // The number of pixels between the top and the origin.
+    let yOffset = this.height - this.pad - this.margin[2];
+    this.svg.append('g')
+      .attr('transform', `translate(${ this.pad },${ yOffset })`)
+      .attr('class', 'axis x')
+      .call(xAxis);
+
+    // The origin is pushed right by the pad + left margin.
+    let xOffset = this.pad + this.margin[3];
+    this.svg.append('g')
+      .attr('transform', `translate(${ xOffset },0)`)
+      .attr('class', 'axis y')
+      .call(yAxis);
+  }
+
+  /**
+   * Determines the subset of
+   * {{#crossLink "ScatterPlotDirective/data:property"}}{{/crossLink}}
+   * data points within the D3 brush bounding box.
+   *
+   * _Note_: this method is intended for use solely by the D3 callback.
+   *
+   * @method getSelectedData
+   * @return the data selection
+   */
+  private createBrush() {
+    // The callback functions.
+    let isWithin = (x, y, box) =>
+      x >= box[0][0] && x <= box[1][0] && y >= box[0][1] && y <= box[1][1];
+    let isDataSelected = (d, i, box) => isWithin(this.cx(d, i), this.cy(d, i), box);
+    let selectedData = () => {
+      // The selection bounding box.
+      let box = d3.event.selection;
+      // If some data points are selected, then map the
+      // data to their selection state.
+      // Otherwise, the default null is returned,
+      // which signifies that all data points are shown.
+      return box ? this.data.map((d, i) => isDataSelected(d, i, box)) : null;
+    };
+
+    // Make the brush.
+    let brush = d3.brush();
+
+    // Add the callbacks:
+
+    let onBrushStart = () => {
+      // Reshow all elements in this chart until the brush
+      // selection is completed.
+      let delay = this.pendingTransitionTime;
+      this.svg.selectAll('circle')
+        .transition()
+        .delay(delay)
+        .duration(0)
+        .style('visibility', null);
+    };
+
+    // Flag to avoid an infinite loop (see below).
+    let clearingBrush = false;
+    let onBrushEnd = () => {
+      // Ignore an empty selection.
+      // The magical guard below avoids an infinite loop,
+      // as described below.
+      if (clearingBrush) { return; }
+
+      // We apologize for the technical interruption and
+      // return to the program in progress.
+      let selected = selectedData();
+      // If there is a change, then trigger the select callback.
+      if (selected !== this.selected) {
+        this.select.emit(selected);
+      }
+
+      // Due to technical difficulties described below, we
+      // interrupt the normally scheduled program as follows:
+      //
+      // Clear the brush. The bizarre move clear idiom is a D3 v4
+      // "improvement" over D3 v3 brush.clear(). However, the
+      // side-effect is an infinite loop trap for some obscure
+      // reason adumbrated in https://github.com/d3/d3-brush/issues/10.
+      // However, the work-around guards suggested there as:
+      //   if (!d3.event.sourceEvent) return;
+      //   if (!d3.event.selection) return;
+      // don't apply here. The first guard never triggers. The
+      // second guard defeats the purpose of sending the selection
+      // all-clear signal to the parent component.
+      //
+      // Therefore, we introduce the clearingBrush flag kludge
+      // below to work around the obscure, deficient unofficially
+      // official D3 work-around.
+      clearingBrush = true;
+      this.svg.select('.brush')
+        .call(brush.move, null);
+      clearingBrush = false;
+    };
+
+    // Register the callbacks.
+    brush.on('start', onBrushStart);
+    brush.on('end', onBrushEnd);
+
+    return brush;
+  }
+
+  /**
+   * Calculate the least-squares trend line parameters. This
+   * function is adapted, with improvements, from
+   * http://bl.ocks.org/benvandyke/8459843. The return value
+   * is the {slope, intercept, rSquare} object, if well-defined,
+   * otherwise null. The correlation is not well-defined if
+   * either all of the X values or all of the Y values are equal.
+   *
+   * @method leastSquares
+   * @private
+   * @return {Object} the trend line slope, intercept and r-square
+   */
+  private leastSquares() {
+    // The valid X and Y values and means.
+    let isValid = (d, i) => this.valid[i];
+    let domain = _.filter(this.data, isValid);
+    let xValues = _.map(domain, this.x);
+    let yValues = _.map(domain, this.y);
+    let xMean = _.mean(xValues);
+    let yMean = _.mean(yValues);
+
+    // The sums of squares.
+    let diffSquare = (d, delta) => Math.pow(d - delta, 2);
+    let dxSquares = xValues.map(d => diffSquare(d, xMean));
+    let xx = _.sum(dxSquares);
+    let dySquares = yValues.map(d => diffSquare(d, yMean));
+    let yy = _.sum(dySquares);
+    // If all of the X values or all of the Y values are equal,
+    // then correlation is undefined so bail.
+    if (xx === 0 || yy === 0) {
+      return null;
+    }
+    let dxy = (i) => (xValues[i] - xMean) * (yValues[i] - yMean);
+    let crossProduct = _.range(domain.length).map(dxy);
+    let xy = _.sum(crossProduct);
+
+    // The least-squares coefficients.
+    let slope = xy / xx;
+    let intercept = yMean - (xMean * slope);
+    let rSquare = Math.pow(xy, 2) / (xx * yy);
+
+    return {slope: slope, intercept: intercept, rSquare: rSquare};
   }
 
   /**
@@ -298,21 +726,17 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
    * input.
    *
    * @method getDomain
-   * @param value {function} the input => value function
+   * @private
+   * @param property {string} the X or Y property path
    * @return the [min, max] domain
    */
-  private getDomain(value) {
-    let values = this.data.map(value);
+  private getDomain(property) {
+    // Note that this.valid is not yet defined, so we find the
+    // max and min of this.data instead. this.data might include
+    // invalid values, but these are ignored by lodash min and max.
+    let values = _.map(this.data, property);
     let min = _.min(values);
     let max = _.max(values);
-    // d3.nice doesn't pad out an integer domain,
-    // so do that here.
-    if (min === Math.floor(min)) {
-      min--;
-    }
-    if (max === Math.ceil(max)) {
-      max++;
-    }
 
     return [min, max];
   }

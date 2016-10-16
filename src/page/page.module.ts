@@ -13,7 +13,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ModalModule } from 'angular2-modal';
-import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap';
+// Note: the from location below should be 'angular2-modal/plugins/bootstrap',
+// but that fails on a 404. Specifying the exact file succeeds, although
+// this needs to be tested in the volume help.
+// TODO - verify the volume help and amend the qualifier above.
+// TODO - can this bug be tracked down? Is it a typings error? jspm error?
+//   The lib was added to typings.json, but that has no effect. The lib
+//   v. 2.0.1 added some esm work and now builds with WebPack 2. Is that
+//   a problem? Post this as an issue in the lib GitHub.
+import { BootstrapModalModule } from 'angular2-modal/plugins/bootstrap/index.js';
 
 import { HomeComponent } from '../home/home.component.ts';
 import { ToggleHelpComponent } from '../help/toggle-help.component.ts';

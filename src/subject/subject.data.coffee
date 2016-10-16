@@ -15,6 +15,11 @@ fixDates = (subject)  ->
     # Anonymize the birth date.
     subject.birthDate = DateHelper.anonymize(date)
 
+  # Fix the diagnosis date.
+  if subject.diagnosisDate?
+    date = DateHelper.asMoment(subject.diagnosisDate)
+    subject.diagnosisDate = date
+
   # Fix the encounter dates.
   for enc in subject.encounters
     if enc.date?

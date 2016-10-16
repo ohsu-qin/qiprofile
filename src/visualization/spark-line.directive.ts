@@ -212,12 +212,12 @@ export class SparkLineDirective implements OnChanges, OnInit {
     // The optional guide.
     if (this.guide) {
       let midPoint = Math.floor(this.width / 2);
-      this.svg.append("line")
+      this.svg.append('line')
         .attr('class', 'guide')
-        .attr("x1", midPoint)
-        .attr("y1", 0)
-        .attr("x2", midPoint)
-        .attr("y2", plotHeight);
+        .attr('x1', midPoint)
+        .attr('y1', 0)
+        .attr('x2', midPoint)
+        .attr('y2', plotHeight);
     }
 
     // The optional legend.

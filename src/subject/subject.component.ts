@@ -1,9 +1,3 @@
-/**
- * The Subject Detail module.
- *
- * @module subject
- * @main subject
- */
 import {
   Component, ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core';
@@ -23,7 +17,7 @@ import help from './subject.help.md';
 })
 
 /**
- * The Subject main component.
+ * The Subject Detail page component.
  *
  * @class SubjectComponent
  */
@@ -73,19 +67,7 @@ export class SubjectComponent extends PageComponent {
   }
 
   /**
-   * Unsets the error property.
-   *
-   * @method clearError
-   */
-  clearError() {
-    this.error = null;
-  }
-
-  /**
    * Opens the Session Detail page.
-   *
-   *
-   * TODO - this belongs in the list pane item component.
    *
    * @method visitSession
    * @param session {Object} the session REST object

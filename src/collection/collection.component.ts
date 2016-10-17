@@ -148,19 +148,6 @@ export class CollectionComponent extends PageComponent {
   }
 
   /**
-   * The axis callback sets the axis label and ticks.
-   *
-   * @method onAxes
-   * @param axes {Object} the {`x`: _axis_, `y`: _axis_}
-   *   object, where each _axis_ is a {`property`, `axis`}
-   *   object
-   */
-   onAxes(axes: Object) {
-     let onAxis = axis => this.onAxis(axis.property, axis.axis);
-     _.flow(_.values, _.each, onAxis)(axes);
-  }
-
-  /**
    * The session chart callback adds axis labels.
    *
    * @method onSessionsChartPlotted

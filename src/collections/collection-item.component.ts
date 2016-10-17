@@ -17,7 +17,7 @@ export class CollectionItemComponent {
   constructor(private route: ActivatedRoute, private router: Router) { }
 
   /**
-   * Opens the visit info page.
+   * Opens the Collection Info page.
    *
    * @method visitInfo
    */
@@ -26,9 +26,9 @@ export class CollectionItemComponent {
   }
 
   /**
-   * Opens the visit info page.
+   * Opens the Collection Detail page.
    *
-   * @method visitInfo
+   * @method visitDetail
    */
   visitDetail() {
     this.router.navigate([this.collection.name], {relativeTo: this.route});

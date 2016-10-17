@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import { Component, ViewContainerRef, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Overlay } from 'angular2-modal';
-import { Modal } from 'angular2-modal/plugins/bootstrap';
+import { Modal } from 'angular2-modal/plugins/bootstrap/index.js';
 
 import { PageComponent } from '../page/page.component.ts';
 import { PapayaService } from '../image/papaya.service.ts';

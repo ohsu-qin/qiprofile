@@ -6,7 +6,7 @@ block billboard
 block content
   .row
     .col-md-2.qi-align-top
-      div(
+      .qi-sessions-chart(
         qi-scatter-plot, [height]="sessionsChart.height",
         [data]="sessions", [color]="'subject.number'",
         [margin]="sessionsChart.margin",

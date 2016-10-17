@@ -173,6 +173,14 @@ export class CollectionComponent extends PageComponent {
         .attr('class', 'legend y')
         .attr('transform', `translate(10,${ y })rotate(-90)`)
         .text(d => d[0]);
+
+    // Open the Subject Detail page when the Y axis subject tick
+    // mark is clicked. The argument is the subect number string
+    // tick text. Convert the string to a number before calling
+    // visitSubject.
+    let onClick = d => this.visitSubject(+d);
+    svg.selectAll('g.y.axis .tick text')
+      .on('click', onClick);
   }
 
   /**
@@ -199,16 +207,17 @@ export class CollectionComponent extends PageComponent {
   /**
    * Opens the Subect Detail page.
    *
-   *
-   * TODO - this belongs in the list pane item component.
-   *
    * @method visitSubject
-   * @param subject {Object} the subject REST object
+   * @param subjectNbr {number} the subject number
    */
-  visitSubject(subject) {
+  private visitSubject(subjectNbr) {
+    // The subjects are ordered by number.
+    let subject = this.subjects[subjectNbr - 1];
+    // Cache the subject to avoid a refetch.
     this.subjectService.cache(subject);
+    // Go to the Subect Detail page.
     this.router.navigate(
-      ['subject', subject.number],
+      ['subject', subjectNbr],
       {relativeTo: this.route}
     );
   }

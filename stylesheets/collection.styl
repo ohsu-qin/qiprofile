@@ -1,15 +1,23 @@
 [qi-scatter-plot] .legend
   font-size smaller
-  fill RebeccaPurple
+  fill Indigo
 
-//** The Collection Detail page styles. **//
-qi-collection-correlation
-  // The select groups are in a row.
+// The sessions chart Y axis subject number tick marks
+// emulate clickable link buttons.
+.qi-sessions-chart .y.axis .tick text
+  fill Indigo
+  &:hover
+    fill Peru
+    cursor pointer
+  &:focus, &:active
+    fill Indigo
+
+// The select groups are in a row.
+qi-collection-correlation > qi-cascade-select
+  display inline-block
+  // The first select group is aligned over the axis.
+  &:first-child
+    padding-left 0
+  // Nested selects are stacked vertically under the parent.
   & > qi-cascade-select
-    display inline-block
-    // The first select group is aligned over the axis.
-    &:first-child
-      padding-left 0
-    // Nested selects are stacked vertically under the parent.
-    & > qi-cascade-select
-      display block
+    display block

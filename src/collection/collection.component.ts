@@ -378,7 +378,7 @@ export class CollectionComponent extends PageComponent {
     let flatten = (path, topic) => {
       let section = filtered[topic];
       return this.flattenSection(section, filtered, path);
-    }
+    };
     // Fill out the top subsections.
     let flattenValues = (section) => _.mapValues(section, flatten);
     let flattened = _.mapValues(top, flattenValues);
@@ -482,7 +482,7 @@ export class CollectionComponent extends PageComponent {
       } else {
         accum[key] = subpath;
       }
-    }
+    };
 
     return _.transform(section, flatten);
   }

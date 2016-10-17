@@ -267,7 +267,6 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
     let n = this.data.length;
     const total = 500;
     const avg = Math.floor(total / n);
-    let pending = this.pendingTransitionTime;
     let delay = (d, i) => i * avg;
     let duration = (d, i) => (n - i) * avg;
     let remaining = n;
@@ -415,10 +414,10 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
     // The value accessors.
     let xValue = (d, i) => {
       return this.valid[i] ? _.get(d, this.x) : this.xDomain[0];
-    }
+    };
     let yValue = (d, i) => {
       return this.valid[i] ? _.get(d, this.y) : this.yDomain[0];
-    }
+    };
 
     // The data point coordinate functions.
     this.cx = (d, i) => this.xScale(xValue(d, i));

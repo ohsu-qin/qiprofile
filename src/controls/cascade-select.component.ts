@@ -86,7 +86,7 @@ export class CascadeSelectComponent implements OnInit, OnChanges {
     let optionsChange = changes['options'];
     if (optionsChange && !optionsChange.isFirstChange()) {
       if (_.isEmpty(this.options)) {
-        throw new Error("The select options cannot be empty")
+        throw new Error("The select options cannot be empty");
       }
       if (!(this.selOption in this.options)) {
         this.selOption = _.keys(this.options)[0];
@@ -154,7 +154,7 @@ export class CascadeSelectComponent implements OnInit, OnChanges {
   private onOptionChange(defer=false) {
     // If defer is set, then recurse without defer in the next digest cycle.
     if (defer) {
-      let recurse = () => { this.onOptionChange(); }
+      let recurse = () => { this.onOptionChange(); };
       setTimeout(recurse, 0);
       return;
     }

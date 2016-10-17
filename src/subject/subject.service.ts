@@ -33,8 +33,11 @@ export class SubjectService {
     // Fetch the subjects.
     let subjects: Observable<Object[]> = this.resource.find(searchParam);
 
-    // Return the extended subjects.
-    return subjects.map(fetched => fetched.map(Subject.extend));
+    // Return the extended subjects in number order.
+    let extend = fetched => fetched.map(Subject.extend);
+    let sort = extended => _.sortBy(extended, 'number');
+
+    return subjects.map(_.flow(extend, sort));
   }
 
   /**

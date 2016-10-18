@@ -4,6 +4,17 @@ block billboard
   | {{ subject.title }}
 
 block content
-  ul.qi-main-list
-    li(*ngFor="let session of subject.sessions", (click)="visitSession(session)")
-      | {{ session.number }}
+  //- ul.qi-main-list
+  //-   li(*ngFor="let session of subject.sessions", (click)="visitSession(session)")
+  //-     | {{ session.number }}
+  //-
+  .col-md-7.qi-modeling-profile
+    include include/imaging-profile
+
+  .col-md-5.qi-clinical-profile
+    include include/clinical-profile
+
+block help-text
+  // The nested quote ensures evaluation to a string rather than
+  // a scope variable.
+  .qi-help-text(ng-include="'/partials/help/subject-detail.html'")

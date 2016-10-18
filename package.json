@@ -155,6 +155,7 @@
       "lodash": "npm:lodash@^4.13.1",
       "md": "guybedford/system-md@^0.1.0",
       "moment": "npm:moment@^2.14.1",
+      "ng2-accordion": "npm:ng2-accordion@^0.0.9",
       "ng2-resource-rest": "npm:ng2-resource-rest@^0.5.6",
       "ohsu-qin/ng2-nouislider": "^0.3.0",
       "pako": "npm:pako@^0.2.9",

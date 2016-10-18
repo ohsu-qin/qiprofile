@@ -10,6 +10,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
+import { AccordionModule } from 'ng2-accordion';
 
 import { PageModule } from '../page/page.module.ts';
 import { SubjectComponent } from './subject.component.ts';
@@ -22,7 +23,10 @@ const ROUTE_CONFIG: Routes = [
 ];
 
 @NgModule({
-  imports: [CommonModule, PageModule, RouterModule.forChild(ROUTE_CONFIG)],
+  imports: [
+    CommonModule, PageModule, RouterModule.forChild(ROUTE_CONFIG),
+    AccordionModule
+  ],
   declarations: [
     SubjectComponent
   ],

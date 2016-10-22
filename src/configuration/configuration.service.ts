@@ -8,6 +8,7 @@ import { Injectable } from '@angular/core';
 import { parse } from 'ini-parser';
 
 import dataModel from './data-model.cfg';
+import choices from './choices.cfg';
 
 @Injectable()
 
@@ -25,8 +26,16 @@ export class ConfigurationService {
    */
   dataModel: Object;
 
+  /**
+   * The choices configuration {topic: {database value: display value}}
+   * object.
+   *
+   * @property choices
+   */
+  choices: Object;
+
   constructor() {
-    // TODO - merge an admin-defined server file path.
     this.dataModel = parse(dataModel);
+    this.choices = parse(choices);
   }
 }

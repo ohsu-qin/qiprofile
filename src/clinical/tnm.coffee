@@ -79,9 +79,9 @@ TNM =
   formatSize: (size) ->
     sizeSuffix = ->
       inSituSuffix = (inSitu) ->
-        if size.inSitu.invasiveType is 'ductal'
+        if inSitu.invasiveType is 'ductal'
           'is(DCIS)'
-        else if size.inSitu.invasiveType is 'lobular'
+        else if inSitu.invasiveType is 'lobular'
           'is(LCIS)'
         else
           'is'

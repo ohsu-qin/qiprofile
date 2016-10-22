@@ -28,6 +28,11 @@ StringHelper =
   dasherize: (s) ->
     # Prepares the given match for underscore.string dasherize.
     prep = (match) ->
+      # if the input string is 'aBCDeFG', then the matches
+      # are 'BCDe' and 'FG'. For the initial match, *first*
+      # is 'B', *rest* is 'CDe' and last is 'e'. This match
+      # is prepped as 'BcDe' and dasherized as '-bc-de', and
+      # the entire string is thus dasherized as 'a-bc-de-fg'.
       first = match[0]
       rest = match.substring(1)
       last = match[match.length - 1]
@@ -45,5 +50,19 @@ StringHelper =
       sdashed.substring(1)
     else
       sdashed
+
+  ###*
+   * Humanizes and capitalizes the input string.
+   *
+   * Example:
+   *     StringHelper.labelize("abcDef_g");
+   *     // => "Abc Def G"
+   *
+   * @method labelize
+   * @param s the input string
+   * @return the lowercase dashed conversion
+  ###
+  labelize: (s) ->
+    _s.humanize(s).split(' ').map(_s.capitalize).join(' ')
 
 `export { StringHelper as default }`

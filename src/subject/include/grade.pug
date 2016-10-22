@@ -1,0 +1,5 @@
+div([ngSwitch]="tumor.tnm.grade._cls")
+  div(*ngSwitchCase="'ModifiedBloomRichardsonGrade'")
+    include modified-b-r-grade
+  div(*ngSwitchCase="'FNCLCCGrade'")
+    include fnclcc-grade

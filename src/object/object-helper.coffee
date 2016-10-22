@@ -18,6 +18,18 @@ _sortValuesByKey = (obj) ->
   else
     []
 
+# Define here to allow recursion.
+_hasValidContent = (value) ->
+  if _.isNil(value)
+    false
+  else if _.isString(value)
+    !_.isEmpty(value)
+  else if _.isNumber(value)
+    _.isFinite(value)
+  else if _.isArrayLike(value) or _.isObjectLike(value)
+    _.some(value, _hasValidContent)
+
+
 ###*
  * The static ObjectHelper utility.
  *
@@ -43,6 +55,33 @@ ObjectHelper =
   ###
   delegate: (objects...) ->
     _.reduce(objects, _.defaults, {})
+
+  ###*
+   * Returns whether the given value has non-nil, non-empty
+   * content, determined as follows:
+   * * If the value is a string, then return whether the value
+   *   length is non-zero.
+   * * If the value is a number, then return whether the value
+   *   is finite.
+   * * If the value is an array or object, then return
+   *   whether the value has an indexed item with content.
+   * * Otherwise, return whether the value is not undefined
+   *   or null.
+   *
+   * This method recurses into children to determine whether
+   * the children have content.
+   *
+   * Examples:
+   *     ObjectHelper.hasContent(null) // => false
+   *     ObjectHelper.hasContent(NaN) // => true
+   *     ObjectHelper.hasContent(null) // => false
+   *     ObjectHelper.hasContent(null) // => false
+   *
+   * @method hasContent
+   * @param value {any} the value to check
+   * @return {boolean} whether the value has content
+  ###
+  hasValidContent: _hasValidContent
 
   ###*
    * Pretty prints the given object in a readable format. This function

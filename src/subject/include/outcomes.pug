@@ -1,0 +1,8 @@
+// Iterate over the outcomes to include the outcome directives.
+div(ng-switch='outcome._cls')
+  div(*ngSwitchCase='TNM')
+    include tnm
+  div(*ngSwitchCase='HormoneReceptorStatus')
+    include breast-hormone-receptors
+  div(*ngSwitchCase='NecrosisPercent')
+    include necrosis-percent

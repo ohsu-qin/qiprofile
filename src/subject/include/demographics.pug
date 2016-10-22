@@ -1,0 +1,13 @@
+table#demographics.table.qi-table
+  tr(*ngIf="has(subject.age)")
+    th Age
+    td {{ subject.age }}
+  tr(*ngIf="has(subject.gender)")
+    th.col Gender
+    td.col {{ subject.gender }}
+  tr(*ngIf="has(subject.races)")
+    th.col Race
+    td.col {{ subject.races | choice:'Race' }}
+  tr(*ngIf="has(subject.ethnicity)")
+    th.col Ethnicity
+    td.col {{ subject.ethnicity | choice:'Ethnicity' }}

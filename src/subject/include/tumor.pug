@@ -1,0 +1,5 @@
+div([ngSwitch]="encounter.subject.collection")
+  div(*ngSwitchCase="'Breast'")
+    include breast-pathology
+  //- div(*ngSwitchCase="'Sarcoma'")
+  //-   include sarcoma-pathology

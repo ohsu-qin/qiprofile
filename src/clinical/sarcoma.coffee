@@ -51,7 +51,7 @@ Sarcoma =
     ###*
      * Returns the cancer stage.
      *
-     * If metastasis exists (M1), then the stage is IV.
+     * If metastasis exists (M1), then the stage is 4.
      * Otherwise, the stage is determined by T and N scores as
      * defined in the tumor type factory STAGES associative
      * lookup table.
@@ -63,10 +63,9 @@ Sarcoma =
      *    stage
     ###
     stage: (tnm, summaryGrade) ->
-      # M1 => stage IV.
-      # TODO - see Breast stage TODO.
+      # M1 => stage 4.
       if tnm.metastasis
-        return 'IV'
+        return '4'
       # The T and N scores.
       # TODO - factor in the size suffix.
       t = tnm.size.tumorSize

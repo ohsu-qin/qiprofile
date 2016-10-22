@@ -1,0 +1,15 @@
+.qi-table-title Residual Cancer Burden
+
+.qi-panel.qi-nested
+  // RCB index and class.
+  table.table.qi-table.qi-spaced-table(*ngIf="has(tumor.rcb.index)")
+    tr
+      th Index
+      td {{ tumor.rcb.index | number:'1.2-2' }}
+    tr
+      th Class
+      td {{ tumor.rcb.class }}
+  // RCB parameters.
+  qi-property-table.qi-spaced-table(
+    [object]="tumor.rcb", [exclude]=['tumor'], [label]="getLabel"
+  )

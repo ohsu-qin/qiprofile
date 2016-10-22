@@ -1,0 +1,13 @@
+.qi-table-title Normalized Assay
+
+.qi-panel.qi-nested
+  table.table.qi-table.qi-bottom-buffer(
+    *ngIf="has(tumor.geneticExpression.normalizedAssay.recurrenceScore)"
+  )
+    tr
+      th Recurrence Score
+      td {{ tumor.geneticExpression.normalizedAssay.recurrenceScore }}
+      td.qi-transparent(ng-click="openAssayHelp()")
+        .glyphicon.glyphicon-question-sign
+
+  qi-property-table([object]="assay")

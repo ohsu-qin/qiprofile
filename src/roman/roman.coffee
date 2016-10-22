@@ -98,27 +98,26 @@ MAX = _.reduceRight([0...ROMANS.length], incrementMax, 0)
 Roman =
   ###*
    * @method romanize
-   * @param s the input string or integer
+   * @param value the input string or integer
    * @return the roman numeral string
    * @throws RangeError if the string value is not a string consisting of
-   *   positive digits less than 
+   *   positive digits less than 4000
   ###
-  romanize: (s) ->
-    s = s.toString()
-    n = parseInt(s)
+  romanize: (value) ->
+    n = if _.isInteger(value) then value else parseInt(value.toString())
     if not n or n < 0
       throw new RangeError("The romanize input value cannot be converted" +
-                          " to a positive integer: #{ s }")
+                          " to a positive integer: #{ value }")
 
     if n > MAX
       throw new RangeError("The romanize input value exceeds the maximum" +
-                      " supported value of #{ MAX }: #{ s }")
+                      " supported value of #{ MAX }: #{ value }")
 
     # The string digits.
     # Note: cannot use parseInt directly as the map argument, since the
     # second parseInt argument is incorrectly interpreted as a radix
     # (cf. http://stackoverflow.com/questions/262427/javascript-arraymap-and-parseint)
-    digits = s.split('').map((n) -> parseInt(n))
+    digits = n.toString().split('').map((n) -> parseInt(n))
 
     # The place indexes.
     places = [0...digits.length]

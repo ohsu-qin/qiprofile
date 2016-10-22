@@ -9,7 +9,7 @@ block content
       .qi-sessions-chart(
         qi-scatter-plot, [height]="sessionsChart.height",
         [data]="sessions", [color]="'subject.number'",
-        [margin]="sessionsChart.margin",
+        [symbolType]="symbolType", [margin]="sessionsChart.margin",
         [x]="sessionsChart.x.property", [y]="sessionsChart.y.property",
         [onAxis]="onAxis", (plotted)="onSessionsChartPlotted($event)",
         [selection]="selection", (select)="onBrushSelect($event)"
@@ -17,13 +17,13 @@ block content
     .col-md-10
       // Double up the correlation charts horizontally in the
       // remaining space.
-      qi-collection-correlation.col-md-6(
+      qi-correlation.col-md-6(
         *ngFor="let correlation of correlations",
-        [data]="sessions",
-        [selection]="selection",
+        [data]="sessions", [color]="'subject.number'",
+        [symbolType]="symbolType",
         [xOptions]="correlationConfig.Clinical",
         [yOptions]="correlationConfig.Imaging",
         [xSelOptionPath]="correlation.xPath",
         [ySelOptionPath]="correlation.yPath",
-        (select)="onBrushSelect($event)"
+        [selection]="selection", (select)="onBrushSelect($event)"
       )

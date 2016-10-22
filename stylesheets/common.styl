@@ -250,7 +250,7 @@ thead.qi-thead-underlined
     border-bottom 0
     text-decoration underline
 
-.qi-subtable-title
+.qi-table-title
   font-size larger
   font-style italic
   margin-left 0.5 em
@@ -280,3 +280,9 @@ ul.qi-horizontal-list
 .qi-right
   position absolute
   right 0
+
+qi-correlation > qi-cascade-select
+  display inline-block
+  // The first select group is aligned over the axis.
+  &:first-child
+    padding-left 0

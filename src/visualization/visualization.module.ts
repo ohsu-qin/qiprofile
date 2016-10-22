@@ -11,16 +11,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+import { ControlsModule } from '../controls/controls.module.ts';
 import { ScatterPlotDirective } from './scatter-plot.directive.ts';
 import { SparkLineDirective } from './spark-line.directive.ts';
 import { ColorBarDirective } from './color-bar.directive.ts';
+import { CorrelationComponent } from './correlation.component.ts';
 
 const DIRECTIVES = [
-  ScatterPlotDirective, SparkLineDirective, ColorBarDirective
+  ScatterPlotDirective, SparkLineDirective, ColorBarDirective,
+  CorrelationComponent
 ];
 
 @NgModule({
-  imports: [CommonModule],
+  imports: [CommonModule, ControlsModule],
   declarations: DIRECTIVES,
   exports: DIRECTIVES
 })

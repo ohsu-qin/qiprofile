@@ -8,6 +8,14 @@ import { PageComponent } from '../page/page.component.ts';
 import { SubjectService } from '../subject/subject.service.ts';
 import help from './collection.help.md';
 
+// The D3 v4 symbols
+// (cf. https://github.com/d3/d3-shape/blob/master/README.md#symbols).
+// The symbols are sorted by inverse preference.
+const SYMBOL_TYPES = [
+  d3.symbolCircle, d3.symbolDiamond, d3.symbolStar, d3.symbolTriangle,
+  d3.symbolSquare, d3.symbolCross, d3.symbolWye
+];
+
 @Component({
   selector: 'qi-collection',
   templateUrl: '/public/html/collection/collection.html'
@@ -47,6 +55,13 @@ export class CollectionComponent extends PageComponent {
    * @property selection {boolean[]}
    */
   selection: boolean[];
+
+  /**
+   * The data => symbol type method.
+   *
+   * @property symbolType {(d: Object) => string}
+   */
+  const symbolType = d => this._symbolType(d);
 
   /**
    * The subject vs visit day sessions chart {x, y, height}
@@ -110,6 +125,14 @@ export class CollectionComponent extends PageComponent {
   private subjects: Object[];
 
   /**
+   * The properties to exclude.
+   *
+   * @property exclude {string[]}
+   * @private
+   */
+  private exclude: string[];
+
+  /**
    * The tick values for a subject number axis.
    *
    * @property subjectAxisTickValues
@@ -148,6 +171,17 @@ export class CollectionComponent extends PageComponent {
   }
 
   /**
+   * The symbol is specific to the session number.
+   *
+   * @method symbolType
+   * @param d {Object} the session object
+   * @return {string} the session number symbol type
+   */
+  symbolType(d: Object) {
+    return d.number - 1;
+  }
+
+  /**
    * The session chart callback adds axis labels.
    *
    * @method onSessionsChartPlotted
@@ -181,6 +215,11 @@ export class CollectionComponent extends PageComponent {
     let onClick = d => this.visitSubject(+d);
     svg.selectAll('g.y.axis .tick text')
       .on('click', onClick);
+
+    // TODO - adapt checkbox from
+    // https://bl.ocks.org/Lulkafe/c77a36d5efb603e788b03eb749a4a714.
+    // Center X axis checkbox over average day for each session number.
+    // Push plot and axes down and over to make room.
   }
 
   /**
@@ -194,14 +233,14 @@ export class CollectionComponent extends PageComponent {
   }
 
   /**
-   * Returns the label for the given property name or property path.
+   * Returns the D3 symbol type for the given data.
    *
-   * @method getLabel
-   * @param property {Object} the property name or path
+   * @method symbolType
+   * @param d {Object} the session object
    */
-  getLabel(property: string) {
-    let terminal = _.last(property.split('.'));
-    return this.configService.getLabel(terminal);
+  private _symbolType(d: Object) {
+    let i = Math.min(d.number - 1, SYMBOL_TYPES.length);
+    return SYMBOL_TYPES[i];
   }
 
   /**
@@ -395,8 +434,17 @@ export class CollectionComponent extends PageComponent {
    * @return {Object} the new cleaned configuration
    */
   private cleanCorrelationConfiguration(config: Object) {
+    // If the key is not excluded and the value is not
+    // empty, then returns the recursively cleaned value.
+    let clean = (value, key) => {
+      if (!_.includes(this.exclude, key)) {
+        return this.cleanCorrelationConfigurationValue(value);
+      }
+    };
+
+    // Filter out the empty and excluded properties.
     let accumClean = (accum, value, key) => {
-      let cleanedValue = this.cleanCorrelationConfigurationValue(value);
+      let cleanedValue = clean(value, key);
       if (!_.isEmpty(cleanedValue)) {
         accum[key] = cleanedValue;
       }

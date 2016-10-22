@@ -1,0 +1,22 @@
+// Modeling result selection.
+// If there is only one modeling object, then there is nothing to
+// select. In that case, only the modeling info button is displayed.
+// Otherwise, a modeling selection form is displayed.
+div(ng-switch="modelings.length")
+  div(*ngSwitchCase="1")
+    // The repeat below only serves to place the modeling object in
+    // scope for the modeling info modal pop-up. The repeat block
+    // includes the title in order to display the button on the same
+    // line as the title.
+    .qi-left-buffer.qi-bottom-buffer(ng-repeat="modeling in modelings")
+      span.qi-inset-title Modeling Input Parameters:
+      include modeling-info-btn
+  div(ng-switch-default)
+    form.qi-left-buffer.qi-bottom-buffer(name='modelingSelect')
+      span.qi-inset-title Modeling Input Parameters:
+      // The radio row fortuitously aligns next to the title. It is not
+      // known why it does not align below the title. See the
+      // *ngSwitchCase="1" comment above.
+      .qi-radio-row(ng-repeat="modeling in modelings")
+        input(type='radio', ng-model='modelingIndex', ng-value="{{ $index }}")
+        include modeling-info-btn

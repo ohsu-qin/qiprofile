@@ -1,0 +1,11 @@
+.qi-table-title {{ receptorStatus.hormone | capitalize }}
+table.table.qi-table
+  tr
+    th Result
+    td {{ receptorStatus.positive | boolean:'Positive':'Negative' }}
+  tr(*ngIf="has(receptorStatus.intensity)")
+    th Intensity
+    td {{ receptorStatus.intensity }}%
+  tr(*ngIf="has(receptorStatus.quickScore)")
+    th Quick Score
+    td {{ receptorStatus.quickScore }}

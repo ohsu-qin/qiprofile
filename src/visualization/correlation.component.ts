@@ -4,18 +4,18 @@ import {
 } from '@angular/core';
 
 @Component({
-  selector: 'qi-collection-correlation',
-  templateUrl: '/public/html/collection/correlation.html'
+  selector: 'qi-correlation',
+  templateUrl: '/public/html/visualization/correlation.html'
 })
 
 /**
  * The correlation component coordinates X, Y property selection
  * and data series display.
  *
- * @module collection
- * @class CollectionCorrelationComponent
+ * @module visualization
+ * @class CorrelationComponent
  */
-export class CollectionCorrelationComponent implements OnInit {
+export class CorrelationComponent implements OnInit {
   /**
    * The data object array.
    *
@@ -31,6 +31,20 @@ export class CollectionCorrelationComponent implements OnInit {
    * @property selection {boolean[]}
    */
   @Input() selection: boolean[];
+
+  /**
+   * The optional color chooser property path.
+   *
+   * @property color {string}
+   */
+  @Input() color: string;
+
+  /**
+   * The optional symbol type chooser function.
+   *
+   * @property symbolType {function}
+   */
+  @Input() symbolType: (d: Object) => string;
 
   /**
    * The X axis select options Object.
@@ -85,9 +99,9 @@ export class CollectionCorrelationComponent implements OnInit {
 
   /**
    * Sets the initial
-   * {{#crossLink "CollectionCorrelationComponent/x:property}}{{/crossLink}}
+   * {{#crossLink "CorrelationComponent/x:property}}{{/crossLink}}
    * and
-   * {{#crossLink "CollectionCorrelationComponent/y:property}}{{/crossLink}}
+   * {{#crossLink "CorrelationComponent/y:property}}{{/crossLink}}
    * property paths.
    *
    * @method ngOnInit

@@ -3,5 +3,8 @@
     "value": 90,
     "level": "warn",
     "limitComments": false
+  },
+  "no_backticks": {
+    "level": "ignore"
   }
 }

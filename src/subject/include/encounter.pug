@@ -1,0 +1,11 @@
+table.table.qi-table.qi-vertical-space
+  tr
+    th Date
+    td {{ encounter.date | moment }}
+
+  tr(*ngIf="has(encounter.weight)")
+    th Patient Weight
+    td {{ encounter.weight }}
+
+.qi-vertical-space(*ngIf="encounter.pathology")
+  include pathology

@@ -354,7 +354,7 @@ export class PapayaService {
    * @return {boolean} whether Papaya has already been monkey-patched
    */
   private isPapayaPatched(): boolean {
-    return !!papaya.viewer.Viewer.prototype._finishedLoading;
+    return has(papaya).viewer.Viewer.prototype._finishedLoading;
   }
 
   /**

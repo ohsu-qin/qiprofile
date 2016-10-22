@@ -18,9 +18,7 @@ import {
  * {{#crossLink "ScatterPlotDirective/x:property"}}{{/crossLink}}
  * and
  * {{#crossLink "ScatterPlotDirective/y:property"}}{{/crossLink}},
- * data points. The axis labels are determined by the
- * {{#crossLink "ConfigurationService/getLabel"}}{{/crossLink}} function
- * called on the respective accessor property name.
+ * data points.
  *
  * @module visualization
  * @class ScatterPlotDirective
@@ -62,8 +60,8 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
    * are assigned the same (color, opacity) combination if and only if applying
    * the color function returns the same color value.
    *
-   * The default color function is the zero-based position of the input object in
-   * the {{#crossLink "ScatterPlotDirective/data:property"}}{{/crossLink}}
+   * The default color function is the zero-based position of the input object
+   * in the {{#crossLink "ScatterPlotDirective/data:property"}}{{/crossLink}}
    * array.
    *
    * @property color {string}
@@ -71,8 +69,15 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
   @Input() color: string;
 
   /**
-   * The optional chart width. The default width is the parent
-   * element width.
+   * The optional symbol type function (default `circle`).
+   *
+   * @property symbolType {function}
+   */
+  @Input() symbolType: (d: Object) => string;
+
+  /**
+   * The optional chart width. The default width is the parent element
+   * width.
    *
    * @property width {number}
    */
@@ -177,6 +182,14 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
   private yScale: Object;
 
   /**
+   * The point locator function.
+   *
+   * @property pointTransform {function}
+   * @private
+   */
+  private pointTransform: (d: Object) => string;
+
+  /**
    * The D3 SVG root group element.
    *
    * @property svg {d3.Selection<any>}
@@ -187,18 +200,18 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
   /**
    * The data point X cooordinate function.
    *
-   * @property cx {function}
+   * @property dx {function}
    * @private
    */
-  private cx: (d: Object) => number;
+  private dx: (d: Object) => number;
 
   /**
    * The data point Y cooordinate function.
    *
-   * @property cy {function}
+   * @property dy {function}
    * @private
    */
-  private cy: (d: Object) => number;
+  private dy: (d: Object) => number;
 
   /**
    * The time of the transitions in progress.
@@ -262,7 +275,7 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
     // Draw the axes.
     this.drawAxes();
 
-    // Reset the data points with a fancy index-dependent
+    // Reset the data points with a fandy index-dependent
     // delay/duration.
     let n = this.data.length;
     const total = 500;
@@ -277,13 +290,12 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
       }
     };
     this.pendingTransitionTime += total;
-    this.svg.selectAll('circle')
+    this.svg.selectAll('.point')
       .transition()
       .delay(delay)
       .duration(duration)
       .on('end', onEnd)
-      .attr('cx', this.cx)
-      .attr('cy', this.cy);
+      .attr('transform', this.pointTransform);
 
     // Recalculate the correlation.
     if (this.trendLine) {
@@ -420,8 +432,8 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
     };
 
     // The data point coordinate functions.
-    this.cx = (d, i) => this.xScale(xValue(d, i));
-    this.cy = (d, i) => this.yScale(yValue(d, i));
+    this.dx = (d, i) => this.xScale(xValue(d, i));
+    this.dy = (d, i) => this.yScale(yValue(d, i));
 
     this.visibility = (d, i) =>
       this.isVisible(i) ? 'visibile' : 'hidden';
@@ -469,16 +481,25 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
       .attr('transform', `translate(${ this.pad },0)`)
       .attr('class', 'plot');
 
+    // The symbol factory.
+    const symbolSize = 40;
+    let symbolType = this.symbolType || d3.symbolCircle;
+    let symbol = d3.symbol().type(symbolType).size(symbolSize);
+
+    // The point locator.
+    this.pointTransform = (d, i) =>
+      `translate(${ this.dx(d, i) },${ this.dy(d, i) })`;
+
     // Draw the plot.
-    plot.selectAll('circle')
+    plot.selectAll('.point')
       .data(this.data)
-      .enter().append('circle')
+      .enter().append('path')
+        .attr('class', 'point')
         .style('visibility', this.visibility)
         .style('fill', color)
         .style('opacity', opacity)
-        .attr('r', 4)
-        .attr('cx', this.cx)
-        .attr('cy', this.cy);
+        .attr('d', symbol)
+        .attr('transform', this.pointTransform);
 
     // The optional trend line.
     if (this.trendLine) {
@@ -601,7 +622,7 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
     // The callback functions.
     let isWithin = (x, y, box) =>
       x >= box[0][0] && x <= box[1][0] && y >= box[0][1] && y <= box[1][1];
-    let isDataSelected = (d, i, box) => isWithin(this.cx(d, i), this.cy(d, i), box);
+    let isDataSelected = (d, i, box) => isWithin(this.dx(d, i), this.dy(d, i), box);
     let selectedData = () => {
       // The selection bounding box.
       let box = d3.event.selection;

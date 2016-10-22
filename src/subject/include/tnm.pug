@@ -1,0 +1,26 @@
+.qi-table-title TNM
+
+.qi-panel.qi-nested
+  table.table.qi-table.qi-vertical-space
+    tr
+      th Stage
+      td {{ tumor.tnm | tnmStage | romanize }}
+      td.qi-transparent([ngSwitch]="subject.collection")
+        button.btn.btn-med.tnm-stage-help-btn.qi-profile-btn(
+          (click)="tnmStageHelp()"
+        )
+          .glyphicon.glyphicon-question-sign
+
+  .qi-vertical-space(*ngIf="has(tumor.tnm.grade)")
+    include grade
+
+  table.table.table.qi-table.qi-spaced-table.qi-vertical-space
+    tr
+      th Size
+      td {{ tumor.tnm.size | tnmSize }}
+    tr
+      th Lymph Status
+      td {{ tumor.tnm.lymphStatus | notSpecified }}
+    tr
+      th Metastasis
+      td {{ tumor.tnm.metastasis | boolean:'Present':'Absent' }}

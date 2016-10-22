@@ -1,0 +1,17 @@
+qi-property-table.qi-vertical-space(
+  *ngIf="has(tumor.extent)",
+  [object]="tumor.extent",
+  [title]="'Tumor Extent (mm)'"
+)
+
+.qi-vertical-space(*ngIf="has(tumor.tnm)")
+  include tnm
+
+.qi-vertical-space(*ngIf="has(tumor.hormoneReceptors)")
+  include breast-hormone-receptors
+
+.qi-vertical-space(*ngIf="has(tumor.geneticExpression)")
+  include breast-genetic-expression
+
+.qi-vertical-space(*ngIf="has(tumor.rcb)")
+  include breast-rcb

@@ -15,7 +15,7 @@ qi-cascade-select.col-md-7(
 // The correlation chart.
 div(
   qi-scatter-plot, [data]="data", [x]="x", [y]="y",
-  [color]="'subject.number'", trendLine=true,
-  [selection]="selection",
+  [color]="color", [symbolType]="symbolType",
+  trendLine=true, [selection]="selection",
   (select)="onBrushSelect($event)"
 )

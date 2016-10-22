@@ -1,0 +1,21 @@
+// The tumor site and histology.
+table.table.qi-table.qi-spaced-table.qi-vertical-space
+  tr(*ngIf="has(tumor.location)")
+    th Site
+    td {{ tumor.location | sarcomaTumorLocation }}
+
+  tr(*ngIf="has(tumor.histology)")
+    th Histology
+    td {{ tumor.histology }}
+
+// The tumor extent partial.
+.qi-vertical-space(*ngIf="has(tumor.extent)")
+  include tumor-extent
+
+// The TNM partial.
+.qi-vertical-space(*ngIf="has(tumor.tnm)")
+  include tnm
+
+// The necrosis percent partial.
+.qi-vertical-space(*ngIf="has(tumor.necrosis_percent)")
+  include necrosis-percent

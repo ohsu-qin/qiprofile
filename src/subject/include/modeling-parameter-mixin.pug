@@ -1,0 +1,20 @@
+include modeling-chart-mixin
+include modeling-table-mixin
+
+//- The modeling parameter mixin.
+//-
+//- @param properties the modeling property in column index order,
+//-   exclusive of the visit date
+//- @param headings the modeling {property name: heading} associative
+//-   object
+mixin modeling-parameter(properties, headings)
+  // Display the chart or table, depending on the format selection.
+  div(ng-switch='modelingFormat')
+    div(*ngSwitchCase='chart')
+      +modeling-chart()
+    div(*ngSwitchCase='table')
+      +modeling-table(properties, headings)
+    div(ng-switch-default)
+      script.
+        console.log(new Error('The modeling chart scope modelingFormat' +
+                              ' variable is not set to Chart or Table'))

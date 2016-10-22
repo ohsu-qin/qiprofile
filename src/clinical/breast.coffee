@@ -17,8 +17,15 @@ STAGES = [
 
 # Define here for use in RCB below.
 _rcbIndex = (extent, rcb) ->
+  # Validity check.
+  PROPS = ['tumorCellDensity', 'dcisCellDensity',
+           'positiveNodeCount', 'largestNodalMetastasisLength']
+  missingProp = -> _.some(PROPS, (prop) -> _.isNil(rcb[prop]))
+  if _.isNil(extent) or _.isNil(rcb) or missingProp()
+    return null
+
   # The bidimensional tumor size metric.
-  size = Math.sqrt(extent.length * extent.width)
+  size = Math.sqrt(extent.tumorLength * extent.tumorWidth)
   # The overall tumor cellularity.
   overall = rcb.tumorCellDensity / 100
   # The in situ cellularity.
@@ -38,6 +45,8 @@ _rcbIndex = (extent, rcb) ->
   invasionFactor + nodeFactor
 
 _rcbClass = (index) ->
+  if _.isNil(index)
+    return null
   if index == 0
     return 0
   else if index < 1.36
@@ -217,12 +226,9 @@ Breast =
    *    stage
   ###
   stage: (tnm) ->
-    # M1 => stage IV.
-    # TODO - shouldn't this be '4'? Is there a test case for this?
-    #   Since the value is romanized prior to display, this bug might
-    #   be hidden. Same with the Sarcoma stage.
+    # M1 => stage 4.
     if tnm.metastasis
-      return 'IV'
+      return '4'
     # The T and N scores.
     # TODO - factor in the size suffix.
     t = tnm.size.tumorSize

@@ -11,13 +11,3 @@
     cursor pointer
   &:focus, &:active
     fill Indigo
-
-// The select groups are in a row.
-qi-collection-correlation > qi-cascade-select
-  display inline-block
-  // The first select group is aligned over the axis.
-  &:first-child
-    padding-left 0
-  // Nested selects are stacked vertically under the parent.
-  & > qi-cascade-select
-    display block

@@ -11,10 +11,8 @@ import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 
 import { PageModule } from '../page/page.module.ts';
-import { ControlsModule } from '../controls/controls.module.ts';
 import { VisualizationModule } from '../visualization/visualization.module.ts';
 import { CollectionComponent } from './collection.component.ts';
-import { CollectionCorrelationComponent } from './correlation.component.ts';
 
 const ROUTE_CONFIG: Routes = [
   {
@@ -26,9 +24,9 @@ const ROUTE_CONFIG: Routes = [
 @NgModule({
   imports: [
     CommonModule, PageModule, RouterModule.forChild(ROUTE_CONFIG),
-    ControlsModule, VisualizationModule
+    VisualizationModule
   ],
-  declarations: [CollectionComponent, CollectionCorrelationComponent],
+  declarations: [CollectionComponent],
   exports: [CollectionComponent]
 })
 

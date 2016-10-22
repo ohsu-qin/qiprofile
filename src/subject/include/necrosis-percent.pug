@@ -1,0 +1,12 @@
+div(ng-controller='NecrosisPercentCtrl' ng-switch="necrosis_percent._cls")
+  div(*ngSwitchCase='NecrosisPercentValue')
+    table.table.qi-table
+      tr
+        th Necrosis Percent
+        td {{ necrosis_percent.value }}
+
+  div(*ngSwitchCase='NecrosisPercentRange')
+    table.table.qi-table
+      tr
+        th Necrosis Percent
+        td {{ necrosis_percent | percentRange }}

@@ -1,13 +1,14 @@
-[qi-scatter-plot] .legend
-  font-size smaller
-  fill Indigo
-
-// The sessions chart Y axis subject number tick marks
-// emulate clickable link buttons.
-.qi-sessions-chart .y.axis .tick text
-  fill Indigo
-  &:hover
-    fill Peru
-    cursor pointer
-  &:focus, &:active
+.qi-collection
+  [qi-scatter-plot] .legend
+    font-size smaller
     fill Indigo
+
+  // The sessions chart Y axis subject number tick marks
+  // emulate clickable link buttons.
+  .qi-sessions-chart .y.axis .tick text
+    fill Indigo
+    &:hover
+      fill Peru
+      cursor pointer
+    &:focus, &:active
+      fill Indigo

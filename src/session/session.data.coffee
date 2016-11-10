@@ -77,6 +77,29 @@ Session =
     # Augment the modeling objects.
     for modeling in session.modelings
       Modeling.extend(modeling, session)
+
+    # Add the extent volume virtual property.
+    if not session.tumorExtents?
+      session.tumorExtents = []
+    for extent in session.tumorExtents
+      ###*
+       * The measured scan tumor length, width and depth.
+       *
+       * @module session
+       * @class SessionTumorExtent
+      ###
+      Object.defineProperties extent,
+        ###*
+         * The extent length x width x depth in cubic
+         * centimeters.
+         *
+         * @property volume
+        ###
+        volume:
+          get: ->
+            if @length and @width and @depth
+              (@length * @width * @depth) / 1000
+    
     # Add the overlays property.
     session.overlays = getOverlays(session)
 

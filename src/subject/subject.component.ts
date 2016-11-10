@@ -82,15 +82,6 @@ export class SubjectComponent extends PageComponent {
    * @return {boolean} whether the value has displayable content
    */
   has(value: any): boolean {
-
-
-    if (value && value._cls === 'TumorExtent') {
-      console.log(">> s x ", value._cls, ": ", JSON.stringify(value));
-    }
-
-
-
-
     return ObjectHelper.hasValidContent(value);
   }
 

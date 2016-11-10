@@ -61,7 +61,15 @@ export class CollectionComponent extends PageComponent {
    *
    * @property symbolType {(d: Object) => string}
    */
-  const symbolType = d => this._symbolType(d);
+  symbolType = d => this._symbolType(d);
+
+  /**
+   * The sessions chart margin is scooched down to allow room
+   * for the Y axis label at the top.
+   *
+   * @property sessionsChartMargin {number[]}
+   */
+  const sessionsChartMargin = [12, 0, 0, 0];
 
   /**
    * The subject vs visit day sessions chart {x, y, height}
@@ -73,8 +81,7 @@ export class CollectionComponent extends PageComponent {
    */
   sessionsChart: Object = {
     x: {property: 'day', legend: 'Day'},
-    y: {property: 'subject.number', legend: 'Subject'},
-    margin: [20, 6, 6, 6]
+    y: {property: 'subject.number', legend: 'Subject'}
   };
 
   /**
@@ -85,10 +92,10 @@ export class CollectionComponent extends PageComponent {
    * @param property {string} the axis property
    * @param axis {Object} the D3 axis object
    */
-  onAxis = (property, axis) => {
+  onSessionsChartAxis = (property, axis) => {
     // Wrap the private function in this fat arrow function
     // to ensure that `this` binds correctly.
-    this._onAxis(property, axis);
+    this._onSessionsChartAxis(property, axis);
   };
 
   /**
@@ -108,13 +115,11 @@ export class CollectionComponent extends PageComponent {
   correlations: Object[];
 
   /**
-   * The {`Clinical`: _options_, `Imaging`: _options_} correlation
-   * options, where each _options_ is a {topic: {path: label}}
-   * configuration.
+   * The {topic: {label: path}} correlation selectionChoices.
    *
-   * @property correlationConfig {Object}
+   * @property selectionChoices {Object}
    */
-  correlationConfig: Object;
+  selectionChoices: Object;
 
   /**
    * The subject objects.
@@ -182,7 +187,8 @@ export class CollectionComponent extends PageComponent {
   }
 
   /**
-   * The session chart callback adds axis labels.
+   * The session chart callback adds axis labels and subject
+   * hyperlinks.
    *
    * @method onSessionsChartPlotted
    * @param svg {Object} the root SVG group D3 selection
@@ -265,82 +271,115 @@ export class CollectionComponent extends PageComponent {
     // Each subject has a tick mark.
     this.subjectAxisTickValues = _.range(1, this.subjects.length + 1);
     let yTickCnt = this.subjectAxisTickValues.length;
-    // The chart padding.
-    const chartPad = 18;
     // The axis vertical padding.
     const axisPad = 8;
     // The axis legend character size.
     const legendCharSize = 12;
     // The subject tick button size.
-    const tickCharSize = 24;
+    const tickCharSize = 18;
     // The sessions chart vertical legend size.
     let yLegend = this.sessionsChart.y.legend;
     let yLegendSize = (yLegend.length * legendCharSize) + axisPad;
     // The sessions chart plot vertical size.
-    let plotHeight = (yTickCnt * tickCharSize) + axisPad;
+    let plotHeight = yTickCnt * tickCharSize;
     // The sessions chart accomodates both the axis label and the
     // session buttons along the axis, along with a small padding.
-    let height =  chartPad + Math.max(yLegendSize, plotHeight);
+    let height = Math.max(yLegendSize, plotHeight);
     this.sessionsChart.height = height;
   }
 
-  /**
-   * Helper utility to expand an object to a depth-first expansion
-   * of the object's property hierarchy, e.g.:
-   *
-   *     expandHierarchy({a: {b: 2}, c: {d: {e: 3}}})
-   *     // -> [['a', 'b'], ['a', 'c', 'd', 'e']]
-   *
-   * @method
-   * @private
-   * @param obj {Object} the object to expand
-   * @return {Array[]} the sorted hierarchical paths
-   */
-  private expandHierarchy(obj: Object) {
-    let expand;
-
-    let expandProperty = (v, k) => {
-      let paths = expand(v);
-      if (paths.length === 0) {
-        paths.push([]);
-      }
-      for (let path of paths) { path.unshift(k); }
-      return paths;
-    };
-    let accumExpansions = (accum, v, k) =>
-      accum.concat(expandProperty(v, k));
-
-    // Expand a plain object to path arrays.
-    expand = (o) =>
-      _.isPlainObject(o) ? _.reduce(o, accumExpansions, []) : [];
-
-    return expand(obj).sort();
+  private initCorrelationCharts() {
+    // The {Imaging, Clinical} configuration.
+    let config = this.createCorrelationConfiguration();
+    // The combined {topic: {label: path}} configuration.
+    let accumChoices = (accum, choices) => _.assign(accum, choices);
+    this.selectionChoices = _.values(config).reduce(accumChoices, {});
+    // The initial select property paths.
+    this.correlations = this.initialPaths(config);
   }
 
-  private initCorrelationCharts() {
-    // The {topic: {label: path}} configuration.
-    let config = this.createCorrelationConfiguration();
+  private initialPaths(config) {
+    // The initial {topic: path} preference is in the
+    // preferences configuration.
+    let prefConfig = this.configService.preferences.Collection;
 
-    // The hierarchical config text paths.
-    let xPaths = this.expandHierarchy(config.Clinical);
-    let yPaths = this.expandHierarchy(config.Imaging);
-    // Draw at most four correlation charts.
-    const correlationCnt = Math.min(
-      xPaths.length + yPaths.length,
-      4
-    );
-    // The initial ith correlation setting.
-    let initialSetting = (i) => {
-      return {
-        xPath: xPaths[i % xPaths.length],
-        yPath: yPaths[i % yPaths.length]
-      };
+    // Finds a matching property path in the given data model
+    // section. The path parameter is the data model path string.
+    let searchSection = (path, section) => {
+      // Guard against a non-object section.
+      if (_.isPlainObject(section)) {
+        // Try to match against a full path.
+        if (_.get(section, path)) {
+          return path;
+        }
+        // Recurse until a match is found.
+        for (let key in section) {
+          let subsection = section[key];
+          let target = searchSection(path, subsection);
+          if (target) {
+            return `${ key }.${ target }`;
+          }
+        }
+      }
+      // No matching path.
+      return null;
     };
 
-    // Set the correlation configuration input.
-    this.correlationConfig = config;
-    // Make the initial correlation settings.
-    this.correlations = _.range(correlationCnt).map(initialSetting);
+    let search = path => {
+      for (let section of _.values(config)) {
+        let target = searchSection(path, section);
+        if (target) {
+          return target;
+        }
+      }
+      // The selection path was not found.
+      throw new Error('The collection correlation selection path was not found: ' +
+                      path);
+    };
+
+    // Converts the delimited preference string to an array.
+    let parse = value => value.split(/;\s*/);
+
+    // Converts the preference config entry to property paths.
+    let collect = (axis, topic) => {
+      // Fills out partial paths and sets paths which are not
+      // in the data model to null.
+      let resolvePath = path => search(path);
+      let resolveAll = paths => paths.map(resolvePath);
+      // Parse, complete and filter the paths.
+      return _.flow(parse, resolveAll, _.filter)(axis);
+    };
+
+    // The complete, valid preference paths.
+    let preferences = _.mapValues(prefConfig, collect);
+
+    // The X axis preferences.
+    let xPrefs = preferences.x;
+    // The number of X paths.
+    let xPrefCnt = xPrefs.length;
+    // The Y axis preferences.
+    let yPrefs = preferences.y;
+    // The number of Y paths.
+    let yPrefCnt = yPrefs.length;
+    // The number of Clinical x Imaging path combinations.
+    let prefCnt = xPrefCnt * yPrefCnt;
+    // Draw at most four correlation charts.
+    const maxCorrCnt = 4;
+    // The number of correlation charts.
+    let corrCnt = Math.min(prefCnt, maxCorrCnt);
+    // There should be an even number of side-by-side
+    // correlation charts.
+    if (corrCnt > 1 && corrCnt % 2) { corrCnt--; }
+    // The ith X axis correlation path modulo the X preference count.
+    let xPathAt = i => xPrefs[i % xPrefCnt];
+    // The ith Y axis correlation path modulo the Y preference count.
+    let yPathAt = i => yPrefs[i % yPrefCnt];
+    // Pick each X and Y path.
+    let correlationAt = i => {
+      return {x: xPathAt(i), y: yPathAt(i)};
+    };
+
+    return _.range(corrCnt).map(correlationAt);
   }
 
   /**
@@ -532,20 +571,18 @@ export class CollectionComponent extends PageComponent {
   }
 
   /**
-   * The axis callback sets the axis label and ticks.
+   * This axis callback sets the X axis Day tick interval to 10 rather
+   * than the default 5.
    *
-   * @method _onAxis
+   * @method _onSessionsChartAxis
    * @private
    * @param property {string} the axis property
    * @param axis {Object} the D3 axis object
    */
-   private _onAxis(property: string, axis: Object) {
-    if (property.endsWith('date')) {
-      // Date ticks are formatted as mm/dd/yyyy.
-      axis.tickFormat(d3.timeFormat('%m/%d/%Y'));
-    } else if (property.endsWith('subject.number')) {
-      // There is one tick per subject.
-      axis.tickValues(this.subjectAxisTickValues);
+   private _onSessionsChartAxis(property: string, axis: Object) {
+    if (property.endsWith('day')) {
+      let [min, max] = axis.scale().domain();
+      axis.ticks(Math.floor((max - min) / 10));
     }
   }
 }

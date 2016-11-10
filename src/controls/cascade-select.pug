@@ -1,26 +1,39 @@
 // The conventional Angular FormsModule [(ngModel)] [ngValue]
 // magic incantation results in the following errors:
 //   Can't bind to 'ngModel' since it isn't a known property of 'select'
-//   Can't bind to 'ngValue' since it isn't a known property of 'option'
+//   Can't bind to 'ngValue' since it isn't a known property of 'choice'
 // Many variations and much debugging were tried without success.
 // Consequently, the useless FormsModule is relegated to the
-// heaping trashbin of Angular failed experiments.
+// bulging trashbin of Angular failed experiments.
 //
 // However, the primitive [value], [selected] and (change) incantation
 // below works, and is much simpler than the Angular twittering machine.
-// The component mediates between the option text string value and
-// the intended option object. So much for the highly-touted Angular
+// This select component mediates between the choice text string value
+// and the intended choice object. So much for the highly-touted Angular
 // two-way data binding.
-select((change)="onSelect($event.target.value)")
+//
+// Note that the select (change) must specify $event.target.value.
+// "onSelectChange($event)" results in the following error:
+//   The selection choice is not recognized: [object Event]
+// By contrast, the child (selectionChange) must specify $event.
+// (selectionChange)="onChildSelect($event.target.value)" results
+// in the following error:
+//   Cannot read property 'value' of undefined
+// These errors occur deep in the byzantine Angular internal compiled
+// frames and are hard to debug. The behavior of $event.target.value
+// vs $event arguments is a profound Angular mystery here and elsewhere.
+// The best advice is to try incremental variations until something
+// works.
+select((change)="onSelectChange($event.target.value)")
   option(
-    *ngFor="let option of optionKeys()",
-    [value]="option", [selected]="option === selOption",
+    *ngFor="let choice of choiceKeys()",
+    [value]="choice", [selected]="choice === selection",
   )
-    | {{ option }}
-// Recurse to the child selector, if there is one.
+    | {{ choice }}
+// Recurse to the child chooser, if there is one.
 qi-cascade-select(
-  *ngIf="childOptions",
-  [options]="childOptions",
-  [selOptionPath]="selOptionPath.slice(1)",
-  (value)="onTerminalValue($event)"
+  *ngIf="childChoices",
+  [choices]="childChoices",
+  [selectionPath]="selectionPath.slice(1)",
+  (selectionChange)="onChildSelect($event)"
 )

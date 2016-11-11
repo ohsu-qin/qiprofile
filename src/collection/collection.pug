@@ -4,14 +4,16 @@ block billboard
   | {{ name }} Collection
 
 block content
-  .row
+  .row.qi-collection
     .col-md-2.qi-align-top
       .qi-sessions-chart(
         qi-scatter-plot, [height]="sessionsChart.height",
         [data]="sessions", [color]="'subject.number'",
-        [symbolType]="symbolType", [margin]="sessionsChart.margin",
+        [margin]="sessionsChartMargin",
         [x]="sessionsChart.x.property", [y]="sessionsChart.y.property",
-        [onAxis]="onAxis", (plotted)="onSessionsChartPlotted($event)",
+        [yDiscrete]=true, [symbolType]="symbolType",
+        [onAxis]="onSessionsChartAxis",
+        (plotted)="onSessionsChartPlotted($event)",
         [selection]="selection", (select)="onBrushSelect($event)"
       )
     .col-md-10
@@ -20,10 +22,11 @@ block content
       qi-correlation.col-md-6(
         *ngFor="let correlation of correlations",
         [data]="sessions", [color]="'subject.number'",
-        [symbolType]="symbolType",
-        [xOptions]="correlationConfig.Clinical",
-        [yOptions]="correlationConfig.Imaging",
-        [xSelOptionPath]="correlation.xPath",
-        [ySelOptionPath]="correlation.yPath",
-        [selection]="selection", (select)="onBrushSelect($event)"
+        [valueChoices]="valueChoices", [symbolType]="symbolType",
+        [xSelectionChoices]="selectionChoices",
+        [ySelectionChoices]="selectionChoices",
+        [xSelectionPath]="correlation.x",
+        [ySelectionPath]="correlation.y",
+        [domainSelection]="domainSelection",
+        (select)="onBrushSelect($event)"
       )

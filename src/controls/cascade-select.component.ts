@@ -16,154 +16,176 @@ import {
  */
 export class CascadeSelectComponent implements OnInit, OnChanges {
   /**
-   * The select options Object.
+   * The select choices Object.
    *
-   * @property options {Object}
+   * @property choices {Object}
    */
-  @Input() options: Object;
+  @Input() choices: Object;
 
   /**
-   * The initial selected option path for this and the
-   * cascaded selects.
+   * The initial selection path for this chooser and the cascaded
+   * child choosers.
    *
-   * @property selOptionPath {string[]}
+   * @property selectionPath {string[]}
    */
-  @Input() selOptionPath: string[] = [];
+  @Input() set selectionPath(value: string | string[]) {
+    this._selectionPath = _.isString(value) ? value.split('.') : value;
+  }
 
   /**
-   * The selected option for this select.
+   * The cascaded selection path change event.
    *
-   * @property selOption{string}
+   * @property selectionChange {EventEmitter<any>}
    */
-  selOption: string;
+  @Output() selectionChange: EventEmitter<any> = new EventEmitter(true);
+
+  get selectionPath(): string[] {
+    return this._selectionPath;
+  }
 
   /**
-   * If this select is not terminal, then the child select options
+   * The selected choice.
+   *
+   * @property selection{string}
+   */
+  selection: string;
+
+  /**
+   * If this chooser is not terminal, then the child chooser choices
    * are the keys of the
-   * {{#crossLink "CascadeSelectComponent/options:property"}}{{/crossLink}}
+   * {{#crossLink "CascadeSelectComponent/choices:property"}}{{/crossLink}}
    * value for this select's
-   * {{#crossLink "CascadeSelectComponent/selOption:property"}}{{/crossLink}}.
-   * If this select is terminal, then there are no child options.
+   * {{#crossLink "CascadeSelectComponent/selection:property"}}{{/crossLink}}.
+   * If this chooser is terminal, then there are no child choices.
    *
-   * @property childOptions{Object}
+   * @property childChoices{Object}
    */
-  childOptions: Object;
+  childChoices: Object;
 
   /**
-   * The terminal cascaded path selection.
+   * The internal
+   * {{#crossLink "CascadeSelectComponent/selectionPath:property"}}{{/crossLink}}
+   * representation.
    *
-   * @property value {EventEmitter<any>}
+   * @property _selectionPath {string[]}
+   * @private
    */
-  @Output() value: EventEmitter<any> = new EventEmitter(true);
+  private _selectionPath: string[];
 
   constructor() {}
 
   /**
    * Sets the
-   * {{#crossLink "CascadeSelectComponent/selOption:property"}}{{/crossLink}}
+   * {{#crossLink "CascadeSelectComponent/selection:property"}}{{/crossLink}}
    *
    * @method ngOnChanges
    */
   ngOnInit() {
-    if (_.isEmpty(this.selOptionPath)) {
-      this.selOption = _.keys(this.options)[0];
+    if (_.isEmpty(this.selectionPath)) {
+      this.selection = _.keys(this.choices)[0];
     } else {
-      this.selOption = this.selOptionPath[0];
+      this.selection = this.selectionPath[0];
     }
-    this.onOptionChange(true);
+    this.onSelect(true);
   }
 
   /**
    * Handle a
-   * {{#crossLink "CascadeSelectComponent/options:property"}}{{/crossLink}}
+   * {{#crossLink "CascadeSelectComponent/choices:property"}}{{/crossLink}}
    * change by resetting the
-   * {{#crossLink "CascadeSelectComponent/selOption:property"}}{{/crossLink}}
-   * if the previous value is no longer available in the new options.
+   * {{#crossLink "CascadeSelectComponent/selection:property"}}{{/crossLink}}
+   * if the previous value is no longer available in the new choices.
    *
    * @method ngOnChanges
    */
   ngOnChanges(changes: SimpleChanges) {
-    let optionsChange = changes['options'];
-    if (optionsChange && !optionsChange.isFirstChange()) {
-      if (_.isEmpty(this.options)) {
-        throw new Error("The select options cannot be empty");
+    let choicesChange = changes['choices'];
+    if (choicesChange && !choicesChange.isFirstChange()) {
+      if (_.isEmpty(this.choices)) {
+        throw new Error("The select choices cannot be empty");
       }
-      if (!(this.selOption in this.options)) {
-        this.selOption = _.keys(this.options)[0];
+      if (!(this.selection in this.choices)) {
+        this.selection = _.keys(this.choices)[0];
       }
-      this.onOptionChange(true);
+      this.onSelect(true);
     }
   }
 
   /**
-   * @method optionKeys
+   * @method choiceKeys
    * @return {string[]} the sorted
-   *   {{#crossLink "CascadeSelectComponent/options:property"}}{{/crossLink}}
+   *   {{#crossLink "CascadeSelectComponent/choices:property"}}{{/crossLink}}
    *   object keys.
    */
-  optionKeys(): string[] {
-    return _.keys(this.options).sort();
+  choiceKeys(): string[] {
+    return _.keys(this.choices).sort();
   }
 
   /**
    * Sets the
-   * {{#crossLink "CascadeSelectComponent/selOption:property"}}{{/crossLink}}
-   * to the given option.
-   * In addition, if the option value is terminal (i.e., if
+   * {{#crossLink "CascadeSelectComponent/selection:property"}}{{/crossLink}}
+   * to the given choice.
+   * In addition, if the choice value is terminal (i.e., if
    * {{#crossLink "CascadeSelectComponent/isTerminal}}{{/crossLink}}
    * returns `true`), then
    * {{#crossLink "CascadeSelectComponent/value:property"}}{{/crossLink}}
    * is triggered with the
-   * {{#crossLink "CascadeSelectComponent/options:property"}}{{/crossLink}}
-   * value for the *option* property.
+   * {{#crossLink "CascadeSelectComponent/choices:property"}}{{/crossLink}}
+   * value for the *choice* property.
    *
-   * @method onSelect
-   * @param option {string} the option text
+   * @method onSelectChange
+   * @param choice {string} the choice text
    */
-  onSelect(option: string) {
-    this.selOption = option;
-    this.onOptionChange();
+  onSelectChange(choice: string) {
+    this.selection = choice;
+    this.onSelect();
   }
 
   /**
-   * Forwards the child select terminal value to the parent
-   * listener.
+   * Forwards the select path to the parent listener.
+   * The select path is formed by prepending this select's
+   * selection to the given child select path.
    *
-   * @method onTerminalValue
-   * @param value {any} the cascaded terminal selection value
+   * @method onTerminalSelect
+   * @param value {string} the cascaded terminal selection path
    */
-  onTerminalValue(value: any) {
-    this.value.emit(value);
+  onChildSelect(value: string) {
+    let path = `${ this.selection }.${ value }`;
+    this.selectionChange.emit(path);
   }
 
   /**
-   * If the option value is terminal (i.e., if the value is not a plain
+   * If the choice value is terminal (i.e., if the value is not a plain
    * Javascript object, then trigger
    * {{#crossLink "CascadeSelectComponent/value:property"}}{{/crossLink}}
    * with the associated
-   * {{#crossLink "CascadeSelectComponent/options:property"}}{{/crossLink}}
+   * {{#crossLink "CascadeSelectComponent/choices:property"}}{{/crossLink}}
    * value.
    * Otherwise, set the
-   * {{#crossLink "CascadeSelectComponent/childOptions:property"}}{{/crossLink}}.
+   * {{#crossLink "CascadeSelectComponent/childChoices:property"}}{{/crossLink}}.
    *
-   * @method onSelectOptionChange
+   * @method onSelect
    * @private
    * @param defer {boolean} whether to delay emitting changes until
    *   after the current digest cycle completes
    */
-  private onOptionChange(defer=false) {
+  private onSelect(defer=false) {
     // If defer is set, then recurse without defer in the next digest cycle.
     if (defer) {
-      let recurse = () => { this.onOptionChange(); };
+      let recurse = () => { this.onSelect(); };
       setTimeout(recurse, 0);
       return;
     }
-    // The child options or terminal terminal value.
-    let value = this.options[this.selOption];
+    // The child choices or terminal property path.
+    let value = this.choices[this.selection];
+    if (!value) {
+      throw new Error('The selection choice is not recognized: ' +
+                      this.selection);
+    }
     if (_.isPlainObject(value)) {
-      this.childOptions = value;
+      this.childChoices = value;
     } else {
-      this.value.emit(value);
+      this.selectionChange.emit(this.selection);
     }
   }
 }

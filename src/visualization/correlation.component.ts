@@ -28,9 +28,18 @@ export class CorrelationComponent implements OnInit {
    * to the embedded
    * {{#crossLink "ScatterPlotDirective/selection:property}}{{/crossLink}}.
    *
-   * @property selection {boolean[]}
+   * @property domainSelection {boolean[]}
    */
-  @Input() selection: boolean[];
+  @Input() domainSelection: boolean[];
+
+  /**
+   * The optional value {property: {value: label}}
+   * associative object, where *property* is the terminal
+   * select property.
+   *
+   * @property valueChoices {Object}
+   */
+  @Input() valueChoices: Object;
 
   /**
    * The optional color chooser property path.
@@ -47,32 +56,39 @@ export class CorrelationComponent implements OnInit {
   @Input() symbolType: (d: Object) => string;
 
   /**
-   * The X axis select options Object.
+   * The X axis select options hierarchy Object.
    *
-   * @property xOptions {Object}
+   * @property xSelectionChoices {Object}
    */
-  @Input() xOptions: Object;
+  @Input() xSelectionChoices: Object;
 
   /**
-   * The Y axis select options Object.
+   * The Y axis select options hierarchy Object.
    *
-   * @property yOptions {Object}
+   * @property ySelectionChoices {Object}
    */
-  @Input() yOptions: Object;
+  @Input() ySelectionChoices: Object;
 
   /**
-   * The initial X option selection path.
+   * The initial X chooser path.
    *
-   * @property xSelOptionPath {string[]}
+   * @property xSelectionPath {string[]}
    */
-  @Input() xSelOptionPath: string[];
+  @Input() xSelectionPath: string[];
 
   /**
-   * The initial Y option selection path.
+   * The initial Y chooser path.
    *
-   * @property ySelOptionPath {string[]}
+   * @property ySelectionPath {string[]}
    */
-  @Input() ySelOptionPath: string[];
+  @Input() ySelectionPath: string[];
+
+  /**
+   * The select event transmits a user brush domain object select.
+   *
+   * @property select {EventEmitter<boolean[]>}
+   */
+  @Output() select: EventEmitter<boolean[]> = new EventEmitter(true);
 
   /**
    * The X property path.
@@ -89,11 +105,26 @@ export class CorrelationComponent implements OnInit {
   y: string;
 
   /**
-   * The select event transmits a user brush domain object select.
+   * The X {value: label} associative object.
    *
-   * @property select {EventEmitter<boolean[]>}
+   * @property xValueChoices {Object}
    */
-  @Output() select: EventEmitter<boolean[]> = new EventEmitter(true);
+  xValueChoices: Object;
+
+  /**
+   * The Y {value: label} associative object.
+   *
+   * @property yValueChoices {Object}
+   */
+  yValueChoices: Object;
+
+  /**
+   * The correlation chart margin has a small pad at the top
+   * for the cascade select control and bottom for spacing.
+   *
+   * @property margin {number[]}
+   */
+  const margin = [6, 0, 6, 0];
 
   constructor() {}
 
@@ -102,21 +133,40 @@ export class CorrelationComponent implements OnInit {
    * {{#crossLink "CorrelationComponent/x:property}}{{/crossLink}}
    * and
    * {{#crossLink "CorrelationComponent/y:property}}{{/crossLink}}
-   * property paths.
+   * property paths and the
+   *.
    *
    * @method ngOnInit
    */
   ngOnInit() {
-    this.x = _.reduce(this.xSelOptionPath, _.get, this.xOptions);
-    this.y = _.reduce(this.ySelOptionPath, _.get, this.yOptions);
+    if (!this.xSelectionPath) {
+      throw new Error('The correlation is missing the X selection path.');
+    }
+    this.x = _.get(this.xSelectionChoices, this.xSelectionPath);
+    if (!this.x) {
+      throw new Error('The correlation property was not found for the X' +
+                      ' selection path ' + JSON.stringify(this.xSelectionPath));
+    }
+    this.xValueChoices = _.get(this.valueChoices, _.last(this.xSelectionPath));
+    if (!this.ySelectionPath) {
+      throw new Error('The correlation is missing the Y selection path.');
+    }
+    this.y = _.get(this.ySelectionChoices, this.ySelectionPath);
+    if (!this.y) {
+      throw new Error('The correlation property was not found for the Y' +
+                      ' selection path ' + JSON.stringify(this.ySelectionPath));
+    }
+    this.yValueChoices = _.get(this.valueChoices, _.last(this.ySelectionPath));
   }
 
-  onXChange(property: string) {
-    this.x = property;
+  onXChange(path: string) {
+    this.x = _.get(this.xSelectionChoices, path);
+    this.xValueChoices = _.get(this.valueChoices, _.last(path));
   }
 
-  onYChange(property: string) {
-    this.y = property;
+  onYChange(path: string) {
+    this.y = _.get(this.ySelectionChoices, path);
+    this.yValueChoices = _.get(this.valueChoices, _.last(path));
   }
 
   /**

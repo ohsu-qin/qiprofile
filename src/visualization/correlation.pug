@@ -1,21 +1,23 @@
 // The Y axis property select.
 qi-cascade-select.col-md-5(
-  [options]="yOptions",
-  [selOptionPath] = "ySelOptionPath",
-  (value)="onYChange($event)"
+  [choices]="ySelectionChoices",
+  [selectionPath] = "ySelectionPath",
+  (selectionChange)="onYChange($event)"
 )
 // The X axis property select is roughly centered over
 // the plot.
 qi-cascade-select.col-md-7(
-  [options]="xOptions",
-  [selOptionPath] = "xSelOptionPath",
-  (value)="onXChange($event)"
+  [choices]="xSelectionChoices",
+  [selectionPath] = "xSelectionPath",
+  (selectionChange)="onXChange($event)"
 )
 
 // The correlation chart.
 div(
   qi-scatter-plot, [data]="data", [x]="x", [y]="y",
+  [xChoices]="xValueChoices", [yChoices]="yValueChoices",
   [color]="color", [symbolType]="symbolType",
-  trendLine=true, [selection]="selection",
-  (select)="onBrushSelect($event)"
+  [margin]="margin", trendLine=true,
+  [selection]="domainSelection",
+  (selection)="onBrushSelect($event)"
 )

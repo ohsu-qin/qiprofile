@@ -73,7 +73,10 @@ Update the ``qiprofile`` workspace as follows::
     npm install
     npm prune
 
-Check periodically for outdated package specifications by running npmedge_.
+A major upgrade is most easily accomplished by running
+``npm reinstall`` rather than ``npm install``. Note that reinstall
+is a destructive operation which deletes and reinstalls all
+npm packages and updates the local qirest_ conda environment.
 
 
 ***********
@@ -844,8 +847,6 @@ The test image files conform to the XNAT file location convention, e.g.::
 .. _Node.js: https://www.nodejs.org/
 
 .. _npm: https://www.npmjs.org/
-
-.. _npmedge: https://www.npmjs.com/package/npmedge#overview
 
 .. _NPM Publishing Guide: https://docs.npmjs.com/getting-started/publishing-npm-packages
 

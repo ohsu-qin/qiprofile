@@ -45,10 +45,7 @@ Setup
 
    This command installs the necessary packages [#xtk_fork]_.
 
-4. Read ``testing/e2e/README.rst`` for additional
-   testing notes.
-
-5. Run the following Grunt_ script::
+4. Run the following Grunt_ script::
 
        grunt
 

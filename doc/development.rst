@@ -218,29 +218,29 @@ End-to-end testing notes:
 * Running the tests can result in the following errors::
 
       Client error: SyntaxError: Unexpected end of input
-      
+
       Client error: Error: [$compile:tpload] Failed to load template: /partials/intensity-chart.html
 
   The partial does load in the browser and it appears that the
   tests are not affected. These messages began occuring after updating
   test packages, but they cannot be isolated to a particular package.
   Since the messages seem to be benign, it is ignored for now.
-  
+
   TODO - revisit this after applying npmedge in late 2015.
 
 * A Page can be instantiated in a before (once per suite) or a beforeEach
   (once per test case).
-  
+
   Sometimes the beforeEach page results in an error,
   e.g. if volumeSpec were changed from before to beforeEach then the
   volume resource fails to load. In those cases, use a before page.
-  
+
   Sometimes, the before page results in an error, e.g. if subjectListSpec
   were changed from beforeEach to before then the following error is
   raised:
-  
+
       Error while waiting for Protractor to sync with the page
-  
+
   In those cases, use a beforeEach page. The putative rationale for the
   difference is the interaction of Protractor with Selenium on angular vs.
   non-angular pages
@@ -251,11 +251,11 @@ End-to-end testing notes:
   * browser.get on angular pages with the Protractor API
 
   * browser.driver.get on non-angular pages with the Selenium API
-  
+
   However, that rationale does not apply in the aforementioned examples.
   The best, albeit terrible, approach is trial-and-error and cross your
   fingers that it doesn't break over time.
-  
+
   TODO - there must be a better answer!
 
 * The ``it.only`` qualifier results in the following error::
@@ -278,7 +278,7 @@ End-to-end testing notes:
   results in the following error::
 
       StaleElementReferenceError: stale element reference: element is not attached to the page document
-  
+
   This error is caused by resetting the parent DOM element with each test case,
   but not refreshing the child DOM element. The resolution is to ensure that
   the inner and outer contexts are either both beforeEach or both before clauses.
@@ -303,15 +303,15 @@ Coding Standards
 
       `import REST from "./rest.coffee"`
       `export { REST as default }`
-  
+
   The export ``as default`` ensures ES6 and TypeScript interoperability.
   Libraries with an ``index.js`` in the package root folder, e.g. ``lodash``,
   need to be imported using ``* as``, e.g.::
-  
+
       `import * as _ from "lodash"`
 
 * The CoffeeScript service modules export a singleton variable, e.g.::
-  
+
       Rest =
         ...
       `export { Rest as default }`
@@ -320,10 +320,10 @@ Coding Standards
   YUIDoc_ comments. Every public function is documented. Every private
   function that is not self-explanatory is documented and marked with
   the ``@private`` tag.
-  
+
 * CoffeeScript comments must compile to ``/** ... */`` blocks  in
   JavaScript, e.g.::
-  
+
       ###*
        * Formats the {where: condition} Eve REST query parameter.
        *
@@ -332,22 +332,22 @@ Coding Standards
        * @return the REST condition query parameter
       ###
       where: (params) ->
-  
+
   Note that the block is in the form::
-  
+
       ###*
        * Good
       ###
-  
+
   rather than::
-  
+
       ###
       #  Bad!
       ###
 
 * Each CoffeeScript service module include a static class comment block,
   e.g.::
-  
+
       ###*
        * @class Rest
        * @static
@@ -359,10 +359,10 @@ Coding Standards
   pre-processor.
 
 * Every application Angular component file is indicated by ``.component.``
-   in the file name, e.g. ``app.component.ts``.
+  in the file name, e.g. ``app.component.ts``.
 
 * Every application Angular service file is indicated by ``.service.``
-   in the file name, e.g. ``collections.service.ts``.
+  in the file name, e.g. ``collections.service.ts``.
 
 * Every application Angular data file is indicated by a simple file name
   without a qualifier, e.g. ``collection.ts``.
@@ -388,45 +388,45 @@ Coding Standards
 
 * CoffeeScript imports another module with an escaped ``import``
   statement, e.g.::
-  
+
       `import * as _ from "lodash"`
-  
+
   Note that the imported module name uses double quotes rather than
   single quotes for readability.
 
 * Each application CoffeeScript file makes an object that is exported
   with an escaped ``export`` statement, e.g.::
-  
+
       REST =
         ... # the service definition
-        
+
       `export { REST as default }`
-  
-  The service can then be imported by a TypeScript file with import, 
+
+  The service can then be imported by a TypeScript file with import,
   e.g.::
-  
+
       import REST from '../rest/rest.ts';
-  
-  CoffeeScript unit test suites do not need to be exported. 
+
+  CoffeeScript unit test suites do not need to be exported.
 
 * Each intra-``src/`` import is relative, e.g.::
 
       import REST from './rest.coffee';  // good
-  
+
   rather than::
-  
+
       import REST from 'src/rest/rest.coffee'; // bad!
 
 * Outside imports of source files, e.g. from a test suite, are rooted at
   ``app/``, e.g.::
 
       import REST from 'app/rest.coffee';  // good from testing/
-  
+
   rather than::
-  
+
       import REST from '../../src/rest/rest.coffee'; // bad from testing/!
       import REST from 'src/rest/rest.coffee'; // bad from testing/!
-      
+
   ``app/`` is a ``src/`` alias defined in the jspm ``paths`` option.
 
 * Source code lines are no longer than 80 characters, unless a single
@@ -437,7 +437,7 @@ Coding Standards
 
 * Function calls are on one line unless they exceed the recommended
   length, e.g.::
-  
+
       a = _.concat(first, second)  # Good
 
   rather than::
@@ -506,16 +506,16 @@ Coding Standards
       throw new Error(message)   # Good
 
  rather than::
- 
+
       throw new message   # Bad
 
 * Error messages are simple, informative text without ending punction,
   e.g.::
-  
+
       throw new Error("The file type is not recognized: #{ file }") # Good
-  
+
   rather than::
-  
+
       throw new Error("Bad file type!")  # Bad
 
 * CoffeeScript, pug and Stylus string literals have double quotation
@@ -551,7 +551,7 @@ Coding Standards
 
 * Comments are readable English on a separate line, usually beginning
   with a capitalized 'The' and ending in a period.
-  
+
 * Every public module, class and function is commented using the
   `Writing AngularJS Documentation`_ guideline.[#docCaveat]_
 
@@ -624,18 +624,18 @@ Coding Standards
 
 * Version numbers follow the *major*\ .\ *minor*\ .\ *patch* SemVer_
   scheme, where:
-  
+
   * *major* is 0 for pre-release development, 1 for the initial alpha
     public release, 2 for the beta public release, and incremented
     thereafter when a major feature set is introduced.
-  
+
   * *minor* is 0 for unstable major version development checkpoints,
     1 for the initial public major version release, and incremented
     thereafter for each non-backward-compatible change.
-  
+
   * *patch* is a number only starting at 1, and incremented with each
     backward-compatible change.
-  
+
   A release is published to npm if and only if it is a public release,
   as described below.
 
@@ -669,7 +669,7 @@ Coding Standards
     public, i.e. the version *major* and *minor* are 1 or above.
     Changes are published to NPM as follows (cf. the `NPM
     Publishing Guide`_)::
-  
+
         npm publish
 
   - Periodically delete unused local and remote branches. Exercise care
@@ -779,11 +779,14 @@ The test image files conform to the XNAT file location convention, e.g.::
       testing/fixtures/data/
         QIN_Test/arc001/Sarcoma001_Session01/SCANS/50/NIFTI/series050.nii.gz
 
+---------
+
+.. container:: copyright
 
 .. rubric:: Footnotes
 
 .. [#xtk_fork]
-  :Note: XTK_ is not packaged for Bower_ or npm_. The `XTK Bower Fork`_
+  Note that XTK_ is not packaged for Bower_ or npm_. The `XTK Bower Fork`_
     remedies this omission. The qiprofile ``bower.json`` definition file
     specifies this GitHub fork. The ``edge`` XTK version is used, following
     the recommendation on the XTK_ home page.

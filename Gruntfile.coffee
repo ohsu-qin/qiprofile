@@ -191,8 +191,9 @@ module.exports = (grunt) ->
       # Install the npm packages.
       buildnpm:
         command:
-          # Note: the first install fails to completely install secondary
-          #   lodash dependencies. The second install remedies this npm bug.
+          # Note: the first install below fails to completely install
+          #   secondary lodash dependencies. The second install remedies
+          #   this npm bug.
           # TODO - revisit this with a new npm release in 2017. Try deleting
           #   the second install below, running npm run reinstall and then
           #   grunt start. If grunt fails with a missing babel lodash error,

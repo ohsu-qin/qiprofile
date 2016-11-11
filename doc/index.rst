@@ -73,11 +73,11 @@ See the `Developer Guide`_ for starting a development server.
 
 .. _qipipe: http://qipipe.readthedocs.org/en/latest/
 
-.. _REST: http://qirest.readthedocs.org/en/latest/
+.. _REST: http://qiprofile-rest.readthedocs.io/en/latest/
 
-.. _REST Development: http://qirest.readthedocs.org/en/latest/#development
+.. _REST Development: http://qiprofile-rest.readthedocs.org/en/latest/#development
 
-.. _REST Usage: http://qirest.readthedocs.org/en/latest/#usage
+.. _REST Usage: http://qiprofile-rest.readthedocs.org/en/latest/#usage
 
 
 .. toctree::

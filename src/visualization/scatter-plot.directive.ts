@@ -518,7 +518,6 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
     // The root SVG group element.
     this.svg = d3.select(this.elementRef.nativeElement)
       .append('svg')
-      .attr('class', 'scatter-plot')
       .attr('viewBox', `0 0 ${ this.width } ${ this.height }`)
       .attr('width', this.width)
       .attr('height', this.height);
@@ -741,7 +740,8 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
     // The callback functions.
     let isWithin = (x, y, box) =>
       x >= box[0][0] && x <= box[1][0] && y >= box[0][1] && y <= box[1][1];
-    let isDataSelected = (d, i, box) => isWithin(this.dx(d, i), this.dy(d, i), box);
+    let isDataSelected = (d, i, box) =>
+      this.valid[i] && isWithin(this.dx(d, i), this.dy(d, i), box);
     let selectedData = () => {
       // The selection bounding box.
       let box = d3.event.selection;
@@ -752,12 +752,18 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
       return box ? this.data.map((d, i) => isDataSelected(d, i, box)) : null;
     };
 
-    // Make the brush.
+    // The brush extent includes only the data points. The
+    // offset is the amount to chop out, with the exception
+    // noted below.
     let offset = _.map(this.pad, (v, i) => v + this.margin[i]);
+    // For some reason, setting the brush extent first y value
+    // to the offset chops out data points. Use the margin
+    // instead.
     let extent = [
-      [offset[0], offset[3]],
+      [offset[0], this.margin[3]],
       [this.width - offset[1], this.height - offset[2]]
     ];
+    // Make the brush.
     let brush = d3.brush().extent(extent);
 
     // Add the callbacks:
@@ -770,7 +776,7 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
         .transition()
         .delay(delay)
         .duration(0)
-        .style('visibility', null);
+        .style('visibility', (d, i) => this.valid[i]);
     };
 
     // Flag to avoid an infinite loop (see below).

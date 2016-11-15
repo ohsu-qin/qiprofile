@@ -33,9 +33,8 @@ export class CorrelationComponent implements OnInit {
   @Input() domainSelection: boolean[];
 
   /**
-   * The optional value {property: {value: label}}
-   * associative object, where *property* is the terminal
-   * select property.
+   * The optional value {path: {value: label}} associative object,
+   * where *path* is the property select choice path.
    *
    * @property valueChoices {Object}
    */
@@ -58,30 +57,30 @@ export class CorrelationComponent implements OnInit {
   /**
    * The X axis select options hierarchy Object.
    *
-   * @property xSelectionChoices {Object}
+   * @property xPropertyChoices {Object}
    */
-  @Input() xSelectionChoices: Object;
+  @Input() xPropertyChoices: Object;
 
   /**
    * The Y axis select options hierarchy Object.
    *
-   * @property ySelectionChoices {Object}
+   * @property yPropertyChoices {Object}
    */
-  @Input() ySelectionChoices: Object;
+  @Input() yPropertyChoices: Object;
 
   /**
    * The initial X chooser path.
    *
-   * @property xSelectionPath {string[]}
+   * @property xPropertyPath {string[]}
    */
-  @Input() xSelectionPath: string[];
+  @Input() xPropertyPath: string[];
 
   /**
    * The initial Y chooser path.
    *
-   * @property ySelectionPath {string[]}
+   * @property yPropertyPath {string[]}
    */
-  @Input() ySelectionPath: string[];
+  @Input() yPropertyPath: string[];
 
   /**
    * The select event transmits a user brush domain object select.
@@ -134,39 +133,58 @@ export class CorrelationComponent implements OnInit {
    * and
    * {{#crossLink "CorrelationComponent/y:property}}{{/crossLink}}
    * property paths and the
-   *.
+   * {{#crossLink "CorrelationComponent/xValueChoices:property}}{{/crossLink}}
+   * and
+   * {{#crossLink "CorrelationComponent/yValueChoices:property}}{{/crossLink}}
+   * value choices.
    *
    * @method ngOnInit
    */
   ngOnInit() {
-    if (!this.xSelectionPath) {
+    if (!this.xPropertyPath) {
       throw new Error('The correlation is missing the X selection path.');
     }
-    this.x = _.get(this.xSelectionChoices, this.xSelectionPath);
+    this.x = _.get(this.xPropertyChoices, this.xPropertyPath);
     if (!this.x) {
       throw new Error('The correlation property was not found for the X' +
-                      ' selection path ' + JSON.stringify(this.xSelectionPath));
+                      ' selection path ' + this.xPropertyPath);
     }
-    this.xValueChoices = _.get(this.valueChoices, _.last(this.xSelectionPath));
-    if (!this.ySelectionPath) {
+    this.xValueChoices = _.get(this.valueChoices, this.xPropertyPath);
+    if (!this.yPropertyPath) {
       throw new Error('The correlation is missing the Y selection path.');
     }
-    this.y = _.get(this.ySelectionChoices, this.ySelectionPath);
+    this.y = _.get(this.yPropertyChoices, this.yPropertyPath);
     if (!this.y) {
       throw new Error('The correlation property was not found for the Y' +
-                      ' selection path ' + JSON.stringify(this.ySelectionPath));
+                      ' selection path ' + this.yPropertyPath);
     }
-    this.yValueChoices = _.get(this.valueChoices, _.last(this.ySelectionPath));
+    this.yValueChoices = _.get(this.valueChoices, this.yPropertyPath);
   }
 
+  /**
+   * Updates the
+   * {{#crossLink "CorrelationComponent/x:property}}{{/crossLink}}
+   * and
+   * {{#crossLink "CorrelationComponent/xValueChoices:property}}{{/crossLink}}.
+   *
+   * @method onXChange
+   */
   onXChange(path: string) {
-    this.x = _.get(this.xSelectionChoices, path);
-    this.xValueChoices = _.get(this.valueChoices, _.last(path));
+    this.x = _.get(this.xPropertyChoices, path);
+    this.xValueChoices = _.get(this.valueChoices, path);
   }
 
+  /**
+   * Updates the
+   * {{#crossLink "CorrelationComponent/y:property}}{{/crossLink}}
+   * and
+   * {{#crossLink "CorrelationComponent/yValueChoices:property}}{{/crossLink}}.
+   *
+   * @method onYChange
+   */
   onYChange(path: string) {
-    this.y = _.get(this.ySelectionChoices, path);
-    this.yValueChoices = _.get(this.valueChoices, _.last(path));
+    this.y = _.get(this.yPropertyChoices, path);
+    this.yValueChoices = _.get(this.valueChoices, path);
   }
 
   /**

@@ -3,7 +3,9 @@ import * as d3 from 'd3';
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { ConfigurationService } from '../configuration/configuration.service.ts';
+import {
+  ConfigurationService
+} from '../configuration/configuration.service.ts';
 import { PageComponent } from '../page/page.component.ts';
 import { SubjectService } from '../subject/subject.service.ts';
 import help from './collection.help.md';
@@ -50,11 +52,12 @@ export class CollectionComponent extends PageComponent {
   sessions: Object[];
 
   /**
-   * The sessions display state (or null to display all session data).
+   * The session display state array (or null to display
+   * all session data).
    *
-   * @property selection {boolean[]}
+   * @property domainSelection {boolean[]}
    */
-  selection: boolean[];
+  domainSelection: boolean[];
 
   /**
    * The data => symbol type method.
@@ -69,7 +72,7 @@ export class CollectionComponent extends PageComponent {
    *
    * @property sessionsChartMargin {number[]}
    */
-  const sessionsChartMargin = [12, 0, 0, 0];
+  const sessionsChartMargin = [12, 0, 0, 12];
 
   /**
    * The subject vs visit day sessions chart {x, y, height}
@@ -115,11 +118,11 @@ export class CollectionComponent extends PageComponent {
   correlations: Object[];
 
   /**
-   * The {topic: {label: path}} correlation selectionChoices.
+   * The {topic: {label: path}} correlation propertyChoices.
    *
-   * @property selectionChoices {Object}
+   * @property propertyChoices {Object}
    */
-  selectionChoices: Object;
+  propertyChoices: Object;
 
   /**
    * The subject objects.
@@ -130,12 +133,29 @@ export class CollectionComponent extends PageComponent {
   private subjects: Object[];
 
   /**
+   * Flag indicating whether the domain selection is
+   * based on the subject checkboxes.
+   *
+   * @property isCheckboxSelection {boolean}
+   * @private
+   */
+  private isCheckboxSelection: boolean;
+
+  /**
    * The properties to exclude.
    *
    * @property exclude {string[]}
    * @private
    */
   private exclude: string[];
+
+  /**
+   * The SVG element.
+   *
+   * @property svg {d3.Selection<any>}
+   * @private
+   */
+  private svg: d3.Selection<any>;
 
   /**
    * The tick values for a subject number axis.
@@ -194,6 +214,8 @@ export class CollectionComponent extends PageComponent {
    * @param svg {Object} the root SVG group D3 selection
    */
    onSessionsChartPlotted(svg: Object) {
+    // Capture the SVG element for use when clearing the checkboxes.
+    this.svg = svg;
     // Make the X axis legend.
     let xData = [[100, 10, this.sessionsChart.x.legend]];
     svg.selectAll('text.x.legend')
@@ -218,14 +240,40 @@ export class CollectionComponent extends PageComponent {
     // mark is clicked. The argument is the subect number string
     // tick text. Convert the string to a number before calling
     // visitSubject.
-    let onClick = d => this.visitSubject(+d);
+    let onSubjectClick = d => this.visitSubject(+d);
     svg.selectAll('g.y.axis .tick text')
-      .on('click', onClick);
+      .on('click', onSubjectClick);
 
-    // TODO - adapt checkbox from
-    // https://bl.ocks.org/Lulkafe/c77a36d5efb603e788b03eb749a4a714.
-    // Center X axis checkbox over average day for each session number.
-    // Push plot and axes down and over to make room.
+    // Flip the corresponding domain selection flag when a
+    // subject checkbox is clicked. If a checkbox select is
+    // active, then augment the domain selection. Otherwise,
+    // activate a new checkbox select and select only the
+    // domain sessions for the checked subject.
+    let onCheckboxClick = value => {
+      let subjectNbr = +value;
+      let matchesSubject = d => d.subject.number === subjectNbr;
+      let isSelected;
+      if (this.isCheckboxSelection) {
+        isSelected = (d, i) =>
+          this.domainSelection[i] || matchesSubject(d);
+      } else {
+        isSelected = matchesSubject;
+        this.isCheckboxSelection = true;
+      }
+      this.domainSelection = this.sessions.map(isSelected);
+    };
+    // Add the Y axis checkboxes. The pixel values are 'just so'
+    // a posteriori numbers determined by visual inspection with
+    // no a priori justification.
+    svg.selectAll('g.y.axis g.tick')
+      .append('g')
+        .attr('transform', 'translate(-32, -7)')
+        .append('foreignObject')
+          .attr('width', 10)
+          .attr('height', 10)
+          .append('xhtml:input')
+            .attr('type', 'checkbox')
+            .on('click', onCheckboxClick);
   }
 
   /**
@@ -235,7 +283,14 @@ export class CollectionComponent extends PageComponent {
    * @param selection {boolean[]} the selection state array
    */
   onBrushSelect(selection: boolean[]) {
-    this.selection = selection;
+    // Relay the selection to the child charts.
+    this.domainSelection = selection;
+    // Cancel an active checkbox select.
+    if (this.isCheckboxSelection) {
+      this.isCheckboxSelection = false;
+      this.svg.selectAll('g.y.axis g.tick [type="checkbox"]')
+        .property('checked', false);
+    }
   }
 
   /**
@@ -247,6 +302,17 @@ export class CollectionComponent extends PageComponent {
   private _symbolType(d: Object) {
     let i = Math.min(d.number - 1, SYMBOL_TYPES.length);
     return SYMBOL_TYPES[i];
+  }
+
+  /**
+   * @method isExcluded
+   * @private
+   * @return {boolean} whether the topic is in the
+   *   {{#crossLink "CollectionComponent/exclude:property}}{{/crossLink}}
+   *   list
+   */
+  private isExcluded(topic) {
+    return _.includes(this.exclude, topic);
   }
 
   /**
@@ -289,19 +355,30 @@ export class CollectionComponent extends PageComponent {
   }
 
   private initCorrelationCharts() {
-    // The {Imaging, Clinical} configuration.
-    let config = this.createCorrelationConfiguration();
+    // Acquire the excludes from the preferences configuration.
+    let prefConfig = this.configService.preferences.Collection;
+    let prefExcludes = prefConfig.exclude;
+    if (prefExcludes) {
+      this.exclude = prefExcludes.split(/,\s*/);
+    }
+
+    // The {Imaging, Clinical} select option path configuration.
+    let corrConfig = this.createCorrelationConfiguration();
     // The combined {topic: {label: path}} configuration.
     let accumChoices = (accum, choices) => _.assign(accum, choices);
-    this.selectionChoices = _.values(config).reduce(accumChoices, {});
+    // The select option choices.
+    this.propertyChoices = _.values(corrConfig).reduce(accumChoices, {});
+    // The select {path: {value: label}} object.
+    this.valueChoices = this.configService.valueChoices;
     // The initial select property paths.
-    this.correlations = this.initialPaths(config);
+    this.correlations = this.initialPaths(corrConfig);
   }
 
   private initialPaths(config) {
     // The initial {topic: path} preference is in the
     // preferences configuration.
     let prefConfig = this.configService.preferences.Collection;
+    let prefPaths = _.pick(prefConfig, 'x', 'y');
 
     // Finds a matching property path in the given data model
     // section. The path parameter is the data model path string.
@@ -332,9 +409,9 @@ export class CollectionComponent extends PageComponent {
           return target;
         }
       }
-      // The selection path was not found.
-      throw new Error('The collection correlation selection path was not found: ' +
-                      path);
+      // The property selection path was not found; complain.
+      throw new Error('The collection correlation property selection' +
+                      ` path was not found: ${ path }`);
     };
 
     // Converts the delimited preference string to an array.
@@ -351,7 +428,7 @@ export class CollectionComponent extends PageComponent {
     };
 
     // The complete, valid preference paths.
-    let preferences = _.mapValues(prefConfig, collect);
+    let preferences = _.mapValues(prefPaths, collect);
 
     // The X axis preferences.
     let xPrefs = preferences.x;
@@ -421,21 +498,31 @@ export class CollectionComponent extends PageComponent {
   private createCorrelationConfiguration() {
     // The {topic: {label: path}} configuration.
     let baseConfig = this.configService.dataModel;
-    // Merge sections for this collection, e.g. if
-    // this collection's name is 'Breast', then
-    // [TNM] and [TNM:Breast] are merged into one
-    // TNM section. Other collection specializations
+    // Excluded topics are added here.
+    let exclude = {};
+    // Merge sections for this collection, e.g. if this collection's
+    // name is 'Breast', then [TNM] and [TNM:Breast] are merged
+    // into one TNM section. Other collection specializations
     // are ignored, e.g. [TNM:Sarcoma].
     let accumSections = (accum, section, topic) => {
       let topicCollection = topic.split(':');
       let baseTopic = topicCollection[0];
       let collection = topicCollection[1];
+      // Check whether the topic is in the collection.
       if (!collection || collection === this.name) {
-        let accumSection = accum[baseTopic];
-        if (accumSection) {
-          accum[baseTopic] = _.assign({}, accumSection, section);
+        // Capture an excluded topic for use in the flattener below.
+        if (this.isExcluded(topic) || this.isExcluded(baseTopic)) {
+          exclude[topic] = topic;
         } else {
-          accum[baseTopic] = section;
+          // The resolved section which will hold the content.
+          let accumSection = accum[baseTopic];
+          // If the section is already defined, then add the content
+          // to the existing section. Otherwise, add the new section.
+          if (accumSection) {
+            accum[baseTopic] = _.assign({}, accumSection, section);
+          } else {
+            accum[baseTopic] = section;
+          }
         }
       }
     };
@@ -448,13 +535,15 @@ export class CollectionComponent extends PageComponent {
     let isTop = (value, key) => !isChild(key);
     let top = _.pickBy(filtered, isTop);
 
-    // Flattens subtopics.
+    // Flattens subtopics. Excluded topics return undefined.
     let flatten = (path, topic) => {
-      let section = filtered[topic];
-      return this.flattenSection(section, filtered, path);
+      if (!_.includes(exclude, topic)) {
+        let section = filtered[topic];
+        return this.flattenSection(section, filtered, path, exclude);
+      }
     };
     // Fill out the top subsections.
-    let flattenValues = (section) => _.mapValues(section, flatten);
+    let flattenValues = section => _.mapValues(section, flatten);
     let flattened = _.mapValues(top, flattenValues);
 
     // Delete unavailable properties and empty sections.
@@ -473,19 +562,11 @@ export class CollectionComponent extends PageComponent {
    * @return {Object} the new cleaned configuration
    */
   private cleanCorrelationConfiguration(config: Object) {
-    // If the key is not excluded and the value is not
-    // empty, then returns the recursively cleaned value.
-    let clean = (value, key) => {
-      if (!_.includes(this.exclude, key)) {
-        return this.cleanCorrelationConfigurationValue(value);
-      }
-    };
-
-    // Filter out the empty and excluded properties.
+    // Filter out the missing properties and empty sections.
     let accumClean = (accum, value, key) => {
-      let cleanedValue = clean(value, key);
-      if (!_.isEmpty(cleanedValue)) {
-        accum[key] = cleanedValue;
+      let cleaned = this.cleanCorrelationConfigurationValue(value);
+      if (!_.isEmpty(cleaned)) {
+        accum[key] = cleaned;
       }
     };
 
@@ -543,26 +624,43 @@ export class CollectionComponent extends PageComponent {
    * @param section {Object} the configuration section
    * @param config {Object} the {topic, section} configuration
    * @param path {string} the property path to the section
+   * @param exclude {string[]} the excluded topics
    */
-  private flattenSection(section: Object, config: Object, path: string) {
+  private flattenSection(
+    section: Object, config: Object, path: string, exclude: string[]
+  ) {
     let flatten = (accum, value, key) => {
+      if (_.includes(exclude, key)) {
+        return;
+      }
+      // The current entry concatenated property path.
       let subpath;
       // The section entry "this" implies the section is
       // an alias for the parent section, so ignore it in
       // the path.
-      if (path === 'this') {
+      if (value === 'this') {
+        subpath = path;
+      } else if (path === 'this') {
         subpath = value;
       } else {
         subpath = `${ path }.${ value }`;
       }
+      // If both the value and the path are 'this', then bail.
+      // This should never occur by construction.
+      if (subpath === 'this') {
+        throw new Error('Invalid data model configuration property entry ' +
+                        `${ key }: ${ value } in context ${ path }`);
+      }
+
       // If the property key references a config section,
       // then recursively flatten the subsection.
       // Otherwise, the result is the value.
       let subsection = config[key];
       if (subsection) {
-        let flattened = this.flattenSection(subsection, config, subpath);
+        let flattened =
+          this.flattenSection(subsection, config, subpath, exclude);
         _.assign(accum, flattened);
-      } else {
+      } else if (!_.includes(this.exclude, key)) {
         accum[key] = subpath;
       }
     };

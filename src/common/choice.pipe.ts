@@ -13,7 +13,7 @@ export class ChoicePipe implements PipeTransform {
   private choices: Object;
 
   constructor(private configService: ConfigurationService) {
-    this.choices = configService.choices;
+    this.choices = configService.valueChoices;
   }
 
   /**

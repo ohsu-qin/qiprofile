@@ -1,7 +1,7 @@
 .qi-table-title Radiotherapy
 
 .qi-panel.qi-nested
-  .qi-vertical-space(ng-repeat="dosage in radiotherapy.dosages")
+  .qi-vertical-space(*ngFor="let dosage in radiotherapy.dosages")
     table.table.qi-table
       tr
         th Beam Type

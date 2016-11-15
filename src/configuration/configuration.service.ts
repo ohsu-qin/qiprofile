@@ -8,7 +8,7 @@ import { Injectable } from '@angular/core';
 import { parse } from 'ini-parser';
 
 import dataModel from './data-model.cfg';
-import choices from './choices.cfg';
+import valueChoices from './value-choices.cfg';
 import preferences from './preferences.cfg';
 
 @Injectable()
@@ -35,16 +35,16 @@ export class ConfigurationService {
   preferences: Object;
 
   /**
-   * The choices configuration {topic: {database value: display value}}
-   * object.
+   * The choices configuration {path: {value: label}} object,
+   * where *path* is the property select choice path.
    *
-   * @property choices {Object}
+   * @property valueChoices {Object}
    */
-  choices: Object;
+  valueChoices: Object;
 
   constructor() {
     this.dataModel = parse(dataModel);
     this.preferences = parse(preferences);
-    this.choices = parse(choices);
+    this.valueChoices = parse(valueChoices);
   }
 }

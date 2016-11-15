@@ -115,7 +115,7 @@ export class PropertyTableComponent implements OnInit {
     let isPublic = (k) => !k.startsWith('_');
     // The public properties.
     let publicProps = _.keys(this.object).filter(isPublic);
-    // Ignores the excludes, parent references and invalid properties.
+    // Ignore the excludes, parent references and invalid properties.
     let isDisplayable = k => this.isDisplayable(k);
     // The displayable properties.
     let selected = publicProps.filter(isDisplayable);
@@ -230,7 +230,7 @@ export class PropertyTableComponent implements OnInit {
    * @return {boolean} whether the property should be displayed
    */
   private isDisplayable(key: string) {
-    if (this.exclude && _.includes(this.exclude, key)) {
+    if (_.includes(this.exclude, key)) {
       return false;
     }
     let value = this.object[key];

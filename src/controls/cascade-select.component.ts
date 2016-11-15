@@ -26,21 +26,21 @@ export class CascadeSelectComponent implements OnInit, OnChanges {
    * The initial selection path for this chooser and the cascaded
    * child choosers.
    *
-   * @property selectionPath {string[]}
+   * @property path {string[]}
    */
-  @Input() set selectionPath(value: string | string[]) {
-    this._selectionPath = _.isString(value) ? value.split('.') : value;
+  @Input() set path(value: string | string[]) {
+    this._path = _.isString(value) ? value.split('.') : value;
   }
 
   /**
    * The cascaded selection path change event.
    *
-   * @property selectionChange {EventEmitter<any>}
+   * @property pathChange {EventEmitter<any>}
    */
-  @Output() selectionChange: EventEmitter<any> = new EventEmitter(true);
+  @Output() pathChange: EventEmitter<any> = new EventEmitter(true);
 
-  get selectionPath(): string[] {
-    return this._selectionPath;
+  get path(): string[] {
+    return this._path;
   }
 
   /**
@@ -64,13 +64,13 @@ export class CascadeSelectComponent implements OnInit, OnChanges {
 
   /**
    * The internal
-   * {{#crossLink "CascadeSelectComponent/selectionPath:property"}}{{/crossLink}}
+   * {{#crossLink "CascadeSelectComponent/path:property"}}{{/crossLink}}
    * representation.
    *
-   * @property _selectionPath {string[]}
+   * @property _path {string[]}
    * @private
    */
-  private _selectionPath: string[];
+  private _path: string[];
 
   constructor() {}
 
@@ -81,10 +81,10 @@ export class CascadeSelectComponent implements OnInit, OnChanges {
    * @method ngOnChanges
    */
   ngOnInit() {
-    if (_.isEmpty(this.selectionPath)) {
+    if (_.isEmpty(this.path)) {
       this.selection = _.keys(this.choices)[0];
     } else {
-      this.selection = this.selectionPath[0];
+      this.selection = this.path[0];
     }
     this.onSelect(true);
   }
@@ -151,7 +151,7 @@ export class CascadeSelectComponent implements OnInit, OnChanges {
    */
   onChildSelect(value: string) {
     let path = `${ this.selection }.${ value }`;
-    this.selectionChange.emit(path);
+    this.pathChange.emit(path);
   }
 
   /**
@@ -185,7 +185,7 @@ export class CascadeSelectComponent implements OnInit, OnChanges {
     if (_.isPlainObject(value)) {
       this.childChoices = value;
     } else {
-      this.selectionChange.emit(this.selection);
+      this.pathChange.emit(this.selection);
     }
   }
 }

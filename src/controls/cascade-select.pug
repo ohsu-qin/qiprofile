@@ -15,8 +15,8 @@
 // Note that the select (change) must specify $event.target.value.
 // "onSelectChange($event)" results in the following error:
 //   The selection choice is not recognized: [object Event]
-// By contrast, the child (selectionChange) must specify $event.
-// (selectionChange)="onChildSelect($event.target.value)" results
+// By contrast, the child (pathChange) must specify $event.
+// (pathChange)="onChildSelect($event.target.value)" results
 // in the following error:
 //   Cannot read property 'value' of undefined
 // These errors occur deep in the byzantine Angular internal compiled
@@ -34,6 +34,6 @@ select((change)="onSelectChange($event.target.value)")
 qi-cascade-select(
   *ngIf="childChoices",
   [choices]="childChoices",
-  [selectionPath]="selectionPath.slice(1)",
-  (selectionChange)="onChildSelect($event)"
+  [path]="path.slice(1)",
+  (pathChange)="onChildSelect($event)"
 )

@@ -7,7 +7,7 @@
       td {{ tumor.tnm | tnmStage | romanize }}
       td.qi-transparent([ngSwitch]="subject.collection")
         button.btn.btn-med.tnm-stage-help-btn.qi-profile-btn(
-          (click)="tnmStageHelp()"
+          (click)="openTNMStageHelp()"
         )
           .glyphicon.glyphicon-question-sign
 

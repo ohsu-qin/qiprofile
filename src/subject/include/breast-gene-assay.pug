@@ -7,7 +7,10 @@
     tr
       th Recurrence Score
       td {{ tumor.geneticExpression.normalizedAssay.recurrenceScore }}
-      td.qi-transparent(ng-click="openAssayHelp()")
+      td.qi-transparent(ng-click="openRecurrenceScoreHelp()")
         .glyphicon.glyphicon-question-sign
 
-  qi-property-table([object]="assay")
+  qi-property-table(
+    [object]="tumor.geneticExpression.normalizedAssay",
+    [exclude]="recurrenceScore"
+  )

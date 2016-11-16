@@ -120,7 +120,7 @@ export class SubjectComponent extends PageComponent {
    * @method tnmStageHelp
    * @raise {Error} if the collection does not have help
    */
-  tnmStageHelp() {
+  openTNMStageHelp() {
     let help;
     if (this.subject.collection === 'Breast') {
       help = breastTnmStageHelp;
@@ -144,7 +144,21 @@ export class SubjectComponent extends PageComponent {
    *
    * @method dosageAmountHelp
    */
-  dosageAmountHelp() {
+  openRecurrenceScoreHelp() {
+    this.modal.alert()
+      .size('med')
+      .showClose(true)
+      .title('Dosage Amount')
+      .body(dosageAmountHelp)
+      .open();
+  }
+
+  /**
+   * Shows the dosage amount help pop-up.
+   *
+   * @method dosageAmountHelp
+   */
+  openDosageAmountHelp() {
     this.modal.alert()
       .size('med')
       .showClose(true)

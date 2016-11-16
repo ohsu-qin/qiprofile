@@ -18,6 +18,7 @@ import { SubjectService } from './subject.service.ts';
 import help from './subject.help.md';
 import breastTnmStageHelp from '../clinical/breast-tnm-stage.help.md';
 import sarcomaTnmStageHelp from '../clinical/sarcoma-tnm-stage.help.md';
+import recurrenceScoreHelp from '../clinical/recurrence-score.help.md';
 import dosageAmountHelp from '../clinical/dosage-amount.help.md';
 
 @Component({
@@ -62,7 +63,7 @@ export class SubjectComponent extends PageComponent {
 
   /**
    * The {property: label} associative object, where *property*
-   * is the property path relative to the subject.
+   * is an atomic simple property (as opposed to a path).
    *
    * @property labelLookup {Object}
    * @private
@@ -72,8 +73,7 @@ export class SubjectComponent extends PageComponent {
   constructor(
     private router: Router, private route: ActivatedRoute,
     vcRef: ViewContainerRef, overlay: Overlay, private modal: Modal,
-    service: SubjectService,
-    configService: ConfigurationService,
+    service: SubjectService, configService: ConfigurationService,
     changeDetector: ChangeDetectorRef
   ) {
     super(help);
@@ -148,8 +148,8 @@ export class SubjectComponent extends PageComponent {
     this.modal.alert()
       .size('med')
       .showClose(true)
-      .title('Dosage Amount')
-      .body(dosageAmountHelp)
+      .title('Recurrence Score')
+      .body(recurrenceScoreHelp)
       .open();
   }
 
@@ -181,7 +181,8 @@ export class SubjectComponent extends PageComponent {
    * @param property {string} the property name
    */
   getLabel(property: string): string {
-    return this.labelLookup[property] || StringHelper.labelize(property);
+    let atomic = _.last(property.split('.'));
+    return this.labelLookup[atomic] || StringHelper.labelize(atomic);
   }
 
   /**
@@ -199,27 +200,36 @@ export class SubjectComponent extends PageComponent {
 
   private createLabelLookup(dataModel) {
     // Returns whether the label is not a key in the dataModel.
-    let isLeaf = (prop, label) => !(label in dataModel);
-    // Collect the section leaf items.
-    let accumLeaves = section => _.pickBy(section, isLeaf);
-    let leaves = _.values(dataModel).map(accumLeaves);
+    let isAtomic = (prop, label) => !(label in dataModel);
+    // Collect the section non-aggregate items.
+    let accumAtomic = section => {
+      // Include only the atomic section entries.
+      let atomic = _.pickBy(section, isAtomic);
+      // Convert each property path to its final property.
+      let simplify = path => _.last(path.split('.'));
+      return _.mapValues(atomic, simplify);
+    };
 
-    // Remove ambiguous {property: label} associations.
-    let isAmbiguous = (prop, label) => {
-      let match = section => {
-        let other = section[label];
-        return other && other != prop;
-      }
-      return _.some(leaves, match);
-    }
-    let removeAmbiguous = section => _.remove(section, isAmbiguous);
-    _.forEach(leaves, removeAmbiguous);
+    // The array of atomic {label: property} sections.
+    let sections = _.values(dataModel).map(accumAtomic);
+    // The [[label, property], ...] pairs.
+    let allPairs = _.flow(_.map, _.flatten)(sections, _.toPairs);
+    // The {property: pairs} groups.
+    let groups = _.flow(_.groupBy, _.values)(allPairs, _.last);
+    // Remove duplicate pairs within groups.
+    let uniquePairs = pairs => _.uniqBy(pairs, _.first);
+    let consolidated = _.map(groups, uniquePairs);
 
-    // Collect the section {label: property} items into
-    // a flat {property: label} lookup.
-    let accumInverse = (accum, section) =>
-      _.assign(accum, _.invert(section));
+    // A pairs group is unique if it has only one pair.
+    let isUnique = group => group.length === 1;
+    // The unique atomic [label, property] pairs.
+    let unambiguousPairs = _.flow(_.filter, _.values, _.flatten)(
+      consolidated, isUnique
+    );
+    // The unambiguous atomic {label: property} lookup.
+    let labelPropLookup = _.fromPairs(unambiguousPairs);
 
-    return _.reduce(leaves, accumInverse, {});
+    // Return the unambiguous atomic {property: label} lookup.
+    return _.invert(labelPropLookup);
   }
 }

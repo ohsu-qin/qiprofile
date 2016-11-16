@@ -1,16 +1,19 @@
 .qi-table-title Normalized Assay
 
 .qi-panel.qi-nested
-  table.table.qi-table.qi-bottom-buffer(
+  table.table.qi-table.qi-spaced-table(
     *ngIf="has(tumor.geneticExpression.normalizedAssay.recurrenceScore)"
   )
     tr
       th Recurrence Score
       td {{ tumor.geneticExpression.normalizedAssay.recurrenceScore }}
-      td.qi-transparent(ng-click="openRecurrenceScoreHelp()")
-        .glyphicon.glyphicon-question-sign
+      td.qi-transparent
+        button.btn.btn-med.qi-profile-btn(
+          (click)="openRecurrenceScoreHelp()"
+        )
+          .glyphicon.glyphicon-question-sign
 
   qi-property-table(
     [object]="tumor.geneticExpression.normalizedAssay",
-    [exclude]="recurrenceScore"
+    [exclude]="recurrenceScore", [label]="label"
   )

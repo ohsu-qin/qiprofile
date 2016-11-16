@@ -5,8 +5,8 @@
     tr
       th Stage
       td {{ tumor.tnm | tnmStage | romanize }}
-      td.qi-transparent([ngSwitch]="subject.collection")
-        button.btn.btn-med.tnm-stage-help-btn.qi-profile-btn(
+      td.qi-transparent
+        button.btn.btn-med.qi-profile-btn(
           (click)="openTNMStageHelp()"
         )
           .glyphicon.glyphicon-question-sign
@@ -14,7 +14,7 @@
   .qi-vertical-space(*ngIf="has(tumor.tnm.grade)")
     include grade
 
-  table.table.table.qi-table.qi-spaced-table.qi-vertical-space
+  table.table.qi-table.qi-vertical-space
     tr
       th Size
       td {{ tumor.tnm.size | tnmSize }}

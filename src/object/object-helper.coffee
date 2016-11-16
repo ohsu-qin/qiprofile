@@ -28,7 +28,8 @@ _hasValidContent = (value) ->
     _.isFinite(value)
   else if _.isArrayLike(value) or _.isObjectLike(value)
     _.some(value, _hasValidContent)
-
+  else
+    true
 
 ###*
  * The static ObjectHelper utility.

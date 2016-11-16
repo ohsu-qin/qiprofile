@@ -112,16 +112,16 @@ export class PropertyTableComponent implements OnInit {
 
   ngOnInit() {
     // Private properties start with _.
-    let isPublic = (k) => !k.startsWith('_');
+    let isPublic = (key) => !key.startsWith('_');
     // The public properties.
     let publicProps = _.keys(this.object).filter(isPublic);
     // Ignore the excludes, parent references and invalid properties.
-    let isDisplayable = k => this.isDisplayable(k);
+    let isDisplayable = key => this.isDisplayable(key);
     // The displayable properties.
     let selected = publicProps.filter(isDisplayable);
     // Add back unconditional includes.
     let include = this.include || [];
-    let others = _.reject(include, k => _includes(selected, k));
+    let others = _.reject(include, key => _.includes(selected, key));
     // The candidate keys sorted by name.
     let keys = _.concat(selected, others).sort();
     // Is the value a string, boolean, number or null?
@@ -129,17 +129,21 @@ export class PropertyTableComponent implements OnInit {
     // Is the value an array of atomic items?
     let isSimpleArray = value => _.isArray(value) && _.every(value, isAtomic);
     // A simple value is atomic or an array of simple values.
-    let isSimple = value => isAtomic(value) || isSimpleArray(value);
+    let isSimple = key => {
+      let value = this.object[key];
+      return isAtomic(value) || isSimpleArray(value);
+    }
     // Split the candidate keys into simple and composite.
-    let partition = _.partition(keys, isSimple);
+    let [simple, composite] = _.partition(keys, isSimple);
+
     // The non-object candidate keys.
-    this.simpleKeys = partition[0];
+    this.simpleKeys = simple;
     // If the expand property is not set to false, then set the
     // composite candidate keys.
     if (this.expand === false) {
       this.compositeKeys = [];
     } else {
-      this.compositeKeys = partition[1];
+      this.compositeKeys = composite;
     }
     // Tell Angular to digest the change.
     this.changeDetector.markForCheck();

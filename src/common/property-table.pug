@@ -9,7 +9,7 @@ div(*ngIf="hasContent()")
       td {{ getDisplayValue(key) }}
 
   // The nested tables.
-  .qi-bottom-buffer(*ngFor="let key of compositeKeys")
+  .qi-vertical(*ngFor="let key of compositeKeys")
     qi-property-table(
       *ngFor="let child of children(key)",
       [object]="child", [parent]="object", [label]="label",

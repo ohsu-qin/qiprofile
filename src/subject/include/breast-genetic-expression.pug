@@ -2,7 +2,7 @@
 
 .qi-panel.qi-nested
   table.table.qi-table.qi-vertical-space(
-    *ngIf="has(tumor.geneticExpression.her2NeuIhc) || has(tumor.geneticExpression.her2NeuFish) || has(tumor.geneticExpression.ki67)"
+    *ngIf="has(tumor.geneticExpression)"
   )
     tr(*ngIf="has(tumor.geneticExpression.her2NeuIhc)")
       th HER2 NEU IHC

@@ -1,10 +1,11 @@
-The Intensity Tracker depicts the intensity at the current coordinate
-over time. The voxel intensity values at the coordinate are shown as
-both a line and a color bar for each visited time point.
+The Time Point Intensity Gradient depicts the intensity at the current
+coordinate over the successive scan volume time points. The voxel
+intensity values at the coordinate are shown as both a line and a
+color bar for each visited time point.
 
 Time points which have not yet been visited are omitted. Thus, when
-the Time Series Detail page is first opened, the line is not shown
-since it only has one time point, and the color bar shows a single
+this Volume Detail page is first opened, the line is not shown
+since it has only one time point, and the color bar shows a single
 color. Clicking on the Time Point play button will progressively
 show the additional time point intensities as the volumes are loaded.
 Gaps in the loaded volumes appear as gaps in the line and color bar.

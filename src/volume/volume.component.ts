@@ -9,7 +9,8 @@ import { PapayaService } from '../image/papaya.service.ts';
 import { ImageSequenceService } from '../session/image-sequence.service.ts';
 import { VolumeService } from './volume.service.ts';
 import help from './volume.help.md';
-import intensityHelp from './intensity.help.md';
+import physicalIntensityHelp from './physical-intensity.help.md';
+import timePointIntensityHelp from './time-point-intensity.help.md';
 
 @Component({
   selector: 'qi-volume',
@@ -100,8 +101,8 @@ export class VolumeComponent extends PageComponent {
    * @property physicalIntensitiesLegend {Object}
    */
   physicalIntensitiesLegend = {
-    axial: 'R-L',
-    coronal: 'P-A',
+    axial: 'L-R',
+    coronal: 'A-P',
     sagittal: 'I-S'
   };
 
@@ -421,16 +422,30 @@ export class VolumeComponent extends PageComponent {
   }
 
   /**
-   * Shows the Intensity Tracker modal help pop-up.
+   * Shows the Physical Intensity Gradient modal help pop-up.
    *
-   * @method intensityHelp
+   * @method openPhysicalIntensityHelp
    */
-  intensityHelp() {
+  openPhysicalIntensityHelp() {
     this.modal.alert()
       .size('med')
       .showClose(true)
-      .title('Intensity Tracker')
-      .body(intensityHelp)
+      .title('Physical Intensity Gradient')
+      .body(physicalIntensityHelp)
+      .open();
+  }
+
+  /**
+   * Shows the Time Point Intensity Gradient modal help pop-up.
+   *
+   * @method openTimePointIntensityHelp
+   */
+  openTimePointIntensityHelp() {
+    this.modal.alert()
+      .size('med')
+      .showClose(true)
+      .title('Time Point Intensity Gradient')
+      .body(timePointIntensityHelp)
       .open();
   }
 
@@ -551,7 +566,7 @@ export class VolumeComponent extends PageComponent {
    * @private
    * @static
    */
-  private static const PHYSICAL_GRADIENT_DOMAIN = _.range(50, -51, -1);
+  private static const PHYSICAL_GRADIENT_DOMAIN = _.range(-50, 51);
 
   /**
    * Makes the _coordinate_ => {_orientation_: _intensities_, ...}
@@ -583,7 +598,7 @@ export class VolumeComponent extends PageComponent {
     let sagittalValueFunction = (coordinate, dz) => {
       let x = coordinate.x;
       let y = coordinate.y;
-      let z = coordinate.z + dz;
+      let z = coordinate.z - dz;
       return z < 0 ? null : this.papaya.getVoxelValueAt(x, y, z);
     };
 

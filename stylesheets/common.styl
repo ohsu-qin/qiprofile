@@ -100,14 +100,12 @@ ul.qi-clean-list
   top 0
 
 // Add some vertical space between successive elements.
-.qi-vertical-space
-  & + .qi-vertical-space
-    margin-top 0.5em
+.qi-vertical-space + .qi-vertical-space
+  margin-top 0.5em
 
 // Add some horizontal space between successive elements.
-.qi-horizontal-space
-  & + .qi-horizontal-space
-    margin-left 0.5em
+.qi-horizontal-space + .qi-horizontal-space
+  margin-left 0.5em
 
 .qi-inline
   display inline-block
@@ -175,11 +173,11 @@ ul.qi-clean-list
     background-color DarkTurquoise
     & .qi-nested
       background-color PaleTurquoise
-      & > .qi-nested
+      & .qi-nested
         background-color LightSeaGreen
-        & > .qi-nested
+        & .qi-nested
           background-color Azure
-          & > .qi-nested
+          & .qi-nested
             background-color DarkTurquoise
 
 // The nested panel style adds an offset.

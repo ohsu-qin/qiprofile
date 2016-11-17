@@ -8,11 +8,11 @@ div(ng-switch="modelings.length")
     // scope for the modeling info modal pop-up. The repeat block
     // includes the title in order to display the button on the same
     // line as the title.
-    .qi-left-buffer.qi-bottom-buffer(*ngFor="let modeling in modelings")
+    .qi-left-space.qi-bottom-space(*ngFor="let modeling in modelings")
       span.qi-inset-title Modeling Input Parameters:
       include modeling-info-btn
   div(ng-switch-default)
-    form.qi-left-buffer.qi-bottom-buffer(name='modelingSelect')
+    form.qi-left-space.qi-bottom-space(name='modelingSelect')
       span.qi-inset-title Modeling Input Parameters:
       // The radio row fortuitously aligns next to the title. It is not
       // known why it does not align below the title. See the

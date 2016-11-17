@@ -1,4 +1,19 @@
 h4.qi-profile-heading Imaging Profile
-.panel-group.qi-profile-panel
-  include timeline
+.qi-panel
+  //- include timeline
   include modeling
+
+.qi-panel
+  // Note: even though expandAll is set to true, each
+  // accordion group must also set isOpened to true
+  // (cf. https://github.com/pleerock/ng2-accordion/issues/13).
+  accordion([showArrows]=true, [expandAll]=true)
+    accordion-group([heading]="'Demographics'")
+      include demographics
+
+    // Iterate over the encounters to include the encounter partial.
+    accordion-group(
+      *ngFor="let encounter of subject.clinicalEncounters",
+      [heading]="encounter.title", [isOpened]=true
+    )
+      include encounter

@@ -1,15 +1,15 @@
 div(*ngIf="hasContent()")
   // The optional table title.
-  .qi-table-title(*ngIf="title") {{ title }}
+  span.qi-table-title(*ngIf="title") {{ title }}
 
   // The table of simple values, e.g. numbers and strings.
-  table.table.qi-table
+  table.table.qi-table.qi-vertical-space
     tr(*ngFor="let key of simpleKeys")
       th {{ getLabel(key) }}
       td {{ getDisplayValue(key) }}
 
   // The nested tables.
-  .qi-vertical(*ngFor="let key of compositeKeys")
+  .qi-vertical-space(*ngFor="let key of compositeKeys")
     qi-property-table(
       *ngFor="let child of children(key)",
       [object]="child", [parent]="object", [label]="label",

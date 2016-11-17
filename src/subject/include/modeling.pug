@@ -1,20 +1,39 @@
 // The modeling results.
-.panel.panel-default(*ngIf="modelings.length > 0"
-                     ng-controller='SubjectModelingCtrl')
+.panel.panel-default(*ngIf="has(modelings)")
   .panel-heading
     h4.panel-title Pharmokinetic Modeling
-      button#modeling-format-btn.btn.btn-med.qi-profile-btn(
-        *ngIf='subject.isMultiSession()'
-        ng-click='toggleModelingFormat()'
-      )
-        // TODO - use the fontawesome bar-chart and list-ul icons instead.
-        .glyphicon.glyphicon-list(*ngIf="modelingFormat == 'chart'")
-        .glyphicon.glyphicon-stats(*ngIf="modelingFormat == 'table'")
-      button#pk-modeling-help-btn.btn.btn-med.qi-profile-btn(ng-controller='PkModelingHelpCtrl',
-        ng-click="open()"
+      //- button#modeling-format-btn.btn.btn-med.qi-btn.qi-minihelp-btn(
+      //-   *ngIf='subject.isMultiSession()'
+      //-   ng-click='toggleModelingFormat()'
+      //- )
+      //-   // TODO - use the fontawesome bar-chart and list-ul icons instead.
+      //-   .glyphicon.glyphicon-list(*ngIf="modelingFormat == 'chart'")
+      //-   .glyphicon.glyphicon-stats(*ngIf="modelingFormat == 'table'")
+      button.btn.btn-med.qi-btn.qi-minihelp-btn(
+          (click)="openModelingHelp()"
         )
-        .glyphicon.glyphicon-question-sign
+          .glyphicon.glyphicon-question-sign
   .panel-collapse
     .panel-body
       include modeling-selection
       include modeling-parameters
+
+//- .panel.panel-default(*ngIf="modelings.length > 0"
+//-                      ng-controller='SubjectModelingCtrl')
+//-   .panel-heading
+//-     h4.panel-title Pharmokinetic Modeling
+//-       button#modeling-format-btn.btn.btn-med.qi-btn.qi-minihelp-btn(
+//-         *ngIf='subject.isMultiSession()'
+//-         ng-click='toggleModelingFormat()'
+//-       )
+//-         // TODO - use the fontawesome bar-chart and list-ul icons instead.
+//-         .glyphicon.glyphicon-list(*ngIf="modelingFormat == 'chart'")
+//-         .glyphicon.glyphicon-stats(*ngIf="modelingFormat == 'table'")
+//-       button#pk-modeling-help-btn.btn.btn-med.qi-btn.qi-minihelp-btn(ng-controller='PkModelingHelpCtrl',
+//-         ng-click="open()"
+//-         )
+//-         .glyphicon.glyphicon-question-sign
+//-   .panel-collapse
+//-     .panel-body
+//-       include modeling-selection
+//-       include modeling-parameters

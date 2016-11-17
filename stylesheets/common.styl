@@ -30,11 +30,6 @@
 .qi-align-top
   vertical-align top
 
-// Center an element. Use .qi-text-center to center text.
-.qi-center
-  margin-left auto
-  margin-right auto
-
 // Impart table cell mojo without the table structural cruft.
 .qi-cell
   display table-cell
@@ -74,30 +69,20 @@ ul.qi-clean-list
   border 1px solid Lavender
 
 // Make some room at the top.
-.qi-top-buffer
+.qi-top-space
   margin-top 0.5em
 
 // Make some room at the left.
-.qi-left-buffer
+.qi-left-space
   margin-left 0.5em
 
 // Make some room at the right.
-.qi-right-buffer
+.qi-right-space
   margin-right 0.5em
 
 // Make some room at the bottom.
-.qi-bottom-buffer
+.qi-bottom-space
   margin-bottom 0.5em
-
-// Align at the bottom.
-.qi-bottom
-  position absolute
-  bottom 0
-
-// Align at the top.
-.qi-top
-  position absolute
-  top 0
 
 // Add some vertical space between successive elements.
 .qi-vertical-space + .qi-vertical-space
@@ -119,11 +104,17 @@ ul.qi-clean-list
   border 0
   background-color Moccasin
   &:hover
-    background-color Peru
+    background-color Chocolate
     cursor pointer
   &:focus, &:active
     outline none
     background-color Moccasin
+
+// A mini-help button is placed to the right of the
+// reference element. This style augments .qi-btn
+// to reduce the button size by padding the icon text.
+.qi-minihelp-btn
+  padding 0.2em
 
 // Override .qi-btn to change the colors and preserve
 // highlighting on click.
@@ -165,10 +156,10 @@ ul.qi-clean-list
   border-radius: 0.4em
   margin 2px
 
-// The table panel style adds background color
-// to offset the table. Nested tables have
-// distinguishing colors.
-.qi-table-panel
+  // Table body is a Bootstrap accordion style.
+  // Thus, any accordion panel within a .qi-panel
+  // will be a context for the .qi-nested style
+  // to take effect.
   & .panel-body
     background-color DarkTurquoise
     & .qi-nested
@@ -180,7 +171,7 @@ ul.qi-clean-list
           & .qi-nested
             background-color DarkTurquoise
 
-// The nested panel style adds an offset.
+// The nested style adds an offset.
 .qi-nested
   padding 0.5em
 
@@ -271,6 +262,16 @@ ul.qi-horizontal-list
 .qi-vertical
   height 100%
 
+// Align at the top.
+.qi-top
+  position absolute
+  top 0
+
+// Align at the bottom.
+.qi-bottom
+  position absolute
+  bottom 0
+
 .qi-left
   position absolute
   left 0
@@ -278,6 +279,13 @@ ul.qi-horizontal-list
 .qi-right
   position absolute
   right 0
+
+// A general-purpose style for centering a div within
+// a div without prescribing a fixed width is surprisingly
+// elusive. The incantation below seems to do the trick.
+.qi-center
+  display table
+  margin 0 auto
 
 qi-correlation > qi-cascade-select
   display inline-block

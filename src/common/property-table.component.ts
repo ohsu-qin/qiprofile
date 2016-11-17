@@ -132,7 +132,7 @@ export class PropertyTableComponent implements OnInit {
     let isSimple = key => {
       let value = this.object[key];
       return isAtomic(value) || isSimpleArray(value);
-    }
+    };
     // Split the candidate keys into simple and composite.
     let [simple, composite] = _.partition(keys, isSimple);
 

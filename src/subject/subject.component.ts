@@ -19,6 +19,7 @@ import help from './subject.help.md';
 import breastTnmStageHelp from '../clinical/breast-tnm-stage.help.md';
 import sarcomaTnmStageHelp from '../clinical/sarcoma-tnm-stage.help.md';
 import recurrenceScoreHelp from '../clinical/recurrence-score.help.md';
+import rcbHelp from '../clinical/breast-rcb.help.md';
 import dosageAmountHelp from '../clinical/dosage-amount.help.md';
 
 @Component({
@@ -140,9 +141,9 @@ export class SubjectComponent extends PageComponent {
   }
 
   /**
-   * Shows the dosage amount help pop-up.
+   * Shows the recurrence score help pop-up.
    *
-   * @method dosageAmountHelp
+   * @method openRecurrenceScoreHelp
    */
   openRecurrenceScoreHelp() {
     this.modal.alert()
@@ -154,9 +155,23 @@ export class SubjectComponent extends PageComponent {
   }
 
   /**
+   * Shows the RCB help pop-up.
+   *
+   * @method openRCBHelp
+   */
+  openRCBHelp() {
+    this.modal.alert()
+      .size('med')
+      .showClose(true)
+      .title('Residual Cancer Burden')
+      .body(rcbHelp)
+      .open();
+  }
+
+  /**
    * Shows the dosage amount help pop-up.
    *
-   * @method dosageAmountHelp
+   * @method openDosageAmountHelp
    */
   openDosageAmountHelp() {
     this.modal.alert()

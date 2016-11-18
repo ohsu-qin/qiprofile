@@ -24,7 +24,10 @@ MONGODB_PORT = 27017
 QIREST_PORT = 5000
 
 # The grunt build tasks place all compiled and copied files within
-# the public directory.
+# the public directory. However, jspm and the test environment
+# expect files in the parent directory. Therefore, we make the
+# parent directory the root and qualify the HTML with the
+# public subdirectory.
 root = path.join(__dirname, '..')
 
 # The REST request handler.
@@ -46,7 +49,7 @@ defaultLogFile = ->
     '/var/log/qiprofile.log'
   catch err
     './log/qiprofile.log'
- 
+
 # The log file is either set in the environment or defaults to
 # log/qiprofile.log in the current directory.
 relLogFile = app.get('log') or defaultLogFile()
@@ -111,7 +114,7 @@ app.get '/*', (req, res) ->
     headers:
       'x-timestamp': Date.now()
       'x-sent': true
-    
+
   res.sendFile file, options, (err) ->
     if err
       console.log(err)
@@ -170,7 +173,7 @@ start_app = ->
   restMode = if env is 'test' then 'development' else env
   # The REST server command.
   qirest = if restMode? then "qirest --#{ restMode }" else 'qirest'
-  
+
   # The callback after the REST server is started.
   start_eve = ->
     # The server port.
@@ -184,7 +187,7 @@ start_app = ->
       env = app.settings.env
       console.log "The qiprofile server is listening on port #{ port }" +
                   " in #{ env } mode."
-  
+
   # Start the REST app without logging to the console.
   spawn(qirest, QIREST_PORT, start_eve, {silent: true})
 

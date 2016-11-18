@@ -28,9 +28,9 @@ will install the most recent 1.x version, but not a 2.x version.
 See the *Development* section below for adding a new dependency.
 
 
-*****
-Setup
-*****
+************
+Installation
+************
 
 1. Follow the `qiprofile installation instructions`_, omitting the
    ``--production`` option.
@@ -39,28 +39,15 @@ Setup
 
        npm install -g grunt-cli
 
-3. Run the following in a console from the ``qiprofile`` directory::
+The web application can be rebuilt by running the following
+Grunt_ script::
 
-       npm install
+    grunt
 
-   This command installs the necessary packages [#xtk_fork]_.
+The default Grunt task builds the project. The following command
+lists the available Grunt tasks::
 
-4. Run the following Grunt_ script::
-
-       grunt
-
-   The default Grunt task builds the project. The following command
-   lists the available Grunt tasks::
-
-       grunt --help
-
-
-***
-API
-***
-
-The ``grunt`` default build task builds the API documentation at
-``build/doc/api/index.html`` in the project workspace.
+    grunt --help
 
 
 ******
@@ -77,6 +64,14 @@ A major upgrade is most easily accomplished by running
 ``npm reinstall`` rather than ``npm install``. Note that reinstall
 is a destructive operation which deletes and reinstalls all
 npm packages and updates the local qirest_ conda environment.
+
+
+***
+API
+***
+
+The ``grunt`` default build task builds the API documentation at
+``build/doc/api/index.html`` in the project workspace.
 
 
 ***********
@@ -785,12 +780,6 @@ The test image files conform to the XNAT file location convention, e.g.::
 
 .. rubric:: Footnotes
 
-.. [#xtk_fork]
-  Note that XTK_ is not packaged for Bower_ or npm_. The `XTK Bower Fork`_
-    remedies this omission. The qiprofile ``bower.json`` definition file
-    specifies this GitHub fork. The ``edge`` XTK version is used, following
-    the recommendation on the XTK_ home page.
-
 .. [#midway]
    The ngMidwayTester_ purports to offer a testing solution intermediate
    to unit and end-to-end testing. However, this package was evalutated
@@ -807,8 +796,6 @@ The test image files conform to the XNAT file location convention, e.g.::
 .. Targets:
 
 .. _angular-app: https://github.com/angular-app/angular-app
-
-.. _Bower: https://bower.io/
 
 .. _Chai: http://chaijs.com/
 
@@ -866,12 +853,6 @@ The test image files conform to the XNAT file location convention, e.g.::
 
 .. _SemVer: http://semver.org/
 
-.. _Writing AngularJS Documentation: https://github.com/angular/angular.js/wiki/Writing-AngularJS-Documentation
-
 .. _XHR: https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest
-
-.. _XTK: http://www.goXTK.com
-
-.. _XTK Bower Fork: https://www.github.com/FredLoney/get
 
 .. _YUIDoc: http://yui.github.io/yuidoc/

@@ -30,9 +30,21 @@ Installation
 
 1. Install a REST_ server, if necessary.
 
+2. Install Git_, if necessary.
+
+3. Make a directory to hold your git repository, if necessary, e.g.::
+
+      mkdir -p ~/workspaces
+      cd ~/workspaces
+
+3. Clone the qiprofile GitHub repository, e.g.::
+
+      git clone https://github.com/ohsu-qin/qiprofile
+      cd qiprofile
+
 2. Download npm_.
 
-3. Run the following in a console from the ``qiprofile`` directory
+3. Run the following in a console from the repository directory
    (omit the ``--production`` flag for a development installation)::
 
        npm install --production
@@ -53,7 +65,11 @@ Usage
 
 3. Run the following command to start the web application server::
 
-     qiprofile
+     ./bin/qiprofile
+
+4. Once you have a database, e.g. the `Developer Guide`_ demo seed
+   database, then the landing page is *host:``:3000/qiprofile/``,
+   where *host* is the web application host URL.
 
 See the `Developer Guide`_ for starting a development server.
 

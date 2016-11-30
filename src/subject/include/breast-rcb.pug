@@ -16,5 +16,6 @@ button.btn.btn-med.qi-btn.qi-minihelp-btn(
       td {{ tumor.rcb.class }}
   // RCB parameters.
   qi-property-table.qi-spaced-table(
-    [object]="tumor.rcb", [exclude]=['tumor'], [label]="label"
+    [object]="tumor.rcb", [exclude]=['tumor'], [label]="label",
+    [path]="'subject.biopsy.pathology.tumors[0].rcb'",
   )

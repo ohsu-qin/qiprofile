@@ -26,7 +26,7 @@ export class CorrelationComponent implements OnInit {
   /**
    * This input domain filter is relayed from this component
    * to the embedded
-   * {{#crossLink "ScatterPlotDirective/selection:property}}{{/crossLink}}.
+   * {{#crossLink "ScatterPlotDirective/selection:property"}}{{/crossLink}}.
    *
    * @property domainSelection {boolean[]}
    */
@@ -129,13 +129,13 @@ export class CorrelationComponent implements OnInit {
 
   /**
    * Sets the initial
-   * {{#crossLink "CorrelationComponent/x:property}}{{/crossLink}}
+   * {{#crossLink "CorrelationComponent/x:property"}}{{/crossLink}}
    * and
-   * {{#crossLink "CorrelationComponent/y:property}}{{/crossLink}}
+   * {{#crossLink "CorrelationComponent/y:property"}}{{/crossLink}}
    * property paths and the
-   * {{#crossLink "CorrelationComponent/xValueChoices:property}}{{/crossLink}}
+   * {{#crossLink "CorrelationComponent/xValueChoices:property"}}{{/crossLink}}
    * and
-   * {{#crossLink "CorrelationComponent/yValueChoices:property}}{{/crossLink}}
+   * {{#crossLink "CorrelationComponent/yValueChoices:property"}}{{/crossLink}}
    * value choices.
    *
    * @method ngOnInit
@@ -163,9 +163,9 @@ export class CorrelationComponent implements OnInit {
 
   /**
    * Updates the
-   * {{#crossLink "CorrelationComponent/x:property}}{{/crossLink}}
+   * {{#crossLink "CorrelationComponent/x:property"}}{{/crossLink}}
    * and
-   * {{#crossLink "CorrelationComponent/xValueChoices:property}}{{/crossLink}}.
+   * {{#crossLink "CorrelationComponent/xValueChoices:property"}}{{/crossLink}}.
    *
    * @method onXChange
    */
@@ -176,9 +176,9 @@ export class CorrelationComponent implements OnInit {
 
   /**
    * Updates the
-   * {{#crossLink "CorrelationComponent/y:property}}{{/crossLink}}
+   * {{#crossLink "CorrelationComponent/y:property"}}{{/crossLink}}
    * and
-   * {{#crossLink "CorrelationComponent/yValueChoices:property}}{{/crossLink}}.
+   * {{#crossLink "CorrelationComponent/yValueChoices:property"}}{{/crossLink}}.
    *
    * @method onYChange
    */

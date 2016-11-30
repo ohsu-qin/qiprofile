@@ -15,5 +15,6 @@ span.qi-table-title Normalized Assay
 
   qi-property-table(
     [object]="tumor.geneticExpression.normalizedAssay",
-    [exclude]="recurrenceScore", [label]="label"
+    [path]="'subject.biopsy.pathology.tumors[0].geneticExpression.normalizedAssay'",
+    [exclude]="recurrenceScore", [label]="getLabel"
   )

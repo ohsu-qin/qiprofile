@@ -1,10 +1,11 @@
 import * as _ from 'lodash';
 import * as d3 from 'd3';
-import moment from 'moment';
 import {
   Directive, Input, Output, ElementRef, EventEmitter,
   OnChanges, SimpleChange
 } from '@angular/core';
+
+import DateHelper from '../date/date-helper.coffee';
 
 @Directive({
   selector: '[qi-scatter-plot]'
@@ -697,11 +698,10 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
     let yAxis = d3.axisLeft(this.yScale);
 
     // Date ticks are formatted as mm/dd/yyyy.
-    let isDate = v => moment.isMoment(v) || moment.isDate(v);
-    if (isDate(this.xDomain[0])) {
+    if (DateHelper.isDate(this.xDomain[0])) {
       xAxis.tickFormat(d3.timeFormat('%m/%d/%Y'));
     }
-    if (isDate(this.yDomain[0])) {
+    if (DateHelper.isDate(this.yDomain[0])) {
       yAxis.tickFormat(d3.timeFormat('%m/%d/%Y'));
     }
 

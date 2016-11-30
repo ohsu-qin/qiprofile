@@ -17,12 +17,12 @@ associate = (accum, session) ->
     if not assocPcl?
       assocPcl = accum[modeling.protocol] = {}
     if not modeling.source?
-      throw new ReferenceError("The modeling object does not reference" +
-                               " a source")
+      throw new ReferenceError('The modeling object does not reference' +
+                               ' a source')
     pairs = _.toPairs(modeling.source)
     if pairs.length > 1
-      throw new ReferenceError("The modeling source references more" +
-                               " than one source type:" +
+      throw new ReferenceError('The modeling source references more' +
+                               ' than one source type:' +
                                " #{ Object.keys(modeling.source) }")
     [srcType, srcId] = pairs[0]
     assocSrc = assocPcl[srcType]
@@ -191,37 +191,16 @@ ModelingResult =
  * @static
 ###
 Modeling =
-# define ['angular', 'lodash', 'resources', 'session'], (ng, _) ->
-#   modeling = ng.module 'qiprofile.modeling', ['qiprofile.resources']
-#
-#   modeling.factory 'Modeling', [ 'ObjectHelper', (ObjectHelper) ->
-
   ###*
-   * @method collect
-   * @param subject the parent subject
-   * @return the modeling [{source, results}] array, where
-   *   each source value is a {source type: source id}
-   *   object and the results are the modeling results in
-   *   session number order.
-  ###
-  collect: (subject) ->
-    # Make the {protocol id: {source type: {source id: results}}}
-    # object.
-    assoc = subject.sessions.reduce(associate, {})
-    # Flatten into a [[{protocol, source, results}, ...], ...]
-    # array of arrays partitioned by protocol id.
-    modelingArrays = (
-      flattenBySource(pclId, srcAssoc) for pclId, srcAssoc of assoc
-    )
-    # Flatten into a [{protocol, source, results}, ...] array.
-    _.flatten(modelingArrays)
-
-  ###*
-   * Extends the modeling result as described in
-   * extendModelingResult and adds the following
-   * modeling object properties:
+   * Extends the modeling results as described in
+   * {{#crossLink "ModelingResult/extend"}}{{/crossLink}}
+   * and adds the following modeling object properties:
    * * session - the parent session object reference
    * * overlays - the modeling result overlays
+   * * intensities - the modeling result {param: intensity}
+   *   object
+   * * title - the parent session title followed by the
+   *   modeling resource name
    *
    * @method extend
    * @param modeling the modeling object to extend
@@ -235,6 +214,15 @@ Modeling =
     ModelingResult.extend(modeling.result, modeling)
     # Add the virtual properties.
     Object.defineProperties modeling,
+      ###*
+       * @method intensities
+       * @return the modeling result parameter {name: intensity}
+       *   object
+      ###
+      intensities:
+        get: ->
+          _.mapValues(@result, 'image.metadata.averageIntensity')
+    
       ###*
        * @method overlays
        * @return the modeling results which have an overlay,
@@ -261,35 +249,5 @@ Modeling =
 
     # Return the extended object.
     modeling
-
-  ###*
-   * The property metadata, as follows:
-   * * text - plaintext label
-   * * html - HTML label
-   * * color - recommended HTML color
-   *
-   * @property properties
-  ###
-  properties:
-    fxlKTrans:
-      text: 'FXL Ktrans'
-      html: 'FXL K<sub>trans</sub>'
-      color: 'BurlyWood'
-    fxrKTrans:
-      text: 'FXR Ktrans'
-      html: 'FXR K<sub>trans</sub>'
-      color: 'OliveDrab'
-    deltaKTrans:
-      text: 'Delta Ktrans'
-      html: '&Delta;K<sub>trans</sub>'
-      color: 'DarkGoldenRod'
-    tauI:
-      text: 'tau_i'
-      html: '&tau;<sub>i</sub>'
-      color: 'PaleVioletRed'
-    vE:
-      text: 'v_e'
-      html: 'v<sub>e</sub>'
-      color: 'MediumSeaGreen'
 
 `export { Modeling as default }`

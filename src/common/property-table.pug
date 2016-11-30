@@ -5,13 +5,15 @@ div(*ngIf="hasContent()")
   // The table of simple values, e.g. numbers and strings.
   table.table.qi-table.qi-vertical-space
     tr(*ngFor="let key of simpleKeys")
-      th {{ getLabel(key) }}
+      th
+        span([innerHtml]="getLabel(key)")
       td {{ getDisplayValue(key) }}
 
   // The nested tables.
   .qi-vertical-space(*ngFor="let key of compositeKeys")
     qi-property-table(
-      *ngFor="let child of children(key)",
-      [object]="child", [parent]="object", [label]="label",
-      [title]="getLabel(key)"
+      *ngFor="let child of children(key); let i = index",
+      [object]="child", [parent]="object",
+      [path]="getPath(key, i)",
+      [label]="label", [title]="getLabel(key)"
     )

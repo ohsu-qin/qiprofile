@@ -31,6 +31,16 @@ export class PropertyTableComponent implements OnInit {
   @Input() object: Object;
 
   /**
+   * The property path to the
+   * {{#crossLink "PropertyTableComponent/object:property"}}{{/crossLink}}.
+   * If this input path is set, then it is prepended to each object property
+   * path for label lookup.
+   *
+   * @property path {string}
+   */
+  @Input() path: string;
+
+  /**
    * The optional title displayed above the table.
    *
    * @property title: string
@@ -40,6 +50,14 @@ export class PropertyTableComponent implements OnInit {
   /**
    * The property name => label function, used as described in
    * {{#crossLink "PropertyTableComponent/getLabel"}}{{/crossLink}}.
+   *
+   * The return value can be unescaped HTML, i.e. embedded HTML is
+   * interpreted. For example, `&tau;<sub>i</sub>` displays as
+   * <span>&tau;<sub>i</sub></span>.  A simple string return value
+   * is displayed as the string value. A null or undefined return
+   * is displayed as the
+   * {{#crossLink "PropertyTableComponent/getLabel"}}{{/crossLink}}
+   * default.
    *
    * @property label {function}
    */
@@ -133,9 +151,9 @@ export class PropertyTableComponent implements OnInit {
       let value = this.object[key];
       return isAtomic(value) || isSimpleArray(value);
     };
+
     // Split the candidate keys into simple and composite.
     let [simple, composite] = _.partition(keys, isSimple);
-
     // The non-object candidate keys.
     this.simpleKeys = simple;
     // If the expand property is not set to false, then set the
@@ -154,22 +172,23 @@ export class PropertyTableComponent implements OnInit {
    * {{#crossLink "PropertyTableComponent/simpleKeys:property"}}{{/crossLink}}
    * key. If the
    * {{#crossLink "PropertyTableComponent/label:property"}}{{/crossLink}}
-   * function is set, then that function is called on the key. If there is
-   * a result, then that is the label. The default label is the
-   * humanized, capitalized property name described in
+   * function is set, then that function is called on the key. If there
+   * is a result, then that is the label. Otherwise, the default label
+   * is the humanized, capitalized property name described in
    * {{#crossLink "StringHelper/labelize"}}{{/crossLink}}.
    *
    * @method getLabel
-   * @param {string} the simple key
+   * @param property {string} the child property name (not a path)
    * @return {string} the display value
    */
-  getLabel(key: string) {
+  getLabel(property: string) {
     let label;
     if (this.label) {
-      label = this.label(key);
+      let path = this.getPath(property);
+      label = this.label(path);
     }
     if (!label) {
-      label = StringHelper.labelize(key);
+      label = StringHelper.labelize(property);
     }
 
     return label;
@@ -201,6 +220,7 @@ export class PropertyTableComponent implements OnInit {
    * {{#crossLink "PropertyTableComponent/compositeKeys:property"}}{{/crossLink}}
    * key.
    *
+   * @method children
    * @param {string} the composite key
    * @return {Object[]} the child objects
    */
@@ -210,10 +230,42 @@ export class PropertyTableComponent implements OnInit {
   }
 
   /**
+   * Augments the given property with the
+   * {{#crossLink "PropertyTableComponent/path:property"}}{{/crossLink}},
+   * if that parent path is set.
+   *
+   * @method getPath
+   * @param property {string} a property path relative to the
+   *   {{#crossLink "PropertyTableComponent/object:property"}}{{/crossLink}}
+   * @param index {number} the array index for an array property
+   * @return {string} the augmented property path
+   */
+  getPath(property: string, index?: number): string {
+    let suffix;
+    if (_.isArray(this.object[property])) {
+      if (_.isNil(index)) {
+        throw new Error('The property path to an array item is missing' +
+                        ` the item index: ${ property }`);
+      }
+      suffix = `${ property }[${ index }]`;
+    } else {
+      if (index) {
+        throw new Error('The property path to an object whose parent is' +
+                        ' not an array is incorrect:' +
+                        ` ${ property }[${ index }]`);
+      }
+      suffix = property;
+    }
+
+    return this.path ? `${ this.path }.${ suffix }` : suffix;
+  }
+
+  /**
    * Returns whether this table's
    * {{#crossLink "PropertyTableComponent/object:property"}}{{/crossLink}}
    * has displayable properties.
    *
+   * @method hasContent
    * @return {boolean} whether there is displayable content
    */
   hasContent(): boolean {

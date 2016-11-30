@@ -12,7 +12,7 @@ h4.qi-profile-heading Clinical Profile
       *ngFor="let encounter of subject.clinicalEncounters",
       [heading]="encounter.title", [isOpened]=true
     )
-      include encounter
+      include clinical-encounter
 
     //- // Iterate over the treatments to include the treatment partial.
     //- accordion-group(*ngFor="let treatment in subject.treatments",

@@ -45,6 +45,36 @@ extendEncounters = (subject) ->
   for enc in subject.clinicalEncounters
     ClinicalEncounter.extend(enc, subject)
 
+
+###*
+ * The Subject modeling results.
+ *
+ * @module subject
+ * @class ModelingResults
+ * @static
+###
+ModelingResults =
+  ###*
+   * @method collect
+   * @param subject {Object} the parent subject
+   * @return {Object[]} the modeling [{source, results}] array,
+   *   where each source value is a {type: id} object and the
+   *   results are the modeling results in session number
+   *   order.
+  ###
+  collect: (subject) ->
+    # Make the {protocol id: {source type: {source id: results}}}
+    # object.
+    assoc = subject.sessions.reduce(associate, {})
+    # Flatten into a [[{protocol, source, results}, ...], ...]
+    # array of arrays partitioned by protocol id.
+    modelingArrays = (
+      flattenBySource(pclId, srcAssoc) for pclId, srcAssoc of assoc
+    )
+    # Flatten into a [{protocol, source, results}, ...] array.
+    _.flatten(modelingArrays)
+
+
 ###*
  * The Subject REST data object extension utility.
  *
@@ -142,6 +172,8 @@ Subject =
           if surgeries.length is 1 then surgeries[0] else null
 
       ###*
+       * The {{#crossLink "Modeling"}}{{/crossLink}} results array.
+       *
        * @property modelings
        * @return the modelings array
       ###
@@ -149,7 +181,7 @@ Subject =
         get: ->
           # Create on demand.
           if not @_modelings?
-            @_modelings = Modeling.collect(this)
+            @_modelings = ModelingResults.collect(this)
           @_modelings
 
     # Add the default empty encounters array, if necessary.

@@ -3,6 +3,8 @@ import * as d3 from 'd3';
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
+import ObjectHelper from '../object/object-helper.coffee';
+import DateHelper from '../date/date-helper.coffee';
 import {
   ConfigurationService
 } from '../configuration/configuration.service.ts';
@@ -110,15 +112,15 @@ export class CollectionComponent extends PageComponent {
   correlationChartHeight: number;
 
   /**
-   * The initial correlation chart {x, y} property path objects,
-   * one per chart.
+   * The initial correlation chart {x, y} [[topic, label], ...] array,
+   * one item per chart.
    *
    * @property correlations {Object[]}
    */
   correlations: Object[];
 
   /**
-   * The {topic: {label: path}} correlation propertyChoices.
+   * The {topic: {label: path}} correlation choices.
    *
    * @property propertyChoices {Object}
    */
@@ -131,6 +133,14 @@ export class CollectionComponent extends PageComponent {
    * @private
    */
   private subjects: Object[];
+
+  /**
+   * The {path: domain} associative object for the displayable
+   * properties.
+   *
+   * @property domains
+   */
+  domains: Object[];
 
   /**
    * Flag indicating whether the domain selection is
@@ -193,6 +203,18 @@ export class CollectionComponent extends PageComponent {
       this.initSessionChart();
       this.initCorrelationCharts();
     });
+  }
+
+  /**
+   * Delegates to
+   * {{#crossLink "ConfigurationService/getTextLabel"}}{{/crossLink}},
+   *
+   * @method getLabel
+   * @param property {string} the property path
+   * @return {string} the display text label
+   */
+  getLabel(property: string) {
+    return this.configService.getTextLabel(property, this.name);
   }
 
   /**
@@ -305,17 +327,6 @@ export class CollectionComponent extends PageComponent {
   }
 
   /**
-   * @method isExcluded
-   * @private
-   * @return {boolean} whether the topic is in the
-   *   {{#crossLink "CollectionComponent/exclude:property}}{{/crossLink}}
-   *   list
-   */
-  private isExcluded(topic) {
-    return _.includes(this.exclude, topic);
-  }
-
-  /**
    * Opens the Subect Detail page.
    *
    * @method visitSubject
@@ -362,73 +373,57 @@ export class CollectionComponent extends PageComponent {
       this.exclude = prefExcludes.split(/,\s*/);
     }
 
-    // The {Imaging, Clinical} select option path configuration.
-    let corrConfig = this.createCorrelationConfiguration();
-    // The combined {topic: {label: path}} configuration.
-    let accumChoices = (accum, choices) => _.assign(accum, choices);
-    // The select option choices.
-    this.propertyChoices = _.values(corrConfig).reduce(accumChoices, {});
-    // The select {path: {value: label}} object.
+    // The select {topic: {label: path}} configuration.
+    this.propertyChoices = this.createCorrelationConfiguration();
+    // The select {path: {value: label}} configuration.
     this.valueChoices = this.configService.valueChoices;
-    // The initial select property paths.
-    this.correlations = this.initialPaths(corrConfig);
+    // The [[topic, label], ...] configuration.
+    this.correlations = this.initialCorrelationChoices();
   }
 
-  private initialPaths(config) {
-    // The initial {topic: path} preference is in the
-    // preferences configuration.
+  /**
+   * Makes the initial correlation [[topic, label], ...]
+   * configuration from the preferences configuration [Correlation]
+   * section x and y entries.
+   *
+   * @method initialCorrelationChoices
+   * @private
+   * @return {string[][]} the correlation choices
+   */
+  private initialCorrelationChoices() {
+    // The x and y label preference array is in the preferences
+    // configuration.
     let prefConfig = this.configService.preferences.Collection;
-    let prefPaths = _.pick(prefConfig, 'x', 'y');
+    let unparsed = _.pick(prefConfig, 'x', 'y');
 
-    // Finds a matching property path in the given data model
-    // section. The path parameter is the data model path string.
-    let searchSection = (path, section) => {
-      // Guard against a non-object section.
-      if (_.isPlainObject(section)) {
-        // Try to match against a full path.
-        if (_.get(section, path)) {
-          return path;
-        }
-        // Recurse until a match is found.
-        for (let key in section) {
-          let subsection = section[key];
-          let target = searchSection(path, subsection);
-          if (target) {
-            return `${ key }.${ target }`;
-          }
+    // Convert the delimited preference strings to arrays.
+    let parse = value => value.split(/\s*[,;:]\s*/);
+    let parsed = _.mapValues(unparsed, parse);
+
+    // Looks for the labels in the {topic: {label: path}} configuration.
+    let topicWithLabel = label => {
+      for (let topic in this.propertyChoices) {
+        if (this.propertyChoices[topic][label]) {
+          return topic;
         }
       }
-      // No matching path.
-      return null;
     };
-
-    let search = path => {
-      for (let section of _.values(config)) {
-        let target = searchSection(path, section);
-        if (target) {
-          return target;
-        }
+    //  Makes a path consisting of the topic which contains the
+    // label followed by the label. If the label is not found in
+    // any topic section, then this function throws an error.
+    let qualifyLabel = label => {
+      let topic = topicWithLabel(label);
+      if (!topic) {
+        // The property selection path was not found; complain.
+        throw new Error('The preferences configuration Collection axis ' +
+                        ` label was not found: ${ label }`);
       }
-      // The property selection path was not found; complain.
-      throw new Error('The collection correlation property selection' +
-                      ` path was not found: ${ path }`);
+      // Return the topic.label path.
+      return `${ topic }.${ label }`;
     };
-
-    // Converts the delimited preference string to an array.
-    let parse = value => value.split(/;\s*/);
-
-    // Converts the preference config entry to property paths.
-    let collect = (axis, topic) => {
-      // Fills out partial paths and sets paths which are not
-      // in the data model to null.
-      let resolvePath = path => search(path);
-      let resolveAll = paths => paths.map(resolvePath);
-      // Parse, complete and filter the paths.
-      return _.flow(parse, resolveAll, _.filter)(axis);
-    };
-
-    // The complete, valid preference paths.
-    let preferences = _.mapValues(prefPaths, collect);
+    // The complete, valid preference topic.label paths.
+    let qualifyLabels = labels => labels.map(qualifyLabel);
+    let preferences = _.mapValues(parsed, qualifyLabels);
 
     // The X axis preferences.
     let xPrefs = preferences.x;
@@ -460,212 +455,183 @@ export class CollectionComponent extends PageComponent {
   }
 
   /**
-   * Converts the parsed correlation configuration file into a
-   * {`Clinical`: sections}, {`Imaging`: sections} object,
-   * where each sections object is a {topic: {label: path, ...}}}
-   * of chartable property label: path items grouped by topic,
-   * e.g.:
-   *
-   *     {
-   *       Clinical: {
-   *         Demographics: {
-   *           'Age': 'subject.age',
-   *           'Gender': 'subject.gender',
-   *           ...
-   *         }
-   *         Biopsy: {
-   *           'TNM Size': 'subject.biopsy.pathology.tumors[0].tnm.size',
-   *           ...
-   *         }
-   *         Surgery: {
-   *           'Tumor Length': 'subject.surgery.pathology.tumorLength',
-   *           ...
-   *         }
-   *       },
-   *       Imaging: {
-   *         Scan: {
-   *           'delta Ktrans':
-   *             scanModeling.modelingResult.deltaKTrans.image.metadata.averageIntensity
-   *         },
-   *         Registration: ...
-   *       }
-   *     }
    *
    * @method createCorrelationConfiguration
    * @private
    * @return {Object} the chartable property configuration
    */
   private createCorrelationConfiguration() {
-    // The {topic: {label: path}} configuration.
-    let baseConfig = this.configService.dataModel;
-    // Excluded topics are added here.
-    let exclude = {};
-    // Merge sections for this collection, e.g. if this collection's
-    // name is 'Breast', then [TNM] and [TNM:Breast] are merged
-    // into one TNM section. Other collection specializations
-    // are ignored, e.g. [TNM:Sarcoma].
-    let accumSections = (accum, section, topic) => {
-      let topicCollection = topic.split(':');
-      let baseTopic = topicCollection[0];
-      let collection = topicCollection[1];
-      // Check whether the topic is in the collection.
-      if (!collection || collection === this.name) {
-        // Capture an excluded topic for use in the flattener below.
-        if (this.isExcluded(topic) || this.isExcluded(baseTopic)) {
-          exclude[topic] = topic;
-        } else {
-          // The resolved section which will hold the content.
-          let accumSection = accum[baseTopic];
-          // If the section is already defined, then add the content
-          // to the existing section. Otherwise, add the new section.
-          if (accumSection) {
-            accum[baseTopic] = _.assign({}, accumSection, section);
-          } else {
-            accum[baseTopic] = section;
+    // The clinical {topic: path} associative object.
+    let clinical = this.configService.dataModel.Clinical;
+    // The imaging {topic: path} associative object.
+    let imaging = this.configService.dataModel.Imaging;
+    // The combined top-level {topic: path} associative object.
+    let top = _.assign({}, clinical, imaging);
+    // The top-level paths.
+    let topPaths = _.invert(top);
+
+    // The label lookup to flatten. The lookup is parameterized
+    // by the collection name.
+    let lookup = this.configService.labelLookup[this.name];
+
+    // Converts the path to a lookup section (ignoring the topic).
+    let resolveLookup = (topic, path) =>
+      path === 'this' ? lookup : _.get(lookup, path);
+    // The top-level lookup {path: section}.
+    let topLookup = _.mapValues(topPaths, resolveLookup);
+
+    let flatten = (accum, section, path) => {
+      let label = _.get(section, '_label.text');
+      let nonLabel = label ? _.omit(section, '_label') : section;
+      if (label && _.isEmpty(nonLabel)) {
+        accum[path] = label;
+      } else {
+        let flattenChild = (value, key) => {
+          let subpath = this.concatPath(key, path);
+          if (!(subpath in topPaths)) {
+            flatten(accum, value, subpath);
           }
+        };
+        _.forEach(nonLabel, flattenChild);
+      }
+    };
+
+    // Converts the top-level lookup section to a property
+    // {label: path} object.
+    let flattenTop = topPath => {
+      let section = topLookup[topPath];
+      // Make a root traversal object.
+      let root = {};
+      root[topPath] = section;
+      // Make the {label: path} object.
+      let flattened = _.transform(root, flatten, {});
+      // Collect the {path: domain} objects.
+      let domains = this.getDomains(flattened);
+      // Hold onto the domains for later use.
+      _.assign(this.domains, domains);
+      // Delete the missing properties.
+      let hasDomain = path => path in domains;
+      let cleaned = _.pickBy(flattened, hasDomain);
+      // Fold in the expanded properties.
+      for (let path in domains) {
+        if (!(path in cleaned)) {
+          cleaned[path] = this.getLabel(path);
+        }
+      }
+
+      // Convert the {path: label} to the {label: path} object.
+      return _.invert(cleaned);
+    };
+
+    // Return the {topic: config} object.
+    return _.mapValues(top, flattenTop);
+  }
+
+  /**
+   * Collects the
+   * {{#crossLink "PropertyCollector/domains:property"}}{{/crossLink}}
+   * for the given paths.
+   *
+   * @method getDomains
+   * @param paths {Object|string[]} the starting paths
+   * @return {Object} the {path: domain} lookup
+   */
+  private getDomains(paths: Object|string[]) {
+    // The return object.
+    let domains = {};
+
+    let collectNumber = (value, path) => {
+      let domain = domains[path];
+      if (!domain) {
+        domain = domains[path] = [value, value];
+      } else if (!_.isArray(domain)) {
+        throw new Error('Heterogeneous property domain not supported:' +
+                        `property: ${ path } value: ${ value }`);
+      } else {
+        let [min, max] = domain;
+        if (value < min) {
+          domain[0] = value;
+        }
+        if (value > max) {
+          domain[1] = value;
         }
       }
     };
-    // The consolidated configuration with merged specialized
-    // topics.
-    let filtered = _.transform(baseConfig, accumSections);
 
-    // The top-level entries are not referenced by another entry.
-    let isChild = topic => _.find(filtered, other => _.has(other, topic));
-    let isTop = (value, key) => !isChild(key);
-    let top = _.pickBy(filtered, isTop);
-
-    // Flattens subtopics. Excluded topics return undefined.
-    let flatten = (path, topic) => {
-      if (!_.includes(exclude, topic)) {
-        let section = filtered[topic];
-        return this.flattenSection(section, filtered, path, exclude);
+    let collectDiscrete = (value, path) => {
+      let domain = domains[path];
+      if (!domain) {
+        domain = domains[path] = {};
+      } else if (!_.isPlainObject(domain)) {
+        throw new Error('Heterogeneous property domain not supported:' +
+                        `property: ${ path } value: ${ value }`);
       }
+      domain[value] = true;
     };
-    // Fill out the top subsections.
-    let flattenValues = section => _.mapValues(section, flatten);
-    let flattened = _.mapValues(top, flattenValues);
 
-    // Delete unavailable properties and empty sections.
-    let cleaned = this.cleanCorrelationConfiguration(flattened);
+    let isPublic = key => !key.startsWith('_');
 
-    // Return the filtered, merged, flattened, cleaned configuration.
-    return cleaned;
-  }
-
-  /**
-   * Returns a new configuration without unavailable properties and
-   * empty sections removed from the given configuration.
-   *
-   * @method cleanCorrelationConfiguration
-   * @param config {Object} the input configuration
-   * @return {Object} the new cleaned configuration
-   */
-  private cleanCorrelationConfiguration(config: Object) {
-    // Filter out the missing properties and empty sections.
-    let accumClean = (accum, value, key) => {
-      let cleaned = this.cleanCorrelationConfigurationValue(value);
-      if (!_.isEmpty(cleaned)) {
-        accum[key] = cleaned;
+    let collectObject = (object, path, parent) => {
+      for (let key in object) {
+        if (isPublic(key)) {
+          let subpath = this.concatPath(key, path);
+          let value = object[key];
+          collectValue(value, subpath, object);
+        }
       }
     };
 
-    return _.transform(config, accumClean);
-  }
+    let isDiscrete = value =>
+      _.isBoolean(value) || _.isString(value) || DateHelper.isDate(value);
 
-  /**
-   * "Cleans" the given value as follows:
-   * * If the value is an Object, then this method cleans
-   *   the value using
-   *   {{#crossLink "CollectionComponent/cleanCorrelationConfiguration}}{{/crossLink}}.
-   * * Otherwise, the input value is a property path. In that case,
-   *   if there is at least one
-   *   {{#crossLink "CollectionComponent/sessions:property}}{{/crossLink}}
-   *   data object which has the property value, then the input
-   *   property path is returned.
-   * * Otherwise, null is returned.
-   *
-   *
-   * @method cleanCorrelationConfigurationValue
-   * @param value {any} the sub-configuration or property path to check
-   * @return {any} the cleaned value
-   */
-  private cleanCorrelationConfigurationValue(value: any) {
-    if (_.isPlainObject(value)) {
-      return this.cleanCorrelationConfiguration(value);
-    } else if (this.isPropertyinSomeSession(value)) {
-      return value;
-    } else {
-      return null;
+    let collectValue = (value, path, parent) => {
+      if (ObjectHelper.hasValidContent(value)) {
+        if (isDiscrete(value)) {
+          collectDiscrete(value, path);
+        } else if (_.isNumber(value)) {
+          collectNumber(value, path);
+        } else if (_.isPlainObject(value) && value !== parent) {
+          collectObject(value, path, parent);
+        }
+      }
+    };
+
+    let collectDomain = path => {
+      for (let session of this.sessions) {
+        let value = _.get(session, path);
+        collectValue(value, path, session);
+      }
+    };
+
+    // Build the {path, domain} object.
+    for (let path in paths) {
+      collectDomain(path);
     }
+    // Convert each discrete domain to a sorted array.
+    let convertDiscrete = domain =>
+      _.isPlainObject(domain) ? _.keys(domain).sort() : domain;
+
+    return _.mapValues(domains, convertDiscrete);
   }
 
   /**
-   * Returns whether there is at least one
-   * {{#crossLink "CollectionComponent/sessions:property}}{{/crossLink}}
-   * data object which has a non-nil value for the given property.
+   * Concatenates the parent path to the given key as follows:
+   * * If there is not a path or the path is `this`, then return the key
+   * * Otherwise, if the key is numeric, then return _path_`[`_key_`]`
+   * * Otherwise, return _path_`.`_key_
    *
-   * @method isPropertyinSomeSession
-   * @param path {string} the property path to check
-   * @return {boolean} whether some session has a non-nil
-   *   value for the property
+   * @method concatPath
+   * @param key {string|number} the accessor
+   * @param path {string} the optional parent property path
+   * @return {string} the concatenated path
    */
-  private isPropertyinSomeSession(path: string) {
-    let hasValue = session => !_.isNil(_.get(session, path));
-    return _.some(this.sessions, hasValue);
-  }
-
-  /**
-   * Recursively flatten the section into an object consisting
-   * only of {topic: {label: path}} entries.
-   *
-   * @method flattenSection
-   * @private
-   * @param section {Object} the configuration section
-   * @param config {Object} the {topic, section} configuration
-   * @param path {string} the property path to the section
-   * @param exclude {string[]} the excluded topics
-   */
-  private flattenSection(
-    section: Object, config: Object, path: string, exclude: string[]
-  ) {
-    let flatten = (accum, value, key) => {
-      if (_.includes(exclude, key)) {
-        return;
-      }
-      // The current entry concatenated property path.
-      let subpath;
-      // The section entry "this" implies the section is
-      // an alias for the parent section, so ignore it in
-      // the path.
-      if (value === 'this') {
-        subpath = path;
-      } else if (path === 'this') {
-        subpath = value;
-      } else {
-        subpath = `${ path }.${ value }`;
-      }
-      // If both the value and the path are 'this', then bail.
-      // This should never occur by construction.
-      if (subpath === 'this') {
-        throw new Error('Invalid data model configuration property entry ' +
-                        `${ key }: ${ value } in context ${ path }`);
-      }
-
-      // If the property key references a config section,
-      // then recursively flatten the subsection.
-      // Otherwise, the result is the value.
-      let subsection = config[key];
-      if (subsection) {
-        let flattened =
-          this.flattenSection(subsection, config, subpath, exclude);
-        _.assign(accum, flattened);
-      } else if (!_.includes(this.exclude, key)) {
-        accum[key] = subpath;
-      }
-    };
-
-    return _.transform(section, flatten);
+  private concatPath(key, path?) {
+    if (path && path !== 'this') {
+      let suffix = _.isNumber(key) ? `[${ key }]` : '.' + key;
+      return path + suffix;
+    } else {
+      return key;
+    }
   }
 
   /**

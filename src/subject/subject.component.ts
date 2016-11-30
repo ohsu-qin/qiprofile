@@ -8,7 +8,6 @@ import { Overlay } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap/index.js';
 
 import ObjectHelper from '../object/object-helper.coffee';
-import StringHelper from '../string/string-helper.coffee';
 import {
   ConfigurationService
 } from '../configuration/configuration.service.ts';
@@ -16,11 +15,21 @@ import { PageComponent } from '../page/page.component.ts';
 import Subject from './subject.data.coffee';
 import { SubjectService } from './subject.service.ts';
 import help from './subject.help.md';
+import modelingHelp from './modeling.help.md';
 import breastTnmStageHelp from '../clinical/breast-tnm-stage.help.md';
 import sarcomaTnmStageHelp from '../clinical/sarcoma-tnm-stage.help.md';
 import recurrenceScoreHelp from '../clinical/recurrence-score.help.md';
 import rcbHelp from '../clinical/breast-rcb.help.md';
 import dosageAmountHelp from '../clinical/dosage-amount.help.md';
+
+/**
+ * The modeling display formats, `chart` or `table`.
+ *
+ * @property MODELING_FORMATS {string}
+ * @private
+ * @static
+ */
+const MODELING_FORMATS = ['chart', 'table'];
 
 @Component({
   selector: 'qi-subject',
@@ -44,6 +53,15 @@ export class SubjectComponent extends PageComponent {
   subject: Object;
 
   /**
+   * The modeling display format, `chart` or `table`.
+   *
+   * @property modelingFormat {string}
+   */
+  get modelingFormat(): string {
+    return MODELING_FORMATS[this._modelingFormatIndex];
+  }
+
+  /**
    * A
    * {{#crossLink "SubjectComponent/getLabel"}}{{/crossLink}}
    * wrapper that can be used in templates.
@@ -53,45 +71,55 @@ export class SubjectComponent extends PageComponent {
   const label = (property: string) => this.getLabel(property);
 
   /**
+   * A
+   * {{#crossLink "SubjectComponent/getGenomicsLabel"}}{{/crossLink}}
+   * wrapper that can be used in templates.
+   *
+   * @property genomicsLabel {function}
+   */
+  const genomicsLabel = (property: string) =>
+    this.getGenomicsLabel(property);
+
+  /**
    * The project name.
    *
    * @property project {string}
    * @readOnly
    */
-  get project(): string {
+  get project(): string  {
     return this.subject ? this.subject.project : null;
   }
 
   /**
-   * The {property: label} associative object, where *property*
-   * is an atomic simple property (as opposed to a path).
+   * The
+   * {{#crossLink "SubjectComponent/MODELING_FORMATS:property"}}{{/crossLink}}
+   * index to obtain the
+   * {{#crossLink "SubjectComponent/modelingFormat:property"}}{{/crossLink}}.
    *
-   * @property labelLookup {Object}
+   * @property _modelingFormatIndex {number}
    * @private
    */
-  private labelLookup: Object;
+  private _modelingFormatIndex = 0;
 
   constructor(
     private router: Router, private route: ActivatedRoute,
     vcRef: ViewContainerRef, overlay: Overlay, private modal: Modal,
-    service: SubjectService, configService: ConfigurationService,
+    subjectService: SubjectService,
+    private configService: ConfigurationService,
     changeDetector: ChangeDetectorRef
   ) {
     super(help);
 
-    // Prep the modal.
+    // Prep the modal in the obscure idiom favored by Angular.
     overlay.defaultViewContainer = vcRef;
     // The route/query parameters.
     let params = this.route.params.value;
 
-    // Make the property => label lookup.
-    this.labelLookup = this.createLabelLookup(configService.dataModel);
-
     // A place-holder subject sufficient to get a title.
-    this.subject = service.secondaryKey(params);
+    this.subject = subjectService.secondaryKey(params);
     Subject.extend(this.subject);
     // Fetch the real subject.
-    service.getSubject(params).subscribe(subject => {
+    subjectService.getSubject(params).subscribe(subject => {
       if (subject) {
         this.subject = subject;
       } else {
@@ -104,6 +132,18 @@ export class SubjectComponent extends PageComponent {
 
   /**
    * Delegates to
+   * {{#crossLink "ConfigurationService/getHTMLLabel"}}{{/crossLink}},
+   *
+   * @method getLabel
+   * @param property {string} the property path
+   * @return {string} the display HTML label
+   */
+  getLabel(property: string) {
+    return this.configService.getHTMLLabel(property, this.subject.collection);
+  }
+
+  /**
+   * Delegates to
    * {{#crossLink "ObjectHelper/hasValidContent"}}{{/crossLink}}.
    *
    * @method has
@@ -112,6 +152,33 @@ export class SubjectComponent extends PageComponent {
    */
   has(value: any): boolean {
     return ObjectHelper.hasValidContent(value);
+  }
+
+  /**
+   * Sets the
+   * {{#crossLink "SubjectComponent/modelingFormat:property"}}{{/crossLink}}
+   * to the other value.
+   *
+   * @method tnmStageHelp
+   * @raise {Error} if the collection does not have help
+   */
+  toggleModelingFormat() {
+    this._modelingFormatIndex =
+      (this._modelingFormatIndex + 1) % MODELING_FORMATS.length;
+  }
+
+  /**
+   * Shows the PK modeling help pop-up.
+   *
+   * @method openModelingHelp
+   */
+  openModelingHelp() {
+    this.modal.alert()
+      .size('med')
+      .showClose(true)
+      .title('Pharmokinetic Modeling')
+      .body(modelingHelp)
+      .open();
   }
 
   /**
@@ -183,24 +250,6 @@ export class SubjectComponent extends PageComponent {
   }
 
   /**
-   * Gets the label for the given clinical property.
-   * This method supplants the default
-   * {{#crossLink "PropertyTableComponent/getLabel"}}{{/crossLink}}
-   * to search for the property in the
-   * {{#crossLink "ConfigurationService/dataModel:property"}}{{/crossLink}}.
-   * If the property is not a unique value in a data model
-   * {label: property} section, then this method delegates to
-   * {{#crossLink "StringHelper/labelize"}}{{/crossLink}}.
-   *
-   * @method getLabel
-   * @param property {string} the property name
-   */
-  getLabel(property: string): string {
-    let atomic = _.last(property.split('.'));
-    return this.labelLookup[atomic] || StringHelper.labelize(atomic);
-  }
-
-  /**
    * Opens the Session Detail page.
    *
    * @method visitSession
@@ -211,40 +260,5 @@ export class SubjectComponent extends PageComponent {
       ['session', session.number],
       {relativeTo: this.route}
     );
-  }
-
-  private createLabelLookup(dataModel) {
-    // Returns whether the label is not a key in the dataModel.
-    let isAtomic = (prop, label) => !(label in dataModel);
-    // Collect the section non-aggregate items.
-    let accumAtomic = section => {
-      // Include only the atomic section entries.
-      let atomic = _.pickBy(section, isAtomic);
-      // Convert each property path to its final property.
-      let simplify = path => _.last(path.split('.'));
-      return _.mapValues(atomic, simplify);
-    };
-
-    // The array of atomic {label: property} sections.
-    let sections = _.values(dataModel).map(accumAtomic);
-    // The [[label, property], ...] pairs.
-    let allPairs = _.flow(_.map, _.flatten)(sections, _.toPairs);
-    // The {property: pairs} groups.
-    let groups = _.flow(_.groupBy, _.values)(allPairs, _.last);
-    // Remove duplicate pairs within groups.
-    let uniquePairs = pairs => _.uniqBy(pairs, _.first);
-    let consolidated = _.map(groups, uniquePairs);
-
-    // A pairs group is unique if it has only one pair.
-    let isUnique = group => group.length === 1;
-    // The unique atomic [label, property] pairs.
-    let unambiguousPairs = _.flow(_.filter, _.values, _.flatten)(
-      consolidated, isUnique
-    );
-    // The unambiguous atomic {label: property} lookup.
-    let labelPropLookup = _.fromPairs(unambiguousPairs);
-
-    // Return the unambiguous atomic {property: label} lookup.
-    return _.invert(labelPropLookup);
   }
 }

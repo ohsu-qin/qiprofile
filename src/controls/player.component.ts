@@ -81,12 +81,12 @@ export class PlayerComponent implements OnInit, OnChanges {
    * request.
    *
    * The state machine is as follows:
-   * ```
-   * next|previous -> clear play; request -> receive ->
-   *       clear waiting flag
    *
-   * play -> set play; request -> receive -> repeat
-   * ```
+   *     next|previous -> clear play; request -> receive ->
+   *     clear waiting flag
+   *
+   *     play -> set play; request -> receive -> repeat
+   *
    * If the {{#crossLink "PlayerComponent/isWaiting:property"}}{{/crossLink}}
    * flag is set, then the request is queued.
    * Otherwise, the request is issued and the waiting flag is set.

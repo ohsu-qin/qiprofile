@@ -15,12 +15,21 @@
 ###
 DateHelper =
   ###*
+   * @method isDate
+   * @param value the value to check
+   * @return whether the value is a javascript `Date` or
+   *   moment object
+  ###
+  isDate: (value) ->
+    moment.isMoment(value) or moment.isDate(value)
+
+  ###*
    * Converts the input to a moment. The input can be a date string,
-   * e.g. '07 Sep 1986', or the number of milliseconds since
+   * e.g. `07 Sep 1986`, or the number of milliseconds since
    * the Unix Epoch (Jan 1 1970 12AM UTC).
    *
    * A string input must contain the date in the format
-   * DD MMM YYYY, e.g. 'Tue, 03 Feb 2012 00:00:00 GMT'.
+   * DD MMM YYYY, e.g. `Tue, 03 Feb 2012 00:00:00 GMT`.
    * Otherwise, an error is thrown. Note that the time in
    * the example input is ignored.
    *

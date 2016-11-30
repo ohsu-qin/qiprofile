@@ -126,7 +126,7 @@ export class CascadeSelectComponent implements OnInit, OnChanges {
    * {{#crossLink "CascadeSelectComponent/selection:property"}}{{/crossLink}}
    * to the given choice.
    * In addition, if the choice value is terminal (i.e., if
-   * {{#crossLink "CascadeSelectComponent/isTerminal}}{{/crossLink}}
+   * {{#crossLink "CascadeSelectComponent/isTerminal"}}{{/crossLink}}
    * returns `true`), then
    * {{#crossLink "CascadeSelectComponent/value:property"}}{{/crossLink}}
    * is triggered with the

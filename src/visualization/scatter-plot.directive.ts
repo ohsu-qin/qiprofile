@@ -5,7 +5,9 @@ import {
   OnChanges, SimpleChange
 } from '@angular/core';
 
+import ObjectHelper from '../object/object-helper.coffee';
 import DateHelper from '../date/date-helper.coffee';
+import * as math from '../math/math.ts';
 
 @Directive({
   selector: '[qi-scatter-plot]'
@@ -173,12 +175,19 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
   @Output() select: EventEmitter<boolean[]> = new EventEmitter(true);
 
   /**
-   * The valid array flags whether the values are valid.
+   * The domain object reference object. The reference object
+   * is built by
+   * {{#crossLink "ScatterPlotDirective/configDomains"}}{{/crossLink}}
+   * and consists of the following properties:
+   * * _toData_: the data point => data index array
+   * * _fromData_: the data => [data point] index array
+   * * _xIndexes_: the array property data point indexes
+   * * _yIndexes_: the array property data point indexes
    *
    * @property valid {boolean[]}
    * @private
    */
-  private valid: boolean[];
+  private domainRefs: Object;
 
   /**
    * The X values [min, max] array.
@@ -211,14 +220,6 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
    * @private
    */
   private yScale: Object;
-
-  /**
-   * The point locator function.
-   *
-   * @property pointTransform {function}
-   * @private
-   */
-  private pointTransform: (d: Object) => string;
 
   /**
    * The D3 SVG root group element.
@@ -312,9 +313,22 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
     if (isXChanged || isYChanged) {
       this.updatePlot();
     } else if (isChanged('selection')) {
-      // Reset the visibility.
+      // The visibility depends on the selection array.
       this.resetVisibility();
     }
+  }
+
+  /**
+   * The point locator function.
+   *
+   * @method pointTransform
+   * @private
+   * @param d {Object} the data object
+   * @param i {number} the data point (not *data*) index
+   * @return {string} the `translate` SVG directive
+   */
+  private pointTransform(d: Object, i: number) {
+    return `translate(${ this.dx(d, i) },${ this.dy(d, i) })`;
   }
 
   private updatePlot() {
@@ -328,7 +342,8 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
 
     // Reset the data points with a fancy index-dependent
     // delay/duration.
-    let n = this.data.length;
+    let dataPointArray = this.domainRefs.toData || this.data;
+    let n = dataPointArray.length;
     const total = 500;
     const avg = Math.floor(total / n);
     let delay = (d, i) => i * avg;
@@ -341,12 +356,16 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
       }
     };
     this.pendingTransitionTime += total;
+
+    // Bind brain-dead Javascript *this*.
+    let pointTransform = (d, i) => this.pointTransform(d, i);
+
     this.svg.selectAll('.point')
       .transition()
       .delay(delay)
       .duration(duration)
       .on('end', onEnd)
-      .attr('transform', this.pointTransform);
+      .attr('transform', pointTransform);
 
     // Recalculate the correlation.
     if (this.trendLine) {
@@ -366,35 +385,35 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
    * which have a valid X and Y value.
    *
    * @method filterValidData
-   * @param {function} the X value accessor
-   * @param {function} the Y value accessor
    * @private
+   * @param x {function} the X value accessor
+   * @param y {function} the Y value accessor
+   * @return {boolean[]} the
    */
   private filterValidData(x, y) {
     // The validity checkers.
-    let isInvalidValue = v => _.isNil(v) || Number.isNaN(v);
-    let isValidValue = _.negate(isInvalidValue);
-    let isValidX = _.flow(x, isValidValue);
-    let isValidY = _.flow(y, isValidValue);
+    let isValidX = _.flow(x, ObjectHelper.hasValidContent);
+    let isValidY = _.flow(y, ObjectHelper.hasValidContent);
     let isValid = d => isValidX(d) && isValidY(d);
-    // The validity flag array.
-    this.valid = this.data.map(isValid);
+    // Return the validity flag array.
+    return this.data.map(isValid);
   }
 
   /**
    * Resets the data point visibility style based on the
-   * {{#crossLink "ScatterPlotDirective/isVisible"}}{{/crossLink}}
-   * value.
+   * {{#crossLink "ScatterPlotDirective/isDataPointVisible"}}{{/crossLink}}
+   * result.
    *
    * @method resetVisibility
    * @private
    */
   private resetVisibility() {
-    let isVisible = (d, i) => this.isVisible(i);
+    let isVisible = (d, i) => this.isDataPointVisible(i);
     let isHidden = _.negate(isVisible);
     let delay = this.pendingTransitionTime;
     const duration = 200;
-    let remaining = this.data.length;
+    let dataPointArray = this.domainRefs.toData || this.data;
+    let remaining = dataPointArray.length;
     let onEnd = () => {
       remaining -= 1;
       if (!remaining) {
@@ -416,22 +435,6 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
       .duration(duration)
       .on('end', onEnd)
       .style('visibility', null);
-  }
-
-  /**
-   * Returns whether the given
-   * {{#crossLink "ScatterPlotDirective/data:property"}}{{/crossLink}}
-   * item is selected.
-   * The selection flag array determines whether to show a data
-   * point (default is to show the point).
-   *
-   * @method isVisible
-   * @private
-   * @param i {number} the *data* array index
-   * @return {boolean} whether the data point is selected and valid
-   */
-  private isVisible(i): boolean {
-    return this.valid[i] && (!this.selection || this.selection[i]);
   }
 
   /**
@@ -475,19 +478,19 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
     // minimum value. This adjustment is for charting purposes
     // only, and does not affect the r-square calcuation.
     let xValue = (d, i) => {
-      return this.valid[i] ? this.xValue(d) : this.xDomain[0];
+      return this.isDataPointValid(i) ? this.xValue(d) : this.xDomain[0];
     };
     let yValue = (d, i) => {
-      return this.valid[i] ? this.yValue(d) : this.yDomain[0];
+      return this.isDataPointValid(i) ? this.yValue(d) : this.yDomain[0];
     };
 
     // The data point coordinate functions.
     this.dx = (d, i) => this.xScale(xValue(d, i));
     this.dy = (d, i) => this.yScale(yValue(d, i));
 
-    // The visibility
-    this.visibility = (d, i) =>
-      this.isVisible(i) ? 'visibile' : 'hidden';
+    // The visibility function.
+    let visibility = (d, i) =>
+      this.isDataPointVisible(i) ? 'visibile' : 'hidden';
 
     // The color index function maps the input to a color reference value.
     // The default index function assigns each object to its position in
@@ -536,20 +539,24 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
     let symbolType = this.symbolType || d3.symbolCircle;
     let symbol = d3.symbol().type(symbolType).size(symbolSize);
 
-    // The point locator.
-    this.pointTransform = (d, i) =>
-      `translate(${ this.dx(d, i) },${ this.dy(d, i) })`;
+    // The data point data.
+    let toData = this.domainRefs.toData;
+    let deref = ref => this.data[ref];
+    let data = toData ? toData.map(deref) : this.data;
+
+    // Bind brain-dead Javascript *this*.
+    let pointTransform = (d, i) => this.pointTransform(d, i);
 
     // Draw the plot.
     plot.selectAll('.point')
-      .data(this.data)
+      .data(data)
       .enter().append('path')
         .attr('class', 'point')
-        .style('visibility', this.visibility)
+        .style('visibility', visibility)
         .style('fill', color)
         .style('opacity', opacity)
         .attr('d', symbol)
-        .attr('transform', this.pointTransform);
+        .attr('transform', pointTransform);
 
     // The optional trend line.
     if (this.trendLine) {
@@ -616,21 +623,34 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
   }
 
   private configureDomains(getX, getY) {
-    // The first valid value.
-    let isValid = (d, i) => this.valid[i];
-    let sample = _.first(this.data, isValid);
-    // There must be at least one valid value.
-    if (!sample) {
-      throw new Error("There is no valid data point for the properties" +
-                      ` X ${ this.x } and Y ${ this.y } `);
+    // Make the domain encapsulation object.
+    this.domainRefs = this.createDomainRefs(getX, getY);
+
+    // Array property accessors must account for the index
+    // qualifier.
+    let getXBase;
+    if (this.domainRefs.xIndexes) {
+      getXBase = (d, i) => {
+        let index = this.domainRefs.xIndexes[i];
+        let array = getX(d);
+        if (array) {
+          return array[index];
+        }
+      }
+    } else {
+      getXBase = getX;
     }
-    // Strings and booleans are always discrete.
-    let isValueDiscrete = v => _.isString(v) || _.isBoolean(v);
-    if (_.isNil(this.xDiscrete)) {
-      this.xDiscrete = isValueDiscrete(getX(sample));
-    }
-    if (_.isNil(this.yDiscrete)) {
-      this.yDiscrete = isValueDiscrete(getY(sample));
+    let getYBase;
+    if (this.domainRefs.yIndexes) {
+      getYBase = (d, i) => {
+        let index = this.domainRefs.yIndexes[i];
+        let array = getY(d);
+        if (array) {
+          return array[index];
+        }
+      }
+    } else {
+      getYBase = getY;
     }
 
     // Configure the discrete axes.
@@ -650,15 +670,16 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
       // and the other axis property. If we will draw a trend line,
       // then the sort criterion is given by mapSortValues.
       // Otherwise, the domain is sorted in the natural order.
-      let valid = _.filter(this.data, isValid);
+      let toData = this.domainRefs.toData;
+      let data = toData ? toData.map(this.toDatum) : this.data;
+      let values = _.map(data, discrete);
       let getDiscreteValues = (discrete, other) => {
         if (this.trendLine) {
-          let groups = _.groupBy(valid, discrete);
+          let groups = _.groupBy(data, discrete);
           let sortPrep = mapSortValues(groups, other);
           let sorter = v => sortPrep[v];
           return _.sortBy(_.keys(groups), sorter);
         } else {
-          let values = _.map(valid, discrete);
           // Silly brain-dead Javascript numeric sort work-around.
           let isNumeric = _.isNumber(values[0]);
           let sorted = isNumeric ? values.sort(_.subtract) : values.sort();
@@ -667,29 +688,185 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
         }
       };
 
+      // Note that the calls to getXBase or getYBase below are
+      // not guarded by a valid data check. That check
+      // is done up front by createChart.
+
       // The discrete domain is the sorted label list.
       if (this.xDiscrete) {
         let lookupX = v => _.get(this.xChoices, v) || v;
-        this.xValue = _.flow(getX, lookupX);
-        this.xDomain = getDiscreteValues(this.xValue, getY);
+        this.xValue = _.flow(getXBase, lookupX);
+        this.xDomain = getDiscreteValues(this.xValue, getYBase);
       }
       if (this.yDiscrete) {
         let lookupY = v => _.get(this.yChoices, v) || v;
-        this.yValue = _.flow(getY, lookupY);
-        this.yDomain = getDiscreteValues(this.yValue, getX);
+        this.yValue = _.flow(getYBase, lookupY);
+        this.yDomain = getDiscreteValues(this.yValue, getXBase);
       }
     }
 
     // The continuous accessor is the getter property.
     // The continuous domain is the [min, max].
     if (!this.xDiscrete) {
-      this.xValue = getX;
+      this.xValue = getXBase;
       this.xDomain = this.getContinuousDomain(this.xValue);
     }
     if (!this.yDiscrete) {
-      this.yValue = getY;
+      this.yValue = getYBase;
       this.yDomain = this.getContinuousDomain(this.yValue);
     }
+  }
+
+  /**
+   * Returns the data object for the given data point index.
+   *
+   * @method toDatum
+   * @private
+   * @param index {number} the data point (not *data*) array index
+   * @return {Object} the data object
+   */
+  private toDatum(index: number): boolean {
+    let refs = this.domainRefs.toData;
+    let di = refs ? refs[index] : index;
+    return this.data[di];
+  }
+
+  /**
+   * Returns whether the data point at the given index is both
+   * valid and selected.
+   *
+   * @method isDataPointVisible
+   * @private
+   * @param index {number} the data point (not *data*) array index
+   * @return {boolean} whether the data point is selected and valid
+   */
+  private isDataPointVisible(index: number): boolean {
+    let refs = this.domainRefs.toData;
+    let di = refs ? refs[index] : index;
+    return this.valid[di] && (!this.selection || this.selection[di]);
+  }
+
+  /**
+   * Returns whether the data point at the given index is valid.
+   *
+   * @method isDataPointValid
+   * @private
+   * @param index {number} the data point (not *data*) array index
+   * @return {boolean} whether the data point is valid
+   */
+  private isDataPointValid(index: number): boolean {
+    let refs = this.domainRefs.toData;
+    let di = refs ? refs[index] : index;
+    return this.valid[di];
+  }
+
+  /**
+   * Accomodates an array value by adapting the accessor
+   * and expanding the data and validity arrays. The return
+   * value is the domain encapsulation described in
+   * {{#crossLink "ScatterPlotDirective/domain:property"}}{{/crossLink}}.
+   *
+   * @method createDomainRefs
+   * @private
+   * @param sample {Object} a sample valid input domain object
+   * @return {Object} the domain object
+   */
+  private createDomainRefs(getX, getY) {
+    // Filter for the well-defined data points.
+    let isValidX = _.flow(getX, ObjectHelper.hasValidContent);
+    let isValidY = _.flow(getY, ObjectHelper.hasValidContent);
+    let isBothValid = d => isValidX(d) && isValidY(d);
+    // The validity flag array.
+    this.valid = this.data.map(isBothValid);
+
+    // The first valid value.
+    let isDataValid = (d, i) => this.valid[i];
+    let sampleInput = _.first(this.data, isDataValid);
+    // There must be at least one valid value.
+    if (!sampleInput) {
+      throw new Error("There is no valid data point for the properties" +
+                      ` X ${ this.x } and Y ${ this.y } `);
+    }
+    let sample = {x: getX(sampleInput), y: getY(sampleInput)};
+    // Strings and booleans are always discrete.
+    let isValueDiscrete = v =>
+      _.isString(v) || _.isBoolean(v) ||
+      (_.isArray(sample.x) && isValueDiscrete(sample.x[0]));
+    if (_.isNil(this.xDiscrete)) {
+      this.xDiscrete = isValueDiscrete(sample.x);
+    }
+    if (_.isNil(this.yDiscrete)) {
+      this.yDiscrete = isValueDiscrete(sample.y);
+    }
+
+    // Adjust for a multi-valued domain, if necessary.
+    let indexGroups = {};
+    if (_.isArray(sample.x)) {
+      indexGroups.x = this.groupIndexes(getX);
+    }
+    if (_.isArray(sample.y)) {
+      indexGroups.y = this.groupIndexes(getY);
+    }
+    // If both properties are multi-valued, then make
+    // the cross-product indexGroups.
+    let dup = (value, n) => _.fill(new Array(n), value);
+    if (indexGroups.x && indexGroups.y) {
+      let cross = (groupX, i) => {
+        if (groupX) {
+          let groupY = indexGroups.y[i];
+          let dupX = _.partialRight(dup, groupY.length);
+          let dupedX = _.flatMap(groupX, dupX);
+          let pairOff = y => groupX.map(x => [x, y]);
+          let dupedY = _.flatMapDeep(groupY, pairOff);
+          return {x: dupedX, y: dupedY};
+        }
+      };
+      let crossed = indexGroups.x.map(cross);
+      indexGroups.x = _.map(crossed, 'x');
+      indexGroups.y = _.map(crossed, 'y');
+    }
+
+    let someGroups = indexGroups.x || indexGroups.y;
+    let flattenGroups = groups => groups.map(_.flatten);
+    let indexes = _.mapValues(indexGroups, flattenGroups);
+
+    let domainRefs = {};
+    if (someGroups) {
+      // The data point => this.data references.
+      let dupTo = (group, i) => {
+        return group ? dup(i, group.length) : i;
+      };
+      domainRefs.toData = _.flatMap(someGroups, dupTo);
+
+      // The this.data => [data points] references.
+      let accumFrom = (accum, ref, i) => {
+        let group = accum[ref];
+        if (!group) {
+          group = accum[ref] = [];
+        }
+        group.push(i);
+      };
+      domainRefs.fromData = _.transform(domainRefs.toData, accumFrom);
+    }
+
+    if (indexGroups.x) {
+      domainRefs.xIndexes = _.flatten(indexes.x);
+    }
+    if (indexGroups.y) {
+      domainRefs.yIndexes = _.flatten(indexes.y);
+    }
+
+    return domainRefs;
+  }
+
+  private groupIndexes(accessor) {
+    let getGroup = d => {
+      let value = accessor(d);
+      if (!_.isEmpty(value)) {
+        return _.range(value.length);
+      }
+    };
+    return this.data.map(getGroup);
   }
 
   private drawAxes() {
@@ -727,31 +904,12 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
   }
 
   /**
-   * Determines the subset of
-   * {{#crossLink "ScatterPlotDirective/data:property"}}{{/crossLink}}
-   * data points within the D3 brush bounding box.
+   * Makes the seletion D3 brush.
    *
-   * _Note_: this method is intended for use solely by the D3 callback.
-   *
-   * @method getSelectedData
-   * @return the data selection
+   * @method createBrush
+   * @return {Object} the D3 brush
    */
   private createBrush() {
-    // The callback functions.
-    let isWithin = (x, y, box) =>
-      x >= box[0][0] && x <= box[1][0] && y >= box[0][1] && y <= box[1][1];
-    let isDataSelected = (d, i, box) =>
-      this.valid[i] && isWithin(this.dx(d, i), this.dy(d, i), box);
-    let selectedData = () => {
-      // The selection bounding box.
-      let box = d3.event.selection;
-      // If some data points are selected, then map the
-      // data to their selection state.
-      // Otherwise, the default null is returned,
-      // which signifies that all data points are shown.
-      return box ? this.data.map((d, i) => isDataSelected(d, i, box)) : null;
-    };
-
     // The brush extent includes only the data points. The
     // offset is the amount to chop out, with the exception
     // noted below.
@@ -772,11 +930,16 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
       // Reshow all elements in this chart until the brush
       // selection is completed.
       let delay = this.pendingTransitionTime;
+      // The starting visibility ignores the previous selection
+      // array and only takes into account whether the data is valid.
+      let visibility = (d, i) =>
+        this.isDataPointValid(i) ? 'visibile' : 'hidden';
+      let isValid = (d, i) => this.isDataPointValid(i);
       this.svg.selectAll('.point')
         .transition()
         .delay(delay)
         .duration(0)
-        .style('visibility', (d, i) => this.valid[i]);
+        .style('visibility', visibility);
     };
 
     // Flag to avoid an infinite loop (see below).
@@ -789,16 +952,16 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
 
       // We apologize for the technical interruption and
       // return to the program in progress.
-      let selected = selectedData();
+      let selected = this.selectedData();
       // If there is a change, then trigger the select callback.
-      if (selected !== this.selected) {
+      if (selected !== this.selection) {
         this.select.emit(selected);
       }
 
       // Due to technical difficulties described below, we
       // interrupt the normally scheduled program as follows:
       //
-      // Clear the brush. The bizarre move clear idiom is a D3 v4
+      // Clear the brush. The bizarre move/clear idiom is a D3 v4
       // "improvement" over D3 v3 brush.clear(). However, the
       // side-effect is an infinite loop trap for some obscure
       // reason adumbrated in https://github.com/d3/d3-brush/issues/10.
@@ -811,7 +974,7 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
       //
       // Therefore, we introduce the clearingBrush flag kludge
       // below to work around the obscure, deficient unofficially
-      // official D3 work-around.
+      // official D3 v4 work-around.
       clearingBrush = true;
       this.svg.select('.brush')
         .call(brush.move, null);
@@ -823,6 +986,47 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
     brush.on('end', onBrushEnd);
 
     return brush;
+  }
+
+  /**
+   * Determines the subset of
+   * {{#crossLink "ScatterPlotDirective/data:property"}}{{/crossLink}}
+   * data points within the D3 brush bounding box.
+   *
+   * _Note_: this method is intended for use solely by the D3 callback.
+   *
+   * @method getSelectedData
+   * @return the data selection
+   */
+  private selectedData() {
+    // The selection bounding box.
+    let box = d3.event.selection;
+    // The callback functions.
+    let isWithin = (x, y) =>
+      x >= box[0][0] && x <= box[1][0] && y >= box[0][1] && y <= box[1][1];
+    let isDataPointInBox = (d, i) =>
+      isWithin(this.dx(d, i), this.dy(d, i), box);
+    let isDataSelected = (d, i) => {
+      if (!this.valid[i]) {
+        return false;
+      } else if (this.domainRefs.toData) {
+        // The data points for the data object.
+        let refs = this.domainRefs.toData[i];
+        let isRefInBox = _.partial(isDataPointInBox, d);
+        return _.some(refs, isRefInBox);
+      } else {
+         return isDataPointInBox(d, i);
+      }
+    };
+
+    // If some data points are selected, then map the data to
+    // their selection state. Otherwise, the default null is
+    // returned, which signifies that all data points are shown.
+    if (box) {
+      return this.data.map((d, i) => isDataSelected(i, box));
+    } else {
+      return null;
+    }
   }
 
   /**
@@ -894,12 +1098,20 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
    * @return {Object} the trend line slope, intercept and r-square
    */
   private leastSquares() {
-    // The valid X and Y values and means.
-    let isValid = (d, i) => this.valid[i];
-    let xAllValues = this.data.map(this.dx);
-    let xValues = _.filter(xAllValues, isValid);
-    let yAllValues = this.data.map(this.dy);
-    let yValues = _.filter(yAllValues, isValid);
+    // The data point data objects.
+    let data;
+    if (this.domainRefs.toData) {
+      let deref = ref => this.data[ref];
+      data = this.domainRefs.toData.map(deref);
+    } else {
+      data = this.data;
+    }
+    // The valid data points.
+    let isValid = (d, i) => this.isDataPointValid(i);
+    // The scaled X and Y values for valid data points.
+    let xValues = data.map(this.dx).filter(isValid);
+    let yValues = data.map(this.dy).filter(isValid);
+    // The X and Y means.
     let xMean = _.mean(xValues);
     let yMean = _.mean(yValues);
 
@@ -934,14 +1146,19 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
    *
    * @method getContinuousDomain
    * @private
-   * @param accessor {function|string} the X or Y value accessor or
-   *   property path
+   * @param accessor {function|string} the X or Y domain object => value
+   *   accessor or property path
    * @return the [min, max] domain
    */
   private getContinuousDomain(accessor) {
-    let min = _.flow(_.minBy, accessor)(this.data, accessor);
-    let max = _.flow(_.maxBy, accessor)(this.data, accessor);
+    let data = this.domainRefs.toData || this.data;
+    let value = (d, i) => {
+      let datum = this.toDatum(i);
+      if (datum) {
+        return accessor(datum);
+      }
+    };
 
-    return [min, max];
+    return math.bounds(data, value);
   }
 }

@@ -4,7 +4,6 @@ import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import ObjectHelper from '../object/object-helper.coffee';
-import DateHelper from '../date/date-helper.coffee';
 import {
   ConfigurationService
 } from '../configuration/configuration.service.ts';
@@ -127,6 +126,13 @@ export class CollectionComponent extends PageComponent {
   propertyChoices: Object;
 
   /**
+   * The discrete property {path: {value: label}} tick label choices.
+   *
+   * @property valueChoices {Object}
+   */
+  valueChoices: Object;
+
+  /**
    * The subject objects.
    *
    * @property subjects {Object[]}
@@ -203,18 +209,6 @@ export class CollectionComponent extends PageComponent {
       this.initSessionChart();
       this.initCorrelationCharts();
     });
-  }
-
-  /**
-   * Delegates to
-   * {{#crossLink "ConfigurationService/getTextLabel"}}{{/crossLink}},
-   *
-   * @method getLabel
-   * @param property {string} the property path
-   * @return {string} the display text label
-   */
-  getLabel(property: string) {
-    return this.configService.getTextLabel(property, this.name);
   }
 
   /**
@@ -313,6 +307,18 @@ export class CollectionComponent extends PageComponent {
       this.svg.selectAll('g.y.axis g.tick [type="checkbox"]')
         .property('checked', false);
     }
+  }
+
+  /**
+   * Delegates to
+   * {{#crossLink "ConfigurationService/getTextLabel"}}{{/crossLink}},
+   *
+   * @method getLabel
+   * @param property {string} the property path
+   * @return {string} the display text label
+   */
+  private getLabel(property: string) {
+    return this.configService.getTextLabel(property, this.name);
   }
 
   /**
@@ -505,22 +511,10 @@ export class CollectionComponent extends PageComponent {
       root[topPath] = section;
       // Make the {label: path} object.
       let flattened = _.transform(root, flatten, {});
-      // Collect the {path: domain} objects.
-      let domains = this.getDomains(flattened);
-      // Hold onto the domains for later use.
-      _.assign(this.domains, domains);
-      // Delete the missing properties.
-      let hasDomain = path => path in domains;
-      let cleaned = _.pickBy(flattened, hasDomain);
-      // Fold in the expanded properties.
-      for (let path in domains) {
-        if (!(path in cleaned)) {
-          cleaned[path] = this.getLabel(path);
-        }
-      }
-
+      // Add child paths and filter out paths with missing values.
+      let expanded = this.expand(flattened);
       // Convert the {path: label} to the {label: path} object.
-      return _.invert(cleaned);
+      return _.invert(expanded);
     };
 
     // Return the {topic: config} object.
@@ -528,90 +522,69 @@ export class CollectionComponent extends PageComponent {
   }
 
   /**
-   * Collects the
-   * {{#crossLink "PropertyCollector/domains:property"}}{{/crossLink}}
-   * for the given paths.
+   * Returns the {path: label} object for those paths which
+   * have a valid value. A path with an object value is recursively
+   * expanded to include child paths.
    *
-   * @method getDomains
-   * @param paths {Object|string[]} the starting paths
-   * @return {Object} the {path: domain} lookup
+   * @method expand
+   * @param paths {Object} the object whose keys are the starting paths
+   * @return {Object} the {path: label} lookup
    */
-  private getDomains(paths: Object|string[]) {
-    // The return object.
-    let domains = {};
+  private expand(paths: Object) {
+    // The {path: label} associations collected in the
+    // expansion. Paths to exclude have a pseudo-label
+    // of false. These are filtered out in the method
+    // return.
+    let closure = {};
 
-    let collectNumber = (value, path) => {
-      let domain = domains[path];
-      if (!domain) {
-        domain = domains[path] = [value, value];
-      } else if (!_.isArray(domain)) {
-        throw new Error('Heterogeneous property domain not supported:' +
-                        `property: ${ path } value: ${ value }`);
-      } else {
-        let [min, max] = domain;
-        if (value < min) {
-          domain[0] = value;
-        }
-        if (value > max) {
-          domain[1] = value;
-        }
-      }
-    };
-
-    let collectDiscrete = (value, path) => {
-      let domain = domains[path];
-      if (!domain) {
-        domain = domains[path] = {};
-      } else if (!_.isPlainObject(domain)) {
-        throw new Error('Heterogeneous property domain not supported:' +
-                        `property: ${ path } value: ${ value }`);
-      }
-      domain[value] = true;
-    };
-
+    // Private properties begin with an underscore, e.g _id.
     let isPublic = key => !key.startsWith('_');
 
-    let collectObject = (object, path, parent) => {
+    // Recursively expands subobject paths.
+    let expandObject = (object, path) => {
       for (let key in object) {
         if (isPublic(key)) {
           let subpath = this.concatPath(key, path);
-          let value = object[key];
-          collectValue(value, subpath, object);
+          if (!(subpath in closure)) {
+            expandPath(subpath, path);
+          }
         }
       }
     };
 
-    let isDiscrete = value =>
-      _.isBoolean(value) || _.isString(value) || DateHelper.isDate(value);
-
-    let collectValue = (value, path, parent) => {
-      if (ObjectHelper.hasValidContent(value)) {
-        if (isDiscrete(value)) {
-          collectDiscrete(value, path);
-        } else if (_.isNumber(value)) {
-          collectNumber(value, path);
-        } else if (_.isPlainObject(value) && value !== parent) {
-          collectObject(value, path, parent);
-        }
-      }
-    };
-
-    let collectDomain = path => {
+    // Expands the session object graph. Every session
+    // is examined for potential property subpaths. If
+    // If the path references a subobject, then the
+    // subobject is expanded. Along the way, the visited
+    // path labels are collected in the closure. Parent
+    // references are excluded.
+    let expandPath = (path, parentPath) => {
       for (let session of this.sessions) {
         let value = _.get(session, path);
-        collectValue(value, path, session);
+        if (ObjectHelper.hasValidContent(value)) {
+          if (_.isPlainObject(value)) {
+            if (parentPath) {
+              let parent = _.get(session, parentPath);
+              if (value === parent) {
+                closure[path] = false;
+                return;
+              }
+            }
+            expandObject(value, path);
+          } else {
+            closure[path] = this.getLabel(path);
+            return;
+          }
+        }
       }
+      closure[path] = false;
     };
 
-    // Build the {path, domain} object.
     for (let path in paths) {
-      collectDomain(path);
+      expandPath(path);
     }
-    // Convert each discrete domain to a sorted array.
-    let convertDiscrete = domain =>
-      _.isPlainObject(domain) ? _.keys(domain).sort() : domain;
 
-    return _.mapValues(domains, convertDiscrete);
+    return _.pickBy(closure);
   }
 
   /**

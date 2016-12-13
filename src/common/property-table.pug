@@ -15,5 +15,6 @@ div(*ngIf="hasContent()")
       *ngFor="let child of children(key); let i = index",
       [object]="child", [parent]="object",
       [path]="getPath(key, i)",
+      [valueChoices]="valueChoices",
       [label]="label", [title]="getLabel(key)"
     )

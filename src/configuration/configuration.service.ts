@@ -134,6 +134,7 @@ export class ConfigurationService {
    *     {
    *       common:
    *         subject: {
+   *           _label: {text: 'Demographics'},
    *           age: {_label: {text: 'Age'}},
    *           biopsy: {
    *             _label: {text: 'Biopsy'},
@@ -179,6 +180,9 @@ export class ConfigurationService {
    * resolves to `TNM Size` as described in
    * {{#crossLink "ConfigurationService/getLabel"}}{{/crossLink}}.
    *
+   * Note that an array index is supported, e.g. `tumors[0]`
+   * in the above example.
+   *
    * @property dataModel {Object}
    */
   get labelLookup(): Object {
@@ -213,12 +217,12 @@ export class ConfigurationService {
    * * If the label lookup search returns a matching {text, html} label
    *   object and has a *html* value, then that value is returned.
    *
-   * @method getHTMLabel
+   * @method getHTMLLabel
    * @param property {string} the property path
    * @param config {string} the optional parameterized extension
    * @return {string} the display HTML label
    */
-  getHTMLabel(property: string, config?: string) {
+  getHTMLLabel(property: string, config?: string) {
     let target = this.getLabelObject(property, config);
     if (target) {
       return target.html || target.text;
@@ -275,40 +279,6 @@ export class ConfigurationService {
     let path = `${ config }.${ property }._label`;
 
     return _.get(this.labelLookup, path);
-  }
-
-  /**
-   * Returns the configuration label for the given display
-   * property, as described in
-   * {{#crossLink "ConfigurationService/getLabel"}}{{/crossLink}},
-   * with the exception that if the
-   * {{#crossLink "ConfigurationService/getLabel"}}{{/crossLink}}
-   * search fails, then this method returns `undefined`.
-   *
-   * @method getConfigLabel
-   * @private
-   * @param property {string} the property path
-   * @return {string} the target label
-   */
-  private getConfigLabel(property: string): string {
-    let collection = this.subject.collection;
-    let label = this.configService.getLabel(property, collection);
-    if (label) {
-      return label.html || label.text;
-    }
-  }
-
-  /**
-   * Returns the HTML for the given
-   * {{#crossLink "ConfigurationService/dataModel:property"}}{{/crossLink}}
-   * atomic property key. The default HTML is the key itself.
-   *
-   * @method html
-   * @param key {string} the configuration key
-   * @return {string} the target HTML
-   */
-  getHTML(property: string) {
-    return this.htmlLookup[property] || property;
   }
 
   /**

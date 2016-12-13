@@ -149,7 +149,7 @@ export class CorrelationComponent implements OnInit {
       throw new Error('The correlation property was not found for the X' +
                       ' selection path ' + this.xPropertyPath);
     }
-    this.xValueChoices = _.get(this.valueChoices, this.xPropertyPath);
+    this.xValueChoices = _.get(this.valueChoices, _.last(this.xPropertyPath));
     if (!this.yPropertyPath) {
       throw new Error('The correlation is missing the Y selection path.');
     }
@@ -158,7 +158,7 @@ export class CorrelationComponent implements OnInit {
       throw new Error('The correlation property was not found for the Y' +
                       ' selection path ' + this.yPropertyPath);
     }
-    this.yValueChoices = _.get(this.valueChoices, this.yPropertyPath);
+    this.yValueChoices = _.get(this.valueChoices, _.last(this.yPropertyPath));
   }
 
   /**
@@ -171,7 +171,9 @@ export class CorrelationComponent implements OnInit {
    */
   onXChange(path: string) {
     this.x = _.get(this.xPropertyChoices, path);
-    this.xValueChoices = _.get(this.valueChoices, path);
+    // The value choice topics are the atomic property name.
+    let prop = _.last(path.split('.'));
+    this.xValueChoices = _.get(this.valueChoices, prop);
   }
 
   /**
@@ -184,7 +186,9 @@ export class CorrelationComponent implements OnInit {
    */
   onYChange(path: string) {
     this.y = _.get(this.yPropertyChoices, path);
-    this.yValueChoices = _.get(this.valueChoices, path);
+    // The value choice topics are the atomic property name.
+    let prop = _.last(path.split('.'));
+    this.yValueChoices = _.get(this.valueChoices, prop);
   }
 
   /**

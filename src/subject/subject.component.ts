@@ -53,6 +53,16 @@ export class SubjectComponent extends PageComponent {
   subject: Object;
 
   /**
+   * The subject demographics sub-object.
+   *
+   * @property demographics {Object}
+   */
+  get demographics(): Object {
+    const DEMOGRAPHICS_PROPERTIES = ['age', 'gender', 'races', 'ethnicity'];
+    return _.pick(this.subject, DEMOGRAPHICS_PROPERTIES);
+  }
+
+  /**
    * The modeling display format, `chart` or `table`.
    *
    * @property modelingFormat {string}
@@ -68,17 +78,14 @@ export class SubjectComponent extends PageComponent {
    *
    * @property label {function}
    */
-  const label = (property: string) => this.getLabel(property);
+  const label = (property) => this.getLabel(property);
 
   /**
-   * A
-   * {{#crossLink "SubjectComponent/getGenomicsLabel"}}{{/crossLink}}
-   * wrapper that can be used in templates.
+   * The discrete property {path: {value: label}} tick label choices.
    *
-   * @property genomicsLabel {function}
+   * @property valueChoices {Object}
    */
-  const genomicsLabel = (property: string) =>
-    this.getGenomicsLabel(property);
+  valueChoices: Object;
 
   /**
    * The project name.
@@ -114,6 +121,9 @@ export class SubjectComponent extends PageComponent {
     overlay.defaultViewContainer = vcRef;
     // The route/query parameters.
     let params = this.route.params.value;
+
+    // The select {path: {value: label}} configuration.
+    this.valueChoices = this.configService.valueChoices;
 
     // A place-holder subject sufficient to get a title.
     this.subject = subjectService.secondaryKey(params);

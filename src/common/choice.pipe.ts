@@ -31,7 +31,7 @@ export class ChoicePipe implements PipeTransform {
   transform(value: string|string[], topic: string): string|string[] {
     // Recurse into an array.
     if (_.isArray(value)) {
-      let recurse = (v, t) => this.transform(v, t);
+      let recurse = item => this.transform(item, topic);
       return value.map(recurse);
     }
     // The choice section.

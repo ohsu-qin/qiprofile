@@ -7,6 +7,7 @@
 
 `import * as _ from "lodash"`
 `import * as _s from "underscore.string"`
+`import moment from "moment"`
 
 # Define here for reuse below.
 _sortValuesByKey = (obj) ->
@@ -30,6 +31,20 @@ _hasValidContent = (value) ->
     _.some(value, _hasValidContent)
   else
     true
+
+_isDate = (value) ->
+  moment.isDate(value) or moment.isMoment(value)
+
+_isAtomic = (value) ->
+  _.isNil(value) or _.isString(value) or
+  _.isNumber(value) or _.isBoolean(value) or _isDate(value)
+
+_isSimple = (value) ->
+  _isAtomic(value) or _isSimpleArray(value)
+
+_isSimpleArray = (value) ->
+  _.isArray(value) and _.every(value, _isSimple)
+
 
 ###*
  * The static ObjectHelper utility.
@@ -66,23 +81,44 @@ ObjectHelper =
    *   is finite.
    * * If the value is an array or object, then return
    *   whether the value has an indexed item with content.
-   * * Otherwise, return whether the value is not undefined
-   *   or null.
+   * * Otherwise, return whether the value is neither undefined
+   *   nor null.
    *
    * This method recurses into children to determine whether
    * the children have content.
    *
    * Examples:
    *     ObjectHelper.hasContent(null) // => false
-   *     ObjectHelper.hasContent(NaN) // => true
-   *     ObjectHelper.hasContent(null) // => false
-   *     ObjectHelper.hasContent(null) // => false
+   *     ObjectHelper.hasContent(NaN) // => false
+   *     ObjectHelper.hasContent(3) // => true
+   *     ObjectHelper.hasContent('a') // => true
+   *     ObjectHelper.hasContent([3, 2]) // => true
+   *     ObjectHelper.hasContent([]) // => false
+   *     ObjectHelper.hasContent([null]) // => false
+   *     ObjectHelper.hasContent({a: 1}) // => true
+   *     ObjectHelper.hasContent([{}, [[{}, [5]]]]) // => true
    *
    * @method hasContent
    * @param value {any} the value to check
    * @return {boolean} whether the value has content
   ###
   hasValidContent: _hasValidContent
+
+  ###*
+   * Returns whether the given value is nil, a string,
+   * a number, a date or an array of simple values.
+   *
+   * Examples:
+   *     ObjectHelper.isSimple(null) // => true
+   *     ObjectHelper.isSimple({a: 1}) // => false
+   *     ObjectHelper.isSimple([3]) // => true
+   *     ObjectHelper.isSimple([2, [4, 1]]) // => true
+   *
+   * @method isSimple
+   * @param value {any} the value to check
+   * @return {boolean} whether the value is simple
+  ###
+  isSimple: _isSimple
 
   ###*
    * Pretty prints the given object in a readable format. This function

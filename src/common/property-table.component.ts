@@ -64,6 +64,14 @@ export class PropertyTableComponent implements OnInit {
   @Input() label: (key: string) => string;
 
   /**
+   * The optional value {path: {value: label}} associative object,
+   * where *path* is the property select choice path.
+   *
+   * @property valueChoices {Object}
+   */
+  @Input() valueChoices: Object;
+
+  /**
    * The optional property names to always include, whether
    * or not there is a non-null property value. This property
    * has precedence if the
@@ -142,17 +150,9 @@ export class PropertyTableComponent implements OnInit {
     let others = _.reject(include, key => _.includes(selected, key));
     // The candidate keys sorted by name.
     let keys = _.concat(selected, others).sort();
-    // Is the value a string, boolean, number or null?
-    let isAtomic = _.negate(_.isPlainObject);
-    // Is the value an array of atomic items?
-    let isSimpleArray = value => _.isArray(value) && _.every(value, isAtomic);
-    // A simple value is atomic or an array of simple values.
-    let isSimple = key => {
-      let value = this.object[key];
-      return isAtomic(value) || isSimpleArray(value);
-    };
 
     // Split the candidate keys into simple and composite.
+    let isSimple = key => ObjectHelper.isSimple(this.object[key]);
     let [simple, composite] = _.partition(keys, isSimple);
     // The non-object candidate keys.
     this.simpleKeys = simple;
@@ -200,19 +200,12 @@ export class PropertyTableComponent implements OnInit {
    * key.
    *
    * @method getDisplayValue
-   * @param {string} the simple key
-   * @return {string} the display value
+   * @param key {string} the simple key
+   * @return {any} the display value
    */
-  getDisplayValue(key: string): Object[] {
+  getDisplayValue(key: string): string {
     let value = this.object[key];
-    if (_.isArray(value)) {
-      let content = _reject(value, _.isNil).join(', ');
-      return _.isEmpty(content) ? MISSING_LABEL : content;
-    } else if (ObjectHelper.hasValidContent(value)) {
-      return value;
-    } else {
-      return MISSING_LABEL;
-    }
+    return this.formatDisplayValue(value, key);
   }
 
   /**
@@ -221,7 +214,7 @@ export class PropertyTableComponent implements OnInit {
    * key.
    *
    * @method children
-   * @param {string} the composite key
+   * @param key {string} the composite key
    * @return {Object[]} the child objects
    */
   children(key: string): Object[] {
@@ -237,27 +230,10 @@ export class PropertyTableComponent implements OnInit {
    * @method getPath
    * @param property {string} a property path relative to the
    *   {{#crossLink "PropertyTableComponent/object:property"}}{{/crossLink}}
-   * @param index {number} the array index for an array property
    * @return {string} the augmented property path
    */
-  getPath(property: string, index?: number): string {
-    let suffix;
-    if (_.isArray(this.object[property])) {
-      if (_.isNil(index)) {
-        throw new Error('The property path to an array item is missing' +
-                        ` the item index: ${ property }`);
-      }
-      suffix = `${ property }[${ index }]`;
-    } else {
-      if (index) {
-        throw new Error('The property path to an object whose parent is' +
-                        ' not an array is incorrect:' +
-                        ` ${ property }[${ index }]`);
-      }
-      suffix = property;
-    }
-
-    return this.path ? `${ this.path }.${ suffix }` : suffix;
+  getPath(property: string): string {
+    return this.path ? `${ this.path }.${ property }` : property;
   }
 
   /**
@@ -273,6 +249,37 @@ export class PropertyTableComponent implements OnInit {
   }
 
   /**
+   * Returns the display value for the given
+   * {{#crossLink "PropertyTableComponent/getDisplayValue:property"}}{{/crossLink}}
+   * key and value.
+   *
+   * @method getDisplayValue
+   * @param value {any} the value to display
+   * @param key {string} the simple key
+   * @return {any} the display value
+   */
+  private formatDisplayValue(value: any, key: string): string {
+    if (_.isArray(value)) {
+      let cleaned = _.omit(value, _.isNil);
+      if (_.isEmpty(cleaned)) {
+        return MISSING_LABEL;
+      }
+      let recurse = item => this.formatDisplayValue(item, key);
+      return value.map(recurse).join(', ');
+    } else if (ObjectHelper.hasValidContent(value)) {
+      if (this.valueChoices) {
+        let label = this.getLabel(key);
+        let choices = this.valueChoices[label];
+        return _.get(choices, value) || value;
+      } else {
+        return value;
+      }
+    } else {
+      return MISSING_LABEL;
+    }
+  }
+
+  /**
    * Returns whether the given property key is not in the
    * {{#crossLink "PropertyTableComponent/exclude:property"}}{{/crossLink}}
    * list, does not reference the
@@ -282,7 +289,7 @@ export class PropertyTableComponent implements OnInit {
    *
    * @method isDisplayable
    * @private
-   * @param {string} the composite key
+   * @param key {string} the composite key
    * @return {boolean} whether the property should be displayed
    */
   private isDisplayable(key: string) {

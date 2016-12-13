@@ -5,7 +5,7 @@ span.qi-table-title Genetic Expression
     [object]="tumor.geneticExpression",
     [path]="'subject.biopsy.pathology.tumors[0].geneticExpression'",
     [exclude]=['tumor', 'normalizedAssay'],
-    [label]="genomicsLabel"
+    [label]="label"
   )
 
   .qi-vertical-space(*ngIf="has(tumor.geneticExpression.normalizedAssay)")

@@ -55,24 +55,52 @@ extendEncounters = (subject) ->
 ###
 ModelingResults =
   ###*
+   * Collects the modeling results into a [_modelings_] array,
+   * where _modelings_ is a {{source, protocol, results}},
+   * the ``source`` value is a {source type, source protocol}
+   * object, ``protocol`` is the modeling protocol, and
+   * ``results`` is an array of modeling results in session
+   * number order.
    * @method collect
    * @param subject {Object} the parent subject
-   * @return {Object[]} the modeling [{source, results}] array,
-   *   where each source value is a {type: id} object and the
-   *   results are the modeling results in session number
-   *   order.
+   * @return {Object} the
+   *   {_sourceType_: {_sourceProtocol_: {_modelingProtocol_: _results_}}}
+   *   associative object,
+   *   where the results are an array in session number order
   ###
   collect: (subject) ->
-    # Make the {protocol id: {source type: {source id: results}}}
-    # object.
-    assoc = subject.sessions.reduce(associate, {})
-    # Flatten into a [[{protocol, source, results}, ...], ...]
-    # array of arrays partitioned by protocol id.
-    modelingArrays = (
-      flattenBySource(pclId, srcAssoc) for pclId, srcAssoc of assoc
-    )
-    # Flatten into a [{protocol, source, results}, ...] array.
-    _.flatten(modelingArrays)
+    # The modeling result intensity value property path.
+    intensityPath = 'image.metadata.average_intensity'
+    # The grouped modelings.
+    grouped = {}
+    # Collect each session modeling result.
+    for session, i in subject.sessions
+      for modeling in session.modelings
+        # Convert the modeling source from {_type_: _protocol_}
+        # to [_type_, _protocol_].
+        source = _.toPairs(modeling.source)[0]
+        # The property path to the modeling result is the
+        # source followed by the modeling protocol followed
+        # by the session index.
+        path = _.flatten([source, modeling.protocol, i])
+        result = _.mapValues(modeling.result, intensityPath)
+        _.set(grouped, path, result)
+
+    # Regroup by the modeling source and protocol.
+    regrouped = []
+    for sourceType, rest of grouped
+      for sourceProtocol, rest2 of rest
+        for modelingProtocol, results of rest2
+          item =
+            source:
+              type: sourceType
+              protocol: sourceProtocol
+            protocol: modelingProtocol
+            results: results
+          regrouped.push(item)
+
+    # Return the regrouped array.
+    regrouped
 
 
 ###*
@@ -172,10 +200,10 @@ Subject =
           if surgeries.length is 1 then surgeries[0] else null
 
       ###*
-       * The {{#crossLink "Modeling"}}{{/crossLink}} results array.
+       * The {{#crossLink "ModelingResults"}}{{/crossLink}}
+       * array.
        *
-       * @property modelings
-       * @return the modelings array
+       * @property modelings {Object[]}
       ###
       modelings:
         get: ->

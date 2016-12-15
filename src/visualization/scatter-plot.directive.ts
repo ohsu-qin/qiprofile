@@ -436,7 +436,7 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
       pointTransform: pointTransform,
       x: {range: [x1, x2]},
       y: {range: [y1, y2]}
-    }
+    };
   }
 
   /**
@@ -699,7 +699,7 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
    *
    * @method getDiscreteValues
    * @param discrete {function} the discrete axis value accessor
-    *  object
+   *   object
    * @param other {function} the orthogonal axis value accessor
    * @return {any[]} the sorted discrete values
    */
@@ -753,7 +753,7 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
    *
    * @method getDiscreteSortCriterion
    * @param groups {Object} the discrete {value: [data objects]}
-    *  object
+   *   object
    * @param other {function} the orthogonal value accessor
    * @return {Object} the group sort criteria
    */

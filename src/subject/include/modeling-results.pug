@@ -1,5 +1,4 @@
-// The PK modeling parameters.
-// The modeling results.
+// The PK modeling results.
 .qi-panel(*ngIf="has(subject.modelings)")
   h4.panel-title Pharmokinetic Modeling
   div(*ngIf="subject.isMultiSession()")
@@ -14,7 +13,7 @@
         (click)="openModelingHelp()"
       )
         .glyphicon.glyphicon-question-sign
-    accordion([showArrows]=true, [expandAll]=true)
+    accordion([showArrows]=true)
       accordion-group(*ngFor="param in modelingParameters()")
       [heading]="'Demographics'")
         include demographics
@@ -40,7 +39,7 @@
   //-     include modeling-parameters
 
 
-ccordion([showArrows]=true, [expandAll]=true)
+accordion([showArrows]=true, [expandAll]=true)
   accordion-group([heading]="'Demographics'")
     include demographics
 

@@ -1,14 +1,26 @@
 // The modeling results.
-.qi-panel(*ngIf="has(subject.modelings)")
-  h4.panel-title Pharmokinetic Modeling
-  div(*ngSwitch="subject.sessions.length")
-    qi-property-table(
-      *ngSwitchCase=1,
-      // TODO - show all modelings.
-      [object]="subject.modelings[0].intensities",
-      [path]="'scanModeling.modelingResult'",
-      [title]="'Modeling Result'",
-      [label]="label"
-    )
-  div(*ngSwitchDefault)
-    include modeling-results
+div(*ngIf="has(subject.modelings)")
+  h4.qi-text-center Sessions
+  .qi-even-row
+    span.qi-cell
+    span.qi-cell(*ngFor="let session of subject.sessions")
+      | {{ session.number }}
+  .qi-even-row
+    .qi-cell
+    .qi-cell(*ngFor="let session of subject.sessions")
+      | Preview {{ session.number }}
+  h4.qi-text-center Pharmokinetic Modeling
+  .qi-even-row(*ngFor="let modelings of subject.modelings")
+    .qi-cell {{ modelings.source.type }}
+    .qi-cell(*ngFor="let modeling of modelings.results")
+      | Modeling Result
+//-   div(*ngFor="modeling in subject.modelingResults")
+//-     span True
+    //- div(*ngFor="let session in subject.sessions")
+    //-   span {{ session.number }}
+      //- qi-property-table(
+      //-   *ngFor="let modeling in session.modelings",
+      //-   [object]="modeling.intensities",
+      //-   [path]="'scanModeling.intensities'",
+      //-   [label]="label"
+      //- )

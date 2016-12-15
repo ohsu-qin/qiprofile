@@ -30,11 +30,6 @@
 .qi-align-top
   vertical-align top
 
-// Impart table cell mojo without the table structural cruft.
-.qi-cell
-  display table-cell
-  vertical-align middle
-
 // See the clean-list helper for a description.
 ul.qi-clean-list
   clean-list()
@@ -174,6 +169,20 @@ ul.qi-clean-list
 // The nested style adds an offset.
 .qi-nested
   padding 0.5em
+
+// Impart table cell mojo without the table structural cruft.
+.qi-cell
+  display table-cell
+  vertical-align middle
+
+// A row with evenly-spaced, centered cells.
+.qi-even-row
+  display table
+  width 100%
+  text-align center
+  table-layout fixed
+  & .qi-cell
+    display table-cell
 
 // The standard qiprofile data table style.
 // This style should be used in conjunction with the bootstrap

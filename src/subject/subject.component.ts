@@ -186,7 +186,7 @@ export class SubjectComponent extends PageComponent {
     this.modal.alert()
       .size('med')
       .showClose(true)
-      .title('Pharmokinetic Modeling')
+      .title('Pharmacokinetic Modeling')
       .body(modelingHelp)
       .open();
   }

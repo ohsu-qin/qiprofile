@@ -17,7 +17,7 @@ imaging analysis biomarkers with clinical outcomes.
 Feature List
 ************
 
-1. Side-by-side clinical and pharmokinetic modeling results display.
+1. Side-by-side clinical and pharmacokinetic modeling results display.
 
 2. MR visualization.
 

@@ -9,7 +9,7 @@ div(*ngIf="has(subject.modelings)")
     .qi-cell
     .qi-cell(*ngFor="let session of subject.sessions")
       | Preview {{ session.number }}
-  h4.qi-text-center Pharmokinetic Modeling
+  h4.qi-text-center Pharmacokinetic Modeling
   .qi-even-row(*ngFor="let modelings of subject.modelings")
     .qi-cell {{ modelings.source.type }}
     .qi-cell(*ngFor="let modeling of modelings.results")

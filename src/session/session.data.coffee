@@ -99,7 +99,7 @@ Session =
           get: ->
             if @length and @width and @depth
               (@length * @width * @depth) / 1000
-    
+
     # Add the overlays property.
     session.overlays = getOverlays(session)
 
@@ -180,6 +180,15 @@ Session =
       registrationModeling:
         get: ->
           _.find(@modelings, 'source.registration')
+
+      ###*
+       * The sum of all tumor volumes.
+       *
+       * @property tumorVolume
+      ###
+      tumorVolume:
+        get: ->
+          _.sumBy(@tumorExtents, 'volume')
 
     ###*
      * @method hasDetailProperties

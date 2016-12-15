@@ -4,19 +4,17 @@ h4.qi-profile-heading Clinical Profile
   // accordion group must also set isOpened to true
   // (cf. https://github.com/pleerock/ng2-accordion/issues/13).
   accordion([showArrows]=true, [expandAll]=true)
+    // The Demographics table.
     accordion-group([heading]="'Demographics'")
       include demographics
 
-    // Iterate over the encounters to include the encounter partial.
-    accordion-group(
-      *ngFor="let encounter of subject.clinicalEncounters",
-      [heading]="encounter.title", [isOpened]=true
-    )
+    // The encounter tables.
+    div(*ngFor="let encounter of subject.clinicalEncounters")
+      accordion-group([heading]="encounter.title", [isOpened]=true)
       include clinical-encounter
 
-    // TODO - enable.
-    
-    //- // Iterate over the treatments to include the treatment partial.
+    //- TODO - enable.
+    //- // The treatments tables.
     //- accordion-group(*ngFor="let treatment in subject.treatments",
     //-   [heading]="treatment.title", [isOpened]=true
     //- )

@@ -2,4 +2,4 @@
 
 _QiPr_ displays medical imaging and clinical data.
 
-* [API](./build/doc/api/index.rst)
+* [API](./build/doc/api/index.html)

@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>build/src/volume/volume.component.ts - qiprofile API</title>
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="http://yui.yahooapis.com/combo?3.8.0pr2/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div class="yui3-g">
+        <div id="sidebar" class="yui3-u">
+            <div class="logo">
+              <a href="../index.html">
+                  qiprofile API
+              </a>
+            </div>
+            
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/clinical.html">clinical</a>
+                            </li>
+                            <li><a href="../modules/collection.html">collection</a>
+                            </li>
+                            <li><a href="../modules/collections.html">collections</a>
+                            </li>
+                            <li><a href="../modules/common.html">common</a>
+                            </li>
+                            <li><a href="../modules/configuration.html">configuration</a>
+                            </li>
+                            <li><a href="../modules/controls.html">controls</a>
+                            </li>
+                            <li><a href="../modules/data.html">data</a>
+                            </li>
+                            <li><a href="../modules/date.html">date</a>
+                            </li>
+                            <li><a href="../modules/error.html">error</a>
+                            </li>
+                            <li><a href="../modules/file.html">file</a>
+                            </li>
+                            <li><a href="../modules/help.html">help</a>
+                            </li>
+                            <li><a href="../modules/home.html">home</a>
+                            </li>
+                            <li><a href="../modules/image.html">image</a>
+                            </li>
+                            <li><a href="../modules/imageSequence.html">imageSequence</a>
+                            </li>
+                            <li><a href="../modules/main.html">main</a>
+                            </li>
+                            <li><a href="../modules/object.html">object</a>
+                            </li>
+                            <li><a href="../modules/page.html">page</a>
+                            </li>
+                            <li><a href="../modules/project.html">project</a>
+                            </li>
+                            <li><a href="../modules/projects.html">projects</a>
+                            </li>
+                            <li><a href="../modules/rest.html">rest</a>
+                            </li>
+                            <li><a href="../modules/roman.html">roman</a>
+                            </li>
+                            <li><a href="../modules/session.html">session</a>
+                            </li>
+                            <li><a href="../modules/string.html">string</a>
+                            </li>
+                            <li><a href="../modules/subject.html">subject</a>
+                            </li>
+                            <li><a href="../modules/testing.html">testing</a>
+                            </li>
+                            <li><a href="../modules/visualization.html">visualization</a>
+                            </li>
+                            <li><a href="../modules/volume.html">volume</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/AppComponent.html">AppComponent</a></li>
+                            <li><a href="../classes/AppModule.html">AppModule</a></li>
+                            <li><a href="../classes/Breast.html">Breast</a></li>
+                            <li><a href="../classes/BreastNormalizedAssay.html">BreastNormalizedAssay</a></li>
+                            <li><a href="../classes/BreastPathology.html">BreastPathology</a></li>
+                            <li><a href="../classes/CascadeSelectComponent.html">CascadeSelectComponent</a></li>
+                            <li><a href="../classes/ClinicalEncounter.html">ClinicalEncounter</a></li>
+                            <li><a href="../classes/CollectionActivatedRouteStub.html">CollectionActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionComponent.html">CollectionComponent</a></li>
+                            <li><a href="../classes/CollectionComponentSpec.html">CollectionComponentSpec</a></li>
+                            <li><a href="../classes/CollectionItemComponent.html">CollectionItemComponent</a></li>
+                            <li><a href="../classes/CollectionListPage.html">CollectionListPage</a></li>
+                            <li><a href="../classes/CollectionListSpec.html">CollectionListSpec</a></li>
+                            <li><a href="../classes/CollectionModule.html">CollectionModule</a></li>
+                            <li><a href="../classes/CollectionRouterStub.html">CollectionRouterStub</a></li>
+                            <li><a href="../classes/CollectionsActivatedRouteStub.html">CollectionsActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionsComponent.html">CollectionsComponent</a></li>
+                            <li><a href="../classes/CollectionsComponentSpec.html">CollectionsComponentSpec</a></li>
+                            <li><a href="../classes/CollectionsHelpComponent.html">CollectionsHelpComponent</a></li>
+                            <li><a href="../classes/CollectionsHelpServiceStub.html">CollectionsHelpServiceStub</a></li>
+                            <li><a href="../classes/CollectionsHelpTextComponent.html">CollectionsHelpTextComponent</a></li>
+                            <li><a href="../classes/CollectionsModule.html">CollectionsModule</a></li>
+                            <li><a href="../classes/CollectionsResource.html">CollectionsResource</a></li>
+                            <li><a href="../classes/CollectionsService.html">CollectionsService</a></li>
+                            <li><a href="../classes/CollectionsServiceStub.html">CollectionsServiceStub</a></li>
+                            <li><a href="../classes/CollectionSubectServiceStub.html">CollectionSubectServiceStub</a></li>
+                            <li><a href="../classes/ColorBarDirective.html">ColorBarDirective</a></li>
+                            <li><a href="../classes/CommonModule.html">CommonModule</a></li>
+                            <li><a href="../classes/ConfigurationService.html">ConfigurationService</a></li>
+                            <li><a href="../classes/ConfigurationServiceSpec.html">ConfigurationServiceSpec</a></li>
+                            <li><a href="../classes/ControlsModule.html">ControlsModule</a></li>
+                            <li><a href="../classes/CorrelationComponent.html">CorrelationComponent</a></li>
+                            <li><a href="../classes/DateHelper.html">DateHelper</a></li>
+                            <li><a href="../classes/DateHelperSpec.html">DateHelperSpec</a></li>
+                            <li><a href="../classes/Encounter.html">Encounter</a></li>
+                            <li><a href="../classes/ErrorComponent.html">ErrorComponent</a></li>
+                            <li><a href="../classes/FileService.html">FileService</a></li>
+                            <li><a href="../classes/FileServiceSpec.html">FileServiceSpec</a></li>
+                            <li><a href="../classes/Findable.html">Findable</a></li>
+                            <li><a href="../classes/HelpComponent.html">HelpComponent</a></li>
+                            <li><a href="../classes/HelpService.html">HelpService</a></li>
+                            <li><a href="../classes/HomeComponent.html">HomeComponent</a></li>
+                            <li><a href="../classes/IamgeSequenceService.html">IamgeSequenceService</a></li>
+                            <li><a href="../classes/Image.html">Image</a></li>
+                            <li><a href="../classes/ImageComponent.html">ImageComponent</a></li>
+                            <li><a href="../classes/ImageModule.html">ImageModule</a></li>
+                            <li><a href="../classes/ImageSequence.html">ImageSequence</a></li>
+                            <li><a href="../classes/ImageSequenceServiceSpec.html">ImageSequenceServiceSpec</a></li>
+                            <li><a href="../classes/ImageSequenceSessionServiceStub.html">ImageSequenceSessionServiceStub</a></li>
+                            <li><a href="../classes/ImageSequenceSpec.html">ImageSequenceSpec</a></li>
+                            <li><a href="../classes/ImageStore.html">ImageStore</a></li>
+                            <li><a href="../classes/LabelMap.html">LabelMap</a></li>
+                            <li><a href="../classes/Modeling.html">Modeling</a></li>
+                            <li><a href="../classes/ModelingResult.html">ModelingResult</a></li>
+                            <li><a href="../classes/ModelingResults.html">ModelingResults</a></li>
+                            <li><a href="../classes/ObjectHelper.html">ObjectHelper</a></li>
+                            <li><a href="../classes/Page.html">Page</a></li>
+                            <li><a href="../classes/PageComponent.html">PageComponent</a></li>
+                            <li><a href="../classes/PageModule.html">PageModule</a></li>
+                            <li><a href="../classes/PapayaService.html">PapayaService</a></li>
+                            <li><a href="../classes/ParameterResult.html">ParameterResult</a></li>
+                            <li><a href="../classes/Pathology.html">Pathology</a></li>
+                            <li><a href="../classes/PlayerComponent.html">PlayerComponent</a></li>
+                            <li><a href="../classes/ProjectItemComponent.html">ProjectItemComponent</a></li>
+                            <li><a href="../classes/ProjectListPage.html">ProjectListPage</a></li>
+                            <li><a href="../classes/ProjectListSpec.html">ProjectListSpec</a></li>
+                            <li><a href="../classes/ProjectsComponent.html">ProjectsComponent</a></li>
+                            <li><a href="../classes/ProjectsComponentSpec.html">ProjectsComponentSpec</a></li>
+                            <li><a href="../classes/ProjectsHelpComponent.html">ProjectsHelpComponent</a></li>
+                            <li><a href="../classes/ProjectsHelpServiceStub.html">ProjectsHelpServiceStub</a></li>
+                            <li><a href="../classes/ProjectsHelpTextComponent.html">ProjectsHelpTextComponent</a></li>
+                            <li><a href="../classes/ProjectsModule.html">ProjectsModule</a></li>
+                            <li><a href="../classes/ProjectsResource.html">ProjectsResource</a></li>
+                            <li><a href="../classes/ProjectsService.html">ProjectsService</a></li>
+                            <li><a href="../classes/ProjectsServiceStub.html">ProjectsServiceStub</a></li>
+                            <li><a href="../classes/PropertyTableComponent.html">PropertyTableComponent</a></li>
+                            <li><a href="../classes/RCB.html">RCB</a></li>
+                            <li><a href="../classes/Registration.html">Registration</a></li>
+                            <li><a href="../classes/RegistrationSpec.html">RegistrationSpec</a></li>
+                            <li><a href="../classes/REST.html">REST</a></li>
+                            <li><a href="../classes/RestResource.html">RestResource</a></li>
+                            <li><a href="../classes/RESTSpec.html">RESTSpec</a></li>
+                            <li><a href="../classes/Roman.html">Roman</a></li>
+                            <li><a href="../classes/RomanSpec.html">RomanSpec</a></li>
+                            <li><a href="../classes/Sarcoma.html">Sarcoma</a></li>
+                            <li><a href="../classes/Scan.html">Scan</a></li>
+                            <li><a href="../classes/ScanSpec.html">ScanSpec</a></li>
+                            <li><a href="../classes/ScatterPlotDirective.html">ScatterPlotDirective</a></li>
+                            <li><a href="../classes/Session.html">Session</a></li>
+                            <li><a href="../classes/SessionActivatedRouteStub.html">SessionActivatedRouteStub</a></li>
+                            <li><a href="../classes/SessionComponent.html">SessionComponent</a></li>
+                            <li><a href="../classes/SessionComponentSpec.html">SessionComponentSpec</a></li>
+                            <li><a href="../classes/SessionDetailResource.html">SessionDetailResource</a></li>
+                            <li><a href="../classes/SessionDetailResourceStub.html">SessionDetailResourceStub</a></li>
+                            <li><a href="../classes/SessiondRouterStub.html">SessiondRouterStub</a></li>
+                            <li><a href="../classes/SessionModule.html">SessionModule</a></li>
+                            <li><a href="../classes/SessionService.html">SessionService</a></li>
+                            <li><a href="../classes/SessionServiceSpec.html">SessionServiceSpec</a></li>
+                            <li><a href="../classes/SessionServiceStub.html">SessionServiceStub</a></li>
+                            <li><a href="../classes/SessionSpec.html">SessionSpec</a></li>
+                            <li><a href="../classes/SessionSubjectResourceStub.html">SessionSubjectResourceStub</a></li>
+                            <li><a href="../classes/SessionTumorExtent.html">SessionTumorExtent</a></li>
+                            <li><a href="../classes/SliderDirective.html">SliderDirective</a></li>
+                            <li><a href="../classes/SparkLineDirective.html">SparkLineDirective</a></li>
+                            <li><a href="../classes/StringHelper.html">StringHelper</a></li>
+                            <li><a href="../classes/StringHelperSpec.html">StringHelperSpec</a></li>
+                            <li><a href="../classes/Subject.html">Subject</a></li>
+                            <li><a href="../classes/SubjectActivatedRouteStub.html">SubjectActivatedRouteStub</a></li>
+                            <li><a href="../classes/SubjectChangeDetectorRefStub.html">SubjectChangeDetectorRefStub</a></li>
+                            <li><a href="../classes/SubjectComponent.html">SubjectComponent</a></li>
+                            <li><a href="../classes/SubjectComponentSpec.html">SubjectComponentSpec</a></li>
+                            <li><a href="../classes/SubjectdRouterStub.html">SubjectdRouterStub</a></li>
+                            <li><a href="../classes/SubjectModule.html">SubjectModule</a></li>
+                            <li><a href="../classes/SubjectResource.html">SubjectResource</a></li>
+                            <li><a href="../classes/SubjectResourceStub.html">SubjectResourceStub</a></li>
+                            <li><a href="../classes/SubjectService.html">SubjectService</a></li>
+                            <li><a href="../classes/SubjectServiceSpec.html">SubjectServiceSpec</a></li>
+                            <li><a href="../classes/SubjectServiceStub.html">SubjectServiceStub</a></li>
+                            <li><a href="../classes/SubjectSpec.html">SubjectSpec</a></li>
+                            <li><a href="../classes/Table.html">Table</a></li>
+                            <li><a href="../classes/TimeSeries.html">TimeSeries</a></li>
+                            <li><a href="../classes/TNM.html">TNM</a></li>
+                            <li><a href="../classes/ToggleHelpComponent.html">ToggleHelpComponent</a></li>
+                            <li><a href="../classes/VisualizationModule.html">VisualizationModule</a></li>
+                            <li><a href="../classes/Volume.html">Volume</a></li>
+                            <li><a href="../classes/VolumeComponent.html">VolumeComponent</a></li>
+                            <li><a href="../classes/VolumeDetailPage.html">VolumeDetailPage</a></li>
+                            <li><a href="../classes/VolumeImageSequenceServiceStub.html">VolumeImageSequenceServiceStub</a></li>
+                            <li><a href="../classes/VolumeModule.html">VolumeModule</a></li>
+                            <li><a href="../classes/VolumeService.html">VolumeService</a></li>
+                            <li><a href="../classes/VolumeServiceSpec.html">VolumeServiceSpec</a></li>
+                            <li><a href="../classes/VolumeSpec.html">VolumeSpec</a></li>
+                            <li><a href="../classes/XNAT.html">XNAT</a></li>
+                            <li><a href="../classes/XNATSpec.html">XNATSpec</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            
+            
+            
+            <div class="version-info">
+              Version: 2.1.1
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><div class="title">
+  <h1 class="file-name">build/src/volume/volume.component.ts</h1>
+</div>
+
+<pre class="code prettyprint linenums">
+import * as _ from &#x27;lodash&#x27;;
+import { Component, ViewContainerRef, HostListener } from &#x27;@angular/core&#x27;;
+import { ActivatedRoute } from &#x27;@angular/router&#x27;;
+import { Overlay } from &#x27;angular2-modal&#x27;;
+import { Modal } from &#x27;angular2-modal/plugins/bootstrap/index.js&#x27;;
+
+import { PageComponent } from &#x27;../page/page.component.ts&#x27;;
+import { PapayaService } from &#x27;../image/papaya.service.ts&#x27;;
+import { ImageSequenceService } from &#x27;../session/image-sequence.service.ts&#x27;;
+import { VolumeService } from &#x27;./volume.service.ts&#x27;;
+import help from &#x27;./volume.help.md&#x27;;
+import physicalIntensityHelp from &#x27;./physical-intensity.help.md&#x27;;
+import timePointIntensityHelp from &#x27;./time-point-intensity.help.md&#x27;;
+
+@Component({
+  selector: &#x27;qi-volume&#x27;,
+  templateUrl: &#x27;/public/html/volume/volume.html&#x27;,
+  providers: [ImageSequenceService, VolumeService]
+})
+
+/**
+ * The Volume main component.
+ *
+ * @class VolumeComponent
+ * @module volume
+ * @extends PageComponent
+ */
+export class VolumeComponent extends PageComponent {
+  /**
+   * The default horizontal slider configuration.
+   *
+   * @property HORIZONTAL_SLIDER_CONFIG {Object}
+   * @static
+   */
+  static const HORIZONTAL_SLIDER_CONFIG = {
+    connect: &#x27;lower&#x27;,
+    step: 1,
+    pips: {
+      mode: &#x27;steps&#x27;,
+    }
+  };
+
+  /**
+   * The default vertical slider configuration.
+   *
+   * @property VERTICAL_SLIDER_CONFIG {Object}
+   * @static
+   */
+  static const VERTICAL_SLIDER_CONFIG = _.defaults(
+    {orientation: &#x27;vertical&#x27;, direction: &#x27;rtl&#x27;},
+    VolumeComponent.HORIZONTAL_SLIDER_CONFIG
+  );
+
+  /**
+   * The route parameters are retained in case the session or
+   * volume changes.
+   *
+   * @property routeParams {Object}
+   */
+  routeParams: Object;
+
+  /**
+   * The place-holder object for the display title and home
+   * navigation project.
+   *
+   * @property placeHolder {string}
+   */
+  placeHolder: Object;
+
+  /**
+   * The image to display.
+   *
+   * @property image {Object}
+   */
+  image: Object;
+
+  /**
+   * The loaded volume REST object.
+   *
+   * @property volume {Object}
+   */
+  volume: Object;
+
+  /**
+   * The current coordinate time series voxel values.
+   *
+   * @property timePointIntensities {number[]}
+   */
+  timePointIntensities: number[];
+
+  /**
+   * The physical space voxel values about the current coordinate.
+   *
+   * @property physicalIntensities {number[]}
+   */
+  physicalIntensities: number[];
+
+  /**
+   * The physical intensity gradient chart legend.
+   *
+   * @property physicalIntensitiesLegend {Object}
+   */
+  physicalIntensitiesLegend = {
+    axial: &#x27;L-R&#x27;,
+    coronal: &#x27;A-P&#x27;,
+    sagittal: &#x27;I-S&#x27;
+  };
+
+  /**
+   * The physical intensity gradient chart width in pixels
+   * is a bit less than 20% of the window width to match
+   * the CSS .qi-time-series .qi-right setting and allow
+   * for a small right margin.
+   *
+   * @property gradientWidth {number}
+   */
+  gradientWidth: number;
+
+  /**
+   * The intensity charts top position is the image view base
+   * plus a small margin.
+   *
+   * @property intensityGradientsTop{number}
+   */
+   intensityGradientsTop: number;
+
+  /**
+   * The vertical time point slider height is calculated
+   * to span the image view height minus a small margin.
+   *
+   * @property timePointSliderHeight {number}
+   */
+  timePointSliderHeight: number;
+
+  /**
+   * The time point slider configuration.
+   *
+   * @property timePointSliderConfig {Object}
+   */
+  timePointSliderConfig: Object;
+
+  /**
+   * The session slider configuration.
+   *
+   * @property sessionSliderConfig {Object}
+   */
+  sessionSliderConfig: Object;
+
+  /**
+   * Flag indicating whether to stop an active time point player.
+   *
+   * @property cancelTimePointPlayer {boolean}
+   */
+  cancelTimePointPlayer = false;
+
+  /**
+   * Flag indicating whether to stop an active session player.
+   *
+   * @property cancelSessionPlayer {boolean}
+   */
+  cancelSessionPlayer = false;
+
+  /**
+   * The intensity [min, max].
+   *
+   * @property domain {number[]}
+   */
+  // TODO - get this from the pipeline.
+  domain = [0, 480];
+
+  /**
+   * The project name.
+   *
+   * @property project {string}
+   * @readOnly
+   */
+  get project(): string {
+    return this.placeHolder.imageSequence.session.subject.project;
+  }
+
+  /**
+   * The _coordinate_ =&gt; {_orientation_: _intensities_, ...}
+   * function described in
+   * {{#crossLink &quot;VolumeComponent/createPhysicalIntensitiesFactory&quot;}}{{/crossLink}}
+   *
+   * @property createPhysicalIntensities
+   * @private
+   * @static
+   */
+  private createPhysicalIntensities: Function;
+
+  /**
+   * Fetches the volume specified by the route parameters as
+   * described in
+   * {{#crossLink &quot;VolumeComponent/getVolume&quot;}}{{/crossLink}}.
+   *
+   * @method constructor
+   */
+  constructor(
+    route: ActivatedRoute,
+    vcRef: ViewContainerRef, overlay: Overlay, private modal: Modal,
+    private papaya: PapayaService, private service: VolumeService
+  ) {
+    super(help);
+    // Capture the route parameters.
+    this.routeParams = route.params.value;
+    // Prep the modal.
+    overlay.defaultViewContainer = vcRef;
+    // Make the physical intensity gradient factory.
+    this.createPhysicalIntensities = this.createPhysicalIntensitiesFactory();
+    // Set the dynamic styles.
+    this.calibrateStyles();
+    // Fetch the volume.
+    this.getVolume(this.routeParams);
+  }
+
+  /**
+   * Adjusts the slider and intensity chart placement and dimensions.
+   *
+   * @method onResize
+   */
+   @HostListener(&#x27;window:resize&#x27;, [&#x27;$event&#x27;])
+   onResize() {
+    this.calibrateStyles();
+  }
+
+  /**
+   * Sets the following style properties:
+   * * {{#crossLink &quot;VolumeComponent/timePointSliderHeight:property&quot;}}{{/crossLink}}
+   * * {{#crossLink &quot;VolumeComponent/intensityGradientsBottom:property&quot;}}{{/crossLink}}
+   * * {{#crossLink &quot;VolumeComponent/intensityGradientsWidth:property&quot;}}{{/crossLink}}
+   *
+   * @method calibrateStyles
+   * @private
+   */
+  private calibrateStyles() {
+    let imageViewHeight = this.imageViewHeight();
+    this.timePointSliderHeight =
+      this.calculateTimePointSliderHeight(imageViewHeight);
+    this.gradientWidth =
+      this.calculateIntensityGradientWidth();
+  }
+
+  /**
+   * Sets the
+   * {{#crossLink &quot;VolumeComponent/volume:property&quot;}}{{/crossLink}}
+   * property to notify the respective choosers.
+   *
+   * @method onLoaded
+   * @param volume {Object} the loaded volume
+   */
+  onLoaded(volume: Object) {
+    // Create the slider configurations, if necessary.
+    if (!this.timePointSliderConfig) {
+      this.timePointSliderConfig = this.createTimePointSliderConfig(volume);
+      this.sessionSliderConfig = this.createSessionSliderConfig(volume);
+    }
+
+    // Update the volume-based variables.
+    this.volume = volume;
+    // Set the intensities in the next cycle to avoid the infamous
+    // Angular &quot;Expression has changed after it was checked&quot; error
+    // (cf. https://github.com/angular/angular/issues/6005). Angular&#x27;s
+    // obscure, fragile change detector can&#x27;t deal with changes
+    // to a watched variable during change processing. The intensities
+    // change below induces this error, but only when the session player
+    // is advanced and then reset to the previous value. Perhaps this
+    // change confuses Angular because setting volume above triggers
+    // a redigest in the next cycle, so the intensities change must be
+    // deferred to a cycle after that. However, why this error does not
+    // occur on the initial advance is a mystery. Ah well, whatever
+    // appeases the Angular gods.
+    let setIntensities = () =&gt; {
+      let coord = this.papaya.currentCoordinate;
+      this.timePointIntensities = this.timePointVoxelValues(coord);
+      this.physicalIntensities = this.physicalVoxelValues(coord);
+    };
+    setTimeout(setIntensities, 0);
+  }
+
+  /**
+   * Turn off any active player and display the standard error
+   * pop-up.
+   *
+   * @method onLoadError
+   * @param message {string} the error message
+   */
+  onLoadError(message: string) {
+    // Cancel any active player.
+    this.cancelTimePointPlayer = true;
+    // Reset on the next cycle.
+    let clear = () =&gt; {
+      this.cancelTimePointPlayer = false;
+    };
+    setTimeout(clear, 0);
+    // Delegate to the standard error handler.
+    this.onError(message);
+  }
+
+  /**
+   * @method volumeCount
+   * @return {number} the number of volume parent images
+   */
+  volumeCount(): number {
+    return this.volume ?
+           this.volume.imageSequence.volumes.images.length :
+           0;
+  }
+
+  /**
+   * Fetches the requested volume. The request can be the
+   * number, &#x60;previous&#x60; or &#x60;next&#x60;.
+   *
+   * This change resets the title by virtue of loading the
+   * volume but does not reroute the app or change the page.
+   *
+   * @method onTimePointRequest
+   * @param request {string|number} the number request
+   */
+  onTimePointRequest(request: string|number) {
+    // Cancel the other player, if active.
+    this.cancelSessionPlayer = true;
+    // Reset on the next cycle.
+    let clear = () =&gt; {
+      this.cancelSessionPlayer = false;
+    };
+    setTimeout(clear, 0);
+
+    // The target volume number.
+    let volumeNbr = this.requestedVolumeNumber(request);
+    // The parent image sequence.
+    let imageSequence = this.volume.imageSequence;
+    // Find the requested volume.
+    let volume = this.service.findVolume(imageSequence, volumeNbr);
+    // If the volume was found, then capture the new volume
+    // and trigger the image swap or load.
+    // Otherwise, post an error message.
+    //
+    // Image swap or load triggers the onLoaded callback,
+    // which in turn sets the volume instance variable,
+    // which in turn propagates the volume change to the
+    // intensity charts.
+    if (volume) {
+      this.placeHolder = volume;
+      this.image = volume;
+    } else {
+      this.error = &#x60;${imageSequence.title} Volume ${volumeNbr}&#x60; +
+                   &#x27;was not found&#x27;;
+    }
+  }
+
+  /**
+   * @method sessionCount
+   * @return {number} the number of parent subject sessions
+   */
+  sessionCount(): number {
+    return this.volume ?
+           this.volume.imageSequence.session.subject.sessions.length :
+           0;
+  }
+
+  /**
+   * Replaces the current
+   * {{#crossLink &quot;VolumeComponent/volume:property&quot;}}{{/crossLink}}
+   * with a comparable session image sequence volume. The volume
+   * hierarchy is the same except for the session number. The request
+   * can be the session number, &#x60;previous&#x60; or &#x60;next&#x60;.
+   *
+   * For example, if the current volume has hierarchy:
+   *
+   *     /QIN/Breast/Subject008/Session01/scan/1/registration/1/volume003
+   *
+   * and the requested session number is &#x60;2&#x60;, then the new volume is&quot;
+   *
+   *     /QIN/Breast/Subject008/Session02/scan/1/registration/1/volume003
+   *
+   * This change resets the title by virtue of loading the
+   * new session but does not reroute the app or change the page.
+   *
+   * @method onSessionRequest
+   * @param request {string|number} the number request
+   */
+  onSessionRequest(request: string|number) {
+    // Cancel the other player, if active.
+    this.cancelTimePointPlayer = true;
+    // Reset on the next cycle.
+    let clear = () =&gt; {
+      this.cancelTimePointPlayer = false;
+    };
+    setTimeout(clear, 0);
+
+    // The target session number.
+    let sessionNbr = this.requestedSessionNumber(request);
+    // Copy and adjust the route parameters.
+    let params = _.defaults(
+      {session: sessionNbr, volume: this.volume.number},
+      this.routeParams
+    );
+    // Fetch the volume.
+    this.getVolume(params);
+  }
+
+  /**
+   * Sets the
+   * {{#crossLink &quot;VolumeComponent/intensities:property&quot;}}{{/crossLink}}
+   * property for the new coordinate.
+   *
+   * @method onCoordinateChanged
+   * @param coordinate {Object} the new coordinate
+   */
+  onCoordinateChanged(coordinate: Object) {
+    // Papaya centers the coordinate before it invokes the
+    // finishedLoading callback. Since the volume variable is
+    // not set until the image is loaded, the intensity will
+    // not be available on the first call to this coordinate
+    // change callback. The loaded callback is therefore
+    // also responsible for setting the initial intensities.
+    if (this.volume) {
+      this.timePointIntensities = this.timePointVoxelValues(coordinate);
+      this.physicalIntensities = this.physicalVoxelValues(coordinate);
+    }
+  }
+
+  /**
+   * Shows the Physical Intensity Gradient modal help pop-up.
+   *
+   * @method openPhysicalIntensityHelp
+   */
+  openPhysicalIntensityHelp() {
+    this.modal.alert()
+      .size(&#x27;med&#x27;)
+      .showClose(true)
+      .title(&#x27;Physical Intensity Gradient&#x27;)
+      .body(physicalIntensityHelp)
+      .open();
+  }
+
+  /**
+   * Shows the Time Point Intensity Gradient modal help pop-up.
+   *
+   * @method openTimePointIntensityHelp
+   */
+  openTimePointIntensityHelp() {
+    this.modal.alert()
+      .size(&#x27;med&#x27;)
+      .showClose(true)
+      .title(&#x27;Time Point Intensity Gradient&#x27;)
+      .body(timePointIntensityHelp)
+      .open();
+  }
+
+  private timePointVoxelValues(coordinate: Object): number[] {
+    let value = volume =&gt; this.volumeVoxelValue(coordinate, volume);
+    return this.volume.imageSequence.volumes.images.map(value);
+  }
+
+  private volumeVoxelValue(coordinate, volume): number {
+    let data = volume.contents &amp;&amp; volume.contents.data;
+    return data &amp;&amp; this.papaya.getVoxelValue(coordinate, data);
+  }
+
+  private createTimePointSliderConfig(volume: Object) {
+    // The volume count can be deferred in the filter, but not
+    // the density.
+    let volumeCnt = volume.imageSequence.volumes.images.length;
+    // Wrap count to work around the silly Javascript *this* confusion.
+    let count = () =&gt; this.volumeCount();
+    let filter = _.partial(this.pipFilter, count);
+    let override = {
+      pips: {
+        filter: filter,
+        density: this.pipDensity(volumeCnt)
+      }
+    };
+
+    return _.defaultsDeep(override, VolumeComponent.VERTICAL_SLIDER_CONFIG);
+  }
+
+  private createSessionSliderConfig(volume: Object) {
+    // The session count can be deferred in the filter, but not
+    // the density.
+    let sessionCnt = volume.imageSequence.session.subject.sessions.length;
+    // Wrap count to work around the silly Javascript *this* confusion.
+    let count = () =&gt; this.sessionCount();
+    let filter = _.partial(this.pipFilter, count);
+    let override = {
+      pips: {
+        filter: filter,
+        density: this.pipDensity(sessionCnt)
+      }
+    };
+
+    return _.defaultsDeep(override, VolumeComponent.HORIZONTAL_SLIDER_CONFIG);
+  }
+
+  /**
+   * The pip density is the larger of 10 or (100 / *count*()).
+   *
+   * @method pipDensity
+   * @private
+   * @param count {number} the number of slider values
+   * @return {number} the preferred pip density
+   */
+  private pipDensity(count: number) {
+    let n = Math.max(1, count);
+
+    return Math.max(10, 100 / n);
+  }
+
+  /**
+   * The _value_ =&gt; 0|1|2 slider pip function, where
+   * * 0 =&gt; don&#x27;t show the value
+   * * 1 =&gt; show a value in large text
+   * * 2 =&gt; show a value in small text
+   *
+   * The values in large text are as follows:
+   * * the start and end
+   * * if there are 5 or fewer values, then all remaining values
+   * * if there are 6-20 values, then every fifth value
+   * * if there are more than 20 values, then every tenth value
+   * The remaining values are in small text, unless there are more
+   * than 20 values, in which case only intermittent values are
+   * displayed in small text and the remaining values are not
+   * displayed next to their pip.
+   *
+   * @method pipFilter
+   * @private
+   * @param count {() =&gt; number} a function returning the number of
+   *   slider values
+   * @param value {number} the input slider value
+   * @return {number} the pip display designator
+   */
+  private pipFilter(count: () =&gt; number, value: number): number {
+    // If the volume is not yet loaded, then the count is zero.
+    // In that case, set the range to one rather than zero.
+    // The resulting filter will hide the slider entirely.
+    // In fact, the filter will not be employed unless the volume
+    // is loaded, but it doesn&#x27;t hurt to guard against this case.
+    let n = Math.max(1, count());
+    // The value offset in the range.
+    let index = value - 1;
+    // The small text is most of the remainder.
+    let small = Math.ceil(n / 20);
+
+    // The first, last and quartile pips are large.
+    // The pips at the small increment are small.
+    // The remainder are not displayed.
+    if (value === 1 || value === n || n &lt; 5) {
+      return 1;
+    } else if (n &lt; 20 &amp;&amp; value % 5 === 0 &amp;&amp; value &lt; (n * 0.9)) {
+      return 1;
+    } else if (value % 10 === 0 &amp;&amp; value &lt; (n * 0.8)) {
+      return 1;
+    } else if (index % small === 0) {
+      return 2;
+    } else {
+      return 0;
+    }
+  }
+
+  /**
+   * The physical intensity gradient domain is the 101 voxels centered
+   * at the current coordinate.
+   *
+   * @property PHYSICAL_GRADIENT_DOMAIN
+   * @private
+   * @static
+   */
+  private static const PHYSICAL_GRADIENT_DOMAIN = _.range(-50, 51);
+
+  /**
+   * Makes the _coordinate_ =&gt; {_orientation_: _intensities_, ...}
+   * function, where
+   * * _orientation_ is &#x60;axial&#x60;, &#x60;coronal&#x60; or &#x60;sagittal&#x60;
+   * * _intensities_ is the voxel values over the
+   *   {{#crossLink &quot;VolumeComponent/PHYSICAL_GRADIENT_DOMAIN:property&quot;}}{{/crossLink}}
+   *   offset from the _coordinate_ _orientation_ x, y or z index.
+   *
+   * @method createPhysicalIntensitiesFactory
+   * @private
+   * @return {function} the gradient voxel values factory
+   */
+  private createPhysicalIntensitiesFactory() {
+    // The value functions vary over one axis and fix the
+    // other axes.
+    let axialValueFunction = (coordinate, dx) =&gt; {
+      let x = coordinate.x + dx;
+      let y = coordinate.y;
+      let z = coordinate.z;
+      return x &lt; 0 ? null : this.papaya.getVoxelValueAt(x, y, z);
+    };
+    let coronalValueFunction = (coordinate, dy) =&gt; {
+      let x = coordinate.x;
+      let y = coordinate.y + dy;
+      let z = coordinate.z;
+      return y &lt; 0 ? null : this.papaya.getVoxelValueAt(x, y, z);
+    };
+    let sagittalValueFunction = (coordinate, dz) =&gt; {
+      let x = coordinate.x;
+      let y = coordinate.y;
+      let z = coordinate.z - dz;
+      return z &lt; 0 ? null : this.papaya.getVoxelValueAt(x, y, z);
+    };
+
+    // The coordinate =&gt; {axial, coronal, sagittal} function.
+    return (coordinate) =&gt; {
+      let axial = _.partial(axialValueFunction, coordinate);
+      let coronal = _.partial(coronalValueFunction, coordinate);
+      let sagittal = _.partial(sagittalValueFunction, coordinate);
+      return {
+        axial: VolumeComponent.PHYSICAL_GRADIENT_DOMAIN.map(axial),
+        coronal: VolumeComponent.PHYSICAL_GRADIENT_DOMAIN.map(coronal),
+        sagittal: VolumeComponent.PHYSICAL_GRADIENT_DOMAIN.map(sagittal)
+      };
+    };
+  }
+
+  private physicalVoxelValues(coordinate: Object): Object {
+    return this.createPhysicalIntensities(coordinate);
+  }
+
+  /**
+   * Mimic the Papaya container height = body width / 1.5.
+   * The Papaya parent element width is specified in the
+   * CSS as 60% of the body width.
+   *
+   * Nothing is laid out when this method is initially called,
+   * so we can&#x27;t rely on
+   * {{#crossLink &quot;PapayaService/viewerDimensions&quot;}}{{/crossLink}}.
+   *
+   * @method imageViewHeight
+   * @return the image view height truncated to the nearest
+   *   integer
+   */
+  private imageViewHeight(): number {
+    let viewerDims = this.papaya.viewerDimensions();
+    if (viewerDims) {
+      return viewerDims[1];
+    } else {
+      let rect = document.body.getBoundingClientRect();
+      return Math.floor((rect.width * 0.6) / 1.5);
+    }
+  }
+
+  /**
+   * The body width exclusive of the 15px left and right paddding.
+   *
+   * @method bodyInnerWidth
+   * @return the body inner width in pixels
+   */
+  private bodyInnerWidth(): number {
+    let rect = document.body.getBoundingClientRect();
+    return rect.width - 30;
+  }
+
+  /**
+   * The gutters on either side of the image display are 20%
+   * of the
+   * {{#crossLink &quot;VolumeComponent/bodyInnerWidth&quot;}}{{/crossLink}}.
+   *
+   * @method gutterWidth
+   * @return the width of the gutter in pixels
+   */
+  private gutterWidth(): number {
+    return Math.floor(this.bodyInnerWidth() * 0.2);
+  }
+
+  /**
+   * The slider height is the image view height less the
+   * title and player heights.
+   *
+   * @method calculateTimePointSliderHeight
+   * @param imageViewHeight {number}
+   * @return the preferred slider height
+   */
+  private calculateTimePointSliderHeight(
+    imageViewHeight: number
+  ): number {
+    // The title is 20 pixels and the player is 28 pixels.
+    // Knock out off an inexplicable fudge factor.
+    const margin = 24;
+    return imageViewHeight - margin;
+  }
+
+  /**
+   * @method calculateIntensityGradientWidth
+   * @return the preferred gradient width
+   */
+  private calculateIntensityGradientWidth(): number {
+    // The margin is an inexplicable fudge factor.
+    const margin = 24;
+    return this.gutterWidth() - margin;
+  }
+
+  /**
+   * Determines the requested volume number. The request
+   * can be the number, &#x60;previous&#x60; or &#x60;next&#x60;.
+   *
+   * @method timePointRequestVolume
+   * @param request {string|number} the number request
+   * @private
+   */
+  private requestedVolumeNumber(request: string|number) {
+    if (_.isInteger(request)) {
+      return request;
+    } else if (request === &#x27;previous&#x27;) {
+      return this.volume.number === 1 ?
+        this.volume.imageSequence.volumes.images.length :
+        this.volume.number - 1;
+    } else if (request === &#x27;next&#x27;) {
+      let nextNdx = this.volume.number %
+            this.volume.imageSequence.volumes.images.length;
+      return nextNdx + 1;
+    } else  {
+      throw new Error(&#x60;Time point request not supported: ${ request }&#x60;);
+    }
+  }
+
+  /**
+   * Determines the requested session number. The request
+   * can be the number, &#x60;previous&#x60; or &#x60;next&#x60;.
+   *
+   * @method requestedSessionNumber
+   * @param request {string|number} the number request
+   * @private
+   */
+  private requestedSessionNumber(request: string|number) {
+    if (_.isInteger(request)) {
+      return request;
+    } else if (request === &#x27;previous&#x27;) {
+      return this.volume.imageSequence.session.number === 1 ?
+        this.volume.imageSequence.session.subject.sessions.length :
+        this.volume.imageSequence.session.number - 1;
+    } else if (request === &#x27;next&#x27;) {
+      let nextNdx = this.volume.imageSequence.session.number %
+            this.volume.imageSequence.session.subject.sessions.length;
+      return nextNdx + 1;
+    } else  {
+      throw new Error(&#x60;Session request not supported: ${ request }&#x60;);
+    }
+  }
+
+  /**
+   * Fetches the volume specified by the given parameters.
+   * This method sets the
+   * {{#crossLink &quot;VolumeComponent/volume:property&quot;}}{{/crossLink}} to
+   * a {{#crossLink &quot;VolumeService/placeHolder&quot;}}{{/crossLink}} and then
+   * attempts to fetch the specified object. If successful, the
+   * {{#crossLink &quot;VolumeComponent/volume:property&quot;}}{{/crossLink}} is
+   * set to the fetched object. Otherwise, this component&#x27;s
+   * {{#crossLink &quot;PageComponent/error:property&quot;}}{{/crossLink}} is
+   * set to an error message, which is then displayed in a pop-up.
+   *
+   * Setting the
+   * {{#crossLink &quot;VolumeComponent/volume:property&quot;}}{{/crossLink}}
+   * property value triggers the image component image load. When
+   * the image is loaded the
+   * {{#crossLink &quot;PageComponent/onLoaded&quot;}}{{/crossLink}} callback
+   * notifies the choosers.
+   *
+   * @method getVolume
+   * @param params {Object} the search parameters
+   */
+  private getVolume(params) {
+    // The place-holder volume fills in the title until the real
+    // volume is fetched.
+    this.placeHolder = this.service.placeHolder(params);
+
+    // Fetch the real volume.
+    this.service.getVolume(params).subscribe(volume =&gt; {
+      if (volume) {
+        // Set the image, which will trigger image load.
+        this.image = volume;
+      } else {
+        this.error = &#x60;${this.placeHolder.title} was not found&#x60;;
+      }
+    });
+  }
+}
+
+</pre>
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>

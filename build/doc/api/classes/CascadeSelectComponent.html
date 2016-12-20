@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>CascadeSelectComponent - qiprofile API</title>
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="http://yui.yahooapis.com/combo?3.8.0pr2/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div class="yui3-g">
+        <div id="sidebar" class="yui3-u">
+            <div class="logo">
+              <a href="../index.html">
+                  qiprofile API
+              </a>
+            </div>
+            
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/clinical.html">clinical</a>
+                            </li>
+                            <li><a href="../modules/collection.html">collection</a>
+                            </li>
+                            <li><a href="../modules/collections.html">collections</a>
+                            </li>
+                            <li><a href="../modules/common.html">common</a>
+                            </li>
+                            <li><a href="../modules/configuration.html">configuration</a>
+                            </li>
+                            <li><a href="../modules/controls.html">controls</a>
+                            </li>
+                            <li><a href="../modules/data.html">data</a>
+                            </li>
+                            <li><a href="../modules/date.html">date</a>
+                            </li>
+                            <li><a href="../modules/error.html">error</a>
+                            </li>
+                            <li><a href="../modules/file.html">file</a>
+                            </li>
+                            <li><a href="../modules/help.html">help</a>
+                            </li>
+                            <li><a href="../modules/home.html">home</a>
+                            </li>
+                            <li><a href="../modules/image.html">image</a>
+                            </li>
+                            <li><a href="../modules/imageSequence.html">imageSequence</a>
+                            </li>
+                            <li><a href="../modules/main.html">main</a>
+                            </li>
+                            <li><a href="../modules/object.html">object</a>
+                            </li>
+                            <li><a href="../modules/page.html">page</a>
+                            </li>
+                            <li><a href="../modules/project.html">project</a>
+                            </li>
+                            <li><a href="../modules/projects.html">projects</a>
+                            </li>
+                            <li><a href="../modules/rest.html">rest</a>
+                            </li>
+                            <li><a href="../modules/roman.html">roman</a>
+                            </li>
+                            <li><a href="../modules/session.html">session</a>
+                            </li>
+                            <li><a href="../modules/string.html">string</a>
+                            </li>
+                            <li><a href="../modules/subject.html">subject</a>
+                            </li>
+                            <li><a href="../modules/testing.html">testing</a>
+                            </li>
+                            <li><a href="../modules/visualization.html">visualization</a>
+                            </li>
+                            <li><a href="../modules/volume.html">volume</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/AppComponent.html">AppComponent</a></li>
+                            <li><a href="../classes/AppModule.html">AppModule</a></li>
+                            <li><a href="../classes/Breast.html">Breast</a></li>
+                            <li><a href="../classes/BreastNormalizedAssay.html">BreastNormalizedAssay</a></li>
+                            <li><a href="../classes/BreastPathology.html">BreastPathology</a></li>
+                            <li><a href="../classes/CascadeSelectComponent.html">CascadeSelectComponent</a></li>
+                            <li><a href="../classes/ClinicalEncounter.html">ClinicalEncounter</a></li>
+                            <li><a href="../classes/CollectionActivatedRouteStub.html">CollectionActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionComponent.html">CollectionComponent</a></li>
+                            <li><a href="../classes/CollectionComponentSpec.html">CollectionComponentSpec</a></li>
+                            <li><a href="../classes/CollectionItemComponent.html">CollectionItemComponent</a></li>
+                            <li><a href="../classes/CollectionListPage.html">CollectionListPage</a></li>
+                            <li><a href="../classes/CollectionListSpec.html">CollectionListSpec</a></li>
+                            <li><a href="../classes/CollectionModule.html">CollectionModule</a></li>
+                            <li><a href="../classes/CollectionRouterStub.html">CollectionRouterStub</a></li>
+                            <li><a href="../classes/CollectionsActivatedRouteStub.html">CollectionsActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionsComponent.html">CollectionsComponent</a></li>
+                            <li><a href="../classes/CollectionsComponentSpec.html">CollectionsComponentSpec</a></li>
+                            <li><a href="../classes/CollectionsHelpComponent.html">CollectionsHelpComponent</a></li>
+                            <li><a href="../classes/CollectionsHelpServiceStub.html">CollectionsHelpServiceStub</a></li>
+                            <li><a href="../classes/CollectionsHelpTextComponent.html">CollectionsHelpTextComponent</a></li>
+                            <li><a href="../classes/CollectionsModule.html">CollectionsModule</a></li>
+                            <li><a href="../classes/CollectionsResource.html">CollectionsResource</a></li>
+                            <li><a href="../classes/CollectionsService.html">CollectionsService</a></li>
+                            <li><a href="../classes/CollectionsServiceStub.html">CollectionsServiceStub</a></li>
+                            <li><a href="../classes/CollectionSubectServiceStub.html">CollectionSubectServiceStub</a></li>
+                            <li><a href="../classes/ColorBarDirective.html">ColorBarDirective</a></li>
+                            <li><a href="../classes/CommonModule.html">CommonModule</a></li>
+                            <li><a href="../classes/ConfigurationService.html">ConfigurationService</a></li>
+                            <li><a href="../classes/ConfigurationServiceSpec.html">ConfigurationServiceSpec</a></li>
+                            <li><a href="../classes/ControlsModule.html">ControlsModule</a></li>
+                            <li><a href="../classes/CorrelationComponent.html">CorrelationComponent</a></li>
+                            <li><a href="../classes/DateHelper.html">DateHelper</a></li>
+                            <li><a href="../classes/DateHelperSpec.html">DateHelperSpec</a></li>
+                            <li><a href="../classes/Encounter.html">Encounter</a></li>
+                            <li><a href="../classes/ErrorComponent.html">ErrorComponent</a></li>
+                            <li><a href="../classes/FileService.html">FileService</a></li>
+                            <li><a href="../classes/FileServiceSpec.html">FileServiceSpec</a></li>
+                            <li><a href="../classes/Findable.html">Findable</a></li>
+                            <li><a href="../classes/HelpComponent.html">HelpComponent</a></li>
+                            <li><a href="../classes/HelpService.html">HelpService</a></li>
+                            <li><a href="../classes/HomeComponent.html">HomeComponent</a></li>
+                            <li><a href="../classes/IamgeSequenceService.html">IamgeSequenceService</a></li>
+                            <li><a href="../classes/Image.html">Image</a></li>
+                            <li><a href="../classes/ImageComponent.html">ImageComponent</a></li>
+                            <li><a href="../classes/ImageModule.html">ImageModule</a></li>
+                            <li><a href="../classes/ImageSequence.html">ImageSequence</a></li>
+                            <li><a href="../classes/ImageSequenceServiceSpec.html">ImageSequenceServiceSpec</a></li>
+                            <li><a href="../classes/ImageSequenceSessionServiceStub.html">ImageSequenceSessionServiceStub</a></li>
+                            <li><a href="../classes/ImageSequenceSpec.html">ImageSequenceSpec</a></li>
+                            <li><a href="../classes/ImageStore.html">ImageStore</a></li>
+                            <li><a href="../classes/LabelMap.html">LabelMap</a></li>
+                            <li><a href="../classes/Modeling.html">Modeling</a></li>
+                            <li><a href="../classes/ModelingResult.html">ModelingResult</a></li>
+                            <li><a href="../classes/ModelingResults.html">ModelingResults</a></li>
+                            <li><a href="../classes/ObjectHelper.html">ObjectHelper</a></li>
+                            <li><a href="../classes/Page.html">Page</a></li>
+                            <li><a href="../classes/PageComponent.html">PageComponent</a></li>
+                            <li><a href="../classes/PageModule.html">PageModule</a></li>
+                            <li><a href="../classes/PapayaService.html">PapayaService</a></li>
+                            <li><a href="../classes/ParameterResult.html">ParameterResult</a></li>
+                            <li><a href="../classes/Pathology.html">Pathology</a></li>
+                            <li><a href="../classes/PlayerComponent.html">PlayerComponent</a></li>
+                            <li><a href="../classes/ProjectItemComponent.html">ProjectItemComponent</a></li>
+                            <li><a href="../classes/ProjectListPage.html">ProjectListPage</a></li>
+                            <li><a href="../classes/ProjectListSpec.html">ProjectListSpec</a></li>
+                            <li><a href="../classes/ProjectsComponent.html">ProjectsComponent</a></li>
+                            <li><a href="../classes/ProjectsComponentSpec.html">ProjectsComponentSpec</a></li>
+                            <li><a href="../classes/ProjectsHelpComponent.html">ProjectsHelpComponent</a></li>
+                            <li><a href="../classes/ProjectsHelpServiceStub.html">ProjectsHelpServiceStub</a></li>
+                            <li><a href="../classes/ProjectsHelpTextComponent.html">ProjectsHelpTextComponent</a></li>
+                            <li><a href="../classes/ProjectsModule.html">ProjectsModule</a></li>
+                            <li><a href="../classes/ProjectsResource.html">ProjectsResource</a></li>
+                            <li><a href="../classes/ProjectsService.html">ProjectsService</a></li>
+                            <li><a href="../classes/ProjectsServiceStub.html">ProjectsServiceStub</a></li>
+                            <li><a href="../classes/PropertyTableComponent.html">PropertyTableComponent</a></li>
+                            <li><a href="../classes/RCB.html">RCB</a></li>
+                            <li><a href="../classes/Registration.html">Registration</a></li>
+                            <li><a href="../classes/RegistrationSpec.html">RegistrationSpec</a></li>
+                            <li><a href="../classes/REST.html">REST</a></li>
+                            <li><a href="../classes/RestResource.html">RestResource</a></li>
+                            <li><a href="../classes/RESTSpec.html">RESTSpec</a></li>
+                            <li><a href="../classes/Roman.html">Roman</a></li>
+                            <li><a href="../classes/RomanSpec.html">RomanSpec</a></li>
+                            <li><a href="../classes/Sarcoma.html">Sarcoma</a></li>
+                            <li><a href="../classes/Scan.html">Scan</a></li>
+                            <li><a href="../classes/ScanSpec.html">ScanSpec</a></li>
+                            <li><a href="../classes/ScatterPlotDirective.html">ScatterPlotDirective</a></li>
+                            <li><a href="../classes/Session.html">Session</a></li>
+                            <li><a href="../classes/SessionActivatedRouteStub.html">SessionActivatedRouteStub</a></li>
+                            <li><a href="../classes/SessionComponent.html">SessionComponent</a></li>
+                            <li><a href="../classes/SessionComponentSpec.html">SessionComponentSpec</a></li>
+                            <li><a href="../classes/SessionDetailResource.html">SessionDetailResource</a></li>
+                            <li><a href="../classes/SessionDetailResourceStub.html">SessionDetailResourceStub</a></li>
+                            <li><a href="../classes/SessiondRouterStub.html">SessiondRouterStub</a></li>
+                            <li><a href="../classes/SessionModule.html">SessionModule</a></li>
+                            <li><a href="../classes/SessionService.html">SessionService</a></li>
+                            <li><a href="../classes/SessionServiceSpec.html">SessionServiceSpec</a></li>
+                            <li><a href="../classes/SessionServiceStub.html">SessionServiceStub</a></li>
+                            <li><a href="../classes/SessionSpec.html">SessionSpec</a></li>
+                            <li><a href="../classes/SessionSubjectResourceStub.html">SessionSubjectResourceStub</a></li>
+                            <li><a href="../classes/SessionTumorExtent.html">SessionTumorExtent</a></li>
+                            <li><a href="../classes/SliderDirective.html">SliderDirective</a></li>
+                            <li><a href="../classes/SparkLineDirective.html">SparkLineDirective</a></li>
+                            <li><a href="../classes/StringHelper.html">StringHelper</a></li>
+                            <li><a href="../classes/StringHelperSpec.html">StringHelperSpec</a></li>
+                            <li><a href="../classes/Subject.html">Subject</a></li>
+                            <li><a href="../classes/SubjectActivatedRouteStub.html">SubjectActivatedRouteStub</a></li>
+                            <li><a href="../classes/SubjectChangeDetectorRefStub.html">SubjectChangeDetectorRefStub</a></li>
+                            <li><a href="../classes/SubjectComponent.html">SubjectComponent</a></li>
+                            <li><a href="../classes/SubjectComponentSpec.html">SubjectComponentSpec</a></li>
+                            <li><a href="../classes/SubjectdRouterStub.html">SubjectdRouterStub</a></li>
+                            <li><a href="../classes/SubjectModule.html">SubjectModule</a></li>
+                            <li><a href="../classes/SubjectResource.html">SubjectResource</a></li>
+                            <li><a href="../classes/SubjectResourceStub.html">SubjectResourceStub</a></li>
+                            <li><a href="../classes/SubjectService.html">SubjectService</a></li>
+                            <li><a href="../classes/SubjectServiceSpec.html">SubjectServiceSpec</a></li>
+                            <li><a href="../classes/SubjectServiceStub.html">SubjectServiceStub</a></li>
+                            <li><a href="../classes/SubjectSpec.html">SubjectSpec</a></li>
+                            <li><a href="../classes/Table.html">Table</a></li>
+                            <li><a href="../classes/TimeSeries.html">TimeSeries</a></li>
+                            <li><a href="../classes/TNM.html">TNM</a></li>
+                            <li><a href="../classes/ToggleHelpComponent.html">ToggleHelpComponent</a></li>
+                            <li><a href="../classes/VisualizationModule.html">VisualizationModule</a></li>
+                            <li><a href="../classes/Volume.html">Volume</a></li>
+                            <li><a href="../classes/VolumeComponent.html">VolumeComponent</a></li>
+                            <li><a href="../classes/VolumeDetailPage.html">VolumeDetailPage</a></li>
+                            <li><a href="../classes/VolumeImageSequenceServiceStub.html">VolumeImageSequenceServiceStub</a></li>
+                            <li><a href="../classes/VolumeModule.html">VolumeModule</a></li>
+                            <li><a href="../classes/VolumeService.html">VolumeService</a></li>
+                            <li><a href="../classes/VolumeServiceSpec.html">VolumeServiceSpec</a></li>
+                            <li><a href="../classes/VolumeSpec.html">VolumeSpec</a></li>
+                            <li><a href="../classes/XNAT.html">XNAT</a></li>
+                            <li><a href="../classes/XNATSpec.html">XNATSpec</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            <div id="sections" class="sidebox">
+              <div class="hd">
+                <h2 class="no-toc">CascadeSelectComponent</h2>
+              </div>
+              <div class="bd">
+            
+            
+            
+                  <div><a href="#property-summary">Property Summary</a></div>
+            
+                  <div><a href="#method-summary">Method Summary</a></div>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+                  <div><a href="#public-properties">Public Properties</a></div>
+                  <ul>
+                      <li><a href="#props_childChoices">childChoices</a></li>
+                      <li><a href="#props_choices">choices</a></li>
+                      <li><a href="#props_path">path</a></li>
+                      <li><a href="#props_pathChange">pathChange</a></li>
+                      <li><a href="#props_selection">selection</a></li>
+                  </ul>
+            
+            
+                  <div><a href="#private-properties">Private Properties</a></div>
+                  <ul>
+                      <li><a href="#props__path">_path</a></li>
+                  </ul>
+            
+                  <div><a href="#public-methods">Public Methods</a></div>
+                  <ul>
+                      <li><a href="#method_choiceKeys">choiceKeys</a></li>
+                      <li><a href="#method_ngOnChanges">ngOnChanges</a></li>
+                      <li><a href="#method_ngOnChanges">ngOnChanges</a></li>
+                      <li><a href="#method_onSelectChange">onSelectChange</a></li>
+                      <li><a href="#method_onTerminalSelect">onTerminalSelect</a></li>
+                  </ul>
+            
+            
+                  <div><a href="#private-methods">Private Methods</a></div>
+                  <ul>
+                      <li><a href="#method_onSelect">onSelect</a></li>
+                  </ul>
+              </div>
+            </div>
+            
+            
+            
+            <div class="version-info">
+              Version: 2.1.1
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><div class="title">
+    <span class="source-link"><a href="../files/build_src_controls_cascade-select.component.ts.html#l11"><code>build&#x2F;src&#x2F;controls&#x2F;cascade-select.component.ts:11</code></a></span>
+    <h1 class="class-name">CascadeSelectComponent</h1>
+</div>
+
+
+
+
+<div class="class-description"><p>The cascade select component has subselects.</p>
+</div>
+
+
+
+
+
+
+
+  <h2 id="property-summary">Property Summary</h2>
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Public Properties</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_childChoices">childChoices</a>: Object
+            </div>
+            <div class="short-description">
+              <p>If this chooser is not terminal, then the child chooser choices are the keys of the <a href="../classes/CascadeSelectComponent.html#property_choices" class="crosslink">choices</a> value for this select's <a href="../classes/CascadeSelectComponent.html#property_selection" class="crosslink">selection</a>. If this chooser is terminal, then there are no child choices.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_choices">choices</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The select choices Object.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_path">path</a>: String
+            </div>
+            <div class="short-description">
+              <p>The initial selection path for this chooser and the cascaded child choosers.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_pathChange">pathChange</a>: EventEmitter<any>
+            </div>
+            <div class="short-description">
+              <p>The cascaded selection path change event.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_selection">selection</a>: String
+            </div>
+            <div class="short-description">
+              <p>The selected choice.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Private Properties</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props__path">_path</a>: String
+            </div>
+            <div class="short-description">
+              <p>The internal <a href="../classes/CascadeSelectComponent.html#property_path" class="crosslink">path</a> representation.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  <h2 id="method-summary">Method Summary</h2>
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Public Methods</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_choiceKeys">choiceKeys</a>( ): String
+            </div>
+            <div class="short-description">
+              
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_ngOnChanges">ngOnChanges</a>( )
+            </div>
+            <div class="short-description">
+              <p>Sets the <a href="../classes/CascadeSelectComponent.html#property_selection" class="crosslink">selection</a></p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_ngOnChanges">ngOnChanges</a>( )
+            </div>
+            <div class="short-description">
+              <p>Handle a <a href="../classes/CascadeSelectComponent.html#property_choices" class="crosslink">choices</a> change by resetting the <a href="../classes/CascadeSelectComponent.html#property_selection" class="crosslink">selection</a> if the previous value is no longer available in the new choices.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_onSelectChange">onSelectChange</a>(choice)
+            </div>
+            <div class="short-description">
+              <p>Sets the <a href="../classes/CascadeSelectComponent.html#property_selection" class="crosslink">selection</a> to the given choice. In addition, if the choice value is terminal (i.e., if CascadeSelectComponent/isTerminal returns <code>true</code>), then CascadeSelectComponent/value:property is triggered with the <a href="../classes/CascadeSelectComponent.html#property_choices" class="crosslink">choices</a> value for the <em>choice</em> property.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_onTerminalSelect">onTerminalSelect</a>(value)
+            </div>
+            <div class="short-description">
+              <p>Forwards the select path to the parent listener. The select path is formed by prepending this select's selection to the given child select path.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Private Methods</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_onSelect">onSelect</a>(defer)
+            </div>
+            <div class="short-description">
+              <p>If the choice value is terminal (i.e., if the value is not a plain Javascript object, then trigger CascadeSelectComponent/value:property with the associated <a href="../classes/CascadeSelectComponent.html#property_choices" class="crosslink">choices</a> value. Otherwise, set the <a href="../classes/CascadeSelectComponent.html#property_childChoices" class="crosslink">childChoices</a>.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+    <div id="properties public">
+        <h2 id="public-properties">Public Properties</h2>
+<div class="property item">
+  <div id="props_childChoices" class="title">
+    <span class="source-link"><a href="../files/build_src_controls_cascade-select.component.ts.html#l53"><code>build&#x2F;src&#x2F;controls&#x2F;cascade-select.component.ts:53</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      childChoices: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>If this chooser is not terminal, then the child chooser choices
+are the keys of the
+<a href="../classes/CascadeSelectComponent.html#property_choices" class="crosslink">choices</a>
+value for this select's
+<a href="../classes/CascadeSelectComponent.html#property_selection" class="crosslink">selection</a>.
+If this chooser is terminal, then there are no child choices.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_choices" class="title">
+    <span class="source-link"><a href="../files/build_src_controls_cascade-select.component.ts.html#l18"><code>build&#x2F;src&#x2F;controls&#x2F;cascade-select.component.ts:18</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      choices: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The select choices Object.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_path" class="title">
+    <span class="source-link"><a href="../files/build_src_controls_cascade-select.component.ts.html#l25"><code>build&#x2F;src&#x2F;controls&#x2F;cascade-select.component.ts:25</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      path: String
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The initial selection path for this chooser and the cascaded
+child choosers.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_pathChange" class="title">
+    <span class="source-link"><a href="../files/build_src_controls_cascade-select.component.ts.html#l35"><code>build&#x2F;src&#x2F;controls&#x2F;cascade-select.component.ts:35</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      pathChange: EventEmitter<any>
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The cascaded selection path change event.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_selection" class="title">
+    <span class="source-link"><a href="../files/build_src_controls_cascade-select.component.ts.html#l46"><code>build&#x2F;src&#x2F;controls&#x2F;cascade-select.component.ts:46</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      selection: String
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The selected choice.</p>
+</div>
+
+</div>
+    </div>
+
+
+    <div id="properties private">
+        <h2 id="private-properties">Private Properties</h2>
+<div class="property item private">
+  <div id="props__path" class="title">
+    <span class="source-link"><a href="../files/build_src_controls_cascade-select.component.ts.html#l65"><code>build&#x2F;src&#x2F;controls&#x2F;cascade-select.component.ts:65</code></a></span>
+    <h3 class="">
+      private
+      
+      
+      _path: String
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The internal
+<a href="../classes/CascadeSelectComponent.html#property_path" class="crosslink">path</a>
+representation.</p>
+</div>
+
+</div>
+    </div>
+
+  <div id="methods public">
+    <h2 id="public-methods">Public Methods</h2>
+<div class="method item">
+    <div id="method_choiceKeys" class="title">
+        <span class="source-link"><a href="../files/build_src_controls_cascade-select.component.ts.html#l114"><code>build&#x2F;src&#x2F;controls&#x2F;cascade-select.component.ts:114</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            choiceKeys( ): String
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"></div>
+
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type">String</span>
+          <span class="return-description"><p>the sorted
+<a href="../classes/CascadeSelectComponent.html#property_choices" class="crosslink">choices</a>
+object keys.</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item">
+    <div id="method_ngOnChanges" class="title">
+        <span class="source-link"><a href="../files/build_src_controls_cascade-select.component.ts.html#l77"><code>build&#x2F;src&#x2F;controls&#x2F;cascade-select.component.ts:77</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            ngOnChanges( )
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Sets the
+<a href="../classes/CascadeSelectComponent.html#property_selection" class="crosslink">selection</a></p>
+</div>
+
+
+
+
+</div>
+<div class="method item">
+    <div id="method_ngOnChanges" class="title">
+        <span class="source-link"><a href="../files/build_src_controls_cascade-select.component.ts.html#l92"><code>build&#x2F;src&#x2F;controls&#x2F;cascade-select.component.ts:92</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            ngOnChanges( )
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Handle a
+<a href="../classes/CascadeSelectComponent.html#property_choices" class="crosslink">choices</a>
+change by resetting the
+<a href="../classes/CascadeSelectComponent.html#property_selection" class="crosslink">selection</a>
+if the previous value is no longer available in the new choices.</p>
+</div>
+
+
+
+
+</div>
+<div class="method item">
+    <div id="method_onSelectChange" class="title">
+        <span class="source-link"><a href="../files/build_src_controls_cascade-select.component.ts.html#l124"><code>build&#x2F;src&#x2F;controls&#x2F;cascade-select.component.ts:124</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            onSelectChange(choice)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Sets the
+<a href="../classes/CascadeSelectComponent.html#property_selection" class="crosslink">selection</a>
+to the given choice.
+In addition, if the choice value is terminal (i.e., if
+CascadeSelectComponent/isTerminal
+returns <code>true</code>), then
+CascadeSelectComponent/value:property
+is triggered with the
+<a href="../classes/CascadeSelectComponent.html#property_choices" class="crosslink">choices</a>
+value for the <em>choice</em> property.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>choice</td>
+              <td>String</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the choice text</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method_onTerminalSelect" class="title">
+        <span class="source-link"><a href="../files/build_src_controls_cascade-select.component.ts.html#l144"><code>build&#x2F;src&#x2F;controls&#x2F;cascade-select.component.ts:144</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            onTerminalSelect(value)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Forwards the select path to the parent listener.
+The select path is formed by prepending this select's
+selection to the given child select path.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>value</td>
+              <td>String</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the cascaded terminal selection path</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+  </div>
+
+
+    <div id="methods private">
+        <h2 id="private-methods">Private Methods</h2>
+<div class="method item private">
+    <div id="method_onSelect" class="title">
+        <span class="source-link"><a href="../files/build_src_controls_cascade-select.component.ts.html#l157"><code>build&#x2F;src&#x2F;controls&#x2F;cascade-select.component.ts:157</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            onSelect(defer)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>If the choice value is terminal (i.e., if the value is not a plain
+Javascript object, then trigger
+CascadeSelectComponent/value:property
+with the associated
+<a href="../classes/CascadeSelectComponent.html#property_choices" class="crosslink">choices</a>
+value.
+Otherwise, set the
+<a href="../classes/CascadeSelectComponent.html#property_childChoices" class="crosslink">childChoices</a>.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>defer</td>
+              <td>Boolean</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>whether to delay emitting changes until
+after the current digest cycle completes</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+    </div>
+
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>

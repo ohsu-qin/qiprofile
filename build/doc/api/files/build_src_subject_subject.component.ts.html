@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>build/src/subject/subject.component.ts - qiprofile API</title>
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="http://yui.yahooapis.com/combo?3.8.0pr2/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div class="yui3-g">
+        <div id="sidebar" class="yui3-u">
+            <div class="logo">
+              <a href="../index.html">
+                  qiprofile API
+              </a>
+            </div>
+            
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/clinical.html">clinical</a>
+                            </li>
+                            <li><a href="../modules/collection.html">collection</a>
+                            </li>
+                            <li><a href="../modules/collections.html">collections</a>
+                            </li>
+                            <li><a href="../modules/common.html">common</a>
+                            </li>
+                            <li><a href="../modules/configuration.html">configuration</a>
+                            </li>
+                            <li><a href="../modules/controls.html">controls</a>
+                            </li>
+                            <li><a href="../modules/data.html">data</a>
+                            </li>
+                            <li><a href="../modules/date.html">date</a>
+                            </li>
+                            <li><a href="../modules/error.html">error</a>
+                            </li>
+                            <li><a href="../modules/file.html">file</a>
+                            </li>
+                            <li><a href="../modules/help.html">help</a>
+                            </li>
+                            <li><a href="../modules/home.html">home</a>
+                            </li>
+                            <li><a href="../modules/image.html">image</a>
+                            </li>
+                            <li><a href="../modules/imageSequence.html">imageSequence</a>
+                            </li>
+                            <li><a href="../modules/main.html">main</a>
+                            </li>
+                            <li><a href="../modules/object.html">object</a>
+                            </li>
+                            <li><a href="../modules/page.html">page</a>
+                            </li>
+                            <li><a href="../modules/project.html">project</a>
+                            </li>
+                            <li><a href="../modules/projects.html">projects</a>
+                            </li>
+                            <li><a href="../modules/rest.html">rest</a>
+                            </li>
+                            <li><a href="../modules/roman.html">roman</a>
+                            </li>
+                            <li><a href="../modules/session.html">session</a>
+                            </li>
+                            <li><a href="../modules/string.html">string</a>
+                            </li>
+                            <li><a href="../modules/subject.html">subject</a>
+                            </li>
+                            <li><a href="../modules/testing.html">testing</a>
+                            </li>
+                            <li><a href="../modules/visualization.html">visualization</a>
+                            </li>
+                            <li><a href="../modules/volume.html">volume</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/AppComponent.html">AppComponent</a></li>
+                            <li><a href="../classes/AppModule.html">AppModule</a></li>
+                            <li><a href="../classes/Breast.html">Breast</a></li>
+                            <li><a href="../classes/BreastNormalizedAssay.html">BreastNormalizedAssay</a></li>
+                            <li><a href="../classes/BreastPathology.html">BreastPathology</a></li>
+                            <li><a href="../classes/CascadeSelectComponent.html">CascadeSelectComponent</a></li>
+                            <li><a href="../classes/ClinicalEncounter.html">ClinicalEncounter</a></li>
+                            <li><a href="../classes/CollectionActivatedRouteStub.html">CollectionActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionComponent.html">CollectionComponent</a></li>
+                            <li><a href="../classes/CollectionComponentSpec.html">CollectionComponentSpec</a></li>
+                            <li><a href="../classes/CollectionItemComponent.html">CollectionItemComponent</a></li>
+                            <li><a href="../classes/CollectionListPage.html">CollectionListPage</a></li>
+                            <li><a href="../classes/CollectionListSpec.html">CollectionListSpec</a></li>
+                            <li><a href="../classes/CollectionModule.html">CollectionModule</a></li>
+                            <li><a href="../classes/CollectionRouterStub.html">CollectionRouterStub</a></li>
+                            <li><a href="../classes/CollectionsActivatedRouteStub.html">CollectionsActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionsComponent.html">CollectionsComponent</a></li>
+                            <li><a href="../classes/CollectionsComponentSpec.html">CollectionsComponentSpec</a></li>
+                            <li><a href="../classes/CollectionsHelpComponent.html">CollectionsHelpComponent</a></li>
+                            <li><a href="../classes/CollectionsHelpServiceStub.html">CollectionsHelpServiceStub</a></li>
+                            <li><a href="../classes/CollectionsHelpTextComponent.html">CollectionsHelpTextComponent</a></li>
+                            <li><a href="../classes/CollectionsModule.html">CollectionsModule</a></li>
+                            <li><a href="../classes/CollectionsResource.html">CollectionsResource</a></li>
+                            <li><a href="../classes/CollectionsService.html">CollectionsService</a></li>
+                            <li><a href="../classes/CollectionsServiceStub.html">CollectionsServiceStub</a></li>
+                            <li><a href="../classes/CollectionSubectServiceStub.html">CollectionSubectServiceStub</a></li>
+                            <li><a href="../classes/ColorBarDirective.html">ColorBarDirective</a></li>
+                            <li><a href="../classes/CommonModule.html">CommonModule</a></li>
+                            <li><a href="../classes/ConfigurationService.html">ConfigurationService</a></li>
+                            <li><a href="../classes/ConfigurationServiceSpec.html">ConfigurationServiceSpec</a></li>
+                            <li><a href="../classes/ControlsModule.html">ControlsModule</a></li>
+                            <li><a href="../classes/CorrelationComponent.html">CorrelationComponent</a></li>
+                            <li><a href="../classes/DateHelper.html">DateHelper</a></li>
+                            <li><a href="../classes/DateHelperSpec.html">DateHelperSpec</a></li>
+                            <li><a href="../classes/Encounter.html">Encounter</a></li>
+                            <li><a href="../classes/ErrorComponent.html">ErrorComponent</a></li>
+                            <li><a href="../classes/FileService.html">FileService</a></li>
+                            <li><a href="../classes/FileServiceSpec.html">FileServiceSpec</a></li>
+                            <li><a href="../classes/Findable.html">Findable</a></li>
+                            <li><a href="../classes/HelpComponent.html">HelpComponent</a></li>
+                            <li><a href="../classes/HelpService.html">HelpService</a></li>
+                            <li><a href="../classes/HomeComponent.html">HomeComponent</a></li>
+                            <li><a href="../classes/IamgeSequenceService.html">IamgeSequenceService</a></li>
+                            <li><a href="../classes/Image.html">Image</a></li>
+                            <li><a href="../classes/ImageComponent.html">ImageComponent</a></li>
+                            <li><a href="../classes/ImageModule.html">ImageModule</a></li>
+                            <li><a href="../classes/ImageSequence.html">ImageSequence</a></li>
+                            <li><a href="../classes/ImageSequenceServiceSpec.html">ImageSequenceServiceSpec</a></li>
+                            <li><a href="../classes/ImageSequenceSessionServiceStub.html">ImageSequenceSessionServiceStub</a></li>
+                            <li><a href="../classes/ImageSequenceSpec.html">ImageSequenceSpec</a></li>
+                            <li><a href="../classes/ImageStore.html">ImageStore</a></li>
+                            <li><a href="../classes/LabelMap.html">LabelMap</a></li>
+                            <li><a href="../classes/Modeling.html">Modeling</a></li>
+                            <li><a href="../classes/ModelingResult.html">ModelingResult</a></li>
+                            <li><a href="../classes/ModelingResults.html">ModelingResults</a></li>
+                            <li><a href="../classes/ObjectHelper.html">ObjectHelper</a></li>
+                            <li><a href="../classes/Page.html">Page</a></li>
+                            <li><a href="../classes/PageComponent.html">PageComponent</a></li>
+                            <li><a href="../classes/PageModule.html">PageModule</a></li>
+                            <li><a href="../classes/PapayaService.html">PapayaService</a></li>
+                            <li><a href="../classes/ParameterResult.html">ParameterResult</a></li>
+                            <li><a href="../classes/Pathology.html">Pathology</a></li>
+                            <li><a href="../classes/PlayerComponent.html">PlayerComponent</a></li>
+                            <li><a href="../classes/ProjectItemComponent.html">ProjectItemComponent</a></li>
+                            <li><a href="../classes/ProjectListPage.html">ProjectListPage</a></li>
+                            <li><a href="../classes/ProjectListSpec.html">ProjectListSpec</a></li>
+                            <li><a href="../classes/ProjectsComponent.html">ProjectsComponent</a></li>
+                            <li><a href="../classes/ProjectsComponentSpec.html">ProjectsComponentSpec</a></li>
+                            <li><a href="../classes/ProjectsHelpComponent.html">ProjectsHelpComponent</a></li>
+                            <li><a href="../classes/ProjectsHelpServiceStub.html">ProjectsHelpServiceStub</a></li>
+                            <li><a href="../classes/ProjectsHelpTextComponent.html">ProjectsHelpTextComponent</a></li>
+                            <li><a href="../classes/ProjectsModule.html">ProjectsModule</a></li>
+                            <li><a href="../classes/ProjectsResource.html">ProjectsResource</a></li>
+                            <li><a href="../classes/ProjectsService.html">ProjectsService</a></li>
+                            <li><a href="../classes/ProjectsServiceStub.html">ProjectsServiceStub</a></li>
+                            <li><a href="../classes/PropertyTableComponent.html">PropertyTableComponent</a></li>
+                            <li><a href="../classes/RCB.html">RCB</a></li>
+                            <li><a href="../classes/Registration.html">Registration</a></li>
+                            <li><a href="../classes/RegistrationSpec.html">RegistrationSpec</a></li>
+                            <li><a href="../classes/REST.html">REST</a></li>
+                            <li><a href="../classes/RestResource.html">RestResource</a></li>
+                            <li><a href="../classes/RESTSpec.html">RESTSpec</a></li>
+                            <li><a href="../classes/Roman.html">Roman</a></li>
+                            <li><a href="../classes/RomanSpec.html">RomanSpec</a></li>
+                            <li><a href="../classes/Sarcoma.html">Sarcoma</a></li>
+                            <li><a href="../classes/Scan.html">Scan</a></li>
+                            <li><a href="../classes/ScanSpec.html">ScanSpec</a></li>
+                            <li><a href="../classes/ScatterPlotDirective.html">ScatterPlotDirective</a></li>
+                            <li><a href="../classes/Session.html">Session</a></li>
+                            <li><a href="../classes/SessionActivatedRouteStub.html">SessionActivatedRouteStub</a></li>
+                            <li><a href="../classes/SessionComponent.html">SessionComponent</a></li>
+                            <li><a href="../classes/SessionComponentSpec.html">SessionComponentSpec</a></li>
+                            <li><a href="../classes/SessionDetailResource.html">SessionDetailResource</a></li>
+                            <li><a href="../classes/SessionDetailResourceStub.html">SessionDetailResourceStub</a></li>
+                            <li><a href="../classes/SessiondRouterStub.html">SessiondRouterStub</a></li>
+                            <li><a href="../classes/SessionModule.html">SessionModule</a></li>
+                            <li><a href="../classes/SessionService.html">SessionService</a></li>
+                            <li><a href="../classes/SessionServiceSpec.html">SessionServiceSpec</a></li>
+                            <li><a href="../classes/SessionServiceStub.html">SessionServiceStub</a></li>
+                            <li><a href="../classes/SessionSpec.html">SessionSpec</a></li>
+                            <li><a href="../classes/SessionSubjectResourceStub.html">SessionSubjectResourceStub</a></li>
+                            <li><a href="../classes/SessionTumorExtent.html">SessionTumorExtent</a></li>
+                            <li><a href="../classes/SliderDirective.html">SliderDirective</a></li>
+                            <li><a href="../classes/SparkLineDirective.html">SparkLineDirective</a></li>
+                            <li><a href="../classes/StringHelper.html">StringHelper</a></li>
+                            <li><a href="../classes/StringHelperSpec.html">StringHelperSpec</a></li>
+                            <li><a href="../classes/Subject.html">Subject</a></li>
+                            <li><a href="../classes/SubjectActivatedRouteStub.html">SubjectActivatedRouteStub</a></li>
+                            <li><a href="../classes/SubjectChangeDetectorRefStub.html">SubjectChangeDetectorRefStub</a></li>
+                            <li><a href="../classes/SubjectComponent.html">SubjectComponent</a></li>
+                            <li><a href="../classes/SubjectComponentSpec.html">SubjectComponentSpec</a></li>
+                            <li><a href="../classes/SubjectdRouterStub.html">SubjectdRouterStub</a></li>
+                            <li><a href="../classes/SubjectModule.html">SubjectModule</a></li>
+                            <li><a href="../classes/SubjectResource.html">SubjectResource</a></li>
+                            <li><a href="../classes/SubjectResourceStub.html">SubjectResourceStub</a></li>
+                            <li><a href="../classes/SubjectService.html">SubjectService</a></li>
+                            <li><a href="../classes/SubjectServiceSpec.html">SubjectServiceSpec</a></li>
+                            <li><a href="../classes/SubjectServiceStub.html">SubjectServiceStub</a></li>
+                            <li><a href="../classes/SubjectSpec.html">SubjectSpec</a></li>
+                            <li><a href="../classes/Table.html">Table</a></li>
+                            <li><a href="../classes/TimeSeries.html">TimeSeries</a></li>
+                            <li><a href="../classes/TNM.html">TNM</a></li>
+                            <li><a href="../classes/ToggleHelpComponent.html">ToggleHelpComponent</a></li>
+                            <li><a href="../classes/VisualizationModule.html">VisualizationModule</a></li>
+                            <li><a href="../classes/Volume.html">Volume</a></li>
+                            <li><a href="../classes/VolumeComponent.html">VolumeComponent</a></li>
+                            <li><a href="../classes/VolumeDetailPage.html">VolumeDetailPage</a></li>
+                            <li><a href="../classes/VolumeImageSequenceServiceStub.html">VolumeImageSequenceServiceStub</a></li>
+                            <li><a href="../classes/VolumeModule.html">VolumeModule</a></li>
+                            <li><a href="../classes/VolumeService.html">VolumeService</a></li>
+                            <li><a href="../classes/VolumeServiceSpec.html">VolumeServiceSpec</a></li>
+                            <li><a href="../classes/VolumeSpec.html">VolumeSpec</a></li>
+                            <li><a href="../classes/XNAT.html">XNAT</a></li>
+                            <li><a href="../classes/XNATSpec.html">XNATSpec</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            
+            
+            
+            <div class="version-info">
+              Version: 2.1.1
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><div class="title">
+  <h1 class="file-name">build/src/subject/subject.component.ts</h1>
+</div>
+
+<pre class="code prettyprint linenums">
+import * as _ from &#x27;lodash&#x27;;
+import {
+  Component, ViewContainerRef,
+  ChangeDetectionStrategy, ChangeDetectorRef
+} from &#x27;@angular/core&#x27;;
+import { Router, ActivatedRoute } from &#x27;@angular/router&#x27;;
+import { Overlay } from &#x27;angular2-modal&#x27;;
+import { Modal } from &#x27;angular2-modal/plugins/bootstrap/index.js&#x27;;
+
+import ObjectHelper from &#x27;../object/object-helper.coffee&#x27;;
+import {
+  ConfigurationService
+} from &#x27;../configuration/configuration.service.ts&#x27;;
+import { PageComponent } from &#x27;../page/page.component.ts&#x27;;
+import ImageStore from &#x27;../image/image-store.coffee&#x27;;
+import Subject from &#x27;./subject.data.coffee&#x27;;
+import { SubjectService } from &#x27;./subject.service.ts&#x27;;
+import help from &#x27;./subject.help.md&#x27;;
+import modelingHelp from &#x27;./modeling.help.md&#x27;;
+import breastTnmStageHelp from &#x27;../clinical/breast-tnm-stage.help.md&#x27;;
+import sarcomaTnmStageHelp from &#x27;../clinical/sarcoma-tnm-stage.help.md&#x27;;
+import recurrenceScoreHelp from &#x27;../clinical/recurrence-score.help.md&#x27;;
+import rcbHelp from &#x27;../clinical/breast-rcb.help.md&#x27;;
+import dosageAmountHelp from &#x27;../clinical/dosage-amount.help.md&#x27;;
+
+/**
+ * The modeling display formats, &#x60;chart&#x60; or &#x60;table&#x60;.
+ *
+ * @property MODELING_FORMATS {string}
+ * @private
+ * @static
+ */
+const MODELING_FORMATS = [&#x27;chart&#x27;, &#x27;table&#x27;];
+
+@Component({
+  selector: &#x27;qi-subject&#x27;,
+  templateUrl: &#x27;/public/html/subject/subject.html&#x27;,
+  // Instruct Angular to disable change detection until this
+  // component tells it to do so.
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+
+/**
+ * The Subject Detail page component.
+ *
+ * @class SubjectComponent
+ */
+export class SubjectComponent extends PageComponent {
+  /**
+   * The subject to display.
+   *
+   * @property subject {Object}
+   */
+  subject: Object;
+
+  /**
+   * The subject demographics sub-object.
+   *
+   * @property demographics {Object}
+   */
+  get demographics(): Object {
+    const DEMOGRAPHICS_PROPERTIES = [&#x27;age&#x27;, &#x27;gender&#x27;, &#x27;races&#x27;, &#x27;ethnicity&#x27;];
+    return _.pick(this.subject, DEMOGRAPHICS_PROPERTIES);
+  }
+
+  /**
+   * The modeling display format, &#x60;chart&#x60; or &#x60;table&#x60;.
+   *
+   * @property modelingFormat {string}
+   */
+  get modelingFormat(): string {
+    return MODELING_FORMATS[this._modelingFormatIndex];
+  }
+
+  /**
+   * A
+   * {{#crossLink &quot;SubjectComponent/getLabel&quot;}}{{/crossLink}}
+   * wrapper that can be used in templates.
+   *
+   * @property label {function}
+   */
+  const label = (property) =&gt; this.getLabel(property);
+
+  /**
+   * The discrete property {path: {value: label}} tick label choices.
+   *
+   * @property valueChoices {Object}
+   */
+  valueChoices: Object;
+
+  /**
+   * The project name.
+   *
+   * @property project {string}
+   * @readOnly
+   */
+  get project(): string  {
+    return this.subject ? this.subject.project : null;
+  }
+
+  /**
+   * The
+   * {{#crossLink &quot;SubjectComponent/MODELING_FORMATS:property&quot;}}{{/crossLink}}
+   * index to obtain the
+   * {{#crossLink &quot;SubjectComponent/modelingFormat:property&quot;}}{{/crossLink}}.
+   *
+   * @property _modelingFormatIndex {number}
+   * @private
+   */
+  private _modelingFormatIndex = 0;
+
+  constructor(
+    private router: Router, private route: ActivatedRoute,
+    vcRef: ViewContainerRef, overlay: Overlay, private modal: Modal,
+    subjectService: SubjectService,
+    private configService: ConfigurationService,
+    changeDetector: ChangeDetectorRef
+  ) {
+    super(help);
+
+    // Prep the modal in the obscure idiom favored by Angular.
+    overlay.defaultViewContainer = vcRef;
+    // The route/query parameters.
+    let params = this.route.params.value;
+
+    // The select {path: {value: label}} configuration.
+    this.valueChoices = this.configService.valueChoices;
+
+    // A place-holder subject sufficient to get a title.
+    this.subject = subjectService.secondaryKey(params);
+    Subject.extend(this.subject);
+    // Fetch the real subject.
+    subjectService.getSubject(params).subscribe(subject =&gt; {
+      if (subject) {
+        this.subject = subject;
+      } else {
+        this.error = &#x60;${ this.subject.title } was not found&#x60;;
+      }
+      // Tell Angular to digest the change.
+      changeDetector.markForCheck();
+    });
+  }
+
+  /**
+   * Delegates to
+   * {{#crossLink &quot;ConfigurationService/getHTMLLabel&quot;}}{{/crossLink}},
+   *
+   * @method getLabel
+   * @param property {string} the property path
+   * @return {string} the display HTML label
+   */
+  getLabel(property: string) {
+    return this.configService.getHTMLLabel(property, this.subject.collection);
+  }
+
+  /**
+   * Delegates to
+   * {{#crossLink &quot;ObjectHelper/hasValidContent&quot;}}{{/crossLink}}.
+   *
+   * @method has
+   * @param value {any} the value to check
+   * @return {boolean} whether the value has displayable content
+   */
+  has(value: any): boolean {
+    return ObjectHelper.hasValidContent(value);
+  }
+
+  /**
+   * Returns the image {{#crossLink &quot;ImageStore&quot;}}{{/crossLink}}
+   * file location.
+   *
+   * @method location
+   * @param image {Image} the image object
+   * @return {string} the server image file path relative to the server
+   *   web app root
+   */
+  location(image: Object): string {
+    return ImageStore.location(image);
+  }
+
+  /**
+   * Sets the
+   * {{#crossLink &quot;SubjectComponent/modelingFormat:property&quot;}}{{/crossLink}}
+   * to the other value.
+   *
+   * @method tnmStageHelp
+   * @raise {Error} if the collection does not have help
+   */
+  toggleModelingFormat() {
+    this._modelingFormatIndex =
+      (this._modelingFormatIndex + 1) % MODELING_FORMATS.length;
+  }
+
+  /**
+   * Shows the PK modeling help pop-up.
+   *
+   * @method openModelingHelp
+   */
+  openModelingHelp() {
+    this.modal.alert()
+      .size(&#x27;med&#x27;)
+      .showClose(true)
+      .title(&#x27;Pharmacokinetic Modeling&#x27;)
+      .body(modelingHelp)
+      .open();
+  }
+
+  /**
+   * Shows the TNM stage modal help pop-up. The help is
+   * specialized for the subject collection.
+   *
+   * @method tnmStageHelp
+   * @raise {Error} if the collection does not have help
+   */
+  openTNMStageHelp() {
+    let help;
+    if (this.subject.collection === &#x27;Breast&#x27;) {
+      help = breastTnmStageHelp;
+    } else if (this.subject.collection === &#x27;Sarcoma&#x27;) {
+      help = sarcomaTnmStageHelp;
+    } else {
+      throw new Error(&#x27;There is no help for collection&#x27; +
+                      this.subject.collection);
+    }
+
+    this.modal.alert()
+      .size(&#x27;med&#x27;)
+      .showClose(true)
+      .title(&#x27;TNM Stage&#x27;)
+      .body(help)
+      .open();
+  }
+
+  /**
+   * Shows the recurrence score help pop-up.
+   *
+   * @method openRecurrenceScoreHelp
+   */
+  openRecurrenceScoreHelp() {
+    this.modal.alert()
+      .size(&#x27;med&#x27;)
+      .showClose(true)
+      .title(&#x27;Recurrence Score&#x27;)
+      .body(recurrenceScoreHelp)
+      .open();
+  }
+
+  /**
+   * Shows the RCB help pop-up.
+   *
+   * @method openRCBHelp
+   */
+  openRCBHelp() {
+    this.modal.alert()
+      .size(&#x27;med&#x27;)
+      .showClose(true)
+      .title(&#x27;Residual Cancer Burden&#x27;)
+      .body(rcbHelp)
+      .open();
+  }
+
+  /**
+   * Shows the dosage amount help pop-up.
+   *
+   * @method openDosageAmountHelp
+   */
+  openDosageAmountHelp() {
+    this.modal.alert()
+      .size(&#x27;med&#x27;)
+      .showClose(true)
+      .title(&#x27;Dosage Amount&#x27;)
+      .body(dosageAmountHelp)
+      .open();
+  }
+
+  /**
+   * Opens the Session Detail page.
+   *
+   * @method visitSession
+   * @param session {Object} the session REST object
+   */
+  visitSession(session: Object) {
+    this.router.navigate(
+      [&#x27;session&#x27;, session.number],
+      {relativeTo: this.route}
+    );
+  }
+}
+
+</pre>
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>

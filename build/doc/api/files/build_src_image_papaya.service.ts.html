@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>build/src/image/papaya.service.ts - qiprofile API</title>
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="http://yui.yahooapis.com/combo?3.8.0pr2/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div class="yui3-g">
+        <div id="sidebar" class="yui3-u">
+            <div class="logo">
+              <a href="../index.html">
+                  qiprofile API
+              </a>
+            </div>
+            
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/clinical.html">clinical</a>
+                            </li>
+                            <li><a href="../modules/collection.html">collection</a>
+                            </li>
+                            <li><a href="../modules/collections.html">collections</a>
+                            </li>
+                            <li><a href="../modules/common.html">common</a>
+                            </li>
+                            <li><a href="../modules/configuration.html">configuration</a>
+                            </li>
+                            <li><a href="../modules/controls.html">controls</a>
+                            </li>
+                            <li><a href="../modules/data.html">data</a>
+                            </li>
+                            <li><a href="../modules/date.html">date</a>
+                            </li>
+                            <li><a href="../modules/error.html">error</a>
+                            </li>
+                            <li><a href="../modules/file.html">file</a>
+                            </li>
+                            <li><a href="../modules/help.html">help</a>
+                            </li>
+                            <li><a href="../modules/home.html">home</a>
+                            </li>
+                            <li><a href="../modules/image.html">image</a>
+                            </li>
+                            <li><a href="../modules/imageSequence.html">imageSequence</a>
+                            </li>
+                            <li><a href="../modules/main.html">main</a>
+                            </li>
+                            <li><a href="../modules/object.html">object</a>
+                            </li>
+                            <li><a href="../modules/page.html">page</a>
+                            </li>
+                            <li><a href="../modules/project.html">project</a>
+                            </li>
+                            <li><a href="../modules/projects.html">projects</a>
+                            </li>
+                            <li><a href="../modules/rest.html">rest</a>
+                            </li>
+                            <li><a href="../modules/roman.html">roman</a>
+                            </li>
+                            <li><a href="../modules/session.html">session</a>
+                            </li>
+                            <li><a href="../modules/string.html">string</a>
+                            </li>
+                            <li><a href="../modules/subject.html">subject</a>
+                            </li>
+                            <li><a href="../modules/testing.html">testing</a>
+                            </li>
+                            <li><a href="../modules/visualization.html">visualization</a>
+                            </li>
+                            <li><a href="../modules/volume.html">volume</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/AppComponent.html">AppComponent</a></li>
+                            <li><a href="../classes/AppModule.html">AppModule</a></li>
+                            <li><a href="../classes/Breast.html">Breast</a></li>
+                            <li><a href="../classes/BreastNormalizedAssay.html">BreastNormalizedAssay</a></li>
+                            <li><a href="../classes/BreastPathology.html">BreastPathology</a></li>
+                            <li><a href="../classes/CascadeSelectComponent.html">CascadeSelectComponent</a></li>
+                            <li><a href="../classes/ClinicalEncounter.html">ClinicalEncounter</a></li>
+                            <li><a href="../classes/CollectionActivatedRouteStub.html">CollectionActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionComponent.html">CollectionComponent</a></li>
+                            <li><a href="../classes/CollectionComponentSpec.html">CollectionComponentSpec</a></li>
+                            <li><a href="../classes/CollectionItemComponent.html">CollectionItemComponent</a></li>
+                            <li><a href="../classes/CollectionListPage.html">CollectionListPage</a></li>
+                            <li><a href="../classes/CollectionListSpec.html">CollectionListSpec</a></li>
+                            <li><a href="../classes/CollectionModule.html">CollectionModule</a></li>
+                            <li><a href="../classes/CollectionRouterStub.html">CollectionRouterStub</a></li>
+                            <li><a href="../classes/CollectionsActivatedRouteStub.html">CollectionsActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionsComponent.html">CollectionsComponent</a></li>
+                            <li><a href="../classes/CollectionsComponentSpec.html">CollectionsComponentSpec</a></li>
+                            <li><a href="../classes/CollectionsHelpComponent.html">CollectionsHelpComponent</a></li>
+                            <li><a href="../classes/CollectionsHelpServiceStub.html">CollectionsHelpServiceStub</a></li>
+                            <li><a href="../classes/CollectionsHelpTextComponent.html">CollectionsHelpTextComponent</a></li>
+                            <li><a href="../classes/CollectionsModule.html">CollectionsModule</a></li>
+                            <li><a href="../classes/CollectionsResource.html">CollectionsResource</a></li>
+                            <li><a href="../classes/CollectionsService.html">CollectionsService</a></li>
+                            <li><a href="../classes/CollectionsServiceStub.html">CollectionsServiceStub</a></li>
+                            <li><a href="../classes/CollectionSubectServiceStub.html">CollectionSubectServiceStub</a></li>
+                            <li><a href="../classes/ColorBarDirective.html">ColorBarDirective</a></li>
+                            <li><a href="../classes/CommonModule.html">CommonModule</a></li>
+                            <li><a href="../classes/ConfigurationService.html">ConfigurationService</a></li>
+                            <li><a href="../classes/ConfigurationServiceSpec.html">ConfigurationServiceSpec</a></li>
+                            <li><a href="../classes/ControlsModule.html">ControlsModule</a></li>
+                            <li><a href="../classes/CorrelationComponent.html">CorrelationComponent</a></li>
+                            <li><a href="../classes/DateHelper.html">DateHelper</a></li>
+                            <li><a href="../classes/DateHelperSpec.html">DateHelperSpec</a></li>
+                            <li><a href="../classes/Encounter.html">Encounter</a></li>
+                            <li><a href="../classes/ErrorComponent.html">ErrorComponent</a></li>
+                            <li><a href="../classes/FileService.html">FileService</a></li>
+                            <li><a href="../classes/FileServiceSpec.html">FileServiceSpec</a></li>
+                            <li><a href="../classes/Findable.html">Findable</a></li>
+                            <li><a href="../classes/HelpComponent.html">HelpComponent</a></li>
+                            <li><a href="../classes/HelpService.html">HelpService</a></li>
+                            <li><a href="../classes/HomeComponent.html">HomeComponent</a></li>
+                            <li><a href="../classes/IamgeSequenceService.html">IamgeSequenceService</a></li>
+                            <li><a href="../classes/Image.html">Image</a></li>
+                            <li><a href="../classes/ImageComponent.html">ImageComponent</a></li>
+                            <li><a href="../classes/ImageModule.html">ImageModule</a></li>
+                            <li><a href="../classes/ImageSequence.html">ImageSequence</a></li>
+                            <li><a href="../classes/ImageSequenceServiceSpec.html">ImageSequenceServiceSpec</a></li>
+                            <li><a href="../classes/ImageSequenceSessionServiceStub.html">ImageSequenceSessionServiceStub</a></li>
+                            <li><a href="../classes/ImageSequenceSpec.html">ImageSequenceSpec</a></li>
+                            <li><a href="../classes/ImageStore.html">ImageStore</a></li>
+                            <li><a href="../classes/LabelMap.html">LabelMap</a></li>
+                            <li><a href="../classes/Modeling.html">Modeling</a></li>
+                            <li><a href="../classes/ModelingResult.html">ModelingResult</a></li>
+                            <li><a href="../classes/ModelingResults.html">ModelingResults</a></li>
+                            <li><a href="../classes/ObjectHelper.html">ObjectHelper</a></li>
+                            <li><a href="../classes/Page.html">Page</a></li>
+                            <li><a href="../classes/PageComponent.html">PageComponent</a></li>
+                            <li><a href="../classes/PageModule.html">PageModule</a></li>
+                            <li><a href="../classes/PapayaService.html">PapayaService</a></li>
+                            <li><a href="../classes/ParameterResult.html">ParameterResult</a></li>
+                            <li><a href="../classes/Pathology.html">Pathology</a></li>
+                            <li><a href="../classes/PlayerComponent.html">PlayerComponent</a></li>
+                            <li><a href="../classes/ProjectItemComponent.html">ProjectItemComponent</a></li>
+                            <li><a href="../classes/ProjectListPage.html">ProjectListPage</a></li>
+                            <li><a href="../classes/ProjectListSpec.html">ProjectListSpec</a></li>
+                            <li><a href="../classes/ProjectsComponent.html">ProjectsComponent</a></li>
+                            <li><a href="../classes/ProjectsComponentSpec.html">ProjectsComponentSpec</a></li>
+                            <li><a href="../classes/ProjectsHelpComponent.html">ProjectsHelpComponent</a></li>
+                            <li><a href="../classes/ProjectsHelpServiceStub.html">ProjectsHelpServiceStub</a></li>
+                            <li><a href="../classes/ProjectsHelpTextComponent.html">ProjectsHelpTextComponent</a></li>
+                            <li><a href="../classes/ProjectsModule.html">ProjectsModule</a></li>
+                            <li><a href="../classes/ProjectsResource.html">ProjectsResource</a></li>
+                            <li><a href="../classes/ProjectsService.html">ProjectsService</a></li>
+                            <li><a href="../classes/ProjectsServiceStub.html">ProjectsServiceStub</a></li>
+                            <li><a href="../classes/PropertyTableComponent.html">PropertyTableComponent</a></li>
+                            <li><a href="../classes/RCB.html">RCB</a></li>
+                            <li><a href="../classes/Registration.html">Registration</a></li>
+                            <li><a href="../classes/RegistrationSpec.html">RegistrationSpec</a></li>
+                            <li><a href="../classes/REST.html">REST</a></li>
+                            <li><a href="../classes/RestResource.html">RestResource</a></li>
+                            <li><a href="../classes/RESTSpec.html">RESTSpec</a></li>
+                            <li><a href="../classes/Roman.html">Roman</a></li>
+                            <li><a href="../classes/RomanSpec.html">RomanSpec</a></li>
+                            <li><a href="../classes/Sarcoma.html">Sarcoma</a></li>
+                            <li><a href="../classes/Scan.html">Scan</a></li>
+                            <li><a href="../classes/ScanSpec.html">ScanSpec</a></li>
+                            <li><a href="../classes/ScatterPlotDirective.html">ScatterPlotDirective</a></li>
+                            <li><a href="../classes/Session.html">Session</a></li>
+                            <li><a href="../classes/SessionActivatedRouteStub.html">SessionActivatedRouteStub</a></li>
+                            <li><a href="../classes/SessionComponent.html">SessionComponent</a></li>
+                            <li><a href="../classes/SessionComponentSpec.html">SessionComponentSpec</a></li>
+                            <li><a href="../classes/SessionDetailResource.html">SessionDetailResource</a></li>
+                            <li><a href="../classes/SessionDetailResourceStub.html">SessionDetailResourceStub</a></li>
+                            <li><a href="../classes/SessiondRouterStub.html">SessiondRouterStub</a></li>
+                            <li><a href="../classes/SessionModule.html">SessionModule</a></li>
+                            <li><a href="../classes/SessionService.html">SessionService</a></li>
+                            <li><a href="../classes/SessionServiceSpec.html">SessionServiceSpec</a></li>
+                            <li><a href="../classes/SessionServiceStub.html">SessionServiceStub</a></li>
+                            <li><a href="../classes/SessionSpec.html">SessionSpec</a></li>
+                            <li><a href="../classes/SessionSubjectResourceStub.html">SessionSubjectResourceStub</a></li>
+                            <li><a href="../classes/SessionTumorExtent.html">SessionTumorExtent</a></li>
+                            <li><a href="../classes/SliderDirective.html">SliderDirective</a></li>
+                            <li><a href="../classes/SparkLineDirective.html">SparkLineDirective</a></li>
+                            <li><a href="../classes/StringHelper.html">StringHelper</a></li>
+                            <li><a href="../classes/StringHelperSpec.html">StringHelperSpec</a></li>
+                            <li><a href="../classes/Subject.html">Subject</a></li>
+                            <li><a href="../classes/SubjectActivatedRouteStub.html">SubjectActivatedRouteStub</a></li>
+                            <li><a href="../classes/SubjectChangeDetectorRefStub.html">SubjectChangeDetectorRefStub</a></li>
+                            <li><a href="../classes/SubjectComponent.html">SubjectComponent</a></li>
+                            <li><a href="../classes/SubjectComponentSpec.html">SubjectComponentSpec</a></li>
+                            <li><a href="../classes/SubjectdRouterStub.html">SubjectdRouterStub</a></li>
+                            <li><a href="../classes/SubjectModule.html">SubjectModule</a></li>
+                            <li><a href="../classes/SubjectResource.html">SubjectResource</a></li>
+                            <li><a href="../classes/SubjectResourceStub.html">SubjectResourceStub</a></li>
+                            <li><a href="../classes/SubjectService.html">SubjectService</a></li>
+                            <li><a href="../classes/SubjectServiceSpec.html">SubjectServiceSpec</a></li>
+                            <li><a href="../classes/SubjectServiceStub.html">SubjectServiceStub</a></li>
+                            <li><a href="../classes/SubjectSpec.html">SubjectSpec</a></li>
+                            <li><a href="../classes/Table.html">Table</a></li>
+                            <li><a href="../classes/TimeSeries.html">TimeSeries</a></li>
+                            <li><a href="../classes/TNM.html">TNM</a></li>
+                            <li><a href="../classes/ToggleHelpComponent.html">ToggleHelpComponent</a></li>
+                            <li><a href="../classes/VisualizationModule.html">VisualizationModule</a></li>
+                            <li><a href="../classes/Volume.html">Volume</a></li>
+                            <li><a href="../classes/VolumeComponent.html">VolumeComponent</a></li>
+                            <li><a href="../classes/VolumeDetailPage.html">VolumeDetailPage</a></li>
+                            <li><a href="../classes/VolumeImageSequenceServiceStub.html">VolumeImageSequenceServiceStub</a></li>
+                            <li><a href="../classes/VolumeModule.html">VolumeModule</a></li>
+                            <li><a href="../classes/VolumeService.html">VolumeService</a></li>
+                            <li><a href="../classes/VolumeServiceSpec.html">VolumeServiceSpec</a></li>
+                            <li><a href="../classes/VolumeSpec.html">VolumeSpec</a></li>
+                            <li><a href="../classes/XNAT.html">XNAT</a></li>
+                            <li><a href="../classes/XNATSpec.html">XNATSpec</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            
+            
+            
+            <div class="version-info">
+              Version: 2.1.1
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><div class="title">
+  <h1 class="file-name">build/src/image/papaya.service.ts</h1>
+</div>
+
+<pre class="code prettyprint linenums">
+import * as _ from &#x27;lodash&#x27;;
+import { Injectable } from &#x27;@angular/core&#x27;;
+
+import papaya from &#x27;../../lib/papaya.js&#x27;;
+import ImageStore from &#x27;../image/image-store.coffee&#x27;;
+
+@Injectable()
+
+/**
+ * The Papaya facade service.
+ *
+ * @class PapayaService
+ */
+export class PapayaService {
+  /**
+   * The function called when an image load error is encountered.
+   *
+   * @property errorHandler {function}
+   */
+  errorHandler: (message: string) =&gt; {};
+
+  /**
+   * The function called when image load is successfully completed.
+   * The *contents* callback parameter is a {header, data} object,
+   * where *header* is the loaded Papaya volume header and *data*
+   * is the Papaya volume *imageData*.
+   *
+   * Note: this callback is called if and only if there is not an
+   * image load error. The client is responsible for capturing an
+   * error in the
+   * {{#crossLink &quot;PapayaService/errorHandler:property&quot;}}{{/crossLink}}.
+   *
+   * @property finishedLoadingCallback {function}
+   */
+  finishedLoadingCallback: (contents: Object) =&gt; {};
+
+  /**
+   * The function called when the viewer coordinate has changed.
+   *
+   * @property coordinateChangedCallback {function}
+   */
+  coordinateChangedCallback: (coordinate: Object) =&gt; {};
+
+  /**
+   * The Papaya viewer if Papaya is started, undefined otherwise.
+   * The Papaya viewer controls the display.
+   *
+   * @property viewer {any}
+   * @readOnly
+   */
+  get viewer(): any {
+    let container = _.last(papaya.papayaContainers);
+    if (container) {
+      return container.viewer;
+    }
+  }
+
+  /**
+   * Flag indicating whether Papaya has started.
+   *
+   * @property isPapayaStarted
+   * @private
+   */
+  private isPapayaStarted = false;
+
+  /**
+   * This flag is set while a volume is being replaced in
+   * order to disable Papaya mouse event handlers during
+   * the swap.
+   *
+   * @property isSwappingVolume {boolean}
+   * @private
+   */
+  private isSwappingVolume = false;
+
+  /**
+   * @property currentCoordinate {number[]} the [x, y, z] coordinate
+   *   in the cross-hairs
+   */
+  private get currentCoordinate(): number[] {
+    return this.viewer.currentCoord;
+  }
+
+  /**
+   * Monkey-patches Papaya to disable drag-and-drop, replace the
+   * error handler, disable the non-View menu items, inject a finished
+   * load callback and fix several bugs.
+   */
+  constructor() {
+    // Note: this constructor is called on refresh. In that case,
+    //   Papaya is already monkey-patched. If we patch it again,
+    //   the finishedLoad recursion will result in an infinite loop.
+    //   Guard against that with the isPatched function.
+    if (!this.isPapayaPatched()) {
+      this.fixResize();
+      this.fixShowMenu();
+      this.disableDnD();
+      this.disableMouseEventsWhileLoading();
+      this.replaceErrorHandler();
+      this.injectFinishedLoadingCallback();
+      this.injectCoordinateChangedCallback();
+    }
+  }
+
+  /**
+   * Returns whether the
+   * {{#crossLink &quot;PapayaService/viewer:property&quot;}}{{/crossLink}}
+   * has been successfully initialized.
+   *
+   * @method isInitialized
+   * @return {boolean} whether the viewer is initialized
+   */
+  isInitialized(): boolean {
+    return this.viewer &amp;&amp; this.viewer.initialized;
+  }
+
+  /**
+   * Starts Papaya on the given image and overlays.
+   *
+   * If Papaya was already successfully started on an image,
+   * then this method delegates to the
+   * {{#crossLink &quot;PapayaService/restart&quot;}}{{/crossLink}} method
+   * instead.
+   *
+   * @method start
+   * @param image {Image} the {{#crossLink &quot;Image&quot;}}{{/crossLink}}
+   *   to display
+   * @param overlays {Image[]} the image overlays
+   */
+  start(image: Object, overlays=[]) {
+    // Papaya expectes an array with base image first followed by the
+    // overlays.
+    let images = [image].concat(overlays);
+    // The image urls.
+    let urls = images.map(ImageStore.location);
+    // Delegate to the helper method.
+    this.startPapaya(urls);
+    // Set the started flag.
+    this.isPapayaStarted = true;
+  }
+
+  refresh() {
+    let params = papaya.papayaContainers[0].params;
+    let stashed = _.cloneDeep(params.images);
+    delete params.images;
+    papaya.Container.resetViewer(0);
+    params.images = stashed;
+  }
+
+  /**
+   * Restarts Papaya on the given image and overlays.
+   *
+   * @method restart
+   * @param image {Image} the {{#crossLink &quot;Image&quot;}}{{/crossLink}}
+   *   to display
+   * @param overlays {Image[]} the image overlays
+   */
+  restart(image: Object, overlays=[]) {
+    papaya.Container.resetViewer(papaya.papayaContainers.length - 1);
+    // TODO - is below necessary? Test restart.
+    // // Make the urls array as in the start method above.
+    // let images = [image].concat(overlays);
+    // let urls = images.map(ImageStore.location);
+    // // Restart the viewer.
+    // this.viewer.restart(urls, true, false);
+  }
+
+  /**
+   * @method viewerDimensions
+   * @return the viewer [width, height], if known, otherwise null
+   */
+  viewerDimensions(): number[] {
+    return this.viewer ? this.viewer.container.getViewerDimensions() : null;
+  }
+
+  /**
+   * Swaps a new image into the existing Papaya viewer and repaints the
+   * slice views.
+   *
+   * @method replaceImage
+   * @param image {Object} the new {{#crossLink &quot;Image&quot;}}{{/crossLink}}
+   *   object
+   */
+  replaceImage(image: Object) {
+    // The Papaya viewer controls the display.
+    if (_.isNil(this.viewer)) {
+      throw new Error(&quot;Papaya is not yet initialized&quot;);
+    }
+    // The Papaya volume (not the parent VolumeComponent volume).
+    let volume = this.viewer.volume;
+
+    let url = ImageStore.location(image);
+    // Prepare for the swap.
+    volume.urls = [];
+    volume.rawData = [];
+    volume.loadedFileCount = 0;
+    // Reset the url and file name.
+    volume.urls[0] = url;
+    volume.fileName = _.last(url.split(&#x27;/&#x27;));
+    // The Papaya Volume class has two flavors of loaded flags,
+    // which, of course, are undocumented, but are both used
+    // for slightly different purposes.
+    volume.loaded = volume.isLoaded = false;
+    // If the image has already been loaded, then swap in the
+    // previous image content and redraw.
+    if (image.contents) {
+      // Clobber the volume state.
+      volume.header = image.contents.header;
+      volume.imageData = image.contents.data;
+      // The volume.finishedLoad callback.
+      volume.onFinishedRead = () =&gt; {
+        this.viewer.drawEmptyViewer();
+        this.viewer.drawViewer(true, false);
+      };
+      // Simulate load finish.
+      // Note: the Papaya undocumented viewer.finishedLoading function
+      // differs from the undocumented volume.finishedLoad function.
+      // We call finishedLoadingCallback as well to simulate a
+      // complete Papaya image load async trigger chain.
+      volume.finishedLoad();
+      this.finishedLoadingCallback(image.contents);
+    } else {
+      // Guard against mouse move cursor update while
+      // the volume is being swapped in.
+      this.isSwappingVolume = true;
+      // Adapted from the Volume ctor.
+      let pad: boolean = volume.params &amp;&amp; volume.params.padAllImages;
+      volume.header = new papaya.volume.Header(pad);
+      volume.imageData = new papaya.volume.ImageData(pad);
+      // The load completion callback.
+      let onLoaded = () =&gt; {
+        // Check for an error.
+        if (volume.error) {
+          // Kill Papaya.
+          this.viewer.resetViewer();
+          this.viewer.drawEmptyViewer(&quot;Black&quot;);
+          this.viewer.drawHelpMessage();
+          this.viewer.container.display.drawError(volume.error.message);
+        } else {
+          // Redraw the viewer.
+          this.viewer.drawEmptyViewer();
+          this.viewer.drawViewer(true, false);
+          // Patch in the load callback to cache the content.
+          if (this.finishedLoadingCallback) {
+            let contents = {
+              header: volume.header,
+              data: volume.imageData
+            };
+            this.finishedLoadingCallback(contents);
+          }
+        }
+        // Reenable the Papaya mouse handler.
+        this.isSwappingVolume = false;
+      };
+      // Load the image.
+      volume.readURLs([url], onLoaded);
+    }
+  }
+
+  /**
+   * Gets the voxel value for the current or cached image data.
+   *
+   * @method getVoxelValue
+   * @param coordinate {number[]} the [x, y, z] coordinate
+   * @param imageData {Object} the cached volume image data to reference
+   *    (default is the current volume)
+   * @return {number} the voxel value in the image data
+   */
+  getVoxelValue(coordinate: number[], imageData?: Object) {
+    // For some reason, refresh doesn&#x27;t have a transform on the
+    // first call via the callback, but then is immediately
+    // called again and does have a transform. Perhaps the
+    // load callback is called twice in succession on refresh?
+    // Don&#x27;t know, but the guard below apparently works in
+    // the end for a refresh.
+    if (!this.viewer.volume.transform) {
+      return null;
+    }
+    let value;
+    if (imageData) {
+      // Stash the current image data.
+      let currentImageData = this.viewer.volume.transform.voxelValue.imageData;
+      // Swizzle the image data (dangerous!).
+      this.viewer.volume.transform.voxelValue.imageData = imageData;
+      // Delegate to the viewer fooled by the swapped image data.
+      value = this.getVoxelValueAt(coordinate.x, coordinate.y, coordinate.z);
+      // Restore the current image data (important!).
+      this.viewer.volume.transform.voxelValue.imageData = currentImageData;
+    } else {
+      value = this.getVoxelValueAt(coordinate.x, coordinate.y, coordinate.z);
+    }
+
+    return value;
+  }
+
+  /**
+   * Gets the voxel value for the current image at the given coordinates.
+   *
+   * @method getVoxelValueAt
+   * @param x {number} the X coordinate
+   * @param y {number} the Y coordinate
+   * @param z {number} the Z coordinate
+   * @return {number} the voxel value
+   */
+  getVoxelValueAt(x: number, y: number, z: number) {
+    // In some yet to be determined cirucumstances, Papaya is corrupted.
+    // Forestall the meaningless Papaya error message with a slightly
+    // more useful message.
+    if (!this.viewer.currentScreenVolume) {
+      throw new Error(&#x27;The viewer does not have a screen volume&#x27;);
+    }
+    return this.viewer.getCurrentValueAt(x, y, z);
+  }
+
+  /**
+   * Starts Papaya on the given image URLs.
+   *
+   * @method startPapaya
+   * @private
+   * @param urls {string[]} the base image and overlays
+   */
+  private startPapaya(urls=[]) {
+    // The awful Papaya data-passing kludge is to create a global variable
+    // and set the container data-params attribute to the variable name.
+    window.papayaParams = {
+      worldSpace: true,
+      showOrientation: true,
+      images: [urls]
+    };
+
+    // Start the renderer.
+    papaya.Container.startPapaya();
+
+    // Resize the viewer to work around the following Papaya bug:
+    // * Papaya initial display fills in the canvas with the body element
+    //   background color, but then resizes the canvas to a smaller dimension,
+    //   which automatically refills it to black. That wipes out the padding
+    //   between the slice views. Fixing this bug reveals another bug, where
+    //   Papaya sets the Swap button css, which mysteriously creates a black
+    //   strip on the right. Filling that strip has no effect for some reason.
+    //   The work-around is to resize the viewer after the initial display.
+    //   That causes a slight flicker, but we can live with that.
+    papaya.Container.resizePapaya(null, true);
+  }
+
+  /**
+   * In the case of a hot reload, a new PapayaService is created but
+   * the previous patched Papaya library is retained. If that is the
+   * case, the papaya.viewer.Viewer.prototype._finishedLoading patch
+   * function already exists. This method returns whether that function
+   * exists, which serves as a proxy for whether Papaya is already
+   * monkey-patched.
+   *
+   * @method isPapayaPatched
+   * @return {boolean} whether Papaya has already been monkey-patched
+   */
+  private isPapayaPatched(): boolean {
+    return papaya.viewer.Viewer.prototype._finishedLoading;
+  }
+
+  /**
+   * Monkey-patches the misplaced Papaya resize button and kills
+   * the other misplaced and/or irrelevant &quot;main&quot; buttons.
+   *
+   * @method fixResize
+   * @private
+   */
+  private fixResize() {
+    const PAPAYA_PADDING = 0;
+    const PAPAYA_CONTROL_MAIN_INCREMENT_BUTTON_CSS = &quot;papaya-main-increment&quot;;
+    const PAPAYA_CONTROL_MAIN_DECREMENT_BUTTON_CSS = &quot;papaya-main-decrement&quot;;
+    const PAPAYA_CONTROL_MAIN_SWAP_BUTTON_CSS = &quot;papaya-main-swap&quot;;
+    const PAPAYA_CONTROL_MAIN_GOTO_CENTER_BUTTON_CSS = &quot;papaya-main-goto-center&quot;;
+    const PAPAYA_CONTROL_MAIN_GOTO_ORIGIN_BUTTON_CSS = &quot;papaya-main-goto-origin&quot;;
+
+    papaya.viewer.Viewer.prototype.resizeViewer = function (dims) {
+
+      let halfPadding = PAPAYA_PADDING / 2, offset, swapButton, originButton;
+      let incButton, decButton, centerButton;
+
+      this.canvas.width = dims[0];
+      this.canvas.height = dims[1];
+
+      this.context.fillStyle = this.bgColor;
+      this.context.fillRect(0, 0, this.canvas.offsetWidth, this.canvas.offsetHeight);
+
+      if (this.initialized) {
+          this.calculateScreenSliceTransforms();
+          this.canvasRect = this.canvas.getBoundingClientRect();
+          this.drawViewer(true);
+
+          if (this.container.showControls) {
+              offset = $(this.canvas).offset();
+
+              incButton = $(&quot;#&quot; + PAPAYA_CONTROL_MAIN_INCREMENT_BUTTON_CSS +
+                            this.container.containerIndex);
+              incButton.css({
+                  top: offset.top + halfPadding,
+                  left: offset.left + this.mainImage.screenDim -
+                        incButton.outerWidth() - halfPadding,
+                  position: &#x27;absolute&#x27;});
+
+              decButton = $(&quot;#&quot; + PAPAYA_CONTROL_MAIN_DECREMENT_BUTTON_CSS +
+                            this.container.containerIndex);
+              decButton.css({
+                  top: offset.top + decButton.outerHeight() + PAPAYA_PADDING,
+                  left: offset.left + this.mainImage.screenDim -
+                        decButton.outerWidth() - halfPadding,
+                  position: &#x27;absolute&#x27;});
+
+              swapButton = $(&quot;#&quot; + PAPAYA_CONTROL_MAIN_SWAP_BUTTON_CSS +
+                             this.container.containerIndex);
+              swapButton.css({
+                  //** Kludge fix replace top by bottom. **//
+                  // top: offset.top + this.mainImage.screenDim -
+                  //      swapButton.outerHeight() - halfPadding,
+                  bottom: 55,
+                  left: offset.left + this.mainImage.screenDim -
+                        swapButton.outerWidth() - halfPadding,
+                  position: &#x27;absolute&#x27;});
+
+              centerButton = $(&quot;#&quot; + PAPAYA_CONTROL_MAIN_GOTO_CENTER_BUTTON_CSS +
+                               this.container.containerIndex);
+              centerButton.css({
+                  //** Kludge fix replace top by bottom. **//
+                  // top: offset.top + this.mainImage.screenDim -
+                  //      centerButton.outerHeight() - halfPadding,
+                  bottom: 55,
+                  left: offset.left + halfPadding,
+                  position: &#x27;absolute&#x27;});
+
+              originButton = $(&quot;#&quot; + PAPAYA_CONTROL_MAIN_GOTO_ORIGIN_BUTTON_CSS +
+                               this.container.containerIndex);
+              originButton.css({
+                  //** Kludge fix replace top by bottom. **//
+                  // top: offset.top + this.mainImage.screenDim -
+                  //      originButton.outerHeight() - halfPadding,
+                  bottom: 55,
+                  left: offset.left + halfPadding + originButton.outerWidth() + PAPAYA_PADDING,
+                  position: &#x27;absolute&#x27;});
+          }
+      }
+    };
+  }
+
+  private fixShowMenu() {
+    papaya.ui.Menu.doShowMenu = function (viewer, el, menu, right) {
+      let posV, pos, eWidth, mWidth, mHeight, left, top, dHeight;
+
+      //get the position of the placeholder element
+      posV = $(viewer.canvas).offset();
+      dHeight = $(viewer.container.display.canvas).outerHeight();
+      pos = $(el).offset();
+      eWidth = $(el).outerWidth();
+      mWidth = $(menu).outerWidth();
+      mHeight = $(menu).outerHeight();
+      //left = pos.left + (right ? ((-1 * mWidth) + eWidth) : 5) + &quot;px&quot;;
+      left = pos.left - 12;
+
+      //top = (posV.top) + &quot;px&quot;;
+      top = 24;
+
+      //show the menu directly under the placeholder
+      $(menu).css({
+          position: &#x27;absolute&#x27;,
+          zIndex: 100,
+          left: left,
+          top: top
+      });
+
+      $(menu).hide().fadeIn(200);
+    };
+  }
+
+  /**
+   * Removes the &#x27;Drag a file&#x27; message from the Papaya Viewer.drawEmptyViewer
+   * function. Adds a new Viewer.drawHelpMessage function that displays a
+   * &#x27;Select a Time Point&#x27; message. This function should be called on load
+   *  error.
+   *
+   * @method disableDnD
+   * @private
+   */
+  private disableDnD() {
+    papaya.viewer.Viewer.prototype.drawEmptyViewer = function (color) {
+      // The default color is the background.
+      if (!color) {
+        color = this.bgColor;
+      }
+      // Clear the area.
+      this.context.fillStyle = color;
+      this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+    };
+
+    papaya.viewer.Viewer.prototype.drawHelpMessage = function () {
+      // The message text padding size.
+      const pad = 6;
+
+      // Scale the message text.
+      const fontSize = 18;
+      this.context.font = fontSize + &quot;px sans-serif&quot;;
+      const text = &quot;Select a Time Point to display&quot;;
+      let metrics = this.context.measureText(text);
+      let textWidth = metrics.width;
+
+      // Make a right arrow image which points to the Time Point slider.
+      // Scale the right arrow image using the x:y ratio of 1.47.
+      const arrowAspectRatio = 1.47;
+      let arrowWidth = fontSize * arrowAspectRatio;
+
+      // Position the message.
+      // For some reason, the image draws larger than the indicated size.
+      // Adjust for this by using a horizontal pad factor of 6 * pad.
+      let locX = (this.canvas.width / 2) - ((arrowWidth + textWidth + (6 * pad)) / 2);
+      let locY = this.canvas.height - 22;
+
+      // Draw the arrow.
+      let arrow = new Image(arrowWidth, fontSize);
+      // Point to the Time Point slider.
+      arrow.src = &#x27;static/media/arrow-right.png&#x27;;
+      arrow.onload = () =&gt; {
+        this.context.drawImage(arrow, locX, locY - pad - fontSize);
+      };
+
+      // Draw the revised help text.
+      this.context.fillStyle = &quot;MediumSpringGreen&quot;;
+      let offset = arrowWidth + (6 * pad);
+      this.context.fillText(text, locX + offset, locY);
+    };
+  }
+
+  /**
+   * Guard against the following behavior:
+   * * When the mouse moves or is clicked outside of the image viewport
+   *   while a volume is being loaded, Papaya sporadically tries to
+   *   dereference an empty viewer volume header, resulting in the
+   *   following error message:
+   *
+   *       Cannot read property &#x27;xDim&#x27; of null
+   *
+   * The remedy is to check the
+   * {{#crossLink &quot;PapayaService/isSwappingVolume:property&quot;}}{{/crossLink}}
+   * flag.
+   *
+   * @method disableMouseEventsWhileLoading
+   * @private
+   */
+  private disableMouseEventsWhileLoading() {
+    let self = this;
+
+  // Be careful here, because we are already monkey patching
+  // at least one of these functions elsewhere. To avoid an
+  // infinite loop, rename the base methods to a __ prefix
+  // rather than _.
+
+    papaya.viewer.Viewer.prototype.__mouseMoveEvent =
+      papaya.viewer.Viewer.prototype.mouseMoveEvent;
+    papaya.viewer.Viewer.prototype.mouseMoveEvent =
+      function(me) {
+        if (!self.isSwappingVolume) {
+          this.__mouseMoveEvent(me);
+        }
+      };
+
+    papaya.viewer.Viewer.prototype.__mouseDownEvent =
+      papaya.viewer.Viewer.prototype.mouseDownEvent;
+    papaya.viewer.Viewer.prototype.mouseDownEvent =
+      function(me) {
+        if (!self.isSwappingVolume) {
+          this.__mouseDownEvent(me);
+        }
+      };
+
+    papaya.viewer.Viewer.prototype.__mouseUpEvent =
+      papaya.viewer.Viewer.prototype.mouseUpEvent;
+    papaya.viewer.Viewer.prototype.mouseUpEvent =
+      function(me) {
+        if (!self.isSwappingVolume) {
+          this.__mouseUpEvent(me);
+        }
+      };
+
+    // A Papaya mouse event handler delays an updatePosition
+    // on a timer. The volume might be ok in the handler but
+    // swapping out by the time the update is called.
+    papaya.viewer.Viewer.prototype.__updatePosition =
+      papaya.viewer.Viewer.prototype.updatePosition;
+    papaya.viewer.Viewer.prototype.updatePosition =
+      function() {
+        if (!self.isSwappingVolume) {
+          this.__updatePosition.apply(this, arguments);
+        }
+      };
+  }
+
+  /**
+   * Monkey-patches the Papaya image loader to call the
+   * {{#crossLink &quot;PapayaService/errorHandler:property&quot;}}{{/crossLink}},
+   * if it exists, otherwise throw an exception.
+   *
+   * @method replaceErrorHandler
+   * @throws a default error if there is no error handler
+   * @private
+   */
+  private replaceErrorHandler() {
+    // If there is an error handler, then delegate to that function.
+    // Otherwise, throw an error.
+    let onError = (message) =&gt; {
+      if (this.errorHandler) {
+        this.errorHandler(message);
+      } else {
+        // Improve a file read error message.
+        const notFoundPrefix = &#x27;There was a problem reading that file&#x27;;
+        let better = &#x60;The server could not read the image file&#x60;;
+        message = message.replace(notFoundPrefix, better);
+        throw new Error(&#x60;File load was unsuccessful: ${ message }&#x60;);
+      }
+    };
+    papaya.viewer.Display.prototype.drawError = onError;
+  }
+
+  /**
+   * Monkey-patches the Papaya image loader to call the
+   * {{#crossLink &quot;PapayaService/finishedLoadingCallback:property&quot;}}{{/crossLink}}
+   * with the loaded Papaya volume {header, data} object.
+   *
+   * @method injectFinishedLoadingCallback
+   * @private
+   */
+  private injectFinishedLoadingCallback() {
+    // The base implementation.
+    papaya.viewer.Viewer.prototype._finishedLoading =
+      papaya.viewer.Viewer.prototype.finishedLoading;
+    // Clobber the Papaya function. In the function body, *this* is
+    // the viewer and *self* is the service.
+    let self = this;
+    papaya.viewer.Viewer.prototype.finishedLoading = function() {
+      this._finishedLoading();
+      if (self.finishedLoadingCallback) {
+        let contents = {
+          header: this.volume.header,
+          data: this.volume.imageData
+        };
+        // Delegate to the callback.
+        self.finishedLoadingCallback(contents);
+      }
+    };
+  }
+
+  /**
+   * Monkey-patches the Papaya cross-hair reposition handlers
+   * to call the
+   * {{#crossLink &quot;PapayaService/coordinateChangedCallback:property&quot;}}{{/crossLink}}
+   * with the new coordinate.
+   *
+   * @method injectFinishedLoadingCallback
+   * @private
+   */
+  private injectCoordinateChangedCallback() {
+    // The base implementation.
+    papaya.Container.prototype._coordinateChanged =
+      papaya.Container.prototype.coordinateChanged;
+    // Clobber the Papaya function. In the function body,
+    // *self* is this service.
+    let self = this;
+    papaya.Container.prototype.coordinateChanged = function(viewer) {
+      papaya.Container.prototype._coordinateChanged(viewer);
+      if (self.coordinateChangedCallback) {
+        // Delegate to the callback.
+        let coord = _.clone(viewer.currentCoord);
+        self.coordinateChangedCallback(coord);
+      }
+    };
+  }
+}
+
+</pre>
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>

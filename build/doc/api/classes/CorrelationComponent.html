@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>CorrelationComponent - qiprofile API</title>
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="http://yui.yahooapis.com/combo?3.8.0pr2/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div class="yui3-g">
+        <div id="sidebar" class="yui3-u">
+            <div class="logo">
+              <a href="../index.html">
+                  qiprofile API
+              </a>
+            </div>
+            
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/clinical.html">clinical</a>
+                            </li>
+                            <li><a href="../modules/collection.html">collection</a>
+                            </li>
+                            <li><a href="../modules/collections.html">collections</a>
+                            </li>
+                            <li><a href="../modules/common.html">common</a>
+                            </li>
+                            <li><a href="../modules/configuration.html">configuration</a>
+                            </li>
+                            <li><a href="../modules/controls.html">controls</a>
+                            </li>
+                            <li><a href="../modules/data.html">data</a>
+                            </li>
+                            <li><a href="../modules/date.html">date</a>
+                            </li>
+                            <li><a href="../modules/error.html">error</a>
+                            </li>
+                            <li><a href="../modules/file.html">file</a>
+                            </li>
+                            <li><a href="../modules/help.html">help</a>
+                            </li>
+                            <li><a href="../modules/home.html">home</a>
+                            </li>
+                            <li><a href="../modules/image.html">image</a>
+                            </li>
+                            <li><a href="../modules/imageSequence.html">imageSequence</a>
+                            </li>
+                            <li><a href="../modules/main.html">main</a>
+                            </li>
+                            <li><a href="../modules/object.html">object</a>
+                            </li>
+                            <li><a href="../modules/page.html">page</a>
+                            </li>
+                            <li><a href="../modules/project.html">project</a>
+                            </li>
+                            <li><a href="../modules/projects.html">projects</a>
+                            </li>
+                            <li><a href="../modules/rest.html">rest</a>
+                            </li>
+                            <li><a href="../modules/roman.html">roman</a>
+                            </li>
+                            <li><a href="../modules/session.html">session</a>
+                            </li>
+                            <li><a href="../modules/string.html">string</a>
+                            </li>
+                            <li><a href="../modules/subject.html">subject</a>
+                            </li>
+                            <li><a href="../modules/testing.html">testing</a>
+                            </li>
+                            <li><a href="../modules/visualization.html">visualization</a>
+                            </li>
+                            <li><a href="../modules/volume.html">volume</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/AppComponent.html">AppComponent</a></li>
+                            <li><a href="../classes/AppModule.html">AppModule</a></li>
+                            <li><a href="../classes/Breast.html">Breast</a></li>
+                            <li><a href="../classes/BreastNormalizedAssay.html">BreastNormalizedAssay</a></li>
+                            <li><a href="../classes/BreastPathology.html">BreastPathology</a></li>
+                            <li><a href="../classes/CascadeSelectComponent.html">CascadeSelectComponent</a></li>
+                            <li><a href="../classes/ClinicalEncounter.html">ClinicalEncounter</a></li>
+                            <li><a href="../classes/CollectionActivatedRouteStub.html">CollectionActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionComponent.html">CollectionComponent</a></li>
+                            <li><a href="../classes/CollectionComponentSpec.html">CollectionComponentSpec</a></li>
+                            <li><a href="../classes/CollectionItemComponent.html">CollectionItemComponent</a></li>
+                            <li><a href="../classes/CollectionListPage.html">CollectionListPage</a></li>
+                            <li><a href="../classes/CollectionListSpec.html">CollectionListSpec</a></li>
+                            <li><a href="../classes/CollectionModule.html">CollectionModule</a></li>
+                            <li><a href="../classes/CollectionRouterStub.html">CollectionRouterStub</a></li>
+                            <li><a href="../classes/CollectionsActivatedRouteStub.html">CollectionsActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionsComponent.html">CollectionsComponent</a></li>
+                            <li><a href="../classes/CollectionsComponentSpec.html">CollectionsComponentSpec</a></li>
+                            <li><a href="../classes/CollectionsHelpComponent.html">CollectionsHelpComponent</a></li>
+                            <li><a href="../classes/CollectionsHelpServiceStub.html">CollectionsHelpServiceStub</a></li>
+                            <li><a href="../classes/CollectionsHelpTextComponent.html">CollectionsHelpTextComponent</a></li>
+                            <li><a href="../classes/CollectionsModule.html">CollectionsModule</a></li>
+                            <li><a href="../classes/CollectionsResource.html">CollectionsResource</a></li>
+                            <li><a href="../classes/CollectionsService.html">CollectionsService</a></li>
+                            <li><a href="../classes/CollectionsServiceStub.html">CollectionsServiceStub</a></li>
+                            <li><a href="../classes/CollectionSubectServiceStub.html">CollectionSubectServiceStub</a></li>
+                            <li><a href="../classes/ColorBarDirective.html">ColorBarDirective</a></li>
+                            <li><a href="../classes/CommonModule.html">CommonModule</a></li>
+                            <li><a href="../classes/ConfigurationService.html">ConfigurationService</a></li>
+                            <li><a href="../classes/ConfigurationServiceSpec.html">ConfigurationServiceSpec</a></li>
+                            <li><a href="../classes/ControlsModule.html">ControlsModule</a></li>
+                            <li><a href="../classes/CorrelationComponent.html">CorrelationComponent</a></li>
+                            <li><a href="../classes/DateHelper.html">DateHelper</a></li>
+                            <li><a href="../classes/DateHelperSpec.html">DateHelperSpec</a></li>
+                            <li><a href="../classes/Encounter.html">Encounter</a></li>
+                            <li><a href="../classes/ErrorComponent.html">ErrorComponent</a></li>
+                            <li><a href="../classes/FileService.html">FileService</a></li>
+                            <li><a href="../classes/FileServiceSpec.html">FileServiceSpec</a></li>
+                            <li><a href="../classes/Findable.html">Findable</a></li>
+                            <li><a href="../classes/HelpComponent.html">HelpComponent</a></li>
+                            <li><a href="../classes/HelpService.html">HelpService</a></li>
+                            <li><a href="../classes/HomeComponent.html">HomeComponent</a></li>
+                            <li><a href="../classes/IamgeSequenceService.html">IamgeSequenceService</a></li>
+                            <li><a href="../classes/Image.html">Image</a></li>
+                            <li><a href="../classes/ImageComponent.html">ImageComponent</a></li>
+                            <li><a href="../classes/ImageModule.html">ImageModule</a></li>
+                            <li><a href="../classes/ImageSequence.html">ImageSequence</a></li>
+                            <li><a href="../classes/ImageSequenceServiceSpec.html">ImageSequenceServiceSpec</a></li>
+                            <li><a href="../classes/ImageSequenceSessionServiceStub.html">ImageSequenceSessionServiceStub</a></li>
+                            <li><a href="../classes/ImageSequenceSpec.html">ImageSequenceSpec</a></li>
+                            <li><a href="../classes/ImageStore.html">ImageStore</a></li>
+                            <li><a href="../classes/LabelMap.html">LabelMap</a></li>
+                            <li><a href="../classes/Modeling.html">Modeling</a></li>
+                            <li><a href="../classes/ModelingResult.html">ModelingResult</a></li>
+                            <li><a href="../classes/ModelingResults.html">ModelingResults</a></li>
+                            <li><a href="../classes/ObjectHelper.html">ObjectHelper</a></li>
+                            <li><a href="../classes/Page.html">Page</a></li>
+                            <li><a href="../classes/PageComponent.html">PageComponent</a></li>
+                            <li><a href="../classes/PageModule.html">PageModule</a></li>
+                            <li><a href="../classes/PapayaService.html">PapayaService</a></li>
+                            <li><a href="../classes/ParameterResult.html">ParameterResult</a></li>
+                            <li><a href="../classes/Pathology.html">Pathology</a></li>
+                            <li><a href="../classes/PlayerComponent.html">PlayerComponent</a></li>
+                            <li><a href="../classes/ProjectItemComponent.html">ProjectItemComponent</a></li>
+                            <li><a href="../classes/ProjectListPage.html">ProjectListPage</a></li>
+                            <li><a href="../classes/ProjectListSpec.html">ProjectListSpec</a></li>
+                            <li><a href="../classes/ProjectsComponent.html">ProjectsComponent</a></li>
+                            <li><a href="../classes/ProjectsComponentSpec.html">ProjectsComponentSpec</a></li>
+                            <li><a href="../classes/ProjectsHelpComponent.html">ProjectsHelpComponent</a></li>
+                            <li><a href="../classes/ProjectsHelpServiceStub.html">ProjectsHelpServiceStub</a></li>
+                            <li><a href="../classes/ProjectsHelpTextComponent.html">ProjectsHelpTextComponent</a></li>
+                            <li><a href="../classes/ProjectsModule.html">ProjectsModule</a></li>
+                            <li><a href="../classes/ProjectsResource.html">ProjectsResource</a></li>
+                            <li><a href="../classes/ProjectsService.html">ProjectsService</a></li>
+                            <li><a href="../classes/ProjectsServiceStub.html">ProjectsServiceStub</a></li>
+                            <li><a href="../classes/PropertyTableComponent.html">PropertyTableComponent</a></li>
+                            <li><a href="../classes/RCB.html">RCB</a></li>
+                            <li><a href="../classes/Registration.html">Registration</a></li>
+                            <li><a href="../classes/RegistrationSpec.html">RegistrationSpec</a></li>
+                            <li><a href="../classes/REST.html">REST</a></li>
+                            <li><a href="../classes/RestResource.html">RestResource</a></li>
+                            <li><a href="../classes/RESTSpec.html">RESTSpec</a></li>
+                            <li><a href="../classes/Roman.html">Roman</a></li>
+                            <li><a href="../classes/RomanSpec.html">RomanSpec</a></li>
+                            <li><a href="../classes/Sarcoma.html">Sarcoma</a></li>
+                            <li><a href="../classes/Scan.html">Scan</a></li>
+                            <li><a href="../classes/ScanSpec.html">ScanSpec</a></li>
+                            <li><a href="../classes/ScatterPlotDirective.html">ScatterPlotDirective</a></li>
+                            <li><a href="../classes/Session.html">Session</a></li>
+                            <li><a href="../classes/SessionActivatedRouteStub.html">SessionActivatedRouteStub</a></li>
+                            <li><a href="../classes/SessionComponent.html">SessionComponent</a></li>
+                            <li><a href="../classes/SessionComponentSpec.html">SessionComponentSpec</a></li>
+                            <li><a href="../classes/SessionDetailResource.html">SessionDetailResource</a></li>
+                            <li><a href="../classes/SessionDetailResourceStub.html">SessionDetailResourceStub</a></li>
+                            <li><a href="../classes/SessiondRouterStub.html">SessiondRouterStub</a></li>
+                            <li><a href="../classes/SessionModule.html">SessionModule</a></li>
+                            <li><a href="../classes/SessionService.html">SessionService</a></li>
+                            <li><a href="../classes/SessionServiceSpec.html">SessionServiceSpec</a></li>
+                            <li><a href="../classes/SessionServiceStub.html">SessionServiceStub</a></li>
+                            <li><a href="../classes/SessionSpec.html">SessionSpec</a></li>
+                            <li><a href="../classes/SessionSubjectResourceStub.html">SessionSubjectResourceStub</a></li>
+                            <li><a href="../classes/SessionTumorExtent.html">SessionTumorExtent</a></li>
+                            <li><a href="../classes/SliderDirective.html">SliderDirective</a></li>
+                            <li><a href="../classes/SparkLineDirective.html">SparkLineDirective</a></li>
+                            <li><a href="../classes/StringHelper.html">StringHelper</a></li>
+                            <li><a href="../classes/StringHelperSpec.html">StringHelperSpec</a></li>
+                            <li><a href="../classes/Subject.html">Subject</a></li>
+                            <li><a href="../classes/SubjectActivatedRouteStub.html">SubjectActivatedRouteStub</a></li>
+                            <li><a href="../classes/SubjectChangeDetectorRefStub.html">SubjectChangeDetectorRefStub</a></li>
+                            <li><a href="../classes/SubjectComponent.html">SubjectComponent</a></li>
+                            <li><a href="../classes/SubjectComponentSpec.html">SubjectComponentSpec</a></li>
+                            <li><a href="../classes/SubjectdRouterStub.html">SubjectdRouterStub</a></li>
+                            <li><a href="../classes/SubjectModule.html">SubjectModule</a></li>
+                            <li><a href="../classes/SubjectResource.html">SubjectResource</a></li>
+                            <li><a href="../classes/SubjectResourceStub.html">SubjectResourceStub</a></li>
+                            <li><a href="../classes/SubjectService.html">SubjectService</a></li>
+                            <li><a href="../classes/SubjectServiceSpec.html">SubjectServiceSpec</a></li>
+                            <li><a href="../classes/SubjectServiceStub.html">SubjectServiceStub</a></li>
+                            <li><a href="../classes/SubjectSpec.html">SubjectSpec</a></li>
+                            <li><a href="../classes/Table.html">Table</a></li>
+                            <li><a href="../classes/TimeSeries.html">TimeSeries</a></li>
+                            <li><a href="../classes/TNM.html">TNM</a></li>
+                            <li><a href="../classes/ToggleHelpComponent.html">ToggleHelpComponent</a></li>
+                            <li><a href="../classes/VisualizationModule.html">VisualizationModule</a></li>
+                            <li><a href="../classes/Volume.html">Volume</a></li>
+                            <li><a href="../classes/VolumeComponent.html">VolumeComponent</a></li>
+                            <li><a href="../classes/VolumeDetailPage.html">VolumeDetailPage</a></li>
+                            <li><a href="../classes/VolumeImageSequenceServiceStub.html">VolumeImageSequenceServiceStub</a></li>
+                            <li><a href="../classes/VolumeModule.html">VolumeModule</a></li>
+                            <li><a href="../classes/VolumeService.html">VolumeService</a></li>
+                            <li><a href="../classes/VolumeServiceSpec.html">VolumeServiceSpec</a></li>
+                            <li><a href="../classes/VolumeSpec.html">VolumeSpec</a></li>
+                            <li><a href="../classes/XNAT.html">XNAT</a></li>
+                            <li><a href="../classes/XNATSpec.html">XNATSpec</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            <div id="sections" class="sidebox">
+              <div class="hd">
+                <h2 class="no-toc">CorrelationComponent</h2>
+              </div>
+              <div class="bd">
+            
+            
+            
+                  <div><a href="#property-summary">Property Summary</a></div>
+            
+                  <div><a href="#method-summary">Method Summary</a></div>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+                  <div><a href="#public-properties">Public Properties</a></div>
+                  <ul>
+                      <li><a href="#props_color">color</a></li>
+                      <li><a href="#props_data">data</a></li>
+                      <li><a href="#props_domainSelection">domainSelection</a></li>
+                      <li><a href="#props_margin">margin</a></li>
+                      <li><a href="#props_select">select</a></li>
+                      <li><a href="#props_symbolType">symbolType</a></li>
+                      <li><a href="#props_valueChoices">valueChoices</a></li>
+                      <li><a href="#props_x">x</a></li>
+                      <li><a href="#props_xPropertyChoices">xPropertyChoices</a></li>
+                      <li><a href="#props_xPropertyPath">xPropertyPath</a></li>
+                      <li><a href="#props_xValueChoices">xValueChoices</a></li>
+                      <li><a href="#props_y">y</a></li>
+                      <li><a href="#props_yPropertyChoices">yPropertyChoices</a></li>
+                      <li><a href="#props_yPropertyPath">yPropertyPath</a></li>
+                      <li><a href="#props_yValueChoices">yValueChoices</a></li>
+                  </ul>
+            
+            
+            
+                  <div><a href="#public-methods">Public Methods</a></div>
+                  <ul>
+                      <li><a href="#method_ngOnInit">ngOnInit</a></li>
+                      <li><a href="#method_onBrushSelect">onBrushSelect</a></li>
+                      <li><a href="#method_onXChange">onXChange</a></li>
+                      <li><a href="#method_onYChange">onYChange</a></li>
+                  </ul>
+            
+            
+              </div>
+            </div>
+            
+            
+            
+            <div class="version-info">
+              Version: 2.1.1
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><div class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_correlation.component.ts.html#l11"><code>build&#x2F;src&#x2F;visualization&#x2F;correlation.component.ts:11</code></a></span>
+    <h1 class="class-name">CorrelationComponent</h1>
+</div>
+
+
+
+
+<div class="class-description"><p>The correlation component coordinates X, Y property selection
+and data series display.</p>
+</div>
+
+
+
+
+
+
+
+  <h2 id="property-summary">Property Summary</h2>
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Public Properties</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_color">color</a>: String
+            </div>
+            <div class="short-description">
+              <p>The optional color chooser property path.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_data">data</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The data object array.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_domainSelection">domainSelection</a>: Boolean
+            </div>
+            <div class="short-description">
+              <p>This input domain filter is relayed from this component to the embedded <a href="../classes/ScatterPlotDirective.html#property_selection" class="crosslink">selection</a>.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_margin">margin</a>: Number
+            </div>
+            <div class="short-description">
+              <p>The correlation chart margin has a small pad at the top for the cascade select control and bottom for spacing.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_select">select</a>: EventEmitter<boolean>
+            </div>
+            <div class="short-description">
+              <p>The select event transmits a user brush domain object select.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_symbolType">symbolType</a>: Function
+            </div>
+            <div class="short-description">
+              <p>The optional symbol type chooser function.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_valueChoices">valueChoices</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The optional value {path: {value: label}} associative object, where <em>path</em> is the property select choice path.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_x">x</a>: String
+            </div>
+            <div class="short-description">
+              <p>The X property path.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_xPropertyChoices">xPropertyChoices</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The X axis select options hierarchy Object.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_xPropertyPath">xPropertyPath</a>: String
+            </div>
+            <div class="short-description">
+              <p>The initial X chooser path.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_xValueChoices">xValueChoices</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The X {value: label} associative object.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_y">y</a>: String
+            </div>
+            <div class="short-description">
+              <p>The Y property path.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_yPropertyChoices">yPropertyChoices</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The Y axis select options hierarchy Object.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_yPropertyPath">yPropertyPath</a>: String
+            </div>
+            <div class="short-description">
+              <p>The initial Y chooser path.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_yValueChoices">yValueChoices</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The Y {value: label} associative object.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+  <h2 id="method-summary">Method Summary</h2>
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Public Methods</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_ngOnInit">ngOnInit</a>( )
+            </div>
+            <div class="short-description">
+              <p>Sets the initial <a href="../classes/CorrelationComponent.html#property_x" class="crosslink">x</a> and <a href="../classes/CorrelationComponent.html#property_y" class="crosslink">y</a> property paths and the <a href="../classes/CorrelationComponent.html#property_xValueChoices" class="crosslink">xValueChoices</a> and <a href="../classes/CorrelationComponent.html#property_yValueChoices" class="crosslink">yValueChoices</a> value choices.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_onBrushSelect">onBrushSelect</a>(selected)
+            </div>
+            <div class="short-description">
+              <p>Forwards the user brush select to the parent component.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_onXChange">onXChange</a>( )
+            </div>
+            <div class="short-description">
+              <p>Updates the <a href="../classes/CorrelationComponent.html#property_x" class="crosslink">x</a> and <a href="../classes/CorrelationComponent.html#property_xValueChoices" class="crosslink">xValueChoices</a>.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_onYChange">onYChange</a>( )
+            </div>
+            <div class="short-description">
+              <p>Updates the <a href="../classes/CorrelationComponent.html#property_y" class="crosslink">y</a> and <a href="../classes/CorrelationComponent.html#property_yValueChoices" class="crosslink">yValueChoices</a>.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+
+
+    <div id="properties public">
+        <h2 id="public-properties">Public Properties</h2>
+<div class="property item">
+  <div id="props_color" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_correlation.component.ts.html#l43"><code>build&#x2F;src&#x2F;visualization&#x2F;correlation.component.ts:43</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      color: String
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The optional color chooser property path.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_data" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_correlation.component.ts.html#l19"><code>build&#x2F;src&#x2F;visualization&#x2F;correlation.component.ts:19</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      data: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The data object array.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_domainSelection" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_correlation.component.ts.html#l26"><code>build&#x2F;src&#x2F;visualization&#x2F;correlation.component.ts:26</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      domainSelection: Boolean
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>This input domain filter is relayed from this component
+to the embedded
+<a href="../classes/ScatterPlotDirective.html#property_selection" class="crosslink">selection</a>.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_margin" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_correlation.component.ts.html#l120"><code>build&#x2F;src&#x2F;visualization&#x2F;correlation.component.ts:120</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      margin: Number
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The correlation chart margin has a small pad at the top
+for the cascade select control and bottom for spacing.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_select" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_correlation.component.ts.html#l85"><code>build&#x2F;src&#x2F;visualization&#x2F;correlation.component.ts:85</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      select: EventEmitter<boolean>
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The select event transmits a user brush domain object select.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_symbolType" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_correlation.component.ts.html#l50"><code>build&#x2F;src&#x2F;visualization&#x2F;correlation.component.ts:50</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      symbolType: Function
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The optional symbol type chooser function.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_valueChoices" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_correlation.component.ts.html#l35"><code>build&#x2F;src&#x2F;visualization&#x2F;correlation.component.ts:35</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      valueChoices: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The optional value {path: {value: label}} associative object,
+where <em>path</em> is the property select choice path.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_x" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_correlation.component.ts.html#l92"><code>build&#x2F;src&#x2F;visualization&#x2F;correlation.component.ts:92</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      x: String
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The X property path.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_xPropertyChoices" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_correlation.component.ts.html#l57"><code>build&#x2F;src&#x2F;visualization&#x2F;correlation.component.ts:57</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      xPropertyChoices: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The X axis select options hierarchy Object.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_xPropertyPath" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_correlation.component.ts.html#l71"><code>build&#x2F;src&#x2F;visualization&#x2F;correlation.component.ts:71</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      xPropertyPath: String
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The initial X chooser path.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_xValueChoices" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_correlation.component.ts.html#l106"><code>build&#x2F;src&#x2F;visualization&#x2F;correlation.component.ts:106</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      xValueChoices: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The X {value: label} associative object.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_y" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_correlation.component.ts.html#l99"><code>build&#x2F;src&#x2F;visualization&#x2F;correlation.component.ts:99</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      y: String
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The Y property path.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_yPropertyChoices" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_correlation.component.ts.html#l64"><code>build&#x2F;src&#x2F;visualization&#x2F;correlation.component.ts:64</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      yPropertyChoices: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The Y axis select options hierarchy Object.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_yPropertyPath" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_correlation.component.ts.html#l78"><code>build&#x2F;src&#x2F;visualization&#x2F;correlation.component.ts:78</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      yPropertyPath: String
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The initial Y chooser path.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_yValueChoices" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_correlation.component.ts.html#l113"><code>build&#x2F;src&#x2F;visualization&#x2F;correlation.component.ts:113</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      yValueChoices: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The Y {value: label} associative object.</p>
+</div>
+
+</div>
+    </div>
+
+
+
+  <div id="methods public">
+    <h2 id="public-methods">Public Methods</h2>
+<div class="method item">
+    <div id="method_ngOnInit" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_correlation.component.ts.html#l130"><code>build&#x2F;src&#x2F;visualization&#x2F;correlation.component.ts:130</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            ngOnInit( )
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Sets the initial
+<a href="../classes/CorrelationComponent.html#property_x" class="crosslink">x</a>
+and
+<a href="../classes/CorrelationComponent.html#property_y" class="crosslink">y</a>
+property paths and the
+<a href="../classes/CorrelationComponent.html#property_xValueChoices" class="crosslink">xValueChoices</a>
+and
+<a href="../classes/CorrelationComponent.html#property_yValueChoices" class="crosslink">yValueChoices</a>
+value choices.</p>
+</div>
+
+
+
+
+</div>
+<div class="method item">
+    <div id="method_onBrushSelect" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_correlation.component.ts.html#l194"><code>build&#x2F;src&#x2F;visualization&#x2F;correlation.component.ts:194</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            onBrushSelect(selected)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Forwards the user brush select to the parent component.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>selected</td>
+              <td>Boolean</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the selected state</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method_onXChange" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_correlation.component.ts.html#l164"><code>build&#x2F;src&#x2F;visualization&#x2F;correlation.component.ts:164</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            onXChange( )
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Updates the
+<a href="../classes/CorrelationComponent.html#property_x" class="crosslink">x</a>
+and
+<a href="../classes/CorrelationComponent.html#property_xValueChoices" class="crosslink">xValueChoices</a>.</p>
+</div>
+
+
+
+
+</div>
+<div class="method item">
+    <div id="method_onYChange" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_correlation.component.ts.html#l179"><code>build&#x2F;src&#x2F;visualization&#x2F;correlation.component.ts:179</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            onYChange( )
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Updates the
+<a href="../classes/CorrelationComponent.html#property_y" class="crosslink">y</a>
+and
+<a href="../classes/CorrelationComponent.html#property_yValueChoices" class="crosslink">yValueChoices</a>.</p>
+</div>
+
+
+
+
+</div>
+  </div>
+
+
+
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>

@@ -49,15 +49,18 @@ XNAT =
     # sequence.
     resource = image.resource
     imageSequence = image.imageSequence
-    scan = scanFor(imageSequence)
-    session = imageSequence.session
+    if imageSequence?
+      scan = scanFor(imageSequence)
+      session = imageSequence.session
+    else
+      session = image.session
+    if not session?
+      throw new Error "The image #{ image.name } does not have a session"
     subject = session.subject
     collection = subject.collection
     project = subject.project
     # The XNAT project directory.
     projectDir = projectLocation(project)
-    # The scan subdirectory.
-    scanDir = "SCANS/#{ scan.number }"
     # The zero-padded subject label number suffix, e.g. "003".
     subjectNumberSuffix = sprintf.sprintf("%03d", subject.number)
     # The subject label, e.g. "Breast003".
@@ -66,8 +69,12 @@ XNAT =
     sessionNumberSuffix = sprintf.sprintf("%02d", session.number)
     # The XNAT experiment label, e.g. "Breast003_Session02".
     expLabel = "#{ subjectLabel }_Session#{ sessionNumberSuffix }"
+    if scan?
+      parentDir = "#{ expLabel }/SCANS/#{ scan.number }"
+    else
+      parentDir = expLabel
 
     # Return the formatted image file path.
-    "#{ projectDir }/#{ expLabel }/#{ scanDir }/#{ resource }/#{ image.name }"
+    "#{ projectDir }/#{ parentDir }/#{ resource }/#{ image.name }"
 
 `export { XNAT as default }`

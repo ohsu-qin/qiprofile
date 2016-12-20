@@ -12,6 +12,7 @@ import {
   ConfigurationService
 } from '../configuration/configuration.service.ts';
 import { PageComponent } from '../page/page.component.ts';
+import ImageStore from '../image/image-store.coffee';
 import Subject from './subject.data.coffee';
 import { SubjectService } from './subject.service.ts';
 import help from './subject.help.md';
@@ -162,6 +163,19 @@ export class SubjectComponent extends PageComponent {
    */
   has(value: any): boolean {
     return ObjectHelper.hasValidContent(value);
+  }
+
+  /**
+   * Returns the image {{#crossLink "ImageStore"}}{{/crossLink}}
+   * file location.
+   *
+   * @method location
+   * @param image {Image} the image object
+   * @return {string} the server image file path relative to the server
+   *   web app root
+   */
+  location(image: Object): string {
+    return ImageStore.location(image);
   }
 
   /**

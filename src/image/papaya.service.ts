@@ -157,6 +157,7 @@ export class PapayaService {
    */
   restart(image: Object, overlays=[]) {
     papaya.Container.resetViewer(papaya.papayaContainers.length - 1);
+    // TODO - is below necessary? Test restart.
     // // Make the urls array as in the start method above.
     // let images = [image].concat(overlays);
     // let urls = images.map(ImageStore.location);

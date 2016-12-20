@@ -11,7 +11,7 @@ h4.qi-profile-heading Clinical Profile
     // The encounter tables.
     div(*ngFor="let encounter of subject.clinicalEncounters")
       accordion-group([heading]="encounter.title", [isOpened]=true)
-      include clinical-encounter
+        include clinical-encounter
 
     //- TODO - enable.
     //- // The treatments tables.

@@ -1,0 +1,2281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ScatterPlotDirective - qiprofile API</title>
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="http://yui.yahooapis.com/combo?3.8.0pr2/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div class="yui3-g">
+        <div id="sidebar" class="yui3-u">
+            <div class="logo">
+              <a href="../index.html">
+                  qiprofile API
+              </a>
+            </div>
+            
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/clinical.html">clinical</a>
+                            </li>
+                            <li><a href="../modules/collection.html">collection</a>
+                            </li>
+                            <li><a href="../modules/collections.html">collections</a>
+                            </li>
+                            <li><a href="../modules/common.html">common</a>
+                            </li>
+                            <li><a href="../modules/configuration.html">configuration</a>
+                            </li>
+                            <li><a href="../modules/controls.html">controls</a>
+                            </li>
+                            <li><a href="../modules/data.html">data</a>
+                            </li>
+                            <li><a href="../modules/date.html">date</a>
+                            </li>
+                            <li><a href="../modules/error.html">error</a>
+                            </li>
+                            <li><a href="../modules/file.html">file</a>
+                            </li>
+                            <li><a href="../modules/help.html">help</a>
+                            </li>
+                            <li><a href="../modules/home.html">home</a>
+                            </li>
+                            <li><a href="../modules/image.html">image</a>
+                            </li>
+                            <li><a href="../modules/imageSequence.html">imageSequence</a>
+                            </li>
+                            <li><a href="../modules/main.html">main</a>
+                            </li>
+                            <li><a href="../modules/object.html">object</a>
+                            </li>
+                            <li><a href="../modules/page.html">page</a>
+                            </li>
+                            <li><a href="../modules/project.html">project</a>
+                            </li>
+                            <li><a href="../modules/projects.html">projects</a>
+                            </li>
+                            <li><a href="../modules/rest.html">rest</a>
+                            </li>
+                            <li><a href="../modules/roman.html">roman</a>
+                            </li>
+                            <li><a href="../modules/session.html">session</a>
+                            </li>
+                            <li><a href="../modules/string.html">string</a>
+                            </li>
+                            <li><a href="../modules/subject.html">subject</a>
+                            </li>
+                            <li><a href="../modules/testing.html">testing</a>
+                            </li>
+                            <li><a href="../modules/visualization.html">visualization</a>
+                            </li>
+                            <li><a href="../modules/volume.html">volume</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/AppComponent.html">AppComponent</a></li>
+                            <li><a href="../classes/AppModule.html">AppModule</a></li>
+                            <li><a href="../classes/Breast.html">Breast</a></li>
+                            <li><a href="../classes/BreastNormalizedAssay.html">BreastNormalizedAssay</a></li>
+                            <li><a href="../classes/BreastPathology.html">BreastPathology</a></li>
+                            <li><a href="../classes/CascadeSelectComponent.html">CascadeSelectComponent</a></li>
+                            <li><a href="../classes/ClinicalEncounter.html">ClinicalEncounter</a></li>
+                            <li><a href="../classes/CollectionActivatedRouteStub.html">CollectionActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionComponent.html">CollectionComponent</a></li>
+                            <li><a href="../classes/CollectionComponentSpec.html">CollectionComponentSpec</a></li>
+                            <li><a href="../classes/CollectionItemComponent.html">CollectionItemComponent</a></li>
+                            <li><a href="../classes/CollectionListPage.html">CollectionListPage</a></li>
+                            <li><a href="../classes/CollectionListSpec.html">CollectionListSpec</a></li>
+                            <li><a href="../classes/CollectionModule.html">CollectionModule</a></li>
+                            <li><a href="../classes/CollectionRouterStub.html">CollectionRouterStub</a></li>
+                            <li><a href="../classes/CollectionsActivatedRouteStub.html">CollectionsActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionsComponent.html">CollectionsComponent</a></li>
+                            <li><a href="../classes/CollectionsComponentSpec.html">CollectionsComponentSpec</a></li>
+                            <li><a href="../classes/CollectionsHelpComponent.html">CollectionsHelpComponent</a></li>
+                            <li><a href="../classes/CollectionsHelpServiceStub.html">CollectionsHelpServiceStub</a></li>
+                            <li><a href="../classes/CollectionsHelpTextComponent.html">CollectionsHelpTextComponent</a></li>
+                            <li><a href="../classes/CollectionsModule.html">CollectionsModule</a></li>
+                            <li><a href="../classes/CollectionsResource.html">CollectionsResource</a></li>
+                            <li><a href="../classes/CollectionsService.html">CollectionsService</a></li>
+                            <li><a href="../classes/CollectionsServiceStub.html">CollectionsServiceStub</a></li>
+                            <li><a href="../classes/CollectionSubectServiceStub.html">CollectionSubectServiceStub</a></li>
+                            <li><a href="../classes/ColorBarDirective.html">ColorBarDirective</a></li>
+                            <li><a href="../classes/CommonModule.html">CommonModule</a></li>
+                            <li><a href="../classes/ConfigurationService.html">ConfigurationService</a></li>
+                            <li><a href="../classes/ConfigurationServiceSpec.html">ConfigurationServiceSpec</a></li>
+                            <li><a href="../classes/ControlsModule.html">ControlsModule</a></li>
+                            <li><a href="../classes/CorrelationComponent.html">CorrelationComponent</a></li>
+                            <li><a href="../classes/DateHelper.html">DateHelper</a></li>
+                            <li><a href="../classes/DateHelperSpec.html">DateHelperSpec</a></li>
+                            <li><a href="../classes/Encounter.html">Encounter</a></li>
+                            <li><a href="../classes/ErrorComponent.html">ErrorComponent</a></li>
+                            <li><a href="../classes/FileService.html">FileService</a></li>
+                            <li><a href="../classes/FileServiceSpec.html">FileServiceSpec</a></li>
+                            <li><a href="../classes/Findable.html">Findable</a></li>
+                            <li><a href="../classes/HelpComponent.html">HelpComponent</a></li>
+                            <li><a href="../classes/HelpService.html">HelpService</a></li>
+                            <li><a href="../classes/HomeComponent.html">HomeComponent</a></li>
+                            <li><a href="../classes/IamgeSequenceService.html">IamgeSequenceService</a></li>
+                            <li><a href="../classes/Image.html">Image</a></li>
+                            <li><a href="../classes/ImageComponent.html">ImageComponent</a></li>
+                            <li><a href="../classes/ImageModule.html">ImageModule</a></li>
+                            <li><a href="../classes/ImageSequence.html">ImageSequence</a></li>
+                            <li><a href="../classes/ImageSequenceServiceSpec.html">ImageSequenceServiceSpec</a></li>
+                            <li><a href="../classes/ImageSequenceSessionServiceStub.html">ImageSequenceSessionServiceStub</a></li>
+                            <li><a href="../classes/ImageSequenceSpec.html">ImageSequenceSpec</a></li>
+                            <li><a href="../classes/ImageStore.html">ImageStore</a></li>
+                            <li><a href="../classes/LabelMap.html">LabelMap</a></li>
+                            <li><a href="../classes/Modeling.html">Modeling</a></li>
+                            <li><a href="../classes/ModelingResult.html">ModelingResult</a></li>
+                            <li><a href="../classes/ModelingResults.html">ModelingResults</a></li>
+                            <li><a href="../classes/ObjectHelper.html">ObjectHelper</a></li>
+                            <li><a href="../classes/Page.html">Page</a></li>
+                            <li><a href="../classes/PageComponent.html">PageComponent</a></li>
+                            <li><a href="../classes/PageModule.html">PageModule</a></li>
+                            <li><a href="../classes/PapayaService.html">PapayaService</a></li>
+                            <li><a href="../classes/ParameterResult.html">ParameterResult</a></li>
+                            <li><a href="../classes/Pathology.html">Pathology</a></li>
+                            <li><a href="../classes/PlayerComponent.html">PlayerComponent</a></li>
+                            <li><a href="../classes/ProjectItemComponent.html">ProjectItemComponent</a></li>
+                            <li><a href="../classes/ProjectListPage.html">ProjectListPage</a></li>
+                            <li><a href="../classes/ProjectListSpec.html">ProjectListSpec</a></li>
+                            <li><a href="../classes/ProjectsComponent.html">ProjectsComponent</a></li>
+                            <li><a href="../classes/ProjectsComponentSpec.html">ProjectsComponentSpec</a></li>
+                            <li><a href="../classes/ProjectsHelpComponent.html">ProjectsHelpComponent</a></li>
+                            <li><a href="../classes/ProjectsHelpServiceStub.html">ProjectsHelpServiceStub</a></li>
+                            <li><a href="../classes/ProjectsHelpTextComponent.html">ProjectsHelpTextComponent</a></li>
+                            <li><a href="../classes/ProjectsModule.html">ProjectsModule</a></li>
+                            <li><a href="../classes/ProjectsResource.html">ProjectsResource</a></li>
+                            <li><a href="../classes/ProjectsService.html">ProjectsService</a></li>
+                            <li><a href="../classes/ProjectsServiceStub.html">ProjectsServiceStub</a></li>
+                            <li><a href="../classes/PropertyTableComponent.html">PropertyTableComponent</a></li>
+                            <li><a href="../classes/RCB.html">RCB</a></li>
+                            <li><a href="../classes/Registration.html">Registration</a></li>
+                            <li><a href="../classes/RegistrationSpec.html">RegistrationSpec</a></li>
+                            <li><a href="../classes/REST.html">REST</a></li>
+                            <li><a href="../classes/RestResource.html">RestResource</a></li>
+                            <li><a href="../classes/RESTSpec.html">RESTSpec</a></li>
+                            <li><a href="../classes/Roman.html">Roman</a></li>
+                            <li><a href="../classes/RomanSpec.html">RomanSpec</a></li>
+                            <li><a href="../classes/Sarcoma.html">Sarcoma</a></li>
+                            <li><a href="../classes/Scan.html">Scan</a></li>
+                            <li><a href="../classes/ScanSpec.html">ScanSpec</a></li>
+                            <li><a href="../classes/ScatterPlotDirective.html">ScatterPlotDirective</a></li>
+                            <li><a href="../classes/Session.html">Session</a></li>
+                            <li><a href="../classes/SessionActivatedRouteStub.html">SessionActivatedRouteStub</a></li>
+                            <li><a href="../classes/SessionComponent.html">SessionComponent</a></li>
+                            <li><a href="../classes/SessionComponentSpec.html">SessionComponentSpec</a></li>
+                            <li><a href="../classes/SessionDetailResource.html">SessionDetailResource</a></li>
+                            <li><a href="../classes/SessionDetailResourceStub.html">SessionDetailResourceStub</a></li>
+                            <li><a href="../classes/SessiondRouterStub.html">SessiondRouterStub</a></li>
+                            <li><a href="../classes/SessionModule.html">SessionModule</a></li>
+                            <li><a href="../classes/SessionService.html">SessionService</a></li>
+                            <li><a href="../classes/SessionServiceSpec.html">SessionServiceSpec</a></li>
+                            <li><a href="../classes/SessionServiceStub.html">SessionServiceStub</a></li>
+                            <li><a href="../classes/SessionSpec.html">SessionSpec</a></li>
+                            <li><a href="../classes/SessionSubjectResourceStub.html">SessionSubjectResourceStub</a></li>
+                            <li><a href="../classes/SessionTumorExtent.html">SessionTumorExtent</a></li>
+                            <li><a href="../classes/SliderDirective.html">SliderDirective</a></li>
+                            <li><a href="../classes/SparkLineDirective.html">SparkLineDirective</a></li>
+                            <li><a href="../classes/StringHelper.html">StringHelper</a></li>
+                            <li><a href="../classes/StringHelperSpec.html">StringHelperSpec</a></li>
+                            <li><a href="../classes/Subject.html">Subject</a></li>
+                            <li><a href="../classes/SubjectActivatedRouteStub.html">SubjectActivatedRouteStub</a></li>
+                            <li><a href="../classes/SubjectChangeDetectorRefStub.html">SubjectChangeDetectorRefStub</a></li>
+                            <li><a href="../classes/SubjectComponent.html">SubjectComponent</a></li>
+                            <li><a href="../classes/SubjectComponentSpec.html">SubjectComponentSpec</a></li>
+                            <li><a href="../classes/SubjectdRouterStub.html">SubjectdRouterStub</a></li>
+                            <li><a href="../classes/SubjectModule.html">SubjectModule</a></li>
+                            <li><a href="../classes/SubjectResource.html">SubjectResource</a></li>
+                            <li><a href="../classes/SubjectResourceStub.html">SubjectResourceStub</a></li>
+                            <li><a href="../classes/SubjectService.html">SubjectService</a></li>
+                            <li><a href="../classes/SubjectServiceSpec.html">SubjectServiceSpec</a></li>
+                            <li><a href="../classes/SubjectServiceStub.html">SubjectServiceStub</a></li>
+                            <li><a href="../classes/SubjectSpec.html">SubjectSpec</a></li>
+                            <li><a href="../classes/Table.html">Table</a></li>
+                            <li><a href="../classes/TimeSeries.html">TimeSeries</a></li>
+                            <li><a href="../classes/TNM.html">TNM</a></li>
+                            <li><a href="../classes/ToggleHelpComponent.html">ToggleHelpComponent</a></li>
+                            <li><a href="../classes/VisualizationModule.html">VisualizationModule</a></li>
+                            <li><a href="../classes/Volume.html">Volume</a></li>
+                            <li><a href="../classes/VolumeComponent.html">VolumeComponent</a></li>
+                            <li><a href="../classes/VolumeDetailPage.html">VolumeDetailPage</a></li>
+                            <li><a href="../classes/VolumeImageSequenceServiceStub.html">VolumeImageSequenceServiceStub</a></li>
+                            <li><a href="../classes/VolumeModule.html">VolumeModule</a></li>
+                            <li><a href="../classes/VolumeService.html">VolumeService</a></li>
+                            <li><a href="../classes/VolumeServiceSpec.html">VolumeServiceSpec</a></li>
+                            <li><a href="../classes/VolumeSpec.html">VolumeSpec</a></li>
+                            <li><a href="../classes/XNAT.html">XNAT</a></li>
+                            <li><a href="../classes/XNATSpec.html">XNATSpec</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            <div id="sections" class="sidebox">
+              <div class="hd">
+                <h2 class="no-toc">ScatterPlotDirective</h2>
+              </div>
+              <div class="bd">
+            
+            
+            
+                  <div><a href="#property-summary">Property Summary</a></div>
+            
+                  <div><a href="#method-summary">Method Summary</a></div>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+                  <div><a href="#public-properties">Public Properties</a></div>
+                  <ul>
+                      <li><a href="#props_aspect">aspect</a></li>
+                      <li><a href="#props_color">color</a></li>
+                      <li><a href="#props_data">data</a></li>
+                      <li><a href="#props_height">height</a></li>
+                      <li><a href="#props_margin">margin</a></li>
+                      <li><a href="#props_onAxis">onAxis</a></li>
+                      <li><a href="#props_plotted">plotted</a></li>
+                      <li><a href="#props_select">select</a></li>
+                      <li><a href="#props_selection">selection</a></li>
+                      <li><a href="#props_symbolType">symbolType</a></li>
+                      <li><a href="#props_trendLine">trendLine</a></li>
+                      <li><a href="#props_width">width</a></li>
+                      <li><a href="#props_x">x</a></li>
+                      <li><a href="#props_xChoices">xChoices</a></li>
+                      <li><a href="#props_xDiscrete">xDiscrete</a></li>
+                      <li><a href="#props_y">y</a></li>
+                      <li><a href="#props_yChoices">yChoices</a></li>
+                      <li><a href="#props_yDiscrete">yDiscrete</a></li>
+                  </ul>
+            
+            
+                  <div><a href="#private-properties">Private Properties</a></div>
+                  <ul>
+                      <li><a href="#props_domains">domains</a></li>
+                      <li><a href="#props_dx">dx</a></li>
+                      <li><a href="#props_dy">dy</a></li>
+                      <li><a href="#props_pad">pad</a></li>
+                      <li><a href="#props_pendingTransitionTime">pendingTransitionTime</a></li>
+                      <li><a href="#props_plot">plot</a></li>
+                      <li><a href="#props_svg">svg</a></li>
+                  </ul>
+            
+                  <div><a href="#public-methods">Public Methods</a></div>
+                  <ul>
+                      <li><a href="#method_createBrush">createBrush</a></li>
+                      <li><a href="#method_getDiscreteSortCriterion">getDiscreteSortCriterion</a></li>
+                      <li><a href="#method_getDiscreteValues">getDiscreteValues</a></li>
+                      <li><a href="#method_getSelectedData">getSelectedData</a></li>
+                  </ul>
+            
+            
+                  <div><a href="#private-methods">Private Methods</a></div>
+                  <ul>
+                      <li><a href="#method_configureDomainRefs">configureDomainRefs</a></li>
+                      <li><a href="#method_configureDomains">configureDomains</a></li>
+                      <li><a href="#method_configurePlot">configurePlot</a></li>
+                      <li><a href="#method_createChart">createChart</a></li>
+                      <li><a href="#method_createDomains">createDomains</a></li>
+                      <li><a href="#method_drawPoints">drawPoints</a></li>
+                      <li><a href="#method_drawTrendLine">drawTrendLine</a></li>
+                      <li><a href="#method_getContinuousDomain">getContinuousDomain</a></li>
+                      <li><a href="#method_isDataPointVisible">isDataPointVisible</a></li>
+                      <li><a href="#method_leastSquares">leastSquares</a></li>
+                      <li><a href="#method_pointTransform">pointTransform</a></li>
+                      <li><a href="#method_resetVisibility">resetVisibility</a></li>
+                      <li><a href="#method_updatePlot">updatePlot</a></li>
+                  </ul>
+              </div>
+            </div>
+            
+            
+            
+            <div class="version-info">
+              Version: 2.1.1
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><div class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l17"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:17</code></a></span>
+    <h1 class="class-name">ScatterPlotDirective</h1>
+</div>
+
+
+
+
+<div class="class-description"><p>Draws a D3 scatter plot. The
+<a href="../classes/ScatterPlotDirective.html#property_data" class="crosslink">data</a>
+input, optionally filtered by the
+<a href="../classes/ScatterPlotDirective.html#property_selection" class="crosslink">selection</a>,
+is the domain used to acquire the
+<a href="../classes/ScatterPlotDirective.html#property_x" class="crosslink">x</a>
+and
+<a href="../classes/ScatterPlotDirective.html#property_y" class="crosslink">y</a>,
+data points.</p>
+</div>
+
+
+
+
+
+
+
+  <h2 id="property-summary">Property Summary</h2>
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Public Properties</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_aspect">aspect</a>: Number
+            </div>
+            <div class="short-description">
+              <p>The optional chart width:height ratio. The default is the window aspect.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_color">color</a>: String
+            </div>
+            <div class="short-description">
+              <p>The optional property name or path whose value determines the data point (color, opacity) assignment. A data point is assigned a color and opacity based on the result of calling the color function. Distinct data points are assigned the same (color, opacity) combination if and only if applying the color function returns the same color value.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_data">data</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The data object array.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_height">height</a>: Number
+            </div>
+            <div class="short-description">
+              <p>The optional chart height. The default height is the <a href="../classes/ScatterPlotDirective.html#property_width" class="crosslink">width</a> times the <a href="../classes/ScatterPlotDirective.html#property_aspect" class="crosslink">aspect</a>.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_margin">margin</a>: Number
+            </div>
+            <div class="short-description">
+              <p>The optional chart [top, left, bottom, right] margin within the SVG root element.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_onAxis">onAxis</a>: Function
+            </div>
+            <div class="short-description">
+              <p>The axis customization callback.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_plotted">plotted</a>: EventEmitter<Object>
+            </div>
+            <div class="short-description">
+              <p>The plotted event transmits the root SVG group D3 selection after the chart is drawn.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_select">select</a>: EventEmitter<boolean>
+            </div>
+            <div class="short-description">
+              <p>The select event transmits the domain object selection state.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_selection">selection</a>: Boolean
+            </div>
+            <div class="short-description">
+              <p>The optional selection array filters the data domain. The default is to use all of the data objects. Missing inputs are always ignored.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_symbolType">symbolType</a>: Function
+            </div>
+            <div class="short-description">
+              <p>The optional symbol type function (default <code>circle</code>).</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_trendLine">trendLine</a>: Boolean
+            </div>
+            <div class="short-description">
+              <p>The optional least squares trend line flag. The default is <code>false</code>.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_width">width</a>: Number
+            </div>
+            <div class="short-description">
+              <p>The optional chart width. The default width is the parent element width.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_x">x</a>: String
+            </div>
+            <div class="short-description">
+              <p>The required X value property name or path.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_xChoices">xChoices</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The optional X {value: label} associative object for a discrete domain.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_xDiscrete">xDiscrete</a>: Boolean
+            </div>
+            <div class="short-description">
+              <p>The flag indicating whether the X domain is discrete rather than continuous. The default is <code>true</code> if the first non-nil X value is a string or boolean, <code>false</code> otherwise.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_y">y</a>: String
+            </div>
+            <div class="short-description">
+              <p>The required Y value property name or path.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_yChoices">yChoices</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The optional Y {value: label} associative object for a discrete domain.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_yDiscrete">yDiscrete</a>: Boolean
+            </div>
+            <div class="short-description">
+              <p>The flag indicating whether the Y domain is discrete rather than continuous. The default is <code>true</code> if the first non-nil Y value is a string or boolean, <code>false</code> otherwise.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Private Properties</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_domains">domains</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The domain references encapsulation. This object is built by <a href="../classes/ScatterPlotDirective.html#method_createDomains" class="crosslink">createDomains</a> and consists of the following properties:</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_dx">dx</a>: Function
+            </div>
+            <div class="short-description">
+              <p>The data point X cooordinate function.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_dy">dy</a>: Function
+            </div>
+            <div class="short-description">
+              <p>The data point Y cooordinate function.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_pad">pad</a>: Unknown
+            </div>
+            <div class="short-description">
+              <p>The internal chart padding to accomodate the top and bottom axes. The right pad allows for the last X tick label. The left pad accomodates a <code>-n.nn</code> number. Non-numeric labels are slanted to fit within the pad.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_pendingTransitionTime">pendingTransitionTime</a>: Number
+            </div>
+            <div class="short-description">
+              <p>The time of the transitions in progress.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_plot">plot</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The plot configuration parameters. This object is built by <a href="../classes/ScatterPlotDirective.html#method_createChart" class="crosslink">createChart</a> and consists of data-independent properties, e.g. the plot origin and the visibility function.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_svg">svg</a>: d3.Selection<any>
+            </div>
+            <div class="short-description">
+              <p>The D3 SVG root group element.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  <h2 id="method-summary">Method Summary</h2>
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Public Methods</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_createBrush">createBrush</a>( ): Object
+            </div>
+            <div class="short-description">
+              <p>Makes the seletion D3 brush.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_getDiscreteSortCriterion">getDiscreteSortCriterion</a>(groups, other): Object
+            </div>
+            <div class="short-description">
+              <p>The discrete groups are sorted as follows:</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_getDiscreteValues">getDiscreteValues</a>(discrete, other): Any
+            </div>
+            <div class="short-description">
+              <p>Collects the values for a discrete domain. If there is a trend line, then the domain is sorted as follows:</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_getSelectedData">getSelectedData</a>( ): 
+            </div>
+            <div class="short-description">
+              <p>Determines the subset of <a href="../classes/ScatterPlotDirective.html#property_data" class="crosslink">data</a> data points within the D3 brush bounding box.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Private Methods</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_configureDomainRefs">configureDomainRefs</a>(getX, getY)
+            </div>
+            <div class="short-description">
+              <p>Sets the <a href="../classes/ScatterPlotDirective.html#property_domains" class="crosslink">domains</a> properties <code>data</code>, <code>dataRefs</code>, <code>toData</code>, <code>fromData</code>, <code>x.discrete</code>, <code>y.discrete</code>, <code>x.indexes</code> and <code>y.indexes</code>.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_configureDomains">configureDomains</a>(getX, getY)
+            </div>
+            <div class="short-description">
+              <p>Creates the ScatterPlotDirective/domain:property.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_configurePlot">configurePlot</a>( )
+            </div>
+            <div class="short-description">
+              <p>Makes the plot data-independent parameters.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_createChart">createChart</a>( )
+            </div>
+            <div class="short-description">
+              <p>Makes the D3 SVG root group element and draws the plot.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_createDomains">createDomains</a>( )
+            </div>
+            <div class="short-description">
+              <p>Sets the data-dependent portion of the plot.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_drawPoints">drawPoints</a>(plot)
+            </div>
+            <div class="short-description">
+              <p>Draws the D3 points in the given plot.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_drawTrendLine">drawTrendLine</a>(plot): 
+            </div>
+            <div class="short-description">
+              <p>Draws the correlation trend line and correlation coefficient, if the correlation is well-defined, as described in <a href="../classes/ScatterPlotDirective.html#method_leastSquares" class="crosslink">leastSquares</a>.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_getContinuousDomain">getContinuousDomain</a>(accessor): 
+            </div>
+            <div class="short-description">
+              <p>Determines the continuous [min, max] domain for the given value function applied over the <a href="../classes/ScatterPlotDirective.html#property_data" class="crosslink">data</a> input.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_isDataPointVisible">isDataPointVisible</a>(index): Boolean
+            </div>
+            <div class="short-description">
+              <p>Returns whether the data point at the given index is both valid and selected.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_leastSquares">leastSquares</a>( ): Object
+            </div>
+            <div class="short-description">
+              <p>Calculate the least-squares trend line parameters. This function is adapted, with improvements, from <a href="http://bl.ocks.org/benvandyke/8459843">http://bl.ocks.org/benvandyke/8459843</a>. The return value is the {slope, intercept, rSquare} object, if well-defined, otherwise null. The correlation is not well-defined if either all of the X values or all of the Y values are equal.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_pointTransform">pointTransform</a>(d, i): String
+            </div>
+            <div class="short-description">
+              <p>The point locator function.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_resetVisibility">resetVisibility</a>( )
+            </div>
+            <div class="short-description">
+              <p>Resets the data point visibility style based on the <a href="../classes/ScatterPlotDirective.html#method_isDataPointVisible" class="crosslink">isDataPointVisible</a> result.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_updatePlot">updatePlot</a>( )
+            </div>
+            <div class="short-description">
+              <p>Reconfigures and redraws the D3 plot.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+    <div id="properties public">
+        <h2 id="public-properties">Public Properties</h2>
+<div class="property item">
+  <div id="props_aspect" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l141"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:141</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      aspect: Number
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The optional chart width:height ratio. The default is the window
+aspect.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_color" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l61"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:61</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      color: String
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The optional property name or path whose value determines the data point
+(color, opacity) assignment. A data point is assigned a color and opacity
+based on the result of calling the color function. Distinct data points
+are assigned the same (color, opacity) combination if and only if applying
+the color function returns the same color value.</p>
+<p>The default color function is the zero-based position of the input object
+in the <a href="../classes/ScatterPlotDirective.html#property_data" class="crosslink">data</a>
+array.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_data" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l32"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:32</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      data: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The data object array.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_height" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l123"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:123</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      height: Number
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The optional chart height. The default height is the
+<a href="../classes/ScatterPlotDirective.html#property_width" class="crosslink">width</a>
+times the
+<a href="../classes/ScatterPlotDirective.html#property_aspect" class="crosslink">aspect</a>.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_margin" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l133"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:133</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      margin: Number
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The optional chart [top, left, bottom, right] margin within the SVG
+root element.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_onAxis" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l156"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:156</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      onAxis: Function
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The axis customization callback.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_plotted" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l163"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:163</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      plotted: EventEmitter<Object>
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The plotted event transmits the root SVG group D3 selection
+after the chart is drawn.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_select" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l171"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:171</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      select: EventEmitter<boolean>
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The select event transmits the domain object selection state.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_selection" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l39"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:39</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      selection: Boolean
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The optional selection array filters the data domain. The default
+is to use all of the data objects. Missing inputs are always ignored.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_symbolType" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l108"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:108</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      symbolType: Function
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The optional symbol type function (default <code>circle</code>).</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_trendLine" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l149"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:149</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      trendLine: Boolean
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The optional least squares trend line flag. The default is <code>false</code>.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_width" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l115"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:115</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      width: Number
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The optional chart width. The default width is the parent element
+width.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_x" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l47"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:47</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      x: String
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The required X value property name or path.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_xChoices" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l94"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:94</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      xChoices: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The optional X {value: label} associative object for a discrete domain.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_xDiscrete" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l76"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:76</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      xDiscrete: Boolean
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The flag indicating whether the X domain is discrete rather than
+continuous. The default is <code>true</code> if the first non-nil X value
+is a string or boolean, <code>false</code> otherwise.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_y" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l54"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:54</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      y: String
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The required Y value property name or path.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_yChoices" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l101"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:101</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      yChoices: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The optional Y {value: label} associative object for a discrete domain.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_yDiscrete" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l85"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:85</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      yDiscrete: Boolean
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The flag indicating whether the Y domain is discrete rather than
+continuous. The default is <code>true</code> if the first non-nil Y value
+is a string or boolean, <code>false</code> otherwise.</p>
+</div>
+
+</div>
+    </div>
+
+
+    <div id="properties private">
+        <h2 id="private-properties">Private Properties</h2>
+<div class="property item private">
+  <div id="props_domains" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l189"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:189</code></a></span>
+    <h3 class="">
+      private
+      
+      
+      domains: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The domain references encapsulation. This object is built
+by
+<a href="../classes/ScatterPlotDirective.html#method_createDomains" class="crosslink">createDomains</a>
+and consists of the following properties:</p>
+<ul>
+<li><em>data</em>: the valid data object array</li>
+<li><em>dataRefs</em>: the <em>data</em> =&gt;
+<a href="../classes/ScatterPlotDirective.html#property_data" class="crosslink">data</a>
+index array</li>
+<li><em>pointData</em>: the valid data points array</li>
+<li><em>toData</em>: the data point =&gt; <em>data</em> index array</li>
+<li><em>fromData</em>: the <em>data</em> =&gt; [data point] index array</li>
+<li><em>x</em>, <em>y</em>: the {value, indexes, domain, scale} axis
+properties</li>
+</ul>
+</div>
+
+</div>
+<div class="property item private">
+  <div id="props_dx" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l217"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:217</code></a></span>
+    <h3 class="">
+      private
+      
+      
+      dx: Function
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The data point X cooordinate function.</p>
+</div>
+
+</div>
+<div class="property item private">
+  <div id="props_dy" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l225"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:225</code></a></span>
+    <h3 class="">
+      private
+      
+      
+      dy: Function
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The data point Y cooordinate function.</p>
+</div>
+
+</div>
+<div class="property item private">
+  <div id="props_pad" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l241"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:241</code></a></span>
+    <h3 class="">
+      private
+      
+      
+      pad: Unknown
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The internal chart padding to accomodate the top and
+bottom axes. The right pad allows for the last X tick
+label. The left pad accomodates a <code>-n.nn</code> number.
+Non-numeric labels are slanted to fit within the pad.</p>
+</div>
+
+</div>
+<div class="property item private">
+  <div id="props_pendingTransitionTime" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l233"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:233</code></a></span>
+    <h3 class="">
+      private
+      
+      
+      pendingTransitionTime: Number
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The time of the transitions in progress.</p>
+</div>
+
+</div>
+<div class="property item private">
+  <div id="props_plot" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l178"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:178</code></a></span>
+    <h3 class="">
+      private
+      
+      
+      plot: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The plot configuration parameters. This object is built by
+<a href="../classes/ScatterPlotDirective.html#method_createChart" class="crosslink">createChart</a>
+and consists of data-independent properties, e.g. the plot
+origin and the visibility function.</p>
+</div>
+
+</div>
+<div class="property item private">
+  <div id="props_svg" class="title">
+    <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l209"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:209</code></a></span>
+    <h3 class="">
+      private
+      
+      
+      svg: d3.Selection<any>
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The D3 SVG root group element.</p>
+</div>
+
+</div>
+    </div>
+
+  <div id="methods public">
+    <h2 id="public-methods">Public Methods</h2>
+<div class="method item">
+    <div id="method_createBrush" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l967"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:967</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            createBrush( ): Object
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Makes the seletion D3 brush.</p>
+</div>
+
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type">Object</span>
+          <span class="return-description"><p>the D3 brush</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item">
+    <div id="method_getDiscreteSortCriterion" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l747"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:747</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            getDiscreteSortCriterion(groups, other): Object
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The discrete groups are sorted as follows:</p>
+<ul>
+<li>If both axes are discrete, then the sort criterion is
+the orthogonal count.</li>
+<li>Otherwise, the discrete axis sort criterion is the
+orthogonal mean.</li>
+</ul>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>groups</td>
+              <td>Object</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the discrete {value: [data objects]}
+object</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>other</td>
+              <td>Function</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the orthogonal value accessor</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type">Object</span>
+          <span class="return-description"><p>the group sort criteria</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item">
+    <div id="method_getDiscreteValues" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l689"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:689</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            getDiscreteValues(discrete, other): Any
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Collects the values for a discrete domain.
+If there is a trend line, then the domain is sorted as
+follows:</p>
+<ul>
+<li>If both axes are discrete, then the sort criterion is
+the orthogonal count.</li>
+<li>Otherwise, the discrete axis sort criterion is the
+orthogonal mean.
+If there is not a trend line, then the domain is sorted
+in the natural order.</li>
+</ul>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>discrete</td>
+              <td>Function</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the discrete axis value accessor
+object</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>other</td>
+              <td>Function</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the orthogonal axis value accessor</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type">Any</span>
+          <span class="return-description"><p>the sorted discrete values</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item">
+    <div id="method_getSelectedData" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l1049"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:1049</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            getSelectedData( ): 
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Determines the subset of
+<a href="../classes/ScatterPlotDirective.html#property_data" class="crosslink">data</a>
+data points within the D3 brush bounding box.</p>
+<p><em>Note</em>: this method is intended for use solely by the D3 callback.</p>
+</div>
+
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          
+          <span class="return-description"><p>the data selection</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+  </div>
+
+
+    <div id="methods private">
+        <h2 id="private-methods">Private Methods</h2>
+<div class="method item private">
+    <div id="method_configureDomainRefs" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l770"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:770</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            configureDomainRefs(getX, getY)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Sets the
+<a href="../classes/ScatterPlotDirective.html#property_domains" class="crosslink">domains</a>
+properties <code>data</code>, <code>dataRefs</code>, <code>toData</code>, <code>fromData</code>, <code>x.discrete</code>,
+<code>y.discrete</code>, <code>x.indexes</code> and <code>y.indexes</code>.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>getX</td>
+              <td>Function</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the X accessor</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>getY</td>
+              <td>Function</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the Y accessor</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item private">
+    <div id="method_configureDomains" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l608"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:608</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            configureDomains(getX, getY)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Creates the
+ScatterPlotDirective/domain:property.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>getX</td>
+              <td>Function</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the X accessor</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>getY</td>
+              <td>Function</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the Y accessor</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item private">
+    <div id="method_configurePlot" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l370"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:370</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            configurePlot( )
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Makes the plot data-independent parameters.</p>
+</div>
+
+
+
+
+</div>
+<div class="method item private">
+    <div id="method_createChart" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l291"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:291</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            createChart( )
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Makes the D3 SVG root group element and draws the plot.</p>
+</div>
+
+
+
+
+</div>
+<div class="method item private">
+    <div id="method_createDomains" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l565"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:565</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            createDomains( )
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Sets the data-dependent portion of the plot.</p>
+</div>
+
+
+
+
+</div>
+<div class="method item private">
+    <div id="method_drawPoints" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l469"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:469</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            drawPoints(plot)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Draws the D3 points in the given plot.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>plot</td>
+              <td>Object</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the D3 plot selection</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item private">
+    <div id="method_drawTrendLine" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l1092"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:1092</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            drawTrendLine(plot): 
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Draws the correlation trend line and correlation
+coefficient, if the correlation is well-defined, as
+described in
+<a href="../classes/ScatterPlotDirective.html#method_leastSquares" class="crosslink">leastSquares</a>.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>plot</td>
+              <td>Object</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the plot SVG element</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          
+          <span class="return-description"><p>the data selection</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item private">
+    <div id="method_getContinuousDomain" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l1192"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:1192</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            getContinuousDomain(accessor): 
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Determines the continuous [min, max] domain for the
+given value function applied over the
+<a href="../classes/ScatterPlotDirective.html#property_data" class="crosslink">data</a>
+input.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>accessor</td>
+              <td>Function | String</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the X or Y domain object =&gt; value
+accessor or property path</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          
+          <span class="return-description"><p>the [min, max] domain</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item private">
+    <div id="method_isDataPointVisible" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l918"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:918</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            isDataPointVisible(index): Boolean
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Returns whether the data point at the given index is both
+valid and selected.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>index</td>
+              <td>Number</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the data point (not <em>data</em>) array index</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type">Boolean</span>
+          <span class="return-description"><p>whether the data point is selected and valid</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item private">
+    <div id="method_leastSquares" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l1149"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:1149</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            leastSquares( ): Object
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Calculate the least-squares trend line parameters. This
+function is adapted, with improvements, from
+<a href="http://bl.ocks.org/benvandyke/8459843">http://bl.ocks.org/benvandyke/8459843</a>. The return value
+is the {slope, intercept, rSquare} object, if well-defined,
+otherwise null. The correlation is not well-defined if
+either all of the X values or all of the Y values are equal.</p>
+</div>
+
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type">Object</span>
+          <span class="return-description"><p>the trend line slope, intercept and r-square</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item private">
+    <div id="method_pointTransform" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l905"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:905</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            pointTransform(d, i): String
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The point locator function.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>d</td>
+              <td>Object</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the data object</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>i</td>
+              <td>Number</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the data point (not <em>data</em>) index</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type">String</span>
+          <span class="return-description"><p>the <code>translate</code> SVG directive</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item private">
+    <div id="method_resetVisibility" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l528"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:528</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            resetVisibility( )
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Resets the data point visibility style based on the
+<a href="../classes/ScatterPlotDirective.html#method_isDataPointVisible" class="crosslink">isDataPointVisible</a>
+result.</p>
+</div>
+
+
+
+
+</div>
+<div class="method item private">
+    <div id="method_updatePlot" class="title">
+        <span class="source-link"><a href="../files/build_src_visualization_scatter-plot.directive.ts.html#l442"><code>build&#x2F;src&#x2F;visualization&#x2F;scatter-plot.directive.ts:442</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            updatePlot( )
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Reconfigures and redraws the D3 plot.</p>
+</div>
+
+
+
+
+</div>
+    </div>
+
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>

@@ -6,7 +6,7 @@ import {
 import StringHelper from '../string/string-helper.coffee';
 import ObjectHelper from '../object/object-helper.coffee';
 
-const MISSING_LABEL = 'Not Specified';
+const MISSING_VALUE = 'Not Specified';
 
 @Component({
   selector: 'qi-property-table',
@@ -62,6 +62,23 @@ export class PropertyTableComponent implements OnInit {
    * @property label {function}
    */
   @Input() label: (key: string) => string;
+
+  /**
+   * The display value formatting function. If there is a format
+   * function, then the property value is passed to this function
+   * to get the display value.
+   *
+   * *Note*: {{#crossLink "PropertyTableComponent/format:property"}}{{/crossLink}}
+   * and {{#crossLink "PropertyTableComponent/valueChoices:property"}}{{/crossLink}}
+   * are mutually exclusive. If
+   * {{#crossLink "PropertyTableComponent/valueChoices:property"}}{{/crossLink}}
+   * is set, then this
+   * {{#crossLink "PropertyTableComponent/format:property"}}{{/crossLink}}
+   * property is ignored.
+   *
+   * @property format {function}
+   */
+  @Input() format: (value: any) => any;
 
   /**
    * The optional value {path: {value: label}} associative object,
@@ -262,7 +279,7 @@ export class PropertyTableComponent implements OnInit {
     if (_.isArray(value)) {
       let cleaned = _.omit(value, _.isNil);
       if (_.isEmpty(cleaned)) {
-        return MISSING_LABEL;
+        return MISSING_VALUE;
       }
       let recurse = item => this.formatDisplayValue(item, key);
       return value.map(recurse).join(', ');
@@ -271,11 +288,13 @@ export class PropertyTableComponent implements OnInit {
         let label = this.getLabel(key);
         let choices = this.valueChoices[label];
         return _.get(choices, value) || value;
+      } else if (this.format) {
+        return this.format(value);
       } else {
         return value;
       }
     } else {
-      return MISSING_LABEL;
+      return MISSING_VALUE;
     }
   }
 

@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>build/src/subject/subject.data.js - qiprofile API</title>
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="http://yui.yahooapis.com/combo?3.8.0pr2/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div class="yui3-g">
+        <div id="sidebar" class="yui3-u">
+            <div class="logo">
+              <a href="../index.html">
+                  qiprofile API
+              </a>
+            </div>
+            
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/clinical.html">clinical</a>
+                            </li>
+                            <li><a href="../modules/collection.html">collection</a>
+                            </li>
+                            <li><a href="../modules/collections.html">collections</a>
+                            </li>
+                            <li><a href="../modules/common.html">common</a>
+                            </li>
+                            <li><a href="../modules/configuration.html">configuration</a>
+                            </li>
+                            <li><a href="../modules/controls.html">controls</a>
+                            </li>
+                            <li><a href="../modules/data.html">data</a>
+                            </li>
+                            <li><a href="../modules/date.html">date</a>
+                            </li>
+                            <li><a href="../modules/error.html">error</a>
+                            </li>
+                            <li><a href="../modules/file.html">file</a>
+                            </li>
+                            <li><a href="../modules/help.html">help</a>
+                            </li>
+                            <li><a href="../modules/home.html">home</a>
+                            </li>
+                            <li><a href="../modules/image.html">image</a>
+                            </li>
+                            <li><a href="../modules/imageSequence.html">imageSequence</a>
+                            </li>
+                            <li><a href="../modules/main.html">main</a>
+                            </li>
+                            <li><a href="../modules/object.html">object</a>
+                            </li>
+                            <li><a href="../modules/page.html">page</a>
+                            </li>
+                            <li><a href="../modules/project.html">project</a>
+                            </li>
+                            <li><a href="../modules/projects.html">projects</a>
+                            </li>
+                            <li><a href="../modules/rest.html">rest</a>
+                            </li>
+                            <li><a href="../modules/roman.html">roman</a>
+                            </li>
+                            <li><a href="../modules/session.html">session</a>
+                            </li>
+                            <li><a href="../modules/string.html">string</a>
+                            </li>
+                            <li><a href="../modules/subject.html">subject</a>
+                            </li>
+                            <li><a href="../modules/testing.html">testing</a>
+                            </li>
+                            <li><a href="../modules/visualization.html">visualization</a>
+                            </li>
+                            <li><a href="../modules/volume.html">volume</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/AppComponent.html">AppComponent</a></li>
+                            <li><a href="../classes/AppModule.html">AppModule</a></li>
+                            <li><a href="../classes/Breast.html">Breast</a></li>
+                            <li><a href="../classes/BreastNormalizedAssay.html">BreastNormalizedAssay</a></li>
+                            <li><a href="../classes/BreastPathology.html">BreastPathology</a></li>
+                            <li><a href="../classes/CascadeSelectComponent.html">CascadeSelectComponent</a></li>
+                            <li><a href="../classes/ClinicalEncounter.html">ClinicalEncounter</a></li>
+                            <li><a href="../classes/CollectionActivatedRouteStub.html">CollectionActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionComponent.html">CollectionComponent</a></li>
+                            <li><a href="../classes/CollectionComponentSpec.html">CollectionComponentSpec</a></li>
+                            <li><a href="../classes/CollectionItemComponent.html">CollectionItemComponent</a></li>
+                            <li><a href="../classes/CollectionListPage.html">CollectionListPage</a></li>
+                            <li><a href="../classes/CollectionListSpec.html">CollectionListSpec</a></li>
+                            <li><a href="../classes/CollectionModule.html">CollectionModule</a></li>
+                            <li><a href="../classes/CollectionRouterStub.html">CollectionRouterStub</a></li>
+                            <li><a href="../classes/CollectionsActivatedRouteStub.html">CollectionsActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionsComponent.html">CollectionsComponent</a></li>
+                            <li><a href="../classes/CollectionsComponentSpec.html">CollectionsComponentSpec</a></li>
+                            <li><a href="../classes/CollectionsHelpComponent.html">CollectionsHelpComponent</a></li>
+                            <li><a href="../classes/CollectionsHelpServiceStub.html">CollectionsHelpServiceStub</a></li>
+                            <li><a href="../classes/CollectionsHelpTextComponent.html">CollectionsHelpTextComponent</a></li>
+                            <li><a href="../classes/CollectionsModule.html">CollectionsModule</a></li>
+                            <li><a href="../classes/CollectionsResource.html">CollectionsResource</a></li>
+                            <li><a href="../classes/CollectionsService.html">CollectionsService</a></li>
+                            <li><a href="../classes/CollectionsServiceStub.html">CollectionsServiceStub</a></li>
+                            <li><a href="../classes/CollectionSubectServiceStub.html">CollectionSubectServiceStub</a></li>
+                            <li><a href="../classes/ColorBarDirective.html">ColorBarDirective</a></li>
+                            <li><a href="../classes/CommonModule.html">CommonModule</a></li>
+                            <li><a href="../classes/ConfigurationService.html">ConfigurationService</a></li>
+                            <li><a href="../classes/ConfigurationServiceSpec.html">ConfigurationServiceSpec</a></li>
+                            <li><a href="../classes/ControlsModule.html">ControlsModule</a></li>
+                            <li><a href="../classes/CorrelationComponent.html">CorrelationComponent</a></li>
+                            <li><a href="../classes/DateHelper.html">DateHelper</a></li>
+                            <li><a href="../classes/DateHelperSpec.html">DateHelperSpec</a></li>
+                            <li><a href="../classes/Encounter.html">Encounter</a></li>
+                            <li><a href="../classes/ErrorComponent.html">ErrorComponent</a></li>
+                            <li><a href="../classes/FileService.html">FileService</a></li>
+                            <li><a href="../classes/FileServiceSpec.html">FileServiceSpec</a></li>
+                            <li><a href="../classes/Findable.html">Findable</a></li>
+                            <li><a href="../classes/HelpComponent.html">HelpComponent</a></li>
+                            <li><a href="../classes/HelpService.html">HelpService</a></li>
+                            <li><a href="../classes/HomeComponent.html">HomeComponent</a></li>
+                            <li><a href="../classes/IamgeSequenceService.html">IamgeSequenceService</a></li>
+                            <li><a href="../classes/Image.html">Image</a></li>
+                            <li><a href="../classes/ImageComponent.html">ImageComponent</a></li>
+                            <li><a href="../classes/ImageModule.html">ImageModule</a></li>
+                            <li><a href="../classes/ImageSequence.html">ImageSequence</a></li>
+                            <li><a href="../classes/ImageSequenceServiceSpec.html">ImageSequenceServiceSpec</a></li>
+                            <li><a href="../classes/ImageSequenceSessionServiceStub.html">ImageSequenceSessionServiceStub</a></li>
+                            <li><a href="../classes/ImageSequenceSpec.html">ImageSequenceSpec</a></li>
+                            <li><a href="../classes/ImageStore.html">ImageStore</a></li>
+                            <li><a href="../classes/LabelMap.html">LabelMap</a></li>
+                            <li><a href="../classes/Modeling.html">Modeling</a></li>
+                            <li><a href="../classes/ModelingResult.html">ModelingResult</a></li>
+                            <li><a href="../classes/ModelingResults.html">ModelingResults</a></li>
+                            <li><a href="../classes/ObjectHelper.html">ObjectHelper</a></li>
+                            <li><a href="../classes/Page.html">Page</a></li>
+                            <li><a href="../classes/PageComponent.html">PageComponent</a></li>
+                            <li><a href="../classes/PageModule.html">PageModule</a></li>
+                            <li><a href="../classes/PapayaService.html">PapayaService</a></li>
+                            <li><a href="../classes/ParameterResult.html">ParameterResult</a></li>
+                            <li><a href="../classes/Pathology.html">Pathology</a></li>
+                            <li><a href="../classes/PlayerComponent.html">PlayerComponent</a></li>
+                            <li><a href="../classes/ProjectItemComponent.html">ProjectItemComponent</a></li>
+                            <li><a href="../classes/ProjectListPage.html">ProjectListPage</a></li>
+                            <li><a href="../classes/ProjectListSpec.html">ProjectListSpec</a></li>
+                            <li><a href="../classes/ProjectsComponent.html">ProjectsComponent</a></li>
+                            <li><a href="../classes/ProjectsComponentSpec.html">ProjectsComponentSpec</a></li>
+                            <li><a href="../classes/ProjectsHelpComponent.html">ProjectsHelpComponent</a></li>
+                            <li><a href="../classes/ProjectsHelpServiceStub.html">ProjectsHelpServiceStub</a></li>
+                            <li><a href="../classes/ProjectsHelpTextComponent.html">ProjectsHelpTextComponent</a></li>
+                            <li><a href="../classes/ProjectsModule.html">ProjectsModule</a></li>
+                            <li><a href="../classes/ProjectsResource.html">ProjectsResource</a></li>
+                            <li><a href="../classes/ProjectsService.html">ProjectsService</a></li>
+                            <li><a href="../classes/ProjectsServiceStub.html">ProjectsServiceStub</a></li>
+                            <li><a href="../classes/PropertyTableComponent.html">PropertyTableComponent</a></li>
+                            <li><a href="../classes/RCB.html">RCB</a></li>
+                            <li><a href="../classes/Registration.html">Registration</a></li>
+                            <li><a href="../classes/RegistrationSpec.html">RegistrationSpec</a></li>
+                            <li><a href="../classes/REST.html">REST</a></li>
+                            <li><a href="../classes/RestResource.html">RestResource</a></li>
+                            <li><a href="../classes/RESTSpec.html">RESTSpec</a></li>
+                            <li><a href="../classes/Roman.html">Roman</a></li>
+                            <li><a href="../classes/RomanSpec.html">RomanSpec</a></li>
+                            <li><a href="../classes/Sarcoma.html">Sarcoma</a></li>
+                            <li><a href="../classes/Scan.html">Scan</a></li>
+                            <li><a href="../classes/ScanSpec.html">ScanSpec</a></li>
+                            <li><a href="../classes/ScatterPlotDirective.html">ScatterPlotDirective</a></li>
+                            <li><a href="../classes/Session.html">Session</a></li>
+                            <li><a href="../classes/SessionActivatedRouteStub.html">SessionActivatedRouteStub</a></li>
+                            <li><a href="../classes/SessionComponent.html">SessionComponent</a></li>
+                            <li><a href="../classes/SessionComponentSpec.html">SessionComponentSpec</a></li>
+                            <li><a href="../classes/SessionDetailResource.html">SessionDetailResource</a></li>
+                            <li><a href="../classes/SessionDetailResourceStub.html">SessionDetailResourceStub</a></li>
+                            <li><a href="../classes/SessiondRouterStub.html">SessiondRouterStub</a></li>
+                            <li><a href="../classes/SessionModule.html">SessionModule</a></li>
+                            <li><a href="../classes/SessionService.html">SessionService</a></li>
+                            <li><a href="../classes/SessionServiceSpec.html">SessionServiceSpec</a></li>
+                            <li><a href="../classes/SessionServiceStub.html">SessionServiceStub</a></li>
+                            <li><a href="../classes/SessionSpec.html">SessionSpec</a></li>
+                            <li><a href="../classes/SessionSubjectResourceStub.html">SessionSubjectResourceStub</a></li>
+                            <li><a href="../classes/SessionTumorExtent.html">SessionTumorExtent</a></li>
+                            <li><a href="../classes/SliderDirective.html">SliderDirective</a></li>
+                            <li><a href="../classes/SparkLineDirective.html">SparkLineDirective</a></li>
+                            <li><a href="../classes/StringHelper.html">StringHelper</a></li>
+                            <li><a href="../classes/StringHelperSpec.html">StringHelperSpec</a></li>
+                            <li><a href="../classes/Subject.html">Subject</a></li>
+                            <li><a href="../classes/SubjectActivatedRouteStub.html">SubjectActivatedRouteStub</a></li>
+                            <li><a href="../classes/SubjectChangeDetectorRefStub.html">SubjectChangeDetectorRefStub</a></li>
+                            <li><a href="../classes/SubjectComponent.html">SubjectComponent</a></li>
+                            <li><a href="../classes/SubjectComponentSpec.html">SubjectComponentSpec</a></li>
+                            <li><a href="../classes/SubjectdRouterStub.html">SubjectdRouterStub</a></li>
+                            <li><a href="../classes/SubjectModule.html">SubjectModule</a></li>
+                            <li><a href="../classes/SubjectResource.html">SubjectResource</a></li>
+                            <li><a href="../classes/SubjectResourceStub.html">SubjectResourceStub</a></li>
+                            <li><a href="../classes/SubjectService.html">SubjectService</a></li>
+                            <li><a href="../classes/SubjectServiceSpec.html">SubjectServiceSpec</a></li>
+                            <li><a href="../classes/SubjectServiceStub.html">SubjectServiceStub</a></li>
+                            <li><a href="../classes/SubjectSpec.html">SubjectSpec</a></li>
+                            <li><a href="../classes/Table.html">Table</a></li>
+                            <li><a href="../classes/TimeSeries.html">TimeSeries</a></li>
+                            <li><a href="../classes/TNM.html">TNM</a></li>
+                            <li><a href="../classes/ToggleHelpComponent.html">ToggleHelpComponent</a></li>
+                            <li><a href="../classes/VisualizationModule.html">VisualizationModule</a></li>
+                            <li><a href="../classes/Volume.html">Volume</a></li>
+                            <li><a href="../classes/VolumeComponent.html">VolumeComponent</a></li>
+                            <li><a href="../classes/VolumeDetailPage.html">VolumeDetailPage</a></li>
+                            <li><a href="../classes/VolumeImageSequenceServiceStub.html">VolumeImageSequenceServiceStub</a></li>
+                            <li><a href="../classes/VolumeModule.html">VolumeModule</a></li>
+                            <li><a href="../classes/VolumeService.html">VolumeService</a></li>
+                            <li><a href="../classes/VolumeServiceSpec.html">VolumeServiceSpec</a></li>
+                            <li><a href="../classes/VolumeSpec.html">VolumeSpec</a></li>
+                            <li><a href="../classes/XNAT.html">XNAT</a></li>
+                            <li><a href="../classes/XNATSpec.html">XNATSpec</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            
+            
+            
+            <div class="version-info">
+              Version: 2.1.1
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><div class="title">
+  <h1 class="file-name">build/src/subject/subject.data.js</h1>
+</div>
+
+<pre class="code prettyprint linenums">
+(function() {
+  import * as _ from &quot;lodash&quot;;
+  import * as _s from &quot;underscore.string&quot;;
+  import DateHelper from &quot;../date/date-helper.coffee&quot;;
+  import Session from &quot;../session/session.data.coffee&quot;;
+  import Modeling from &quot;../session/modeling.data.coffee&quot;;
+  import ClinicalEncounter from &quot;../clinical/encounter.data.coffee&quot;;
+  import Encounter from &quot;./encounter.data.coffee&quot;;
+  var ModelingResults, Subject, extendEncounters, fixDates;
+
+  fixDates = function(subject) {
+    var date, dosage, enc, j, k, len, len1, ref1, ref2, results1, trt;
+    if (subject.birthDate != null) {
+      date = DateHelper.asMoment(subject.birthDate);
+      subject.birthDate = DateHelper.anonymize(date);
+    }
+    if (subject.diagnosisDate != null) {
+      date = DateHelper.asMoment(subject.diagnosisDate);
+      subject.diagnosisDate = date;
+    }
+    ref1 = subject.encounters;
+    for (j = 0, len = ref1.length; j &lt; len; j++) {
+      enc = ref1[j];
+      if (enc.date != null) {
+        enc.date = DateHelper.asMoment(enc.date);
+      }
+    }
+    ref2 = subject.treatments;
+    results1 = [];
+    for (k = 0, len1 = ref2.length; k &lt; len1; k++) {
+      trt = ref2[k];
+      trt.startDate = DateHelper.asMoment(trt.startDate);
+      trt.endDate = DateHelper.asMoment(trt.endDate);
+      results1.push((function() {
+        var l, len2, ref3, results2;
+        ref3 = trt.dosages;
+        results2 = [];
+        for (l = 0, len2 = ref3.length; l &lt; len2; l++) {
+          dosage = ref3[l];
+          results2.push(dosage.startDate = DateHelper.asMoment(trt.startDate));
+        }
+        return results2;
+      })());
+    }
+    return results1;
+  };
+
+  extendEncounters = function(subject) {
+    var enc, i, j, k, l, len, len1, len2, ref1, ref2, ref3, results1, session;
+    ref1 = subject.encounters;
+    for (j = 0, len = ref1.length; j &lt; len; j++) {
+      enc = ref1[j];
+      Encounter.extend(enc, subject);
+    }
+    ref2 = subject.sessions;
+    for (i = k = 0, len1 = ref2.length; k &lt; len1; i = ++k) {
+      session = ref2[i];
+      Session.extend(session, subject, i + 1);
+    }
+    ref3 = subject.clinicalEncounters;
+    results1 = [];
+    for (l = 0, len2 = ref3.length; l &lt; len2; l++) {
+      enc = ref3[l];
+      results1.push(ClinicalEncounter.extend(enc, subject));
+    }
+    return results1;
+  };
+
+
+  /**
+   * The Subject modeling results.
+   *
+   * @module subject
+   * @class ModelingResults
+   * @static
+   */
+
+  ModelingResults = {
+
+    /**
+     * Collects the modeling results into a [_modelings_] array,
+     * where _modelings_ is a {{source, protocol, results}},
+     * the &#x60;&#x60;source&#x60;&#x60; value is a {source type, source protocol}
+     * object, &#x60;&#x60;protocol&#x60;&#x60; is the modeling protocol, and
+     * &#x60;&#x60;results&#x60;&#x60; is an array of modeling results in session
+     * number order.
+     * @method collect
+     * @param subject {Object} the parent subject
+     * @return {Object} the
+     *   {_sourceType_: {_sourceProtocol_: {_modelingProtocol_: _results_}}}
+     *   associative object,
+     *   where the results are an array in session number order
+     */
+    collect: function(subject) {
+      var grouped, i, intensityPath, item, j, k, len, len1, modeling, modelingProtocol, path, ref1, ref2, regrouped, rest, rest2, result, results, session, source, sourceProtocol, sourceType;
+      intensityPath = &#x27;image.metadata.average_intensity&#x27;;
+      grouped = {};
+      ref1 = subject.sessions;
+      for (i = j = 0, len = ref1.length; j &lt; len; i = ++j) {
+        session = ref1[i];
+        ref2 = session.modelings;
+        for (k = 0, len1 = ref2.length; k &lt; len1; k++) {
+          modeling = ref2[k];
+          source = _.toPairs(modeling.source)[0];
+          path = _.flatten([source, modeling.protocol, i]);
+          result = _.mapValues(modeling.result, intensityPath);
+          _.set(grouped, path, result);
+        }
+      }
+      regrouped = [];
+      for (sourceType in grouped) {
+        rest = grouped[sourceType];
+        for (sourceProtocol in rest) {
+          rest2 = rest[sourceProtocol];
+          for (modelingProtocol in rest2) {
+            results = rest2[modelingProtocol];
+            item = {
+              source: {
+                type: sourceType,
+                protocol: sourceProtocol
+              },
+              protocol: modelingProtocol,
+              results: results
+            };
+            regrouped.push(item);
+          }
+        }
+      }
+      return regrouped;
+    }
+  };
+
+
+  /**
+   * The Subject REST data object extension utility.
+   *
+   * @module subject
+   * @class Subject
+   * @static
+   */
+
+  Subject = {
+
+    /**
+     * Makes the following changes to the given subject object:
+     * * add parent references
+     * * add the subject modeling property
+     * * add the age property
+     * * anonymize the birth date by setting it to July 7
+     * * convert the session and encounter dates into moments
+     * * set the subject isMultiSession method
+     *
+     * @method extend
+     * @param subject the REST Subject object to extend
+     * @return the extended Subject
+     */
+    extend: function(subject) {
+      if (subject == null) {
+        return subject;
+      }
+      Object.defineProperties(subject, {
+
+        /**
+         * @property title
+         * @return the subject display title
+         */
+        title: {
+          get: function() {
+            return this.collection + &quot; Patient &quot; + this.number;
+          }
+        },
+
+        /**
+         * Determines this subject&#x27;s age relative to the preferred
+         * reference date, determined as follows:
+         * * the diagnosis date, if available
+         * * otherwise, the first encounter date, if any
+         * * otherwise, today if there are no encounters
+         *
+         * @method age
+         */
+        age: {
+          get: function() {
+            var ref;
+            if (this.birthDate) {
+              ref = this.diagnosisDate || this._firstEncounterDate || moment();
+              return ref.diff(this.birthDate, &#x27;years&#x27;);
+            }
+          }
+        },
+        _firstEncounterDate: {
+          get: function() {
+            if (this.encounters) {
+              return _.minBy(this.encounters, &#x27;date&#x27;).date;
+            }
+          }
+        },
+
+        /**
+         * @property clinicalEncounters
+         * @return the clinical encounters
+         */
+        clinicalEncounters: {
+          get: function() {
+            var enc, j, len, ref1, results1;
+            ref1 = this.encounters;
+            results1 = [];
+            for (j = 0, len = ref1.length; j &lt; len; j++) {
+              enc = ref1[j];
+              if (enc.isClinical()) {
+                results1.push(enc);
+              }
+            }
+            return results1;
+          }
+        },
+
+        /**
+         * @property sessions
+         * @return the session encounters
+         */
+        sessions: {
+          get: function() {
+            var enc, j, len, ref1, results1;
+            ref1 = this.encounters;
+            results1 = [];
+            for (j = 0, len = ref1.length; j &lt; len; j++) {
+              enc = ref1[j];
+              if (enc.isSession()) {
+                results1.push(enc);
+              }
+            }
+            return results1;
+          }
+        },
+
+        /**
+         * @property biopsy
+         * @return the unique biopsy encounter, if there is exactly
+         *   one, otherwise null
+         */
+        biopsy: {
+          get: function() {
+            var biopsies, enc;
+            biopsies = (function() {
+              var j, len, ref1, results1;
+              ref1 = this.clinicalEncounters;
+              results1 = [];
+              for (j = 0, len = ref1.length; j &lt; len; j++) {
+                enc = ref1[j];
+                if (enc.isBiopsy()) {
+                  results1.push(enc);
+                }
+              }
+              return results1;
+            }).call(this);
+            if (biopsies.length === 1) {
+              return biopsies[0];
+            } else {
+              return null;
+            }
+          }
+        },
+
+        /**
+         * @property surgery
+         * @return the unique surgery encounter, if there is exactly
+         *   one, otherwise null
+         */
+        surgery: {
+          get: function() {
+            var enc, surgeries;
+            surgeries = (function() {
+              var j, len, ref1, results1;
+              ref1 = this.clinicalEncounters;
+              results1 = [];
+              for (j = 0, len = ref1.length; j &lt; len; j++) {
+                enc = ref1[j];
+                if (enc.isSurgery()) {
+                  results1.push(enc);
+                }
+              }
+              return results1;
+            }).call(this);
+            if (surgeries.length === 1) {
+              return surgeries[0];
+            } else {
+              return null;
+            }
+          }
+        },
+
+        /**
+         * The {{#crossLink &quot;ModelingResults&quot;}}{{/crossLink}}
+         * array.
+         *
+         * @property modelings {Object[]}
+         */
+        modelings: {
+          get: function() {
+            if (this._modelings == null) {
+              this._modelings = ModelingResults.collect(this);
+            }
+            return this._modelings;
+          }
+        }
+      });
+      if (subject.encounters == null) {
+        subject.encounters = [];
+      }
+      if (subject.treatments == null) {
+        subject.treatments = [];
+      }
+      subject.isMultiSession = function() {
+        return this.sessions.length &gt; 1;
+      };
+      fixDates(subject);
+      extendEncounters(subject);
+      return subject;
+    }
+  };
+
+  export { Subject as default };
+
+}).call(this);
+
+</pre>
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>

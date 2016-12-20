@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>build/src/testing/findable.js - qiprofile API</title>
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="http://yui.yahooapis.com/combo?3.8.0pr2/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div class="yui3-g">
+        <div id="sidebar" class="yui3-u">
+            <div class="logo">
+              <a href="../index.html">
+                  qiprofile API
+              </a>
+            </div>
+            
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/clinical.html">clinical</a>
+                            </li>
+                            <li><a href="../modules/collection.html">collection</a>
+                            </li>
+                            <li><a href="../modules/collections.html">collections</a>
+                            </li>
+                            <li><a href="../modules/common.html">common</a>
+                            </li>
+                            <li><a href="../modules/configuration.html">configuration</a>
+                            </li>
+                            <li><a href="../modules/controls.html">controls</a>
+                            </li>
+                            <li><a href="../modules/data.html">data</a>
+                            </li>
+                            <li><a href="../modules/date.html">date</a>
+                            </li>
+                            <li><a href="../modules/error.html">error</a>
+                            </li>
+                            <li><a href="../modules/file.html">file</a>
+                            </li>
+                            <li><a href="../modules/help.html">help</a>
+                            </li>
+                            <li><a href="../modules/home.html">home</a>
+                            </li>
+                            <li><a href="../modules/image.html">image</a>
+                            </li>
+                            <li><a href="../modules/imageSequence.html">imageSequence</a>
+                            </li>
+                            <li><a href="../modules/main.html">main</a>
+                            </li>
+                            <li><a href="../modules/object.html">object</a>
+                            </li>
+                            <li><a href="../modules/page.html">page</a>
+                            </li>
+                            <li><a href="../modules/project.html">project</a>
+                            </li>
+                            <li><a href="../modules/projects.html">projects</a>
+                            </li>
+                            <li><a href="../modules/rest.html">rest</a>
+                            </li>
+                            <li><a href="../modules/roman.html">roman</a>
+                            </li>
+                            <li><a href="../modules/session.html">session</a>
+                            </li>
+                            <li><a href="../modules/string.html">string</a>
+                            </li>
+                            <li><a href="../modules/subject.html">subject</a>
+                            </li>
+                            <li><a href="../modules/testing.html">testing</a>
+                            </li>
+                            <li><a href="../modules/visualization.html">visualization</a>
+                            </li>
+                            <li><a href="../modules/volume.html">volume</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/AppComponent.html">AppComponent</a></li>
+                            <li><a href="../classes/AppModule.html">AppModule</a></li>
+                            <li><a href="../classes/Breast.html">Breast</a></li>
+                            <li><a href="../classes/BreastNormalizedAssay.html">BreastNormalizedAssay</a></li>
+                            <li><a href="../classes/BreastPathology.html">BreastPathology</a></li>
+                            <li><a href="../classes/CascadeSelectComponent.html">CascadeSelectComponent</a></li>
+                            <li><a href="../classes/ClinicalEncounter.html">ClinicalEncounter</a></li>
+                            <li><a href="../classes/CollectionActivatedRouteStub.html">CollectionActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionComponent.html">CollectionComponent</a></li>
+                            <li><a href="../classes/CollectionComponentSpec.html">CollectionComponentSpec</a></li>
+                            <li><a href="../classes/CollectionItemComponent.html">CollectionItemComponent</a></li>
+                            <li><a href="../classes/CollectionListPage.html">CollectionListPage</a></li>
+                            <li><a href="../classes/CollectionListSpec.html">CollectionListSpec</a></li>
+                            <li><a href="../classes/CollectionModule.html">CollectionModule</a></li>
+                            <li><a href="../classes/CollectionRouterStub.html">CollectionRouterStub</a></li>
+                            <li><a href="../classes/CollectionsActivatedRouteStub.html">CollectionsActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionsComponent.html">CollectionsComponent</a></li>
+                            <li><a href="../classes/CollectionsComponentSpec.html">CollectionsComponentSpec</a></li>
+                            <li><a href="../classes/CollectionsHelpComponent.html">CollectionsHelpComponent</a></li>
+                            <li><a href="../classes/CollectionsHelpServiceStub.html">CollectionsHelpServiceStub</a></li>
+                            <li><a href="../classes/CollectionsHelpTextComponent.html">CollectionsHelpTextComponent</a></li>
+                            <li><a href="../classes/CollectionsModule.html">CollectionsModule</a></li>
+                            <li><a href="../classes/CollectionsResource.html">CollectionsResource</a></li>
+                            <li><a href="../classes/CollectionsService.html">CollectionsService</a></li>
+                            <li><a href="../classes/CollectionsServiceStub.html">CollectionsServiceStub</a></li>
+                            <li><a href="../classes/CollectionSubectServiceStub.html">CollectionSubectServiceStub</a></li>
+                            <li><a href="../classes/ColorBarDirective.html">ColorBarDirective</a></li>
+                            <li><a href="../classes/CommonModule.html">CommonModule</a></li>
+                            <li><a href="../classes/ConfigurationService.html">ConfigurationService</a></li>
+                            <li><a href="../classes/ConfigurationServiceSpec.html">ConfigurationServiceSpec</a></li>
+                            <li><a href="../classes/ControlsModule.html">ControlsModule</a></li>
+                            <li><a href="../classes/CorrelationComponent.html">CorrelationComponent</a></li>
+                            <li><a href="../classes/DateHelper.html">DateHelper</a></li>
+                            <li><a href="../classes/DateHelperSpec.html">DateHelperSpec</a></li>
+                            <li><a href="../classes/Encounter.html">Encounter</a></li>
+                            <li><a href="../classes/ErrorComponent.html">ErrorComponent</a></li>
+                            <li><a href="../classes/FileService.html">FileService</a></li>
+                            <li><a href="../classes/FileServiceSpec.html">FileServiceSpec</a></li>
+                            <li><a href="../classes/Findable.html">Findable</a></li>
+                            <li><a href="../classes/HelpComponent.html">HelpComponent</a></li>
+                            <li><a href="../classes/HelpService.html">HelpService</a></li>
+                            <li><a href="../classes/HomeComponent.html">HomeComponent</a></li>
+                            <li><a href="../classes/IamgeSequenceService.html">IamgeSequenceService</a></li>
+                            <li><a href="../classes/Image.html">Image</a></li>
+                            <li><a href="../classes/ImageComponent.html">ImageComponent</a></li>
+                            <li><a href="../classes/ImageModule.html">ImageModule</a></li>
+                            <li><a href="../classes/ImageSequence.html">ImageSequence</a></li>
+                            <li><a href="../classes/ImageSequenceServiceSpec.html">ImageSequenceServiceSpec</a></li>
+                            <li><a href="../classes/ImageSequenceSessionServiceStub.html">ImageSequenceSessionServiceStub</a></li>
+                            <li><a href="../classes/ImageSequenceSpec.html">ImageSequenceSpec</a></li>
+                            <li><a href="../classes/ImageStore.html">ImageStore</a></li>
+                            <li><a href="../classes/LabelMap.html">LabelMap</a></li>
+                            <li><a href="../classes/Modeling.html">Modeling</a></li>
+                            <li><a href="../classes/ModelingResult.html">ModelingResult</a></li>
+                            <li><a href="../classes/ModelingResults.html">ModelingResults</a></li>
+                            <li><a href="../classes/ObjectHelper.html">ObjectHelper</a></li>
+                            <li><a href="../classes/Page.html">Page</a></li>
+                            <li><a href="../classes/PageComponent.html">PageComponent</a></li>
+                            <li><a href="../classes/PageModule.html">PageModule</a></li>
+                            <li><a href="../classes/PapayaService.html">PapayaService</a></li>
+                            <li><a href="../classes/ParameterResult.html">ParameterResult</a></li>
+                            <li><a href="../classes/Pathology.html">Pathology</a></li>
+                            <li><a href="../classes/PlayerComponent.html">PlayerComponent</a></li>
+                            <li><a href="../classes/ProjectItemComponent.html">ProjectItemComponent</a></li>
+                            <li><a href="../classes/ProjectListPage.html">ProjectListPage</a></li>
+                            <li><a href="../classes/ProjectListSpec.html">ProjectListSpec</a></li>
+                            <li><a href="../classes/ProjectsComponent.html">ProjectsComponent</a></li>
+                            <li><a href="../classes/ProjectsComponentSpec.html">ProjectsComponentSpec</a></li>
+                            <li><a href="../classes/ProjectsHelpComponent.html">ProjectsHelpComponent</a></li>
+                            <li><a href="../classes/ProjectsHelpServiceStub.html">ProjectsHelpServiceStub</a></li>
+                            <li><a href="../classes/ProjectsHelpTextComponent.html">ProjectsHelpTextComponent</a></li>
+                            <li><a href="../classes/ProjectsModule.html">ProjectsModule</a></li>
+                            <li><a href="../classes/ProjectsResource.html">ProjectsResource</a></li>
+                            <li><a href="../classes/ProjectsService.html">ProjectsService</a></li>
+                            <li><a href="../classes/ProjectsServiceStub.html">ProjectsServiceStub</a></li>
+                            <li><a href="../classes/PropertyTableComponent.html">PropertyTableComponent</a></li>
+                            <li><a href="../classes/RCB.html">RCB</a></li>
+                            <li><a href="../classes/Registration.html">Registration</a></li>
+                            <li><a href="../classes/RegistrationSpec.html">RegistrationSpec</a></li>
+                            <li><a href="../classes/REST.html">REST</a></li>
+                            <li><a href="../classes/RestResource.html">RestResource</a></li>
+                            <li><a href="../classes/RESTSpec.html">RESTSpec</a></li>
+                            <li><a href="../classes/Roman.html">Roman</a></li>
+                            <li><a href="../classes/RomanSpec.html">RomanSpec</a></li>
+                            <li><a href="../classes/Sarcoma.html">Sarcoma</a></li>
+                            <li><a href="../classes/Scan.html">Scan</a></li>
+                            <li><a href="../classes/ScanSpec.html">ScanSpec</a></li>
+                            <li><a href="../classes/ScatterPlotDirective.html">ScatterPlotDirective</a></li>
+                            <li><a href="../classes/Session.html">Session</a></li>
+                            <li><a href="../classes/SessionActivatedRouteStub.html">SessionActivatedRouteStub</a></li>
+                            <li><a href="../classes/SessionComponent.html">SessionComponent</a></li>
+                            <li><a href="../classes/SessionComponentSpec.html">SessionComponentSpec</a></li>
+                            <li><a href="../classes/SessionDetailResource.html">SessionDetailResource</a></li>
+                            <li><a href="../classes/SessionDetailResourceStub.html">SessionDetailResourceStub</a></li>
+                            <li><a href="../classes/SessiondRouterStub.html">SessiondRouterStub</a></li>
+                            <li><a href="../classes/SessionModule.html">SessionModule</a></li>
+                            <li><a href="../classes/SessionService.html">SessionService</a></li>
+                            <li><a href="../classes/SessionServiceSpec.html">SessionServiceSpec</a></li>
+                            <li><a href="../classes/SessionServiceStub.html">SessionServiceStub</a></li>
+                            <li><a href="../classes/SessionSpec.html">SessionSpec</a></li>
+                            <li><a href="../classes/SessionSubjectResourceStub.html">SessionSubjectResourceStub</a></li>
+                            <li><a href="../classes/SessionTumorExtent.html">SessionTumorExtent</a></li>
+                            <li><a href="../classes/SliderDirective.html">SliderDirective</a></li>
+                            <li><a href="../classes/SparkLineDirective.html">SparkLineDirective</a></li>
+                            <li><a href="../classes/StringHelper.html">StringHelper</a></li>
+                            <li><a href="../classes/StringHelperSpec.html">StringHelperSpec</a></li>
+                            <li><a href="../classes/Subject.html">Subject</a></li>
+                            <li><a href="../classes/SubjectActivatedRouteStub.html">SubjectActivatedRouteStub</a></li>
+                            <li><a href="../classes/SubjectChangeDetectorRefStub.html">SubjectChangeDetectorRefStub</a></li>
+                            <li><a href="../classes/SubjectComponent.html">SubjectComponent</a></li>
+                            <li><a href="../classes/SubjectComponentSpec.html">SubjectComponentSpec</a></li>
+                            <li><a href="../classes/SubjectdRouterStub.html">SubjectdRouterStub</a></li>
+                            <li><a href="../classes/SubjectModule.html">SubjectModule</a></li>
+                            <li><a href="../classes/SubjectResource.html">SubjectResource</a></li>
+                            <li><a href="../classes/SubjectResourceStub.html">SubjectResourceStub</a></li>
+                            <li><a href="../classes/SubjectService.html">SubjectService</a></li>
+                            <li><a href="../classes/SubjectServiceSpec.html">SubjectServiceSpec</a></li>
+                            <li><a href="../classes/SubjectServiceStub.html">SubjectServiceStub</a></li>
+                            <li><a href="../classes/SubjectSpec.html">SubjectSpec</a></li>
+                            <li><a href="../classes/Table.html">Table</a></li>
+                            <li><a href="../classes/TimeSeries.html">TimeSeries</a></li>
+                            <li><a href="../classes/TNM.html">TNM</a></li>
+                            <li><a href="../classes/ToggleHelpComponent.html">ToggleHelpComponent</a></li>
+                            <li><a href="../classes/VisualizationModule.html">VisualizationModule</a></li>
+                            <li><a href="../classes/Volume.html">Volume</a></li>
+                            <li><a href="../classes/VolumeComponent.html">VolumeComponent</a></li>
+                            <li><a href="../classes/VolumeDetailPage.html">VolumeDetailPage</a></li>
+                            <li><a href="../classes/VolumeImageSequenceServiceStub.html">VolumeImageSequenceServiceStub</a></li>
+                            <li><a href="../classes/VolumeModule.html">VolumeModule</a></li>
+                            <li><a href="../classes/VolumeService.html">VolumeService</a></li>
+                            <li><a href="../classes/VolumeServiceSpec.html">VolumeServiceSpec</a></li>
+                            <li><a href="../classes/VolumeSpec.html">VolumeSpec</a></li>
+                            <li><a href="../classes/XNAT.html">XNAT</a></li>
+                            <li><a href="../classes/XNATSpec.html">XNATSpec</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            
+            
+            
+            <div class="version-info">
+              Version: 2.1.1
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><div class="title">
+  <h1 class="file-name">build/src/testing/findable.js</h1>
+</div>
+
+<pre class="code prettyprint linenums">
+(function() {
+  var Findable, Table, _, addFindableMixin, addMixin, addTableMixin, expect, webdriver,
+    slice = [].slice,
+    indexOf = [].indexOf || function(item) { for (var i = 0, l = this.length; i &lt; l; i++) { if (i in this &amp;&amp; this[i] === item) return i; } return -1; },
+    extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  _ = require(&#x27;lodash&#x27;);
+
+  webdriver = require(&#x27;selenium-webdriver&#x27;);
+
+  expect = require(&#x27;./expect&#x27;)();
+
+  require(&#x27;./object&#x27;);
+
+
+  /**
+   * The WebElement extension for finding subelements.
+   *
+   * @module testing
+   * @class Findable
+   */
+
+  Findable = (function() {
+    function Findable() {}
+
+
+    /**
+     * Finds the element with the given search selection chain.
+     * Each selector is either a Protractor By object or a search
+     * condition string. The search condition string can be CSS,
+     * an id or an xpath, determined as follows:
+     *
+     * * If the string contains a &#x27;/&#x27; or equals &#x27;..&#x27;, then the
+     *   string is assumed to be an xpath.
+     *
+     * * Otherwise, if the string starts with &#x27;#&#x27;, then the search
+     *   is on the id following the hash.
+     *
+     * * Otherwise, if the search argument starts with &#x27;.&#x27;, then
+     *   the search is by CSS.
+     *
+     * * Otherwise, the search is by tag name.
+     *
+     * For example,
+     *
+     *     page.find(&#x27;.qi-billboard&#x27;, &#x27;h3&#x27;, &#x27;..&#x27;)
+     *
+     * returns the parent of the h3 elt within the .qi-billboard
+     * elt on the page.
+     *
+     * The ElementFinder result is extended with a find function
+     * for chaining, so the above example is equivalent to:
+     *
+     *     page.element(By.css(&#x27;.qi-billboard&#x27;))
+     *       .then (bb) -&gt;
+     *         bb.element(By.tagName(&#x27;h3&#x27;))
+     *       .then (h3) -&gt;
+     *         h3.element(By.xpath(&#x27;..&#x27;))
+     *
+     * @method find
+     * @param selectors the search conditions
+     * @return a promise which resolves to the target
+     *   Findable, or null if no such WebElement exists
+     */
+
+    Findable.prototype.find = function() {
+      var selectors;
+      selectors = 1 &lt;= arguments.length ? slice.call(arguments, 0) : [];
+      return this._find.apply(this, selectors).then(function(elt) {
+        if (elt != null) {
+          return addFindableMixin(elt);
+        } else {
+          return elt;
+        }
+      });
+    };
+
+
+    /**
+     * @method _find
+     * @private
+     * @param selectors the search conditions
+     * @return a promise which resolves to the target
+     *   ElementFinder, or null if no such elt exists
+     */
+
+    Findable.prototype._find = function() {
+      var locators, next, selector, selectors, target;
+      selectors = 1 &lt;= arguments.length ? slice.call(arguments, 0) : [];
+
+      /**
+       * @method next
+       * @param current the Findable to search from, or this
+       *   Page to search from the document root
+       * @param locator the protractor By object
+       * @return the result of calling *elt* on the current
+       *   object with the given locator
+       */
+      next = function(current, locator) {
+        return current.element(locator);
+      };
+      locators = (function() {
+        var j, len, results;
+        results = [];
+        for (j = 0, len = selectors.length; j &lt; len; j++) {
+          selector = selectors[j];
+          results.push(this._locatorFor(selector));
+        }
+        return results;
+      }).call(this);
+      target = locators.reduce(next, this);
+      return target.isPresent().then(function(exists) {
+        if (exists) {
+          return target;
+        } else {
+          return null;
+        }
+      });
+    };
+
+
+    /**
+     * Finds the elements with the given search selection.
+     * The selectors are described in the find function.
+     * Unlike the find function, findAll only accepts one
+     * selector argument.
+     *
+     * Each Findable in the array result is extended
+     * with a find function for chaining.
+     *
+     * @method findAll
+     * @param selectors the search condition
+     * @return a promise which resolves to the target
+     *   Findable array
+     */
+
+    Findable.prototype.findAll = function() {
+      var elements, selectors;
+      selectors = 1 &lt;= arguments.length ? slice.call(arguments, 0) : [];
+      elements = this._findAll.apply(this, selectors);
+      return elements.count().then(function(n) {
+        var i, j, len, ref, results;
+        ref = _.range(n);
+        results = [];
+        for (j = 0, len = ref.length; j &lt; len; j++) {
+          i = ref[j];
+          results.push(addFindableMixin(elements.get(i)));
+        }
+        return results;
+      });
+    };
+
+
+    /**
+     * @method _findAll
+     * @private
+     * @param selectors the search condition
+     * @return a promise which resolves to the target
+     *   WebElement array
+     */
+
+    Findable.prototype._findAll = function() {
+      var locators, next, selector, selectors;
+      selectors = 1 &lt;= arguments.length ? slice.call(arguments, 0) : [];
+
+      /**
+       * @method next
+       * @param parent the Findable to search from, or
+       *   this Page to search from the document root
+       * @param locator the protractor By object
+       * @return the search result WebElement array
+       */
+      next = function(current, locator) {
+        return current.all(locator);
+      };
+      locators = (function() {
+        var j, len, results;
+        results = [];
+        for (j = 0, len = selectors.length; j &lt; len; j++) {
+          selector = selectors[j];
+          results.push(this._locatorFor(selector));
+        }
+        return results;
+      }).call(this);
+      return locators.reduce(next, this);
+    };
+
+
+    /**
+     * @method text
+     * @param selectors the search condition
+     * @return a promise which resolves to this WebElement&#x27;s visible
+     *   text, or null if either:
+     *   * the search result does not exist
+     *   * the element is not displayed
+     *   * the text content is empty
+     */
+
+    Findable.prototype.text = function() {
+      var selectors;
+      selectors = 1 &lt;= arguments.length ? slice.call(arguments, 0) : [];
+      return this.find.apply(this, selectors).then(function(target) {
+        if (target != null) {
+          return target.isDisplayed().then(function(shown) {
+            if (shown) {
+              return target;
+            } else {
+              return null;
+            }
+          });
+        } else {
+          return null;
+        }
+      }).then(function(target) {
+        if (target != null) {
+          return target.getText();
+        } else {
+          return null;
+        }
+      }).then(function(text) {
+        if ((text != null) &amp;&amp; text.length) {
+          return text;
+        } else {
+          return null;
+        }
+      });
+    };
+
+
+    /**
+     * Clicks on this element, captures the visited URL,
+     * and returns.
+     *
+     * @method visit
+     * @return the visited URL
+     */
+
+    Findable.prototype.visit = function() {
+
+      /**
+       * Navigates to the previous page, if necessary.
+       *
+       * @method restore
+       * @param prev_url the previous location
+       * @return the URL of the page navigated from
+       */
+      var restore;
+      restore = function(prev_url) {
+        return browser.getCurrentUrl().then(function(curr_url) {
+          if (curr_url === prev_url) {
+            return curr_url;
+          } else {
+            return browser.navigate().back().then(function() {
+              return curr_url;
+            });
+          }
+        });
+      };
+      return browser.getCurrentUrl().then((function(_this) {
+        return function(url) {
+          url;
+          return _this.click().then(function() {
+            return restore(url);
+          });
+        };
+      })(this));
+    };
+
+
+    /**
+     * Finds a nested hyperlink. The hyperlink is the href
+     * attribute of an anchor element (&lt;a href=...&gt;&lt;/a&gt;) contained
+     * within this Findable&#x27;s HTML.
+     *
+     * @method hyperlink
+     * @param selectors the search condition
+     * @return a promise which resolves to the hyperlink URL
+     */
+
+    Findable.prototype.hyperlink = function() {
+      var selectors;
+      selectors = 1 &lt;= arguments.length ? slice.call(arguments, 0) : [];
+      selectors.push(&#x27;a&#x27;);
+      return this._find.apply(this, selectors).then(function(anchor) {
+        if (anchor) {
+          return anchor.getAttribute(&#x27;href&#x27;);
+        } else {
+          return null;
+        }
+      });
+    };
+
+
+    /**
+     * Finds all nested hyperlinks.
+     * See the hyperlink method.
+     *
+     * @method hyperlinks
+     * @param selectors the search condition
+     * @return a promise which resolves to the hyperlink URLs
+     */
+
+    Findable.prototype.hyperlinks = function() {
+      var selectors;
+      selectors = 1 &lt;= arguments.length ? slice.call(arguments, 0) : [];
+      selectors.push(&#x27;a&#x27;);
+      return this._findAll.apply(this, selectors).then(function(anchors) {
+        return anchors.map(function(anchor) {
+          return anchor.getAttribute(&#x27;href&#x27;);
+        });
+      });
+    };
+
+
+    /**
+     * Finds the table WebElement for the given find() selector.
+     * The return value is a promisr resolving to a Table object.
+     * Each table promise resolves to an object {header, body},
+     * where:
+     * * header is a promise which resolves to an array of table
+     *   heading text value promises
+     * * body is a promise which resolves to an array of row promises
+     *
+     * Each row promise resolves to an array of column text promises.
+     *
+     * If the function argument is provided, then it is applied to
+     * each table cell text value promise.
+     *
+     * @method findTable
+     * @param bindings the table  {field: ng-bind expression}
+     *   bindings
+     * @param selectors the table elt find selectors
+     * @return a promise resolving to the table WebElement
+     *   with the field properties, or null if the table
+     *   does not exist
+     */
+
+    Findable.prototype.findTable = function() {
+      var finder, selectors;
+      selectors = 1 &lt;= arguments.length ? slice.call(arguments, 0) : [];
+      return finder = this._find.apply(this, selectors).then(function(table) {
+        if (table != null) {
+          return addTableMixin(table);
+        } else {
+          return table;
+        }
+      });
+    };
+
+
+    /**
+     * Finds the table WebElements for the given Page.findAll()
+     * selector. The return value is an array of table promises.
+     * Each table promise resolves to an object {header, body},
+     * where:
+     * * header is a promise which resolves to an array of table
+     *   heading text value promises
+     * * body is a promise which resolves to an array of row promises
+     *
+     * Each row promise resolves to an array of column text promises.
+     *
+     * If the function argument is provided, then it is applied to
+     * each table cell text value promise.
+     *
+     * @method findTables
+     * @param selector the Protractor CSS locator argument
+     * @return a promise resolving to the Table array
+     */
+
+    Findable.prototype.findTables = function() {
+      var selectors;
+      selectors = 1 &lt;= arguments.length ? slice.call(arguments, 0) : [];
+      return this._findAll.apply(this, selectors).then(function(tables) {
+        return tables.map(addTableMixin);
+      });
+    };
+
+
+    /**
+     * @method _locatorFor
+     * @private
+     * @param selector the search condition
+     * @return the By locator object
+     */
+
+    Findable.prototype._locatorFor = function(selector) {
+      var ref;
+      if (_.isString(selector)) {
+        if (selector === &#x27;..&#x27; || indexOf.call(selector, &#x27;/&#x27;) &gt;= 0) {
+          return By.xpath(selector);
+        } else if (selector[0] === &#x27;#&#x27; &amp;&amp; (ref = !&#x27; &#x27;, indexOf.call(selector, ref) &gt;= 0)) {
+          return By.id(selector.slice(1));
+        } else if (selector.match(&#x27;in &#x27;)) {
+          return By.repeater(selector);
+        } else if (selector.match(/^\w[\w-]*$/)) {
+          return By.tagName(selector);
+        } else {
+          return By.css(selector);
+        }
+      } else if (selector != null) {
+        return selector;
+      } else {
+        throw new Error(&quot;The selector is not defined&quot;);
+      }
+    };
+
+    return Findable;
+
+  })();
+
+
+  /**
+   * The Table class represents a table WebElement with the
+   * following properties:
+   *
+   * * header - a promise resolving to the array of &#x60;&lt;th/&gt;&#x60;
+   *   WebElement text values
+   *
+   * * rows - a promise resolving to the two-dimensional
+   *   &#x60;&lt;tr/&gt; x &lt;td/&gt;&#x60; cell value array
+   *
+   * The header values can be either in a separate &#x60;thead&#x60;
+   * row or as the leading &#x60;th&#x60; element in each &#x60;tbody&#x60; row,
+   * e.g.:
+   *
+   *     &lt;table id=&quot;t01&quot;&gt;
+   *       &lt;thead&gt;
+   *         &lt;tr&gt;
+   *           &lt;th&gt;Name&lt;/th&gt;
+   *           &lt;th&gt;Gender&lt;/th&gt;
+   *         &lt;/tr&gt;
+   *       &lt;/thead&gt;
+   *       &lt;tbody&gt;
+   *         &lt;tr&gt;
+   *           &lt;td&gt;John&lt;/td&gt;
+   *           &lt;td&gt;Male&lt;/td&gt;
+   *         &lt;/tr&gt;
+   *       &lt;/tbody&gt;
+   *     &lt;/table&gt;
+   *
+   * or:
+   *
+   *     &lt;table id=&quot;t02&quot;&gt;
+   *       &lt;tbody&gt;
+   *         &lt;tr&gt;
+   *           &lt;th&gt;Name&lt;/th&gt;
+   *           &lt;td&gt;John&lt;/td&gt;
+   *         &lt;/tr&gt;
+   *         &lt;tr&gt;
+   *           &lt;th&gt;Gender&lt;/th&gt;
+   *           &lt;td&gt;Male&lt;/td&gt;
+   *         &lt;/tr&gt;
+   *       &lt;/tbody&gt;
+   *     &lt;/table&gt;
+   *
+   * In the both cases, the Table *heading* resolves to
+   * [&#x27;Name&#x27;, &#x27;Gender&#x27;]. In the first case, the Table
+   * *rows* resolves to [[&#x27;John&#x27;, &#x27;Male]]. In the second
+   * case, the Table *rows* resolves to [[&#x27;John&#x27;], [&#x27;Male]].
+   *
+   * If this table contains a &#x60;&lt;tbody/&gt;&#x60; subelement, then this
+   * property includes the rows in the first such body
+   * subelement. Otherwise, this methods returns all &#x60;&lt;tr/&gt;&#x60;
+   * rows contained in the table.
+   *
+   * Note - If there are multiple &#x60;&lt;tbody/&gt;&#x60; elements in the
+   *   table, only the rows of the first &#x60;&lt;tbody&gt;&#x60; are returned.
+   *
+   * Note - The rows of nested &#x60;&lt;table/&gt;&#x60; elements are returned
+   *   along with the parent rows.
+   *
+   * TODO - address the above two notes by adding a Table
+   *   subTables property for subtables and include only the
+   *   direct rows in a parent Table.
+   *
+   * Note - The Table class is not defined in it&#x27;s own file
+   *   because there is a cyclical Findable dependency.
+   *
+   * @module testing
+   * @class Table
+   * @extends Findable
+   */
+
+  Table = (function(superClass) {
+    extend(Table, superClass);
+
+    function Table() {
+      return Table.__super__.constructor.apply(this, arguments);
+    }
+
+
+    /**
+     * Adds *field* properties to this table which resolve to the
+     * the value given by the corresponding AngularJS binding
+     * expression.
+     *
+     * @method addBindings
+     * @param bindings {Object} the {field: binding} object, where
+     *   *binding* is the AngularJS expression to which the field
+     *   element is bound
+     * @return this table WebElement
+     */
+
+    Table.prototype.addBindings = function(bindings) {
+      var binding, field, locator;
+      for (field in bindings) {
+        binding = bindings[field];
+        locator = By.binding(binding);
+        this[field] = this.find(locator).then(function(elt) {
+          if (elt != null) {
+            return elt.text();
+          } else {
+            return elt;
+          }
+        });
+      }
+      return this;
+    };
+
+    Table.property({
+      rows: function() {
+        return this.find(By.tagName(&#x27;tbody&#x27;)).then(function(body) {
+          if (body != null) {
+            return body;
+          } else {
+            return this;
+          }
+        }).then(function(parent) {
+          return parent.findAll(By.tagName(&#x27;tr&#x27;));
+        }).then(function(rows) {
+          return rows.map(function(row) {
+            return row.findAll(By.tagName(&#x27;td&#x27;));
+          });
+        }).then(function(rows) {
+          return webdriver.promise.all(rows);
+        });
+      }
+    });
+
+    Table.property({
+      header: function() {
+        return this.findAll(By.tagName(&#x27;th&#x27;)).then(function(headings) {
+          return headings.map(function(heading) {
+            return heading.text();
+          });
+        }).then(function(headings) {
+          return webdriver.promise.all(headings);
+        });
+      }
+    });
+
+    return Table;
+
+  })(Findable);
+
+  addMixin = function(mixin, obj) {
+    var extended, key;
+    extended = _.extend(new mixin, obj);
+    for (key in obj) {
+      if (_.isUndefined(extended[key])) {
+        extended[key] = obj[key];
+      }
+    }
+    return extended;
+  };
+
+  addFindableMixin = _.partial(addMixin, Findable);
+
+  addTableMixin = _.partial(addMixin, Table);
+
+  module.exports = Findable;
+
+}).call(this);
+
+</pre>
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>

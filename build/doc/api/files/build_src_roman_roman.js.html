@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>build/src/roman/roman.js - qiprofile API</title>
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="http://yui.yahooapis.com/combo?3.8.0pr2/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div class="yui3-g">
+        <div id="sidebar" class="yui3-u">
+            <div class="logo">
+              <a href="../index.html">
+                  qiprofile API
+              </a>
+            </div>
+            
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/clinical.html">clinical</a>
+                            </li>
+                            <li><a href="../modules/collection.html">collection</a>
+                            </li>
+                            <li><a href="../modules/collections.html">collections</a>
+                            </li>
+                            <li><a href="../modules/common.html">common</a>
+                            </li>
+                            <li><a href="../modules/configuration.html">configuration</a>
+                            </li>
+                            <li><a href="../modules/controls.html">controls</a>
+                            </li>
+                            <li><a href="../modules/data.html">data</a>
+                            </li>
+                            <li><a href="../modules/date.html">date</a>
+                            </li>
+                            <li><a href="../modules/error.html">error</a>
+                            </li>
+                            <li><a href="../modules/file.html">file</a>
+                            </li>
+                            <li><a href="../modules/help.html">help</a>
+                            </li>
+                            <li><a href="../modules/home.html">home</a>
+                            </li>
+                            <li><a href="../modules/image.html">image</a>
+                            </li>
+                            <li><a href="../modules/imageSequence.html">imageSequence</a>
+                            </li>
+                            <li><a href="../modules/main.html">main</a>
+                            </li>
+                            <li><a href="../modules/object.html">object</a>
+                            </li>
+                            <li><a href="../modules/page.html">page</a>
+                            </li>
+                            <li><a href="../modules/project.html">project</a>
+                            </li>
+                            <li><a href="../modules/projects.html">projects</a>
+                            </li>
+                            <li><a href="../modules/rest.html">rest</a>
+                            </li>
+                            <li><a href="../modules/roman.html">roman</a>
+                            </li>
+                            <li><a href="../modules/session.html">session</a>
+                            </li>
+                            <li><a href="../modules/string.html">string</a>
+                            </li>
+                            <li><a href="../modules/subject.html">subject</a>
+                            </li>
+                            <li><a href="../modules/testing.html">testing</a>
+                            </li>
+                            <li><a href="../modules/visualization.html">visualization</a>
+                            </li>
+                            <li><a href="../modules/volume.html">volume</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/AppComponent.html">AppComponent</a></li>
+                            <li><a href="../classes/AppModule.html">AppModule</a></li>
+                            <li><a href="../classes/Breast.html">Breast</a></li>
+                            <li><a href="../classes/BreastNormalizedAssay.html">BreastNormalizedAssay</a></li>
+                            <li><a href="../classes/BreastPathology.html">BreastPathology</a></li>
+                            <li><a href="../classes/CascadeSelectComponent.html">CascadeSelectComponent</a></li>
+                            <li><a href="../classes/ClinicalEncounter.html">ClinicalEncounter</a></li>
+                            <li><a href="../classes/CollectionActivatedRouteStub.html">CollectionActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionComponent.html">CollectionComponent</a></li>
+                            <li><a href="../classes/CollectionComponentSpec.html">CollectionComponentSpec</a></li>
+                            <li><a href="../classes/CollectionItemComponent.html">CollectionItemComponent</a></li>
+                            <li><a href="../classes/CollectionListPage.html">CollectionListPage</a></li>
+                            <li><a href="../classes/CollectionListSpec.html">CollectionListSpec</a></li>
+                            <li><a href="../classes/CollectionModule.html">CollectionModule</a></li>
+                            <li><a href="../classes/CollectionRouterStub.html">CollectionRouterStub</a></li>
+                            <li><a href="../classes/CollectionsActivatedRouteStub.html">CollectionsActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionsComponent.html">CollectionsComponent</a></li>
+                            <li><a href="../classes/CollectionsComponentSpec.html">CollectionsComponentSpec</a></li>
+                            <li><a href="../classes/CollectionsHelpComponent.html">CollectionsHelpComponent</a></li>
+                            <li><a href="../classes/CollectionsHelpServiceStub.html">CollectionsHelpServiceStub</a></li>
+                            <li><a href="../classes/CollectionsHelpTextComponent.html">CollectionsHelpTextComponent</a></li>
+                            <li><a href="../classes/CollectionsModule.html">CollectionsModule</a></li>
+                            <li><a href="../classes/CollectionsResource.html">CollectionsResource</a></li>
+                            <li><a href="../classes/CollectionsService.html">CollectionsService</a></li>
+                            <li><a href="../classes/CollectionsServiceStub.html">CollectionsServiceStub</a></li>
+                            <li><a href="../classes/CollectionSubectServiceStub.html">CollectionSubectServiceStub</a></li>
+                            <li><a href="../classes/ColorBarDirective.html">ColorBarDirective</a></li>
+                            <li><a href="../classes/CommonModule.html">CommonModule</a></li>
+                            <li><a href="../classes/ConfigurationService.html">ConfigurationService</a></li>
+                            <li><a href="../classes/ConfigurationServiceSpec.html">ConfigurationServiceSpec</a></li>
+                            <li><a href="../classes/ControlsModule.html">ControlsModule</a></li>
+                            <li><a href="../classes/CorrelationComponent.html">CorrelationComponent</a></li>
+                            <li><a href="../classes/DateHelper.html">DateHelper</a></li>
+                            <li><a href="../classes/DateHelperSpec.html">DateHelperSpec</a></li>
+                            <li><a href="../classes/Encounter.html">Encounter</a></li>
+                            <li><a href="../classes/ErrorComponent.html">ErrorComponent</a></li>
+                            <li><a href="../classes/FileService.html">FileService</a></li>
+                            <li><a href="../classes/FileServiceSpec.html">FileServiceSpec</a></li>
+                            <li><a href="../classes/Findable.html">Findable</a></li>
+                            <li><a href="../classes/HelpComponent.html">HelpComponent</a></li>
+                            <li><a href="../classes/HelpService.html">HelpService</a></li>
+                            <li><a href="../classes/HomeComponent.html">HomeComponent</a></li>
+                            <li><a href="../classes/IamgeSequenceService.html">IamgeSequenceService</a></li>
+                            <li><a href="../classes/Image.html">Image</a></li>
+                            <li><a href="../classes/ImageComponent.html">ImageComponent</a></li>
+                            <li><a href="../classes/ImageModule.html">ImageModule</a></li>
+                            <li><a href="../classes/ImageSequence.html">ImageSequence</a></li>
+                            <li><a href="../classes/ImageSequenceServiceSpec.html">ImageSequenceServiceSpec</a></li>
+                            <li><a href="../classes/ImageSequenceSessionServiceStub.html">ImageSequenceSessionServiceStub</a></li>
+                            <li><a href="../classes/ImageSequenceSpec.html">ImageSequenceSpec</a></li>
+                            <li><a href="../classes/ImageStore.html">ImageStore</a></li>
+                            <li><a href="../classes/LabelMap.html">LabelMap</a></li>
+                            <li><a href="../classes/Modeling.html">Modeling</a></li>
+                            <li><a href="../classes/ModelingResult.html">ModelingResult</a></li>
+                            <li><a href="../classes/ModelingResults.html">ModelingResults</a></li>
+                            <li><a href="../classes/ObjectHelper.html">ObjectHelper</a></li>
+                            <li><a href="../classes/Page.html">Page</a></li>
+                            <li><a href="../classes/PageComponent.html">PageComponent</a></li>
+                            <li><a href="../classes/PageModule.html">PageModule</a></li>
+                            <li><a href="../classes/PapayaService.html">PapayaService</a></li>
+                            <li><a href="../classes/ParameterResult.html">ParameterResult</a></li>
+                            <li><a href="../classes/Pathology.html">Pathology</a></li>
+                            <li><a href="../classes/PlayerComponent.html">PlayerComponent</a></li>
+                            <li><a href="../classes/ProjectItemComponent.html">ProjectItemComponent</a></li>
+                            <li><a href="../classes/ProjectListPage.html">ProjectListPage</a></li>
+                            <li><a href="../classes/ProjectListSpec.html">ProjectListSpec</a></li>
+                            <li><a href="../classes/ProjectsComponent.html">ProjectsComponent</a></li>
+                            <li><a href="../classes/ProjectsComponentSpec.html">ProjectsComponentSpec</a></li>
+                            <li><a href="../classes/ProjectsHelpComponent.html">ProjectsHelpComponent</a></li>
+                            <li><a href="../classes/ProjectsHelpServiceStub.html">ProjectsHelpServiceStub</a></li>
+                            <li><a href="../classes/ProjectsHelpTextComponent.html">ProjectsHelpTextComponent</a></li>
+                            <li><a href="../classes/ProjectsModule.html">ProjectsModule</a></li>
+                            <li><a href="../classes/ProjectsResource.html">ProjectsResource</a></li>
+                            <li><a href="../classes/ProjectsService.html">ProjectsService</a></li>
+                            <li><a href="../classes/ProjectsServiceStub.html">ProjectsServiceStub</a></li>
+                            <li><a href="../classes/PropertyTableComponent.html">PropertyTableComponent</a></li>
+                            <li><a href="../classes/RCB.html">RCB</a></li>
+                            <li><a href="../classes/Registration.html">Registration</a></li>
+                            <li><a href="../classes/RegistrationSpec.html">RegistrationSpec</a></li>
+                            <li><a href="../classes/REST.html">REST</a></li>
+                            <li><a href="../classes/RestResource.html">RestResource</a></li>
+                            <li><a href="../classes/RESTSpec.html">RESTSpec</a></li>
+                            <li><a href="../classes/Roman.html">Roman</a></li>
+                            <li><a href="../classes/RomanSpec.html">RomanSpec</a></li>
+                            <li><a href="../classes/Sarcoma.html">Sarcoma</a></li>
+                            <li><a href="../classes/Scan.html">Scan</a></li>
+                            <li><a href="../classes/ScanSpec.html">ScanSpec</a></li>
+                            <li><a href="../classes/ScatterPlotDirective.html">ScatterPlotDirective</a></li>
+                            <li><a href="../classes/Session.html">Session</a></li>
+                            <li><a href="../classes/SessionActivatedRouteStub.html">SessionActivatedRouteStub</a></li>
+                            <li><a href="../classes/SessionComponent.html">SessionComponent</a></li>
+                            <li><a href="../classes/SessionComponentSpec.html">SessionComponentSpec</a></li>
+                            <li><a href="../classes/SessionDetailResource.html">SessionDetailResource</a></li>
+                            <li><a href="../classes/SessionDetailResourceStub.html">SessionDetailResourceStub</a></li>
+                            <li><a href="../classes/SessiondRouterStub.html">SessiondRouterStub</a></li>
+                            <li><a href="../classes/SessionModule.html">SessionModule</a></li>
+                            <li><a href="../classes/SessionService.html">SessionService</a></li>
+                            <li><a href="../classes/SessionServiceSpec.html">SessionServiceSpec</a></li>
+                            <li><a href="../classes/SessionServiceStub.html">SessionServiceStub</a></li>
+                            <li><a href="../classes/SessionSpec.html">SessionSpec</a></li>
+                            <li><a href="../classes/SessionSubjectResourceStub.html">SessionSubjectResourceStub</a></li>
+                            <li><a href="../classes/SessionTumorExtent.html">SessionTumorExtent</a></li>
+                            <li><a href="../classes/SliderDirective.html">SliderDirective</a></li>
+                            <li><a href="../classes/SparkLineDirective.html">SparkLineDirective</a></li>
+                            <li><a href="../classes/StringHelper.html">StringHelper</a></li>
+                            <li><a href="../classes/StringHelperSpec.html">StringHelperSpec</a></li>
+                            <li><a href="../classes/Subject.html">Subject</a></li>
+                            <li><a href="../classes/SubjectActivatedRouteStub.html">SubjectActivatedRouteStub</a></li>
+                            <li><a href="../classes/SubjectChangeDetectorRefStub.html">SubjectChangeDetectorRefStub</a></li>
+                            <li><a href="../classes/SubjectComponent.html">SubjectComponent</a></li>
+                            <li><a href="../classes/SubjectComponentSpec.html">SubjectComponentSpec</a></li>
+                            <li><a href="../classes/SubjectdRouterStub.html">SubjectdRouterStub</a></li>
+                            <li><a href="../classes/SubjectModule.html">SubjectModule</a></li>
+                            <li><a href="../classes/SubjectResource.html">SubjectResource</a></li>
+                            <li><a href="../classes/SubjectResourceStub.html">SubjectResourceStub</a></li>
+                            <li><a href="../classes/SubjectService.html">SubjectService</a></li>
+                            <li><a href="../classes/SubjectServiceSpec.html">SubjectServiceSpec</a></li>
+                            <li><a href="../classes/SubjectServiceStub.html">SubjectServiceStub</a></li>
+                            <li><a href="../classes/SubjectSpec.html">SubjectSpec</a></li>
+                            <li><a href="../classes/Table.html">Table</a></li>
+                            <li><a href="../classes/TimeSeries.html">TimeSeries</a></li>
+                            <li><a href="../classes/TNM.html">TNM</a></li>
+                            <li><a href="../classes/ToggleHelpComponent.html">ToggleHelpComponent</a></li>
+                            <li><a href="../classes/VisualizationModule.html">VisualizationModule</a></li>
+                            <li><a href="../classes/Volume.html">Volume</a></li>
+                            <li><a href="../classes/VolumeComponent.html">VolumeComponent</a></li>
+                            <li><a href="../classes/VolumeDetailPage.html">VolumeDetailPage</a></li>
+                            <li><a href="../classes/VolumeImageSequenceServiceStub.html">VolumeImageSequenceServiceStub</a></li>
+                            <li><a href="../classes/VolumeModule.html">VolumeModule</a></li>
+                            <li><a href="../classes/VolumeService.html">VolumeService</a></li>
+                            <li><a href="../classes/VolumeServiceSpec.html">VolumeServiceSpec</a></li>
+                            <li><a href="../classes/VolumeSpec.html">VolumeSpec</a></li>
+                            <li><a href="../classes/XNAT.html">XNAT</a></li>
+                            <li><a href="../classes/XNATSpec.html">XNATSpec</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            
+            
+            
+            <div class="version-info">
+              Version: 2.1.1
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><div class="title">
+  <h1 class="file-name">build/src/roman/roman.js</h1>
+</div>
+
+<pre class="code prettyprint linenums">
+
+/**
+ * Roman numeral conversion utilities.
+ *
+ * @module roman
+ * @main roman
+ */
+
+(function() {
+  import * as _ from &quot;lodash&quot;;
+
+  /**
+   * @method repeat
+   * @private
+   * @param s the string to repeat
+   * @param n the number of repititions
+   * @return the string repeated n times
+   */
+  var HUNDREDS, MAX, ONES, ROMANS, Roman, TENS, THOUSANDS, genRomans, i, incrementMax, ref, repeat, results;
+
+  repeat = function(s, n) {
+    return new Array(n + 1).join(s);
+  };
+
+
+  /**
+   * @method genRomans
+   * @private
+   * @param one the one character
+   * @param five the five character
+   * @param ten the ten character
+   * @param max the number of roman numerals to generate
+   *   (0 to 10, default 10)
+   * @return an array of the roman numerals
+   * @throws RangeError if the max parameter is not in the inclusive
+   *   range [0, 10]
+   * @throws Error if one of the characters or the max is invalid
+   */
+
+  genRomans = function(one, five, ten, max) {
+    var genRoman, i, results;
+    if (max == null) {
+      max = 10;
+    }
+
+    /**
+     * @method genRoman
+     * @private
+     * @param n the input integer
+     * @return the corresponding roman numeral in one, five
+     *    and ten units
+     */
+    genRoman = function(n) {
+      var ones;
+      ones = n % 5;
+      if (n &lt; 4 || !five) {
+        return repeat(one, n);
+      } else if (n &lt; 6) {
+        return repeat(one, 5 - n) + five;
+      } else if (n &lt; 9) {
+        return five + repeat(one, n - 5);
+      } else {
+        return repeat(one, 10 - n) + ten;
+      }
+    };
+    if (max &lt;= 0 || max &gt; 10) {
+      throw new RangeError(&quot;The roman numeral generator count must be in&quot; + (&quot; the range 1 to 10: &quot; + max));
+    }
+    if (!one) {
+      throw new Error(&quot;The roman numeral generator is missing a one character&quot;);
+    }
+    if (five &amp;&amp; !ten) {
+      throw new Error(&quot;The roman numeral generator is missing a ten character&quot;);
+    }
+    if (ten &amp;&amp; !five) {
+      throw new Error(&quot;The roman numeral generator is missing a five character&quot;);
+    }
+    return (function() {
+      results = [];
+      for (var i = 0; 0 &lt;= max ? i &lt;= max : i &gt;= max; 0 &lt;= max ? i++ : i--){ results.push(i); }
+      return results;
+    }).apply(this).map(genRoman);
+  };
+
+  ONES = genRomans(&#x27;I&#x27;, &#x27;V&#x27;, &#x27;X&#x27;);
+
+  TENS = genRomans(&#x27;X&#x27;, &#x27;L&#x27;, &#x27;C&#x27;);
+
+  HUNDREDS = genRomans(&#x27;C&#x27;, &#x27;D&#x27;, &#x27;M&#x27;);
+
+  THOUSANDS = genRomans(&#x27;M&#x27;, &#x27;&#x27;, &#x27;&#x27;);
+
+  ROMANS = [ONES, TENS, HUNDREDS, THOUSANDS];
+
+
+  /**
+   * @method incrementMax
+   * @private
+   * @return the input &#x60;sum&#x60; shifted left one unit place
+   *   and incremented by the number of roman numerals for
+   *   the given &#x60;place&#x60;.
+   */
+
+  incrementMax = function(sum, place) {
+    return (sum * 10) + ROMANS[place].length - 1;
+  };
+
+  MAX = _.reduceRight((function() {
+    results = [];
+    for (var i = 0, ref = ROMANS.length; 0 &lt;= ref ? i &lt; ref : i &gt; ref; 0 &lt;= ref ? i++ : i--){ results.push(i); }
+    return results;
+  }).apply(this), incrementMax, 0);
+
+
+  /**
+   * The static Roman utility.
+   * Provides the &#x60;romanize&#x60;  function to convert between an
+   * integer and a roman numeral.
+   *
+   * This module is freely adapted from the suggestions offered at
+   * http://stackoverflow.com/questions/9083037/convert-a-number-into-a-roman-numeral-in-javascript.
+   *
+   * @class Roman
+   * @static
+   */
+
+  Roman = {
+
+    /**
+     * @method romanize
+     * @param value the input string or integer
+     * @return the roman numeral string
+     * @throws RangeError if the string value is not a string consisting of
+     *   positive digits less than 4000
+     */
+    romanize: function(value) {
+      var digits, j, n, places, prepend, ref1, results1;
+      n = _.isInteger(value) ? value : parseInt(value.toString());
+      if (!n || n &lt; 0) {
+        throw new RangeError(&quot;The romanize input value cannot be converted&quot; + (&quot; to a positive integer: &quot; + value));
+      }
+      if (n &gt; MAX) {
+        throw new RangeError(&quot;The romanize input value exceeds the maximum&quot; + (&quot; supported value of &quot; + MAX + &quot;: &quot; + value));
+      }
+      digits = n.toString().split(&#x27;&#x27;).map(function(n) {
+        return parseInt(n);
+      });
+      places = (function() {
+        results1 = [];
+        for (var j = 0, ref1 = digits.length; 0 &lt;= ref1 ? j &lt; ref1 : j &gt; ref1; 0 &lt;= ref1 ? j++ : j--){ results1.push(j); }
+        return results1;
+      }).apply(this);
+
+      /**
+       * Prepends the roman numeral conversion of the right-most digit to the
+       * given roman numeral. This function removes the right-most digit from
+       * the digits array.
+       *
+       * @method prepend
+       * @private
+       * @param roman the roman numeral to augment
+       * @param place the roman numeral place index
+       * @return the augmented roman numeral
+       */
+      prepend = function(roman, place) {
+        var digit;
+        digit = digits.pop();
+        return ROMANS[place][digit] + roman;
+      };
+      return _.reduce(places, prepend, &#x27;&#x27;);
+    }
+  };
+
+  export { Roman as default };
+
+}).call(this);
+
+</pre>
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>

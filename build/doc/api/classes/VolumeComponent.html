@@ -1,0 +1,2543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>VolumeComponent - qiprofile API</title>
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="http://yui.yahooapis.com/combo?3.8.0pr2/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div class="yui3-g">
+        <div id="sidebar" class="yui3-u">
+            <div class="logo">
+              <a href="../index.html">
+                  qiprofile API
+              </a>
+            </div>
+            
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/clinical.html">clinical</a>
+                            </li>
+                            <li><a href="../modules/collection.html">collection</a>
+                            </li>
+                            <li><a href="../modules/collections.html">collections</a>
+                            </li>
+                            <li><a href="../modules/common.html">common</a>
+                            </li>
+                            <li><a href="../modules/configuration.html">configuration</a>
+                            </li>
+                            <li><a href="../modules/controls.html">controls</a>
+                            </li>
+                            <li><a href="../modules/data.html">data</a>
+                            </li>
+                            <li><a href="../modules/date.html">date</a>
+                            </li>
+                            <li><a href="../modules/error.html">error</a>
+                            </li>
+                            <li><a href="../modules/file.html">file</a>
+                            </li>
+                            <li><a href="../modules/help.html">help</a>
+                            </li>
+                            <li><a href="../modules/home.html">home</a>
+                            </li>
+                            <li><a href="../modules/image.html">image</a>
+                            </li>
+                            <li><a href="../modules/imageSequence.html">imageSequence</a>
+                            </li>
+                            <li><a href="../modules/main.html">main</a>
+                            </li>
+                            <li><a href="../modules/object.html">object</a>
+                            </li>
+                            <li><a href="../modules/page.html">page</a>
+                            </li>
+                            <li><a href="../modules/project.html">project</a>
+                            </li>
+                            <li><a href="../modules/projects.html">projects</a>
+                            </li>
+                            <li><a href="../modules/rest.html">rest</a>
+                            </li>
+                            <li><a href="../modules/roman.html">roman</a>
+                            </li>
+                            <li><a href="../modules/session.html">session</a>
+                            </li>
+                            <li><a href="../modules/string.html">string</a>
+                            </li>
+                            <li><a href="../modules/subject.html">subject</a>
+                            </li>
+                            <li><a href="../modules/testing.html">testing</a>
+                            </li>
+                            <li><a href="../modules/visualization.html">visualization</a>
+                            </li>
+                            <li><a href="../modules/volume.html">volume</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/AppComponent.html">AppComponent</a></li>
+                            <li><a href="../classes/AppModule.html">AppModule</a></li>
+                            <li><a href="../classes/Breast.html">Breast</a></li>
+                            <li><a href="../classes/BreastNormalizedAssay.html">BreastNormalizedAssay</a></li>
+                            <li><a href="../classes/BreastPathology.html">BreastPathology</a></li>
+                            <li><a href="../classes/CascadeSelectComponent.html">CascadeSelectComponent</a></li>
+                            <li><a href="../classes/ClinicalEncounter.html">ClinicalEncounter</a></li>
+                            <li><a href="../classes/CollectionActivatedRouteStub.html">CollectionActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionComponent.html">CollectionComponent</a></li>
+                            <li><a href="../classes/CollectionComponentSpec.html">CollectionComponentSpec</a></li>
+                            <li><a href="../classes/CollectionItemComponent.html">CollectionItemComponent</a></li>
+                            <li><a href="../classes/CollectionListPage.html">CollectionListPage</a></li>
+                            <li><a href="../classes/CollectionListSpec.html">CollectionListSpec</a></li>
+                            <li><a href="../classes/CollectionModule.html">CollectionModule</a></li>
+                            <li><a href="../classes/CollectionRouterStub.html">CollectionRouterStub</a></li>
+                            <li><a href="../classes/CollectionsActivatedRouteStub.html">CollectionsActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionsComponent.html">CollectionsComponent</a></li>
+                            <li><a href="../classes/CollectionsComponentSpec.html">CollectionsComponentSpec</a></li>
+                            <li><a href="../classes/CollectionsHelpComponent.html">CollectionsHelpComponent</a></li>
+                            <li><a href="../classes/CollectionsHelpServiceStub.html">CollectionsHelpServiceStub</a></li>
+                            <li><a href="../classes/CollectionsHelpTextComponent.html">CollectionsHelpTextComponent</a></li>
+                            <li><a href="../classes/CollectionsModule.html">CollectionsModule</a></li>
+                            <li><a href="../classes/CollectionsResource.html">CollectionsResource</a></li>
+                            <li><a href="../classes/CollectionsService.html">CollectionsService</a></li>
+                            <li><a href="../classes/CollectionsServiceStub.html">CollectionsServiceStub</a></li>
+                            <li><a href="../classes/CollectionSubectServiceStub.html">CollectionSubectServiceStub</a></li>
+                            <li><a href="../classes/ColorBarDirective.html">ColorBarDirective</a></li>
+                            <li><a href="../classes/CommonModule.html">CommonModule</a></li>
+                            <li><a href="../classes/ConfigurationService.html">ConfigurationService</a></li>
+                            <li><a href="../classes/ConfigurationServiceSpec.html">ConfigurationServiceSpec</a></li>
+                            <li><a href="../classes/ControlsModule.html">ControlsModule</a></li>
+                            <li><a href="../classes/CorrelationComponent.html">CorrelationComponent</a></li>
+                            <li><a href="../classes/DateHelper.html">DateHelper</a></li>
+                            <li><a href="../classes/DateHelperSpec.html">DateHelperSpec</a></li>
+                            <li><a href="../classes/Encounter.html">Encounter</a></li>
+                            <li><a href="../classes/ErrorComponent.html">ErrorComponent</a></li>
+                            <li><a href="../classes/FileService.html">FileService</a></li>
+                            <li><a href="../classes/FileServiceSpec.html">FileServiceSpec</a></li>
+                            <li><a href="../classes/Findable.html">Findable</a></li>
+                            <li><a href="../classes/HelpComponent.html">HelpComponent</a></li>
+                            <li><a href="../classes/HelpService.html">HelpService</a></li>
+                            <li><a href="../classes/HomeComponent.html">HomeComponent</a></li>
+                            <li><a href="../classes/IamgeSequenceService.html">IamgeSequenceService</a></li>
+                            <li><a href="../classes/Image.html">Image</a></li>
+                            <li><a href="../classes/ImageComponent.html">ImageComponent</a></li>
+                            <li><a href="../classes/ImageModule.html">ImageModule</a></li>
+                            <li><a href="../classes/ImageSequence.html">ImageSequence</a></li>
+                            <li><a href="../classes/ImageSequenceServiceSpec.html">ImageSequenceServiceSpec</a></li>
+                            <li><a href="../classes/ImageSequenceSessionServiceStub.html">ImageSequenceSessionServiceStub</a></li>
+                            <li><a href="../classes/ImageSequenceSpec.html">ImageSequenceSpec</a></li>
+                            <li><a href="../classes/ImageStore.html">ImageStore</a></li>
+                            <li><a href="../classes/LabelMap.html">LabelMap</a></li>
+                            <li><a href="../classes/Modeling.html">Modeling</a></li>
+                            <li><a href="../classes/ModelingResult.html">ModelingResult</a></li>
+                            <li><a href="../classes/ModelingResults.html">ModelingResults</a></li>
+                            <li><a href="../classes/ObjectHelper.html">ObjectHelper</a></li>
+                            <li><a href="../classes/Page.html">Page</a></li>
+                            <li><a href="../classes/PageComponent.html">PageComponent</a></li>
+                            <li><a href="../classes/PageModule.html">PageModule</a></li>
+                            <li><a href="../classes/PapayaService.html">PapayaService</a></li>
+                            <li><a href="../classes/ParameterResult.html">ParameterResult</a></li>
+                            <li><a href="../classes/Pathology.html">Pathology</a></li>
+                            <li><a href="../classes/PlayerComponent.html">PlayerComponent</a></li>
+                            <li><a href="../classes/ProjectItemComponent.html">ProjectItemComponent</a></li>
+                            <li><a href="../classes/ProjectListPage.html">ProjectListPage</a></li>
+                            <li><a href="../classes/ProjectListSpec.html">ProjectListSpec</a></li>
+                            <li><a href="../classes/ProjectsComponent.html">ProjectsComponent</a></li>
+                            <li><a href="../classes/ProjectsComponentSpec.html">ProjectsComponentSpec</a></li>
+                            <li><a href="../classes/ProjectsHelpComponent.html">ProjectsHelpComponent</a></li>
+                            <li><a href="../classes/ProjectsHelpServiceStub.html">ProjectsHelpServiceStub</a></li>
+                            <li><a href="../classes/ProjectsHelpTextComponent.html">ProjectsHelpTextComponent</a></li>
+                            <li><a href="../classes/ProjectsModule.html">ProjectsModule</a></li>
+                            <li><a href="../classes/ProjectsResource.html">ProjectsResource</a></li>
+                            <li><a href="../classes/ProjectsService.html">ProjectsService</a></li>
+                            <li><a href="../classes/ProjectsServiceStub.html">ProjectsServiceStub</a></li>
+                            <li><a href="../classes/PropertyTableComponent.html">PropertyTableComponent</a></li>
+                            <li><a href="../classes/RCB.html">RCB</a></li>
+                            <li><a href="../classes/Registration.html">Registration</a></li>
+                            <li><a href="../classes/RegistrationSpec.html">RegistrationSpec</a></li>
+                            <li><a href="../classes/REST.html">REST</a></li>
+                            <li><a href="../classes/RestResource.html">RestResource</a></li>
+                            <li><a href="../classes/RESTSpec.html">RESTSpec</a></li>
+                            <li><a href="../classes/Roman.html">Roman</a></li>
+                            <li><a href="../classes/RomanSpec.html">RomanSpec</a></li>
+                            <li><a href="../classes/Sarcoma.html">Sarcoma</a></li>
+                            <li><a href="../classes/Scan.html">Scan</a></li>
+                            <li><a href="../classes/ScanSpec.html">ScanSpec</a></li>
+                            <li><a href="../classes/ScatterPlotDirective.html">ScatterPlotDirective</a></li>
+                            <li><a href="../classes/Session.html">Session</a></li>
+                            <li><a href="../classes/SessionActivatedRouteStub.html">SessionActivatedRouteStub</a></li>
+                            <li><a href="../classes/SessionComponent.html">SessionComponent</a></li>
+                            <li><a href="../classes/SessionComponentSpec.html">SessionComponentSpec</a></li>
+                            <li><a href="../classes/SessionDetailResource.html">SessionDetailResource</a></li>
+                            <li><a href="../classes/SessionDetailResourceStub.html">SessionDetailResourceStub</a></li>
+                            <li><a href="../classes/SessiondRouterStub.html">SessiondRouterStub</a></li>
+                            <li><a href="../classes/SessionModule.html">SessionModule</a></li>
+                            <li><a href="../classes/SessionService.html">SessionService</a></li>
+                            <li><a href="../classes/SessionServiceSpec.html">SessionServiceSpec</a></li>
+                            <li><a href="../classes/SessionServiceStub.html">SessionServiceStub</a></li>
+                            <li><a href="../classes/SessionSpec.html">SessionSpec</a></li>
+                            <li><a href="../classes/SessionSubjectResourceStub.html">SessionSubjectResourceStub</a></li>
+                            <li><a href="../classes/SessionTumorExtent.html">SessionTumorExtent</a></li>
+                            <li><a href="../classes/SliderDirective.html">SliderDirective</a></li>
+                            <li><a href="../classes/SparkLineDirective.html">SparkLineDirective</a></li>
+                            <li><a href="../classes/StringHelper.html">StringHelper</a></li>
+                            <li><a href="../classes/StringHelperSpec.html">StringHelperSpec</a></li>
+                            <li><a href="../classes/Subject.html">Subject</a></li>
+                            <li><a href="../classes/SubjectActivatedRouteStub.html">SubjectActivatedRouteStub</a></li>
+                            <li><a href="../classes/SubjectChangeDetectorRefStub.html">SubjectChangeDetectorRefStub</a></li>
+                            <li><a href="../classes/SubjectComponent.html">SubjectComponent</a></li>
+                            <li><a href="../classes/SubjectComponentSpec.html">SubjectComponentSpec</a></li>
+                            <li><a href="../classes/SubjectdRouterStub.html">SubjectdRouterStub</a></li>
+                            <li><a href="../classes/SubjectModule.html">SubjectModule</a></li>
+                            <li><a href="../classes/SubjectResource.html">SubjectResource</a></li>
+                            <li><a href="../classes/SubjectResourceStub.html">SubjectResourceStub</a></li>
+                            <li><a href="../classes/SubjectService.html">SubjectService</a></li>
+                            <li><a href="../classes/SubjectServiceSpec.html">SubjectServiceSpec</a></li>
+                            <li><a href="../classes/SubjectServiceStub.html">SubjectServiceStub</a></li>
+                            <li><a href="../classes/SubjectSpec.html">SubjectSpec</a></li>
+                            <li><a href="../classes/Table.html">Table</a></li>
+                            <li><a href="../classes/TimeSeries.html">TimeSeries</a></li>
+                            <li><a href="../classes/TNM.html">TNM</a></li>
+                            <li><a href="../classes/ToggleHelpComponent.html">ToggleHelpComponent</a></li>
+                            <li><a href="../classes/VisualizationModule.html">VisualizationModule</a></li>
+                            <li><a href="../classes/Volume.html">Volume</a></li>
+                            <li><a href="../classes/VolumeComponent.html">VolumeComponent</a></li>
+                            <li><a href="../classes/VolumeDetailPage.html">VolumeDetailPage</a></li>
+                            <li><a href="../classes/VolumeImageSequenceServiceStub.html">VolumeImageSequenceServiceStub</a></li>
+                            <li><a href="../classes/VolumeModule.html">VolumeModule</a></li>
+                            <li><a href="../classes/VolumeService.html">VolumeService</a></li>
+                            <li><a href="../classes/VolumeServiceSpec.html">VolumeServiceSpec</a></li>
+                            <li><a href="../classes/VolumeSpec.html">VolumeSpec</a></li>
+                            <li><a href="../classes/XNAT.html">XNAT</a></li>
+                            <li><a href="../classes/XNATSpec.html">XNATSpec</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            <div id="sections" class="sidebox">
+              <div class="hd">
+                <h2 class="no-toc">VolumeComponent</h2>
+              </div>
+              <div class="bd">
+                  <div><a href="#static-property-summary">Static Property Summary</a></div>
+            
+            
+            
+                  <div><a href="#property-summary">Property Summary</a></div>
+            
+                  <div><a href="#method-summary">Method Summary</a></div>
+            
+                  <div><a href="#static-public-properties">Static Public Properties</a></div>
+                  <ul>
+                      <li><a href="#props_HORIZONTAL_SLIDER_CONFIG">HORIZONTAL_SLIDER_CONFIG</a></li>
+                      <li><a href="#props_VERTICAL_SLIDER_CONFIG">VERTICAL_SLIDER_CONFIG</a></li>
+                  </ul>
+            
+            
+                  <div><a href="#static-private-properties">Static Private Properties</a></div>
+                  <ul>
+                      <li><a href="#props_createPhysicalIntensities">createPhysicalIntensities</a></li>
+                      <li><a href="#props_PHYSICAL_GRADIENT_DOMAIN">PHYSICAL_GRADIENT_DOMAIN</a></li>
+                  </ul>
+            
+            
+            
+            
+            
+            
+            
+                  <div><a href="#public-properties">Public Properties</a></div>
+                  <ul>
+                      <li><a href="#props_cancelSessionPlayer">cancelSessionPlayer</a></li>
+                      <li><a href="#props_cancelTimePointPlayer">cancelTimePointPlayer</a></li>
+                      <li><a href="#props_domain">domain</a></li>
+                      <li><a href="#props_error">error</a></li>
+                      <li><a href="#props_gradientWidth">gradientWidth</a></li>
+                      <li><a href="#props_help">help</a></li>
+                      <li><a href="#props_image">image</a></li>
+                      <li><a href="#props_intensityGradientsTop">intensityGradientsTop</a></li>
+                      <li><a href="#props_physicalIntensities">physicalIntensities</a></li>
+                      <li><a href="#props_physicalIntensitiesLegend">physicalIntensitiesLegend</a></li>
+                      <li><a href="#props_placeHolder">placeHolder</a></li>
+                      <li><a href="#props_project">project</a></li>
+                      <li><a href="#props_routeParams">routeParams</a></li>
+                      <li><a href="#props_sessionSliderConfig">sessionSliderConfig</a></li>
+                      <li><a href="#props_timePointIntensities">timePointIntensities</a></li>
+                      <li><a href="#props_timePointSliderConfig">timePointSliderConfig</a></li>
+                      <li><a href="#props_timePointSliderHeight">timePointSliderHeight</a></li>
+                      <li><a href="#props_volume">volume</a></li>
+                  </ul>
+            
+            
+            
+                  <div><a href="#public-methods">Public Methods</a></div>
+                  <ul>
+                      <li><a href="#method_bodyInnerWidth">bodyInnerWidth</a></li>
+                      <li><a href="#method_calculateIntensityGradientWidth">calculateIntensityGradientWidth</a></li>
+                      <li><a href="#method_calculateTimePointSliderHeight">calculateTimePointSliderHeight</a></li>
+                      <li><a href="#method_clearError">clearError</a></li>
+                      <li><a href="#method_constructor">constructor</a></li>
+                      <li><a href="#method_getVolume">getVolume</a></li>
+                      <li><a href="#method_gutterWidth">gutterWidth</a></li>
+                      <li><a href="#method_imageViewHeight">imageViewHeight</a></li>
+                      <li><a href="#method_onCoordinateChanged">onCoordinateChanged</a></li>
+                      <li><a href="#method_onError">onError</a></li>
+                      <li><a href="#method_onLoaded">onLoaded</a></li>
+                      <li><a href="#method_onLoadError">onLoadError</a></li>
+                      <li><a href="#method_onResize">onResize</a></li>
+                      <li><a href="#method_onSessionRequest">onSessionRequest</a></li>
+                      <li><a href="#method_onTimePointRequest">onTimePointRequest</a></li>
+                      <li><a href="#method_openPhysicalIntensityHelp">openPhysicalIntensityHelp</a></li>
+                      <li><a href="#method_openTimePointIntensityHelp">openTimePointIntensityHelp</a></li>
+                      <li><a href="#method_sessionCount">sessionCount</a></li>
+                      <li><a href="#method_volumeCount">volumeCount</a></li>
+                  </ul>
+            
+            
+                  <div><a href="#private-methods">Private Methods</a></div>
+                  <ul>
+                      <li><a href="#method_calibrateStyles">calibrateStyles</a></li>
+                      <li><a href="#method_createPhysicalIntensitiesFactory">createPhysicalIntensitiesFactory</a></li>
+                      <li><a href="#method_pipDensity">pipDensity</a></li>
+                      <li><a href="#method_pipFilter">pipFilter</a></li>
+                      <li><a href="#method_requestedSessionNumber">requestedSessionNumber</a></li>
+                      <li><a href="#method_timePointRequestVolume">timePointRequestVolume</a></li>
+                  </ul>
+              </div>
+            </div>
+            
+            
+            
+            <div class="version-info">
+              Version: 2.1.1
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><div class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l21"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:21</code></a></span>
+    <h1 class="class-name">VolumeComponent</h1>
+</div>
+
+
+
+    <div class="class-extends">
+        <h4>Extends:</h4>
+        <div><a href="../classes/PageComponent.html" class="crosslink">PageComponent</a> → VolumeComponent</div>
+    </div>
+
+<div class="class-description"><p>The Volume main component.</p>
+</div>
+
+
+  <h2 id="static-property-summary">Static Property Summary</h2>
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Static Public Properties</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            public
+            static
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_HORIZONTAL_SLIDER_CONFIG">HORIZONTAL_SLIDER_CONFIG</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The default horizontal slider configuration.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            static
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_VERTICAL_SLIDER_CONFIG">VERTICAL_SLIDER_CONFIG</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The default vertical slider configuration.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Static Private Properties</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            private
+            static
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_createPhysicalIntensities">createPhysicalIntensities</a>: Unknown
+            </div>
+            <div class="short-description">
+              <p>The <em>coordinate</em> =&gt; {<em>orientation</em>: <em>intensities</em>, ...} function described in <a href="../classes/VolumeComponent.html#method_createPhysicalIntensitiesFactory" class="crosslink">createPhysicalIntensitiesFactory</a></p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            static
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_PHYSICAL_GRADIENT_DOMAIN">PHYSICAL_GRADIENT_DOMAIN</a>: Unknown
+            </div>
+            <div class="short-description">
+              <p>The physical intensity gradient domain is the 101 voxels centered at the current coordinate.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+  <h2 id="property-summary">Property Summary</h2>
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Public Properties</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_cancelSessionPlayer">cancelSessionPlayer</a>: Boolean
+            </div>
+            <div class="short-description">
+              <p>Flag indicating whether to stop an active session player.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_cancelTimePointPlayer">cancelTimePointPlayer</a>: Boolean
+            </div>
+            <div class="short-description">
+              <p>Flag indicating whether to stop an active time point player.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_domain">domain</a>: Number
+            </div>
+            <div class="short-description">
+              <p>The intensity [min, max].</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_error">error</a>: String
+            </div>
+            <div class="short-description">
+              <p>The error message to display.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_gradientWidth">gradientWidth</a>: Number
+            </div>
+            <div class="short-description">
+              <p>The physical intensity gradient chart width in pixels is a bit less than 20% of the window width to match the CSS .qi-time-series .qi-right setting and allow for a small right margin.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_help">help</a>: String
+            </div>
+            <div class="short-description">
+              <p>The help content.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_image">image</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The image to display.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_intensityGradientsTop">intensityGradientsTop</a>: Number
+            </div>
+            <div class="short-description">
+              <p>The intensity charts top position is the image view base plus a small margin.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_physicalIntensities">physicalIntensities</a>: Number
+            </div>
+            <div class="short-description">
+              <p>The physical space voxel values about the current coordinate.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_physicalIntensitiesLegend">physicalIntensitiesLegend</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The physical intensity gradient chart legend.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_placeHolder">placeHolder</a>: String
+            </div>
+            <div class="short-description">
+              <p>The place-holder object for the display title and home navigation project.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_project">project</a>: String
+            </div>
+            <div class="short-description">
+              <p>The project name.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_routeParams">routeParams</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The route parameters are retained in case the session or volume changes.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_sessionSliderConfig">sessionSliderConfig</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The session slider configuration.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_timePointIntensities">timePointIntensities</a>: Number
+            </div>
+            <div class="short-description">
+              <p>The current coordinate time series voxel values.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_timePointSliderConfig">timePointSliderConfig</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The time point slider configuration.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_timePointSliderHeight">timePointSliderHeight</a>: Number
+            </div>
+            <div class="short-description">
+              <p>The vertical time point slider height is calculated to span the image view height minus a small margin.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_volume">volume</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The loaded volume REST object.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+  <h2 id="method-summary">Method Summary</h2>
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Public Methods</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_bodyInnerWidth">bodyInnerWidth</a>( ): 
+            </div>
+            <div class="short-description">
+              <p>The body width exclusive of the 15px left and right paddding.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_calculateIntensityGradientWidth">calculateIntensityGradientWidth</a>( ): 
+            </div>
+            <div class="short-description">
+              
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_calculateTimePointSliderHeight">calculateTimePointSliderHeight</a>(imageViewHeight): 
+            </div>
+            <div class="short-description">
+              <p>The slider height is the image view height less the title and player heights.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_clearError">clearError</a>( )
+            </div>
+            <div class="short-description">
+              <p>Unsets the error property.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_constructor">constructor</a>( )
+            </div>
+            <div class="short-description">
+              <p>Fetches the volume specified by the route parameters as described in <a href="../classes/VolumeComponent.html#method_getVolume" class="crosslink">getVolume</a>.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_getVolume">getVolume</a>(params)
+            </div>
+            <div class="short-description">
+              <p>Fetches the volume specified by the given parameters. This method sets the <a href="../classes/VolumeComponent.html#property_volume" class="crosslink">volume</a> to a <a href="../classes/VolumeService.html#method_placeHolder" class="crosslink">placeHolder</a> and then attempts to fetch the specified object. If successful, the <a href="../classes/VolumeComponent.html#property_volume" class="crosslink">volume</a> is set to the fetched object. Otherwise, this component's <a href="../classes/PageComponent.html#property_error" class="crosslink">error</a> is set to an error message, which is then displayed in a pop-up.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_gutterWidth">gutterWidth</a>( ): 
+            </div>
+            <div class="short-description">
+              <p>The gutters on either side of the image display are 20% of the <a href="../classes/VolumeComponent.html#method_bodyInnerWidth" class="crosslink">bodyInnerWidth</a>.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_imageViewHeight">imageViewHeight</a>( ): 
+            </div>
+            <div class="short-description">
+              <p>Mimic the Papaya container height = body width / 1.5. The Papaya parent element width is specified in the CSS as 60% of the body width.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_onCoordinateChanged">onCoordinateChanged</a>(coordinate)
+            </div>
+            <div class="short-description">
+              <p>Sets the VolumeComponent/intensities:property property for the new coordinate.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_onError">onError</a>(message)
+            </div>
+            <div class="short-description">
+              <p>Sets the error property which triggers the error pop-pup. The subclass has the responsibility of binding an error event to this handler, e.g.:</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_onLoaded">onLoaded</a>(volume)
+            </div>
+            <div class="short-description">
+              <p>Sets the <a href="../classes/VolumeComponent.html#property_volume" class="crosslink">volume</a> property to notify the respective choosers.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_onLoadError">onLoadError</a>(message)
+            </div>
+            <div class="short-description">
+              <p>Turn off any active player and display the standard error pop-up.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_onResize">onResize</a>( )
+            </div>
+            <div class="short-description">
+              <p>Adjusts the slider and intensity chart placement and dimensions.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_onSessionRequest">onSessionRequest</a>(request)
+            </div>
+            <div class="short-description">
+              <p>Replaces the current <a href="../classes/VolumeComponent.html#property_volume" class="crosslink">volume</a> with a comparable session image sequence volume. The volume hierarchy is the same except for the session number. The request can be the session number, <code>previous</code> or <code>next</code>.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_onTimePointRequest">onTimePointRequest</a>(request)
+            </div>
+            <div class="short-description">
+              <p>Fetches the requested volume. The request can be the number, <code>previous</code> or <code>next</code>.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_openPhysicalIntensityHelp">openPhysicalIntensityHelp</a>( )
+            </div>
+            <div class="short-description">
+              <p>Shows the Physical Intensity Gradient modal help pop-up.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_openTimePointIntensityHelp">openTimePointIntensityHelp</a>( )
+            </div>
+            <div class="short-description">
+              <p>Shows the Time Point Intensity Gradient modal help pop-up.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_sessionCount">sessionCount</a>( ): Number
+            </div>
+            <div class="short-description">
+              
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_volumeCount">volumeCount</a>( ): Number
+            </div>
+            <div class="short-description">
+              
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Private Methods</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_calibrateStyles">calibrateStyles</a>( )
+            </div>
+            <div class="short-description">
+              <p>Sets the following style properties:</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_createPhysicalIntensitiesFactory">createPhysicalIntensitiesFactory</a>( ): Function
+            </div>
+            <div class="short-description">
+              <p>Makes the <em>coordinate</em> =&gt; {<em>orientation</em>: <em>intensities</em>, ...} function, where</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_pipDensity">pipDensity</a>(count): Number
+            </div>
+            <div class="short-description">
+              <p>The pip density is the larger of 10 or (100 / <em>count</em>()).</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_pipFilter">pipFilter</a>(count, value): Number
+            </div>
+            <div class="short-description">
+              <p>The <em>value</em> =&gt; 0|1|2 slider pip function, where</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_requestedSessionNumber">requestedSessionNumber</a>(request)
+            </div>
+            <div class="short-description">
+              <p>Determines the requested session number. The request can be the number, <code>previous</code> or <code>next</code>.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_timePointRequestVolume">timePointRequestVolume</a>(request)
+            </div>
+            <div class="short-description">
+              <p>Determines the requested volume number. The request can be the number, <code>previous</code> or <code>next</code>.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div id="properties public">
+        <h2 id="static-public-properties">Static Public Properties</h2>
+<div class="property item">
+  <div id="props_HORIZONTAL_SLIDER_CONFIG" class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l29"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:29</code></a></span>
+    <h3 class="">
+      public
+      static
+      
+      HORIZONTAL_SLIDER_CONFIG: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The default horizontal slider configuration.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_VERTICAL_SLIDER_CONFIG" class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l43"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:43</code></a></span>
+    <h3 class="">
+      public
+      static
+      
+      VERTICAL_SLIDER_CONFIG: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The default vertical slider configuration.</p>
+</div>
+
+</div>
+    </div>
+
+
+    <div id="properties private">
+        <h2 id="static-private-properties">Static Private Properties</h2>
+<div class="property item private">
+  <div id="props_createPhysicalIntensities" class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l181"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:181</code></a></span>
+    <h3 class="">
+      private
+      static
+      
+      createPhysicalIntensities: Unknown
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The <em>coordinate</em> =&gt; {<em>orientation</em>: <em>intensities</em>, ...}
+function described in
+<a href="../classes/VolumeComponent.html#method_createPhysicalIntensitiesFactory" class="crosslink">createPhysicalIntensitiesFactory</a></p>
+</div>
+
+</div>
+<div class="property item private">
+  <div id="props_PHYSICAL_GRADIENT_DOMAIN" class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l561"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:561</code></a></span>
+    <h3 class="">
+      private
+      static
+      
+      PHYSICAL_GRADIENT_DOMAIN: Unknown
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The physical intensity gradient domain is the 101 voxels centered
+at the current coordinate.</p>
+</div>
+
+</div>
+    </div>
+
+
+
+
+
+
+
+    <div id="properties public">
+        <h2 id="public-properties">Public Properties</h2>
+<div class="property item">
+  <div id="props_cancelSessionPlayer" class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l156"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:156</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      cancelSessionPlayer: Boolean
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>Flag indicating whether to stop an active session player.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_cancelTimePointPlayer" class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l149"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:149</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      cancelTimePointPlayer: Boolean
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>Flag indicating whether to stop an active time point player.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_domain" class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l163"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:163</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      domain: Number
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The intensity [min, max].</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_error" class="title">
+    <span class="source-link"><a href="../files/build_src_page_page.component.ts.html#l17"><code>build&#x2F;src&#x2F;page&#x2F;page.component.ts:17</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      error: String
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The error message to display.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_gradientWidth" class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l109"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:109</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      gradientWidth: Number
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The physical intensity gradient chart width in pixels
+is a bit less than 20% of the window width to match
+the CSS .qi-time-series .qi-right setting and allow
+for a small right margin.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_help" class="title">
+    <span class="source-link"><a href="../files/build_src_page_page.component.ts.html#l10"><code>build&#x2F;src&#x2F;page&#x2F;page.component.ts:10</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      help: String
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The help content.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_image" class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l70"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:70</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      image: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The image to display.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_intensityGradientsTop" class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l119"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:119</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      intensityGradientsTop: Number
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The intensity charts top position is the image view base
+plus a small margin.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_physicalIntensities" class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l91"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:91</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      physicalIntensities: Number
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The physical space voxel values about the current coordinate.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_physicalIntensitiesLegend" class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l98"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:98</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      physicalIntensitiesLegend: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The physical intensity gradient chart legend.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_placeHolder" class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l62"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:62</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      placeHolder: String
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The place-holder object for the display title and home
+navigation project.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_project" class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l171"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:171</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      project: String
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The project name.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_routeParams" class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l54"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:54</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      routeParams: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The route parameters are retained in case the session or
+volume changes.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_sessionSliderConfig" class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l142"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:142</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      sessionSliderConfig: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The session slider configuration.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_timePointIntensities" class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l84"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:84</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      timePointIntensities: Number
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The current coordinate time series voxel values.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_timePointSliderConfig" class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l135"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:135</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      timePointSliderConfig: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The time point slider configuration.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_timePointSliderHeight" class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l127"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:127</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      timePointSliderHeight: Number
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The vertical time point slider height is calculated
+to span the image view height minus a small margin.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_volume" class="title">
+    <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l77"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:77</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      volume: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The loaded volume REST object.</p>
+</div>
+
+</div>
+    </div>
+
+
+
+  <div id="methods public">
+    <h2 id="public-methods">Public Methods</h2>
+<div class="method item">
+    <div id="method_bodyInnerWidth" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l645"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:645</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            bodyInnerWidth( ): 
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The body width exclusive of the 15px left and right paddding.</p>
+</div>
+
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          
+          <span class="return-description"><p>the body inner width in pixels</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item">
+    <div id="method_calculateIntensityGradientWidth" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l685"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:685</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            calculateIntensityGradientWidth( ): 
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"></div>
+
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          
+          <span class="return-description"><p>the preferred gradient width</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item">
+    <div id="method_calculateTimePointSliderHeight" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l668"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:668</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            calculateTimePointSliderHeight(imageViewHeight): 
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The slider height is the image view height less the
+title and player heights.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>imageViewHeight</td>
+              <td>Number</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td> </td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          
+          <span class="return-description"><p>the preferred slider height</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item">
+    <div id="method_clearError" class="title">
+        <span class="source-link"><a href="../files/build_src_page_page.component.ts.html#l53"><code>build&#x2F;src&#x2F;page&#x2F;page.component.ts:53</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            clearError( )
+        </h3>
+    </div>
+
+        <div class="inherited">
+          Inherited from <a href="../classes/PageComponent.html#method_clearError" class="crosslink">PageComponent</a>
+        </div>
+
+
+    <div class="method-description"><p>Unsets the error property.</p>
+</div>
+
+
+
+
+</div>
+<div class="method item">
+    <div id="method_constructor" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l192"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:192</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            constructor( )
+        </h3>
+    </div>
+
+      <div class="overwrites">
+        Overwrites <a href="../classes/PageComponent.html#method_constructor" class="crosslink">PageComponent.constructor</a>
+      </div>
+
+
+    <div class="method-description"><p>Fetches the volume specified by the route parameters as
+described in
+<a href="../classes/VolumeComponent.html#method_getVolume" class="crosslink">getVolume</a>.</p>
+</div>
+
+
+
+
+</div>
+<div class="method item">
+    <div id="method_getVolume" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l743"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:743</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            getVolume(params)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Fetches the volume specified by the given parameters.
+This method sets the
+<a href="../classes/VolumeComponent.html#property_volume" class="crosslink">volume</a> to
+a <a href="../classes/VolumeService.html#method_placeHolder" class="crosslink">placeHolder</a> and then
+attempts to fetch the specified object. If successful, the
+<a href="../classes/VolumeComponent.html#property_volume" class="crosslink">volume</a> is
+set to the fetched object. Otherwise, this component's
+<a href="../classes/PageComponent.html#property_error" class="crosslink">error</a> is
+set to an error message, which is then displayed in a pop-up.</p>
+<p>Setting the
+<a href="../classes/VolumeComponent.html#property_volume" class="crosslink">volume</a>
+property value triggers the image component image load. When
+the image is loaded the
+PageComponent/onLoaded callback
+notifies the choosers.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>params</td>
+              <td>Object</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the search parameters</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method_gutterWidth" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l656"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:656</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            gutterWidth( ): 
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The gutters on either side of the image display are 20%
+of the
+<a href="../classes/VolumeComponent.html#method_bodyInnerWidth" class="crosslink">bodyInnerWidth</a>.</p>
+</div>
+
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          
+          <span class="return-description"><p>the width of the gutter in pixels</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item">
+    <div id="method_imageViewHeight" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l622"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:622</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            imageViewHeight( ): 
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Mimic the Papaya container height = body width / 1.5.
+The Papaya parent element width is specified in the
+CSS as 60% of the body width.</p>
+<p>Nothing is laid out when this method is initially called,
+so we can't rely on
+<a href="../classes/PapayaService.html#method_viewerDimensions" class="crosslink">viewerDimensions</a>.</p>
+</div>
+
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          
+          <span class="return-description"><p>the image view height truncated to the nearest
+integer</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item">
+    <div id="method_onCoordinateChanged" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l403"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:403</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            onCoordinateChanged(coordinate)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Sets the
+VolumeComponent/intensities:property
+property for the new coordinate.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>coordinate</td>
+              <td>Object</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the new coordinate</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method_onError" class="title">
+        <span class="source-link"><a href="../files/build_src_page_page.component.ts.html#l39"><code>build&#x2F;src&#x2F;page&#x2F;page.component.ts:39</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            onError(message)
+        </h3>
+    </div>
+
+        <div class="inherited">
+          Inherited from <a href="../classes/PageComponent.html#method_onError" class="crosslink">PageComponent</a>
+        </div>
+
+
+    <div class="method-description"><p>Sets the error property which triggers the error pop-pup.
+The subclass has the responsibility of binding an error event
+to this handler, e.g.:</p>
+<pre class="code prettyprint"><code>qi-some-directive((error)="onError($event)")</code></pre>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>message</td>
+              <td>String</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the error messaage</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method_onLoaded" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l244"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:244</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            onLoaded(volume)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Sets the
+<a href="../classes/VolumeComponent.html#property_volume" class="crosslink">volume</a>
+property to notify the respective choosers.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>volume</td>
+              <td>Object</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the loaded volume</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method_onLoadError" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l281"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:281</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            onLoadError(message)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Turn off any active player and display the standard error
+pop-up.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>message</td>
+              <td>String</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the error message</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method_onResize" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l217"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:217</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            onResize( )
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Adjusts the slider and intensity chart placement and dimensions.</p>
+</div>
+
+
+
+
+</div>
+<div class="method item">
+    <div id="method_onSessionRequest" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l362"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:362</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            onSessionRequest(request)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Replaces the current
+<a href="../classes/VolumeComponent.html#property_volume" class="crosslink">volume</a>
+with a comparable session image sequence volume. The volume
+hierarchy is the same except for the session number. The request
+can be the session number, <code>previous</code> or <code>next</code>.</p>
+<p>For example, if the current volume has hierarchy:</p>
+<pre class="code prettyprint"><code>/QIN/Breast/Subject008/Session01/scan/1/registration/1/volume003
+</code></pre>
+<p>and the requested session number is <code>2</code>, then the new volume is"</p>
+<pre class="code prettyprint"><code>/QIN/Breast/Subject008/Session02/scan/1/registration/1/volume003
+</code></pre>
+<p>This change resets the title by virtue of loading the
+new session but does not reroute the app or change the page.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>request</td>
+              <td>String | Number</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the number request</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method_onTimePointRequest" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l310"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:310</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            onTimePointRequest(request)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Fetches the requested volume. The request can be the
+number, <code>previous</code> or <code>next</code>.</p>
+<p>This change resets the title by virtue of loading the
+volume but does not reroute the app or change the page.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>request</td>
+              <td>String | Number</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the number request</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item">
+    <div id="method_openPhysicalIntensityHelp" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l424"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:424</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            openPhysicalIntensityHelp( )
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Shows the Physical Intensity Gradient modal help pop-up.</p>
+</div>
+
+
+
+
+</div>
+<div class="method item">
+    <div id="method_openTimePointIntensityHelp" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l438"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:438</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            openTimePointIntensityHelp( )
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Shows the Time Point Intensity Gradient modal help pop-up.</p>
+</div>
+
+
+
+
+</div>
+<div class="method item">
+    <div id="method_sessionCount" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l352"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:352</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            sessionCount( ): Number
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"></div>
+
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type">Number</span>
+          <span class="return-description"><p>the number of parent subject sessions</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item">
+    <div id="method_volumeCount" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l300"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:300</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            volumeCount( ): Number
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"></div>
+
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type">Number</span>
+          <span class="return-description"><p>the number of volume parent images</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+  </div>
+
+
+    <div id="methods private">
+        <h2 id="private-methods">Private Methods</h2>
+<div class="method item private">
+    <div id="method_calibrateStyles" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l227"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:227</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            calibrateStyles( )
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Sets the following style properties:</p>
+<ul>
+<li><a href="../classes/VolumeComponent.html#property_timePointSliderHeight" class="crosslink">timePointSliderHeight</a></li>
+<li>VolumeComponent/intensityGradientsBottom:property</li>
+<li>VolumeComponent/intensityGradientsWidth:property</li>
+</ul>
+</div>
+
+
+
+
+</div>
+<div class="method item private">
+    <div id="method_createPhysicalIntensitiesFactory" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l571"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:571</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            createPhysicalIntensitiesFactory( ): Function
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Makes the <em>coordinate</em> =&gt; {<em>orientation</em>: <em>intensities</em>, ...}
+function, where</p>
+<ul>
+<li><em>orientation</em> is <code>axial</code>, <code>coronal</code> or <code>sagittal</code></li>
+<li><em>intensities</em> is the voxel values over the
+<a href="../classes/VolumeComponent.html#property_PHYSICAL_GRADIENT_DOMAIN" class="crosslink">PHYSICAL_GRADIENT_DOMAIN</a>
+offset from the <em>coordinate</em> <em>orientation</em> x, y or z index.</li>
+</ul>
+</div>
+
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type">Function</span>
+          <span class="return-description"><p>the gradient voxel values factory</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item private">
+    <div id="method_pipDensity" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l496"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:496</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            pipDensity(count): Number
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The pip density is the larger of 10 or (100 / <em>count</em>()).</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>count</td>
+              <td>Number</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the number of slider values</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type">Number</span>
+          <span class="return-description"><p>the preferred pip density</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item private">
+    <div id="method_pipFilter" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l510"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:510</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            pipFilter(count, value): Number
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>The <em>value</em> =&gt; 0|1|2 slider pip function, where</p>
+<ul>
+<li>0 =&gt; don't show the value</li>
+<li>1 =&gt; show a value in large text</li>
+<li>2 =&gt; show a value in small text</li>
+</ul>
+<p>The values in large text are as follows:</p>
+<ul>
+<li>the start and end</li>
+<li>if there are 5 or fewer values, then all remaining values</li>
+<li>if there are 6-20 values, then every fifth value</li>
+<li>if there are more than 20 values, then every tenth value
+The remaining values are in small text, unless there are more
+than 20 values, in which case only intermittent values are
+displayed in small text and the remaining values are not
+displayed next to their pip.</li>
+</ul>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>count</td>
+              <td>() => number</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>a function returning the number of
+slider values</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>value</td>
+              <td>Number</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the input slider value</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type">Number</span>
+          <span class="return-description"><p>the pip display designator</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item private">
+    <div id="method_requestedSessionNumber" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l719"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:719</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            requestedSessionNumber(request)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Determines the requested session number. The request
+can be the number, <code>previous</code> or <code>next</code>.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>request</td>
+              <td>String | Number</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the number request</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+<div class="method item private">
+    <div id="method_timePointRequestVolume" class="title">
+        <span class="source-link"><a href="../files/build_src_volume_volume.component.ts.html#l695"><code>build&#x2F;src&#x2F;volume&#x2F;volume.component.ts:695</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            timePointRequestVolume(request)
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Determines the requested volume number. The request
+can be the number, <code>previous</code> or <code>next</code>.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>request</td>
+              <td>String | Number</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the number request</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+
+
+</div>
+    </div>
+
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>

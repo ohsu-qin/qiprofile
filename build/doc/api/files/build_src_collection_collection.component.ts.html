@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>build/src/collection/collection.component.ts - qiprofile API</title>
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="http://yui.yahooapis.com/combo?3.8.0pr2/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div class="yui3-g">
+        <div id="sidebar" class="yui3-u">
+            <div class="logo">
+              <a href="../index.html">
+                  qiprofile API
+              </a>
+            </div>
+            
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/clinical.html">clinical</a>
+                            </li>
+                            <li><a href="../modules/collection.html">collection</a>
+                            </li>
+                            <li><a href="../modules/collections.html">collections</a>
+                            </li>
+                            <li><a href="../modules/common.html">common</a>
+                            </li>
+                            <li><a href="../modules/configuration.html">configuration</a>
+                            </li>
+                            <li><a href="../modules/controls.html">controls</a>
+                            </li>
+                            <li><a href="../modules/data.html">data</a>
+                            </li>
+                            <li><a href="../modules/date.html">date</a>
+                            </li>
+                            <li><a href="../modules/error.html">error</a>
+                            </li>
+                            <li><a href="../modules/file.html">file</a>
+                            </li>
+                            <li><a href="../modules/help.html">help</a>
+                            </li>
+                            <li><a href="../modules/home.html">home</a>
+                            </li>
+                            <li><a href="../modules/image.html">image</a>
+                            </li>
+                            <li><a href="../modules/imageSequence.html">imageSequence</a>
+                            </li>
+                            <li><a href="../modules/main.html">main</a>
+                            </li>
+                            <li><a href="../modules/object.html">object</a>
+                            </li>
+                            <li><a href="../modules/page.html">page</a>
+                            </li>
+                            <li><a href="../modules/project.html">project</a>
+                            </li>
+                            <li><a href="../modules/projects.html">projects</a>
+                            </li>
+                            <li><a href="../modules/rest.html">rest</a>
+                            </li>
+                            <li><a href="../modules/roman.html">roman</a>
+                            </li>
+                            <li><a href="../modules/session.html">session</a>
+                            </li>
+                            <li><a href="../modules/string.html">string</a>
+                            </li>
+                            <li><a href="../modules/subject.html">subject</a>
+                            </li>
+                            <li><a href="../modules/testing.html">testing</a>
+                            </li>
+                            <li><a href="../modules/visualization.html">visualization</a>
+                            </li>
+                            <li><a href="../modules/volume.html">volume</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/AppComponent.html">AppComponent</a></li>
+                            <li><a href="../classes/AppModule.html">AppModule</a></li>
+                            <li><a href="../classes/Breast.html">Breast</a></li>
+                            <li><a href="../classes/BreastNormalizedAssay.html">BreastNormalizedAssay</a></li>
+                            <li><a href="../classes/BreastPathology.html">BreastPathology</a></li>
+                            <li><a href="../classes/CascadeSelectComponent.html">CascadeSelectComponent</a></li>
+                            <li><a href="../classes/ClinicalEncounter.html">ClinicalEncounter</a></li>
+                            <li><a href="../classes/CollectionActivatedRouteStub.html">CollectionActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionComponent.html">CollectionComponent</a></li>
+                            <li><a href="../classes/CollectionComponentSpec.html">CollectionComponentSpec</a></li>
+                            <li><a href="../classes/CollectionItemComponent.html">CollectionItemComponent</a></li>
+                            <li><a href="../classes/CollectionListPage.html">CollectionListPage</a></li>
+                            <li><a href="../classes/CollectionListSpec.html">CollectionListSpec</a></li>
+                            <li><a href="../classes/CollectionModule.html">CollectionModule</a></li>
+                            <li><a href="../classes/CollectionRouterStub.html">CollectionRouterStub</a></li>
+                            <li><a href="../classes/CollectionsActivatedRouteStub.html">CollectionsActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionsComponent.html">CollectionsComponent</a></li>
+                            <li><a href="../classes/CollectionsComponentSpec.html">CollectionsComponentSpec</a></li>
+                            <li><a href="../classes/CollectionsHelpComponent.html">CollectionsHelpComponent</a></li>
+                            <li><a href="../classes/CollectionsHelpServiceStub.html">CollectionsHelpServiceStub</a></li>
+                            <li><a href="../classes/CollectionsHelpTextComponent.html">CollectionsHelpTextComponent</a></li>
+                            <li><a href="../classes/CollectionsModule.html">CollectionsModule</a></li>
+                            <li><a href="../classes/CollectionsResource.html">CollectionsResource</a></li>
+                            <li><a href="../classes/CollectionsService.html">CollectionsService</a></li>
+                            <li><a href="../classes/CollectionsServiceStub.html">CollectionsServiceStub</a></li>
+                            <li><a href="../classes/CollectionSubectServiceStub.html">CollectionSubectServiceStub</a></li>
+                            <li><a href="../classes/ColorBarDirective.html">ColorBarDirective</a></li>
+                            <li><a href="../classes/CommonModule.html">CommonModule</a></li>
+                            <li><a href="../classes/ConfigurationService.html">ConfigurationService</a></li>
+                            <li><a href="../classes/ConfigurationServiceSpec.html">ConfigurationServiceSpec</a></li>
+                            <li><a href="../classes/ControlsModule.html">ControlsModule</a></li>
+                            <li><a href="../classes/CorrelationComponent.html">CorrelationComponent</a></li>
+                            <li><a href="../classes/DateHelper.html">DateHelper</a></li>
+                            <li><a href="../classes/DateHelperSpec.html">DateHelperSpec</a></li>
+                            <li><a href="../classes/Encounter.html">Encounter</a></li>
+                            <li><a href="../classes/ErrorComponent.html">ErrorComponent</a></li>
+                            <li><a href="../classes/FileService.html">FileService</a></li>
+                            <li><a href="../classes/FileServiceSpec.html">FileServiceSpec</a></li>
+                            <li><a href="../classes/Findable.html">Findable</a></li>
+                            <li><a href="../classes/HelpComponent.html">HelpComponent</a></li>
+                            <li><a href="../classes/HelpService.html">HelpService</a></li>
+                            <li><a href="../classes/HomeComponent.html">HomeComponent</a></li>
+                            <li><a href="../classes/IamgeSequenceService.html">IamgeSequenceService</a></li>
+                            <li><a href="../classes/Image.html">Image</a></li>
+                            <li><a href="../classes/ImageComponent.html">ImageComponent</a></li>
+                            <li><a href="../classes/ImageModule.html">ImageModule</a></li>
+                            <li><a href="../classes/ImageSequence.html">ImageSequence</a></li>
+                            <li><a href="../classes/ImageSequenceServiceSpec.html">ImageSequenceServiceSpec</a></li>
+                            <li><a href="../classes/ImageSequenceSessionServiceStub.html">ImageSequenceSessionServiceStub</a></li>
+                            <li><a href="../classes/ImageSequenceSpec.html">ImageSequenceSpec</a></li>
+                            <li><a href="../classes/ImageStore.html">ImageStore</a></li>
+                            <li><a href="../classes/LabelMap.html">LabelMap</a></li>
+                            <li><a href="../classes/Modeling.html">Modeling</a></li>
+                            <li><a href="../classes/ModelingResult.html">ModelingResult</a></li>
+                            <li><a href="../classes/ModelingResults.html">ModelingResults</a></li>
+                            <li><a href="../classes/ObjectHelper.html">ObjectHelper</a></li>
+                            <li><a href="../classes/Page.html">Page</a></li>
+                            <li><a href="../classes/PageComponent.html">PageComponent</a></li>
+                            <li><a href="../classes/PageModule.html">PageModule</a></li>
+                            <li><a href="../classes/PapayaService.html">PapayaService</a></li>
+                            <li><a href="../classes/ParameterResult.html">ParameterResult</a></li>
+                            <li><a href="../classes/Pathology.html">Pathology</a></li>
+                            <li><a href="../classes/PlayerComponent.html">PlayerComponent</a></li>
+                            <li><a href="../classes/ProjectItemComponent.html">ProjectItemComponent</a></li>
+                            <li><a href="../classes/ProjectListPage.html">ProjectListPage</a></li>
+                            <li><a href="../classes/ProjectListSpec.html">ProjectListSpec</a></li>
+                            <li><a href="../classes/ProjectsComponent.html">ProjectsComponent</a></li>
+                            <li><a href="../classes/ProjectsComponentSpec.html">ProjectsComponentSpec</a></li>
+                            <li><a href="../classes/ProjectsHelpComponent.html">ProjectsHelpComponent</a></li>
+                            <li><a href="../classes/ProjectsHelpServiceStub.html">ProjectsHelpServiceStub</a></li>
+                            <li><a href="../classes/ProjectsHelpTextComponent.html">ProjectsHelpTextComponent</a></li>
+                            <li><a href="../classes/ProjectsModule.html">ProjectsModule</a></li>
+                            <li><a href="../classes/ProjectsResource.html">ProjectsResource</a></li>
+                            <li><a href="../classes/ProjectsService.html">ProjectsService</a></li>
+                            <li><a href="../classes/ProjectsServiceStub.html">ProjectsServiceStub</a></li>
+                            <li><a href="../classes/PropertyTableComponent.html">PropertyTableComponent</a></li>
+                            <li><a href="../classes/RCB.html">RCB</a></li>
+                            <li><a href="../classes/Registration.html">Registration</a></li>
+                            <li><a href="../classes/RegistrationSpec.html">RegistrationSpec</a></li>
+                            <li><a href="../classes/REST.html">REST</a></li>
+                            <li><a href="../classes/RestResource.html">RestResource</a></li>
+                            <li><a href="../classes/RESTSpec.html">RESTSpec</a></li>
+                            <li><a href="../classes/Roman.html">Roman</a></li>
+                            <li><a href="../classes/RomanSpec.html">RomanSpec</a></li>
+                            <li><a href="../classes/Sarcoma.html">Sarcoma</a></li>
+                            <li><a href="../classes/Scan.html">Scan</a></li>
+                            <li><a href="../classes/ScanSpec.html">ScanSpec</a></li>
+                            <li><a href="../classes/ScatterPlotDirective.html">ScatterPlotDirective</a></li>
+                            <li><a href="../classes/Session.html">Session</a></li>
+                            <li><a href="../classes/SessionActivatedRouteStub.html">SessionActivatedRouteStub</a></li>
+                            <li><a href="../classes/SessionComponent.html">SessionComponent</a></li>
+                            <li><a href="../classes/SessionComponentSpec.html">SessionComponentSpec</a></li>
+                            <li><a href="../classes/SessionDetailResource.html">SessionDetailResource</a></li>
+                            <li><a href="../classes/SessionDetailResourceStub.html">SessionDetailResourceStub</a></li>
+                            <li><a href="../classes/SessiondRouterStub.html">SessiondRouterStub</a></li>
+                            <li><a href="../classes/SessionModule.html">SessionModule</a></li>
+                            <li><a href="../classes/SessionService.html">SessionService</a></li>
+                            <li><a href="../classes/SessionServiceSpec.html">SessionServiceSpec</a></li>
+                            <li><a href="../classes/SessionServiceStub.html">SessionServiceStub</a></li>
+                            <li><a href="../classes/SessionSpec.html">SessionSpec</a></li>
+                            <li><a href="../classes/SessionSubjectResourceStub.html">SessionSubjectResourceStub</a></li>
+                            <li><a href="../classes/SessionTumorExtent.html">SessionTumorExtent</a></li>
+                            <li><a href="../classes/SliderDirective.html">SliderDirective</a></li>
+                            <li><a href="../classes/SparkLineDirective.html">SparkLineDirective</a></li>
+                            <li><a href="../classes/StringHelper.html">StringHelper</a></li>
+                            <li><a href="../classes/StringHelperSpec.html">StringHelperSpec</a></li>
+                            <li><a href="../classes/Subject.html">Subject</a></li>
+                            <li><a href="../classes/SubjectActivatedRouteStub.html">SubjectActivatedRouteStub</a></li>
+                            <li><a href="../classes/SubjectChangeDetectorRefStub.html">SubjectChangeDetectorRefStub</a></li>
+                            <li><a href="../classes/SubjectComponent.html">SubjectComponent</a></li>
+                            <li><a href="../classes/SubjectComponentSpec.html">SubjectComponentSpec</a></li>
+                            <li><a href="../classes/SubjectdRouterStub.html">SubjectdRouterStub</a></li>
+                            <li><a href="../classes/SubjectModule.html">SubjectModule</a></li>
+                            <li><a href="../classes/SubjectResource.html">SubjectResource</a></li>
+                            <li><a href="../classes/SubjectResourceStub.html">SubjectResourceStub</a></li>
+                            <li><a href="../classes/SubjectService.html">SubjectService</a></li>
+                            <li><a href="../classes/SubjectServiceSpec.html">SubjectServiceSpec</a></li>
+                            <li><a href="../classes/SubjectServiceStub.html">SubjectServiceStub</a></li>
+                            <li><a href="../classes/SubjectSpec.html">SubjectSpec</a></li>
+                            <li><a href="../classes/Table.html">Table</a></li>
+                            <li><a href="../classes/TimeSeries.html">TimeSeries</a></li>
+                            <li><a href="../classes/TNM.html">TNM</a></li>
+                            <li><a href="../classes/ToggleHelpComponent.html">ToggleHelpComponent</a></li>
+                            <li><a href="../classes/VisualizationModule.html">VisualizationModule</a></li>
+                            <li><a href="../classes/Volume.html">Volume</a></li>
+                            <li><a href="../classes/VolumeComponent.html">VolumeComponent</a></li>
+                            <li><a href="../classes/VolumeDetailPage.html">VolumeDetailPage</a></li>
+                            <li><a href="../classes/VolumeImageSequenceServiceStub.html">VolumeImageSequenceServiceStub</a></li>
+                            <li><a href="../classes/VolumeModule.html">VolumeModule</a></li>
+                            <li><a href="../classes/VolumeService.html">VolumeService</a></li>
+                            <li><a href="../classes/VolumeServiceSpec.html">VolumeServiceSpec</a></li>
+                            <li><a href="../classes/VolumeSpec.html">VolumeSpec</a></li>
+                            <li><a href="../classes/XNAT.html">XNAT</a></li>
+                            <li><a href="../classes/XNATSpec.html">XNATSpec</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            
+            
+            
+            <div class="version-info">
+              Version: 2.1.1
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><div class="title">
+  <h1 class="file-name">build/src/collection/collection.component.ts</h1>
+</div>
+
+<pre class="code prettyprint linenums">
+import * as _ from &#x27;lodash&#x27;;
+import * as d3 from &#x27;d3&#x27;;
+import { Component } from &#x27;@angular/core&#x27;;
+import { Router, ActivatedRoute } from &#x27;@angular/router&#x27;;
+
+import ObjectHelper from &#x27;../object/object-helper.coffee&#x27;;
+import {
+  ConfigurationService
+} from &#x27;../configuration/configuration.service.ts&#x27;;
+import { PageComponent } from &#x27;../page/page.component.ts&#x27;;
+import { SubjectService } from &#x27;../subject/subject.service.ts&#x27;;
+import help from &#x27;./collection.help.md&#x27;;
+
+// The D3 v4 symbols
+// (cf. https://github.com/d3/d3-shape/blob/master/README.md#symbols).
+// The symbols are sorted by inverse preference.
+const SYMBOL_TYPES = [
+  d3.symbolCircle, d3.symbolDiamond, d3.symbolStar, d3.symbolTriangle,
+  d3.symbolSquare, d3.symbolCross, d3.symbolWye
+];
+
+@Component({
+  selector: &#x27;qi-collection&#x27;,
+  templateUrl: &#x27;/public/html/collection/collection.html&#x27;
+})
+
+/**
+ * The Collection Detail main component.
+ *
+ * @class CollectionComponent
+ * @module collection
+ */
+export class CollectionComponent extends PageComponent {
+  /**
+   * The project name.
+   *
+   * @property project {string}
+   */
+  project: string;
+
+  /**
+   * The collection name.
+   *
+   * @property name {string}
+   */
+  name: string;
+
+  /**
+   * The subject session objects.
+   *
+   * @property sessions {Object[]}
+   */
+  sessions: Object[];
+
+  /**
+   * The session display state array (or null to display
+   * all session data).
+   *
+   * @property domainSelection {boolean[]}
+   */
+  domainSelection: boolean[];
+
+  /**
+   * The data =&gt; symbol type method.
+   *
+   * @property symbolType {(d: Object) =&gt; string}
+   */
+  symbolType = d =&gt; this._symbolType(d);
+
+  /**
+   * The sessions chart margin is scooched down to allow room
+   * for the Y axis label at the top.
+   *
+   * @property sessionsChartMargin {number[]}
+   */
+  const sessionsChartMargin = [12, 0, 0, 12];
+
+  /**
+   * The subject vs visit day sessions chart {x, y, height}
+   * configuration. The X and Y values are constants.
+   * The height is determined after the sessions are fetched
+   * from the database, alloting 24 pixels per subject.
+   *
+   * @property sessionsChart {Object}
+   */
+  sessionsChart: Object = {
+    x: {property: &#x27;day&#x27;, legend: &#x27;Day&#x27;},
+    y: {property: &#x27;subject.number&#x27;, legend: &#x27;Subject&#x27;}
+  };
+
+  /**
+   * The axis callback sets the axis label and ticks.
+   *
+   * @method _onAxis
+   * @private
+   * @param property {string} the axis property
+   * @param axis {Object} the D3 axis object
+   */
+  onSessionsChartAxis = (property, axis) =&gt; {
+    // Wrap the private function in this fat arrow function
+    // to ensure that &#x60;this&#x60; binds correctly.
+    this._onSessionsChartAxis(property, axis);
+  };
+
+  /**
+   * The correlation chart height apportions the remainder
+   * of the usable real estate.
+   *
+   * @property correlationChartHeight {number}
+   */
+  correlationChartHeight: number;
+
+  /**
+   * The initial correlation chart {x, y} [[topic, label], ...] array,
+   * one item per chart.
+   *
+   * @property correlations {Object[]}
+   */
+  correlations: Object[];
+
+  /**
+   * The {topic: {label: path}} correlation choices.
+   *
+   * @property propertyChoices {Object}
+   */
+  propertyChoices: Object;
+
+  /**
+   * The discrete property {path: {value: label}} tick label choices.
+   *
+   * @property valueChoices {Object}
+   */
+  valueChoices: Object;
+
+  /**
+   * The subject objects.
+   *
+   * @property subjects {Object[]}
+   * @private
+   */
+  private subjects: Object[];
+
+  /**
+   * The {path: domain} associative object for the displayable
+   * properties.
+   *
+   * @property domains
+   */
+  domains: Object[];
+
+  /**
+   * Flag indicating whether the domain selection is
+   * based on the subject checkboxes.
+   *
+   * @property isCheckboxSelection {boolean}
+   * @private
+   */
+  private isCheckboxSelection: boolean;
+
+  /**
+   * The properties to exclude.
+   *
+   * @property exclude {string[]}
+   * @private
+   */
+  private exclude: string[];
+
+  /**
+   * The SVG element.
+   *
+   * @property svg {d3.Selection&lt;any&gt;}
+   * @private
+   */
+  private svg: d3.Selection&lt;any&gt;;
+
+  /**
+   * The tick values for a subject number axis.
+   *
+   * @property subjectAxisTickValues
+   * @private
+   */
+  private subjectAxisTickValues: number[];
+
+  constructor(
+    // private elementRef: ElementRef,
+    private router: Router,
+    private route: ActivatedRoute,
+    private subjectService: SubjectService,
+    private configService: ConfigurationService
+  ) {
+    super(help);
+    // The project and collection name are displayed in the banner.
+    let params = route.params.value;
+    this.project = params.project;
+    this.name = params.collection;
+    // Fetch the subjects.
+    subjectService.getSubjects(
+      this.project, this.name
+    ).do(subjects =&gt; {
+      this.subjects = subjects;
+    }).map(subjects =&gt; {
+      // Collect the sessions.
+      return _.flow(_.map, _.flatten)(
+        subjects, &#x27;sessions&#x27;
+      );
+    }).subscribe(sessions =&gt; {
+      this.sessions = sessions;
+      // Initialize the charts.
+      this.initSessionChart();
+      this.initCorrelationCharts();
+    });
+  }
+
+  /**
+   * The symbol is specific to the session number.
+   *
+   * @method symbolType
+   * @param d {Object} the session object
+   * @return {string} the session number symbol type
+   */
+  symbolType(d: Object) {
+    return d.number - 1;
+  }
+
+  /**
+   * The session chart callback adds axis labels and subject
+   * hyperlinks.
+   *
+   * @method onSessionsChartPlotted
+   * @param svg {Object} the root SVG group D3 selection
+   */
+   onSessionsChartPlotted(svg: Object) {
+    // Capture the SVG element for use when clearing the checkboxes.
+    this.svg = svg;
+    // Make the X axis legend.
+    let xData = [[100, 10, this.sessionsChart.x.legend]];
+    svg.selectAll(&#x27;text.x.legend&#x27;)
+      .data(xData)
+      .enter().append(&#x27;text&#x27;)
+        .attr(&#x27;class&#x27;, &#x27;legend x&#x27;)
+        .text(d =&gt; d[2])
+        .attr(&#x27;x&#x27;, d =&gt; d[0])
+        .attr(&#x27;y&#x27;, d =&gt; d[1]);
+
+    // Make the Y axis legend.
+    let yData = [[this.sessionsChart.y.legend]];
+    let y = Math.max(80, Math.floor(this.sessionsChart.height / 3));
+    svg.selectAll(&#x27;text.y.legend&#x27;)
+      .data(yData)
+      .enter().append(&#x27;text&#x27;)
+        .attr(&#x27;class&#x27;, &#x27;legend y&#x27;)
+        .attr(&#x27;transform&#x27;, &#x60;translate(10,${ y })rotate(-90)&#x60;)
+        .text(d =&gt; d[0]);
+
+    // Open the Subject Detail page when the Y axis subject tick
+    // mark is clicked. The argument is the subect number string
+    // tick text. Convert the string to a number before calling
+    // visitSubject.
+    let onSubjectClick = d =&gt; this.visitSubject(+d);
+    svg.selectAll(&#x27;g.y.axis .tick text&#x27;)
+      .on(&#x27;click&#x27;, onSubjectClick);
+
+    // Flip the corresponding domain selection flag when a
+    // subject checkbox is clicked. If a checkbox select is
+    // active, then augment the domain selection. Otherwise,
+    // activate a new checkbox select and select only the
+    // domain sessions for the checked subject.
+    let onCheckboxClick = value =&gt; {
+      let subjectNbr = +value;
+      let matchesSubject = d =&gt; d.subject.number === subjectNbr;
+      let isSelected;
+      if (this.isCheckboxSelection) {
+        isSelected = (d, i) =&gt;
+          this.domainSelection[i] || matchesSubject(d);
+      } else {
+        isSelected = matchesSubject;
+        this.isCheckboxSelection = true;
+      }
+      this.domainSelection = this.sessions.map(isSelected);
+    };
+    // Add the Y axis checkboxes. The pixel values are &#x27;just so&#x27;
+    // a posteriori numbers determined by visual inspection with
+    // no a priori justification.
+    svg.selectAll(&#x27;g.y.axis g.tick&#x27;)
+      .append(&#x27;g&#x27;)
+        .attr(&#x27;transform&#x27;, &#x27;translate(-32, -7)&#x27;)
+        .append(&#x27;foreignObject&#x27;)
+          .attr(&#x27;width&#x27;, 10)
+          .attr(&#x27;height&#x27;, 10)
+          .append(&#x27;xhtml:input&#x27;)
+            .attr(&#x27;type&#x27;, &#x27;checkbox&#x27;)
+            .on(&#x27;click&#x27;, onCheckboxClick);
+  }
+
+  /**
+   * Relays a brush selection to all charts.
+   *
+   * @method onBrushSelect
+   * @param selection {boolean[]} the selection state array
+   */
+  onBrushSelect(selection: boolean[]) {
+    // Relay the selection to the child charts.
+    this.domainSelection = selection;
+    // Cancel an active checkbox select.
+    if (this.isCheckboxSelection) {
+      this.isCheckboxSelection = false;
+      this.svg.selectAll(&#x27;g.y.axis g.tick [type=&quot;checkbox&quot;]&#x27;)
+        .property(&#x27;checked&#x27;, false);
+    }
+  }
+
+  /**
+   * Delegates to
+   * {{#crossLink &quot;ConfigurationService/getTextLabel&quot;}}{{/crossLink}},
+   *
+   * @method getLabel
+   * @param property {string} the property path
+   * @return {string} the display text label
+   */
+  private getLabel(property: string) {
+    return this.configService.getTextLabel(property, this.name);
+  }
+
+  /**
+   * Returns the D3 symbol type for the given data.
+   *
+   * @method symbolType
+   * @param d {Object} the session object
+   */
+  private _symbolType(d: Object) {
+    let i = Math.min(d.number - 1, SYMBOL_TYPES.length);
+    return SYMBOL_TYPES[i];
+  }
+
+  /**
+   * Opens the Subect Detail page.
+   *
+   * @method visitSubject
+   * @param subjectNbr {number} the subject number
+   */
+  private visitSubject(subjectNbr) {
+    // The subjects are ordered by number.
+    let subject = this.subjects[subjectNbr - 1];
+    // Cache the subject to avoid a refetch.
+    this.subjectService.cache(subject);
+    // Go to the Subect Detail page.
+    this.router.navigate(
+      [&#x27;subject&#x27;, subjectNbr],
+      {relativeTo: this.route}
+    );
+  }
+
+  private initSessionChart() {
+    // Each subject has a tick mark.
+    this.subjectAxisTickValues = _.range(1, this.subjects.length + 1);
+    let yTickCnt = this.subjectAxisTickValues.length;
+    // The axis vertical padding.
+    const axisPad = 8;
+    // The axis legend character size.
+    const legendCharSize = 12;
+    // The subject tick button size.
+    const tickCharSize = 18;
+    // The sessions chart vertical legend size.
+    let yLegend = this.sessionsChart.y.legend;
+    let yLegendSize = (yLegend.length * legendCharSize) + axisPad;
+    // The sessions chart plot vertical size.
+    let plotHeight = yTickCnt * tickCharSize;
+    // The sessions chart accomodates both the axis label and the
+    // session buttons along the axis, along with a small padding.
+    let height = Math.max(yLegendSize, plotHeight);
+    this.sessionsChart.height = height;
+  }
+
+  private initCorrelationCharts() {
+    // Acquire the excludes from the preferences configuration.
+    let prefConfig = this.configService.preferences.Collection;
+    let prefExcludes = prefConfig.exclude;
+    if (prefExcludes) {
+      this.exclude = prefExcludes.split(/,\s*/);
+    }
+
+    // The select {topic: {label: path}} configuration.
+    this.propertyChoices = this.createCorrelationConfiguration();
+    // The select {path: {value: label}} configuration.
+    this.valueChoices = this.configService.valueChoices;
+    // The [[topic, label], ...] configuration.
+    this.correlations = this.initialCorrelationChoices();
+  }
+
+  /**
+   * Makes the initial correlation [[topic, label], ...]
+   * configuration from the preferences configuration [Correlation]
+   * section x and y entries.
+   *
+   * @method initialCorrelationChoices
+   * @private
+   * @return {string[][]} the correlation choices
+   */
+  private initialCorrelationChoices() {
+    // The x and y label preference array is in the preferences
+    // configuration.
+    let prefConfig = this.configService.preferences.Collection;
+    let unparsed = _.pick(prefConfig, &#x27;x&#x27;, &#x27;y&#x27;);
+
+    // Convert the delimited preference strings to arrays.
+    let parse = value =&gt; value.split(/\s*[,;:]\s*/);
+    let parsed = _.mapValues(unparsed, parse);
+
+    // Looks for the labels in the {topic: {label: path}} configuration.
+    let topicWithLabel = label =&gt; {
+      for (let topic in this.propertyChoices) {
+        if (this.propertyChoices[topic][label]) {
+          return topic;
+        }
+      }
+    };
+    //  Makes a path consisting of the topic which contains the
+    // label followed by the label. If the label is not found in
+    // any topic section, then this function throws an error.
+    let qualifyLabel = label =&gt; {
+      let topic = topicWithLabel(label);
+      if (!topic) {
+        // The property selection path was not found; complain.
+        throw new Error(&#x27;The preferences configuration Collection axis &#x27; +
+                        &#x60; label was not found: ${ label }&#x60;);
+      }
+      // Return the topic.label path.
+      return &#x60;${ topic }.${ label }&#x60;;
+    };
+    // The complete, valid preference topic.label paths.
+    let qualifyLabels = labels =&gt; labels.map(qualifyLabel);
+    let preferences = _.mapValues(parsed, qualifyLabels);
+
+    // The X axis preferences.
+    let xPrefs = preferences.x;
+    // The number of X paths.
+    let xPrefCnt = xPrefs.length;
+    // The Y axis preferences.
+    let yPrefs = preferences.y;
+    // The number of Y paths.
+    let yPrefCnt = yPrefs.length;
+    // The number of Clinical x Imaging path combinations.
+    let prefCnt = xPrefCnt * yPrefCnt;
+    // Draw at most four correlation charts.
+    const maxCorrCnt = 4;
+    // The number of correlation charts.
+    let corrCnt = Math.min(prefCnt, maxCorrCnt);
+    // There should be an even number of side-by-side
+    // correlation charts.
+    if (corrCnt &gt; 1 &amp;&amp; corrCnt % 2) { corrCnt--; }
+    // The ith X axis correlation path modulo the X preference count.
+    let xPathAt = i =&gt; xPrefs[i % xPrefCnt];
+    // The ith Y axis correlation path modulo the Y preference count.
+    let yPathAt = i =&gt; yPrefs[i % yPrefCnt];
+    // Pick each X and Y path.
+    let correlationAt = i =&gt; {
+      return {x: xPathAt(i), y: yPathAt(i)};
+    };
+
+    return _.range(corrCnt).map(correlationAt);
+  }
+
+  /**
+   *
+   * @method createCorrelationConfiguration
+   * @private
+   * @return {Object} the chartable property configuration
+   */
+  private createCorrelationConfiguration() {
+    // The clinical {topic: path} associative object.
+    let clinical = this.configService.dataModel.Clinical;
+    // The imaging {topic: path} associative object.
+    let imaging = this.configService.dataModel.Imaging;
+    // The combined top-level {topic: path} associative object.
+    let top = _.assign({}, clinical, imaging);
+    // The top-level paths.
+    let topPaths = _.invert(top);
+
+    // The label lookup to flatten. The lookup is parameterized
+    // by the collection name.
+    let lookup = this.configService.labelLookup[this.name];
+
+    // Converts the path to a lookup section (ignoring the topic).
+    let resolveLookup = (topic, path) =&gt;
+      path === &#x27;this&#x27; ? lookup : _.get(lookup, path);
+    // The top-level lookup {path: section}.
+    let topLookup = _.mapValues(topPaths, resolveLookup);
+
+    let flatten = (accum, section, path) =&gt; {
+      let label = _.get(section, &#x27;_label.text&#x27;);
+      let nonLabel = label ? _.omit(section, &#x27;_label&#x27;) : section;
+      if (label &amp;&amp; _.isEmpty(nonLabel)) {
+        accum[path] = label;
+      } else {
+        let flattenChild = (value, key) =&gt; {
+          let subpath = this.concatPath(key, path);
+          if (!(subpath in topPaths)) {
+            flatten(accum, value, subpath);
+          }
+        };
+        _.forEach(nonLabel, flattenChild);
+      }
+    };
+
+    // Converts the top-level lookup section to a property
+    // {label: path} object.
+    let flattenTop = topPath =&gt; {
+      let section = topLookup[topPath];
+      // Make a root traversal object.
+      let root = {};
+      root[topPath] = section;
+      // Make the {label: path} object.
+      let flattened = _.transform(root, flatten, {});
+      // Add child paths and filter out paths with missing values.
+      let expanded = this.expand(flattened);
+      // Convert the {path: label} to the {label: path} object.
+      return _.invert(expanded);
+    };
+
+    // Return the {topic: config} object.
+    return _.mapValues(top, flattenTop);
+  }
+
+  /**
+   * Returns the {path: label} object for those paths which
+   * have a valid value. A path with an object value is recursively
+   * expanded to include child paths.
+   *
+   * @method expand
+   * @param paths {Object} the object whose keys are the starting paths
+   * @return {Object} the {path: label} lookup
+   */
+  private expand(paths: Object) {
+    // The {path: label} associations collected in the
+    // expansion. Paths to exclude have a pseudo-label
+    // of false. These are filtered out in the method
+    // return.
+    let closure = {};
+
+    // Private properties begin with an underscore, e.g _id.
+    let isPublic = key =&gt; !key.startsWith(&#x27;_&#x27;);
+
+    // Recursively expands subobject paths.
+    let expandObject = (object, path) =&gt; {
+      for (let key in object) {
+        if (isPublic(key)) {
+          let subpath = this.concatPath(key, path);
+          if (!(subpath in closure)) {
+            expandPath(subpath, path);
+          }
+        }
+      }
+    };
+
+    // Expands the session object graph. Every session
+    // is examined for potential property subpaths. If
+    // If the path references a subobject, then the
+    // subobject is expanded. Along the way, the visited
+    // path labels are collected in the closure. Parent
+    // references are excluded.
+    let expandPath = (path, parentPath) =&gt; {
+      for (let session of this.sessions) {
+        let value = _.get(session, path);
+        if (ObjectHelper.hasValidContent(value)) {
+          if (_.isPlainObject(value)) {
+            if (parentPath) {
+              let parent = _.get(session, parentPath);
+              if (value === parent) {
+                closure[path] = false;
+                return;
+              }
+            }
+            expandObject(value, path);
+          } else {
+            closure[path] = this.getLabel(path);
+            return;
+          }
+        }
+      }
+      closure[path] = false;
+    };
+
+    for (let path in paths) {
+      expandPath(path);
+    }
+
+    return _.pickBy(closure);
+  }
+
+  /**
+   * Concatenates the parent path to the given key as follows:
+   * * If there is not a path or the path is &#x60;this&#x60;, then return the key
+   * * Otherwise, if the key is numeric, then return _path_&#x60;[&#x60;_key_&#x60;]&#x60;
+   * * Otherwise, return _path_&#x60;.&#x60;_key_
+   *
+   * @method concatPath
+   * @param key {string|number} the accessor
+   * @param path {string} the optional parent property path
+   * @return {string} the concatenated path
+   */
+  private concatPath(key, path?) {
+    if (path &amp;&amp; path !== &#x27;this&#x27;) {
+      let suffix = _.isNumber(key) ? &#x60;[${ key }]&#x60; : &#x27;.&#x27; + key;
+      return path + suffix;
+    } else {
+      return key;
+    }
+  }
+
+  /**
+   * This axis callback sets the X axis Day tick interval to 10 rather
+   * than the default 5.
+   *
+   * @method _onSessionsChartAxis
+   * @private
+   * @param property {string} the axis property
+   * @param axis {Object} the D3 axis object
+   */
+   private _onSessionsChartAxis(property: string, axis: Object) {
+    if (property.endsWith(&#x27;day&#x27;)) {
+      let [min, max] = axis.scale().domain();
+      axis.ticks(Math.floor((max - min) / 10));
+    }
+  }
+}
+
+</pre>
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>

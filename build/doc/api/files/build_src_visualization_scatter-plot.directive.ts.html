@@ -1,0 +1,1463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>build/src/visualization/scatter-plot.directive.ts - qiprofile API</title>
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="http://yui.yahooapis.com/combo?3.8.0pr2/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div class="yui3-g">
+        <div id="sidebar" class="yui3-u">
+            <div class="logo">
+              <a href="../index.html">
+                  qiprofile API
+              </a>
+            </div>
+            
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/clinical.html">clinical</a>
+                            </li>
+                            <li><a href="../modules/collection.html">collection</a>
+                            </li>
+                            <li><a href="../modules/collections.html">collections</a>
+                            </li>
+                            <li><a href="../modules/common.html">common</a>
+                            </li>
+                            <li><a href="../modules/configuration.html">configuration</a>
+                            </li>
+                            <li><a href="../modules/controls.html">controls</a>
+                            </li>
+                            <li><a href="../modules/data.html">data</a>
+                            </li>
+                            <li><a href="../modules/date.html">date</a>
+                            </li>
+                            <li><a href="../modules/error.html">error</a>
+                            </li>
+                            <li><a href="../modules/file.html">file</a>
+                            </li>
+                            <li><a href="../modules/help.html">help</a>
+                            </li>
+                            <li><a href="../modules/home.html">home</a>
+                            </li>
+                            <li><a href="../modules/image.html">image</a>
+                            </li>
+                            <li><a href="../modules/imageSequence.html">imageSequence</a>
+                            </li>
+                            <li><a href="../modules/main.html">main</a>
+                            </li>
+                            <li><a href="../modules/object.html">object</a>
+                            </li>
+                            <li><a href="../modules/page.html">page</a>
+                            </li>
+                            <li><a href="../modules/project.html">project</a>
+                            </li>
+                            <li><a href="../modules/projects.html">projects</a>
+                            </li>
+                            <li><a href="../modules/rest.html">rest</a>
+                            </li>
+                            <li><a href="../modules/roman.html">roman</a>
+                            </li>
+                            <li><a href="../modules/session.html">session</a>
+                            </li>
+                            <li><a href="../modules/string.html">string</a>
+                            </li>
+                            <li><a href="../modules/subject.html">subject</a>
+                            </li>
+                            <li><a href="../modules/testing.html">testing</a>
+                            </li>
+                            <li><a href="../modules/visualization.html">visualization</a>
+                            </li>
+                            <li><a href="../modules/volume.html">volume</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/AppComponent.html">AppComponent</a></li>
+                            <li><a href="../classes/AppModule.html">AppModule</a></li>
+                            <li><a href="../classes/Breast.html">Breast</a></li>
+                            <li><a href="../classes/BreastNormalizedAssay.html">BreastNormalizedAssay</a></li>
+                            <li><a href="../classes/BreastPathology.html">BreastPathology</a></li>
+                            <li><a href="../classes/CascadeSelectComponent.html">CascadeSelectComponent</a></li>
+                            <li><a href="../classes/ClinicalEncounter.html">ClinicalEncounter</a></li>
+                            <li><a href="../classes/CollectionActivatedRouteStub.html">CollectionActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionComponent.html">CollectionComponent</a></li>
+                            <li><a href="../classes/CollectionComponentSpec.html">CollectionComponentSpec</a></li>
+                            <li><a href="../classes/CollectionItemComponent.html">CollectionItemComponent</a></li>
+                            <li><a href="../classes/CollectionListPage.html">CollectionListPage</a></li>
+                            <li><a href="../classes/CollectionListSpec.html">CollectionListSpec</a></li>
+                            <li><a href="../classes/CollectionModule.html">CollectionModule</a></li>
+                            <li><a href="../classes/CollectionRouterStub.html">CollectionRouterStub</a></li>
+                            <li><a href="../classes/CollectionsActivatedRouteStub.html">CollectionsActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionsComponent.html">CollectionsComponent</a></li>
+                            <li><a href="../classes/CollectionsComponentSpec.html">CollectionsComponentSpec</a></li>
+                            <li><a href="../classes/CollectionsHelpComponent.html">CollectionsHelpComponent</a></li>
+                            <li><a href="../classes/CollectionsHelpServiceStub.html">CollectionsHelpServiceStub</a></li>
+                            <li><a href="../classes/CollectionsHelpTextComponent.html">CollectionsHelpTextComponent</a></li>
+                            <li><a href="../classes/CollectionsModule.html">CollectionsModule</a></li>
+                            <li><a href="../classes/CollectionsResource.html">CollectionsResource</a></li>
+                            <li><a href="../classes/CollectionsService.html">CollectionsService</a></li>
+                            <li><a href="../classes/CollectionsServiceStub.html">CollectionsServiceStub</a></li>
+                            <li><a href="../classes/CollectionSubectServiceStub.html">CollectionSubectServiceStub</a></li>
+                            <li><a href="../classes/ColorBarDirective.html">ColorBarDirective</a></li>
+                            <li><a href="../classes/CommonModule.html">CommonModule</a></li>
+                            <li><a href="../classes/ConfigurationService.html">ConfigurationService</a></li>
+                            <li><a href="../classes/ConfigurationServiceSpec.html">ConfigurationServiceSpec</a></li>
+                            <li><a href="../classes/ControlsModule.html">ControlsModule</a></li>
+                            <li><a href="../classes/CorrelationComponent.html">CorrelationComponent</a></li>
+                            <li><a href="../classes/DateHelper.html">DateHelper</a></li>
+                            <li><a href="../classes/DateHelperSpec.html">DateHelperSpec</a></li>
+                            <li><a href="../classes/Encounter.html">Encounter</a></li>
+                            <li><a href="../classes/ErrorComponent.html">ErrorComponent</a></li>
+                            <li><a href="../classes/FileService.html">FileService</a></li>
+                            <li><a href="../classes/FileServiceSpec.html">FileServiceSpec</a></li>
+                            <li><a href="../classes/Findable.html">Findable</a></li>
+                            <li><a href="../classes/HelpComponent.html">HelpComponent</a></li>
+                            <li><a href="../classes/HelpService.html">HelpService</a></li>
+                            <li><a href="../classes/HomeComponent.html">HomeComponent</a></li>
+                            <li><a href="../classes/IamgeSequenceService.html">IamgeSequenceService</a></li>
+                            <li><a href="../classes/Image.html">Image</a></li>
+                            <li><a href="../classes/ImageComponent.html">ImageComponent</a></li>
+                            <li><a href="../classes/ImageModule.html">ImageModule</a></li>
+                            <li><a href="../classes/ImageSequence.html">ImageSequence</a></li>
+                            <li><a href="../classes/ImageSequenceServiceSpec.html">ImageSequenceServiceSpec</a></li>
+                            <li><a href="../classes/ImageSequenceSessionServiceStub.html">ImageSequenceSessionServiceStub</a></li>
+                            <li><a href="../classes/ImageSequenceSpec.html">ImageSequenceSpec</a></li>
+                            <li><a href="../classes/ImageStore.html">ImageStore</a></li>
+                            <li><a href="../classes/LabelMap.html">LabelMap</a></li>
+                            <li><a href="../classes/Modeling.html">Modeling</a></li>
+                            <li><a href="../classes/ModelingResult.html">ModelingResult</a></li>
+                            <li><a href="../classes/ModelingResults.html">ModelingResults</a></li>
+                            <li><a href="../classes/ObjectHelper.html">ObjectHelper</a></li>
+                            <li><a href="../classes/Page.html">Page</a></li>
+                            <li><a href="../classes/PageComponent.html">PageComponent</a></li>
+                            <li><a href="../classes/PageModule.html">PageModule</a></li>
+                            <li><a href="../classes/PapayaService.html">PapayaService</a></li>
+                            <li><a href="../classes/ParameterResult.html">ParameterResult</a></li>
+                            <li><a href="../classes/Pathology.html">Pathology</a></li>
+                            <li><a href="../classes/PlayerComponent.html">PlayerComponent</a></li>
+                            <li><a href="../classes/ProjectItemComponent.html">ProjectItemComponent</a></li>
+                            <li><a href="../classes/ProjectListPage.html">ProjectListPage</a></li>
+                            <li><a href="../classes/ProjectListSpec.html">ProjectListSpec</a></li>
+                            <li><a href="../classes/ProjectsComponent.html">ProjectsComponent</a></li>
+                            <li><a href="../classes/ProjectsComponentSpec.html">ProjectsComponentSpec</a></li>
+                            <li><a href="../classes/ProjectsHelpComponent.html">ProjectsHelpComponent</a></li>
+                            <li><a href="../classes/ProjectsHelpServiceStub.html">ProjectsHelpServiceStub</a></li>
+                            <li><a href="../classes/ProjectsHelpTextComponent.html">ProjectsHelpTextComponent</a></li>
+                            <li><a href="../classes/ProjectsModule.html">ProjectsModule</a></li>
+                            <li><a href="../classes/ProjectsResource.html">ProjectsResource</a></li>
+                            <li><a href="../classes/ProjectsService.html">ProjectsService</a></li>
+                            <li><a href="../classes/ProjectsServiceStub.html">ProjectsServiceStub</a></li>
+                            <li><a href="../classes/PropertyTableComponent.html">PropertyTableComponent</a></li>
+                            <li><a href="../classes/RCB.html">RCB</a></li>
+                            <li><a href="../classes/Registration.html">Registration</a></li>
+                            <li><a href="../classes/RegistrationSpec.html">RegistrationSpec</a></li>
+                            <li><a href="../classes/REST.html">REST</a></li>
+                            <li><a href="../classes/RestResource.html">RestResource</a></li>
+                            <li><a href="../classes/RESTSpec.html">RESTSpec</a></li>
+                            <li><a href="../classes/Roman.html">Roman</a></li>
+                            <li><a href="../classes/RomanSpec.html">RomanSpec</a></li>
+                            <li><a href="../classes/Sarcoma.html">Sarcoma</a></li>
+                            <li><a href="../classes/Scan.html">Scan</a></li>
+                            <li><a href="../classes/ScanSpec.html">ScanSpec</a></li>
+                            <li><a href="../classes/ScatterPlotDirective.html">ScatterPlotDirective</a></li>
+                            <li><a href="../classes/Session.html">Session</a></li>
+                            <li><a href="../classes/SessionActivatedRouteStub.html">SessionActivatedRouteStub</a></li>
+                            <li><a href="../classes/SessionComponent.html">SessionComponent</a></li>
+                            <li><a href="../classes/SessionComponentSpec.html">SessionComponentSpec</a></li>
+                            <li><a href="../classes/SessionDetailResource.html">SessionDetailResource</a></li>
+                            <li><a href="../classes/SessionDetailResourceStub.html">SessionDetailResourceStub</a></li>
+                            <li><a href="../classes/SessiondRouterStub.html">SessiondRouterStub</a></li>
+                            <li><a href="../classes/SessionModule.html">SessionModule</a></li>
+                            <li><a href="../classes/SessionService.html">SessionService</a></li>
+                            <li><a href="../classes/SessionServiceSpec.html">SessionServiceSpec</a></li>
+                            <li><a href="../classes/SessionServiceStub.html">SessionServiceStub</a></li>
+                            <li><a href="../classes/SessionSpec.html">SessionSpec</a></li>
+                            <li><a href="../classes/SessionSubjectResourceStub.html">SessionSubjectResourceStub</a></li>
+                            <li><a href="../classes/SessionTumorExtent.html">SessionTumorExtent</a></li>
+                            <li><a href="../classes/SliderDirective.html">SliderDirective</a></li>
+                            <li><a href="../classes/SparkLineDirective.html">SparkLineDirective</a></li>
+                            <li><a href="../classes/StringHelper.html">StringHelper</a></li>
+                            <li><a href="../classes/StringHelperSpec.html">StringHelperSpec</a></li>
+                            <li><a href="../classes/Subject.html">Subject</a></li>
+                            <li><a href="../classes/SubjectActivatedRouteStub.html">SubjectActivatedRouteStub</a></li>
+                            <li><a href="../classes/SubjectChangeDetectorRefStub.html">SubjectChangeDetectorRefStub</a></li>
+                            <li><a href="../classes/SubjectComponent.html">SubjectComponent</a></li>
+                            <li><a href="../classes/SubjectComponentSpec.html">SubjectComponentSpec</a></li>
+                            <li><a href="../classes/SubjectdRouterStub.html">SubjectdRouterStub</a></li>
+                            <li><a href="../classes/SubjectModule.html">SubjectModule</a></li>
+                            <li><a href="../classes/SubjectResource.html">SubjectResource</a></li>
+                            <li><a href="../classes/SubjectResourceStub.html">SubjectResourceStub</a></li>
+                            <li><a href="../classes/SubjectService.html">SubjectService</a></li>
+                            <li><a href="../classes/SubjectServiceSpec.html">SubjectServiceSpec</a></li>
+                            <li><a href="../classes/SubjectServiceStub.html">SubjectServiceStub</a></li>
+                            <li><a href="../classes/SubjectSpec.html">SubjectSpec</a></li>
+                            <li><a href="../classes/Table.html">Table</a></li>
+                            <li><a href="../classes/TimeSeries.html">TimeSeries</a></li>
+                            <li><a href="../classes/TNM.html">TNM</a></li>
+                            <li><a href="../classes/ToggleHelpComponent.html">ToggleHelpComponent</a></li>
+                            <li><a href="../classes/VisualizationModule.html">VisualizationModule</a></li>
+                            <li><a href="../classes/Volume.html">Volume</a></li>
+                            <li><a href="../classes/VolumeComponent.html">VolumeComponent</a></li>
+                            <li><a href="../classes/VolumeDetailPage.html">VolumeDetailPage</a></li>
+                            <li><a href="../classes/VolumeImageSequenceServiceStub.html">VolumeImageSequenceServiceStub</a></li>
+                            <li><a href="../classes/VolumeModule.html">VolumeModule</a></li>
+                            <li><a href="../classes/VolumeService.html">VolumeService</a></li>
+                            <li><a href="../classes/VolumeServiceSpec.html">VolumeServiceSpec</a></li>
+                            <li><a href="../classes/VolumeSpec.html">VolumeSpec</a></li>
+                            <li><a href="../classes/XNAT.html">XNAT</a></li>
+                            <li><a href="../classes/XNATSpec.html">XNATSpec</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            
+            
+            
+            <div class="version-info">
+              Version: 2.1.1
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><div class="title">
+  <h1 class="file-name">build/src/visualization/scatter-plot.directive.ts</h1>
+</div>
+
+<pre class="code prettyprint linenums">
+import * as _ from &#x27;lodash&#x27;;
+import * as d3 from &#x27;d3&#x27;;
+import {
+  Directive, Input, Output, ElementRef, EventEmitter,
+  OnChanges, SimpleChange
+} from &#x27;@angular/core&#x27;;
+
+import ObjectHelper from &#x27;../object/object-helper.coffee&#x27;;
+import DateHelper from &#x27;../date/date-helper.coffee&#x27;;
+import * as math from &#x27;../math/math.ts&#x27;;
+import * as language from &#x27;../language/language.ts&#x27;;
+
+@Directive({
+  selector: &#x27;[qi-scatter-plot]&#x27;
+})
+
+/**
+ * Draws a D3 scatter plot. The
+ * {{#crossLink &quot;ScatterPlotDirective/data:property&quot;}}{{/crossLink}}
+ * input, optionally filtered by the
+ * {{#crossLink &quot;ScatterPlotDirective/selection:property&quot;}}{{/crossLink}},
+ * is the domain used to acquire the
+ * {{#crossLink &quot;ScatterPlotDirective/x:property&quot;}}{{/crossLink}}
+ * and
+ * {{#crossLink &quot;ScatterPlotDirective/y:property&quot;}}{{/crossLink}},
+ * data points.
+ *
+ * @module visualization
+ * @class ScatterPlotDirective
+ */
+export class ScatterPlotDirective implements OnChanges, OnInit {
+  /**
+   * The data object array.
+   *
+   * @property data {Object[]}
+   */
+  @Input() data;
+
+  /**
+   * The optional selection array filters the data domain. The default
+   * is to use all of the data objects. Missing inputs are always ignored.
+   *
+   * @property selection {boolean[]}
+   */
+  @Input() selection: boolean[];
+
+  /**
+   * The required X value property name or path.
+   *
+   * @property x {string}
+   */
+  @Input() x: string;
+
+  /**
+   * The required Y value property name or path.
+   *
+   * @property y {string}
+   */
+  @Input() y: string;
+
+  /**
+   * The optional property name or path whose value determines the data point
+   * (color, opacity) assignment. A data point is assigned a color and opacity
+   * based on the result of calling the color function. Distinct data points
+   * are assigned the same (color, opacity) combination if and only if applying
+   * the color function returns the same color value.
+   *
+   * The default color function is the zero-based position of the input object
+   * in the {{#crossLink &quot;ScatterPlotDirective/data:property&quot;}}{{/crossLink}}
+   * array.
+   *
+   * @property color {string}
+   */
+  @Input() color: string;
+
+  /**
+   * The flag indicating whether the X domain is discrete rather than
+   * continuous. The default is &#x60;true&#x60; if the first non-nil X value
+   * is a string or boolean, &#x60;false&#x60; otherwise.
+   *
+   * @property xDiscrete {boolean}
+   */
+  @Input() xDiscrete: boolean;
+
+  /**
+   * The flag indicating whether the Y domain is discrete rather than
+   * continuous. The default is &#x60;true&#x60; if the first non-nil Y value
+   * is a string or boolean, &#x60;false&#x60; otherwise.
+   *
+   * @property yDiscrete {boolean}
+   */
+  @Input() yDiscrete: boolean;
+
+  /**
+   * The optional X {value: label} associative object for a discrete domain.
+   *
+   * @property xChoices {Object}
+   */
+  @Input() xChoices: Object;
+
+  /**
+   * The optional Y {value: label} associative object for a discrete domain.
+   *
+   * @property yChoices {Object}
+   */
+  @Input() yChoices: Object;
+
+  /**
+   * The optional symbol type function (default &#x60;circle&#x60;).
+   *
+   * @property symbolType {function}
+   */
+  @Input() symbolType: (d: Object) =&gt; string;
+
+  /**
+   * The optional chart width. The default width is the parent element
+   * width.
+   *
+   * @property width {number}
+   */
+  @Input() width: number;
+
+  /**
+   * The optional chart height. The default height is the
+   * {{#crossLink &quot;ScatterPlotDirective/width:property&quot;}}{{/crossLink}}
+   * times the
+   * {{#crossLink &quot;ScatterPlotDirective/aspect:property&quot;}}{{/crossLink}}.
+   *
+   * @property height {number}
+   */
+  @Input() height: number;
+
+  /**
+   * The optional chart [top, left, bottom, right] margin within the SVG
+   * root element.
+   *
+   * @property margin {number[]}
+   */
+  @Input() margin: number[] = [0, 0, 0, 0];
+
+  /**
+   * The optional chart width:height ratio. The default is the window
+   * aspect.
+   *
+   * @property aspect {number}
+   */
+  @Input() aspect: number;
+
+  /**
+   * The optional least squares trend line flag. The default is &#x60;false&#x60;.
+   *
+   * @property trendLine {boolean}
+   */
+  @Input() trendLine: boolean = false;
+
+  /**
+   * The axis customization callback.
+   *
+   * @property onAxis {function}
+   */
+  @Input() onAxis: (property: string, axis: Object) =&gt; void;
+
+  /**
+   * The plotted event transmits the root SVG group D3 selection
+   * after the chart is drawn.
+   *
+   * @property plotted {EventEmitter&lt;Object&gt;}
+   */
+  @Output() plotted: EventEmitter&lt;Object&gt; = new EventEmitter(true);
+
+  /**
+   * The select event transmits the domain object selection state.
+   *
+   * @property select {EventEmitter&lt;boolean[]&gt;}
+   */
+  @Output() select: EventEmitter&lt;boolean[]&gt; = new EventEmitter(true);
+
+  /**
+   * The plot configuration parameters. This object is built by
+   * {{#crossLink &quot;ScatterPlotDirective/createChart&quot;}}{{/crossLink}}
+   * and consists of data-independent properties, e.g. the plot
+   * origin and the visibility function.
+   *
+   * @property plot {Object}
+   * @private
+   */
+  private plot;
+
+  /**
+   * The domain references encapsulation. This object is built
+   * by
+   * {{#crossLink &quot;ScatterPlotDirective/createDomains&quot;}}{{/crossLink}}
+   * and consists of the following properties:
+   * * _data_: the valid data object array
+   * * _dataRefs_: the _data_ =&gt;
+   *   {{#crossLink &quot;ScatterPlotDirective/data:property&quot;}}{{/crossLink}}
+   *   index array
+   * * _pointData_: the valid data points array
+   * * _toData_: the data point =&gt; _data_ index array
+   * * _fromData_: the _data_ =&gt; [data point] index array
+   * * _x_, _y_: the {value, indexes, domain, scale} axis
+   *   properties
+   *
+   * @property domains {Object}
+   * @private
+   */
+  private domains;
+
+  /**
+   * The D3 SVG root group element.
+   *
+   * @property svg {d3.Selection&lt;any&gt;}
+   * @private
+   */
+  private svg: d3.Selection&lt;any&gt;;
+
+  /**
+   * The data point X cooordinate function.
+   *
+   * @property dx {function}
+   * @private
+   */
+  private dx: (d: Object) =&gt; number;
+
+  /**
+   * The data point Y cooordinate function.
+   *
+   * @property dy {function}
+   * @private
+   */
+  private dy: (d: Object) =&gt; number;
+
+  /**
+   * The time of the transitions in progress.
+   *
+   * @property pendingTransitionTime {number}
+   * @private
+   */
+  private pendingTransitionTime: number = 0;
+
+  /**
+   * The internal chart padding to accomodate the top and
+   * bottom axes. The right pad allows for the last X tick
+   * label. The left pad accomodates a &#x60;-n.nn&#x60; number.
+   * Non-numeric labels are slanted to fit within the pad.
+   *
+   * @property pad
+   * @private
+   */
+  private const pad = [6, 30, 18, 18];
+
+  constructor(private elementRef: ElementRef) {}
+
+  /**
+   * Handle the following changes:
+   * * If the
+   *   {{#crossLink &quot;ScatterPlotDirective/selection:property&quot;}}{{/crossLink}}
+   *   changed, then reset the visibility.
+   * * If the
+   *   {{#crossLink &quot;ScatterPlotDirective/x:property&quot;}}{{/crossLink}} or
+   *   {{#crossLink &quot;ScatterPlotDirective/y:property&quot;}}{{/crossLink}}
+   *   property changed, then reset the data point coordinates.
+   */
+  ngOnChanges(changes: SimpleChange) {
+    let dataChange = changes[&#x27;data&#x27;];
+    if (dataChange &amp;&amp; dataChange.previousValue &amp;&amp; !dataChange.isFirstChange()) {
+      throw new Error(&quot;Scatter plot domain data cannot be changed&quot;);
+    }
+    let heightChange = changes[&#x27;height&#x27;];
+    if (heightChange &amp;&amp; heightChange.previousValue &amp;&amp; !heightChange.isFirstChange()) {
+      throw new Error(&quot;Scatter plot height cannot be changed&quot;);
+    }
+    if ((dataChange || heightChange) &amp;&amp; this.data) {
+      // Lazy chart initialization.
+      this.createChart();
+    }
+
+    // Detect a real change.
+    let isChanged = (key) =&gt;
+      changes[key] &amp;&amp; !changes[key].isFirstChange();
+    let isXChanged = isChanged(&#x27;x&#x27;);
+    let isYChanged = isChanged(&#x27;y&#x27;);
+    if (isXChanged || isYChanged) {
+      this.updatePlot();
+    } else if (isChanged(&#x27;selection&#x27;)) {
+      // The visibility depends on the selection array.
+      this.resetVisibility();
+    }
+  }
+
+  /**
+   * Makes the D3 SVG root group element and draws the plot.
+   *
+   * @method createChart
+   * @private
+   */
+  private createChart() {
+    // There must be X and Y properties.
+    if (!this.x) {
+      throw new Error(&quot;Missing the scatter plot X property&quot;);
+    }
+    if (!this.y) {
+      throw new Error(&quot;Missing the scatter plot Y property&quot;);
+    }
+
+    // The effective width and height.
+    // Note: svg, as a replaced element, has a browser-dependent
+    // default size, often 300px wide by 150px tall. A better
+    // default size is based on the width as described in the height
+    // property apidoc.
+    // Note: use getBoundingClientRect() rather than clientWidth per
+    // https://github.com/d3/d3-brush/blob/master/README.md#brushExtent.
+    // Set the default width, if necessary.
+    if (!this.width) {
+      let rect = this.elementRef.nativeElement.getBoundingClientRect();
+      this.width = rect.width;
+    }
+    // Set the default height, if necessary.
+    if (!this.height) {
+      let rect = document.body.getBoundingClientRect();
+      let defAspect = rect.width / rect.height;
+      let aspect = this.aspect || defAspect;
+      this.height = Math.floor(this.width / aspect);
+    }
+
+    // Make the plot parameter object.
+    this.configurePlot();
+
+    // Define the domains, origin and accessors.
+    this.createDomains();
+
+    // The data point coordinate functions.
+    this.dx = (d, i) =&gt;
+      this.domains.x.scale(this.domains.x.value(d, i));
+    this.dy = (d, i) =&gt;
+      this.domains.y.scale(this.domains.y.value(d, i));
+
+    // The root SVG group element.
+    this.svg = d3.select(this.elementRef.nativeElement)
+      .append(&#x27;svg&#x27;)
+      .attr(&#x27;viewBox&#x27;, &#x60;0 0 ${ this.width } ${ this.height }&#x60;)
+      .attr(&#x27;width&#x27;, this.width)
+      .attr(&#x27;height&#x27;, this.height);
+
+    // The data points plot portion of the chart.
+    let plot = this.svg.append(&#x27;g&#x27;)
+      .attr(&#x27;transform&#x27;, &#x60;translate(${ this.pad[3] },0)&#x60;)
+      .attr(&#x27;class&#x27;, &#x27;plot&#x27;);
+
+    // Draw the axes.
+    this.drawAxes();
+    // Draw the points.
+    this.drawPoints(plot);
+    // The optional trend line.
+    if (this.trendLine) {
+      this.drawTrendLine(plot);
+    }
+
+    // Make a brush.
+    let brush = this.createBrush();
+    // Apply the brush to the plot.
+    plot.append(&#x27;g&#x27;)
+      .attr(&#x27;class&#x27;, &#x27;brush&#x27;)
+      .call(brush);
+
+    // Give watchers a change to bang on the chart.
+    this.plotted.emit(this.svg);
+  }
+
+  /**
+   * Makes the plot data-independent parameters.
+   *
+   * @method configurePlot
+   * @private
+   */
+  private configurePlot() {
+    // Set the scale range.
+    let rightOffset = this.pad[1] + this.margin[1];
+    let bottomOffset = this.pad[2] + this.margin[2];
+    let x1 = this.pad[3] + this.margin[3];
+    let x2 = this.width - rightOffset;
+    let y1 = this.height - bottomOffset;
+    let y2 = this.pad[0] + this.margin[0];
+
+    // The origin is pushed right by the pad amount.
+    let origin = {x: x1 + this.pad[3], y: y1};
+
+    // The visibility function.
+    let visibility = (d, i) =&gt;
+      this.isDataPointVisible(i) ? &#x27;visibile&#x27; : &#x27;hidden&#x27;;
+
+    // The color index function maps the input to a color reference value.
+    // The default index function assigns each object to its position in
+    // the data array.
+    let defColorIndex = (d, i) =&gt;
+      this.domains.toData ? this.domains.toData[i] : i;
+    let colorIndex = this.color ?
+                     d =&gt; _.get(d, this.color) :
+                     defColorIndex;
+
+    // The color chooser maps the input to a RGB color.
+    // First, group the objects by the color index mod the color count.
+    let colorDomain = _.flow(_.map, _.uniq, _.sortBy)(this.data, colorIndex);
+    let colorScale = d3.scaleOrdinal(d3.schemeCategory10)
+      .domain(colorDomain);
+    let color = _.flow(colorIndex, colorScale);
+
+    // The opacity chooser maps the input to an opacity from 1.0 to 0.5.
+    let opacityValue = (d, i) =&gt;
+      Math.floor(colorDomain.indexOf(colorIndex(d, i)) / 10);
+    let opacityMax = Math.floor(_.last(colorDomain) / 10);
+    let opacityDomain = [0, opacityMax];
+    let opacityScale = d3.scaleLinear()
+      .domain(opacityDomain)
+      .range([0, 0.5]);
+    // Convert to [1, 0.5] range.
+    let inverse = (o) =&gt; 1 - o;
+    let opacity = _.flow(opacityValue, opacityScale, inverse);
+
+    // The symbol factory.
+    const symbolSize = 40;
+    let symbolType = this.symbolType || d3.symbolCircle;
+    let symbol = d3.symbol().type(symbolType).size(symbolSize);
+
+    // Localize the point transform function to work around
+    // the brain-dead Javascript *this* confusion.
+    let pointTransform = (d, i) =&gt; this.pointTransform(d, i);
+
+    // Capture the plot parameters.
+    this.plot = {
+      origin: origin,
+      visibility: visibility,
+      opacity: opacity,
+      color: color,
+      symbol: symbol,
+      pointTransform: pointTransform,
+      x: {range: [x1, x2]},
+      y: {range: [y1, y2]}
+    };
+  }
+
+  /**
+   * Reconfigures and redraws the D3 plot.
+   *
+   * @method updatePlot
+   * @private
+   */
+  private updatePlot() {
+    let plot = this.svg.select(&#x27;.plot&#x27;);
+    // Reconfigure the plot.
+    this.createDomains();
+    // Remove the existing axes.
+    this.svg.selectAll(&#x27;g.axis&#x27;).remove();
+    // Draw the new axes.
+    this.drawAxes();
+    // Redraw the points.
+    this.drawPoints(plot);
+    // Recalculate the correlation.
+    if (this.trendLine) {
+      plot.selectAll(&#x27;.trendline&#x27;).remove();
+      plot.selectAll(&#x27;.r-squared&#x27;).remove();
+      this.drawTrendLine(plot);
+    }
+
+    // Reset the visibility.
+    this.resetVisibility();
+  }
+
+  /**
+   * Draws the D3 points in the given plot.
+   *
+   * @method drawPoints
+   * @private
+   * @param plot {Object} the D3 plot selection
+   */
+  private drawPoints(plot: Object) {
+    // The D3 data join.
+    let dataPoints = plot.selectAll(&#x27;.point&#x27;)
+      .data(this.domains.pointData);
+
+    // Reset the common data points with a fancy index-dependent
+    // delay/duration.
+    let n = this.domains.pointData.length;
+    const total = 500;
+    const avg = Math.floor(total / n);
+    let delay = (d, i) =&gt; i * avg;
+    let duration = (d, i) =&gt; (n - i) * avg;
+    let remaining = n;
+    let onEnd = () =&gt; {
+      remaining -= 1;
+      if (!remaining) {
+        this.pendingTransitionTime -= total;
+      }
+    };
+    this.pendingTransitionTime += total;
+
+    // Relocate existing points, using the common transform
+    // set in the data join merge below.
+    dataPoints
+      .transition()
+      .delay(delay)
+      .duration(duration)
+      .on(&#x27;end&#x27;, onEnd);
+
+    // Add new points.
+    dataPoints.enter().append(&#x27;path&#x27;)
+        .attr(&#x27;class&#x27;, &#x27;point&#x27;)
+        .style(&#x27;visibility&#x27;, this.plot.visibility)
+        .attr(&#x27;d&#x27;, this.plot.symbol)
+      // The updated + new data join merge action. This
+      // action applies styles and attributes which
+      // depend on the data point data or data index.
+      // Specifically, a change from an non-array
+      // property to an array property requires a
+      // recalculation of the color and opacity, since
+      // those styles depend on the data point data index.
+      // The transform always changes, since it depends
+      // on dx and dy.
+      .merge(dataPoints)
+        .style(&#x27;fill&#x27;, this.plot.color)
+        .style(&#x27;opacity&#x27;, this.plot.opacity)
+        .attr(&#x27;transform&#x27;, this.plot.pointTransform);
+
+    // Remove extra points.
+    dataPoints.exit().remove();
+  }
+
+  /**
+   * Resets the data point visibility style based on the
+   * {{#crossLink &quot;ScatterPlotDirective/isDataPointVisible&quot;}}{{/crossLink}}
+   * result.
+   *
+   * @method resetVisibility
+   * @private
+   */
+  private resetVisibility() {
+    let isVisible = (d, i) =&gt; this.isDataPointVisible(i);
+    let isHidden = _.negate(isVisible);
+    let delay = this.pendingTransitionTime;
+    const duration = 200;
+    let remaining = this.domains.pointData.length;
+    let onEnd = () =&gt; {
+      remaining -= 1;
+      if (!remaining) {
+        this.pendingTransitionTime -= duration;
+      }
+    };
+    this.pendingTransitionTime += duration;
+    this.svg.selectAll(&#x27;.point&#x27;)
+      .filter(isHidden)
+      .transition()
+      .delay(delay)
+      .duration(duration)
+      .on(&#x27;end&#x27;, onEnd)
+      .style(&#x27;visibility&#x27;, &#x27;hidden&#x27;);
+    this.svg.selectAll(&#x27;.point&#x27;)
+      .filter(isVisible)
+      .transition()
+      .delay(delay)
+      .duration(duration)
+      .on(&#x27;end&#x27;, onEnd)
+      .style(&#x27;visibility&#x27;, null);
+  }
+
+  /**
+   * Sets the data-dependent portion of the plot.
+   *
+   * @method createDomains
+   * @private
+   */
+  private createDomains() {
+    // The base accessors.
+    // Note: we cannot use _.partialRight here because of Javascript
+    // &#x27;this&#x27; swizzling confusion.
+    let getX = d =&gt; _.get(d, this.x);
+    let getY = d =&gt; _.get(d, this.y);
+
+    // The new domain encapsulation object. If there is an old
+    // one, it is trashed.
+    this.domains = {x: {}, y: {}};
+    // Set up the domains.
+    this.configureDomains(getX, getY);
+
+    // A numeric property has a continuous linear scale.
+    // A non-numeric property has a discrete quantized scale.
+    if (this.domains.x.discrete) {
+      let xPadding = 2 / (this.domains.x.domain.length + 1);
+      this.domains.x.scale =
+        d3.scalePoint().domain(this.domains.x.domain)
+          .range(this.plot.x.range).padding(xPadding);
+    } else {
+      this.domains.x.scale =
+        d3.scaleLinear().domain(this.domains.x.domain)
+          .range(this.plot.x.range).nice();
+    }
+    if (this.domains.y.discrete) {
+      let yPadding = 2 / (this.domains.y.domain.length + 1);
+      this.domains.y.scale =
+        d3.scalePoint().domain(this.domains.y.domain)
+          .range(this.plot.y.range).padding(yPadding);
+    } else {
+      this.domains.y.scale =
+        d3.scaleLinear().domain(this.domains.y.domain)
+          .range(this.plot.y.range).nice();
+    }
+  }
+
+  /**
+   * Creates the
+   * {{#crossLink &quot;ScatterPlotDirective/domain:property&quot;}}{{/crossLink}}.
+   *
+   * @method configureDomains
+   * @private
+   * @param getX {function} the X accessor
+   * @param getY {function} the Y accessor
+   */
+  private configureDomains(getX, getY) {
+    // Add the domain reference properties.
+    this.configureDomainRefs(getX, getY);
+
+    // Array property accessors must account for the index
+    // qualifier.
+    let xValue;
+    if (this.domains.x.indexes) {
+      xValue = (d, i) =&gt; {
+        let index = this.domains.x.indexes[i];
+        let array = getX(d);
+        if (array) {
+          return array[index];
+        }
+      };
+    } else {
+      xValue = getX;
+    }
+    let yValue;
+    if (this.domains.y.indexes) {
+      yValue = (d, i) =&gt; {
+        let index = this.domains.y.indexes[i];
+        let array = getY(d);
+        if (array) {
+          return array[index];
+        }
+      };
+    } else {
+      yValue = getY;
+    }
+
+    // Set each value accessor. The discrete accessor
+    // looks up the discrete value in the choices, if
+    // such exists. Note that the calls to xValue or
+    // yValue are not guarded by a valid data check,
+    // since they are only called on the pre-filtered
+    // data that is valid for both axes.
+    if (this.xChoices) {
+      let lookupX = v =&gt; this.xChoices[v] || v;
+      this.domains.x.value = _.flow(xValue, lookupX);
+    } else {
+      this.domains.x.value = xValue;
+    }
+    if (this.yChoices) {
+      let lookupY= v =&gt; this.yChoices[v] || v;
+      this.domains.y.value = _.flow(yValue, lookupY);
+    } else {
+      this.domains.y.value = yValue;
+    }
+
+    // The discrete domain is the sorted value list.
+    // The continuous domain is the [min, max].
+    if (this.domains.x.discrete) {
+      this.domains.x.domain = this.getDiscreteValues(
+        this.domains.x.value, this.domains.y.value
+      );
+    } else {
+      this.domains.x.domain = this.getContinuousDomain(
+        this.domains.x.value
+      );
+    }
+    if (this.domains.y.discrete) {
+      this.domains.y.domain = this.getDiscreteValues(
+        this.domains.y.value, this.domains.x.value
+      );
+    } else {
+      this.domains.y.domain = this.getContinuousDomain(
+        this.domains.y.value
+      );
+    }
+  }
+
+  /**
+   * Collects the values for a discrete domain.
+   * If there is a trend line, then the domain is sorted as
+   * follows:
+   * * If both axes are discrete, then the sort criterion is
+   *   the orthogonal count.
+   * * Otherwise, the discrete axis sort criterion is the
+   *   orthogonal mean.
+   * If there is not a trend line, then the domain is sorted
+   * in the natural order.
+   *
+   * @method getDiscreteValues
+   * @param discrete {function} the discrete axis value accessor
+   *   object
+   * @param other {function} the orthogonal axis value accessor
+   * @return {any[]} the sorted discrete values
+   */
+  private getDiscreteValues(discrete, other) {
+    // The unsorted values.
+    let values = _.map(this.domains.pointData, discrete);
+    if (this.trendLine) {
+      // Sort relative to orthogonal values.
+      //
+      // Note: we cannot use the following to make the groups:
+      //   _.groupBy(this.domains.pointData, discrete)
+      // because the _.groupBy iteratee is only called with
+      // one argument, the value, whereas an array property
+      // accessor uses the iteratee index argument.
+      //
+      // The groupBy function below works around the following
+      // lodash bug:
+      // * the lodash groupBy iteratee is not called with an
+      //   index argument
+      let groupBy = (collection, iteratee) =&gt; {
+        let accumGroups = (accum, d, i) =&gt; {
+          let value = iteratee(d, i);
+          let group = accum[value];
+          if (!group) {
+            group = accum[value] = [];
+          }
+          group.push(d);
+        };
+        return _.transform(collection, accumGroups, {});
+      };
+      let groups = groupBy(this.domains.pointData, discrete);
+      let sortPrep = this.getDiscreteSortCriteria(groups, other);
+      let sorter = v =&gt; sortPrep[v];
+      return _.sortBy(_.keys(groups), sorter);
+    } else {
+      // Sort by natural order.
+      // Silly brain-dead Javascript numeric sort work-around.
+      let isNumeric = _.isNumber(values[0]);
+      let sorted = isNumeric ? values.sort(_.subtract) : values.sort();
+      // The valid unique sorted values.
+      return _.sortedUniq(sorted);
+    }
+  }
+
+  /**
+   * The discrete groups are sorted as follows:
+   * * If both axes are discrete, then the sort criterion is
+   *   the orthogonal count.
+   * * Otherwise, the discrete axis sort criterion is the
+   *   orthogonal mean.
+   *
+   * @method getDiscreteSortCriterion
+   * @param groups {Object} the discrete {value: [data objects]}
+   *   object
+   * @param other {function} the orthogonal value accessor
+   * @return {Object} the group sort criteria
+   */
+  private getDiscreteSortCriteria(groups: Object, other) {
+    if (this.domains.x.discrete &amp;&amp; this.domains.y.discrete) {
+      // Sort by orthogonal count.
+      return _.mapValues(groups, a =&gt; a.length);
+    } else {
+      // Sort by orthogonal mean.
+      return _.mapValues(groups, a =&gt; _.meanBy(a, other));
+    }
+  }
+
+  /**
+   * Sets the
+   * {{#crossLink &quot;ScatterPlotDirective/domains:property&quot;}}{{/crossLink}}
+   * properties &#x60;data&#x60;, &#x60;dataRefs&#x60;, &#x60;toData&#x60;, &#x60;fromData&#x60;, &#x60;x.discrete&#x60;,
+   * &#x60;y.discrete&#x60;, &#x60;x.indexes&#x60; and &#x60;y.indexes&#x60;.
+   *
+   * @method configureDomainRefs
+   * @private
+   * @param getX {function} the X accessor
+   * @param getY {function} the Y accessor
+   */
+  private configureDomainRefs(getX, getY) {
+    // Filter for the well-defined data points.
+    let isValidX = _.flow(getX, ObjectHelper.hasValidContent);
+    let isValidY = _.flow(getY, ObjectHelper.hasValidContent);
+    let isBothValid = d =&gt; isValidX(d) &amp;&amp; isValidY(d);
+    let isInvalid = _.negate(isBothValid);
+
+    // It is common that all data is valid. Therefore,
+    // first check whether at least one datum is invalid.
+    // In that case, collect the valid data and this.data
+    // references. Otherwise, the valid data is just the
+    // this.data array, and there is no need for a dataRefs
+    // array.
+    if (_.some(this.data, isInvalid)) {
+      this.domains.data = [];
+      this.domains.dataRefs = [];
+      let accumValid = (d, i) =&gt; {
+        if (isBothValid(d)) {
+          this.domains.dataRefs.push(i);
+          this.domains.data.push(d);
+        }
+      };
+      _.forEach(this.data, accumValid);
+    } else {
+      this.domains.data = this.data;
+    }
+
+    // The first valid input data object.
+    let sampleInput = _.first(this.domains.data);
+    // There must be at least one valid value.
+    if (!sampleInput) {
+      throw new Error(&quot;There is no valid data point for the properties&quot; +
+                      &#x60; X ${ this.x } and Y ${ this.y } &#x60;);
+    }
+    let sample = {x: getX(sampleInput), y: getY(sampleInput)};
+    // Strings and booleans are always discrete.
+    let isValueDiscrete = v =&gt;
+      _.isString(v) || _.isBoolean(v) ||
+      (_.isArray(v) &amp;&amp; isValueDiscrete(v[0]));
+    this.domains.x.discrete = this.xDiscrete || isValueDiscrete(sample.x);
+    this.domains.y.discrete = this.yDiscrete || isValueDiscrete(sample.y);
+
+    // Adjust for a multi-valued domain, if necessary.
+    let indexGroups = {};
+    let isXIndexed = _.isArray(sample.x);
+    let isYIndexed = _.isArray(sample.y);
+
+    // If both properties are multi-valued, then make
+    // the cross-product index groups. Otherwise, make
+    // the separate axis index groups, if necessary.
+    if (isXIndexed) {
+      let xIndexGroups = this.groupIndexes(getX);
+      if (isYIndexed) {
+        let yIndexGroups = this.groupIndexes(getY);
+        // Make the cross-product index groups.
+        let cross = (groupX, i) =&gt; {
+          let groupY = yIndexGroups[i];
+          let dupX = _.partialRight(language.dup, groupY.length);
+          let dupedX = _.flatMap(groupX, dupX);
+          let pairOff = y =&gt; groupX.map(x =&gt; [x, y]);
+          let dupedY = _.flatMapDeep(groupY, pairOff);
+          return {x: dupedX, y: dupedY};
+        };
+        let crossed = xIndexGroups.map(cross);
+        indexGroups.x = _.map(crossed, &#x27;x&#x27;);
+        indexGroups.y = _.map(crossed, &#x27;y&#x27;);
+      } else {
+        indexGroups.x = xIndexGroups;
+      }
+    } else if (isYIndexed) {
+      indexGroups.y = this.groupIndexes(getY);
+    }
+
+    let flattenGroups = groups =&gt; groups.map(_.flatten);
+    let indexes = _.mapValues(indexGroups, flattenGroups);
+    // Pick any index groups, since we only use the
+    // data index and the group lengths to make the
+    // data point =&gt; data references, and if both
+    // axes are indexed, then the group lengths of
+    // each are identical.
+    let someGroups = indexGroups.x || indexGroups.y;
+    if (someGroups) {
+      // The data point =&gt; data references.
+      let dupTo = (group, i) =&gt; {
+        return group ? language.dup(i, group.length) : i;
+      };
+      this.domains.toData = _.flatMap(someGroups, dupTo);
+
+      // The data =&gt; [data points] references.
+      let accumFrom = (accum, ref, i) =&gt; {
+        let group = accum[ref];
+        if (!group) {
+          group = accum[ref] = [];
+        }
+        group.push(i);
+      };
+      this.domains.fromData = _.transform(this.domains.toData, accumFrom);
+
+      // The data points mirror toData.
+      let deref = ref =&gt; this.domains.data[ref];
+      this.domains.pointData = this.domains.toData.map(deref);
+    } else {
+      // The data points are the same as the data.
+      this.domains.pointData = this.domains.data;
+    }
+
+    if (indexGroups.x) {
+      this.domains.x.indexes = _.flatten(indexes.x);
+    }
+    if (indexGroups.y) {
+      this.domains.y.indexes = _.flatten(indexes.y);
+    }
+  }
+
+  private groupIndexes(accessor) {
+    let getGroup = d =&gt; {
+      let value = accessor(d);
+      if (!_.isEmpty(value)) {
+        return _.range(value.length);
+      }
+    };
+    return this.domains.data.map(getGroup);
+  }
+
+  /**
+   * The point locator function.
+   *
+   * @method pointTransform
+   * @private
+   * @param d {Object} the data object
+   * @param i {number} the data point (not *data*) index
+   * @return {string} the &#x60;translate&#x60; SVG directive
+   */
+  private pointTransform(d: Object, i: number) {
+    return &#x60;translate(${ this.dx(d, i) },${ this.dy(d, i) })&#x60;;
+  }
+
+  /**
+   * Returns whether the data point at the given index is both
+   * valid and selected.
+   *
+   * @method isDataPointVisible
+   * @private
+   * @param index {number} the data point (not *data*) array index
+   * @return {boolean} whether the data point is selected and valid
+   */
+  private isDataPointVisible(index: number): boolean {
+    let refs = this.domains.toData;
+    let di = refs ? refs[index] : index;
+    return !this.selection || this.selection[di];
+  }
+
+  private drawAxes() {
+    // Make the axes.
+    let xAxis = d3.axisBottom(this.domains.x.scale);
+    let yAxis = d3.axisLeft(this.domains.y.scale);
+
+    // Date ticks are formatted as mm/dd/yyyy.
+    if (DateHelper.isDate(this.domains.x.domain[0])) {
+      xAxis.tickFormat(d3.timeFormat(&#x27;%m/%d/%Y&#x27;));
+    }
+    if (DateHelper.isDate(this.domains.y.domain[0])) {
+      yAxis.tickFormat(d3.timeFormat(&#x27;%m/%d/%Y&#x27;));
+    }
+
+    // Allow for the callback.
+    if (this.onAxis) {
+      this.onAxis(this.x, xAxis);
+      this.onAxis(this.y, yAxis);
+    }
+
+    this.svg.append(&#x27;g&#x27;)
+      .attr(&#x27;transform&#x27;, &#x60;translate(${ this.pad[3] },${ this.plot.origin.y })&#x60;)
+      .attr(&#x27;class&#x27;, &#x27;axis x&#x27;)
+      .call(xAxis);
+    this.svg.append(&#x27;g&#x27;)
+      .attr(&#x27;transform&#x27;, &#x60;translate(${ this.plot.origin.x },0)&#x60;)
+      .attr(&#x27;class&#x27;, &#x27;axis y&#x27;)
+      .call(yAxis);
+    // Slant non-numeric discrete Y axis tick labels.
+    if (this.domains.y.discrete &amp;&amp; !_.isNumber(this.domains.y.domain[0])) {
+      this.svg.selectAll(&#x27;.y.axis text&#x27;)
+        .attr(&#x27;transform&#x27;, &#x27;translate(-5,-20)rotate(-70)&#x27;);
+    }
+  }
+
+  /**
+   * Makes the seletion D3 brush.
+   *
+   * @method createBrush
+   * @return {Object} the D3 brush
+   */
+  private createBrush() {
+    // The brush extent includes only the data points. The
+    // offset is the amount to chop out, with the exception
+    // noted below.
+    let offset = _.map(this.pad, (v, i) =&gt; v + this.margin[i]);
+    // For some reason, setting the brush extent first y value
+    // to the offset chops out data points. Use the margin
+    // instead.
+    let extent = [
+      [offset[0], this.margin[3]],
+      [this.width - offset[1], this.height - offset[2]]
+    ];
+    // Make the brush.
+    let brush = d3.brush().extent(extent);
+
+    // Add the callbacks:
+
+    let onBrushStart = () =&gt; {
+      // Reshow all elements in this chart until the brush
+      // selection is completed.
+      let delay = this.pendingTransitionTime;
+      // Every data point is visible at the start of the
+      // brush action.
+      this.svg.selectAll(&#x27;.point&#x27;)
+        .transition()
+        .delay(delay)
+        .duration(0)
+        .style(&#x27;visibility&#x27;, &#x27;visibile&#x27;);
+    };
+
+    // Flag to avoid an infinite loop (see below).
+    let clearingBrush = false;
+    let onBrushEnd = () =&gt; {
+      // Ignore an empty selection.
+      // The magical guard below avoids an infinite loop,
+      // as described below.
+      if (clearingBrush) { return; }
+
+      // We apologize for the technical interruption and
+      // return to the program in progress.
+      let selected = this.selectedData();
+      // If there is a change, then trigger the select callback.
+      if (selected !== this.selection) {
+        this.select.emit(selected);
+      }
+
+      // Due to technical difficulties described below, we
+      // interrupt the normally scheduled program as follows:
+      //
+      // Clear the brush. The bizarre move/clear idiom is a D3 v4
+      // &quot;improvement&quot; over D3 v3 brush.clear(). However, the
+      // side-effect is an infinite loop trap for some obscure
+      // reason adumbrated in https://github.com/d3/d3-brush/issues/10.
+      // However, the work-around guards suggested there as:
+      //   if (!d3.event.sourceEvent) return;
+      //   if (!d3.event.selection) return;
+      // don&#x27;t apply here. The first guard never triggers. The
+      // second guard defeats the purpose of sending the selection
+      // all-clear signal to the parent component.
+      //
+      // Therefore, we introduce the clearingBrush flag kludge
+      // below to work around the obscure, deficient unofficially
+      // official D3 v4 work-around.
+      clearingBrush = true;
+      this.svg.select(&#x27;.brush&#x27;)
+        .call(brush.move, null);
+      clearingBrush = false;
+    };
+
+    // Register the callbacks.
+    brush.on(&#x27;start&#x27;, onBrushStart);
+    brush.on(&#x27;end&#x27;, onBrushEnd);
+
+    return brush;
+  }
+
+  /**
+   * Determines the subset of
+   * {{#crossLink &quot;ScatterPlotDirective/data:property&quot;}}{{/crossLink}}
+   * data points within the D3 brush bounding box.
+   *
+   * _Note_: this method is intended for use solely by the D3 callback.
+   *
+   * @method getSelectedData
+   * @return the data selection
+   */
+  private selectedData() {
+    // The selection bounding box.
+    let box = d3.event.selection;
+    // If some data points are selected, then map the data to
+    // their selection state. Otherwise, the default null is
+    // returned, which signifies that all data points are shown.
+    if (!box) {
+      return null;
+    }
+
+    // The callback functions.
+    let isWithin = (x, y) =&gt;
+      x &gt;= box[0][0] &amp;&amp; x &lt;= box[1][0] &amp;&amp; y &gt;= box[0][1] &amp;&amp; y &lt;= box[1][1];
+    let isDataPointInBox = (d, i) =&gt;
+      isWithin(this.dx(d, i), this.dy(d, i), box);
+    let isDataSelected = (d, i) =&gt; {
+      if (this.domains.fromData) {
+        // The data point indexes for the given datum.
+        let refs = this.domains.fromData[i];
+        // Check the (datum, data point index) pair.
+        let isRefInBox = ref =&gt; isDataPointInBox(d, ref);
+        // If any of the indexed data points is in the box,
+        // then the datum is selected.
+        return _.some(refs, isRefInBox);
+      } else {
+        // Check the (datum, data index) pair.
+        return isDataPointInBox(d, i);
+      }
+    };
+
+    return this.data.map(isDataSelected);
+  }
+
+  /**
+   * Draws the correlation trend line and correlation
+   * coefficient, if the correlation is well-defined, as
+   * described in
+   * {{#crossLink &quot;ScatterPlotDirective/leastSquares&quot;}}{{/crossLink}}.
+   *
+   * @method drawTrendLine
+   * @private
+   * @param plot {Object} the plot SVG element
+   * @return the data selection
+   */
+  private drawTrendLine(plot) {
+    let lsq = this.leastSquares();
+    // If no correlation can be determined, then bail.
+    if (!lsq) {
+      return;
+    }
+
+    // The trend end-points.
+    let m = lsq.slope;
+    let b = lsq.intercept;
+    let [rx1, rx2] = this.domains.x.scale.range();
+    let [ry1, ry2] = this.domains.y.scale.range();
+    let miny = Math.min(ry1, ry2);
+    let maxy = Math.max(ry1, ry2);
+    let lsqy1 = (m * rx1) + b;
+    let y1 = _.max([_.min([lsqy1, maxy]), miny]);
+    let x1 = Math.floor((y1 - b) / m);
+    let lsqy2 = (m * rx2) + b;
+    let y2 = _.max([_.min([lsqy2, maxy]), miny]);
+    let x2 = Math.floor((y2 - b) / m);
+
+    // The sole trend line datum is the array of line start
+    // and end point domain values. The coordinates are then
+    // scaled from this array.
+    let trendData = [[x1, y1, x2, y2]];
+    // Draw the trend line.
+    plot.selectAll(&#x27;.trendline&#x27;)
+      .data(trendData)
+      .enter().append(&#x27;line&#x27;)
+        .attr(&#x27;class&#x27;, &#x27;trendline&#x27;)
+        .attr(&#x27;x1&#x27;, d =&gt; d[0])
+        .attr(&#x27;y1&#x27;, d =&gt; d[1])
+        .attr(&#x27;x2&#x27;, d =&gt; d[2])
+        .attr(&#x27;y2&#x27;, d =&gt; d[3]);
+
+    // Show the r-square value.
+    let rSquareData = [[lsq.rSquare, x2, y2]];
+    plot.selectAll(&#x27;.r-squared&#x27;)
+      .data(rSquareData)
+      .enter().append(&#x27;text&#x27;)
+        .text(d =&gt; &#x60;r² = ${ d[0].toFixed(2) }&#x60;)
+        .attr(&#x27;class&#x27;, &#x27;r-squared&#x27;)
+        .attr(&#x27;x&#x27;, d =&gt; d[1] - 40)
+        .attr(&#x27;y&#x27;, d =&gt; d[2]);
+  }
+
+  /**
+   * Calculate the least-squares trend line parameters. This
+   * function is adapted, with improvements, from
+   * http://bl.ocks.org/benvandyke/8459843. The return value
+   * is the {slope, intercept, rSquare} object, if well-defined,
+   * otherwise null. The correlation is not well-defined if
+   * either all of the X values or all of the Y values are equal.
+   *
+   * @method leastSquares
+   * @private
+   * @return {Object} the trend line slope, intercept and r-square
+   */
+  private leastSquares() {
+    // The scaled X and Y values for valid data points.
+    let xValues = this.domains.pointData.map(this.dx);
+    let yValues = this.domains.pointData.map(this.dy);
+    // The X and Y means.
+    let xMean = _.mean(xValues);
+    let yMean = _.mean(yValues);
+
+    // The sums of squares.
+    let diffSquare = (v, delta) =&gt; Math.pow(v - delta, 2);
+    let dxSquares = xValues.map(v =&gt; diffSquare(v, xMean));
+    let xx = _.sum(dxSquares);
+    let dySquares = yValues.map(v =&gt; diffSquare(v, yMean));
+    let yy = _.sum(dySquares);
+    // If all of the X values or all of the Y values are equal,
+    // then correlation is undefined so bail.
+    if (xx === 0 || yy === 0) {
+      return null;
+    }
+    let dxy = i =&gt; (xValues[i] - xMean) * (yValues[i] - yMean);
+    let crossProduct = _.range(xValues.length).map(dxy);
+    let xy = _.sum(crossProduct);
+
+    // The least-squares coefficients.
+    let slope = xy / xx;
+    let intercept = yMean - (xMean * slope);
+    let rSquare = Math.pow(xy, 2) / (xx * yy);
+
+    return {slope: slope, intercept: intercept, rSquare: rSquare};
+  }
+
+  /**
+   * Determines the continuous [min, max] domain for the
+   * given value function applied over the
+   * {{#crossLink &quot;ScatterPlotDirective/data:property&quot;}}{{/crossLink}}
+   * input.
+   *
+   * @method getContinuousDomain
+   * @private
+   * @param accessor {function|string} the X or Y domain object =&gt; value
+   *   accessor or property path
+   * @return the [min, max] domain
+   */
+  private getContinuousDomain(accessor) {
+    return math.bounds(this.domains.pointData, accessor);
+  }
+}
+
+</pre>
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>

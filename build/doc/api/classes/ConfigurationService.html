@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>ConfigurationService - qiprofile API</title>
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="http://yui.yahooapis.com/combo?3.8.0pr2/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div class="yui3-g">
+        <div id="sidebar" class="yui3-u">
+            <div class="logo">
+              <a href="../index.html">
+                  qiprofile API
+              </a>
+            </div>
+            
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/clinical.html">clinical</a>
+                            </li>
+                            <li><a href="../modules/collection.html">collection</a>
+                            </li>
+                            <li><a href="../modules/collections.html">collections</a>
+                            </li>
+                            <li><a href="../modules/common.html">common</a>
+                            </li>
+                            <li><a href="../modules/configuration.html">configuration</a>
+                            </li>
+                            <li><a href="../modules/controls.html">controls</a>
+                            </li>
+                            <li><a href="../modules/data.html">data</a>
+                            </li>
+                            <li><a href="../modules/date.html">date</a>
+                            </li>
+                            <li><a href="../modules/error.html">error</a>
+                            </li>
+                            <li><a href="../modules/file.html">file</a>
+                            </li>
+                            <li><a href="../modules/help.html">help</a>
+                            </li>
+                            <li><a href="../modules/home.html">home</a>
+                            </li>
+                            <li><a href="../modules/image.html">image</a>
+                            </li>
+                            <li><a href="../modules/imageSequence.html">imageSequence</a>
+                            </li>
+                            <li><a href="../modules/main.html">main</a>
+                            </li>
+                            <li><a href="../modules/object.html">object</a>
+                            </li>
+                            <li><a href="../modules/page.html">page</a>
+                            </li>
+                            <li><a href="../modules/project.html">project</a>
+                            </li>
+                            <li><a href="../modules/projects.html">projects</a>
+                            </li>
+                            <li><a href="../modules/rest.html">rest</a>
+                            </li>
+                            <li><a href="../modules/roman.html">roman</a>
+                            </li>
+                            <li><a href="../modules/session.html">session</a>
+                            </li>
+                            <li><a href="../modules/string.html">string</a>
+                            </li>
+                            <li><a href="../modules/subject.html">subject</a>
+                            </li>
+                            <li><a href="../modules/testing.html">testing</a>
+                            </li>
+                            <li><a href="../modules/visualization.html">visualization</a>
+                            </li>
+                            <li><a href="../modules/volume.html">volume</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/AppComponent.html">AppComponent</a></li>
+                            <li><a href="../classes/AppModule.html">AppModule</a></li>
+                            <li><a href="../classes/Breast.html">Breast</a></li>
+                            <li><a href="../classes/BreastNormalizedAssay.html">BreastNormalizedAssay</a></li>
+                            <li><a href="../classes/BreastPathology.html">BreastPathology</a></li>
+                            <li><a href="../classes/CascadeSelectComponent.html">CascadeSelectComponent</a></li>
+                            <li><a href="../classes/ClinicalEncounter.html">ClinicalEncounter</a></li>
+                            <li><a href="../classes/CollectionActivatedRouteStub.html">CollectionActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionComponent.html">CollectionComponent</a></li>
+                            <li><a href="../classes/CollectionComponentSpec.html">CollectionComponentSpec</a></li>
+                            <li><a href="../classes/CollectionItemComponent.html">CollectionItemComponent</a></li>
+                            <li><a href="../classes/CollectionListPage.html">CollectionListPage</a></li>
+                            <li><a href="../classes/CollectionListSpec.html">CollectionListSpec</a></li>
+                            <li><a href="../classes/CollectionModule.html">CollectionModule</a></li>
+                            <li><a href="../classes/CollectionRouterStub.html">CollectionRouterStub</a></li>
+                            <li><a href="../classes/CollectionsActivatedRouteStub.html">CollectionsActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionsComponent.html">CollectionsComponent</a></li>
+                            <li><a href="../classes/CollectionsComponentSpec.html">CollectionsComponentSpec</a></li>
+                            <li><a href="../classes/CollectionsHelpComponent.html">CollectionsHelpComponent</a></li>
+                            <li><a href="../classes/CollectionsHelpServiceStub.html">CollectionsHelpServiceStub</a></li>
+                            <li><a href="../classes/CollectionsHelpTextComponent.html">CollectionsHelpTextComponent</a></li>
+                            <li><a href="../classes/CollectionsModule.html">CollectionsModule</a></li>
+                            <li><a href="../classes/CollectionsResource.html">CollectionsResource</a></li>
+                            <li><a href="../classes/CollectionsService.html">CollectionsService</a></li>
+                            <li><a href="../classes/CollectionsServiceStub.html">CollectionsServiceStub</a></li>
+                            <li><a href="../classes/CollectionSubectServiceStub.html">CollectionSubectServiceStub</a></li>
+                            <li><a href="../classes/ColorBarDirective.html">ColorBarDirective</a></li>
+                            <li><a href="../classes/CommonModule.html">CommonModule</a></li>
+                            <li><a href="../classes/ConfigurationService.html">ConfigurationService</a></li>
+                            <li><a href="../classes/ConfigurationServiceSpec.html">ConfigurationServiceSpec</a></li>
+                            <li><a href="../classes/ControlsModule.html">ControlsModule</a></li>
+                            <li><a href="../classes/CorrelationComponent.html">CorrelationComponent</a></li>
+                            <li><a href="../classes/DateHelper.html">DateHelper</a></li>
+                            <li><a href="../classes/DateHelperSpec.html">DateHelperSpec</a></li>
+                            <li><a href="../classes/Encounter.html">Encounter</a></li>
+                            <li><a href="../classes/ErrorComponent.html">ErrorComponent</a></li>
+                            <li><a href="../classes/FileService.html">FileService</a></li>
+                            <li><a href="../classes/FileServiceSpec.html">FileServiceSpec</a></li>
+                            <li><a href="../classes/Findable.html">Findable</a></li>
+                            <li><a href="../classes/HelpComponent.html">HelpComponent</a></li>
+                            <li><a href="../classes/HelpService.html">HelpService</a></li>
+                            <li><a href="../classes/HomeComponent.html">HomeComponent</a></li>
+                            <li><a href="../classes/IamgeSequenceService.html">IamgeSequenceService</a></li>
+                            <li><a href="../classes/Image.html">Image</a></li>
+                            <li><a href="../classes/ImageComponent.html">ImageComponent</a></li>
+                            <li><a href="../classes/ImageModule.html">ImageModule</a></li>
+                            <li><a href="../classes/ImageSequence.html">ImageSequence</a></li>
+                            <li><a href="../classes/ImageSequenceServiceSpec.html">ImageSequenceServiceSpec</a></li>
+                            <li><a href="../classes/ImageSequenceSessionServiceStub.html">ImageSequenceSessionServiceStub</a></li>
+                            <li><a href="../classes/ImageSequenceSpec.html">ImageSequenceSpec</a></li>
+                            <li><a href="../classes/ImageStore.html">ImageStore</a></li>
+                            <li><a href="../classes/LabelMap.html">LabelMap</a></li>
+                            <li><a href="../classes/Modeling.html">Modeling</a></li>
+                            <li><a href="../classes/ModelingResult.html">ModelingResult</a></li>
+                            <li><a href="../classes/ModelingResults.html">ModelingResults</a></li>
+                            <li><a href="../classes/ObjectHelper.html">ObjectHelper</a></li>
+                            <li><a href="../classes/Page.html">Page</a></li>
+                            <li><a href="../classes/PageComponent.html">PageComponent</a></li>
+                            <li><a href="../classes/PageModule.html">PageModule</a></li>
+                            <li><a href="../classes/PapayaService.html">PapayaService</a></li>
+                            <li><a href="../classes/ParameterResult.html">ParameterResult</a></li>
+                            <li><a href="../classes/Pathology.html">Pathology</a></li>
+                            <li><a href="../classes/PlayerComponent.html">PlayerComponent</a></li>
+                            <li><a href="../classes/ProjectItemComponent.html">ProjectItemComponent</a></li>
+                            <li><a href="../classes/ProjectListPage.html">ProjectListPage</a></li>
+                            <li><a href="../classes/ProjectListSpec.html">ProjectListSpec</a></li>
+                            <li><a href="../classes/ProjectsComponent.html">ProjectsComponent</a></li>
+                            <li><a href="../classes/ProjectsComponentSpec.html">ProjectsComponentSpec</a></li>
+                            <li><a href="../classes/ProjectsHelpComponent.html">ProjectsHelpComponent</a></li>
+                            <li><a href="../classes/ProjectsHelpServiceStub.html">ProjectsHelpServiceStub</a></li>
+                            <li><a href="../classes/ProjectsHelpTextComponent.html">ProjectsHelpTextComponent</a></li>
+                            <li><a href="../classes/ProjectsModule.html">ProjectsModule</a></li>
+                            <li><a href="../classes/ProjectsResource.html">ProjectsResource</a></li>
+                            <li><a href="../classes/ProjectsService.html">ProjectsService</a></li>
+                            <li><a href="../classes/ProjectsServiceStub.html">ProjectsServiceStub</a></li>
+                            <li><a href="../classes/PropertyTableComponent.html">PropertyTableComponent</a></li>
+                            <li><a href="../classes/RCB.html">RCB</a></li>
+                            <li><a href="../classes/Registration.html">Registration</a></li>
+                            <li><a href="../classes/RegistrationSpec.html">RegistrationSpec</a></li>
+                            <li><a href="../classes/REST.html">REST</a></li>
+                            <li><a href="../classes/RestResource.html">RestResource</a></li>
+                            <li><a href="../classes/RESTSpec.html">RESTSpec</a></li>
+                            <li><a href="../classes/Roman.html">Roman</a></li>
+                            <li><a href="../classes/RomanSpec.html">RomanSpec</a></li>
+                            <li><a href="../classes/Sarcoma.html">Sarcoma</a></li>
+                            <li><a href="../classes/Scan.html">Scan</a></li>
+                            <li><a href="../classes/ScanSpec.html">ScanSpec</a></li>
+                            <li><a href="../classes/ScatterPlotDirective.html">ScatterPlotDirective</a></li>
+                            <li><a href="../classes/Session.html">Session</a></li>
+                            <li><a href="../classes/SessionActivatedRouteStub.html">SessionActivatedRouteStub</a></li>
+                            <li><a href="../classes/SessionComponent.html">SessionComponent</a></li>
+                            <li><a href="../classes/SessionComponentSpec.html">SessionComponentSpec</a></li>
+                            <li><a href="../classes/SessionDetailResource.html">SessionDetailResource</a></li>
+                            <li><a href="../classes/SessionDetailResourceStub.html">SessionDetailResourceStub</a></li>
+                            <li><a href="../classes/SessiondRouterStub.html">SessiondRouterStub</a></li>
+                            <li><a href="../classes/SessionModule.html">SessionModule</a></li>
+                            <li><a href="../classes/SessionService.html">SessionService</a></li>
+                            <li><a href="../classes/SessionServiceSpec.html">SessionServiceSpec</a></li>
+                            <li><a href="../classes/SessionServiceStub.html">SessionServiceStub</a></li>
+                            <li><a href="../classes/SessionSpec.html">SessionSpec</a></li>
+                            <li><a href="../classes/SessionSubjectResourceStub.html">SessionSubjectResourceStub</a></li>
+                            <li><a href="../classes/SessionTumorExtent.html">SessionTumorExtent</a></li>
+                            <li><a href="../classes/SliderDirective.html">SliderDirective</a></li>
+                            <li><a href="../classes/SparkLineDirective.html">SparkLineDirective</a></li>
+                            <li><a href="../classes/StringHelper.html">StringHelper</a></li>
+                            <li><a href="../classes/StringHelperSpec.html">StringHelperSpec</a></li>
+                            <li><a href="../classes/Subject.html">Subject</a></li>
+                            <li><a href="../classes/SubjectActivatedRouteStub.html">SubjectActivatedRouteStub</a></li>
+                            <li><a href="../classes/SubjectChangeDetectorRefStub.html">SubjectChangeDetectorRefStub</a></li>
+                            <li><a href="../classes/SubjectComponent.html">SubjectComponent</a></li>
+                            <li><a href="../classes/SubjectComponentSpec.html">SubjectComponentSpec</a></li>
+                            <li><a href="../classes/SubjectdRouterStub.html">SubjectdRouterStub</a></li>
+                            <li><a href="../classes/SubjectModule.html">SubjectModule</a></li>
+                            <li><a href="../classes/SubjectResource.html">SubjectResource</a></li>
+                            <li><a href="../classes/SubjectResourceStub.html">SubjectResourceStub</a></li>
+                            <li><a href="../classes/SubjectService.html">SubjectService</a></li>
+                            <li><a href="../classes/SubjectServiceSpec.html">SubjectServiceSpec</a></li>
+                            <li><a href="../classes/SubjectServiceStub.html">SubjectServiceStub</a></li>
+                            <li><a href="../classes/SubjectSpec.html">SubjectSpec</a></li>
+                            <li><a href="../classes/Table.html">Table</a></li>
+                            <li><a href="../classes/TimeSeries.html">TimeSeries</a></li>
+                            <li><a href="../classes/TNM.html">TNM</a></li>
+                            <li><a href="../classes/ToggleHelpComponent.html">ToggleHelpComponent</a></li>
+                            <li><a href="../classes/VisualizationModule.html">VisualizationModule</a></li>
+                            <li><a href="../classes/Volume.html">Volume</a></li>
+                            <li><a href="../classes/VolumeComponent.html">VolumeComponent</a></li>
+                            <li><a href="../classes/VolumeDetailPage.html">VolumeDetailPage</a></li>
+                            <li><a href="../classes/VolumeImageSequenceServiceStub.html">VolumeImageSequenceServiceStub</a></li>
+                            <li><a href="../classes/VolumeModule.html">VolumeModule</a></li>
+                            <li><a href="../classes/VolumeService.html">VolumeService</a></li>
+                            <li><a href="../classes/VolumeServiceSpec.html">VolumeServiceSpec</a></li>
+                            <li><a href="../classes/VolumeSpec.html">VolumeSpec</a></li>
+                            <li><a href="../classes/XNAT.html">XNAT</a></li>
+                            <li><a href="../classes/XNATSpec.html">XNATSpec</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            <div id="sections" class="sidebox">
+              <div class="hd">
+                <h2 class="no-toc">ConfigurationService</h2>
+              </div>
+              <div class="bd">
+            
+            
+            
+                  <div><a href="#property-summary">Property Summary</a></div>
+            
+                  <div><a href="#method-summary">Method Summary</a></div>
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
+                  <div><a href="#public-properties">Public Properties</a></div>
+                  <ul>
+                      <li><a href="#props_dataModel">dataModel</a></li>
+                      <li><a href="#props_dataModel">dataModel</a></li>
+                      <li><a href="#props_preferences">preferences</a></li>
+                      <li><a href="#props_valueChoices">valueChoices</a></li>
+                  </ul>
+            
+            
+                  <div><a href="#private-properties">Private Properties</a></div>
+                  <ul>
+                      <li><a href="#props__labelLookup">_labelLookup</a></li>
+                  </ul>
+            
+                  <div><a href="#public-methods">Public Methods</a></div>
+                  <ul>
+                      <li><a href="#method_getHTMLLabel">getHTMLLabel</a></li>
+                      <li><a href="#method_getLabel">getLabel</a></li>
+                      <li><a href="#method_getTextLabel">getTextLabel</a></li>
+                  </ul>
+            
+            
+                  <div><a href="#private-methods">Private Methods</a></div>
+                  <ul>
+                      <li><a href="#method_defaultGenomicsLabel">defaultGenomicsLabel</a></li>
+                      <li><a href="#method_defaultLabel">defaultLabel</a></li>
+                      <li><a href="#method_parseDataModel">parseDataModel</a></li>
+                      <li><a href="#method_parseDataModelValue">parseDataModelValue</a></li>
+                  </ul>
+              </div>
+            </div>
+            
+            
+            
+            <div class="version-info">
+              Version: 2.1.1
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><div class="title">
+    <span class="source-link"><a href="../files/build_src_configuration_configuration.service.ts.html#l19"><code>build&#x2F;src&#x2F;configuration&#x2F;configuration.service.ts:19</code></a></span>
+    <h1 class="class-name">ConfigurationService</h1>
+</div>
+
+
+
+
+<div class="class-description"><p>The application configuration service.</p>
+</div>
+
+
+
+
+
+
+
+  <h2 id="property-summary">Property Summary</h2>
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Public Properties</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_dataModel">dataModel</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The data model configuration object. This input is parsed into the ConfigurationService/labelLookup:property for use by <a href="../classes/ConfigurationService.html#method_getLabel" class="crosslink">getLabel</a>.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_dataModel">dataModel</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The application data model configuration object built from the <code>data_model.cfg</code> input file. The input file topics are conceptual objects. The input sections assign a property path to a label, e.g. the section:</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_preferences">preferences</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The preferences configuration object.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props_valueChoices">valueChoices</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The choices configuration {path: {value: label}} object, where <em>path</em> is the property select choice path.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Private Properties</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="property-name ">
+              <a href="#props__labelLookup">_labelLookup</a>: Object
+            </div>
+            <div class="short-description">
+              <p>The parsed <a href="../classes/ConfigurationService.html#property_dataModel" class="crosslink">dataModel</a> configuration object built on demand.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  <h2 id="method-summary">Method Summary</h2>
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Public Methods</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_getHTMLLabel">getHTMLLabel</a>(property, config): String
+            </div>
+            <div class="short-description">
+              <p>Returns the HTML label for the given display property. The HTML label is determined as described in <a href="../classes/ConfigurationService.html#method_getTextLabel" class="crosslink">getTextLabel</a>, with the following difference:</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_getLabel">getLabel</a>(property, config): Object
+            </div>
+            <div class="short-description">
+              <p>Returns the {text, html} label object for the given display property. The label is searched as described in <a href="../classes/ConfigurationService.html#method_getLabel" class="crosslink">getLabel</a>.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            public
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_getTextLabel">getTextLabel</a>(property, config): String
+            </div>
+            <div class="short-description">
+              <p>Returns the HTML label for the given display property. The text label is determined as follows:</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+    <table class="summary">
+      <thead>
+      <tr>
+        <th colspan="2">Private Methods</th>
+      </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_defaultGenomicsLabel">defaultGenomicsLabel</a>(property): String
+            </div>
+            <div class="short-description">
+              <p>Returns the label for the given genomics property. This method specializes <a href="../classes/ConfigurationService.html#method_defaultLabel" class="crosslink">defaultLabel</a> for a property name of length six or less to upper-case.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_defaultLabel">defaultLabel</a>(property): String
+            </div>
+            <div class="short-description">
+              <p>If the label path contains <code>normalizedAssay</code>, then this method delegates to <a href="../classes/StringHelper.html#method_labelize" class="crosslink">labelize</a> called on the terminal property name in the <em>property</em> path.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_parseDataModel">parseDataModel</a>( ): Object
+            </div>
+            <div class="short-description">
+              <p>Converts the data model configuration input file into the configuration object as described in ConfigurationService/labelLookup:property.</p>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            private
+            
+            
+          </td>
+          <td>
+            <div class="method-name ">
+              <a href="#method_parseDataModelValue">parseDataModelValue</a>(value): String
+            </div>
+            <div class="short-description">
+              <p>Converts the given data model configuration value into a [property, html] pair. The input value must be a property path optionally followed by a html qualifier.</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+
+
+
+
+
+
+
+
+
+    <div id="properties public">
+        <h2 id="public-properties">Public Properties</h2>
+<div class="property item">
+  <div id="props_dataModel" class="title">
+    <span class="source-link"><a href="../files/build_src_configuration_configuration.service.ts.html#l40"><code>build&#x2F;src&#x2F;configuration&#x2F;configuration.service.ts:40</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      dataModel: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The data model configuration object. This input is
+parsed into the
+ConfigurationService/labelLookup:property
+for use by
+<a href="../classes/ConfigurationService.html#method_getLabel" class="crosslink">getLabel</a>.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_dataModel" class="title">
+    <span class="source-link"><a href="../files/build_src_configuration_configuration.service.ts.html#l51"><code>build&#x2F;src&#x2F;configuration&#x2F;configuration.service.ts:51</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      dataModel: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The application data model configuration object built
+from the <code>data_model.cfg</code> input file. The input file
+topics are conceptual objects. The input sections
+assign a property path to a label, e.g. the section:</p>
+<pre class="code prettyprint"><code>[Demographics]
+Age = age
+</code></pre>
+<p>specifies that a Demographics object has the property
+<em>age</em> with display label <code>Age</code>.</p>
+<p>A topic can be parameterized by a qualifier, e.g. the topic:</p>
+<pre class="code prettyprint"><code>[Pathology&lt;Breast&gt;]
+</code></pre>
+<p>pertains only to the <code>Breast</code> qualifier. Only topics
+can be parameterized.</p>
+<p>The property value <code>this</code> is a logical aggregation, e.g.
+the section:</p>
+<pre class="code prettyprint"><code>[RCB]
+RCB Summary = this
+RCB Detail = this
+</code></pre>
+<p>groups the RCB object into two logical aggregations.</p>
+<p>An atomic property entry, i.e. an entry that does not
+refer to another topic, can be annotated by an HTML label,
+e.g. the entry:</p>
+<pre class="code prettyprint"><code>tau_i = tauI (&amp;tau;&lt;sub&gt;i&lt;/sub&gt;)
+</code></pre>
+<p>specifies that the <em>tauI</em> property has text label <code>tau_i</code>
+with HTML representation τ<sub>i</sub>.</p>
+<p>The file is parsed into this
+<a href="../classes/ConfigurationService.html#property_dataModel" class="crosslink">dataModel</a>.
+The parsed object consists of {context: config} properties,
+where <em>context</em> is <code>common</code> for the shared data model or a
+parameterized qualifier as described above, and <em>config</em>
+is the parsed configuration for that context.</p>
+<p>Each parsed configuration is a
+{topic: {property: {_label, child...}}}
+associative label lookup object, where <em>_label</em> is a
+{<code>text</code>, <code>html</code>} label object and <em>child</em> is a child
+property.</p>
+<p>Every object has a label but only non-atomic properties
+have child properties. This sets up the convenient label
+lookup configs for the common and extension configurations
+as sketched in the following function:</p>
+<pre class="code prettyprint"><code>(topic, path) =&gt; _.get(config, <code>${topic}.${path}.${_label}</code>)</code></pre>
+</div>
+
+    <h4>Example:</h4>
+    <pre class="code prettyprint"><code>[Clinical]
+Demographics = subject
+Biopsy = subject.biopsy
+
+[Demographics]
+Age = age
+
+[Biopsy]
+Pathology = pathology
+
+[Pathology]
+PrimaryTumor = tumors[0]
+
+[PrimaryTumor]
+TNM = tnm
+
+[PrimaryTumor&lt;Breast&gt;]
+RCB = rcb
+
+[TNM]
+TNM Size = size.tumorSize
+...
+</code></pre>
+<p>is parsed to:</p>
+<pre class="code prettyprint"><code>{
+  common:
+    subject: {
+      _label: {text: 'Demographics'},
+      age: {_label: {text: 'Age'}},
+      biopsy: {
+        _label: {text: 'Biopsy'},
+        pathology: {
+          _label: {text: 'Pathology'},
+          tumors: [
+            {
+              _label: {text: 'Primary Tumor'},
+              tnm: {
+                _label: {text: 'TNM'},
+                size: {
+                  tumorSize: {_label: {text: 'TNM Size'}},
+                  ...
+                }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+  Breast: {
+    ... // same as common with the following exception:
+            tumors: [
+              {
+                _label: ...
+                tnm: ...
+                rcb: ...   // &lt;== breast-specific
+  }
+}
+</code></pre>
+<p>This example has a parameterized extension <code>Breast</code>
+which augments the common configuration with breast
+patient specializations. Note that each section topic
+and section entry parses to a <code>_label property, but the atomic property items only contain this</code>_label<code>property. Label lookups are then a matter of calling the lodash</code>_get` function with an augmented property
+path. For example, the path:</p>
+<pre class="code prettyprint"><code>common.Clinical.subject.biopsy.pathology.tumors[0].tnm.size.tumorSize._label.text
+</code></pre>
+<p>resolves to <code>TNM Size</code> as described in
+<a href="../classes/ConfigurationService.html#method_getLabel" class="crosslink">getLabel</a>.</p>
+<p>Note that an array index is supported, e.g. <code>tumors[0]</code>
+in the above example.</p>
+
+</div>
+<div class="property item">
+  <div id="props_preferences" class="title">
+    <span class="source-link"><a href="../files/build_src_configuration_configuration.service.ts.html#l25"><code>build&#x2F;src&#x2F;configuration&#x2F;configuration.service.ts:25</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      preferences: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The preferences configuration object.</p>
+</div>
+
+</div>
+<div class="property item">
+  <div id="props_valueChoices" class="title">
+    <span class="source-link"><a href="../files/build_src_configuration_configuration.service.ts.html#l32"><code>build&#x2F;src&#x2F;configuration&#x2F;configuration.service.ts:32</code></a></span>
+    <h3 class="">
+      public
+      
+      
+      valueChoices: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The choices configuration {path: {value: label}} object,
+where <em>path</em> is the property select choice path.</p>
+</div>
+
+</div>
+    </div>
+
+
+    <div id="properties private">
+        <h2 id="private-properties">Private Properties</h2>
+<div class="property item private">
+  <div id="props__labelLookup" class="title">
+    <span class="source-link"><a href="../files/build_src_configuration_configuration.service.ts.html#l196"><code>build&#x2F;src&#x2F;configuration&#x2F;configuration.service.ts:196</code></a></span>
+    <h3 class="">
+      private
+      
+      
+      _labelLookup: Object
+    </h3>
+  </div>
+
+
+  <div class="property-description"><p>The parsed
+<a href="../classes/ConfigurationService.html#property_dataModel" class="crosslink">dataModel</a>
+configuration object built on demand.</p>
+</div>
+
+</div>
+    </div>
+
+  <div id="methods public">
+    <h2 id="public-methods">Public Methods</h2>
+<div class="method item">
+    <div id="method_getHTMLLabel" class="title">
+        <span class="source-link"><a href="../files/build_src_configuration_configuration.service.ts.html#l212"><code>build&#x2F;src&#x2F;configuration&#x2F;configuration.service.ts:212</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            getHTMLLabel(property, config): String
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Returns the HTML label for the given display property.
+The HTML label is determined as described in
+<a href="../classes/ConfigurationService.html#method_getTextLabel" class="crosslink">getTextLabel</a>,
+with the following difference:</p>
+<ul>
+<li>If the label lookup search returns a matching {text, html} label
+object and has a <em>html</em> value, then that value is returned.</li>
+</ul>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>property</td>
+              <td>String</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the property path</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>config</td>
+              <td>String</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the optional parameterized extension</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type">String</span>
+          <span class="return-description"><p>the display HTML label</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item">
+    <div id="method_getLabel" class="title">
+        <span class="source-link"><a href="../files/build_src_configuration_configuration.service.ts.html#l256"><code>build&#x2F;src&#x2F;configuration&#x2F;configuration.service.ts:256</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            getLabel(property, config): Object
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Returns the {text, html} label object for the given display property.
+The label is searched as described in
+<a href="../classes/ConfigurationService.html#method_getLabel" class="crosslink">getLabel</a>.</p>
+<p>If the label lookup search returns a matching {text, html} label object, then
+the <em>html</em> value is returned, if it exists, otherwise the
+<em>text</em> value is returned. If the search fails, then this method
+delegates to
+<a href="../classes/StringHelper.html#method_labelize" class="crosslink">labelize</a>.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>property</td>
+              <td>String</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the property path</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>config</td>
+              <td>String</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the optional parameterized extension</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type">Object</span>
+          <span class="return-description"><p>the configured label object, if it exists,
+otherwise <code>undefined</code></p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item">
+    <div id="method_getTextLabel" class="title">
+        <span class="source-link"><a href="../files/build_src_configuration_configuration.service.ts.html#l234"><code>build&#x2F;src&#x2F;configuration&#x2F;configuration.service.ts:234</code></a></span>
+        <h3 class="">
+            public
+            
+            
+            getTextLabel(property, config): String
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Returns the HTML label for the given display property.
+The text label is determined as follows:</p>
+<ul>
+<li>If the label lookup search returns a matching {text, html}
+label object, then the <em>text</em> value is returned.</li>
+<li>If the search fails, then this method delegates to
+<a href="../classes/ConfigurationService.html#method_defaultLabel" class="crosslink">defaultLabel</a>.</li>
+</ul>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>property</td>
+              <td>String</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the property path</p>
+</td>
+            </tr>
+
+            <tr>
+              <td>config</td>
+              <td>String</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the optional parameterized extension</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type">String</span>
+          <span class="return-description"><p>the display text label</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+  </div>
+
+
+    <div id="methods private">
+        <h2 id="private-methods">Private Methods</h2>
+<div class="method item private">
+    <div id="method_defaultGenomicsLabel" class="title">
+        <span class="source-link"><a href="../files/build_src_configuration_configuration.service.ts.html#l306"><code>build&#x2F;src&#x2F;configuration&#x2F;configuration.service.ts:306</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            defaultGenomicsLabel(property): String
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Returns the label for the given genomics property.
+This method specializes
+<a href="../classes/ConfigurationService.html#method_defaultLabel" class="crosslink">defaultLabel</a>
+for a property name of length six or less to upper-case.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>property</td>
+              <td>String</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the property name (not path)</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type">String</span>
+          <span class="return-description"><p>the default label</p>
+</span>
+        </div>
+      </div>
+
+
+        <h4>Example:</h4>
+        <pre class="code prettyprint"><code>'er'  =&gt; 'ER'
+'scube2'  =&gt; 'SCUBE2'
+'survivin'  =&gt; 'Survivin'</code></pre>
+
+</div>
+<div class="method item private">
+    <div id="method_defaultLabel" class="title">
+        <span class="source-link"><a href="../files/build_src_configuration_configuration.service.ts.html#l284"><code>build&#x2F;src&#x2F;configuration&#x2F;configuration.service.ts:284</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            defaultLabel(property): String
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>If the label path contains <code>normalizedAssay</code>, then
+this method delegates to
+<a href="../classes/StringHelper.html#method_labelize" class="crosslink">labelize</a>
+called on the terminal property name in the <em>property</em>
+path.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>property</td>
+              <td>String</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the property path</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type">String</span>
+          <span class="return-description"><p>the target label</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item private">
+    <div id="method_parseDataModel" class="title">
+        <span class="source-link"><a href="../files/build_src_configuration_configuration.service.ts.html#l330"><code>build&#x2F;src&#x2F;configuration&#x2F;configuration.service.ts:330</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            parseDataModel( ): Object
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Converts the data model configuration input file into
+the configuration object as described in
+ConfigurationService/labelLookup:property.</p>
+</div>
+
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type">Object</span>
+          <span class="return-description"><p>the parsed data model object</p>
+</span>
+        </div>
+      </div>
+
+
+</div>
+<div class="method item private">
+    <div id="method_parseDataModelValue" class="title">
+        <span class="source-link"><a href="../files/build_src_configuration_configuration.service.ts.html#l453"><code>build&#x2F;src&#x2F;configuration&#x2F;configuration.service.ts:453</code></a></span>
+        <h3 class="">
+            private
+            
+            
+            parseDataModelValue(value): String
+        </h3>
+    </div>
+
+
+
+    <div class="method-description"><p>Converts the given data model configuration value into a
+[property, html] pair. The input value must be a property
+path optionally followed by a html qualifier.</p>
+</div>
+
+      <div class="params">
+        <h4>Parameters:</h4>
+        <table>
+          <thead>
+          <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Attribute</th>
+            <th>Description</th>
+          </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>value</td>
+              <td>String</td>
+              <td>
+                <ul>
+                  
+                  
+                  
+                </ul>
+              </td>
+              <td><p>the input data model item value</p>
+</td>
+            </tr>
+
+          </tbody>
+        </table>
+      </div>
+
+      <div class="return">
+        <h4>Return:</h4>
+        <div>
+          <span class="return-type">String</span>
+          <span class="return-description"><p>the parsed item [property, html] pair</p>
+</span>
+        </div>
+      </div>
+
+
+        <h4>Example:</h4>
+        <pre class="code prettyprint"><code>'c'                     =&gt;  ['c', undefined]
+'c.d.e'                 =&gt;  ['c.d.e', undefined]
+'c.vI (v&lt;sub&gt;i&lt;/sub&gt;)'  =&gt;  ['c.vI', 'v&lt;sub&gt;i&lt;/sub&gt;']
+'c.d.e[0]'  =&gt;  ['c.d.e[0]', undefined]</code></pre>
+
+</div>
+    </div>
+
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>

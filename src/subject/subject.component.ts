@@ -89,6 +89,24 @@ export class SubjectComponent extends PageComponent {
   valueChoices: Object;
 
   /**
+   * The time line data series.
+   *
+   * @property timeLineData {Object}
+   */
+  timeLineData: Object;
+
+  /**
+   * The time line data series date properties.
+   *
+   * @property timeLineData {Object}
+   */
+  const timeLineValue = {
+    biopsy: 'date',
+    surgery: 'date',
+    session: 'date'
+  };
+
+  /**
    * The project name.
    *
    * @property project {string}
@@ -133,6 +151,11 @@ export class SubjectComponent extends PageComponent {
     subjectService.getSubject(params).subscribe(subject => {
       if (subject) {
         this.subject = subject;
+        this.timeLineData = {
+          biopsy: this.subject.biopsies,
+          surgery: this.subject.surgeries,
+          session: this.subject.sessions
+        };
       } else {
         this.error = `${ this.subject.title } was not found`;
       }
@@ -179,12 +202,22 @@ export class SubjectComponent extends PageComponent {
   }
 
   /**
+   * Rounds the modeling result to two decimals.
+   *
+   * @method formatModelingResult
+   * @param value {number} the value to format
+   * @return {number} the rounded value
+   */
+  formatModelingResult(value: number): number {
+    return _.isNil(value) ? value : _.round(value, 2);
+  }
+
+  /**
    * Sets the
    * {{#crossLink "SubjectComponent/modelingFormat:property"}}{{/crossLink}}
    * to the other value.
    *
-   * @method tnmStageHelp
-   * @raise {Error} if the collection does not have help
+   * @method toggleModelingFormat
    */
   toggleModelingFormat() {
     this._modelingFormatIndex =
@@ -284,5 +317,26 @@ export class SubjectComponent extends PageComponent {
       ['session', session.number],
       {relativeTo: this.route}
     );
+  }
+
+  /**
+   * @method timeLineWidth
+   * @return the preferred time line width
+   */
+  private timeLineWidth(): number {
+    // The margin is an inexplicable fudge factor.
+    const margin = 24;
+    return this.gutterWidth() - margin;
+  }
+
+  /**
+   * The body width.
+   *
+   * @method bodyInnerWidth
+   * @return the body inner width in pixels
+   */
+  private bodyInnerWidth(): number {
+    let rect = document.body.getBoundingClientRect();
+    return rect.width;
   }
 }

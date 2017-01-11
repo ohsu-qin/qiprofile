@@ -97,7 +97,7 @@ export class TimeLineDirective implements OnChanges, OnInit {
       };
       let seriesData = data.map(toDataPoint);
       return accum.concat(seriesData);
-    }
+    };
     // The flattened data points.
     let dataPoints = sorted.reduce(accumData, []);
     // The X value accessor delegates to the data series.

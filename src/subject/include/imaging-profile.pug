@@ -1,4 +1,22 @@
+// This imaging partial partial displays the timeline,
+// session numbers, preview images and modeling results.
+
 h4.qi-profile-heading Imaging Profile
 .qi-panel
-  //- include timeline
-  include modeling
+  accordion([showArrows]=true, [expandAll]=true)
+    accordion-group.qi-pale(
+      [heading]="'Patient Timeline'", [isOpened]=true
+    )
+      include timeline
+
+    accordion-group.qi-pale(
+      [heading]="'Imaging Visits'", [isOpened]=true
+    )
+      include previews
+
+    accordion-group(
+      *ngIf="has(subject.modelings)",
+      [heading]="'Pharmacokinetic Modeling'",
+      [isOpened]=true
+    )
+      include modeling

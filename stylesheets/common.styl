@@ -141,10 +141,12 @@ ul.qi-clean-list
 .qi-modal-table tr
   font-size smaller
 
-.qi-inset-title
+.qi-title
+  color Indigo
+
+.qi-inset
   text-align left
   padding-left 0.5em
-  color Indigo
 
 .qi-panel
   border 1px solid SlateGray
@@ -165,6 +167,10 @@ ul.qi-clean-list
           background-color Azure
           & .qi-nested
             background-color DarkTurquoise
+  // A pale panel softens the panel body background
+  // for darker content.
+  & .qi-pale .panel-body
+    background-color AliceBlue
 
 // The nested style adds an offset.
 .qi-nested
@@ -183,6 +189,10 @@ ul.qi-clean-list
   table-layout fixed
   & .qi-cell
     display table-cell
+    // Center a nested table within the cell.
+    & .qi-table
+      margin-left auto
+      margin-right auto
 
 // The standard qiprofile data table style.
 // This style should be used in conjunction with the bootstrap

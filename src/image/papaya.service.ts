@@ -157,6 +157,7 @@ export class PapayaService {
    */
   restart(image: Object, overlays=[]) {
     papaya.Container.resetViewer(papaya.papayaContainers.length - 1);
+    // TODO - is below necessary? Test restart.
     // // Make the urls array as in the start method above.
     // let images = [image].concat(overlays);
     // let urls = images.map(ImageStore.location);
@@ -344,7 +345,7 @@ export class PapayaService {
 
   /**
    * In the case of a hot reload, a new PapayaService is created but
-   * the previous patched Papaya library is retaioned. If that is the
+   * the previous patched Papaya library is retained. If that is the
    * case, the papaya.viewer.Viewer.prototype._finishedLoading patch
    * function already exists. This method returns whether that function
    * exists, which serves as a proxy for whether Papaya is already
@@ -531,9 +532,9 @@ export class PapayaService {
   /**
    * Guard against the following behavior:
    * * When the mouse moves or is clicked outside of the image viewport
-   *   while a volume is being loaded, Papaya sporadically
-   *   tries to dereference an empty viewer volume header, resulting
-   *   in the following error message:
+   *   while a volume is being loaded, Papaya sporadically tries to
+   *   dereference an empty viewer volume header, resulting in the
+   *   following error message:
    *
    *       Cannot read property 'xDim' of null
    *

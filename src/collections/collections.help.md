@@ -1,7 +1,7 @@
 Overview
 --------
 The Quantitative Imaging Profile
-(<em>Q<span class='qi-x-smaller'>I</span>P<span class='qi-x-smaller'>R</span></em>
+(<em>QIP<span class='qi-x-smaller'>R</span></em>
  <button class="btn btn-sm qi-btn" type='button' onclick='new Audio("static/media/QiPr1.mp3").play()'>
    <span class="glyphicon glyphicon-volume-up"></span>
  </button>)
@@ -18,11 +18,11 @@ right of the row to view the collection acquisition method details.
 
 Navigation
 ----------
-<em>Q<span class='qi-x-smaller'>I</span>P<span class='qi-x-smaller'>R</span></em>
+<em>QIP<span class='qi-x-smaller'>R</span></em>
 is intended to be used in its own tab. Navigation between
-<em>Q<span class='qi-x-smaller'>I</span>P<span class='qi-x-smaller'>R</span></em>
+<em>QIP<span class='qi-x-smaller'>R</span></em>
 pages within the browser history is nearly instantaneous.
-Open a non-<em>Q<span class='qi-x-smaller'>I</span>P<span class='qi-x-smaller'>R</span></em>
+Open a non-<em>QIP<span class='qi-x-smaller'>R</span></em>
 page in a different tab in order to ensure the application
 continuity and performance.
 

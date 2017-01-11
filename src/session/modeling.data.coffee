@@ -165,19 +165,16 @@ ParameterResult =
 ###
 ModelingResult =
   ###*
-   * Adds the modeling result parent modeling object
-   * reference property and extends the parameter result
-   * objects as described in extendParameterResult.
+   * Extends the parameter result objects as described
+   * in
+   * {{#crossLink "ParameterResult/extend"}}{{/crossLink}}.
    *
    * @method extend
    * @protected
    * @param modelingResult the modeling result object to extend
-   * @param modeling the parent modeling object
   ###
-  extend: (modelingResult, modeling) ->
+  extend: (modelingResult) ->
     return modelingResult unless modelingResult?
-    # Set the modeling result parent reference.
-    modelingResult.modeling = modeling
 
     # Extend each modeling parameter result object.
     for key, paramResult of modelingResult
@@ -211,7 +208,7 @@ Modeling =
     # Set the modeling parent session reference.
     modeling.session = session
     # Extend the modeling result object.
-    ModelingResult.extend(modeling.result, modeling)
+    ModelingResult.extend(modeling.result)
     # Add the virtual properties.
     Object.defineProperties modeling,
       ###*
@@ -222,7 +219,7 @@ Modeling =
       intensities:
         get: ->
           _.mapValues(@result, 'image.metadata.averageIntensity')
-    
+
       ###*
        * @method overlays
        * @return the modeling results which have an overlay,

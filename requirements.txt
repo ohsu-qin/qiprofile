@@ -1,3 +1,3 @@
 # This is an advisory requirements file which specifies the
 # REST server version compatible with this qiprofile version.
-qirest~=6.2.10
+qirest~=6.2.11

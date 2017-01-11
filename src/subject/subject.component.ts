@@ -12,6 +12,7 @@ import {
   ConfigurationService
 } from '../configuration/configuration.service.ts';
 import { PageComponent } from '../page/page.component.ts';
+import ImageStore from '../image/image-store.coffee';
 import Subject from './subject.data.coffee';
 import { SubjectService } from './subject.service.ts';
 import help from './subject.help.md';
@@ -88,6 +89,24 @@ export class SubjectComponent extends PageComponent {
   valueChoices: Object;
 
   /**
+   * The time line data series.
+   *
+   * @property timeLineData {Object}
+   */
+  timeLineData: Object;
+
+  /**
+   * The time line data series date properties.
+   *
+   * @property timeLineData {Object}
+   */
+  const timeLineValue = {
+    biopsy: 'date',
+    surgery: 'date',
+    session: 'date'
+  };
+
+  /**
    * The project name.
    *
    * @property project {string}
@@ -132,6 +151,11 @@ export class SubjectComponent extends PageComponent {
     subjectService.getSubject(params).subscribe(subject => {
       if (subject) {
         this.subject = subject;
+        this.timeLineData = {
+          biopsy: this.subject.biopsies,
+          surgery: this.subject.surgeries,
+          session: this.subject.sessions
+        };
       } else {
         this.error = `${ this.subject.title } was not found`;
       }
@@ -165,12 +189,35 @@ export class SubjectComponent extends PageComponent {
   }
 
   /**
+   * Returns the image {{#crossLink "ImageStore"}}{{/crossLink}}
+   * file location.
+   *
+   * @method location
+   * @param image {Image} the image object
+   * @return {string} the server image file path relative to the server
+   *   web app root
+   */
+  location(image: Object): string {
+    return ImageStore.location(image);
+  }
+
+  /**
+   * Rounds the modeling result to two decimals.
+   *
+   * @method formatModelingResult
+   * @param value {number} the value to format
+   * @return {number} the rounded value
+   */
+  formatModelingResult(value: number): number {
+    return _.isNil(value) ? value : _.round(value, 2);
+  }
+
+  /**
    * Sets the
    * {{#crossLink "SubjectComponent/modelingFormat:property"}}{{/crossLink}}
    * to the other value.
    *
-   * @method tnmStageHelp
-   * @raise {Error} if the collection does not have help
+   * @method toggleModelingFormat
    */
   toggleModelingFormat() {
     this._modelingFormatIndex =
@@ -186,7 +233,7 @@ export class SubjectComponent extends PageComponent {
     this.modal.alert()
       .size('med')
       .showClose(true)
-      .title('Pharmokinetic Modeling')
+      .title('Pharmacokinetic Modeling')
       .body(modelingHelp)
       .open();
   }
@@ -270,5 +317,26 @@ export class SubjectComponent extends PageComponent {
       ['session', session.number],
       {relativeTo: this.route}
     );
+  }
+
+  /**
+   * @method timeLineWidth
+   * @return the preferred time line width
+   */
+  private timeLineWidth(): number {
+    // The margin is an inexplicable fudge factor.
+    const margin = 24;
+    return this.gutterWidth() - margin;
+  }
+
+  /**
+   * The body width.
+   *
+   * @method bodyInnerWidth
+   * @return the body inner width in pixels
+   */
+  private bodyInnerWidth(): number {
+    let rect = document.body.getBoundingClientRect();
+    return rect.width;
   }
 }

@@ -1,6 +1,6 @@
 // The PK modeling results.
 .qi-panel(*ngIf="has(subject.modelings)")
-  h4.panel-title Pharmokinetic Modeling
+  h4.panel-title Pharmacokinetic Modeling
   div(*ngIf="subject.isMultiSession()")
     include modelingParameters
     button.btn.btn-sm.qi-btn(
@@ -20,7 +20,7 @@
   div(*ngIf="!subject.isMultiSession()")
 .panel.panel-default(*ngIf="has(subject.modelings)")
   .panel-heading
-    h4.panel-title Pharmokinetic Modeling
+    h4.panel-title Pharmacokinetic Modeling
       button.btn.btn-sm.qi-btn(
         *ngIf="subject.isMultiSession()",
         (click)="toggleModelingFormat()"

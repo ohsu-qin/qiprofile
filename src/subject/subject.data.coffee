@@ -180,14 +180,30 @@ Subject =
           (enc for enc in @encounters when enc.isSession())
 
       ###*
+       * @property biopsies
+       * @return the biopsy encounters
+      ###
+      biopsies:
+        get: ->
+          (enc for enc in @clinicalEncounters when enc.isBiopsy())
+
+      ###*
        * @property biopsy
        * @return the unique biopsy encounter, if there is exactly
        *   one, otherwise null
       ###
       biopsy:
         get: ->
-          biopsies = (enc for enc in @clinicalEncounters when enc.isBiopsy())
+          biopsies = @biopsies
           if biopsies.length is 1 then biopsies[0] else null
+
+      ###*
+       * @property surgeries
+       * @return the surgery encounters
+      ###
+      surgeries:
+        get: ->
+          (enc for enc in @clinicalEncounters when enc.isSurgery())
 
       ###*
        * @property surgery
@@ -196,7 +212,7 @@ Subject =
       ###
       surgery:
         get: ->
-          surgeries = (enc for enc in @clinicalEncounters when enc.isSurgery())
+          surgeries = @surgeries
           if surgeries.length is 1 then surgeries[0] else null
 
       ###*
@@ -219,8 +235,19 @@ Subject =
     if not subject.treatments?
       subject.treatments = []
 
-    # Add the isMultiSession method.
+    ###*
+     * @method isMultiSession
+     * @return whether this subject has more than one session
+    ###
     subject.isMultiSession = -> @sessions.length > 1
+
+    ###*
+     * @method hasPreviews
+     * @return whether this subject has at least one scan preview
+    ###
+    subject.hasPreviews = ->
+      hasPreview = (session) -> session.preview?
+      _.some(@sessions, hasPreview)
 
     # Fix the subject dates.
     fixDates(subject)

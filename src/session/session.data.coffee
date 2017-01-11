@@ -71,6 +71,13 @@ Session =
     ###
     session.number = number
 
+    # Add the preview image and resource parent references.
+    if session.preview?
+      if not session.preview.image
+        throw new Error "The #{ @title } preview is missing an image"
+      session.preview.image.resource = session.preview.name
+      session.preview.image.session = session
+
     # Add the default empty modeling array, if necessary.
     if not session.modelings?
       session.modelings = []

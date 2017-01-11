@@ -1,0 +1,27 @@
+// This preview partial shows the visit dates and previews.
+// TODO - add hyperlinks and mini-help.
+
+.qi-even-row
+  .qi-cell
+    span Visit Date
+    button.btn.btn-med.qi-btn.qi-minihelp-btn(
+      (click)="openSessionsHelp()"
+    )
+      .glyphicon.glyphicon-question-sign
+  .qi-cell(*ngFor="let session of subject.sessions")
+    | {{ session.date | moment }}
+
+// The scan previews.
+.qi-even-row(*ngIf="subject.hasPreviews()")
+  .qi-cell
+    span Scan
+    button.btn.btn-med.qi-btn.qi-minihelp-btn(
+      (click)="openPreviewsHelp()"
+    )
+      .glyphicon.glyphicon-question-sign
+  .qi-cell(*ngFor="let session of subject.sessions")
+    img(
+      *ngIf="has(session.preview)",
+      src="{{ location(session.preview.image) }}",
+      width=100, height=100
+    )

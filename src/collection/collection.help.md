@@ -1,4 +1,4 @@
-This page shows the correlation between pharmokinetic modeling
+This page shows the correlation between pharmacokinetic modeling
 results and clinical data. Each of the four interactive scatter
 charts has a different pair of imaging and clinical parameter
 axes. Use the drop-down menus to choose which data are plotted

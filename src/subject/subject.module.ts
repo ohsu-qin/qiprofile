@@ -14,6 +14,7 @@ import { AccordionModule } from 'ng2-accordion';
 
 import { PageModule } from '../page/page.module.ts';
 import { CommonModule } from '../common/common.module.ts';
+import { VisualizationModule } from '../visualization/visualization.module.ts';
 import { CapitalizePipe } from '../common/capitalize.pipe.ts';
 import { ChoicePipe } from '../common/choice.pipe.ts';
 import { BooleanPipe } from '../common/boolean.pipe.ts';
@@ -34,7 +35,7 @@ const ROUTE_CONFIG: Routes = [
 @NgModule({
   imports: [
     NgCommonModule, AccordionModule, CommonModule, PageModule,
-    RouterModule.forChild(ROUTE_CONFIG)
+    RouterModule.forChild(ROUTE_CONFIG), VisualizationModule
   ],
   declarations: [
     SubjectComponent, CapitalizePipe, ChoicePipe, MomentPipe, RomanizePipe,

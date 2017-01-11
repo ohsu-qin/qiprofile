@@ -1,34 +1,11 @@
-// This modeling partial displays the session numbers,
-// preview images and modeling results.
+// This modeling partial displays the modeling results.
 
-div(*ngIf="has(subject.modelings)")
-  // The Sessions heading.
-  h4.qi-text-center Sessions
-
-  // The session numbers.
-  .qi-even-row
-    .qi-cell
-    .qi-cell(*ngFor="let session of subject.sessions")
-      | {{ session.number }}
-
-  //- // The scan previews.
-  //- .qi-even-row
-  //-   .qi-cell
-  //-   .qi-cell(*ngFor="let session of subject.sessions")
-  //-     img(
-  //-       *ngIf="session.preview",
-  //-       src="{{ location(session.preview.image) }}",
-  //-       width=100, height=100
-  //-     )
-
-  // The modeling results.
-  h4.qi-text-center Pharmacokinetic Modeling
-  .qi-even-row(*ngFor="let modelings of subject.modelings")
-    .qi-cell {{ modelings.source.type }}
-    .qi-cell(*ngFor="let results of modelings.results")
-      qi-property-table(
-        [object]="results",
-        [path]="'scanModeling.intensities'",
-        [label]="label"
-        [format]="formatModelingResult"
-      )
+.qi-even-row(*ngFor="let modelings of subject.modelings")
+  .qi-cell {{ modelings.source.type }}
+  .qi-cell(*ngFor="let results of modelings.results")
+    qi-property-table(
+      [object]="results",
+      [path]="'scanModeling.intensities'",
+      [label]="label",
+      [format]="formatModelingResult"
+    )

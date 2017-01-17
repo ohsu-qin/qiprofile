@@ -273,7 +273,7 @@ export class SparkLineDirective implements OnChanges, OnInit {
 
   private valueFunction(definition: string|number|Function) {
     if (_.isString(definition)) {
-      return _.partialRight(_.get, definition);
+      return d => _.get(d, definition);
     } else if (_.isNumber(definition)) {
       return _.constant(definition);
     } else if (this.extra) {

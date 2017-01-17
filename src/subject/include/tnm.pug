@@ -20,7 +20,7 @@ span.qi-table-title TNM
       td {{ tumor.tnm.size | tnmSize }}
     tr
       th Lymph Status
-      td {{ tumor.tnm.lymphStatus | notSpecified }}
+      td {{ tumor.tnm.lymphStatus | unspecified }}
     tr
       th Metastasis
       td {{ tumor.tnm.metastasis | boolean:'Present':'Absent' }}

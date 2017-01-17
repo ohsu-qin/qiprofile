@@ -18,7 +18,7 @@ import { VisualizationModule } from '../visualization/visualization.module.ts';
 import { CapitalizePipe } from '../common/capitalize.pipe.ts';
 import { ChoicePipe } from '../common/choice.pipe.ts';
 import { BooleanPipe } from '../common/boolean.pipe.ts';
-import { NotSpecifiedPipe } from '../common/notSpecified.pipe.ts';
+import { UnspecifiedPipe } from '../common/unspecified.pipe.ts';
 import { MomentPipe } from '../date/moment.pipe.ts';
 import { RomanizePipe } from '../roman/romanize.pipe.ts';
 import { TnmSizePipe } from '../clinical/tnm-size.pipe.ts';
@@ -39,7 +39,7 @@ const ROUTE_CONFIG: Routes = [
   ],
   declarations: [
     SubjectComponent, CapitalizePipe, ChoicePipe, MomentPipe, RomanizePipe,
-    BooleanPipe, NotSpecifiedPipe, TnmSizePipe, TnmStagePipe
+    BooleanPipe, UnspecifiedPipe, TnmSizePipe, TnmStagePipe
   ],
   exports: [SubjectComponent]
 })

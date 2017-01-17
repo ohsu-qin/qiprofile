@@ -582,12 +582,17 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
     this.configureDomains(getX, getY);
 
     // A numeric property has a continuous linear scale.
-    // A non-numeric property has a discrete quantized scale.
+    // A date property has a time scale.
+    // Otherwise, use a discrete quantized scale.
     if (this.domains.x.discrete) {
       let xPadding = 2 / (this.domains.x.domain.length + 1);
       this.domains.x.scale =
         d3.scalePoint().domain(this.domains.x.domain)
           .range(this.plot.x.range).padding(xPadding);
+    } else if (this.domains.x.isDate) {
+      this.domains.x.scale =
+        d3.scaleTime().domain(this.domains.x.domain)
+          .range(this.plot.x.range).nice();
     } else {
       this.domains.x.scale =
         d3.scaleLinear().domain(this.domains.x.domain)
@@ -598,6 +603,10 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
       this.domains.y.scale =
         d3.scalePoint().domain(this.domains.y.domain)
           .range(this.plot.y.range).padding(yPadding);
+    } else if (this.domains.y.isDate) {
+      this.domains.y.scale =
+        d3.scaleTime().domain(this.domains.y.domain)
+          .range(this.plot.y.range).nice();
     } else {
       this.domains.y.scale =
         d3.scaleLinear().domain(this.domains.y.domain)
@@ -618,8 +627,10 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
     // Add the domain reference properties.
     this.configureDomainRefs(getX, getY);
 
-    // Array property accessors must account for the index
-    // qualifier.
+    // moments must be converted to JavaScript Dates.
+    let accessor = (domain, getter) =>
+      domain.isDate ? _.flow(getter, DateHelper.toDate) : getter;
+    // Arrays must account for the index qualifier.
     let xValue;
     if (this.domains.x.indexes) {
       xValue = (d, i) => {
@@ -630,7 +641,7 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
         }
       };
     } else {
-      xValue = getX;
+      xValue = accessor(this.domains.x, getX);
     }
     let yValue;
     if (this.domains.y.indexes) {
@@ -642,7 +653,7 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
         }
       };
     } else {
-      yValue = getY;
+      yValue = accessor(this.domains.y, getY);
     }
 
     // Set each value accessor. The discrete accessor
@@ -815,10 +826,15 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
     let sample = {x: getX(sampleInput), y: getY(sampleInput)};
     // Strings and booleans are always discrete.
     let isValueDiscrete = v =>
-      _.isString(v) || _.isBoolean(v) ||
+      _.isString(v) || _.isBoolean(v)
       (_.isArray(v) && isValueDiscrete(v[0]));
     this.domains.x.discrete = this.xDiscrete || isValueDiscrete(sample.x);
     this.domains.y.discrete = this.yDiscrete || isValueDiscrete(sample.y);
+    // Dates are handled specially.
+    this.domains.x.isDate =
+      !this.domains.x.discrete && DateHelper.isDate(sample.x);
+    this.domains.y.isDate =
+      !this.domains.y.discrete && DateHelper.isDate(sample.y);
 
     // Adjust for a multi-valued domain, if necessary.
     let indexGroups = {};
@@ -1202,6 +1218,9 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
    * @return the [min, max] domain
    */
   private getContinuousDomain(accessor) {
-    return math.bounds(this.domains.pointData, accessor);
+    // The [min, max] data objects.
+    let dataBounds = math.bounds(this.domains.pointData, accessor);
+
+    return dataBounds.map(accessor);
   }
 }

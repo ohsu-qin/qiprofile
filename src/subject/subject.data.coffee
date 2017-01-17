@@ -11,26 +11,26 @@
 fixDates = (subject)  ->
   # Fix the birth date.
   if subject.birthDate?
-    date = DateHelper.asMoment(subject.birthDate)
+    date = DateHelper.toMoment(subject.birthDate)
     # Anonymize the birth date.
     subject.birthDate = DateHelper.anonymize(date)
 
   # Fix the diagnosis date.
   if subject.diagnosisDate?
-    date = DateHelper.asMoment(subject.diagnosisDate)
+    date = DateHelper.toMoment(subject.diagnosisDate)
     subject.diagnosisDate = date
 
   # Fix the encounter dates.
   for enc in subject.encounters
     if enc.date?
-      enc.date = DateHelper.asMoment(enc.date)
+      enc.date = DateHelper.toMoment(enc.date)
 
   # Fix the treatment dates.
   for trt in subject.treatments
-    trt.startDate = DateHelper.asMoment(trt.startDate)
-    trt.endDate = DateHelper.asMoment(trt.endDate)
+    trt.startDate = DateHelper.toMoment(trt.startDate)
+    trt.endDate = DateHelper.toMoment(trt.endDate)
     for dosage in trt.dosages
-      dosage.startDate = DateHelper.asMoment(trt.startDate)
+      dosage.startDate = DateHelper.toMoment(trt.startDate)
 
 # Makes the changes to the subject session objects
 # described in Session.extend.

@@ -10,22 +10,22 @@
 ###
 describe 'DateHelper', ->
 
-  describe 'asMoment', ->
+  describe 'toMoment', ->
     it 'should parse a string date', ->
       dateStr = '14 Aug 2012'
       expected = moment(dateStr, 'DD MMM YYYY')
-      actual = DateHelper.asMoment(dateStr)
+      actual = DateHelper.toMoment(dateStr)
       expect(actual, 'The string date was not parsed accurately')
         .to.eql(expected)
 
     it 'should parse an integer date', ->
       dateInt = moment().valueOf()
-      actual = DateHelper.asMoment(dateInt).valueOf()
+      actual = DateHelper.toMoment(dateInt).valueOf()
       expect(actual.valueOf(), 'The integer date was not parsed')
         .to.eql(dateInt)
 
     it 'should not parse null', ->
-      expect(DateHelper.asMoment(null), 'The null date was parsed')
+      expect(DateHelper.toMoment(null), 'The null date was parsed')
         .to.be.null
 
   describe 'anonymize', ->

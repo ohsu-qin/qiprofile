@@ -5,7 +5,8 @@ import {
   Directive, Input, ElementRef, OnChanges, SimpleChange, OnInit
 } from '@angular/core';
 
-//import SYMBOL_TYPES from './symbol-types.ts';
+import DateHelper from '../date/date-helper.coffee';
+import SYMBOL_TYPES from './symbol-types.ts';
 
 @Directive({selector: '[qi-time-line]'})
 
@@ -51,18 +52,19 @@ export class TimeLineDirective implements OnChanges, OnInit {
   @Input() width: number;
 
   /**
+   * Flag indicating whether to draw the X axis
+   * with date ticks for each X value (default false).
+   *
+   * @property axis {boolean}
+   */
+  @Input() axis: boolean = false;
+
+  /**
    * The D3 SVG root group element.
    *
    * @property svg {d3.Selection<any>}
    */
   private svg: d3.Selection<any>;
-
-  /**
-   * The D3 line.
-   *
-   * @property line {d3.Line<number, number>}
-   */
-  private line: d3.Line<number, number>;
 
   constructor(private elementRef: ElementRef) {
   }
@@ -71,70 +73,13 @@ export class TimeLineDirective implements OnChanges, OnInit {
    * Makes the D3 SVG root group element and draws the line.
    */
   ngOnInit() {
-    // Add the data series specification to the given accumulator.
-    let accumSpec = (accum, pair, i) => {
-      let [key, data] = pair;
-      let spec = {
-        data: data,
-        value: _.get(this.value, key) || _.identity,
-        index: i
-      };
-      accum[key] = spec;
-    };
-    // The sorted [key, data] pairs.
-    let sorted = _.toPairs(this.data).sort(_.first);
-    // Collects the {datum, dataSeries} data objects.
-    let accumData = (accum, pair, i) => {
-      let [key, data] = pair;
-      let seriesValue = _.get(this.value, key) || _.identity;
-      let dataSeries = {
-        key: key,
-        value: seriesValue,
-        index: i
-      };
-      let toDataPoint = d => {
-        return {datum: d, dataSeries: dataSeries};
-      };
-      let seriesData = data.map(toDataPoint);
-      return accum.concat(seriesData);
-    };
-    // The flattened data points.
-    let dataPoints = sorted.reduce(accumData, []);
-    // The X value accessor delegates to the data series.
-    let xValue = d => d.dataSeries.value(d);
-    // The [min, max] X domain.
-    let xDomain = [
-      d3.min(dataPoints, xValue),
-      d3.max(dataPoints, xValue)
-    ];
-    // The Y value is always zero.
-    let yValue = _.constant(0);
-    let yDomain = [0, 0];
-
-    // The line to plot.
-    this.line = d3.line()
-      .defined(d => !_.isNil(xValue(d)))
-      .x(xValue)
-      .y(yValue);
-
     // The root SVG group element.
     this.svg = d3.select(this.elementRef.nativeElement)
       .append('svg')
-      .attr('class', 'spark-line')
+      .attr('class', 'time-line')
       .attr('width', this.width)
-      .attr('height', this.height)
+      .attr('height', 20)
       .append('g');
-
-    // The line element.
-    this.svg.append('g')
-      .attr('class', 'plot')
-      .select('path')
-      .data(dataPoints)
-      .enter().append('path')
-        .attr('d', d => this.line(d));
-
-    // TODO - Make the legend.
-
   }
 
   /**
@@ -153,9 +98,139 @@ export class TimeLineDirective implements OnChanges, OnInit {
     let dataChange = changes['data'];
     if (dataChange && !dataChange.isFirstChange()) {
       // Draw the new values.
-      let data = dataChange.currentValue;
-      this.svg.select('path')
-        .attr('d', this.line(data));
+      this.draw();
     }
+  }
+
+  /**
+   * Draws the time line.
+   */
+  private draw() {
+    // Make the series value accessor functions.
+    let seriesAccessor = (data, key) => {
+      // The (possibly undefined) series value function.
+      // The result might be a moment, which will need to
+      // be converted to a JavaScript date.
+      let base = _.get(this.value, key);
+      // Delegate to the base function, if defined,
+      // otherwise default to the input data object
+      // itself.
+      if (base) {
+        let unconverted = d => _.get(d, base);
+        return _.flow(unconverted, DateHelper.toDate);
+      } else {
+        return DateHelper.toDate;
+      }
+    };
+    // The series value access functions.
+    let seriesAccessors = _.mapValues(this.data, seriesAccessor);
+
+    // The common [min, max] domain over all points.
+    let bounds;
+    let accumBounds = (data, series) => {
+      let accessor = seriesAccessors[series];
+      let values = data.map(accessor);
+      let seriesMin = _.min(values);
+      let seriesMax = _.max(values);
+      if (bounds) {
+        bounds[0] = Math.min(bounds[0], seriesMin);
+        bounds[1] = Math.max(bounds[0], seriesMax);
+      } else {
+        bounds = [seriesMin, seriesMax];
+      }
+    }
+    _.forEach(this.data, accumBounds);
+
+    // The data series X scale.
+    this.scale = d3.scaleTime()
+      .domain(bounds)
+      .range([0, this.width]);
+
+    // The Y value is always zero.
+    let zero = _.constant(0);
+
+    // The line generator function depends on the series key.
+    let line = key => {
+      // Convert the value to a date.
+      let xValue = seriesAccessors[key];
+
+      // The X display coordinate function.
+      // Note: we can't use _.flow(xValue, xScale) here
+      // since that returns NaN, possibly due to a
+      // secondary function parameter side-effect.
+      let x = v => this.scale(xValue(v));
+
+      // The filter for whether to plot the point.
+      let isDefined = d => !_.isNil(xValue(d));
+      // The d3 line function.
+      let line = d3.line()
+        .defined(isDefined)
+        .x(x)
+        .y(zero);
+
+      return line;
+    };
+
+    // Convert the series data instance variable to a
+    // {id, data} array sorted by the series id.
+    let accumSeries = (accum, v, k) => {
+      accum.push({id: k, data: v});
+    };
+    let seriesUnsorted = _.transform(this.data, accumSeries, []);
+    let seriesData = _.sortBy(seriesUnsorted, 'id');
+
+    // The line function makes a d3 line function.
+    // Calling this line function makes the path
+    // d attribute points value.
+    let seriesPoints = series => {
+      let x = line(series.id)(series.data);
+      return x;
+    }
+
+    // The data series line elements.
+    let seriesSelection = this.svg.append('g')
+      .attr('class', 'plot')
+      .selectAll('.series')
+      .data(seriesData)
+      .enter().append('g')
+        .attr('class', d => `series ${ d.id }`)
+        .append('path')
+          .attr('class', 'line')
+          .attr('d', seriesPoints);
+
+    // Draw the axis.
+    if (this.axis) {
+      this.drawAxis();
+    }
+
+
+
+
+    // TODO - First, cut this comment, merge to master and push.
+    // Then, undo or paste the cut. Then, add symbols.
+    // In parent, add treatment pseudo-series with
+    // two data points each (start and end). Set
+    // symbol for session and treatment to null.
+    // Add output to emit {svg, scale}.
+    // Make treatment color-bars directly under
+    // the time line. Add session numbers directly
+    // above the time line.
+
+
+
+
+
+    // TODO - Make the legend.
+
+  }
+
+  private drawAxis() {
+    let axis = d3.axisBottom(this.scale);
+    // Date ticks are formatted as mm/dd/yyyy.
+    axis.tickFormat(d3.timeFormat('%m/%d/%Y'));
+    // Make the tick element.
+    this.svg.append('g')
+      .attr('class', 'axis x')
+      .call(axis);
   }
 }

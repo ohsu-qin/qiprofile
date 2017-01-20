@@ -28,7 +28,8 @@ fixDates = (subject)  ->
   # Fix the treatment dates.
   for trt in subject.treatments
     trt.startDate = DateHelper.toMoment(trt.startDate)
-    trt.endDate = DateHelper.toMoment(trt.endDate)
+    if trt.endDate?
+      trt.endDate = DateHelper.toMoment(trt.endDate)
     for dosage in trt.dosages
       dosage.startDate = DateHelper.toMoment(trt.startDate)
 

@@ -6,7 +6,17 @@ import {
 } from '@angular/core';
 
 import DateHelper from '../date/date-helper.coffee';
-import SYMBOL_TYPES from './symbol-types.ts';
+import * as math from '../math/math.ts';
+
+/**
+ * The default representation of a time line point is the HTML
+ * nabla special character (the wedge-like math del operator).
+ *
+ * @property WEDGE {string}
+ * @private
+ * @static
+ */
+const WEDGE = '\u2207';
 
 @Directive({selector: '[qi-time-line]'})
 
@@ -23,26 +33,44 @@ import SYMBOL_TYPES from './symbol-types.ts';
  */
 export class TimeLineDirective implements OnChanges, OnInit {
   /**
-   * The required data series {_key_: _data_} data properties.
-   * The _data_ is an array of data objects. This property is
+   * The array of input data objects. This property is
    * customarily bound in a template to a parent component
    * property.
    *
-   * @property data {Object}
+   * @property data {Object[]}
    */
-  @Input() data: Object;
+  @Input() data: Object[];
 
   /**
-   * The {_key_: _property_} data series value accessors, where _key_
-   * is the
-   * {{#crossLink "TimeLineDirective/data:property"}}{{/crossLink}}
-   * series key and _property_ is the corresponding value access
-   * date property name or path. The default accessor is the identity
-   * function.
+   * The optional array of data objects which are included
+   * in determining the X axis domain but are not displayed.
+   *
+   * @property extra {Object[]}
+   */
+  @Input() extra: Object[];
+
+  /**
+   * The value access date property name or path.
+   * The default accessor is the identity function.
    *
    * @property value {Object}
    */
   @Input() value: string;
+
+  /**
+   * The optional datum => inner text function.
+   * The default text is a wedge character.
+   *
+   * @property text {function}
+   */
+  @Input() text: (Object) => string;
+
+  /**
+   * The optional datum => CSS class function.
+   *
+   * @property cssClass {function}
+   */
+  @Input() cssClass: (Object) => string;
 
   /**
    * The line width.
@@ -53,11 +81,14 @@ export class TimeLineDirective implements OnChanges, OnInit {
 
   /**
    * Flag indicating whether to draw the X axis
-   * with date ticks for each X value (default false).
+   * with date ticks as follows:
+   * * nil or boolean `false` => no axis (default)
+   * * boolean `true` => tick marks for each X value
+   * * string `bounds` => earliest and latest tick marks only
    *
-   * @property axis {boolean}
+   * @property axis {boolean|string}
    */
-  @Input() axis: boolean = false;
+  @Input() axis = false;
 
   /**
    * The D3 SVG root group element.
@@ -78,8 +109,7 @@ export class TimeLineDirective implements OnChanges, OnInit {
       .append('svg')
       .attr('class', 'time-line')
       .attr('width', this.width)
-      .attr('height', 20)
-      .append('g');
+      .attr('height', 48);
   }
 
   /**
@@ -106,131 +136,92 @@ export class TimeLineDirective implements OnChanges, OnInit {
    * Draws the time line.
    */
   private draw() {
-    // Make the series value accessor functions.
-    let seriesAccessor = (data, key) => {
-      // The (possibly undefined) series value function.
-      // The result might be a moment, which will need to
-      // be converted to a JavaScript date.
-      let base = _.get(this.value, key);
-      // Delegate to the base function, if defined,
-      // otherwise default to the input data object
-      // itself.
-      if (base) {
-        let unconverted = d => _.get(d, base);
-        return _.flow(unconverted, DateHelper.toDate);
-      } else {
-        return DateHelper.toDate;
-      }
-    };
-    // The series value access functions.
-    let seriesAccessors = _.mapValues(this.data, seriesAccessor);
-
-    // The common [min, max] domain over all points.
-    let bounds;
-    let accumBounds = (data, series) => {
-      let accessor = seriesAccessors[series];
-      let values = data.map(accessor);
-      let seriesMin = _.min(values);
-      let seriesMax = _.max(values);
-      if (bounds) {
-        bounds[0] = Math.min(bounds[0], seriesMin);
-        bounds[1] = Math.max(bounds[0], seriesMax);
-      } else {
-        bounds = [seriesMin, seriesMax];
-      }
+    // A text line is roughly 20 pixels high.
+    const lineHeight = 20;
+    // A small spacing pad.
+    const pad = 2;
+    // The plot width offset.
+    const margin = 30;
+    // Delegate to the value property getter, if defined,
+    // otherwise default to the input data object itself.
+    // The value might be a moment, which will need to
+    // be converted to a JavaScript date.
+    let xValue;
+    if (this.value) {
+      let unconverted = d => _.get(d, this.value);
+      xValue = _.flow(unconverted, DateHelper.toDate);
+    } else {
+      xValue = DateHelper.toDate;
     }
-    _.forEach(this.data, accumBounds);
+    // The date values.
+    let domainValues = this.data.map(xValue);
+    // If there are extra values, then those also go into
+    // making the domain.
+    if (this.extra) {
+      domainValues = domainValues.concat(this.extra);
+    }
+    // The [min, max] domain.
+    let domain = math.bounds(domainValues);
 
-    // The data series X scale.
-    this.scale = d3.scaleTime()
-      .domain(bounds)
-      .range([0, this.width]);
+    // The date scale.
+    // Logically, the range should be shrunk by the same
+    // margin on both sides. However, that setting trunctates
+    // the right tick value. Doubling the right margin works,
+    // although it is unknown why that is necessary.
+    let scale = d3.scaleTime()
+      .domain(domain)
+      .range([margin, this.width - (2 * margin)]);
 
-    // The Y value is always zero.
-    let zero = _.constant(0);
-
-    // The line generator function depends on the series key.
-    let line = key => {
-      // Convert the value to a date.
-      let xValue = seriesAccessors[key];
-
-      // The X display coordinate function.
-      // Note: we can't use _.flow(xValue, xScale) here
-      // since that returns NaN, possibly due to a
-      // secondary function parameter side-effect.
-      let x = v => this.scale(xValue(v));
-
-      // The filter for whether to plot the point.
-      let isDefined = d => !_.isNil(xValue(d));
-      // The d3 line function.
-      let line = d3.line()
-        .defined(isDefined)
-        .x(x)
-        .y(zero);
-
-      return line;
-    };
-
-    // Convert the series data instance variable to a
-    // {id, data} array sorted by the series id.
-    let accumSeries = (accum, v, k) => {
-      accum.push({id: k, data: v});
-    };
-    let seriesUnsorted = _.transform(this.data, accumSeries, []);
-    let seriesData = _.sortBy(seriesUnsorted, 'id');
-
-    // The line function makes a d3 line function.
-    // Calling this line function makes the path
-    // d attribute points value.
-    let seriesPoints = series => {
-      let x = line(series.id)(series.data);
-      return x;
+    // The filter for whether to plot the point.
+    let isDefined = d => !_.isNil(xValue(d));
+    // The data point X coordinate function.
+    let dx = _.flow(xValue, scale);
+    // The text function.
+    let text = this.text || WEDGE;
+    // The class function.
+    let klass;
+    if (this.cssClass) {
+      klass = (d, i) => `point ${ this.cssClass(d, i) }`;
+    } else {
+      klass = 'point';
     }
 
     // The data series line elements.
-    let seriesSelection = this.svg.append('g')
+    let selection = this.svg.append('g')
       .attr('class', 'plot')
-      .selectAll('.series')
-      .data(seriesData)
-      .enter().append('g')
-        .attr('class', d => `series ${ d.id }`)
-        .append('path')
-          .attr('class', 'line')
-          .attr('d', seriesPoints);
+      .selectAll('.point')
+      .data(this.data)
+      .enter().append('text')
+        .attr('class', klass)
+        .attr('x', dx)
+        .attr('dx', lineHeight)
+        .attr('y', lineHeight + pad)
+        .text(text);
 
-    // Draw the axis.
+    // If the axis flag is set, then draw the axis.
     if (this.axis) {
-      this.drawAxis();
+      let axis = d3.axisBottom(scale);
+      // Date ticks are formatted as mm/dd/yyyy.
+      axis.tickFormat(d3.timeFormat('%m/%d/%Y'));
+      // The bounds axis only adds tick marks at the
+      // start and end of the time line.
+      if (this.axis === 'bounds') {
+        axis.tickValues(domain);
+      }
+      // Draw the axis.
+      let axisOffset = {x: lineHeight, y: lineHeight + (2 * pad)};
+      this.svg.append('g')
+        .attr('class', 'axis x')
+        .attr('transform', `translate(${ axisOffset.x },${ axisOffset.y })`)
+        .call(axis);
     }
 
-
-
-
-    // TODO - First, cut this comment, merge to master and push.
-    // Then, undo or paste the cut. Then, add symbols.
-    // In parent, add treatment pseudo-series with
-    // two data points each (start and end). Set
-    // symbol for session and treatment to null.
-    // Add output to emit {svg, scale}.
-    // Make treatment color-bars directly under
-    // the time line. Add session numbers directly
-    // above the time line.
-
-
-
-
+    // TODO - Make treatment color-bars directly under
+    // the time line.
 
     // TODO - Make the legend.
+    if (this.legend) {
 
-  }
-
-  private drawAxis() {
-    let axis = d3.axisBottom(this.scale);
-    // Date ticks are formatted as mm/dd/yyyy.
-    axis.tickFormat(d3.timeFormat('%m/%d/%Y'));
-    // Make the tick element.
-    this.svg.append('g')
-      .attr('class', 'axis x')
-      .call(axis);
+    }
   }
 }

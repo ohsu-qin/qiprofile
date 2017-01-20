@@ -1,8 +1,32 @@
 //**  The Subject Detail styles. **//
 
-@require 'modeling'
-
-@require 'clinical'
-
+// Push both profile headings over a bit.
 .qi-profile-heading
   margin-left 2em
+
+// The modeling profile styles.
+@require 'modeling'
+
+// The clinical profile styles.
+@require 'clinical'
+
+// The time line styles.
+[qi-time-line] svg.time-line
+  & .plot > text.point
+    &.biopsy
+      fill Coral
+    &.surgery
+      fill LightBlue
+    &.session
+      fill MediumSpringGreen
+  & .x.axis
+    stroke MistyRose
+    & path
+      stroke inherit
+    & .tick
+      stroke inherit
+      & > line
+        stroke inherit
+      & > text
+        font-size larger
+        font-weight lighter

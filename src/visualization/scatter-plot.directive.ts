@@ -826,7 +826,7 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
     let sample = {x: getX(sampleInput), y: getY(sampleInput)};
     // Strings and booleans are always discrete.
     let isValueDiscrete = v =>
-      _.isString(v) || _.isBoolean(v)
+      _.isString(v) || _.isBoolean(v) ||
       (_.isArray(v) && isValueDiscrete(v[0]));
     this.domains.x.discrete = this.xDiscrete || isValueDiscrete(sample.x);
     this.domains.y.discrete = this.yDiscrete || isValueDiscrete(sample.y);

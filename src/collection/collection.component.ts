@@ -9,8 +9,13 @@ import {
 } from '../configuration/configuration.service.ts';
 import { PageComponent } from '../page/page.component.ts';
 import { SubjectService } from '../subject/subject.service.ts';
-import SYMBOL_TYPES from '../visualization/symbol-types.ts';
 import help from './collection.help.md';
+
+// TODO - replace with symbolize.
+const SYMBOL_TYPES = [
+  d3.symbolCircle, d3.symbolDiamond, d3.symbolStar, d3.symbolTriangle,
+  d3.symbolSquare, d3.symbolCross, d3.symbolWye
+];
 
 @Component({
   selector: 'qi-collection',

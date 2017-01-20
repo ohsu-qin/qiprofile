@@ -45,14 +45,14 @@ function colorize(data: Object[], value?: string): Object {
   // The opacity chooser effectively expands the 10-color chooser
   // to differentiate colors in a domain with more than 10 color
   // values.
-  let div10 = value => value / 10;
+  let div10 = n => n / 10;
   let opacityKey = _.flow(colorValue, div10, Math.floor);
   let opacityDomain = valueDomain(opacityKey);
   let opacityScale = d3.scaleLinear()
     .domain(opacityDomain)
     .range([0, 0.5]);
   // Convert to [1, 0.5] range.
-  let inverse = value => 1 - value;
+  let inverse = n => 1 - n;
   // Map the input to an opacity from 1.0 to 0.5.
   let opacityValue = _.flow(opacityKey, opacityScale, inverse);
 

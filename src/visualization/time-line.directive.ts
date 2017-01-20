@@ -1,5 +1,4 @@
 import * as _ from 'lodash';
-import * as _s from 'underscore.string';
 import * as d3 from 'd3';
 import {
   Directive, Input, ElementRef, OnChanges, SimpleChange, OnInit
@@ -63,14 +62,14 @@ export class TimeLineDirective implements OnChanges, OnInit {
    *
    * @property text {function}
    */
-  @Input() text: (Object) => string;
+  @Input() text: (d: Object) => string;
 
   /**
    * The optional datum => CSS class function.
    *
    * @property cssClass {function}
    */
-  @Input() cssClass: (Object) => string;
+  @Input() cssClass: (d: Object) => string;
 
   /**
    * The line width.
@@ -172,8 +171,6 @@ export class TimeLineDirective implements OnChanges, OnInit {
       .domain(domain)
       .range([margin, this.width - (2 * margin)]);
 
-    // The filter for whether to plot the point.
-    let isDefined = d => !_.isNil(xValue(d));
     // The data point X coordinate function.
     let dx = _.flow(xValue, scale);
     // The text function.
@@ -187,7 +184,7 @@ export class TimeLineDirective implements OnChanges, OnInit {
     }
 
     // The data series line elements.
-    let selection = this.svg.append('g')
+    this.svg.append('g')
       .attr('class', 'plot')
       .selectAll('.point')
       .data(this.data)

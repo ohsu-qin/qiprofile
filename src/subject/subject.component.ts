@@ -391,25 +391,4 @@ export class SubjectComponent extends PageComponent {
       {relativeTo: this.route}
     );
   }
-
-  /**
-   * @method timeLineWidth
-   * @return the preferred time line width
-   */
-  private timeLineWidth(): number {
-    // The margin is an inexplicable fudge factor.
-    const margin = 24;
-    return this.gutterWidth() - margin;
-  }
-
-  /**
-   * The body width.
-   *
-   * @method bodyInnerWidth
-   * @return the body inner width in pixels
-   */
-  private bodyInnerWidth(): number {
-    let rect = document.body.getBoundingClientRect();
-    return rect.width;
-  }
 }

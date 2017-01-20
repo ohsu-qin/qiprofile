@@ -24,7 +24,7 @@ function bounds(collection: Object|any[], iteratee=_.identity) {
   let maxTarget;
   let minValue;
   let maxValue;
-  let isValid = v => !(_.isNil(v) || _.isNaN(v))
+  let isValid = v => !(_.isNil(v) || _.isNaN(v));
   let check = (value, key) => {
     let target = iteratee(value, key);
     if (isValid(target)) {

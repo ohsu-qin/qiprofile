@@ -24,14 +24,15 @@ function bounds(collection: Object|any[], iteratee=_.identity) {
   let maxTarget;
   let minValue;
   let maxValue;
+  let isValid = v => !(_.isNil(v) || _.isNaN(v))
   let check = (value, key) => {
     let target = iteratee(value, key);
-    if (_.isFinite(target)) {
-      if (_.isUndefined(min) || target < minTarget) {
+    if (isValid(target)) {
+      if (_.isUndefined(minTarget) || target < minTarget) {
         minTarget = target;
         minValue = value;
       }
-      if (_.isUndefined(max) || target > maxTarget) {
+      if (_.isUndefined(maxTarget) || target > maxTarget) {
         maxTarget = target;
         maxValue = value;
       }

@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import * as moment from 'moment';
 import {
   Component, ViewContainerRef,
   ChangeDetectionStrategy, ChangeDetectorRef
@@ -8,20 +9,21 @@ import { Overlay } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap/index.js';
 
 import ObjectHelper from '../object/object-helper.coffee';
+import StringHelper from '../string/string-helper.coffee';
 import {
   ConfigurationService
 } from '../configuration/configuration.service.ts';
 import { PageComponent } from '../page/page.component.ts';
 import ImageStore from '../image/image-store.coffee';
+import breastTnmStageHelp from '../clinical/breast-tnm-stage.help.md';
+import sarcomaTnmStageHelp from '../clinical/sarcoma-tnm-stage.help.md';
+import recurrenceScoreHelp from '../clinical/recurrence-score.help.md';
+import dosageAmountHelp from '../clinical/dosage-amount.help.md';
+import rcbHelp from '../clinical/breast-rcb.help.md';
 import Subject from './subject.data.coffee';
 import { SubjectService } from './subject.service.ts';
 import help from './subject.help.md';
 import modelingHelp from './modeling.help.md';
-import breastTnmStageHelp from '../clinical/breast-tnm-stage.help.md';
-import sarcomaTnmStageHelp from '../clinical/sarcoma-tnm-stage.help.md';
-import recurrenceScoreHelp from '../clinical/recurrence-score.help.md';
-import rcbHelp from '../clinical/breast-rcb.help.md';
-import dosageAmountHelp from '../clinical/dosage-amount.help.md';
 
 /**
  * The modeling display formats, `chart` or `table`.
@@ -31,6 +33,17 @@ import dosageAmountHelp from '../clinical/dosage-amount.help.md';
  * @static
  */
 const MODELING_FORMATS = ['chart', 'table'];
+
+/**
+ * A time line clinical encounter is designated by the HTML
+ * nabla special character (the wedge-like math del operator).
+ *
+ * @property WEDGE {string}
+ * @private
+ * @static
+ */
+const WEDGE = '\u2207';
+
 
 @Component({
   selector: 'qi-subject',
@@ -79,7 +92,7 @@ export class SubjectComponent extends PageComponent {
    *
    * @property label {function}
    */
-  const label = (property) => this.getLabel(property);
+  const label = property => this.getLabel(property);
 
   /**
    * The discrete property {path: {value: label}} tick label choices.
@@ -89,24 +102,6 @@ export class SubjectComponent extends PageComponent {
   valueChoices: Object;
 
   /**
-   * The time line data series.
-   *
-   * @property timeLineData {Object}
-   */
-  timeLineData: Object;
-
-  /**
-   * The time line data series date properties.
-   *
-   * @property timeLineData {Object}
-   */
-  const timeLineValue = {
-    biopsy: 'date',
-    surgery: 'date',
-    session: 'date'
-  };
-
-  /**
    * The project name.
    *
    * @property project {string}
@@ -114,6 +109,65 @@ export class SubjectComponent extends PageComponent {
    */
   get project(): string  {
     return this.subject ? this.subject.project : null;
+  }
+
+  /**
+   * The treatment start and end dates.
+   * If a treatment does not have an end date, then
+   * include today's date as well.
+   *
+   * @property timeLineExtraDates {Object[]}
+   */
+  get timeLineExtraDates(): Object[] {
+    if (this.subject) {
+      if (!this._timeLineExtraDates) {
+        let dates;
+        let addToday = false;
+        dates = _.map(this.subject.treatments, 'startDate');
+        for (let trt in this.subject.treatments) {
+          if (trt.endDate) {
+            dates.push(trt.endDate);
+          } else {
+            addToday = true;
+          }
+          if (addToday) {
+            dates.push(moment.now());
+          }
+          this._timeLineExtraDates = dates;
+        }
+      }
+      return this._timeLineStyles;
+    }
+  }
+
+  /**
+   * The
+   * {{#crossLink "SubjectComponent/timeLineExtraDates:property"}}{{/crossLink}}.
+   * value created on demand.
+   *
+   * @property _timeLineExtraDates {Object[]}
+   * @private
+   */
+  private _timeLineExtraDates;
+
+  /**
+   * The time line text is a wedge special symbol for a
+   * clinical encounter, the session number otherwise.
+   *
+   * @property timeLineText {function}
+   */
+  timeLineText = (encounter) => {
+    return this._timeLineText(encounter);
+  }
+
+  /**
+   * The time line class is the lower case dasherized REST
+   * data object class.
+   *
+   * @property timeLineClass {function}
+   */
+  timeLineClass = (encounter) => {
+    return this._timeLineClass(encounter);
   }
 
   /**
@@ -151,11 +205,6 @@ export class SubjectComponent extends PageComponent {
     subjectService.getSubject(params).subscribe(subject => {
       if (subject) {
         this.subject = subject;
-        this.timeLineData = {
-          biopsy: this.subject.biopsies,
-          surgery: this.subject.surgeries,
-          session: this.subject.sessions
-        };
       } else {
         this.error = `${ this.subject.title } was not found`;
       }
@@ -172,8 +221,32 @@ export class SubjectComponent extends PageComponent {
    * @param property {string} the property path
    * @return {string} the display HTML label
    */
-  getLabel(property: string) {
+  getLabel(property: string): string {
     return this.configService.getHTMLLabel(property, this.subject.collection);
+  }
+
+  /**
+   * @method _timeLineText
+   * @param encounter {Object} the encounter REST data object
+   * @return {string} the SVG text element inner text string
+   */
+  private _timeLineText(encounter: Object): string  {
+    return encounter.isClinical() ? WEDGE : encounter.number;
+  }
+
+  /**
+   * @method _timeLineClass
+   * @private
+   * @param encounter {Object} the encounter REST data object
+   * @return {string} the CSS class
+   */
+  private _timeLineClass(encounter: Object): string {
+    let klass = encounter._cls;
+    // Left-truncate the surgery specialization class names.
+    if (klass.endsWith('Surgery')) {
+      klass = 'Surgery';
+    }
+    return StringHelper.dasherize(klass);
   }
 
   /**

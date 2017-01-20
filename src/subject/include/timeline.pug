@@ -1,7 +1,14 @@
 // The patient encounters and treatments time line.
+// Note that [data] and [extra] are resolved to arrays,
+// [text] and [cssClass] are resolved to functions,
+// and [value] and [axis] are set to literals.
 
 div(
-  qi-time-line, [width]="400",
-  [data]="timeLineData",
-  [value]="timeLineValue"
+  qi-time-line, [width]="600",
+  [data]="subject.encounters",
+  [value]="'date'",
+  [extra]="timeLineExtraDates",
+  [text]="timeLineText",
+  [axis]="'bounds'",
+  [cssClass]="timeLineClass"
 )

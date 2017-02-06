@@ -4,6 +4,7 @@
 `import DateHelper from "../date/date-helper.coffee"`
 `import Session from "../session/session.data.coffee"`
 `import Modeling from "../session/modeling.data.coffee"`
+`import Treatment from "../clinical/treatment.data.coffee"`
 `import ClinicalEncounter from "../clinical/encounter.data.coffee"`
 `import Encounter from "./encounter.data.coffee"`
 
@@ -32,6 +33,7 @@ fixDates = (subject)  ->
       trt.endDate = DateHelper.toMoment(trt.endDate)
     for dosage in trt.dosages
       dosage.startDate = DateHelper.toMoment(trt.startDate)
+    Treatment.extend(trt, subject)
 
 # Makes the changes to the subject session objects
 # described in Session.extend.

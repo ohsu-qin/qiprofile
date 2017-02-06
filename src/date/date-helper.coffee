@@ -16,6 +16,9 @@ _toDate = (value) ->
   else
     Date(value)
 
+# Define here for reuse below.
+_TODAY = moment.now()
+
 ###*
  * The static DateHelper utility.
  *
@@ -23,6 +26,15 @@ _toDate = (value) ->
  * @static
 ###
 DateHelper =
+  ###*
+   * The uniform fixed date at the point when this component is loaded.
+   *
+   * @property TODAY {Object}
+   * @private
+   * @static
+   ###
+  TODAY: _TODAY
+
   ###*
    * @method isDate
    * @param value the value to check

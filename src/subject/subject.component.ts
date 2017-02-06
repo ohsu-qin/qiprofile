@@ -1,5 +1,5 @@
 import * as _ from 'lodash';
-import * as moment from 'moment';
+import * as _s from 'underscore.string';
 import {
   Component, ViewContainerRef,
   ChangeDetectionStrategy, ChangeDetectorRef
@@ -112,62 +112,71 @@ export class SubjectComponent extends PageComponent {
   }
 
   /**
-   * The treatment start and end dates.
-   * If a treatment does not have an end date, then
-   * include today's date as well.
-   *
-   * @property timeLineExtraDates {Object[]}
-   */
-  get timeLineExtraDates(): Object[] {
-    if (this.subject) {
-      if (!this._timeLineExtraDates) {
-        let dates;
-        let addToday = false;
-        dates = _.map(this.subject.treatments, 'startDate');
-        for (let trt in this.subject.treatments) {
-          if (trt.endDate) {
-            dates.push(trt.endDate);
-          } else {
-            addToday = true;
-          }
-          if (addToday) {
-            dates.push(moment.now());
-          }
-          this._timeLineExtraDates = dates;
-        }
-      }
-      return this._timeLineStyles;
-    }
-  }
-
-  /**
-   * The
-   * {{#crossLink "SubjectComponent/timeLineExtraDates:property"}}{{/crossLink}}.
-   * value created on demand.
-   *
-   * @property _timeLineExtraDates {Object[]}
-   * @private
-   */
-  private _timeLineExtraDates;
-
-  /**
    * The time line text is a wedge special symbol for a
    * clinical encounter, the session number otherwise.
    *
    * @property timeLineText {function}
    */
-  timeLineText = (encounter) => {
+  timeLineText = (encounter: Object) => {
     return this._timeLineText(encounter);
+  }
+
+  /**
+   * The
+   * {{#crossLink "SubjectComponent/subject:property"}}{{/crossLink}}
+   * encounters.
+   *
+   * @property encounters
+   * @return {Object[]} the subject encounters
+   */
+  get encounters() {
+    return _.get(this.subject, 'encounters');
   }
 
   /**
    * The time line class is the lower case dasherized REST
    * data object class.
    *
-   * @property timeLineClass {function}
+   * @property encounterDataClass {function}
    */
-  timeLineClass = (encounter) => {
-    return this._timeLineClass(encounter);
+  encounterDataClass = (encounter: Object) => {
+    return this._encounterDataClass(encounter);
+  }
+
+  /**
+   * The
+   * {{#crossLink "TimeLineDirective/legend"}}{{/crossLink}}
+   * specification, consisting of the {_dataClass_: {label}}
+   * settings for the encounter data classes. The
+   * {{#crossLink "TimeLineDirective/legend"}}{{/crossLink}}
+   * defaults suffice for all other legend settings.
+   *
+   * @property legend {Object}
+   */
+  get legend() {
+    return this._legend();
+  }
+
+  /**
+   * The
+   * {{#crossLink "SubjectComponent/subject:property"}}{{/crossLink}}
+   * treatments, ordered with the primary treatment first so that it
+   * will overlay any overlapping neodajuvant or adjuvant treatment.
+   *
+   * @property treatments
+   * @return {Object[]} the subject treatments
+   */
+  get treatments() {
+    if (this.subject) {
+      let isPrimary = trt => trt.treatmentType === 'Primary';
+      let primary = _.find(this.subject.treatments, isPrimary);
+      if (primary) {
+        let others = _.without(this.subject.treatments, primary);
+        return others.concat([primary]);
+      } else {
+        return this.subject.treatments;
+      }
+    }
   }
 
   /**
@@ -235,18 +244,47 @@ export class SubjectComponent extends PageComponent {
   }
 
   /**
-   * @method _timeLineClass
+   * @method _encounterDataClass
    * @private
    * @param encounter {Object} the encounter REST data object
-   * @return {string} the CSS class
+   * @return {string} the data class
    */
-  private _timeLineClass(encounter: Object): string {
+  private _encounterDataClass(encounter: Object): string {
     let klass = encounter._cls;
     // Left-truncate the surgery specialization class names.
     if (klass.endsWith('Surgery')) {
       klass = 'Surgery';
     }
-    return StringHelper.dasherize(klass);
+    return klass;
+  }
+
+  /**
+   * Returns the
+   * {{#crossLink "SubjectComponent/legend:property"}}{{/crossLink}}
+   * specification.
+   *
+   * @method _legend
+   * @private
+   * @return {Object} the legend specification
+   */
+  private _legend() {
+    // The clinical encounters ordered by date.
+    let clnEncounters = _.sortBy(this.subject.clinicalEncounters, 'date');
+    // The encounter data classes.
+    let clnCasses = _.uniq(clnEncounters.map(this.encounterDataClass));
+    // The clinical legend label is the wedge character.
+    let accumClinicalLegends = (accum, dataClass) => {
+      accum[dataClass] = {label: WEDGE};
+    };
+    let legends = _.transform(clnCasses, accumClinicalLegends, {});
+
+    // The session legend label is the session number range.
+    legends['Session'] = {
+      label: `1-${ this.subject.sessions.length }`,
+      name: 'Imaging Visit'
+    };
+
+    return legends;
   }
 
   /**

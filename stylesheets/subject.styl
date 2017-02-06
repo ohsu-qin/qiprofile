@@ -12,13 +12,20 @@
 
 // The time line styles.
 [qi-time-line] svg.time-line
-  & .plot > text.point
-    &.biopsy
-      fill Coral
-    &.surgery
-      fill LightBlue
-    &.session
-      fill MediumSpringGreen
+  margin 0 1em
+  & .biopsy
+    fill Coral
+  & .surgery
+    fill Gold
+  & .session
+    fill MediumSpringGreen
+  & .neoadjuvant
+    fill HotPink
+  & .primary
+    fill DarkOrange
+  & .adjuvant
+    fill LightCyan
+
   & .x.axis
     stroke MistyRose
     & path

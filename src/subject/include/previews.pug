@@ -1,27 +1,33 @@
 // This preview partial shows the visit dates and previews.
 // TODO - add hyperlinks and mini-help.
 
-.qi-even-row
-  .qi-cell
+// The imaging session dates.
+.row
+  .col-md-2.qi-text-right.qi-row-heading
     span Visit Date
-    button.btn.btn-med.qi-btn.qi-minihelp-btn(
-      (click)="openSessionsHelp()"
-    )
-      .glyphicon.glyphicon-question-sign
-  .qi-cell(*ngFor="let session of subject.sessions")
-    | {{ session.date | moment }}
+  .col-md-10
+    .qi-even-row
+      .qi-cell(*ngFor="let session of subject.sessions")
+        span.qi-clickable((click)="visitSession(session)")
+          | {{ session.date | moment }}
 
 // The scan previews.
-.qi-even-row(*ngIf="subject.hasPreviews()")
-  .qi-cell
-    span Scan
+.row(*ngIf="subject.hasPreviews()")
+  // .qi-top-pad-line is a kludge to push the label down.
+  // Vertical centering w.r.t. to the row is preferred,
+  // but various attempts to do so were unsuccessful.
+  .col-md-2.qi-text-right.qi-top-pad-line.qi-row-heading
+    span Preview
     button.btn.btn-med.qi-btn.qi-minihelp-btn(
       (click)="openPreviewsHelp()"
     )
       .glyphicon.glyphicon-question-sign
-  .qi-cell(*ngFor="let session of subject.sessions")
-    img(
-      *ngIf="has(session.preview)",
-      src="{{ location(session.preview.image) }}",
-      width=100, height=100
-    )
+  .col-md-10
+    .qi-even-row
+      .qi-cell(*ngFor="let session of subject.sessions")
+        img.qi-clickable(
+          *ngIf="has(session.preview)",
+          (click)="visitSession(session)",
+          src="{{ location(session.preview.image) }}",
+          width=100, height=100
+        )

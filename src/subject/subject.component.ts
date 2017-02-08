@@ -1,5 +1,4 @@
 import * as _ from 'lodash';
-import * as _s from 'underscore.string';
 import {
   Component, ViewContainerRef,
   ChangeDetectionStrategy, ChangeDetectorRef
@@ -9,7 +8,6 @@ import { Overlay } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap/index.js';
 
 import ObjectHelper from '../object/object-helper.coffee';
-import StringHelper from '../string/string-helper.coffee';
 import {
   ConfigurationService
 } from '../configuration/configuration.service.ts';
@@ -23,6 +21,8 @@ import rcbHelp from '../clinical/breast-rcb.help.md';
 import Subject from './subject.data.coffee';
 import { SubjectService } from './subject.service.ts';
 import help from './subject.help.md';
+import previewsHelp from './previews.help.md';
+import visitsHelp from './visits.help.md';
 import modelingHelp from './modeling.help.md';
 
 /**
@@ -348,6 +348,34 @@ export class SubjectComponent extends PageComponent {
       .body(modelingHelp)
       .open();
   }
+  
+  /**
+   * Shows the previews help pop-up.
+   *
+   * @method openPreviewsHelp
+   */
+  openPreviewsHelp() {
+    this.modal.alert()
+      .size('med')
+      .showClose(true)
+      .title('Scan Previews')
+      .body(previewsHelp)
+      .open();
+  }
+
+  /**
+   * Shows the PK modeling help pop-up.
+   *
+   * @method openModelingHelp
+   */
+  openModelingHelp() {
+    this.modal.alert()
+      .size('med')
+      .showClose(true)
+      .title('Pharmacokinetic Modeling')
+      .body(modelingHelp)
+      .open();
+  }
 
   /**
    * Shows the TNM stage modal help pop-up. The help is
@@ -424,8 +452,10 @@ export class SubjectComponent extends PageComponent {
    * @param session {Object} the session REST object
    */
   visitSession(session: Object) {
+    // For now, go directly to the scan display.
+    // TODO - navigate to an intermediate Session Detail page.
     this.router.navigate(
-      ['session', session.number],
+      ['session', session.number, 'scan', 1, 'volumes'],
       {relativeTo: this.route}
     );
   }

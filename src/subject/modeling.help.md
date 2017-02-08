@@ -1,4 +1,4 @@
-This section displays the pharmokinetic (PK) modeling results.
+This section displays the pharmacokinetic (PK) modeling results.
 The <span class="fa fa-list-ul"></span> button toggles between
 the modeling result chart and table presentation format. When
 the tables are displayed, the <span class="fa fa-bar-chart"></span>

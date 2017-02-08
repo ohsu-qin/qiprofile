@@ -3,15 +3,18 @@
 @require 'helpers'
 
 .qi-title
+  color Indigo
   font-weight bold
   white-space nowrap
 
-.qi-label
-  font-weight bold
-  white-space nowrap
+.qi-row-heading, .qi-col-heading
+  color Indigo
 
 .qi-x-smaller
   font-size 75%
+
+.qi-emphasis
+  font-style italic
 
 .qi-text-right
   text-align right
@@ -29,6 +32,12 @@
 
 .qi-align-top
   vertical-align top
+
+.qi-align-middle
+  vertical-align middle
+
+.qi-top-pad-line
+  padding-top 1em
 
 // See the clean-list helper for a description.
 ul.qi-clean-list
@@ -58,7 +67,7 @@ ul.qi-clean-list
   cursor pointer
 
 .qi-transparent
-  background: transparent
+  background transparent
 
 .qi-separator-faint
   border 1px solid Lavender
@@ -89,6 +98,13 @@ ul.qi-clean-list
 
 .qi-inline
   display inline-block
+
+// Simulates an anchor style.
+.qi-clickable
+  color DarkMagenta
+  &:hover
+    cursor pointer
+    color Chocolate
 
 // Override the bootstrap button as follows:
 // * remove the border and outline
@@ -140,9 +156,6 @@ ul.qi-clean-list
 
 .qi-modal-table tr
   font-size smaller
-
-.qi-title
-  color Indigo
 
 .qi-inset
   text-align left

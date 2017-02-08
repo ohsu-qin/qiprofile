@@ -2,13 +2,10 @@ This page displays the Imaging and Clinical profiles side by side.
 
 Imaging Profile
 --------------
-On the left, the Imaging Profile displays a summary patient timeline
-and the modeling results.
-
-The MR Visit Timeline shows the MR sessions in the context of the
-patient encounters and treatments. The visit dates are shown below
-the X axis. The visit numbers are shown above the X axis. Clicking
-on a visit number opens the Session Detail page.
+On the left, the Imaging Profile displays a summary patient timeline,
+the imaging session dates, scan previews (if available)
+and the pharmacokinetic modeling results. Clicking on an imaging
+session date opens the detail page for that session.
 
 Clinical Profile
 ----------------
@@ -20,3 +17,8 @@ The grade is computed from the detailed grade for the specific
 tumor type, e.g. the ModifiedBloomRichardson Grade for a breast tumor.
 The stage is then computed from the size, lymph status and
 TNM grade.
+
+Click on a section title to toggle display of that section.
+Click on the embedded mini-help buttons
+(<span class="glyphicon glyphicon-question-sign"></span>)
+for further context-specific information.

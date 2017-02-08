@@ -361,7 +361,6 @@ export class TimeLineDirective implements DoCheck, OnInit {
       let legendFor = dataClass =>
         _.merge({dataClass: dataClass}, this.legend[dataClass]);
       spanLegends = spanClasses.map(legendFor);
-      let hasLegend = dataClass => dataClass in this.legend;
       let legendClasses = _.keys(this.legend);
       let pointClasses = _.difference(legendClasses, spanClasses).sort();
       pointLegends = pointClasses.map(legendFor);
@@ -526,7 +525,7 @@ export class TimeLineDirective implements DoCheck, OnInit {
 
     // ** Legend **//
 
-    if (this.legend != false) {
+    if (this.legend !== false) {
       // The legend label function.
       let label = legend => legend.label;
 

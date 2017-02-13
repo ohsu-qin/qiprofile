@@ -397,11 +397,6 @@ SystemJS.config({
         'nan': 'npm:nan@2.4.0'
       }
     },
-    'github:jspm/nodelibs-http@0.2.0-alpha': {
-      'map': {
-        'http-browserify': 'npm:stream-http@2.3.1'
-      }
-    },
     'github:guybedford/system-md@0.1.0': {
       'map': {
         'showdown': 'github:showdownjs/showdown@1.4.3'
@@ -712,6 +707,11 @@ SystemJS.config({
     'npm:jspm-nodelibs-zlib@0.2.0': {
       'map': {
         'zlib-browserify': 'npm:browserify-zlib@0.1.4'
+      }
+    },
+    'github:jspm/nodelibs-http@0.2.0-alpha': {
+      'map': {
+        'http-browserify': 'npm:stream-http@2.3.1'
       }
     }
   }

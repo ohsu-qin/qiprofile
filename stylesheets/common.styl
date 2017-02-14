@@ -7,9 +7,6 @@
   font-weight bold
   white-space nowrap
 
-.qi-row-heading, .qi-col-heading
-  color Indigo
-
 .qi-x-smaller
   font-size 75%
 
@@ -35,9 +32,6 @@
 
 .qi-align-middle
   vertical-align middle
-
-.qi-top-pad-line
-  padding-top 1em
 
 // See the clean-list helper for a description.
 ul.qi-clean-list
@@ -95,6 +89,9 @@ ul.qi-clean-list
 // Add some horizontal space between successive elements.
 .qi-horizontal-space + .qi-horizontal-space
   margin-left 0.5em
+
+.qi-pad-top
+  padding-top 1em
 
 .qi-inline
   display inline-block
@@ -199,16 +196,8 @@ ul.qi-clean-list
 
 // A row with evenly-spaced, centered cells.
 .qi-even-row
-  display table
-  width 100%
   text-align center
   table-layout fixed
-  & .qi-cell
-    display table-cell
-    // Center a nested table within the cell.
-    & .qi-table
-      margin-left auto
-      margin-right auto
 
 // The standard qiprofile data table style.
 // This style should be used in conjunction with the bootstrap

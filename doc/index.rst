@@ -8,7 +8,7 @@ Quantitative Imaging Profile
 Synopsis
 ********
 
-The *Q*\ uantitative *I*\ maging *Pr*\ ofile (*qipr*\ ) web application displays
+The *Q*\ uantitative *I*\ maging *Pr*\ ofile (*QIPr*\ ) web application displays
 medical imaging and clinical data. The intent is to visualize the correlation of
 imaging analysis biomarkers with clinical outcomes.
 
@@ -68,8 +68,8 @@ Usage
      ./bin/qiprofile
 
 4. Once you have a database, e.g. the `Developer Guide`_ demo seed
-   database, then the landing page is *host:``:3000/qiprofile/``,
-   where *host* is the web application host URL.
+   database, then the landing page is _host_``:3000/qiprofile``,
+   where _host_ is the web application host URL.
 
 See the `Developer Guide`_ for starting a development server.
 

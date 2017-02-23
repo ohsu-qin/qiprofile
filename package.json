@@ -16,7 +16,7 @@
     "imaging"
   ],
   "author": "Fred Loney <loneyf@ohsu.edu>",
-  "license": "BSD",
+  "license": "BSD-2-Clause",
   "bin": "./bin/qiprofile",
   "scripts": {
     "reinstall": "./node_modules/grunt-cli/bin/grunt reinstall",
@@ -164,7 +164,7 @@
       "socket.io": "npm:socket.io@^1.4.6",
       "socket.io-client": "npm:socket.io-client@^1.4.6",
       "sprintf": "npm:sprintf@^0.1.5",
-      "systemjs-hot-reloader": "capaj/systemjs-hot-reloader@^0.6.0",
+      "systemjs-hot-reloader": "alexisvincent/systemjs-hot-reloader@^0.6.0",
       "text": "systemjs/plugin-text@^0.0.8",
       "ts": "frankwallis/plugin-typescript@^4.0.16",
       "underscore.string": "npm:underscore.string@^3.3.4"

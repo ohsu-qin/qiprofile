@@ -1,13 +1,13 @@
 import * as _ from 'lodash';
 import {
-  Component, ViewContainerRef,
-  ChangeDetectionStrategy, ChangeDetectorRef
+  Component, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Overlay } from 'angular2-modal';
 import { Modal } from 'angular2-modal/plugins/bootstrap/index.js';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import ObjectHelper from '../object/object-helper.coffee';
+import ObjectHelper from '../common/object-helper.coffee';
 import {
   ConfigurationService
 } from '../configuration/configuration.service.ts';
@@ -22,7 +22,6 @@ import Subject from './subject.data.coffee';
 import { SubjectService } from './subject.service.ts';
 import help from './subject.help.md';
 import previewsHelp from './previews.help.md';
-import visitsHelp from './visits.help.md';
 import modelingHelp from './modeling.help.md';
 
 /**
@@ -193,6 +192,7 @@ export class SubjectComponent extends PageComponent {
   constructor(
     private router: Router, private route: ActivatedRoute,
     vcRef: ViewContainerRef, overlay: Overlay, private modal: Modal,
+    private modalService: NgbModal,
     subjectService: SubjectService,
     private configService: ConfigurationService,
     changeDetector: ChangeDetectorRef
@@ -313,17 +313,6 @@ export class SubjectComponent extends PageComponent {
   }
 
   /**
-   * Rounds the modeling result to two decimals.
-   *
-   * @method formatModelingResult
-   * @param value {number} the value to format
-   * @return {number} the rounded value
-   */
-  formatModelingResult(value: number): number {
-    return _.isNil(value) ? value : _.round(value, 2);
-  }
-
-  /**
    * Sets the
    * {{#crossLink "SubjectComponent/modelingFormat:property"}}{{/crossLink}}
    * to the other value.
@@ -336,31 +325,12 @@ export class SubjectComponent extends PageComponent {
   }
 
   /**
-   * Shows the PK modeling help pop-up.
-   *
-   * @method openModelingHelp
-   */
-  openModelingHelp() {
-    this.modal.alert()
-      .size('med')
-      .showClose(true)
-      .title('Pharmacokinetic Modeling')
-      .body(modelingHelp)
-      .open();
-  }
-  
-  /**
    * Shows the previews help pop-up.
    *
    * @method openPreviewsHelp
    */
   openPreviewsHelp() {
-    this.modal.alert()
-      .size('med')
-      .showClose(true)
-      .title('Scan Previews')
-      .body(previewsHelp)
-      .open();
+    this.modalService.open(previewsHelp);
   }
 
   /**

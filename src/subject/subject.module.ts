@@ -15,13 +15,7 @@ import { AccordionModule } from 'ng2-accordion';
 import { PageModule } from '../page/page.module.ts';
 import { CommonModule } from '../common/common.module.ts';
 import { VisualizationModule } from '../visualization/visualization.module.ts';
-import { FloorPipe } from '../common/floor.pipe.ts';
-import { CapitalizePipe } from '../common/capitalize.pipe.ts';
-import { ChoicePipe } from '../common/choice.pipe.ts';
-import { BooleanPipe } from '../common/boolean.pipe.ts';
-import { UnspecifiedPipe } from '../common/unspecified.pipe.ts';
-import { MomentPipe } from '../date/moment.pipe.ts';
-import { RomanizePipe } from '../roman/romanize.pipe.ts';
+import { ModelingModule } from '../modeling/modeling.module.ts';
 import { TnmSizePipe } from '../clinical/tnm-size.pipe.ts';
 import { TnmStagePipe } from '../clinical/tnm-stage.pipe.ts';
 import { SubjectComponent } from './subject.component.ts';
@@ -36,11 +30,10 @@ const ROUTE_CONFIG: Routes = [
 @NgModule({
   imports: [
     NgCommonModule, AccordionModule, CommonModule, PageModule,
-    RouterModule.forChild(ROUTE_CONFIG), VisualizationModule
+    ModelingModule, VisualizationModule, RouterModule.forChild(ROUTE_CONFIG)
   ],
   declarations: [
-    SubjectComponent, FloorPipe, CapitalizePipe, ChoicePipe, MomentPipe,
-    BooleanPipe, UnspecifiedPipe, RomanizePipe, TnmSizePipe, TnmStagePipe
+    SubjectComponent, TnmSizePipe, TnmStagePipe
   ],
   exports: [SubjectComponent]
 })

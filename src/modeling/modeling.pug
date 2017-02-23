@@ -1,17 +1,16 @@
-// This modeling partial displays the modeling results under
-// the previews.pug session dates and previews.
+// Apportion the modeling result columns. There is one
+// result per session. The modeling results array is in
+// session order.
+- var colClass = "col-md-{{ (12 / modeling.results.length) | floor }}";
 
-// There is one modeling result per session. The modeling
-// results array is in session order.
-- var colClass = "col-md-{{ (12 / subject.sessions.length) | floor }}";
-
-.row(*ngFor="let modeling of subject.modelings")
+.row
   .col-md-2.qi-pad-top
     span {{ modeling.source.type | capitalize }}
     button.btn.btn-med.qi-btn.qi-minihelp-btn(
       (click)="openModelingInfo(modeling)"
     )
       .glyphicon.glyphicon-info-sign
+    qi-modeling-info([modeling]="modeling", [hidden]=true)
   .col-md-10
     .table
       .row.qi-even-row

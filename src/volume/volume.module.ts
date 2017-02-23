@@ -8,7 +8,7 @@
  */
 
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule as NgCommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 
 import { PageModule } from '../page/page.module.ts';
@@ -26,7 +26,7 @@ const ROUTE_CONFIG: Routes = [
 
 @NgModule({
   imports: [
-    CommonModule, PageModule, ControlsModule, RouterModule.forChild(ROUTE_CONFIG),
+    NgCommonModule, PageModule, ControlsModule, RouterModule.forChild(ROUTE_CONFIG),
     VisualizationModule, ImageModule
   ],
   declarations: [VolumeComponent],

@@ -1,9 +1,4 @@
 This section displays the pharmacokinetic (PK) modeling results.
-The <span class="fa fa-list-ul"></span> button toggles between
-the modeling result chart and table presentation format. When
-the tables are displayed, the <span class="fa fa-bar-chart"></span>
-button toggles back to the chart format.
-
 Clicking the <span class="glyphicon glyphicon-info-sign"></span>
 button shows the modeling input parameters.
 

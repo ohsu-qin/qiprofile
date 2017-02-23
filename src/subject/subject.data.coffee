@@ -1,9 +1,8 @@
 `import * as _ from "lodash"`
 `import * as _s from "underscore.string"`
 
-`import DateHelper from "../date/date-helper.coffee"`
+`import DateHelper from "../common/date-helper.coffee"`
 `import Session from "../session/session.data.coffee"`
-`import Modeling from "../session/modeling.data.coffee"`
 `import Treatment from "../clinical/treatment.data.coffee"`
 `import ClinicalEncounter from "../clinical/encounter.data.coffee"`
 `import Encounter from "./encounter.data.coffee"`
@@ -59,11 +58,13 @@ extendEncounters = (subject) ->
 ModelingResults =
   ###*
    * Collects the modeling results into a [_modelings_] array,
-   * where _modelings_ is a {{source, protocol, results}},
-   * the ``source`` value is a {source type, source protocol}
-   * object, ``protocol`` is the modeling protocol, and
-   * ``results`` is an array of modeling results in session
-   * number order.
+   * where:
+   * * _modelings_ is a {{source, protocol, results}} object,
+   * * the ``source`` value is a {type, protocol} object,
+   * * the ``protocol`` value is the modeling protocol
+   * * the ``results`` value is an array of modeling results
+   *   in session number order.
+   *
    * @method collect
    * @param subject {Object} the parent subject
    * @return {Object} the
@@ -73,7 +74,7 @@ ModelingResults =
   ###
   collect: (subject) ->
     # The modeling result intensity value property path.
-    intensityPath = 'image.metadata.average_intensity'
+    INTENSITY_PROP_PATH = 'image.metadata.average_intensity'
     # The grouped modelings.
     grouped = {}
     # Collect each session modeling result.
@@ -86,7 +87,8 @@ ModelingResults =
         # source followed by the modeling protocol followed
         # by the session index.
         path = _.flatten([source, modeling.protocol, i])
-        result = _.mapValues(modeling.result, intensityPath)
+        # The modeling result array.
+        result = _.mapValues(modeling.result, INTENSITY_PROP_PATH)
         _.set(grouped, path, result)
 
     # Regroup by the modeling source and protocol.

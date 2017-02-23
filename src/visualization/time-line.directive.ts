@@ -4,7 +4,7 @@ import * as d3 from 'd3';
 import { Directive, Input, ElementRef, OnInit, DoCheck } from '@angular/core';
 
 import StringHelper from '../string/string-helper.coffee';
-import DateHelper from '../date/date-helper.coffee';
+import DateHelper from '../common/date-helper.coffee';
 import * as math from '../math/math.ts';
 
 /**

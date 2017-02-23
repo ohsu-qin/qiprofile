@@ -9,7 +9,7 @@
  */
 
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule as NgCommonModule } from '@angular/common';
 
 import { SliderDirective } from './slider.directive.ts';
 import { PlayerComponent } from './player.component.ts';
@@ -20,7 +20,7 @@ const DIRECTIVES = [
 ];
 
 @NgModule({
-  imports: [CommonModule],
+  imports: [NgCommonModule],
   declarations: DIRECTIVES,
   exports: DIRECTIVES
 })

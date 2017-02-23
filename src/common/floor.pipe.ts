@@ -8,12 +8,12 @@
 // jspm matures.
 //
 
-import {PipeTransform, Pipe} from '@angular/core';
+import { PipeTransform, Pipe } from '@angular/core';
 
 @Pipe({name: 'floor'})
 export class FloorPipe implements PipeTransform {
 
-  transform(num: number, precision: number = 0):number {
+  transform(num: number, precision=0): number {
     if (precision <= 0) {
       return Math.floor(num);
     }

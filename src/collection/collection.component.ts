@@ -3,7 +3,7 @@ import * as d3 from 'd3';
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import ObjectHelper from '../object/object-helper.coffee';
+import ObjectHelper from '../common/object-helper.coffee';
 import {
   ConfigurationService
 } from '../configuration/configuration.service.ts';

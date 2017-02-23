@@ -1,6 +1,6 @@
 `import * as _ from "lodash"`
 
-`import ObjectHelper from "../object/object-helper.coffee"`
+`import ObjectHelper from "../common/object-helper.coffee"`
 
 # The cancer stages correspond to TNM scores, assuming no
 # metastasis (M0).

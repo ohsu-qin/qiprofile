@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 
 import StringHelper from '../string/string-helper.coffee';
-import ObjectHelper from '../object/object-helper.coffee';
+import ObjectHelper from '../common/object-helper.coffee';
 
 const MISSING_VALUE = 'Not Specified';
 

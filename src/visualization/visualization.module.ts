@@ -9,7 +9,7 @@
  */
 
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule as NgCommonModule } from '@angular/common';
 
 import { ControlsModule } from '../controls/controls.module.ts';
 import { ScatterPlotDirective } from './scatter-plot.directive.ts';
@@ -24,7 +24,7 @@ const DIRECTIVES = [
 ];
 
 @NgModule({
-  imports: [CommonModule, ControlsModule],
+  imports: [NgCommonModule, ControlsModule],
   declarations: DIRECTIVES,
   exports: DIRECTIVES
 })

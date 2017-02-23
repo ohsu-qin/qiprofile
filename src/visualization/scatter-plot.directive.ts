@@ -5,8 +5,8 @@ import {
   OnChanges, SimpleChange
 } from '@angular/core';
 
-import ObjectHelper from '../object/object-helper.coffee';
-import DateHelper from '../date/date-helper.coffee';
+import ObjectHelper from '../common/object-helper.coffee';
+import DateHelper from '../common/date-helper.coffee';
 import * as math from '../math/math.ts';
 import * as language from '../language/language.ts';
 

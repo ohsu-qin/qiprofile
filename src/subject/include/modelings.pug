@@ -1,0 +1,7 @@
+// This modelings partial displays each subject modeling under
+// the previews.pug session dates and previews.
+
+qi-modeling(
+  *ngFor="let modeling of subject.modelings",
+  [modeling]="modeling"
+)

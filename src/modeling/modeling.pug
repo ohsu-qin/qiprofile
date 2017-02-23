@@ -1,0 +1,23 @@
+// Apportion the modeling result columns. There is one
+// result per session. The modeling results array is in
+// session order.
+- var colClass = "col-md-{{ (12 / modeling.results.length) | floor }}";
+
+.row
+  .col-md-2.qi-pad-top
+    span {{ modeling.source.type | capitalize }}
+    button.btn.btn-med.qi-btn.qi-minihelp-btn(
+      (click)="openModelingInfo(modeling)"
+    )
+      .glyphicon.glyphicon-info-sign
+    qi-modeling-info([modeling]="modeling", [hidden]=true)
+  .col-md-10
+    .table
+      .row.qi-even-row
+        div(class=colClass, *ngFor="let results of modeling.results")
+          qi-property-table(
+            [object]="results",
+            [path]="'scanModeling.intensities'",
+            [label]="label",
+            [format]="formatModelingResult"
+          )

@@ -15,9 +15,16 @@ import Subject from './subject.data.coffee';
  * @class SubjectService
  */
 export class SubjectService {
-  constructor(private resource: SubjectResource) { }
-
+  /**
+   * The cached {{#crossLink "Subjectr"}}{{/crossLink}}
+   * REST object.
+   *
+   * @property subject {Object}
+   * @private
+   */
   private subject: Object;
+
+  constructor(private resource: SubjectResource) { }
 
   /**
    * @method getSubjects

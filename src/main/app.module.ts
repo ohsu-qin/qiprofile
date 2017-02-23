@@ -31,6 +31,7 @@ import { BrowserModule } from '@angular/platform-browser';
 //import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { ResourceProviders } from 'ng2-resource-rest';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 // The app root.
 import { AppComponent } from './app.component.ts';
@@ -53,8 +54,7 @@ const SHARED_SERVICES = [
 ];
 
 @NgModule({
-  //imports: [BrowserModule, FormsModule, HttpModule, ROUTES],
-  imports: [BrowserModule, HttpModule, ROUTES],
+  imports: [BrowserModule, HttpModule, NgbModule.forRoot(), ROUTES],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
   providers: [ResourceProviders.main(), ...SHARED_SERVICES]

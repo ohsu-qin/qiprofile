@@ -9,7 +9,8 @@ module.exports = (grunt) ->
 
     ts:
       options:
-        module: "commonjs"
+        module: 'CommonJS'
+        target: 'ES6'
         emitDecoratorMetadata: true
         sourceMap: true
         sourceRoot: 'src'
@@ -24,10 +25,12 @@ module.exports = (grunt) ->
         options:
           sourceMap: false
           sourceRoot: false
-        src: ['tslint/src/rules/*.ts', 'node_modules/tslint/lib/tslint.d.ts']
+        src: 'tslint/src/rules/*.ts'
         dest: 'tslint/dist/rules'
 
     tslint:
+      options:
+        force: true
       files:
         src: ['src/**/*.ts']
 

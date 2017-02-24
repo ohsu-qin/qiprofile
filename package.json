@@ -69,7 +69,7 @@
     "grunt-exec": "^0.4.7",
     "grunt-express-server": "^0.5.1",
     "grunt-ts": "^5.5.0-beta.2",
-    "jspm": "^0.17.0-beta.15",
+    "jspm": "=0.17.0-beta.15",
     "load-grunt-tasks": "^3.5.0",
     "lodash": "^4.13.1",
     "method-override": "^2.3.5",
@@ -78,16 +78,24 @@
     "serve-favicon": "^2.3.0",
     "serve-static": "^1.10.2",
     "superagent": "^1.8.3",
-    "typescript": "^1.8.9",
+    "typescript": "^2.2.0",
     "underscore.string": "^2.3.3"
   },
   "devDependencies": {
+    "@angular/common": "file:jspm_packages/npm/@angular/common@2.4.8",
+    "@angular/compiler": "file:jspm_packages/npm/@angular/compiler@2.4.8",
+    "@angular/core": "file:jspm_packages/npm/@angular/core@2.4.8",
+    "@angular/forms": "file:jspm_packages/npm/@angular/forms@2.4.8",
+    "@angular/http": "file:jspm_packages/npm/@angular/http@2.4.8",
+    "@angular/platform-browser": "file:jspm_packages/npm/@angular/platform-browser@2.4.8",
+    "@angular/platform-browser-dynamic": "file:jspm_packages/npm/@angular/platform-browser-dynamic@2.4.8",
+    "@angular/router": "file:jspm_packages/npm/@angular/router@3.4.8",
     "angular2-testing-lite": "^1.4.0",
     "autoprefixer-stylus": "^0.9.3",
     "chai": "^3.4.1",
     "chai-as-promised": "^5.3.0",
     "chokidar-socket-emitter": "^0.5.2",
-    "codelyzer": "0.0.23",
+    "codelyzer": "2.0.1",
     "coffee-errors": "^0.8.6",
     "coffee-script": "^1.10.0",
     "grunt-browser-sync": "^2.2.0",
@@ -98,7 +106,7 @@
     "grunt-karma": "^0.12.1",
     "grunt-protractor-runner": "^3.2.0",
     "grunt-sync": "^0.5.2",
-    "grunt-tslint": "^3.1.0",
+    "grunt-tslint": "^4.0.1",
     "grunt-typings": "^0.1.5",
     "karma": "git+https://github.com/ohsu-qin/karma.git#qiprofile",
     "karma-babel-preprocessor": "^6.0.1",
@@ -119,18 +127,20 @@
     "phantomjs": "^2.1.7",
     "phantomjs-prebuilt": "^2.1.3",
     "protractor": "^3.3.0",
+    "rxjs": "^5.2.0",
     "selenium-standalone": "^4.9.0",
     "showdown": "^1.4.2",
     "sleep-promise": "^2.0.0",
     "testdouble": "^1.4.3",
     "text-encoding": "^0.5.2",
     "time-grunt": "^1.3.0",
-    "tslint": "^3.10.2",
-    "tslint-eslint-rules": "^1.3.0",
+    "tslint": "^4.4.2",
+    "tslint-eslint-rules": "^3.4.0",
     "typings": "^1.3.1",
     "yui": "^3.18.1",
     "yuidoc-ember-cli-theme": "^1.0.2",
-    "yuidocjs": "^0.10.2"
+    "yuidocjs": "^0.10.2",
+    "zone.js": "^0.7.7"
   },
   "jspm": {
     "registry": "github",
@@ -138,7 +148,6 @@
       "jspm": "jspm.config.js"
     },
     "dependencies": {
-      "@angular/forms": "npm:@angular/forms@^2.0.2",
       "@angular/http": "npm:@angular/http@^2.0.2",
       "@angular/router": "npm:@angular/router@^3.0.2",
       "angular2-modal": "npm:angular2-modal@^2.0.1",
@@ -155,64 +164,71 @@
       "lodash": "npm:lodash@^4.13.1",
       "md": "guybedford/system-md@^0.1.0",
       "moment": "npm:moment@^2.14.1",
+      "ng-bootstrap": "npm:@ng-bootstrap/ng-bootstrap@^1.0.0-alpha.20",
       "ng2-accordion": "npm:ng2-accordion@^0.0.9",
       "ng2-resource-rest": "npm:ng2-resource-rest@^0.5.6",
       "ohsu-qin/ng2-nouislider": "^0.3.0",
       "pako": "npm:pako@^0.2.9",
+      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.21",
+      "plugin-typescript": "frankwallis/plugin-typescript@^7.0.4",
       "reflect-metadata": "npm:reflect-metadata@^0.1.0",
       "requirejs": "npm:requirejs@^2.2.0",
       "socket.io": "npm:socket.io@^1.4.6",
       "socket.io-client": "npm:socket.io-client@^1.4.6",
       "sprintf": "npm:sprintf@^0.1.5",
-      "systemjs-hot-reloader": "alexisvincent/systemjs-hot-reloader@^0.6.0",
       "text": "systemjs/plugin-text@^0.0.8",
-      "ts": "frankwallis/plugin-typescript@^4.0.16",
+      "ts": "frankwallis/plugin-typescript@^7.0.4",
       "underscore.string": "npm:underscore.string@^3.3.4"
     },
     "devDependencies": {
       "babel-runtime": "npm:babel-runtime@^5.8.38",
       "core-js": "npm:core-js@^1.1.1",
       "encoding": "npm:encoding@^0.1.12",
-      "plugin-babel": "npm:systemjs-plugin-babel@^0.0.12",
+      "systemjs-hot-reloader": "alexisvincent/systemjs-hot-reloader@^0.6.0",
       "text-encoding": "npm:text-encoding@^0.6.0"
     },
     "peerDependencies": {
-      "@angular/common": "npm:@angular/common@2.0.2",
-      "@angular/compiler": "npm:@angular/compiler@^2.0.2",
-      "@angular/core": "npm:@angular/core@2.0.2",
-      "@angular/platform-browser": "npm:@angular/platform-browser@2.0.2",
-      "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@^2.0.2",
-      "assert": "npm:jspm-nodelibs-assert@^0.2.0",
-      "buffer": "npm:jspm-nodelibs-buffer@^0.2.0",
-      "child_process": "npm:jspm-nodelibs-child_process@^0.2.0",
-      "constants": "npm:jspm-nodelibs-constants@^0.2.0",
-      "crypto": "npm:jspm-nodelibs-crypto@^0.2.0",
+      "@angular/common": "npm:@angular/common@2.4.8",
+      "@angular/compiler": "npm:@angular/compiler@2.4.8",
+      "@angular/core": "npm:@angular/core@2.4.8",
+      "@angular/forms": "npm:@angular/forms@^2.0.2",
+      "@angular/platform-browser": "npm:@angular/platform-browser@2.4.8",
+      "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@^2.4.8",
+      "assert": "jspm/nodelibs-assert@^0.2.0-alpha",
+      "buffer": "jspm/nodelibs-buffer@^0.2.0-alpha",
+      "child_process": "jspm/nodelibs-child_process@^0.2.0-alpha",
+      "constants": "jspm/nodelibs-constants@^0.2.0-alpha",
+      "crypto": "jspm/nodelibs-crypto@^0.2.0-alpha",
       "domain": "npm:jspm-nodelibs-domain@^0.2.0",
-      "events": "npm:jspm-nodelibs-events@^0.2.0",
-      "fs": "npm:jspm-nodelibs-fs@^0.2.0",
+      "events": "jspm/nodelibs-events@^0.2.0-alpha",
+      "fs": "jspm/nodelibs-fs@^0.2.0-alpha",
       "http": "jspm/nodelibs-http@^0.2.0-alpha",
-      "https": "npm:jspm-nodelibs-https@^0.2.0",
-      "module": "npm:jspm-nodelibs-module@^0.2.0",
-      "net": "npm:jspm-nodelibs-net@^0.2.0",
+      "https": "jspm/nodelibs-https@^0.2.0-alpha",
+      "module": "jspm/nodelibs-module@^0.2.0-alpha",
+      "net": "jspm/nodelibs-net@^0.2.0-alpha",
       "nouislider": "npm:nouislider@^8.5.1",
-      "os": "npm:jspm-nodelibs-os@^0.2.0",
-      "path": "npm:jspm-nodelibs-path@^0.2.0",
+      "os": "jspm/nodelibs-os@^0.2.0-alpha",
+      "path": "jspm/nodelibs-path@^0.2.0-alpha",
       "process": "jspm/nodelibs-process@^0.2.0-alpha",
       "querystring": "npm:jspm-nodelibs-querystring@^0.2.0",
-      "rxjs": "npm:rxjs@5.0.0-beta.12",
-      "stream": "npm:jspm-nodelibs-stream@^0.2.0",
-      "string_decoder": "npm:jspm-nodelibs-string_decoder@^0.2.0",
-      "timers": "npm:jspm-nodelibs-timers@^0.2.0",
+      "rxjs": "npm:rxjs@^5.0.1",
+      "stream": "jspm/nodelibs-stream@^0.2.0-alpha",
+      "string_decoder": "jspm/nodelibs-string_decoder@^0.2.0-alpha",
+      "timers": "jspm/nodelibs-timers@^0.2.0-alpha",
       "tls": "npm:jspm-nodelibs-tls@^0.2.0",
       "tty": "npm:jspm-nodelibs-tty@^0.2.0",
-      "url": "npm:jspm-nodelibs-url@^0.2.0",
-      "util": "npm:jspm-nodelibs-util@^0.2.0",
-      "vm": "npm:jspm-nodelibs-vm@^0.2.0",
-      "zlib": "npm:jspm-nodelibs-zlib@^0.2.0",
-      "zone.js": "npm:zone.js@^0.6.21"
+      "typescript": "npm:typescript@^2.0.0",
+      "url": "jspm/nodelibs-url@^0.2.0-alpha",
+      "util": "jspm/nodelibs-util@^0.2.0-alpha",
+      "vm": "jspm/nodelibs-vm@^0.2.0-alpha",
+      "zlib": "jspm/nodelibs-zlib@^0.2.0-alpha",
+      "zone.js": "npm:zone.js@^0.7.2"
     },
     "overrides": {
-      "npm:@angular/common@2.0.2": {
+      "github:socketio/socket.io-client@1.7.2": {
+        "main": "dist/socket.io.js"
+      },
+      "npm:@angular/common@2.4.8": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -222,7 +238,7 @@
           }
         }
       },
-      "npm:@angular/compiler@2.0.2": {
+      "npm:@angular/compiler@2.4.8": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -236,7 +252,7 @@
           "./testing": "./bundles/compiler-testing.umd.js"
         }
       },
-      "npm:@angular/core@2.0.2": {
+      "npm:@angular/core@2.4.8": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -246,7 +262,7 @@
           }
         }
       },
-      "npm:@angular/http@2.0.2": {
+      "npm:@angular/http@2.4.8": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -260,7 +276,7 @@
           "./testing": "./bundles/http-testing.umd.js"
         }
       },
-      "npm:@angular/platform-browser-dynamic@2.0.2": {
+      "npm:@angular/platform-browser-dynamic@2.4.8": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -274,7 +290,7 @@
           "./testing": "./bundles/platform-browser-dynamic-testing.umd.js"
         }
       },
-      "npm:@angular/platform-browser@2.0.2": {
+      "npm:@angular/platform-browser@2.4.8": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -288,7 +304,7 @@
           "./testing": "./bundles/platform-browser-testing.umd.js"
         }
       },
-      "npm:@angular/router@3.0.2": {
+      "npm:@angular/router@3.4.8": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -377,7 +393,7 @@
           "socket.io-client/package": "socket.io-client/package.json"
         }
       },
-      "npm:typescript@1.8.10": {
+      "npm:typescript@2.2.1": {
         "browser": {},
         "map": {
           "buffer": "@empty",
@@ -386,6 +402,9 @@
           "path": "@empty",
           "process": "@empty",
           "readline": "@empty"
+        },
+        "dependencies": {
+          "source-map-support": "*"
         }
       },
       "npm:ws@1.0.1": {

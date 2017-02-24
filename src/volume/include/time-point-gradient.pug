@@ -10,12 +10,12 @@
 
   // The spark line.
   div(
-    qi-spark-line, [width]="gradientWidth", [height]=100, [domain]="domain",
+    qiSparkLine, [width]="gradientWidth", [height]=100, [domain]="domain",
     [data]="timePointIntensities"
   )
 
   // The color bar.
   div(
-    qi-color-bar, [width]="gradientWidth", [height]=40, [domain]="domain",
+    qiColorBar, [width]="gradientWidth", [height]=40, [domain]="domain",
     [data]="timePointIntensities"
   )

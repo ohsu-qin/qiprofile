@@ -5,7 +5,7 @@ import {
 } from '@angular/core';
 
 @Directive({
-  selector: '[qi-color-bar]'
+  selector: '[qiColorBar]'
 })
 
 /**

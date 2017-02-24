@@ -8,7 +8,7 @@ block content
     .col-md-2.qi-align-top
       h5.qi-title.qi-text-center Imaging Sessions
       .qi-sessions-chart(
-        qi-scatter-plot, [height]="sessionsChart.height",
+        qiScatterPlot, [height]="sessionsChart.height",
         [data]="sessions", [color]="'subject.number'",
         [symbolType]="symbolType",
         [margin]="sessionsChartMargin",

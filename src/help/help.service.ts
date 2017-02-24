@@ -13,7 +13,7 @@ export class HelpService {
    *
    * @property showHelp
    */
-  showHelp: boolean = false;
+  showHelp = false;
 
   /**
    * Inverts the `showHelp` flag.

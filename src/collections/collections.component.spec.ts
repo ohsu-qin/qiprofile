@@ -16,7 +16,7 @@ import { CollectionsService } from './collections.service.ts';
  * @class CollectionsHelpServiceStub
  */
 class CollectionsHelpServiceStub {
-  showHelp: boolean = false;
+  showHelp = false;
 }
 
 /**

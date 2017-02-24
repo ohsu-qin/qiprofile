@@ -38,7 +38,7 @@ class ProjectsServiceStub {
  * @class ProjectsHelpServiceStub
  */
 class ProjectsHelpServiceStub {
-  showHelp: boolean = false;
+  showHelp = false;
 }
 
 beforeEachProviders(() => {

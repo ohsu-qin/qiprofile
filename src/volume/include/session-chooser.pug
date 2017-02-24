@@ -5,7 +5,7 @@
 
   // The session number slider.
   .qi-slider(
-    qi-slider, [min]="1", [max]="sessionCount()",
+    qiSlider, [min]="1", [max]="sessionCount()",
     [config]="sessionSliderConfig",
     [value]="volume.imageSequence.session.number",
     (changed)="onSessionRequest($event)"

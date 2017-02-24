@@ -48,7 +48,7 @@ private const PAD = 2;
  */
 private const MARGIN = {top: 6, left: 30, bottom: 6, right: 30};
 
-@Directive({selector: '[qi-time-line]'})
+@Directive({selector: '[qiTimeLine]'})
 
 /**
  * Draws a horizontal D3 line which plots event data by time.

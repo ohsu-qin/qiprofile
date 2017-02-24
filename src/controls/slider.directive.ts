@@ -16,7 +16,7 @@ function toValue(value: string[]): number|number[] {
 }
 
 @Directive({
-  selector: '[qi-slider]'
+  selector: '[qiSlider]'
 })
 
 /**

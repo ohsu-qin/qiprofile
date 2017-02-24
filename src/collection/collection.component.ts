@@ -98,7 +98,7 @@ export class CollectionComponent extends PageComponent {
     // Wrap the private function in this fat arrow function
     // to ensure that `this` binds correctly.
     this._onSessionsChartAxis(property, axis);
-  };
+  }
 
   /**
    * The correlation chart height apportions the remainder

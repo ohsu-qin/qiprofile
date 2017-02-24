@@ -5,7 +5,7 @@ import {
   Directive, Input, ElementRef, OnChanges, SimpleChange, OnInit
 } from '@angular/core';
 
-@Directive({selector: '[qi-spark-line]'})
+@Directive({selector: '[qiSparkLine]'})
 
 /**
  * Draws a D3 spark line which plots a uniform sequential

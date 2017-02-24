@@ -11,7 +11,7 @@ import * as math from '../math/math.ts';
 import * as language from '../language/language.ts';
 
 @Directive({
-  selector: '[qi-scatter-plot]'
+  selector: '[qiScatterPlot]'
 })
 
 /**
@@ -151,7 +151,7 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
    *
    * @property trendLine {boolean}
    */
-  @Input() trendLine: boolean = false;
+  @Input() trendLine = false;
 
   /**
    * The axis customization callback.
@@ -236,7 +236,7 @@ export class ScatterPlotDirective implements OnChanges, OnInit {
    * @property pendingTransitionTime {number}
    * @private
    */
-  private pendingTransitionTime: number = 0;
+  private pendingTransitionTime = 0;
 
   /**
    * The internal chart padding to accomodate the top and

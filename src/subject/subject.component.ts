@@ -20,11 +20,11 @@ import sarcomaTnmStageHelp from '../clinical/sarcoma-tnm-stage.help.md';
 import recurrenceScoreHelp from '../clinical/recurrence-score.help.md';
 import dosageAmountHelp from '../clinical/dosage-amount.help.md';
 import rcbHelp from '../clinical/breast-rcb.help.md';
+import modelingHelp from '../modeling/modeling.help.md';
 import Subject from './subject.data.coffee';
 import { SubjectService } from './subject.service.ts';
 import help from './subject.help.md';
 import previewsHelp from './previews.help.md';
-import modelingHelp from './modeling.help.md';
 
 /**
  * The modeling display formats, `chart` or `table`.

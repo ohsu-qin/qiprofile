@@ -167,10 +167,14 @@ module.exports = (grunt) ->
         configFile: 'karma-conf.coffee'
 
     exec:
-      # # Delete the qirest Anaconda environment.
-      # # Note: conda env remove hangs when executed from a script.
-      # # It does not run when executed from a script in background.
-      # # There is no known mechanism to make this work.
+      # Delete the qirest Anaconda environment.
+      #
+      # Note: conda env remove hangs when executed from a script.
+      # It does not run when executed from a script in background.
+      # There is no known mechanism to make this work.
+      # The work-around is to execute the conda env remove
+      # command below manually.
+      #
       # cleanqirest:
       #   command:
       #     '(source deactivate 2>/dev/null);' +

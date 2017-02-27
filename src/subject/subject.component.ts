@@ -1,6 +1,8 @@
 import * as _ from 'lodash';
+import { Observable } from 'rxjs';
 import {
-  Component, ViewContainerRef, ChangeDetectionStrategy, ChangeDetectorRef
+  Component, ViewContainerRef, ChangeDetectionStrategy,
+  ChangeDetectorRef, HostListener
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Overlay } from 'angular2-modal';
@@ -179,6 +181,14 @@ export class SubjectComponent extends PageComponent {
   }
 
   /**
+   * The time line width. Given the Subject page formatting,
+   * this width is computed as 60% of the document body width.
+   *
+   * @property timeLineWidth {number}
+   */
+  timeLineWidth: number;
+
+  /**
    * The
    * {{#crossLink "SubjectComponent/MODELING_FORMATS:property"}}{{/crossLink}}
    * index to obtain the
@@ -220,6 +230,17 @@ export class SubjectComponent extends PageComponent {
       // Tell Angular to digest the change.
       changeDetector.markForCheck();
     });
+
+    // The initial time line width.
+    this.timeLineWidth = this.computeTimeLineWidth();
+    // Recompute the time line width on resize.
+    Observable.fromEvent(window, 'resize')
+      .debounceTime(500)
+      .subscribe((event) => {
+        this.timeLineWidth = this.computeTimeLineWidth();
+        // Tell Angular to digest the change.
+        changeDetector.markForCheck();
+      });
   }
 
   /**
@@ -232,59 +253,6 @@ export class SubjectComponent extends PageComponent {
    */
   getLabel(property: string): string {
     return this.configService.getHTMLLabel(property, this.subject.collection);
-  }
-
-  /**
-   * @method _timeLineText
-   * @param encounter {Object} the encounter REST data object
-   * @return {string} the SVG text element inner text string
-   */
-  private _timeLineText(encounter: Object): string  {
-    return encounter.isClinical() ? WEDGE : encounter.number;
-  }
-
-  /**
-   * @method _encounterDataClass
-   * @private
-   * @param encounter {Object} the encounter REST data object
-   * @return {string} the data class
-   */
-  private _encounterDataClass(encounter: Object): string {
-    let klass = encounter._cls;
-    // Left-truncate the surgery specialization class names.
-    if (klass.endsWith('Surgery')) {
-      klass = 'Surgery';
-    }
-    return klass;
-  }
-
-  /**
-   * Returns the
-   * {{#crossLink "SubjectComponent/legend:property"}}{{/crossLink}}
-   * specification.
-   *
-   * @method _legend
-   * @private
-   * @return {Object} the legend specification
-   */
-  private _legend() {
-    // The clinical encounters ordered by date.
-    let clnEncounters = _.sortBy(this.subject.clinicalEncounters, 'date');
-    // The encounter data classes.
-    let clnCasses = _.uniq(clnEncounters.map(this.encounterDataClass));
-    // The clinical legend label is the wedge character.
-    let accumClinicalLegends = (accum, dataClass) => {
-      accum[dataClass] = {label: WEDGE};
-    };
-    let legends = _.transform(clnCasses, accumClinicalLegends, {});
-
-    // The session legend label is the session number range.
-    legends['Session'] = {
-      label: `1-${ this.subject.sessions.length }`,
-      name: 'Imaging Visit'
-    };
-
-    return legends;
   }
 
   /**
@@ -428,5 +396,65 @@ export class SubjectComponent extends PageComponent {
       ['session', session.number, 'scan', 1, 'volumes'],
       {relativeTo: this.route}
     );
+  }
+
+  private computeTimeLineWidth(): number {
+    // The time line is 60% as wide as the document body.
+    const RELATIVE_WIDTH = 0.60;
+    let rect = document.body.getBoundingClientRect();
+    return Math.floor(rect.width * RELATIVE_WIDTH);
+  }
+
+  /**
+   * @method _timeLineText
+   * @param encounter {Object} the encounter REST data object
+   * @return {string} the SVG text element inner text string
+   */
+  private _timeLineText(encounter: Object): string  {
+    return encounter.isClinical() ? WEDGE : encounter.number;
+  }
+
+  /**
+   * @method _encounterDataClass
+   * @private
+   * @param encounter {Object} the encounter REST data object
+   * @return {string} the data class
+   */
+  private _encounterDataClass(encounter: Object): string {
+    let klass = encounter._cls;
+    // Left-truncate the surgery specialization class names.
+    if (klass.endsWith('Surgery')) {
+      klass = 'Surgery';
+    }
+    return klass;
+  }
+
+  /**
+   * Returns the
+   * {{#crossLink "SubjectComponent/legend:property"}}{{/crossLink}}
+   * specification.
+   *
+   * @method _legend
+   * @private
+   * @return {Object} the legend specification
+   */
+  private _legend() {
+    // The clinical encounters ordered by date.
+    let clnEncounters = _.sortBy(this.subject.clinicalEncounters, 'date');
+    // The encounter data classes.
+    let clnCasses = _.uniq(clnEncounters.map(this.encounterDataClass));
+    // The clinical legend label is the wedge character.
+    let accumClinicalLegends = (accum, dataClass) => {
+      accum[dataClass] = {label: WEDGE};
+    };
+    let legends = _.transform(clnCasses, accumClinicalLegends, {});
+
+    // The session legend label is the session number range.
+    legends['Session'] = {
+      label: `1-${ this.subject.sessions.length }`,
+      name: 'Imaging Visit'
+    };
+
+    return legends;
   }
 }

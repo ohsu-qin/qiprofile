@@ -185,6 +185,7 @@ export class TimeLineDirective implements DoCheck, OnInit {
    * The D3 SVG root group element.
    *
    * @property svg {d3.Selection<any>}
+   * @private
    */
   private svg: d3.Selection<any>;
 
@@ -194,8 +195,19 @@ export class TimeLineDirective implements DoCheck, OnInit {
    * value.
    *
    * @property previousData {Object}
+   * @private
    */
   private previousData: Object;
+
+  /**
+   * The previous
+   * {{#crossLink "TimeLineDirective/width:property"}}{{/crossLink}}
+   * value.
+   *
+   * @property previousWidth {number}
+   * @private
+   */
+  private previousWidth: number;
 
   constructor(private elementRef: ElementRef) {
   }
@@ -213,22 +225,32 @@ export class TimeLineDirective implements DoCheck, OnInit {
   }
 
   /**
-   * If
+   * If the
    * {{#crossLink "TimeLineDirective/data:property"}}{{/crossLink}}
-   * is an object whose property changed, then redraw the time line.
+   * or
+   * {{#crossLink "TimeLineDirective/width:property"}}{{/crossLink}}
+   * changed, then redraw the time line.
    *
    * _Note_: the other inputs are for initialization only, and changes
    * to those properties are ignored.
    */
   ngDoCheck() {
-    // Convert to an object if necessary.
+    // Convert the data to an object if necessary.
     let currentData = _.isArray(this.data) ? {default: this.data} : this.data;
+    // If there is current data, then check whether either the
+    // data or the width has changed.
     if (currentData && !_.every(currentData, _.isEmpty)) {
-      let isChanged = (data, key) => data !== this.previousData[key];
-      if (!this.previousData || _.some(currentData, isChanged)) {
+      // If the width or some data has changed, then redraw.
+      let isDatumChanged = (data, key) => data !== this.previousData[key];
+      let isDataChanged = !this.previousData || _.some(currentData, isDatumChanged);
+      let isWidthChanged = !this.previousWidth || this.width != this.previousWidth;
+      if (isDataChanged || isWidthChanged) {
         this.draw();
       }
+      // Capture the current data.
       this.previousData = _.clone(currentData);
+      // Capture the current width.
+      this.previousWidth = this.width;
     }
   }
 
@@ -236,6 +258,9 @@ export class TimeLineDirective implements DoCheck, OnInit {
    * Draws the time line.
    */
   private draw() {
+    // Remove the existing viewport, if any.
+    this.svg.select('g').remove();
+
     //** Data prep **//
 
     // Convert a simple data array to a {default: data} object.

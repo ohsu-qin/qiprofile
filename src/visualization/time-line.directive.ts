@@ -243,7 +243,7 @@ export class TimeLineDirective implements DoCheck, OnInit {
       // If the width or some data has changed, then redraw.
       let isDatumChanged = (data, key) => data !== this.previousData[key];
       let isDataChanged = !this.previousData || _.some(currentData, isDatumChanged);
-      let isWidthChanged = !this.previousWidth || this.width != this.previousWidth;
+      let isWidthChanged = !this.previousWidth || this.width !== this.previousWidth;
       if (isDataChanged || isWidthChanged) {
         this.draw();
       }

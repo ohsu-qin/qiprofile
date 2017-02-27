@@ -32,7 +32,7 @@ exports.config =
   # Run the qirest seed and link the test fixtures into public,
   # if necessary.
   onPrepare: 'src/testing/seed'
-  
+
   # Increase time-out from the default 11 seconds to 20 seconds.
   allScriptsTimeout: 20000
 

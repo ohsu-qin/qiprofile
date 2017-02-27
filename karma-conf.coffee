@@ -2,7 +2,7 @@ module.exports = (config) ->
   config.set
     # The base path to resolve files is the top-level qiprofile directory.
     basePath: '.'
-    
+
     # The karma adapter frameworks to use.
     frameworks: ['jspm', 'mocha', 'chai']
 
@@ -94,14 +94,14 @@ module.exports = (config) ->
       mocha:
         bail: true
 
-    # If the browser does not capture output in the given number of 
+    # If the browser does not capture output in the given number of
     # milliseconds, then kill it.
     # Note: timeout doesn't necessarily mean the test fails, but guards
     # against hanging test cases. Chances are if it takes more than 5
     # seconds to run the test, the test either hangs or needs to be
-    # refactored. 
+    # refactored.
     captureTimeout: 5000
-    
+
     # Allowing empty test suites is useful when commenting out tests. The
     # default is true.
     # failOnEmptyTestSuite: false

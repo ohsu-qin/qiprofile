@@ -1,3 +1,5 @@
+path = require 'path'
+
 module.exports = (grunt) ->
   grunt.config.init(
     pkg: grunt.file.readJSON('package.json')
@@ -67,33 +69,6 @@ module.exports = (grunt) ->
         src: '**/*'
         dest: 'public/'
 
-      # Note: this task is only used to copy CSS map files. The
-      # CSS style files themselves are copied to the destination
-      # in the concat:css task.
-      #
-      # This task is only used to copy the Bootstrap map file.
-      # Since the non-minimized Bootstrap module references the
-      # CSS map, the map must be colocated with the stylesheets.
-      cssmap:
-        expand: true
-        flatten: true
-        cwd: 'node_modules/'
-        src: ['bootstrap/dist/css/bootstrap.css.map']
-        dest: 'public/stylesheets/'
-
-      fonts:
-        expand: true
-        flatten: true
-        # Note: Due to a grunt bug, the font-awesome example subdirectory,
-        #   e.g. 4.0.4/index.html, can't be excluded
-        #   (cf. https://github.com/gruntjs/grunt-contrib-copy/issues/13).
-        src: [
-          'node_modules/bootstrap/dist/fonts/*'
-          'node_modules/font-awesome/fonts/*'
-          'fonts/google/*'
-        ]
-        dest: 'public/fonts/'
-
       doc:
         expand: true
         src: ['src/**/*.ts']
@@ -113,9 +88,23 @@ module.exports = (grunt) ->
           'lib/papaya.css'
           'jspm_packages/npm/nouislider*/distribute/nouislider.min.css'
           'node_modules/bootstrap/dist/css/bootstrap.css'
-          'node_modules/font-awesome/css/font-awesome.css'
         ]
         dest: 'public/stylesheets/vendor.css'
+
+    curl:
+      icons:
+        src: 'http://glyphicons.com/files/glyphicons_free.zip'
+        dest: 'build/glyphicons.zip'
+
+    unzip:
+      icons:
+        router: (filepath) ->
+          # Get rid of the numeric qualifier in the file name.
+          base = path.basename(filepath)
+          if base.match(/glyphicons-.*\.png/)
+            base.replace(/glyphicons-\d+-/, 'glyphicon-')
+        src: 'build/glyphicons.zip'
+        dest: 'public/media'
 
     concurrent:
       options:
@@ -167,19 +156,6 @@ module.exports = (grunt) ->
         configFile: 'karma-conf.coffee'
 
     exec:
-      # Delete the qirest Anaconda environment.
-      #
-      # Note: conda env remove hangs when executed from a script.
-      # It does not run when executed from a script in background.
-      # There is no known mechanism to make this work.
-      # The work-around is to execute the conda env remove
-      # command below manually.
-      #
-      # cleanqirest:
-      #   command:
-      #     '(source deactivate 2>/dev/null);' +
-      #     '(yes | conda env remove -n qirest)'
-
       # Clean all installation artifacts, including the qirest Anaconda
       # environment.
       cleannpm:
@@ -243,6 +219,10 @@ module.exports = (grunt) ->
       updatewebdriver:
         command: './node_modules/protractor/bin/webdriver-manager update'
 
+      # Links the test data, if available.
+      lndata:
+        command: 'if [ -n "$QI_DATA" ]; then ln -s $QI_DATA ./public; fi'
+
     protractor:
       e2e:
         configFile: 'protractor-conf.coffee'
@@ -285,10 +265,14 @@ module.exports = (grunt) ->
   grunt.registerTask 'compile', ['tslint', 'concurrent']
 
   # Build the application from scratch.
-  grunt.registerTask 'copy:dev', ['copy:static', 'copy:cssmap', 'copy:fonts']
+  grunt.registerTask 'icons', ['curl:icons', 'unzip:icons']
+
+  # Build the application from scratch.
+  grunt.registerTask 'copy:dev', ['copy:static']
 
   # Build the application server.
-  grunt.registerTask 'build:dev', ['copy:dev', 'concat:css', 'compile']
+  grunt.registerTask 'build:dev', ['icons', 'copy:dev',
+                                   'concat:css', 'compile']
 
   # Build the application documentation.
   grunt.registerTask 'doc', ['copy:doc', 'coffee:doc', 'yuidoc']

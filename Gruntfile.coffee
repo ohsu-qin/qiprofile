@@ -109,7 +109,7 @@ module.exports = (grunt) ->
     concurrent:
       options:
         logConcurrentOutput: true
-      default:
+      compile:
         tasks: ['typings', 'pug', 'stylus']
 
     yuidoc:
@@ -221,7 +221,14 @@ module.exports = (grunt) ->
 
       # Links the test data, if available.
       lndata:
-        command: 'if [ -n "$QI_DATA" ]; then ln -s $QI_DATA ./public; fi'
+        command: 'if [ -n "$QI_DATA" ]; then ' +
+                 '  (cd ./public/; ' +
+                 '   if [ -L data ]; then rm data; fi; ' +
+                 '   if [ ! -e data ]; then ' +
+                 '     ln -s `cd $QI_DATA; pwd` data; ' +
+                 '   fi' +
+                 '  ); ' +
+                 'fi'
 
     protractor:
       e2e:
@@ -262,7 +269,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'default', ['build']
 
   # Compile the app bits concurrently.
-  grunt.registerTask 'compile', ['tslint', 'concurrent']
+  grunt.registerTask 'compile', ['tslint', 'concurrent:compile']
 
   # Build the application from scratch.
   grunt.registerTask 'icons', ['curl:icons', 'unzip:icons']
@@ -271,7 +278,7 @@ module.exports = (grunt) ->
   grunt.registerTask 'copy:dev', ['copy:static']
 
   # Build the application server.
-  grunt.registerTask 'build:dev', ['icons', 'copy:dev',
+  grunt.registerTask 'build:dev', ['icons', 'copy:dev', 'exec:lndata',
                                    'concat:css', 'compile']
 
   # Build the application documentation.

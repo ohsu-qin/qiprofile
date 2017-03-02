@@ -69,6 +69,15 @@ module.exports = (grunt) ->
         src: '**/*'
         dest: 'public/'
 
+      # This task is only used to copy the Bootstrap map file.
+      # Since the unminimized Bootstrap module references the
+      # CSS map, the map must be colocated with the stylesheets.
+      cssmap:
+        expand: true
+        flatten: true
+        src: 'node_modules/bootstrap/dist/css/bootstrap.css.map'
+        dest: 'public/stylesheets/'
+
       doc:
         expand: true
         src: ['src/**/*.ts']
@@ -279,7 +288,8 @@ module.exports = (grunt) ->
 
   # Build the application server.
   grunt.registerTask 'build:dev', ['icons', 'copy:dev', 'exec:lndata',
-                                   'concat:css', 'compile']
+                                   'concat:css', 'copy:cssmap',
+                                   'compile']
 
   # Build the application documentation.
   grunt.registerTask 'doc', ['copy:doc', 'coffee:doc', 'yuidoc']

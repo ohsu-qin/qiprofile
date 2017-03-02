@@ -23,14 +23,15 @@ PORT_TEST = PORT + 1
 MONGODB_PORT = 27017
 QIREST_PORT = 5000
 
-# The grunt build tasks place all compiled and copied files within
-# the public directory. However, the Angular, jspm and test
-# frameworks all make it hard to run in a root other than the
-# top-level project directory. Therefore, we make the parent
-# directory the root and qualify the HTML with the public
-# subdirectory where necessary. This scheme is not ideal, since
-# the web client potentially has access to source. However, since
-# the source is public anyway, we'll let that slide.
+# The grunt build tasks place all compiled and copied files
+# within the public directory. However, the Angular, jspm and
+# test frameworks all conspire to force the demo-mode assumption
+# that the root is the top-level project directory. Therefore,
+# we make the parent directory the root and qualify the HTML
+# with the public subdirectory where necessary. This scheme is
+# not ideal, since the web client potentially has access to
+# source. However, since the source is public anyway, we'll
+# let that slide.
 root = path.join(__dirname, '..')
 
 # The REST request handler.

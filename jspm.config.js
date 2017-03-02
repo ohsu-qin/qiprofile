@@ -118,7 +118,6 @@ SystemJS.config({
     'moment': 'npm:moment@2.14.1',
     'net': 'github:jspm/nodelibs-net@0.2.0-alpha',
     'ng-bootstrap': 'npm:@ng-bootstrap/ng-bootstrap@1.0.0-alpha.20',
-    'ng2-accordion': 'npm:ng2-accordion@0.0.9',
     'ng2-resource-rest': 'npm:ng2-resource-rest@0.5.6',
     'nouislider': 'npm:nouislider@8.5.1',
     'ohsu-qin/ng2-nouislider': 'github:ohsu-qin/ng2-nouislider@0.3.0',

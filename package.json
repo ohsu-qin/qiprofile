@@ -20,7 +20,7 @@
   "bin": "./bin/qiprofile",
   "scripts": {
     "reinstall": "./node_modules/grunt-cli/bin/grunt reinstall",
-    "preinstall": "npm install jspm && jspm install && echo pre done",
+    "preinstall": "npm install jspm && ./node_modules/jspm/jspm.js install",
     "postinstall": "./node_modules/grunt-cli/bin/grunt postinstall",
     "start": "node server.js",
     "test": "./node_modules/grunt-cli/bin/grunt test"

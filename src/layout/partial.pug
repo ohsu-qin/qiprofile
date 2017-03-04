@@ -1,20 +1,19 @@
 // The header, including the nav home and help buttons.
 include header
 
-// The context billboard, e.g. 'Breast Patient 4'.
-.qi-billboard
-  h3
-    block billboard
+// The context billboard e.g. 'Breast Patient 4'.
+.qi-billboard.rounded-bottom
+  block billboard
 
 // The main partial content.
-.row.qi-main
+.row.qi-main(role='main')
   // The error pop-up is shown if and only if the error property
   // is set. When the pop-up is closed, the error property is
-  // unset via the PageComponent.clearError callback. 
+  // unset via the PageComponent.clearError callback.
   qi-error(*ngIf="error", [error]="error", (dismissed)="clearError()")
   .qi-content
     // Every page component is responsible for importing its
     // help text into its help property.
-    block help 
+    block help
       qi-help([help]="help")
     block content

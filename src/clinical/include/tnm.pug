@@ -6,7 +6,7 @@ span.qi-table-title TNM
       th Stage
       td {{ tumor.tnm | tnmStage | romanize }}
       td.qi-transparent
-        button.btn.btn-med.qi-btn.qi-minihelp-btn(
+        button.btn.qi-btn.qi-minihelp-btn(
           (click)="openTNMStageHelp()"
         )
           .glyphicon.glyphicon-question-sign

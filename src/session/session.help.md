@@ -10,12 +10,12 @@ data, respectively.
 The volume selection panel below the graph consists of one row for the
 current multi-volume scan and one row for each of its registrations.
 To begin loading a volume for viewing, click on its
-<span class="glyphicon glyphicon-download"></span> button. After
+<span class="fa fa-download"></span> button. After
 completion, the button will change to
-<span class="glyphicon glyphicon-eye-open"></span>; click on it to open
+<span class="fa fa-eye-open"></span>; click on it to open
 the image detail page.
 
-Click on the <span class="glyphicon glyphicon-info-sign"></span> buttons
+Click on the <span class="fa fa-info-circle"></span> buttons
 to the left of the volume selection rows to view details about the
 scan's type and orientation or the realigned volume's registration
 technique and parameters.

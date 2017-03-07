@@ -1,22 +1,46 @@
 // This imaging profile partial displays the timeline,
 // session numbers, preview images and modeling results.
 
-h4.qi-profile-heading Imaging Profile
-.qi-panel
-  accordion([showArrows]=true, [expandAll]=true)
-    accordion-group.qi-dusky(
-      [heading]="'Patient Timeline'", [isOpened]=true
-    )
-      include timeline
+span.qi-panel-title Imaging Profile
 
-    accordion-group.qi-pale(
-      [heading]="'Imaging Visits'", [isOpened]=true
-    )
+ngb-accordion(
+  #acc='ngbAccordion',
+  activeIds='timeline, sessions, modeling',
+  (panelChange)="onPanelChange($event)"
+)
+  ngb-panel#timeline
+    template(ngbPanelTitle)
+      span Patient Timeline
+      i.fa.fa-caret-up.qi-smaller(
+        *ngIf="isPanelOpen('timeline')"
+      )
+      i.fa.fa-caret-down.qi-smaller(
+        *ngIf="!isPanelOpen('timeline')"
+      )
+    template(ngbPanelContent)
+      .qi-dusky
+        include timeline
+
+  ngb-panel#sessions
+    template(ngbPanelTitle)
+      span Imaging Visits
+      i.fa.fa-caret-up.qi-smaller(
+        *ngIf="isPanelOpen('sessions')"
+      )
+      i.fa.fa-caret-down.qi-smaller(
+        *ngIf="!isPanelOpen('sessions')"
+      )
+    template(ngbPanelContent)
       include previews
 
-    accordion-group(
-      *ngIf="has(subject.modelings)",
-      [heading]="'Pharmacokinetic Modeling'",
-      [isOpened]=true
-    )
+  ngb-panel#modeling
+    template(ngbPanelTitle)
+      span Pharmacokinetic Modeling
+      i.fa.fa-caret-up.qi-smaller(
+        *ngIf="isPanelOpen('modeling')"
+      )
+      i.fa.fa-caret-down.qi-smaller(
+        *ngIf="!isPanelOpen('modeling')"
+      )
+    template(ngbPanelContent)
       include modelings

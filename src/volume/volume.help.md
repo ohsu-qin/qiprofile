@@ -8,17 +8,17 @@ the **Swap View** button to cycle the slice views in a clockwise rotation.
 Re-center the image in all planes with the **Go To Center** button.
 
 Move the Time Point slider or use the left
-<span class="glyphicon glyphicon-step-backward"></span> and right
-<span class="glyphicon glyphicon-step-forward"></span> buttons to
+<span class="fa fa-step-backward"></span> and right
+<span class="fa fa-step-forward"></span> buttons to
 decrement and increment the time series point. Click on the play
-<span class="glyphicon glyphicon-play"></span> button to automatically
+<span class="fa fa-play"></span> button to automatically
 advance through the series points. Click on the pause
-<span class="glyphicon glyphicon-pause"></span> button to stay at the
+<span class="fa fa-pause"></span> button to stay at the
 current point.
 
 Similarly, the Session controls on the right select the volume at the
 same time point for the chosen session number.
 
 Click on the embedded
-<span class="glyphicon glyphicon-question-sign"></span>
+<span class="fa fa-question-sign"></span>
 help buttons for additional information.

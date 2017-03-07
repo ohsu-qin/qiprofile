@@ -1,5 +1,5 @@
 .qi-popup.qi-help(*ngIf="showHelp", (close)="toggleHelp()")
-  .qi-popup-close.glyphicon.glyphicon-remove((click)="toggleHelp()")
+  i.fa.fa-remove.qi-popup-close((click)="toggleHelp()")
   // The parent component imports its help file into its help variable.
   // The layout/partial.pug qi-help element then binds this help variable
   // to the HelpComponent directive for use in this partial template.
@@ -7,7 +7,7 @@
   // plain string.
   .qi-help-text([innerHTML]="help")
   .qi-contact-info
-    | We welcome your questions and comments placed in our 
+    | We welcome your questions and comments placed in our
     a(href="http://qiprofile.idea.informer.com")
       | Suggestion/Question Box
     | .

@@ -53,11 +53,6 @@ module.exports = (grunt) ->
         dest: 'public/html'
 
     stylus:
-      options:
-        use: [
-          require('autoprefixer-stylus')
-          require('csso-stylus')
-        ]
       default:
         src: ['stylesheets/app.styl']
         dest: 'public/stylesheets/app.css'
@@ -69,12 +64,17 @@ module.exports = (grunt) ->
         src: '**/*'
         dest: 'public/'
 
+      fonts:
+        cwd: 'node_modules'
+        expand: true
+        flatten: true
+        src: ['font-awesome/fonts/*']
+        dest: 'public/fonts/'
+
       # This task is only used to copy the Bootstrap map file.
       # Since the unminimized Bootstrap module references the
       # CSS map, the map must be colocated with the stylesheets.
       cssmap:
-        expand: true
-        flatten: true
         src: 'node_modules/bootstrap/dist/css/bootstrap.css.map'
         dest: 'public/stylesheets/'
 
@@ -97,6 +97,7 @@ module.exports = (grunt) ->
           'lib/papaya.css'
           'jspm_packages/npm/nouislider*/distribute/nouislider.min.css'
           'node_modules/bootstrap/dist/css/bootstrap.css'
+          'node_modules/font-awesome/css/font-awesome.css'
         ]
         dest: 'public/stylesheets/vendor.css'
 
@@ -108,10 +109,14 @@ module.exports = (grunt) ->
     unzip:
       icons:
         router: (filepath) ->
-          # Get rid of the numeric qualifier in the file name.
+          # Filter for glyphicons-nnn and get rid of the numeric
+          # qualifier in the file name. Files which don't match
+          # this pattern are excluded.
           base = path.basename(filepath)
-          if base.match(/glyphicons-.*\.png/)
-            base.replace(/glyphicons-\d+-/, 'glyphicon-')
+          match = base.match(/^glyphicon(s-\d+).*\.png/)
+          if match
+            # glyphicons-nnn- becomes glyphicon-.
+            base.replace(match[1], '')
         src: 'build/glyphicons.zip'
         dest: 'public/media'
 

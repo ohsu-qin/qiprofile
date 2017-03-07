@@ -1,35 +1,33 @@
 // This preview partial shows the visit dates and previews.
 
-// Apportion the non-label columns to the sessions.
-- var colClass = "col-md-{{ (12 / subject.sessions.length) | floor }}";
+.px-1
+  // The imaging session dates.
+  .row
+    .col-md-2
+      span Visit Date
+    .col-md-10
+      .row.no-gutters
+        .col(*ngFor="let session of subject.sessions")
+          span.qi-center.qi-clickable((click)="visitSession(session)")
+            | {{ session.date | moment }}
 
-// The imaging session dates.
-.row
-  .col-md-2
-    span Visit Date
-  .col-md-10
-    .row.qi-even-row
-      div(class=colClass, *ngFor="let session of subject.sessions")
-        span.qi-clickable((click)="visitSession(session)")
-          | {{ session.date | moment }}
-
-// The scan previews.
-.row(*ngIf="subject.hasPreviews()")
-  // .qi-pad-top is a kludge to push the label down.
-  // Vertical centering w.r.t. to the row is preferred,
-  // but various attempts to do so were unsuccessful.
-  .col-md-2.qi-pad-top
-    span Preview
-    button.btn.qi-btn.qi-minihelp-btn(
-      (click)="openPreviewsHelp()"
-    )
-      .glyphicon.glyphicon-question-sign
-  .col-md-10
-    .row.qi-even-row
-      div(class=colClass, *ngFor="let session of subject.sessions")
-        img.qi-clickable(
-          *ngIf="has(session.preview)",
-          (click)="visitSession(session)",
-          src="{{ location(session.preview.image) }}",
-          width=100, height=100
-        )
+  // The scan previews, if available.
+  .row(*ngIf="subject.hasPreviews()")
+    // .qi-pad-top is a kludge to push the label down.
+    // Vertical centering w.r.t. to the row is preferred,
+    // but various attempts to do so were unsuccessful.
+    .col-md-2.qi-pad-top
+      span Preview
+      button.btn.qi-btn.qi-minihelp-btn(
+        (click)="openPreviewsHelp()"
+      )
+        i.fa.fa-question-circle
+    .col-md-10
+      .row.no-gutters
+        .col(*ngFor="let session of subject.sessions")
+          img.qi-center.qi-clickable(
+            *ngIf="has(session.preview)",
+            (click)="visitSession(session)",
+            src="{{ location(session.preview.image) }}",
+            width=100, height=100
+          )

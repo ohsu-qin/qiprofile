@@ -1,5 +1,5 @@
 This section displays the pharmacokinetic (PK) modeling results.
-Clicking the <span class="glyphicon glyphicon-info-sign"></span>
+Clicking the <span class="fa fa-info-circle"></span>
 button shows the modeling input parameters.
 
 The following PK modeling results are displayed:

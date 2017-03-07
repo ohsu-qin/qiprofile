@@ -2,17 +2,17 @@
 button.btn.btn-primary.btn-sm.qi-btn(
   type='button', (click)="onPrevious()"
 )
-  .glyphicon.glyphicon-step-backward
+  i.fa.fa-step-backward
 
 // Cycle over the values.
 button.btn.btn-primary.btn-sm.qi-btn(
   type='button', (click)="togglePlay()"
 )
-  .glyphicon.glyphicon-play(*ngIf="!isPlaying")
-  .glyphicon.glyphicon-pause(*ngIf="isPlaying")
+  i.fa.fa-play(*ngIf="!isPlaying")
+  i.fa.fa-pause(*ngIf="isPlaying")
 
 // Next value.
 button.btn.btn-primary.btn-sm.qi-btn(
   type='button', (click)="onNext()"
 )
-  .glyphicon.glyphicon-step-forward
+  i.fa.fa-step-forward

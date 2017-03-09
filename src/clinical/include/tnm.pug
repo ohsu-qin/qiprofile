@@ -1,7 +1,7 @@
 span.qi-table-title TNM
 
-.qi-panel.qi-nested
-  table.table.qi-table.qi-vertical-space
+.qi-panel.qi-table-panel
+  table.table.qi-table.qi-y-spacer
     tr
       th Stage
       td {{ tumor.tnm | tnmStage | romanize }}
@@ -11,10 +11,10 @@ span.qi-table-title TNM
         )
           i.fa.fa-question-circle
 
-  .qi-vertical-space(*ngIf="has(tumor.tnm.grade)")
+  .qi-y-spacer(*ngIf="has(tumor.tnm.grade)")
     include grade
 
-  table.table.qi-table.qi-vertical-space
+  table.table.qi-table.qi-y-spacer
     tr
       th Size
       td {{ tumor.tnm.size | tnmSize }}

@@ -1,5 +1,5 @@
 span.qi-table-title Receptor Status
 
-.qi-panel.qi-nested
-  .qi-vertical-space(*ngFor="let receptorStatus of tumor.hormone_receptors")
+.qi-panel.qi-table-panel
+  .qi-y-spacer(*ngFor="let receptorStatus of tumor.hormone_receptors")
     include hormone-receptor

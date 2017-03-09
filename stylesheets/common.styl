@@ -2,12 +2,17 @@
 
 @require 'helpers'
 
+.qi-panel-title
+  color Indigo
+  font-size 1.2em
+  margin-left 1em
+
 .qi-title
   color Indigo
   font-weight bold
   white-space nowrap
 
-.qi-x-smaller
+.qi-smaller
   font-size 75%
 
 .qi-emphasis
@@ -17,15 +22,15 @@
   text-align right
 
 // Dates and numbers should be center-aligned.
-.qi-date, .qi-number, .qi-text-center
+.qi-date, .qi-number, .qi-center
   text-align center
+
+img.qi-center
+  margin 0 auto
 
 .qi-pct
   padding-right 2em
   text-align right
-
-.qi-inline
-  display inline
 
 .qi-align-top
   vertical-align top
@@ -83,11 +88,11 @@ ul.qi-clean-list
   margin-bottom 0.5em
 
 // Add some vertical space between successive elements.
-.qi-vertical-space + .qi-vertical-space
+.qi-y-spacer + .qi-y-spacer
   margin-top 0.5em
 
 // Add some horizontal space between successive elements.
-.qi-horizontal-space + .qi-horizontal-space
+.qi-x-spacer + .qi-x-spacer
   margin-left 0.5em
 
 .qi-pad-top
@@ -96,12 +101,13 @@ ul.qi-clean-list
 .qi-inline
   display inline-block
 
-// Simulates an anchor style.
+// Emulate the base <a> style.
 .qi-clickable
-  color DarkMagenta
-  &:hover
-    cursor pointer
-    color Chocolate
+  hyperlink()
+
+.qi-btn-img
+  width 20px
+  height 20px
 
 // Override the bootstrap button as follows:
 // * remove the border and outline
@@ -109,6 +115,7 @@ ul.qi-clean-list
 // * change the padding from the bulky 6px 12px
 //   to the compact 2px 4px.
 .qi-btn
+  padding .2em
   border 0
   background-color Moccasin
   &:hover
@@ -122,7 +129,7 @@ ul.qi-clean-list
 // reference element. This style augments .qi-btn
 // to reduce the button size by padding the icon text.
 .qi-minihelp-btn
-  padding 0.2em
+  padding .2em
 
 // Override .qi-btn to change the colors and preserve
 // highlighting on click.
@@ -159,35 +166,28 @@ ul.qi-clean-list
   padding-left 0.5em
 
 .qi-panel
-  border 1px solid SlateGray
-  border-radius: 0.4em
-  margin 2px
+  background-color Ivory
+  padding 0.5em
 
-  // .panel-body is a Bootstrap style. Thus, any
-  // Bootstrap panel within a .qi-panel will be
-  // a context for the .qi-nested style to take
-  // effect.
-  & .panel-body
-    background-color DarkTurquoise
-    & .qi-nested
-      background-color PaleTurquoise
-      & .qi-nested
-        background-color LightSeaGreen
-        & .qi-nested
-          background-color Azure
-          & .qi-nested
-            background-color DarkTurquoise
-
+// The table panel style adds background color to offset
+// the table. Nested tables have distinguishing colors.
+.qi-table-panel
+  background-color DarkTurquoise
+  & .qi-table-panel
+    background-color PaleTurquoise
+    & .qi-table-panel
+      background-color LightSeaGreen
+      & .qi-table-panel
+        background-color Azure
+        & .qi-table-panel
+          background-color MediumTurquoise
   // A pale panel softens the panel body background
   // for darker content.
-  & .qi-pale .panel-body
+  & .qi-pale .card-block
     background-color AliceBlue
-  & .qi-dusky .panel-body
-    background-color DarkSlateBlue
 
-// The nested style adds an offset.
-.qi-nested
-  padding 0.5em
+.qi-dusky
+  background-color DarkSlateBlue
 
 // Impart table cell mojo without the table structural cruft.
 .qi-cell
@@ -216,8 +216,15 @@ ul.qi-clean-list
   width auto
   margin-bottom 0
   border 0
+  // Reduce the Bootstrap table data cell vertical padding
+  // from 0.75em to 0.2em. Bootstrap horizontal formatting
+  // is retained. The table cells have a thin brown border.
   & th, td
     border 1px solid BurlyWood
+    padding-top 0.2em
+    padding-bottom 0.2em
+  // The heading is distinguished by a darker color and
+  // bold text.
   & th
     background-color Bisque
     font-weight bold
@@ -225,20 +232,16 @@ ul.qi-clean-list
     white-space nowrap
   & td
     background-color White
-    // The table data cell has slight vertical padding.
-    // Horizontal formatting is the page responsibility.
-    padding-top 0.2em
-    padding-bottom 0.2em
+    // qi-transparent blends in with the panel background.
     &.qi-transparent
-      // Blend in with the panel background.
       border 0
-      background-color inherit
+      background-color transparent
+  // Separate column groups with a thin silver vertical line.
   & colgroup + colgroup
     border-left 0.2em solid Silver
 
 .qi-spaced-table
   // Space adjacent rows.
-  border 0
   border-collapse separate
   border-spacing 0 0.5em
 

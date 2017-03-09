@@ -1,11 +1,12 @@
-table.table.qi-table.qi-vertical-space
-  tr
-    th Date
-    td {{ encounter.date | moment }}
+.qi-panel.qi-table-panel
+  table.table.qi-table.qi-spaced-table.qi-y-spacer
+    tr
+      th Date
+      td {{ encounter.date | moment }}
 
-  tr(*ngIf="has(encounter.weight)")
-    th Patient Weight
-    td {{ encounter.weight }}
+    tr(*ngIf="has(encounter.weight)")
+      th Patient Weight
+      td {{ encounter.weight }}
 
-.qi-vertical-space(*ngIf="encounter.pathology")
-  include pathology-report
+  .qi-y-spacer(*ngIf="encounter.pathology")
+    include pathology-report

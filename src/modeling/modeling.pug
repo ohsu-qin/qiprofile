@@ -1,17 +1,18 @@
-.row
-  .col-md-2.qi-pad-top
-    span {{ modeling.source.type | capitalize }}
-    button.btn.qi-btn.qi-minihelp-btn(
-      (click)="openModelingInfo(modeling)"
-    )
-      i.fa.fa-info-circle
-    qi-modeling-info([modeling]="modeling", [hidden]=true)
-  .col-md-10
-    .row.no-gutters
-      .col(*ngFor="let results of modeling.results")
-        qi-property-table(
-          [object]="results",
-          [path]="'scanModeling.intensities'",
-          [label]="label",
-          [format]="formatModelingResult"
-        )
+.qi-panel.qi-table-panel
+  .row
+    .col-md-2.qi-pad-top
+      span {{ modeling.source.type | capitalize }}
+      button.btn.qi-btn.qi-minihelp-btn(
+        (click)="openModelingInfo(modeling)"
+      )
+        i.fa.fa-info-circle
+      qi-modeling-info([modeling]="modeling", [hidden]=true)
+    .col-md-10
+      .row.no-gutters
+        .col(*ngFor="let results of modeling.results")
+          qi-property-table(
+            [object]="results",
+            [path]="'scanModeling.intensities'",
+            [label]="label",
+            [format]="formatModelingResult"
+          )

@@ -10,10 +10,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule as NgCommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { AccordionModule } from 'ng2-accordion';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { PageModule } from '../page/page.module.ts';
 import { CommonModule } from '../common/common.module.ts';
+import { PageModule } from '../page/page.module.ts';
 import { VisualizationModule } from '../visualization/visualization.module.ts';
 import { ModelingModule } from '../modeling/modeling.module.ts';
 import { TnmSizePipe } from '../clinical/tnm-size.pipe.ts';
@@ -29,8 +29,9 @@ const ROUTE_CONFIG: Routes = [
 
 @NgModule({
   imports: [
-    NgCommonModule, AccordionModule, CommonModule, PageModule,
-    ModelingModule, VisualizationModule, RouterModule.forChild(ROUTE_CONFIG)
+    NgCommonModule, NgbModule,
+    CommonModule, PageModule, ModelingModule, VisualizationModule,
+    RouterModule.forChild(ROUTE_CONFIG)
   ],
   declarations: [
     SubjectComponent, TnmSizePipe, TnmStagePipe

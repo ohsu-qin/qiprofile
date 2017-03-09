@@ -75,7 +75,10 @@ module.exports = (grunt) ->
       # Since the unminimized Bootstrap module references the
       # CSS map, the map must be colocated with the stylesheets.
       cssmap:
-        src: 'node_modules/bootstrap/dist/css/bootstrap.css.map'
+        cwd: 'node_modules'
+        expand: true
+        flatten: true
+        src: 'bootstrap/dist/css/bootstrap.css.map'
         dest: 'public/stylesheets/'
 
       doc:
@@ -100,25 +103,6 @@ module.exports = (grunt) ->
           'node_modules/font-awesome/css/font-awesome.css'
         ]
         dest: 'public/stylesheets/vendor.css'
-
-    curl:
-      icons:
-        src: 'http://glyphicons.com/files/glyphicons_free.zip'
-        dest: 'build/glyphicons.zip'
-
-    unzip:
-      icons:
-        router: (filepath) ->
-          # Filter for glyphicons-nnn and get rid of the numeric
-          # qualifier in the file name. Files which don't match
-          # this pattern are excluded.
-          base = path.basename(filepath)
-          match = base.match(/^glyphicon(s-\d+).*\.png/)
-          if match
-            # glyphicons-nnn- becomes glyphicon-.
-            base.replace(match[1], '')
-        src: 'build/glyphicons.zip'
-        dest: 'public/media'
 
     concurrent:
       options:
@@ -286,15 +270,12 @@ module.exports = (grunt) ->
   grunt.registerTask 'compile', ['tslint', 'concurrent:compile']
 
   # Build the application from scratch.
-  grunt.registerTask 'icons', ['curl:icons', 'unzip:icons']
-
-  # Build the application from scratch.
-  grunt.registerTask 'copy:dev', ['copy:static']
+  grunt.registerTask 'copy:dev', ['copy:static', 'copy:fonts',
+                                  'copy:cssmap']
 
   # Build the application server.
-  grunt.registerTask 'build:dev', ['icons', 'copy:dev', 'exec:lndata',
-                                   'concat:css', 'copy:cssmap',
-                                   'compile']
+  grunt.registerTask 'build:dev', ['copy:dev', 'exec:lndata',
+                                   'concat:css', 'compile']
 
   # Build the application documentation.
   grunt.registerTask 'doc', ['copy:doc', 'coffee:doc', 'yuidoc']
@@ -306,8 +287,10 @@ module.exports = (grunt) ->
   grunt.registerTask 'bundle', ['build:dev', 'ts:app', 'jspm']
 
   # The npm postinstall task.
-  grunt.registerTask 'postinstall', ['ts:tslint', 'exec:installselenium',
-                                     'exec:updatewebdriver', 'build']
+  grunt.registerTask 'postinstall', ['ts:tslint',
+                                     'exec:installselenium',
+                                     'exec:updatewebdriver',
+                                     'build']
 
   # Reinstall from scratch.
   grunt.registerTask 'cleanall', ['clean', 'exec:cleannpm']

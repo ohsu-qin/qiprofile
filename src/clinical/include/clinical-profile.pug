@@ -1,21 +1,39 @@
-h4.qi-profile-heading Clinical Profile
-.qi-panel
-  // Note: even though expandAll is set to true, each
-  // accordion group must also set isOpened to true
-  // (cf. https://github.com/pleerock/ng2-accordion/issues/13).
-  accordion([showArrows]=true, [expandAll]=true)
-    // The demographics table.
-    accordion-group([heading]="'Demographics'", [isOpened]=true)
+span.qi-panel-title Clinical Profile
+
+ngb-accordion(
+  #acc='ngbAccordion',
+  [activeIds]="clinicalHtmlIdsSequence",
+  (panelChange)="onPanelChange($event)"
+)
+  ngb-panel#demographics
+    template(ngbPanelTitle)
+      span Demographics
+      i.fa.fa-caret-up.qi-smaller(
+        *ngIf="isPanelOpen('demographics')"
+      )
+      i.fa.fa-caret-down.qi-smaller(
+        *ngIf="!isPanelOpen('demographics')"
+      )
+    template(ngbPanelContent)
       include demographics
 
-    // The encounter tables.
-    div(*ngFor="let encounter of subject.clinicalEncounters")
-      accordion-group([heading]="encounter.title", [isOpened]=true)
-        include clinical-encounter
-
-    //- TODO - enable.
-    //- // The treatments tables.
-    //- accordion-group(*ngFor="let treatment in subject.treatments",
-    //-   [heading]="treatment.title", [isOpened]=true
-    //- )
-    //-   include treatment
+  ngb-panel(
+    *ngFor="let encounter of subject.clinicalEncounters; let i = index",
+    [id]="clinicalEncounterHtmlId(encounter, i)"
+  )
+    template(ngbPanelTitle)
+      span {{ encounter.title }}
+      // We unfortunately cannot capture the current panel id
+      // in a #panel variable, since PUG disallows valueless
+      // variables (cf. https://github.com/pugjs/pug/issues/370).
+      // Therefore, we must reacquire the id via the
+      // clinicalEncounterHtmlId function call every time we
+      // need it.
+      i.fa.fa-caret-up.qi-smaller(
+        *ngIf="isPanelOpen(clinicalEncounterHtmlId(encounter, i))"
+      )
+      i.fa.fa-caret-down.qi-smaller(
+        *ngIf="!isPanelOpen(clinicalEncounterHtmlId(encounter, i))"
+      )
+    template(ngbPanelContent)
+      include clinical-encounter

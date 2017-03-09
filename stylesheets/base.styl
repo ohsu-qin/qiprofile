@@ -1,62 +1,62 @@
 //** The base CSS style overrides. **//
 
+@require 'helpers'
+
 body
   margin 1em
   font-family 'Open Sans', sans-serif
 
-h1, h2, h3
-  margin 0
-  padding 0
-
-a
-  text-decoration none
-  color Peru
-  &:hover
-    color Chocolate
-    cursor pointer
-  & img
-    border none
-  & > text
-    fill Peru
-  &:hover > text
-    fill Chocolate
-    text-decoration none
-
 code
   color DarkMagenta
 
-// Override the bootstrap button to change the left margin
-// from the odd setting -1px to .5em.
+a
+  hyperlink()
+
+// Override the bootstrap panel heading background color.
+.card > .card-header
+  background-color MintCream
+
+// Override the Bootstrap panel style.
+.card
+  // Remove the superfluous bottom margin.
+  margin-bottom 0
+  // Override the panel heading background color.
+  & > .card-header
+    background-color MintCream
+  & > .card-block
+    background-color Azure
+  // Add a thin border to a nested card.
+  & .card
+    border-top: 1px solid SlateGray
+  // Add a thin border to separate cards.
+  & .card + .card
+    border-top: 1px solid SlateGray
+    margin-top: 0
+
+// Override the Bootstrap accordion style.
+ngb-accordion .card
+  // Eliminate the Bootstrap accordion block padding to
+  // work around the following Angular Bootstrap bug:
+  // * Angular Bootstrap silently drops user-defined
+  //   accordion panel CSS classes on the floor. There
+  //   is thus no mechanism to selectively set the CSS,
+  //   e.g. the background color, on an accordion panel.
+  //   The work-around is to unset the default padding
+  //   on every card block and reset it within the
+  //   transcluded accordion ngbPanelContent template
+  //   HTML.
+  // Every ngbPanelContent template should have a parent
+  // .qi-panel container, which can optionally be modified
+  // by additional CSS styles to, e.g., set the background
+  // color.
+  & > .card-block
+    padding 0
+
+// Override the bootstrap button to change the left
+// margin from the odd setting -1px to 0.5em.
 .btn-group
   .btn + .btn
     margin-left 0.5em
-
-// Override the bootstrap accordian panel heading style
-// to emulate the preceding hyperlink style.
-.panel-heading
-  & a
-    color Peru
-    &:hover
-      color Chocolate
-      text-decoration none
-
-// Override the bootstrap panel heading background color.
-.panel-default > .panel-heading
-  background-color MintCream
-
-// Override the bootstrap panel style to remove the superfluous
-// margin, but add a slightly larger border the same color as the
-// surrounding border.
-.panel-group
-  // Remove the bootstrap bottom margin.
-  margin-bottom 0
-  // Add a thin border to a nested panel group.
-  & .panel-group
-    border-top: 1px solid SlateGray
-  // Add a thin border to separate panel groups.
-  & .panel + .panel
-    border-top: 1px solid SlateGray
-    margin-top: 0
 
 // Change the SVG hyperlink cursor to a pointer.
 svg
@@ -67,6 +67,8 @@ svg
 hr
   display none
 
+// TODO - delete below if unused.
+//
 // TODO - Commenting out the settings below wraps the modal
 // Registration Protocol pop-up right column. Why is that?
 // No wrap should be the table default.
@@ -105,8 +107,8 @@ hr
 
 // The following style is necessary per
 // https://angular-ui.github.io/bootstrap/
-.nav, .pagination, .carousel, .panel-title a
-  cursor: pointer
+// .nav, .pagination, .carousel, .card-block a
+//   cursor: pointer
 
 // Undo Bootstrap changing the color of a small
 // span in the heading.

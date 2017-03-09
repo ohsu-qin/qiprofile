@@ -1,16 +1,26 @@
-.navbar.navbar-default.qi-navbar(role='navigation')
-  .header.navbar-header
+// Even though navbar collapse is not toggleable, we retain
+// the Bootstrap toggleable class because it sets the correct
+// navbar flex row behavior. Otherwise, the default flex
+// column settings would wrap the controls.
+.navbar.navbar-toggleable.navbar-light.rounded-top.qi-navbar
+  .navbar-brand.qi-brand(role='banner')
     // The logo.
-    img.qi-logo(src='static/media/H.png', width='48', height='48', alt='Hydrogen')
-    .brand.navbar-brand.qi-brand
+    img.align-top.d-inline.qi-logo(
+      src='public/media/H.png', width='48', height='48',
+      alt='Hydrogen'
+    )
+    // The title.
+    span
       | <em>
       |   QIP<span class='qi-x-smaller'>R</span>
       | </em>
-      | - Quantitative Imaging Profile
+    // This part of the title is hidden on small screens.
+    span.hidden-xs-down
+      |  - Quantitative Imaging Profile
+
   // The navigation controls.
-  .collapse.navbar-collapse
-    ul.nav.navbar-nav.qi-navbar-right.navbar-right
-      li
-        qi-home(project="{{ project }}")
-      li
-        qi-toggle-help
+  ul.navbar-nav.qi-right(role='navigation')
+    li.nav-item
+      qi-home(project="{{ project }}")
+    li.nav-item
+      qi-toggle-help

@@ -1,11 +1,11 @@
 // Add a little space between the title and the help button.
 span.qi-table-title.qi-right-space Residual Cancer Burden
-button.btn.btn-med.qi-btn.qi-minihelp-btn(
+button.btn.qi-btn.qi-minihelp-btn(
   (click)="openRCBHelp()"
 )
-  .glyphicon.glyphicon-question-sign
+  i.fa.fa-question-circle
 
-.qi-panel.qi-nested
+.qi-panel.qi-table-panel
   // RCB index and class.
   table.table.qi-table.qi-spaced-table(*ngIf="has(tumor.rcb.index)")
     tr

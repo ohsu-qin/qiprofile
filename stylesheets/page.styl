@@ -9,19 +9,24 @@
 .qi-body
   background-color WhiteSmoke
 
+// The billboard appears directly under the header.
+// Unlike the header, it is a body page subelement
+// with dynamic content. The size is slightly less
+// than the header brand. The line height is reduced
+// from the body 1.5 to normal.
 .qi-billboard
   background MediumSlateBlue
   color LightGoldenRodYellow
-  border-bottom 0.6em solid DarkBlue
-  border-radius: 0 0 0.4em 0.4em
+  border-bottom 0.4em solid DarkBlue
   text-indent 1em
-  margin 0
-
-.qi-content
-  position relative
+  line-height normal
+  font-size 1.4em
 
 .qi-main
   margin 0.5em 0 0 0
+
+.qi-content
+  position relative
 
 .qi-main-list
   clean-list()
@@ -68,5 +73,5 @@
     text-align center
     color DimGray
     font-size x-small
-    & span.glyphicon-copyright-mark
+    & span.fa-copyright-mark
       padding 0 0.2em 0 0.2em

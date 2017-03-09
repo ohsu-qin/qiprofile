@@ -45,6 +45,14 @@ const MODELING_FORMATS = ['chart', 'table'];
  */
 const WEDGE = '\u2207';
 
+/**
+ * The demographics properties.
+ *
+ * @property DEMOGRAPHICS_PROPERTIES {string[]}
+ * @private
+ * @static
+ */
+const DEMOGRAPHICS_PROPERTIES = ['age', 'gender', 'races', 'ethnicity'];
 
 @Component({
   selector: 'qi-subject',
@@ -73,7 +81,6 @@ export class SubjectComponent extends PageComponent {
    * @property demographics {Object}
    */
   get demographics(): Object {
-    const DEMOGRAPHICS_PROPERTIES = ['age', 'gender', 'races', 'ethnicity'];
     return _.pick(this.subject, DEMOGRAPHICS_PROPERTIES);
   }
 
@@ -181,6 +188,23 @@ export class SubjectComponent extends PageComponent {
   }
 
   /**
+   * The comma-delimited
+   * {{#crossLink "SubjectComponent/subject:property"}}{{/crossLink}}
+   * clinical demographics, encounter and treatment HTML element ids.
+   *
+   * @property clinicalHtmlIdsSequence {string}
+   */
+  get clinicalHtmlIdsSequence(): string {
+    let clnEncs = this.subject.clinicalEncounters;
+    let clnEncIds = clnEncs.map(this.clinicalEncounterHtmlId);
+    let treatmentId = (trt, i) => 'treatment-' + (i + 1);
+    let trtIds = this.subject.treatments.map(treatmentId);
+    let dmg = _.isEmpty(this.demographics) ? [] : 'demographics';
+
+    return _.flatten([dmg, clnEncIds, trtIds]).join(', ');
+  }
+
+  /**
    * The time line width. Given the Subject page formatting,
    * this width is computed as 60% of the document body width.
    *
@@ -256,6 +280,16 @@ export class SubjectComponent extends PageComponent {
   }
 
   /**
+   * @method clinicalEncounterHtmlId
+   * @param encounter {Object} the encounter object
+   * @param index {number} the clinical encounter array index
+   * @return {string} the encounter _title_-_index_ HTML id
+   */
+  clinicalEncounterHtmlId(encounter: Object, index: number): string {
+    return encounter.title.toLowerCase() + '-' + (index + 1);
+  }
+
+  /**
    * Delegates to
    * {{#crossLink "ObjectHelper/hasValidContent"}}{{/crossLink}}.
    *
@@ -265,6 +299,16 @@ export class SubjectComponent extends PageComponent {
    */
   has(value: any): boolean {
     return ObjectHelper.hasValidContent(value);
+  }
+
+  /**
+   * @method hasDemographics
+   * @return {boolean} whether there is at least one non-empty
+   *   {{#crossLink "SubjectComponent/demographics:property"}}{{/crossLink}}
+   *   property value
+   */
+  hasDemographics(): boolean {
+    return !_.isEmpty(this.demographics);
   }
 
   /**

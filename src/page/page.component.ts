@@ -1,3 +1,6 @@
+import * as _ from 'lodash';
+import { NgbPanelChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+
 /**
  * The abstract page component base class. A *page component* is
  * a component with a distinct url location and HTML page.
@@ -22,6 +25,13 @@ export abstract class PageComponent {
   error: string;
 
   /**
+   * The accordion panel open state.
+   *
+   * @property panelOpen {Object}
+   */
+  private panelOpen = {};
+
+  /**
    * The help string is fed into the help pull-down when the help button
    * is clicked. The standard mechanism is the `qi-help` directive
    * included by partial.pug in the help block. Superclasses which
@@ -34,6 +44,22 @@ export abstract class PageComponent {
    */
   constructor(help?: string) {
     this.help = help;
+  }
+
+  /**
+   * Returns whether the given accordion panel is open.
+   * Accordion panels are assumed to be opened by the page initially.
+   *
+   * @method isPanelOpen
+   * @param panelId {string} the panel id
+   * @return {boolean} `true` if the panel is open, `false` otherwise
+   */
+  isPanelOpen(panelId: string): boolean {
+    return _.get(this.panelOpen, panelId, true);
+  }
+
+  onPanelChange(ev: NgbPanelChangeEvent) {
+    _.set(this.panelOpen, ev.panelId, ev.nextState);
   }
 
   /**

@@ -3,14 +3,14 @@ div(*ngIf="hasContent()")
   span.qi-table-title(*ngIf="title") {{ title }}
 
   // The table of simple values, e.g. numbers and strings.
-  table.table.qi-table.qi-vertical-space
+  table.table.qi-table.qi-y-spacer
     tr(*ngFor="let key of simpleKeys")
       th
         span([innerHtml]="getLabel(key)")
       td {{ getDisplayValue(key) }}
 
   // The nested tables.
-  .qi-vertical-space(*ngFor="let key of compositeKeys")
+  .qi-y-spacer(*ngFor="let key of compositeKeys")
     qi-property-table(
       *ngFor="let child of children(key); let i = index",
       [object]="child", [parent]="object",

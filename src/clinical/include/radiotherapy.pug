@@ -1,7 +1,7 @@
 span.qi-table-title Radiotherapy
 
-.qi-panel.qi-nested
-  .qi-vertical-space(*ngFor="let dosage in radiotherapy.dosages")
+.qi-panel.qi-table-panel
+  .qi-y-spacer(*ngFor="let dosage in radiotherapy.dosages")
     table.table.qi-table
       tr
         th Beam Type
@@ -13,10 +13,10 @@ span.qi-table-title Radiotherapy
         th Amount
         td {{ dosage.amount | number:1 }} Gy/kg
         td.qi-transparent
-          button.btn.btn-med.qi-btn.qi-minihelp-btn(ng-controller='DosageAmountHelpCtrl',
+          button.btn.qi-btn.qi-minihelp-btn(ng-controller='DosageAmountHelpCtrl',
             ng-click="open()"
             )
-            .glyphicon.glyphicon-question-sign
+            i.fa.fa-question-circle
       tr
         th Duration
         td {{ dosage.duration }} days

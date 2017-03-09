@@ -4,10 +4,10 @@ table.table.qi-table.qi-spaced-table
     th Source
     td
       span {{ modeling.source.type | capitalize }}
-      button.btn.btn-med.qi-btn.qi-minihelp-btn(
+      button.btn.qi-btn.qi-minihelp-btn(
         (click)="openProtocolInfo()"
       )
-        .glyphicon.glyphicon-info-sign()
+        i.fa.fa-info-circle()
 
   //- tr(ng-repeat="(name, value) in modeling.protocol.inputParameters")
   //-   th {{ name | underscore }}

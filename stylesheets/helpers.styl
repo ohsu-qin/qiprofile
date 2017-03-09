@@ -19,3 +19,20 @@ empty-line()
   content ''
   display inline-block
   width 100%
+
+// The standard <a> style.
+hyperlink()
+  text-decoration none
+  color Peru
+  &:focus, &:active, &:visited
+    text-decoration none
+    color Peru
+  &:hover
+    color SaddleBrown
+    cursor pointer
+    text-decoration none
+  & img
+    border none
+  // SVG text fill = non-SVG color.
+  & > text
+    fill Peru

@@ -14,5 +14,5 @@ div(*ngFor="let tumor of encounter.pathology.tumors; let i = index")
     //     div(*ngSwitchDefault='')
     div(*ngSwitchDefault='')
       span.qi-table-title Tumor {{ i + 1 }}
-      .qi-panel.qi-nested
+      .qi-panel.qi-table-panel
         include tumor

@@ -4,9 +4,8 @@ block billboard
   | {{ subject.title }}
 
 block content
-  .col-md-8
-    .qi-center
+  .row
+    .col-md-8
       include include/imaging-profile
-  .col-md-4(*ngIf="has(subject.clinicalEncounters)")
-    .qi-center
+    .col-md-4(*ngIf="has(subject.clinicalEncounters)")
       include ../clinical/include/clinical-profile

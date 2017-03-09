@@ -1,12 +1,12 @@
 span.qi-table-title Genetic Expression
 
-.qi-panel.qi-nested
-  qi-property-table.qi-vertical-space.qi-spaced-table(
+.qi-panel.qi-table-panel
+  qi-property-table.qi-y-spacer.qi-spaced-table(
     [object]="tumor.geneticExpression",
     [path]="'subject.biopsy.pathology.tumors[0].geneticExpression'",
     [exclude]=['tumor', 'normalizedAssay'],
     [label]="label"
   )
 
-  .qi-vertical-space(*ngIf="has(tumor.geneticExpression.normalizedAssay)")
+  .qi-y-spacer(*ngIf="has(tumor.geneticExpression.normalizedAssay)")
     include breast-gene-assay

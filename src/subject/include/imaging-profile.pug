@@ -18,8 +18,7 @@ ngb-accordion(
         *ngIf="!isPanelOpen('timeline')"
       )
     template(ngbPanelContent)
-      .qi-dusky
-        include timeline
+      include timeline
 
   ngb-panel#sessions
     template(ngbPanelTitle)

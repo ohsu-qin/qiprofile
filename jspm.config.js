@@ -71,7 +71,6 @@ SystemJS.config({
     }
   },
   map: {
-    'core': 'npm:@angular/core@2.4.8',
     '@ng-bootstrap/ng-bootstrap': 'node_modules/@ng-bootstrap/ng-bootstrap/bundles/ng-bootstrap.js'
   }
 });

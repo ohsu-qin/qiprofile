@@ -1,10 +1,9 @@
 /**
- * The page module imports the modal module and
- * exports the following directives:
- * {{#crossLink "HomeComponent"}}{{/crossLink}}
- * {{#crossLink "ToggleHelpComponent"}}{{/crossLink}}
- * {{#crossLink "HelpComponent"}}{{/crossLink}}
- * {{#crossLink "ErrorComponent"}}{{/crossLink}}
+ * The page module exports the following directives:
+ * * {{#crossLink "HomeComponent"}}{{/crossLink}}
+ * * {{#crossLink "ToggleHelpComponent"}}{{/crossLink}}
+ * * {{#crossLink "HelpComponent"}}{{/crossLink}}
+ * * {{#crossLink "ErrorComponent"}}{{/crossLink}}
  *
  * @module page
  * @main page
@@ -23,7 +22,7 @@ import { ErrorComponent } from '../error/error.component.ts';
 // import can make them available globally.
 //
 // The built-in Angular directives, e.g. *ngIf, are declared
-// (and exported?) in the CommonModule. These are supposedly
+// (and exported?) in the NgCommonModule. These are supposedly
 // made globally available implicitly when the root module
 // imports the BrowserModule. For some reason, the Delphic Angular
 // examples also import the common module separately in feature

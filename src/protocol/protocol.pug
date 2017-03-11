@@ -1,0 +1,17 @@
+// The protocol property sheet.
+
+// Wait until the protocol is fetched.
+div(*ngIf="protocol")
+  // The one-row technique table.
+  table.table.qi-table
+    tr
+      th Technique
+      td {{ protocol.technique }}
+
+  // The protocol configuration property sheet.
+  qi-property-table(
+    [object]="protocol.configuration",
+    [title]="'Configuration'",
+  )
+span(*ngIf="!protocol")
+  | Fetching the protocol...

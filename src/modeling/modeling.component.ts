@@ -2,10 +2,6 @@ import * as _ from 'lodash';
 import {
   Component, Input, ViewContainerRef, ViewChild
 } from '@angular/core';
-import { Overlay } from 'angular2-modal';
-import { Modal } from 'angular2-modal/plugins/bootstrap/index.js';
-
-import { ModelingInfoComponent } from './modeling-info.component.ts';
 
 @Component({
   selector: 'qi-modeling',
@@ -27,14 +23,14 @@ export class ModelingComponent {
    */
   @Input() modeling;
 
-  @ViewChild(ModelingInfoComponent) info: ModelingInfoComponent;
+  /**
+   * The modeling protocol REST object.
+   *
+   * @property modelingProtocol {Object}
+   */
+  modelingProtocol: Object;
 
-  constructor(
-    vcRef: ViewContainerRef, overlay: Overlay, private modal: Modal
-  ) {
-    // Prep the modal in the obscure idiom favored by angular2-modal.
-    overlay.defaultViewContainer = vcRef;
-  }
+  constructor() { }
 
   /**
    * Rounds the modeling result to two decimals.
@@ -48,18 +44,13 @@ export class ModelingComponent {
   }
 
   /**
-   * Opens the Modeling Info pop-up.
+   * Callback to set the
+   * {{#crossLink "ModelingComponent/modelingProtocol:property"}}{{/crossLink}}.
    *
-   * @method openModelingInfo
-   * @param source {Object} the REST
-   *   {{#crossLink "ModelingResults"}}{{/crossLink}} data object
+   * @method onModelingProtocolFetched
+   * @param protocol {Object} the fetched protocol REST object
    */
-  openModelingInfo(modeling: Object) {
-    this.modal.alert()
-      .size('med')
-      .showClose(true)
-      .title('Modeling Input')
-      .body(this.info.innerHTML)
-      .open();
+  onModelingProtocolFetched(protocol: Object) {
+    this.modelingProtocol = protocol;
   }
 }

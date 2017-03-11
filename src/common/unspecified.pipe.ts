@@ -1,12 +1,15 @@
 import * as _ from 'lodash';
 import { Pipe, PipeTransform } from '@angular/core';
 
+@Pipe({name: 'unspecified'})
+
 /**
  * Formats a nil input value.
+ *
+ * @module common
+ * @class UnspecifiedPipe
  */
-@Pipe({name: 'unspecified'})
 export class UnspecifiedPipe implements PipeTransform {
-
   constructor() { }
 
   /**

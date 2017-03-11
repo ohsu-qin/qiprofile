@@ -1,11 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
-/**
- * Transforms a database value to a display value.
- */
 @Pipe({name: 'moment'})
-export class MomentPipe implements PipeTransform {
 
+/**
+ * Transforms a moment date value to a display value.
+ *
+ * @module common
+ * @class MomentPipe
+ */
+export class MomentPipe implements PipeTransform {
   constructor() { }
 
   /**

@@ -11,6 +11,13 @@
 import { PipeTransform, Pipe } from '@angular/core';
 
 @Pipe({name: 'floor'})
+
+/**
+ * Gets the floor of a number.
+ *
+ * @module common
+ * @class FloorPipe
+ */
 export class FloorPipe implements PipeTransform {
 
   transform(num: number, precision=0): number {

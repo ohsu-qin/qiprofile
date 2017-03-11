@@ -18,8 +18,13 @@
     // but various attempts to do so were unsuccessful.
     .col-md-2.qi-pad-top
       span Preview
-      button.btn.qi-btn.qi-minihelp-btn(
-        (click)="openPreviewsHelp()"
+      include previews-help
+      button.btn.btn-secondary.qi-btn.qi-minihelp-btn(
+        type='button',
+        [ngbPopover]="previewHelp",
+        popoverTitle='Image Preview Help',
+        container='body',
+        placement='right'
       )
         i.fa.fa-question-circle
     .col-md-10

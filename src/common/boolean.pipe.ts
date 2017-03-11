@@ -1,11 +1,14 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+@Pipe({name: 'boolean'})
+
 /**
  * Formats the display value of a three-valued boolean input.
+ *
+ * @module common
+ * @class BooleanPipe
  */
-@Pipe({name: 'boolean'})
 export class BooleanPipe implements PipeTransform {
-
   constructor() { }
 
   /**

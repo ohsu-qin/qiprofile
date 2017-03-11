@@ -3,13 +3,13 @@ import { ResourceParams } from 'ng2-resource-rest';
 import { RestResource } from '../rest/rest.resource.ts';
 
 @ResourceParams({
-    path: '/registration-protocol/{id}'
+    path: '/protocol/{id}'
 })
 
 /**
  * The protocol REST resource.
  *
- * @module session
+ * @module protocol
  * @class ProtocolResource
  * @extends RestResource
  */

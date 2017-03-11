@@ -20,5 +20,5 @@ Similarly, the Session controls on the right select the volume at the
 same time point for the chosen session number.
 
 Click on the embedded
-<span class="fa fa-question-sign"></span>
+<span class="fa fa-question-circle"></span>
 help buttons for additional information.

@@ -1,13 +1,9 @@
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import {
-  Component, ViewContainerRef, ChangeDetectionStrategy,
-  ChangeDetectorRef, HostListener
+  Component, ChangeDetectionStrategy, ChangeDetectorRef, HostListener
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Overlay } from 'angular2-modal';
-import { Modal } from 'angular2-modal/plugins/bootstrap/index.js';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import ObjectHelper from '../common/object-helper.coffee';
 import {
@@ -15,25 +11,9 @@ import {
 } from '../configuration/configuration.service.ts';
 import { PageComponent } from '../page/page.component.ts';
 import ImageStore from '../image/image-store.coffee';
-import breastTnmStageHelp from '../clinical/breast-tnm-stage.help.md';
-import sarcomaTnmStageHelp from '../clinical/sarcoma-tnm-stage.help.md';
-import recurrenceScoreHelp from '../clinical/recurrence-score.help.md';
-import dosageAmountHelp from '../clinical/dosage-amount.help.md';
-import rcbHelp from '../clinical/breast-rcb.help.md';
-import modelingHelp from '../modeling/modeling.help.md';
 import Subject from './subject.data.coffee';
 import { SubjectService } from './subject.service.ts';
 import help from './subject.help.md';
-import previewsHelp from './previews.help.md';
-
-/**
- * The modeling display formats, `chart` or `table`.
- *
- * @property MODELING_FORMATS {string}
- * @private
- * @static
- */
-const MODELING_FORMATS = ['chart', 'table'];
 
 /**
  * A time line clinical encounter is designated by the HTML
@@ -82,15 +62,6 @@ export class SubjectComponent extends PageComponent {
    */
   get demographics(): Object {
     return _.pick(this.subject, DEMOGRAPHICS_PROPERTIES);
-  }
-
-  /**
-   * The modeling display format, `chart` or `table`.
-   *
-   * @property modelingFormat {string}
-   */
-  get modelingFormat(): string {
-    return MODELING_FORMATS[this._modelingFormatIndex];
   }
 
   /**
@@ -212,29 +183,14 @@ export class SubjectComponent extends PageComponent {
    */
   timeLineWidth: number;
 
-  /**
-   * The
-   * {{#crossLink "SubjectComponent/MODELING_FORMATS:property"}}{{/crossLink}}
-   * index to obtain the
-   * {{#crossLink "SubjectComponent/modelingFormat:property"}}{{/crossLink}}.
-   *
-   * @property _modelingFormatIndex {number}
-   * @private
-   */
-  private _modelingFormatIndex = 0;
-
   constructor(
     private router: Router, private route: ActivatedRoute,
-    vcRef: ViewContainerRef, overlay: Overlay, private modal: Modal,
-    private modalService: NgbModal,
     subjectService: SubjectService,
     private configService: ConfigurationService,
     changeDetector: ChangeDetectorRef
   ) {
     super(help);
 
-    // Prep the modal in the obscure idiom favored by Angular.
-    overlay.defaultViewContainer = vcRef;
     // The route/query parameters.
     let params = this.route.params.value;
 
@@ -322,109 +278,6 @@ export class SubjectComponent extends PageComponent {
    */
   location(image: Object): string {
     return ImageStore.location(image);
-  }
-
-  /**
-   * Sets the
-   * {{#crossLink "SubjectComponent/modelingFormat:property"}}{{/crossLink}}
-   * to the other value.
-   *
-   * @method toggleModelingFormat
-   */
-  toggleModelingFormat() {
-    this._modelingFormatIndex =
-      (this._modelingFormatIndex + 1) % MODELING_FORMATS.length;
-  }
-
-  /**
-   * Shows the previews help pop-up.
-   *
-   * @method openPreviewsHelp
-   */
-  openPreviewsHelp() {
-    this.modalService.open(previewsHelp);
-  }
-
-  /**
-   * Shows the PK modeling help pop-up.
-   *
-   * @method openModelingHelp
-   */
-  openModelingHelp() {
-    this.modal.alert()
-      .size('med')
-      .showClose(true)
-      .title('Pharmacokinetic Modeling')
-      .body(modelingHelp)
-      .open();
-  }
-
-  /**
-   * Shows the TNM stage modal help pop-up. The help is
-   * specialized for the subject collection.
-   *
-   * @method tnmStageHelp
-   * @raise {Error} if the collection does not have help
-   */
-  openTNMStageHelp() {
-    let help;
-    if (this.subject.collection === 'Breast') {
-      help = breastTnmStageHelp;
-    } else if (this.subject.collection === 'Sarcoma') {
-      help = sarcomaTnmStageHelp;
-    } else {
-      throw new Error('There is no help for collection' +
-                      this.subject.collection);
-    }
-
-    this.modal.alert()
-      .size('med')
-      .showClose(true)
-      .title('TNM Stage')
-      .body(help)
-      .open();
-  }
-
-  /**
-   * Shows the recurrence score help pop-up.
-   *
-   * @method openRecurrenceScoreHelp
-   */
-  openRecurrenceScoreHelp() {
-    this.modal.alert()
-      .size('med')
-      .showClose(true)
-      .title('Recurrence Score')
-      .body(recurrenceScoreHelp)
-      .open();
-  }
-
-  /**
-   * Shows the RCB help pop-up.
-   *
-   * @method openRCBHelp
-   */
-  openRCBHelp() {
-    this.modal.alert()
-      .size('med')
-      .showClose(true)
-      .title('Residual Cancer Burden')
-      .body(rcbHelp)
-      .open();
-  }
-
-  /**
-   * Shows the dosage amount help pop-up.
-   *
-   * @method openDosageAmountHelp
-   */
-  openDosageAmountHelp() {
-    this.modal.alert()
-      .size('med')
-      .showClose(true)
-      .title('Dosage Amount')
-      .body(dosageAmountHelp)
-      .open();
   }
 
   /**

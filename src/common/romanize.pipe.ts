@@ -2,12 +2,15 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 import Roman from './roman.coffee';
 
+@Pipe({name: 'romanize'})
+
 /**
  * Transforms an Arabic integer to a Roman numberal (seriously).
+ *
+ * @module common
+ * @class FloorPipe
  */
-@Pipe({name: 'romanize'})
 export class RomanizePipe implements PipeTransform {
-
   constructor() { }
 
   /**

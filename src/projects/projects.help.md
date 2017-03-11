@@ -2,8 +2,8 @@ Projects
 --------
 This page lists the projects which can be opened in the
 Quantitative Imaging Profile
-(<em>QIP<span class='qi-x-smaller'>R</span></em>
- <button class="btn btn-sm qi-btn" type='button' onclick='new Audio("static/media/QiPr2.mp3").play()'>
+(<em>QIP<span class='qi-smaller'>R</span></em>
+ <button class="btn btn-sm qi-btn" type='button' onclick='new Audio("public/media/QiPr2.mp3").play()'>
    <span class="fa fa-volume-up"></span>
  </button>) application.
 

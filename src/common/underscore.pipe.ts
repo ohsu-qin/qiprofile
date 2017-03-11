@@ -1,25 +1,23 @@
 import * as _s from 'underscore.string';
 import { Pipe, PipeTransform } from '@angular/core';
 
+@Pipe({name: 'underscore'})
+
 /**
- * Capitalizes string input.
- */
-@Pipe({name: 'capitalize'})
-/**
- * Capitalizes string input.
+ * Converts the string to a lower-case underscore.
  *
  * @module common
- * @class CapitalizePipe
+ * @class UnderscorePipe
  */
-export class CapitalizePipe implements PipeTransform {
+export class UnderscorePipe implements PipeTransform {
   constructor() { }
 
   /**
    * @method transform
    * @param value {string} the input string or null
-   * @return {string} the captalized string
+   * @return {string} the underscored string
    */
   transform(value: string): string {
-    return value ? _s.capitalize(value) : value;
+    return value ? _s.underscored(value) : value;
   }
 }

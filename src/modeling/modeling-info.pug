@@ -1,14 +1,26 @@
-// The modeling source properties sheet.
-table.table.qi-table.qi-spaced-table
+// The modeling source and input parameters property sheet.
+
+// The one-row source table waits on the modeling protocol.
+table.table.qi-table(*ngIf="modelingProtocol")
   tr
     th Source
     td
       span {{ modeling.source.type | capitalize }}
-      button.btn.qi-btn.qi-minihelp-btn(
-        (click)="openProtocolInfo()"
+      // The source popover content.
+      qi-protocol#sourceProtocol(
+        [protocolId]="modeling.source.protocol"
       )
-        i.fa.fa-info-circle()
+      button.btn.btn-secondary.qi-btn.qi-minihelp-btn(
+        type='button',
+        [ngbPopover]='sourceProtocol',
+        popoverTitle="{{ modeling.source.type | capitalize }} Protocol",
+        container='body',
+        placement='right'
+      )
+        i.fa.fa-info-circle
 
-  //- tr(ng-repeat="(name, value) in modeling.protocol.inputParameters")
-  //-   th {{ name | underscore }}
-  //-   td {{ value }}
+// The modeling protocol property sheet.
+qi-protocol(
+  [protocolId]="modelingProtocol",
+  (fetched)="onModelingProtocolFetched"
+)

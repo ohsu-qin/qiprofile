@@ -1,12 +1,24 @@
+// The modeling source and results.
+
 .qi-panel.qi-table-panel
   .row
+    // The modeling source.
     .col-md-2.qi-pad-top
       span {{ modeling.source.type | capitalize }}
-      button.btn.qi-btn.qi-minihelp-btn(
-        (click)="openModelingInfo(modeling)"
+      button.btn.btn-secondary.qi-btn.qi-minihelp-btn(
+        type='button',
+        [ngbPopover]="modelingInfo",
+        popoverTitle='Modeling Information',
+        container='body',
+        placement='right'
       )
         i.fa.fa-info-circle
-      qi-modeling-info([modeling]="modeling", [hidden]=true)
+      // The Modeling Info popup content.
+      <template #modelingInfo>
+        include modeling-info
+      </template>
+
+    // The modeling results.
     .col-md-10
       .row.no-gutters
         .col(*ngFor="let results of modeling.results")

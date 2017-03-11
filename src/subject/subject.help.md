@@ -20,5 +20,5 @@ TNM grade.
 
 Click on a section title to toggle display of that section.
 Click on the embedded mini-help buttons
-(<img src='public/media/fa-question-sign.png', class='qi-btn-img'/>)
-for further context-specific information.
+(<i class='fa fa-question-circle'/>) for further context-specific
+information.

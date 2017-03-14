@@ -1,30 +1,53 @@
-// The modeling source and results.
+// The modeling meta-data and results.
 
 .qi-panel.qi-table-panel
+  // The modeling meta-data.
   .row
     // The modeling source.
-    .col-md-2.qi-pad-top
-      span {{ modeling.source.type | capitalize }}
-      button.btn.btn-secondary.qi-btn.qi-minihelp-btn(
-        type='button',
-        [ngbPopover]="modelingInfo",
-        popoverTitle='Modeling Information',
-        container='body',
-        placement='right'
-      )
-        i.fa.fa-info-circle
-      // The Modeling Info popup content.
-      <template #modelingInfo>
-        include modeling-info
-      </template>
-
-    // The modeling results.
-    .col-md-10
-      .row.no-gutters
-        .col(*ngFor="let results of modeling.results")
+    .col-md-6
+      div(*ngIf="sourceProtocol")
+        span Source: {{ modeling.source.type | capitalize }}
+        button.btn.btn-secondary.qi-btn.qi-minihelp-btn(
+          type='button',
+          [ngbPopover]="sourceInfo",
+          popoverTitle='Modeling Source Protocol',
+          container='body',
+          placement='right'
+        )
+          i.fa.fa-info-circle
+        // The modeling protocol content.
+        <template #sourceInfo>
           qi-property-table(
-            [object]="results",
-            [path]="'scanModeling.intensities'",
-            [label]="label",
-            [format]="formatModelingResult"
+            [object]="sourceProtocol",
+            [label]="label"
           )
+        </template>
+    // The modeling technique.
+    .col-md-6
+      div(*ngIf="modelingProtocol")
+        span Modeling: {{ modelingProtocol.technique }}
+        button.btn.btn-secondary.qi-btn.qi-minihelp-btn(
+          type='button',
+          [ngbPopover]="modelingInfo",
+          popoverTitle='Modeling Protocol',
+          container='body',
+          placement='right'
+        )
+          i.fa.fa-info-circle
+        // The modeling protocol content.
+        <template #modelingInfo>
+          qi-property-table(
+            [object]="modelingProtocol",
+            [label]="label"
+          )
+        </template>
+
+  // The modeling results.
+  .row.no-gutters
+    .col(*ngFor="let results of modeling.results")
+      qi-property-table(
+        [object]="results",
+        [path]="'scanModeling.intensities'",
+        [label]="label",
+        [format]="formatModelingResult"
+      )

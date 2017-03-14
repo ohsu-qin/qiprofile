@@ -12,15 +12,12 @@ import { CommonModule as NgCommonModule } from '@angular/common';
 import { CommonModule } from '../common/common.module.ts';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ProtocolComponent } from './protocol.component.ts';
-
-const DIRECTIVES = [
-  ProtocolComponent
-];
+import { ProtocolTableComponent } from './protocol-table.component.ts';
 
 @NgModule({
   imports: [NgCommonModule, CommonModule, NgbModule],
-  declarations: DIRECTIVES,
-  exports: DIRECTIVES
+  declarations: [ProtocolComponent, ProtocolTableComponent],
+  exports: [ProtocolComponent]
 })
 
 /**

@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
-import {
-  Component, Input, ViewContainerRef, ViewChild
-} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+
+import { ProtocolService } from '../protocol/protocol.service.ts';
 
 @Component({
   selector: 'qi-modeling',
@@ -14,14 +14,29 @@ import {
  * @module modeling
  * @class ModelingComponent
  */
-export class ModelingComponent {
+export class ModelingComponent implements OnInit {
   /**
    * The subject {{#crossLink "ModelingResults"}}{{/crossLink}}
    * REST object to display.
    *
    * @property modeling {Object}
    */
-  @Input() modeling;
+  @Input() modeling: Object;
+
+  /**
+   * The mandatory label lookup function. This input is set by
+   * the parent {{#crossLink "SubjectComponent"}}{{/crossLink}}.
+   *
+   * @property label {function}
+   */
+  @Input() label: (string) => string;
+
+  /**
+   * The modeling source protocol REST object.
+   *
+   * @property sourceProtocol {Object}
+   */
+  sourceProtocol: Object;
 
   /**
    * The modeling protocol REST object.
@@ -30,7 +45,40 @@ export class ModelingComponent {
    */
   modelingProtocol: Object;
 
-  constructor() { }
+  constructor(private protocolService: ProtocolService) { }
+
+  ngOnInit() {
+    // Fetch the protocols.
+    let srcPclFetcher = this.protocolService.getProtocol(
+      this.modeling.source.protocol
+    );
+    srcPclFetcher.subscribe(protocol => {
+      if (protocol) {
+        this.sourceProtocol = protocol;
+      } else {
+        throw new Error(
+          'The modeling source protocol with id' +
+          this.modeling.source.protocol +
+          'was not found'
+        );
+      }
+    });
+
+    let mdlPclFetcher = this.protocolService.getProtocol(
+      this.modeling.protocol
+    );
+    mdlPclFetcher.subscribe(protocol => {
+      if (protocol) {
+        this.modelingProtocol = protocol;
+      } else {
+        throw new Error(
+          'The modeling protocol with id' +
+          this.modeling.protocol +
+          'was not found'
+        );
+      }
+    });
+  }
 
   /**
    * Rounds the modeling result to two decimals.
@@ -41,16 +89,5 @@ export class ModelingComponent {
    */
   formatModelingResult(value: number): number {
     return _.isNil(value) ? value : _.round(value, 2);
-  }
-
-  /**
-   * Callback to set the
-   * {{#crossLink "ModelingComponent/modelingProtocol:property"}}{{/crossLink}}.
-   *
-   * @method onModelingProtocolFetched
-   * @param protocol {Object} the fetched protocol REST object
-   */
-  onModelingProtocolFetched(protocol: Object) {
-    this.modelingProtocol = protocol;
   }
 }

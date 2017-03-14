@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import * as _s from 'underscore.string';
 import { Component, Input, OnInit } from '@angular/core';
 
-import { ProtocolService } from './protocol.service.ts'
+import { ProtocolService } from './protocol.service.ts';
 
 @Component({
   selector: 'qi-protocol',
@@ -33,7 +33,7 @@ export class ProtocolComponent implements OnInit {
   constructor(private protocolService: ProtocolService) { }
 
   ngOnInit() {
-    // The protocol fetcher.
+    // The protocol.
     this.protocol = this.protocolService.getProtocol(this.protocolId);
     // this.protocol = fetcher.subscribe(protocol => {
     //   if (protocol) {

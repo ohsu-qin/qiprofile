@@ -1,7 +1,7 @@
 import * as _ from 'lodash';
-import {
-  Component, Input, ViewContainerRef, ViewChild
-} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
+
+import { ProtocolService } from '../protocol/protocol.service.ts';
 
 @Component({
   selector: 'qi-modeling',
@@ -14,7 +14,7 @@ import {
  * @module modeling
  * @class ModelingComponent
  */
-export class ModelingComponent {
+export class ModelingComponent implements OnInit {
   /**
    * The subject {{#crossLink "ModelingResults"}}{{/crossLink}}
    * REST object to display.
@@ -31,14 +31,54 @@ export class ModelingComponent {
    */
   @Input() label: (string) => string;
 
-  // /**
-  //  * The modeling protocol REST object.
-  //  *
-  //  * @property modelingProtocol {Object}
-  //  */
-  // modelingProtocol: Object;
+  /**
+   * The modeling source protocol REST object.
+   *
+   * @property sourceProtocol {Object}
+   */
+  sourceProtocol: Object;
 
-  constructor() { }
+  /**
+   * The modeling protocol REST object.
+   *
+   * @property modelingProtocol {Object}
+   */
+  modelingProtocol: Object;
+
+  constructor(private protocolService: ProtocolService) { }
+
+  ngOnInit() {
+    // Fetch the protocols.
+    let srcPclFetcher = this.protocolService.getProtocol(
+      this.modeling.source.protocol
+    );
+    srcPclFetcher.subscribe(protocol => {
+      if (protocol) {
+        this.sourceProtocol = protocol;
+      } else {
+        throw new Error(
+          'The modeling source protocol with id' +
+          this.modeling.source.protocol +
+          'was not found'
+        );
+      }
+    });
+
+    let mdlPclFetcher = this.protocolService.getProtocol(
+      this.modeling.protocol
+    );
+    mdlPclFetcher.subscribe(protocol => {
+      if (protocol) {
+        this.modelingProtocol = protocol;
+      } else {
+        throw new Error(
+          'The modeling protocol with id' +
+          this.modeling.protocol +
+          'was not found'
+        );
+      }
+    });
+  }
 
   /**
    * Rounds the modeling result to two decimals.

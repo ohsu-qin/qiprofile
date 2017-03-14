@@ -21,14 +21,22 @@ export class ModelingComponent {
    *
    * @property modeling {Object}
    */
-  @Input() modeling;
+  @Input() modeling: Object;
 
   /**
-   * The modeling protocol REST object.
+   * The mandatory label lookup function. This input is set by
+   * the parent {{#crossLink "SubjectComponent"}}{{/crossLink}}.
    *
-   * @property modelingProtocol {Object}
+   * @property label {function}
    */
-  modelingProtocol: Object;
+  @Input() label: (string) => string;
+
+  // /**
+  //  * The modeling protocol REST object.
+  //  *
+  //  * @property modelingProtocol {Object}
+  //  */
+  // modelingProtocol: Object;
 
   constructor() { }
 
@@ -41,16 +49,5 @@ export class ModelingComponent {
    */
   formatModelingResult(value: number): number {
     return _.isNil(value) ? value : _.round(value, 2);
-  }
-
-  /**
-   * Callback to set the
-   * {{#crossLink "ModelingComponent/modelingProtocol:property"}}{{/crossLink}}.
-   *
-   * @method onModelingProtocolFetched
-   * @param protocol {Object} the fetched protocol REST object
-   */
-  onModelingProtocolFetched(protocol: Object) {
-    this.modelingProtocol = protocol;
   }
 }

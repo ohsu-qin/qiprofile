@@ -60,9 +60,9 @@ ModelingResults =
    * Collects the modeling results into a [_modelings_] array,
    * where:
    * * _modelings_ is a {{source, protocol, results}} object,
-   * * the ``source`` value is a {type, protocol} object,
-   * * the ``protocol`` value is the modeling protocol
-   * * the ``results`` value is an array of modeling results
+   * * the`source` value is a {type, protocol} object,
+   * * the`protocol` value is the modeling protocol
+   * * the`results` value is an array of modeling results
    *   in session number order.
    *
    * @method collect

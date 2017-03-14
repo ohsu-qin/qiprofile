@@ -1,6 +1,6 @@
-import {
-  Component, Input, Output, OnInit, EventEmitter
-} from '@angular/core';
+import * as _ from 'lodash';
+import * as _s from 'underscore.string';
+import { Component, Input, OnInit } from '@angular/core';
 
 import { ProtocolService } from './protocol.service.ts'
 
@@ -23,8 +23,6 @@ export class ProtocolComponent implements OnInit {
    */
   @Input() protocolId: string;
 
-  @Output() fetched:  EventEmitter<Object> = new EventEmitter(true);
-
   /**
    * The protocol REST object to display.
    *
@@ -32,21 +30,19 @@ export class ProtocolComponent implements OnInit {
    */
   protocol: Object;
 
-  constructor(private protocolService: ProtocolService) {
-  }
+  constructor(private protocolService: ProtocolService) { }
 
   ngOnInit() {
-    // Fetch the protocol.
-    let fetcher = this.protocolService.getProtocol(this.protocolId);
-    fetcher.subscribe(protocol => {
-      if (protocol) {
-        this.protocol = protocol;
-        this.fetched.emit(protocol);
-      } else {
-        throw new Error(
-          `The protocol with id ${ this.protocolId } was not found`
-        );
-      }
-    });
+    // The protocol fetcher.
+    this.protocol = this.protocolService.getProtocol(this.protocolId);
+    // this.protocol = fetcher.subscribe(protocol => {
+    //   if (protocol) {
+    //     this.protocol = protocol;
+    //   } else {
+    //     throw new Error(
+    //       `The protocol with id ${ this.protocolId } was not found`
+    //     );
+    //   }
+    // });
   }
 }

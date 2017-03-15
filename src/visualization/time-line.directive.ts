@@ -558,6 +558,18 @@ export class TimeLineDirective implements DoCheck, OnInit {
       let name = legend =>
         legend.name || StringHelper.labelize(legend.dataClass);
 
+      // The legend name + label character length. Span legends
+      // don't have a label property but have a one-character
+      // bar instead.
+      let legendLength = legend =>
+        _.get(legend, 'label.length', 1) + name(legend).length;
+      // The span and point legends.
+      let allLegends = pointLegends.concat(spanLegends);
+      // The legend lengths.
+      let lengths = allLegends.map(legendLength);
+      // The maximum legend character length.
+      let maxLegendLength = _.max(lengths);
+
       // The legend CSS class function.
       let cssClass = legend =>
         StringHelper.dasherize(legend.dataClass);
@@ -599,12 +611,16 @@ export class TimeLineDirective implements DoCheck, OnInit {
       };
 
       // The legend is embedded in a local viewport placed in the
-      // right third of the viewport with a one-character right
-      // margin.
-      let legendWidth = this.width / 3;
+      // right of the viewport, allowing for the legend label, name
+      // separator and a one-character right margin. This formula
+      // over-determines the width, since the non-fixed font is
+      // at most one fixed character wide but often less. However,
+      // it is o.k. if the legend aligns a little more to the
+      // center.
+      let legendWidth = ((maxLegendLength + 1) * CHAR_SIZE) + PAD;
 
       // preserveAspectRatio below and many variations don't work--
-      // the legend is always drawn in the upper right. Work-around
+      // the legend is always drawn in the upper left. Work-around
       // is to fix a text axis to the right.
       // let legend = viewport.append('svg')
       //   .attr('class', 'legend')
@@ -618,11 +634,12 @@ export class TimeLineDirective implements DoCheck, OnInit {
       //   .append('g')
       //     .attr('transform', `translate(0,${ CHAR_SIZE })`);
 
-      let legendXOffset = this.width - legendWidth + (4 * CHAR_SIZE);
+      // Push the legend to the right.
+      let legendXOffset = Math.max(0, this.width - legendWidth);
+      // The legend container element.
       let legend = viewport.append('g')
         .attr('class', 'legend')
-        .append('g')
-          .attr('transform', `translate(${ legendXOffset },${ CHAR_SIZE })`);
+        .attr('transform', `translate(${ legendXOffset },${ CHAR_SIZE })`);
 
       // Each legend item is placed under the previous item, if any.
       let transform = (d, i) => {

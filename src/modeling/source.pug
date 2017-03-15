@@ -1,0 +1,18 @@
+.d-inline.qi-title Source:
+.d-inline {{ type | capitalize }}
+button.btn.btn-secondary.d-inline.qi-btn.qi-minihelp-btn(
+  type='button',
+  (click)="open(properties)"
+)
+  i.fa.fa-info-circle
+// The protocol property sheet.
+// let-d is the obscure Angular idiom for placing
+// the modal dismiss function in the lexical scope.
+<template #properties let-d="dismiss">
+  .modal-header
+    span.modal-title {{ type | capitalize }} Protocol
+    button.close((click)="d('Click')")
+      i.fa.fa-close
+  .modal-body.qi-table-panel
+    qi-property-table([object]="protocol")
+</template>

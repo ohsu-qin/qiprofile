@@ -11,12 +11,15 @@ import { CommonModule as NgCommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { CommonModule } from '../common/common.module.ts';
-import { ProtocolModule } from '../protocol/protocol.module.ts';
 import { ModelingComponent } from './modeling.component.ts';
+import { ModelingSourceComponent } from './source.component.ts';
+import { ModelingProtocolComponent } from './protocol.component.ts';
 
 @NgModule({
-  imports: [NgCommonModule, CommonModule, NgbModule, ProtocolModule],
-  declarations: [ModelingComponent],
+  imports: [NgCommonModule, CommonModule, NgbModule],
+  declarations: [
+    ModelingComponent, ModelingSourceComponent, ModelingProtocolComponent
+  ],
   exports: [ModelingComponent]
 })
 

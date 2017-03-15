@@ -1,4 +1,13 @@
-<template #previewHelp>
+// The visits help button.
+button.btn.btn-secondary.qi-btn.qi-minihelp-btn(
+  type='button',
+  [ngbPopover]="help",
+  popoverTitle='Imaging Visits Help',
+  container='body',
+  placement='right'
+)
+  i.fa.fa-question-circle
+<template #help>
   p
     | There is a preview image on the right for each imaging session.
     | The session scan slice with maximal ROI intensity is cropped to

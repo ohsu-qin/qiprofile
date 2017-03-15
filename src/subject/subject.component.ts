@@ -295,11 +295,24 @@ export class SubjectComponent extends PageComponent {
     );
   }
 
+  /**
+   * The time line is 60% as wide as the document body
+   * above the small device responsive breakpoint, 90%
+   * below. The small device breakpoint is 768 per
+   * the [Bootstrap CSS guide](http://getbootstrap.com/css/).
+   *
+   * @method computeTimeLineWidth
+   * @private
+   * @returns {number} the time line width
+   */
   private computeTimeLineWidth(): number {
-    // The time line is 60% as wide as the document body.
-    const RELATIVE_WIDTH = 0.60;
+    // The body has a 4-point horizontal padding below the
+    // breakpoint.
+    const BREAKPOINT = 768 - 8;
     let rect = document.body.getBoundingClientRect();
-    return Math.floor(rect.width * RELATIVE_WIDTH);
+    let isCollapsed = rect.width < BREAKPOINT;
+    let factor = isCollapsed ? 0.9 : 0.6;
+    return Math.floor(rect.width * factor);
   }
 
   /**

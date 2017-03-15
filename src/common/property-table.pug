@@ -11,10 +11,12 @@ div(*ngIf="hasContent()")
 
   // The nested tables.
   .qi-y-spacer(*ngFor="let key of compositeKeys")
-    qi-property-table(
-      *ngFor="let child of children(key); let i = index",
-      [object]="child", [parent]="object",
-      [path]="getPath(key, i)",
-      [valueChoices]="valueChoices",
-      [label]="label", [title]="getLabel(key)"
-    )
+    span.qi-table-title {{ getLabel(key) }}
+    .qi-panel.qi-table-panel
+      qi-property-table(
+        *ngFor="let child of children(key); let i = index",
+        [object]="child", [parent]="object",
+        [path]="getPath(key, i)",
+        [valueChoices]="valueChoices",
+        [label]="label"
+      )

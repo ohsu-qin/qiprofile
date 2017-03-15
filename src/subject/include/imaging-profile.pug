@@ -22,19 +22,14 @@ ngb-accordion(
 
   ngb-panel#sessions
     template(ngbPanelTitle)
-      span Imaging Visits
-      i.fa.fa-caret-up.qi-smaller(
-        *ngIf="isPanelOpen('sessions')"
-      )
-      i.fa.fa-caret-down.qi-smaller(
-        *ngIf="!isPanelOpen('sessions')"
-      )
+      include visits-title
     template(ngbPanelContent)
-      include previews
+      include visits-content
 
   ngb-panel#modeling
     template(ngbPanelTitle)
       span Pharmacokinetic Modeling
+      // The accordion fold icon.
       i.fa.fa-caret-up.qi-smaller(
         *ngIf="isPanelOpen('modeling')"
       )

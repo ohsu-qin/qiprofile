@@ -1,0 +1,10 @@
+// The visits title text.
+span Imaging Visits
+
+// The accordion fold icon.
+i.fa.fa-caret-up.qi-smaller(
+  *ngIf="isPanelOpen('sessions')"
+)
+i.fa.fa-caret-down.qi-smaller(
+  *ngIf="!isPanelOpen('sessions')"
+)

@@ -1,51 +1,28 @@
 // The modeling meta-data and results.
 
-.qi-panel.qi-table-panel
-  // The modeling meta-data.
-  .row
-    // The modeling source.
-    .col-md-6
-      div(*ngIf="sourceProtocol")
-        span Source: {{ modeling.source.type | capitalize }}
-        button.btn.btn-secondary.qi-btn.qi-minihelp-btn(
-          type='button',
-          [ngbPopover]="sourceInfo",
-          popoverTitle='Modeling Source Protocol',
-          container='body',
-          placement='right'
-        )
-          i.fa.fa-info-circle
-        // The modeling protocol content.
-        <template #sourceInfo>
-          qi-property-table(
-            [object]="sourceProtocol",
-            [label]="label"
-          )
-        </template>
-    // The modeling technique.
-    .col-md-6
-      div(*ngIf="modelingProtocol")
-        span Modeling: {{ modelingProtocol.technique }}
-        button.btn.btn-secondary.qi-btn.qi-minihelp-btn(
-          type='button',
-          [ngbPopover]="modelingInfo",
-          popoverTitle='Modeling Protocol',
-          container='body',
-          placement='right'
-        )
-          i.fa.fa-info-circle
-        // The modeling protocol content.
-        <template #modelingInfo>
-          qi-property-table(
-            [object]="modelingProtocol",
-            [label]="label"
-          )
-        </template>
+// The modeling meta-data.
+ul.pl-3.pt-3.list-inline
+  // The modeling source.
+  li.list-inline-item
+    qi-modeling-source(
+      [type]="modeling.source.type",
+      [protocol]="sourceProtocol | async"
+    )
+  // The modeling protocol.
+  li.list-inline-item
+    qi-modeling-protocol(
+      [protocol]="modelingProtocol | async"
+    )
 
   // The modeling results.
-  .row.no-gutters
+.qi-panel.qi-table-panel
+  // Push the row over to align under the visit dates
+  // and previews. The visits panel has a preceding
+  // mini-help button. .pl-4 below offsets the row to
+  // align under this offset.
+  .row.no-gutters.pl-4
     .col(*ngFor="let results of modeling.results")
-      qi-property-table(
+      qi-property-table.qi-center(
         [object]="results",
         [path]="'scanModeling.intensities'",
         [label]="label",

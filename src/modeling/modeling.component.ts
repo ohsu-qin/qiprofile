@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+import { Observable } from 'rxjs';
 import { Component, Input, OnInit } from '@angular/core';
 
 import { ProtocolService } from '../protocol/protocol.service.ts';
@@ -29,55 +30,34 @@ export class ModelingComponent implements OnInit {
    *
    * @property label {function}
    */
-  @Input() label: (string) => string;
+  @Input() label: (value: string) => string;
 
   /**
-   * The modeling source protocol REST object.
+   * The observable which resolves to the modeling source protocol
+   * REST object.
    *
-   * @property sourceProtocol {Object}
+   * @property sourceProtocol {Observable}
    */
-  sourceProtocol: Object;
+  sourceProtocol: Observable;
 
   /**
-   * The modeling protocol REST object.
+   * The observable which resolves to the modeling protocol REST object.
    *
-   * @property modelingProtocol {Object}
+   * @property modelingProtocol {Observable}
    */
-  modelingProtocol: Object;
+  modelingProtocol: Observable;
 
   constructor(private protocolService: ProtocolService) { }
 
   ngOnInit() {
-    // Fetch the protocols.
-    let srcPclFetcher = this.protocolService.getProtocol(
+    // Fetch the source protocol.
+    this.sourceProtocol = this.protocolService.getProtocol(
       this.modeling.source.protocol
     );
-    srcPclFetcher.subscribe(protocol => {
-      if (protocol) {
-        this.sourceProtocol = protocol;
-      } else {
-        throw new Error(
-          'The modeling source protocol with id' +
-          this.modeling.source.protocol +
-          'was not found'
-        );
-      }
-    });
-
-    let mdlPclFetcher = this.protocolService.getProtocol(
+    // Fetch the modleing protocol.
+    this.modelingProtocol = this.protocolService.getProtocol(
       this.modeling.protocol
     );
-    mdlPclFetcher.subscribe(protocol => {
-      if (protocol) {
-        this.modelingProtocol = protocol;
-      } else {
-        throw new Error(
-          'The modeling protocol with id' +
-          this.modeling.protocol +
-          'was not found'
-        );
-      }
-    });
   }
 
   /**

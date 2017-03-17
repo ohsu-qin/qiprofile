@@ -1,0 +1,17 @@
+// The help button.
+button.btn.btn-secondary.qi-btn.qi-minihelp-btn(
+  type='button',
+  [ngbPopover]="help",
+  popoverTitle='Viewer Help',
+  container='body',
+  placement='right'
+)
+  i.fa.fa-question-circle
+
+// The help content.
+<template #help>
+  p
+    | The viewer <bold>Help</bold> menu provides more information about
+    | using keystrokes and mouse gestures to manipulate the volume
+    | display.
+</template>

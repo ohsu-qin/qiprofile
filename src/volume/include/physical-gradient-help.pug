@@ -1,0 +1,14 @@
+// The help button.
+button.btn.btn-secondary.qi-btn.qi-minihelp-btn(
+  type='button',
+  [ngbPopover]="help",
+  popoverTitle='Physical Gradient Help',
+  container='body',
+  placement='left'
+)
+  i.fa.fa-question-circle
+
+// The help content.
+<template #help>
+  include physical-gradient-help-text
+</template>

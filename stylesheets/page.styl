@@ -9,12 +9,12 @@
 .qi-body
   background-color WhiteSmoke
 
-// The billboard appears directly under the header.
+// The title appears directly under the header.
 // Unlike the header, it is a body page subelement
 // with dynamic content. The size is slightly less
 // than the header brand. The line height is reduced
 // from the body 1.5 to normal.
-.qi-billboard
+.qi-page-title
   background MediumSlateBlue
   color LightGoldenRodYellow
   border-bottom 0.4em solid DarkBlue
@@ -43,17 +43,20 @@
   & img
     float right
 
-// The help panel specializes the .qi-popup panel.
-.qi-help
-  // Scooch up the bottom a bit to allow the special
-  // over-under (Sugg/Qu)estion Box text to spill down
-  // over the baseline.
-  padding-bottom 1em
-  // Don't make the help panel too obtrusive.
-  width 30%
+// Override the standard Bootstrap dialog to place
+// the help pane slightly off the top right corner.
+.qi-help .modal-dialog
+  margin initial
+  position absolute
+  top 4em
+  right 4em
+
+// The modal close button color.
+.qi-close
+  color GoldenRod
 
 .qi-help-text
-  // Downsize headers
+  // Downsize and underline headers.
   for n in 1 2 3 4 5
     h{n}
       font-size (125% - (5 * n))

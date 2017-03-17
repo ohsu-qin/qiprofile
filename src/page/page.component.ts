@@ -1,5 +1,7 @@
 import * as _ from 'lodash';
+import { TemplateRef } from '@angular/core';
 import { NgbPanelChangeEvent } from '@ng-bootstrap/ng-bootstrap';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 /**
  * The abstract page component base class. A *page component* is
@@ -10,13 +12,6 @@ import { NgbPanelChangeEvent } from '@ng-bootstrap/ng-bootstrap';
  * @abstract
  */
 export abstract class PageComponent {
-  /**
-   * The help content.
-   *
-   * @property help {string}
-   */
-  help: string;
-
   /**
    * The error message to display.
    *
@@ -31,20 +26,7 @@ export abstract class PageComponent {
    */
   private panelOpen = {};
 
-  /**
-   * The help string is fed into the help pull-down when the help button
-   * is clicked. The standard mechanism is the `qi-help` directive
-   * included by partial.pug in the help block. Superclasses which
-   * don't supply a help argument are responsible for overriding
-   * the help block, e.g. as is done by
-   * {{#crossLink "CollectionsComponent"}}{{/crossLink}}.
-   *
-   * @method constructor
-   * @param help {string} the optional help text
-   */
-  constructor(help?: string) {
-    this.help = help;
-  }
+  constructor(private modalService: NgbModal) { }
 
   /**
    * Returns whether the given accordion panel is open.
@@ -60,6 +42,15 @@ export abstract class PageComponent {
 
   onPanelChange(ev: NgbPanelChangeEvent) {
     _.set(this.panelOpen, ev.panelId, ev.nextState);
+  }
+
+  /**
+   * Displays the help in a modal dialog.
+   *
+   * @property content {TemplateRef}
+   */
+  openHelp(content: TemplateRef) {
+    this.modalService.open(content, {windowClass: 'qi-help'});
   }
 
   /**

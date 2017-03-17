@@ -19,7 +19,7 @@ URL_PAT_PREFIX = "http://[-\\w]+:\\d+"
  * (https://code.google.com/p/selenium/wiki/PageObjects). If the Page
  * is instantiated with an url argument, then the given url is visited.
  * The Page class has accessors for the common qiprofile layout elements,
- * e.g. the billboard text and help pane.
+ * e.g. the title text and help pane.
  *
  * Page is intended to encapsulate structural HTML access. Extend Page
  * for each partial to be tested. Each Page accessor function should
@@ -35,7 +35,7 @@ URL_PAT_PREFIX = "http://[-\\w]+:\\d+"
  *         super('/login.html')
  *       ...
  *     login = new LoginPage()
- *     expect(login.billboard).to.eventually.equal('Login')
+ *     expect(login.title).to.eventually.equal('Login')
  *
  * @module testing
  * @class Page
@@ -80,9 +80,9 @@ class Page extends Findable
   @property title: ->
     browser.getTitle()
 
-  # @return the billboard text
-  @property billboard: ->
-    @text('.qi-billboard', 'h3')
+  # @return the title text
+  @property title: ->
+    @text('.qi-title', 'h3')
 
   # Find the partial content. The page is loaded if and and only if
   # the return value is not null.

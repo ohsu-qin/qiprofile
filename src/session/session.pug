@@ -1,7 +1,10 @@
 extends ../layout/partial
 
-block billboard
+block title
   | {{ session.title }}
+
+block help
+  include include/page-help
 
 block content
   ul.qi-main-list(*ngIf="session.scans")

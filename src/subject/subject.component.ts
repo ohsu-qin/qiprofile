@@ -4,6 +4,7 @@ import {
   Component, ChangeDetectionStrategy, ChangeDetectorRef, HostListener
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import ObjectHelper from '../common/object-helper.coffee';
 import {
@@ -13,7 +14,6 @@ import { PageComponent } from '../page/page.component.ts';
 import ImageStore from '../image/image-store.coffee';
 import Subject from './subject.data.coffee';
 import { SubjectService } from './subject.service.ts';
-import help from './subject.help.md';
 
 /**
  * A time line clinical encounter is designated by the HTML
@@ -185,11 +185,12 @@ export class SubjectComponent extends PageComponent {
 
   constructor(
     private router: Router, private route: ActivatedRoute,
+    modalService: NgbModal,
     subjectService: SubjectService,
     private configService: ConfigurationService,
     changeDetector: ChangeDetectorRef
   ) {
-    super(help);
+    super(modalService);
 
     // The route/query parameters.
     let params = this.route.params.value;

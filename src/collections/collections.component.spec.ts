@@ -6,18 +6,7 @@ import {
 
 import { ActivatedRoute } from '@angular/router';
 import { CollectionsComponent } from './collections.component.ts';
-import { HelpService } from '../help/help.service.ts';
 import { CollectionsService } from './collections.service.ts';
-
-/**
- * The stunt showHelp flag service.
- *
- * @module collections
- * @class CollectionsHelpServiceStub
- */
-class CollectionsHelpServiceStub {
-  showHelp = false;
-}
 
 /**
  * The test mock for an `ActivatedRoute".
@@ -82,7 +71,6 @@ describe('The Collections component', function() {
     addProviders([
       CollectionsComponent,
       provide(ActivatedRoute, {useClass: CollectionsActivatedRouteStub}),
-      provide(HelpService, {useClass: CollectionsHelpServiceStub}),
       provide(CollectionsService, {useClass: CollectionsCollectionsServiceStub})
     ]);
   });

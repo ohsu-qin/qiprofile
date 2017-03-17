@@ -1,6 +1,6 @@
 extends ../layout/partial
 
-block billboard
+block title
   | {{ subject.title }}
 
 block content
@@ -9,3 +9,6 @@ block content
       include include/imaging-profile
     .col-md-4(*ngIf="has(subject.clinicalEncounters)")
       include ../clinical/include/clinical-profile
+
+block help
+  include include/page-help

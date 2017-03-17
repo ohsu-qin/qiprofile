@@ -71,8 +71,8 @@ describe 'E2E Testing Project List', ->
 
   # The page header test cases.
   describe 'Header', ->
-    it 'should display the billboard', ->
-      expect(page.billboard, 'The billboard is incorrect')
+    it 'should display the title', ->
+      expect(page.title, 'The title is incorrect')
         .to.eventually.equal('Projects')
 
     it 'should have a home button', ->

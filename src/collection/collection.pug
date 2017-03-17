@@ -1,7 +1,10 @@
 extends ../layout/partial
 
-block billboard
+block title
   | {{ name }} Collection
+
+block help
+  include include/page-help
 
 block content
   .row.qi-collection

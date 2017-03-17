@@ -1,0 +1,19 @@
+// The help button.
+button.btn.btn-primary.qi-btn(
+  type='button',
+  (click)="openHelp(help)"
+)
+  i.fa.fa-question-circle
+
+// The help content.
+// let-d is the obscure Angular idiom for placing
+// the modal dismiss function in the lexical scope.
+<template #help let-d="dismiss">
+  .modal-body
+    button.close((click)="d('Click')")
+      i.fa.fa-close
+    // The page-specific help text.
+    block help
+    // The boilerplate help sequel.
+    include contact-info
+</template>

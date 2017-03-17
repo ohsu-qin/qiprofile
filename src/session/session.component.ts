@@ -2,12 +2,12 @@ import {
   Component, ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { PageComponent } from '../page/page.component.ts';
 import Subject from '../subject/subject.data.coffee';
 import Session from './session.data.coffee';
 import { SessionService } from './session.service.ts';
-import help from './session.help.md';
 
 @Component({
   selector: 'qi-session',
@@ -40,12 +40,11 @@ export class SessionComponent extends PageComponent {
   }
 
   constructor(
-    private router: Router,
-    private route: ActivatedRoute,
-    service: SessionService,
+    private router: Router, private route: ActivatedRoute,
+    modalService: NgbModal, service: SessionService,
     changeDetector: ChangeDetectorRef
   ) {
-    super(help);
+    super(modalService);
 
     // The route/query parameters.
     let params = route.params.value;

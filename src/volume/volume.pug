@@ -1,7 +1,10 @@
 extends ../layout/partial
 
-block billboard
+block title
   | {{ placeHolder.title }}
+
+block help
+  include include/page-help
 
 block content
   .qi-time-series

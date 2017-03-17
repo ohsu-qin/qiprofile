@@ -1,16 +1,12 @@
 import * as _ from 'lodash';
 import { Component, ViewContainerRef, HostListener } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Overlay } from 'angular2-modal';
-import { Modal } from 'angular2-modal/plugins/bootstrap/index.js';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { PageComponent } from '../page/page.component.ts';
 import { PapayaService } from '../image/papaya.service.ts';
 import { ImageSequenceService } from '../session/image-sequence.service.ts';
 import { VolumeService } from './volume.service.ts';
-import help from './volume.help.md';
-import physicalIntensityHelp from './physical-intensity.help.md';
-import timePointIntensityHelp from './time-point-intensity.help.md';
 
 @Component({
   selector: 'qi-volume',
@@ -197,15 +193,13 @@ export class VolumeComponent extends PageComponent {
    * @method constructor
    */
   constructor(
-    route: ActivatedRoute,
-    vcRef: ViewContainerRef, overlay: Overlay, private modal: Modal,
+    route: ActivatedRoute, modalService: NgbModal,
     private papaya: PapayaService, private service: VolumeService
   ) {
-    super(help);
+    super(modalService);
+
     // Capture the route parameters.
     this.routeParams = route.params.value;
-    // Prep the modal.
-    overlay.defaultViewContainer = vcRef;
     // Make the physical intensity gradient factory.
     this.createPhysicalIntensities = this.createPhysicalIntensitiesFactory();
     // Set the dynamic styles.
@@ -419,34 +413,6 @@ export class VolumeComponent extends PageComponent {
       this.timePointIntensities = this.timePointVoxelValues(coordinate);
       this.physicalIntensities = this.physicalVoxelValues(coordinate);
     }
-  }
-
-  /**
-   * Shows the Physical Intensity Gradient modal help pop-up.
-   *
-   * @method openPhysicalIntensityHelp
-   */
-  openPhysicalIntensityHelp() {
-    this.modal.alert()
-      .size('med')
-      .showClose(true)
-      .title('Physical Intensity Gradient')
-      .body(physicalIntensityHelp)
-      .open();
-  }
-
-  /**
-   * Shows the Time Point Intensity Gradient modal help pop-up.
-   *
-   * @method openTimePointIntensityHelp
-   */
-  openTimePointIntensityHelp() {
-    this.modal.alert()
-      .size('med')
-      .showClose(true)
-      .title('Time Point Intensity Gradient')
-      .body(timePointIntensityHelp)
-      .open();
   }
 
   private timePointVoxelValues(coordinate: Object): number[] {

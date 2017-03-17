@@ -10,16 +10,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule as NgCommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
-import { AccordionModule } from 'ng2-accordion';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { PageModule } from '../page/page.module.ts';
 import { CommonModule } from '../common/common.module.ts';
-import { CapitalizePipe } from '../common/capitalize.pipe.ts';
-import { ChoicePipe } from '../common/choice.pipe.ts';
-import { BooleanPipe } from '../common/boolean.pipe.ts';
-import { NotSpecifiedPipe } from '../common/notSpecified.pipe.ts';
-import { MomentPipe } from '../date/moment.pipe.ts';
-import { RomanizePipe } from '../roman/romanize.pipe.ts';
+import { PageModule } from '../page/page.module.ts';
+import { VisualizationModule } from '../visualization/visualization.module.ts';
+import { ModelingModule } from '../modeling/modeling.module.ts';
 import { TnmSizePipe } from '../clinical/tnm-size.pipe.ts';
 import { TnmStagePipe } from '../clinical/tnm-stage.pipe.ts';
 import { SubjectComponent } from './subject.component.ts';
@@ -33,12 +29,12 @@ const ROUTE_CONFIG: Routes = [
 
 @NgModule({
   imports: [
-    NgCommonModule, AccordionModule, CommonModule, PageModule,
+    NgCommonModule, NgbModule,
+    CommonModule, PageModule, ModelingModule, VisualizationModule,
     RouterModule.forChild(ROUTE_CONFIG)
   ],
   declarations: [
-    SubjectComponent, CapitalizePipe, ChoicePipe, MomentPipe, RomanizePipe,
-    BooleanPipe, NotSpecifiedPipe, TnmSizePipe, TnmStagePipe
+    SubjectComponent, TnmSizePipe, TnmStagePipe
   ],
   exports: [SubjectComponent]
 })

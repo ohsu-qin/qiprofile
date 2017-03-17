@@ -8,8 +8,9 @@
  */
 
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule as NgCommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { PageModule } from '../page/page.module.ts';
 import { ControlsModule } from '../controls/controls.module.ts';
@@ -26,8 +27,9 @@ const ROUTE_CONFIG: Routes = [
 
 @NgModule({
   imports: [
-    CommonModule, PageModule, ControlsModule, RouterModule.forChild(ROUTE_CONFIG),
-    VisualizationModule, ImageModule
+    NgCommonModule, NgbModule,
+    PageModule, ControlsModule, VisualizationModule, ImageModule,
+    RouterModule.forChild(ROUTE_CONFIG)
   ],
   declarations: [VolumeComponent],
   exports: [VolumeComponent]

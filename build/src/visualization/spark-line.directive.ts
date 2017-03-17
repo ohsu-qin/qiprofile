@@ -5,9 +5,7 @@ import {
   Directive, Input, ElementRef, OnChanges, SimpleChange, OnInit
 } from '@angular/core';
 
-@Directive({
-  selector: '[qi-spark-line]'
-})
+@Directive({selector: '[qiSparkLine]'})
 
 /**
  * Draws a D3 spark line which plots a uniform sequential
@@ -169,14 +167,14 @@ export class SparkLineDirective implements OnChanges, OnInit {
     }
     if (!xDomain) {
       xDomain = [
-        d3.min(values, (v) => d3.min(v, xValue)),
-        d3.max(values, (v) => d3.max(v, xValue))
+        d3.min(values, v => d3.min(v, xValue)),
+        d3.max(values, v => d3.max(v, xValue))
       ];
     }
     if (!yDomain) {
       yDomain = [
-        d3.min(values, (v) => d3.min(v, yValue)),
-        d3.max(values, (v) => d3.max(v, yValue))
+        d3.min(values, v => d3.min(v, yValue)),
+        d3.max(values, v => d3.max(v, yValue))
       ];
     }
 
@@ -249,9 +247,10 @@ export class SparkLineDirective implements OnChanges, OnInit {
   }
 
   /**
-   * Handle the following changes:
-   * * If the data changed, then reset the line data, which will
-   *   induce d3 to replot the line.
+   * If the
+   * {{#crossLink "SparkLineDirective/data:property"}}{{/crossLink}}
+   * changed, then reset the line data, which will
+   * induce d3 to replot the line.
    *
    * _Note_: the other inputs are for initialization only, and
    * changes to them are ignored. For example, resizing the window
@@ -274,7 +273,7 @@ export class SparkLineDirective implements OnChanges, OnInit {
 
   private valueFunction(definition: string|number|Function) {
     if (_.isString(definition)) {
-      return _.partialRight(_.get, definition);
+      return d => _.get(d, definition);
     } else if (_.isNumber(definition)) {
       return _.constant(definition);
     } else if (this.extra) {

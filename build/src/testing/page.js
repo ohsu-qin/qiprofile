@@ -28,7 +28,7 @@
    * (https://code.google.com/p/selenium/wiki/PageObjects). If the Page
    * is instantiated with an url argument, then the given url is visited.
    * The Page class has accessors for the common qiprofile layout elements,
-   * e.g. the billboard text and help pane.
+   * e.g. the title text and help pane.
    *
    * Page is intended to encapsulate structural HTML access. Extend Page
    * for each partial to be tested. Each Page accessor function should
@@ -44,7 +44,7 @@
    *         super('/login.html')
    *       ...
    *     login = new LoginPage()
-   *     expect(login.billboard).to.eventually.equal('Login')
+   *     expect(login.title).to.eventually.equal('Login')
    *
    * @module testing
    * @class Page
@@ -97,8 +97,8 @@
     });
 
     Page.property({
-      billboard: function() {
-        return this.text('.qi-billboard', 'h3');
+      title: function() {
+        return this.text('.qi-title', 'h3');
       }
     });
 

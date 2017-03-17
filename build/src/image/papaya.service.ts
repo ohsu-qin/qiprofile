@@ -517,7 +517,7 @@ export class PapayaService {
       // Draw the arrow.
       let arrow = new Image(arrowWidth, fontSize);
       // Point to the Time Point slider.
-      arrow.src = 'static/media/arrow-right.png';
+      arrow.src = 'public/media/arrow-right.png';
       arrow.onload = () => {
         this.context.drawImage(arrow, locX, locY - pad - fontSize);
       };

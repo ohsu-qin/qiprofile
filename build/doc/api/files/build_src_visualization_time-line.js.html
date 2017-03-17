@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>build/src/visualization/time-line.js - qiprofile API</title>
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="http://yui.yahooapis.com/combo?3.8.0pr2/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div class="yui3-g">
+        <div id="sidebar" class="yui3-u">
+            <div class="logo">
+              <a href="../index.html">
+                  qiprofile API
+              </a>
+            </div>
+            
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/clinical.html">clinical</a>
+                            </li>
+                            <li><a href="../modules/collection.html">collection</a>
+                            </li>
+                            <li><a href="../modules/collections.html">collections</a>
+                            </li>
+                            <li><a href="../modules/common.html">common</a>
+                            </li>
+                            <li><a href="../modules/configuration.html">configuration</a>
+                            </li>
+                            <li><a href="../modules/controls.html">controls</a>
+                            </li>
+                            <li><a href="../modules/data.html">data</a>
+                            </li>
+                            <li><a href="../modules/date.html">date</a>
+                            </li>
+                            <li><a href="../modules/error.html">error</a>
+                            </li>
+                            <li><a href="../modules/file.html">file</a>
+                            </li>
+                            <li><a href="../modules/home.html">home</a>
+                            </li>
+                            <li><a href="../modules/image.html">image</a>
+                            </li>
+                            <li><a href="../modules/imageSequence.html">imageSequence</a>
+                            </li>
+                            <li><a href="../modules/main.html">main</a>
+                            </li>
+                            <li><a href="../modules/modeling.html">modeling</a>
+                            </li>
+                            <li><a href="../modules/object.html">object</a>
+                            </li>
+                            <li><a href="../modules/page.html">page</a>
+                            </li>
+                            <li><a href="../modules/project.html">project</a>
+                            </li>
+                            <li><a href="../modules/projects.html">projects</a>
+                            </li>
+                            <li><a href="../modules/protocol.html">protocol</a>
+                            </li>
+                            <li><a href="../modules/rest.html">rest</a>
+                            </li>
+                            <li><a href="../modules/roman.html">roman</a>
+                            </li>
+                            <li><a href="../modules/session.html">session</a>
+                            </li>
+                            <li><a href="../modules/string.html">string</a>
+                            </li>
+                            <li><a href="../modules/subject.html">subject</a>
+                            </li>
+                            <li><a href="../modules/testing.html">testing</a>
+                            </li>
+                            <li><a href="../modules/visualization.html">visualization</a>
+                            </li>
+                            <li><a href="../modules/volume.html">volume</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/AppComponent.html">AppComponent</a></li>
+                            <li><a href="../classes/AppModule.html">AppModule</a></li>
+                            <li><a href="../classes/BooleanPipe.html">BooleanPipe</a></li>
+                            <li><a href="../classes/Breast.html">Breast</a></li>
+                            <li><a href="../classes/BreastNormalizedAssay.html">BreastNormalizedAssay</a></li>
+                            <li><a href="../classes/BreastPathology.html">BreastPathology</a></li>
+                            <li><a href="../classes/CapitalizePipe.html">CapitalizePipe</a></li>
+                            <li><a href="../classes/CascadeSelectComponent.html">CascadeSelectComponent</a></li>
+                            <li><a href="../classes/ChoicePipe.html">ChoicePipe</a></li>
+                            <li><a href="../classes/ClinicalEncounter.html">ClinicalEncounter</a></li>
+                            <li><a href="../classes/CollectionActivatedRouteStub.html">CollectionActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionComponent.html">CollectionComponent</a></li>
+                            <li><a href="../classes/CollectionComponentSpec.html">CollectionComponentSpec</a></li>
+                            <li><a href="../classes/CollectionItemComponent.html">CollectionItemComponent</a></li>
+                            <li><a href="../classes/CollectionListPage.html">CollectionListPage</a></li>
+                            <li><a href="../classes/CollectionListSpec.html">CollectionListSpec</a></li>
+                            <li><a href="../classes/CollectionModule.html">CollectionModule</a></li>
+                            <li><a href="../classes/CollectionRouterStub.html">CollectionRouterStub</a></li>
+                            <li><a href="../classes/CollectionsActivatedRouteStub.html">CollectionsActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionsComponent.html">CollectionsComponent</a></li>
+                            <li><a href="../classes/CollectionsComponentSpec.html">CollectionsComponentSpec</a></li>
+                            <li><a href="../classes/CollectionsModule.html">CollectionsModule</a></li>
+                            <li><a href="../classes/CollectionsResource.html">CollectionsResource</a></li>
+                            <li><a href="../classes/CollectionsService.html">CollectionsService</a></li>
+                            <li><a href="../classes/CollectionsServiceStub.html">CollectionsServiceStub</a></li>
+                            <li><a href="../classes/CollectionSubectServiceStub.html">CollectionSubectServiceStub</a></li>
+                            <li><a href="../classes/Color.html">Color</a></li>
+                            <li><a href="../classes/ColorBarDirective.html">ColorBarDirective</a></li>
+                            <li><a href="../classes/CommonModule.html">CommonModule</a></li>
+                            <li><a href="../classes/ConfigurationService.html">ConfigurationService</a></li>
+                            <li><a href="../classes/ConfigurationServiceSpec.html">ConfigurationServiceSpec</a></li>
+                            <li><a href="../classes/ControlsModule.html">ControlsModule</a></li>
+                            <li><a href="../classes/CorrelationComponent.html">CorrelationComponent</a></li>
+                            <li><a href="../classes/DateHelper.html">DateHelper</a></li>
+                            <li><a href="../classes/DateHelperSpec.html">DateHelperSpec</a></li>
+                            <li><a href="../classes/Encounter.html">Encounter</a></li>
+                            <li><a href="../classes/ErrorComponent.html">ErrorComponent</a></li>
+                            <li><a href="../classes/ErrorHandler.html">ErrorHandler</a></li>
+                            <li><a href="../classes/FileService.html">FileService</a></li>
+                            <li><a href="../classes/FileServiceSpec.html">FileServiceSpec</a></li>
+                            <li><a href="../classes/Findable.html">Findable</a></li>
+                            <li><a href="../classes/FloorPipe.html">FloorPipe</a></li>
+                            <li><a href="../classes/HomeComponent.html">HomeComponent</a></li>
+                            <li><a href="../classes/IamgeSequenceService.html">IamgeSequenceService</a></li>
+                            <li><a href="../classes/Image.html">Image</a></li>
+                            <li><a href="../classes/ImageComponent.html">ImageComponent</a></li>
+                            <li><a href="../classes/ImageModule.html">ImageModule</a></li>
+                            <li><a href="../classes/ImageSequence.html">ImageSequence</a></li>
+                            <li><a href="../classes/ImageSequenceServiceSpec.html">ImageSequenceServiceSpec</a></li>
+                            <li><a href="../classes/ImageSequenceSessionServiceStub.html">ImageSequenceSessionServiceStub</a></li>
+                            <li><a href="../classes/ImageSequenceSpec.html">ImageSequenceSpec</a></li>
+                            <li><a href="../classes/ImageStore.html">ImageStore</a></li>
+                            <li><a href="../classes/LabelMap.html">LabelMap</a></li>
+                            <li><a href="../classes/Modeling.html">Modeling</a></li>
+                            <li><a href="../classes/ModelingComponent.html">ModelingComponent</a></li>
+                            <li><a href="../classes/ModelingModule.html">ModelingModule</a></li>
+                            <li><a href="../classes/ModelingProtocolComponent.html">ModelingProtocolComponent</a></li>
+                            <li><a href="../classes/ModelingResult.html">ModelingResult</a></li>
+                            <li><a href="../classes/ModelingResults.html">ModelingResults</a></li>
+                            <li><a href="../classes/ModelingSourceComponent.html">ModelingSourceComponent</a></li>
+                            <li><a href="../classes/MomentPipe.html">MomentPipe</a></li>
+                            <li><a href="../classes/ObjectHelper.html">ObjectHelper</a></li>
+                            <li><a href="../classes/Page.html">Page</a></li>
+                            <li><a href="../classes/PageComponent.html">PageComponent</a></li>
+                            <li><a href="../classes/PageModule.html">PageModule</a></li>
+                            <li><a href="../classes/PapayaService.html">PapayaService</a></li>
+                            <li><a href="../classes/ParameterResult.html">ParameterResult</a></li>
+                            <li><a href="../classes/Pathology.html">Pathology</a></li>
+                            <li><a href="../classes/PlayerComponent.html">PlayerComponent</a></li>
+                            <li><a href="../classes/ProjectItemComponent.html">ProjectItemComponent</a></li>
+                            <li><a href="../classes/ProjectListPage.html">ProjectListPage</a></li>
+                            <li><a href="../classes/ProjectListSpec.html">ProjectListSpec</a></li>
+                            <li><a href="../classes/ProjectsComponent.html">ProjectsComponent</a></li>
+                            <li><a href="../classes/ProjectsComponentSpec.html">ProjectsComponentSpec</a></li>
+                            <li><a href="../classes/ProjectsModule.html">ProjectsModule</a></li>
+                            <li><a href="../classes/ProjectsResource.html">ProjectsResource</a></li>
+                            <li><a href="../classes/ProjectsService.html">ProjectsService</a></li>
+                            <li><a href="../classes/ProjectsServiceStub.html">ProjectsServiceStub</a></li>
+                            <li><a href="../classes/PropertyTableComponent.html">PropertyTableComponent</a></li>
+                            <li><a href="../classes/ProtocolResource.html">ProtocolResource</a></li>
+                            <li><a href="../classes/ProtocolService.html">ProtocolService</a></li>
+                            <li><a href="../classes/RCB.html">RCB</a></li>
+                            <li><a href="../classes/Registration.html">Registration</a></li>
+                            <li><a href="../classes/RegistrationSpec.html">RegistrationSpec</a></li>
+                            <li><a href="../classes/REST.html">REST</a></li>
+                            <li><a href="../classes/RestResource.html">RestResource</a></li>
+                            <li><a href="../classes/RESTSpec.html">RESTSpec</a></li>
+                            <li><a href="../classes/Roman.html">Roman</a></li>
+                            <li><a href="../classes/RomanSpec.html">RomanSpec</a></li>
+                            <li><a href="../classes/Sarcoma.html">Sarcoma</a></li>
+                            <li><a href="../classes/Scan.html">Scan</a></li>
+                            <li><a href="../classes/ScanSpec.html">ScanSpec</a></li>
+                            <li><a href="../classes/ScatterPlotDirective.html">ScatterPlotDirective</a></li>
+                            <li><a href="../classes/Session.html">Session</a></li>
+                            <li><a href="../classes/SessionActivatedRouteStub.html">SessionActivatedRouteStub</a></li>
+                            <li><a href="../classes/SessionComponent.html">SessionComponent</a></li>
+                            <li><a href="../classes/SessionComponentSpec.html">SessionComponentSpec</a></li>
+                            <li><a href="../classes/SessionDetailResource.html">SessionDetailResource</a></li>
+                            <li><a href="../classes/SessionDetailResourceStub.html">SessionDetailResourceStub</a></li>
+                            <li><a href="../classes/SessiondRouterStub.html">SessiondRouterStub</a></li>
+                            <li><a href="../classes/SessionModule.html">SessionModule</a></li>
+                            <li><a href="../classes/SessionService.html">SessionService</a></li>
+                            <li><a href="../classes/SessionServiceSpec.html">SessionServiceSpec</a></li>
+                            <li><a href="../classes/SessionServiceStub.html">SessionServiceStub</a></li>
+                            <li><a href="../classes/SessionSpec.html">SessionSpec</a></li>
+                            <li><a href="../classes/SessionSubjectResourceStub.html">SessionSubjectResourceStub</a></li>
+                            <li><a href="../classes/SessionTumorExtent.html">SessionTumorExtent</a></li>
+                            <li><a href="../classes/SliderDirective.html">SliderDirective</a></li>
+                            <li><a href="../classes/SparkLineDirective.html">SparkLineDirective</a></li>
+                            <li><a href="../classes/StringHelper.html">StringHelper</a></li>
+                            <li><a href="../classes/StringHelperSpec.html">StringHelperSpec</a></li>
+                            <li><a href="../classes/Subject.html">Subject</a></li>
+                            <li><a href="../classes/SubjectActivatedRouteStub.html">SubjectActivatedRouteStub</a></li>
+                            <li><a href="../classes/SubjectChangeDetectorRefStub.html">SubjectChangeDetectorRefStub</a></li>
+                            <li><a href="../classes/SubjectComponent.html">SubjectComponent</a></li>
+                            <li><a href="../classes/SubjectComponentSpec.html">SubjectComponentSpec</a></li>
+                            <li><a href="../classes/SubjectdRouterStub.html">SubjectdRouterStub</a></li>
+                            <li><a href="../classes/SubjectModule.html">SubjectModule</a></li>
+                            <li><a href="../classes/SubjectResource.html">SubjectResource</a></li>
+                            <li><a href="../classes/SubjectResourceStub.html">SubjectResourceStub</a></li>
+                            <li><a href="../classes/SubjectService.html">SubjectService</a></li>
+                            <li><a href="../classes/SubjectServiceSpec.html">SubjectServiceSpec</a></li>
+                            <li><a href="../classes/SubjectServiceStub.html">SubjectServiceStub</a></li>
+                            <li><a href="../classes/SubjectSpec.html">SubjectSpec</a></li>
+                            <li><a href="../classes/Symbol.html">Symbol</a></li>
+                            <li><a href="../classes/Table.html">Table</a></li>
+                            <li><a href="../classes/TimeLineDirective.html">TimeLineDirective</a></li>
+                            <li><a href="../classes/TimeSeries.html">TimeSeries</a></li>
+                            <li><a href="../classes/TNM.html">TNM</a></li>
+                            <li><a href="../classes/Treatment.html">Treatment</a></li>
+                            <li><a href="../classes/UnderscorePipe.html">UnderscorePipe</a></li>
+                            <li><a href="../classes/UnspecifiedPipe.html">UnspecifiedPipe</a></li>
+                            <li><a href="../classes/VisualizationModule.html">VisualizationModule</a></li>
+                            <li><a href="../classes/Volume.html">Volume</a></li>
+                            <li><a href="../classes/VolumeComponent.html">VolumeComponent</a></li>
+                            <li><a href="../classes/VolumeDetailPage.html">VolumeDetailPage</a></li>
+                            <li><a href="../classes/VolumeImageSequenceServiceStub.html">VolumeImageSequenceServiceStub</a></li>
+                            <li><a href="../classes/VolumeModule.html">VolumeModule</a></li>
+                            <li><a href="../classes/VolumeService.html">VolumeService</a></li>
+                            <li><a href="../classes/VolumeServiceSpec.html">VolumeServiceSpec</a></li>
+                            <li><a href="../classes/VolumeSpec.html">VolumeSpec</a></li>
+                            <li><a href="../classes/XNAT.html">XNAT</a></li>
+                            <li><a href="../classes/XNATSpec.html">XNATSpec</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            
+            
+            
+            <div class="version-info">
+              Version: 2.1.1
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><div class="title">
+  <h1 class="file-name">build/src/visualization/time-line.js</h1>
+</div>
+
+<pre class="code prettyprint linenums">
+
+/**
+ * The time line decorator utility.
+ *
+ * @module visualization
+ */
+
+(function() {
+  import * as _ from &quot;lodash&quot;;
+  import moment from &quot;moment&quot;;
+  ({
+
+    /**
+     * Decorates the time line as follows:
+     * * Add the session hyperlinks, encounter dates and treatment
+     *   start-end bars.
+     * * Rotate the date x-axis tick labels
+     *
+     * Note: The session hyperlinks are ui-sref attributes. However,
+     * D3 mutates the DOM after the Angular digest cycle. Consequently,
+     * the callback must call Angular $compile with the current scope
+     * on each new hyperlink.ui-sref directive.
+     *
+     * @method decorate
+     * @param svg the timeline svg element
+     * @param subject the displayed subject
+     * @param min the earliest encounter or treatment date
+     * @param max the latest encounter or treatment date
+     */
+    decorate: function(svg, subject, min, max) {
+      var SESSION_DETAIL_STATE, TREATMENT_BAR_HEIGHT, TREATMENT_SYMBOL, addClinicalEncounters, addLegend, addSessionDetailLinks, addTreatmentBars, dy;
+      TREATMENT_BAR_HEIGHT = 1;
+      TREATMENT_SYMBOL = &#x27;\u2207&#x27;;
+      SESSION_DETAIL_STATE = &#x27;quip.collection.subject.session&#x27;;
+
+      /**
+       * Adds the session hyperlinks above the timeline. The template
+       * sets the callback attribute to this function. The new anchor
+       * elements are positioned dy em units above the timeline,
+       * plus a small padding. This allows for displaying the treatment
+       * bars and encounter points between the timeline and the
+       * hyperlinks.
+       *
+       * @method addSessionDetailLinks
+       * @param sessions the subject sessions
+       * @param xAxis the chart SVG X axis D3 selection
+       * @param dy the optional y offset in em units
+       */
+      addSessionDetailLinks = function(sessions, xAxis, dy) {
+        var createSessionDetailLink, isSessionDate, session, sessionIndex, sessionMillis, ticks;
+        if (dy == null) {
+          dy = 0;
+        }
+
+        /**
+         * Makes a new ui-sref anchor element that hyperlinks to the given
+         * session detail page.
+         *
+         * @method createSessionDetailLink
+         * @param session the hyperlink target session
+         * @param tick the X axis tick mark
+         */
+        createSessionDetailLink = function(session, tick) {
+          var handler, params, text;
+          text = tick.append(&#x27;text&#x27;);
+          text.attr(&#x27;dx&#x27;, &#x27;-.2em&#x27;).attr(&#x27;dy&#x27;, &quot;-&quot; + (0.5 + dy) + &quot;em&quot;);
+          text.style(&#x27;text-anchor: middle&#x27;);
+          text.text(session.number);
+          params = {
+            project: subject.project,
+            collection: subject.collection,
+            subject: subject.number,
+            session: session.number
+          };
+          handler = function() {
+            return $state.go(SESSION_DETAIL_STATE, params);
+          };
+          return Chart.d3Hyperlink(text, handler);
+        };
+        ticks = xAxis.selectAll(&#x27;.tick&#x27;);
+        sessionMillis = (function() {
+          var j, len1, results;
+          results = [];
+          for (j = 0, len1 = sessions.length; j &lt; len1; j++) {
+            session = sessions[j];
+            results.push(session.date.valueOf());
+          }
+          return results;
+        })();
+
+        /**
+         * @method isSessionDate
+         * @param date the date to check
+         * @return whether the date is a session date
+         */
+        isSessionDate = function(date) {
+          return _.includes(sessionMillis, date.valueOf());
+        };
+        sessionIndex = 0;
+        return ticks.each(function(date, i) {
+          var tick;
+          if (isSessionDate(date)) {
+            tick = d3.select(this);
+            createSessionDetailLink(sessions[sessionIndex], tick);
+            return sessionIndex++;
+          }
+        });
+      };
+
+      /**
+       * Inserts an SVG bar for each treatment above the timeline.
+       *
+       * @method addTreatmentBars
+       * @param xAxis the chart SVG x axis element
+       */
+      addTreatmentBars = function(xAxis) {
+        var axisWidth, background, bar, end, factor, j, left, len1, parent, ref, results, spacer, start, trt, width, xAxisNode;
+        xAxisNode = xAxis.node();
+        parent = d3.select(xAxisNode.parentNode);
+        background = parent.select(&#x27;.nv-background&#x27;);
+        spacer = background.select(&#x27;rect&#x27;);
+        axisWidth = spacer.attr(&#x27;width&#x27;);
+        factor = axisWidth / (max - min);
+        ref = subject.treatments;
+        results = [];
+        for (j = 0, len1 = ref.length; j &lt; len1; j++) {
+          trt = ref[j];
+          start = trt.startDate;
+          end = trt.endDate || moment();
+          left = (start - min) * factor;
+          width = (end - start) * factor;
+          if (!width) {
+            left = left - 3;
+            width = 6;
+          }
+          bar = parent.insert(&#x27;svg:rect&#x27;, function() {
+            return xAxisNode;
+          });
+          bar.attr(&#x27;height&#x27;, TREATMENT_BAR_HEIGHT + &quot;em&quot;);
+          bar.attr(&#x27;width&#x27;, width);
+          bar.classed(&quot;qi-timeline-&quot; + (trt.treatmentType.toLowerCase()), true);
+          bar.attr(&#x27;x&#x27;, left);
+          results.push(bar.attr(&#x27;y&#x27;, &quot;-&quot; + TREATMENT_BAR_HEIGHT + &quot;em&quot;));
+        }
+        return results;
+      };
+
+      /**
+       * Inserts a marker for each clinical encounter above the
+       * timeline.
+       *
+       * @method addClinicalEncounters
+       * @param element the chart X axis D3 selection
+       */
+      addClinicalEncounters = function(xAxis) {
+        var axisWidth, background, date, enc, factor, j, len1, line, lineNode, offset, parent, ref, results, spacer, text, xAxisNode;
+        xAxisNode = xAxis.node();
+        parent = d3.select(xAxisNode.parentNode);
+        background = parent.select(&#x27;.nv-background&#x27;);
+        spacer = background.select(&#x27;rect&#x27;);
+        axisWidth = spacer.attr(&#x27;width&#x27;);
+        line = parent.select(&#x27;.nv-series-0&#x27;);
+        lineNode = line.node();
+        factor = axisWidth / (max - min);
+        ref = subject.clinicalEncounters;
+        results = [];
+        for (j = 0, len1 = ref.length; j &lt; len1; j++) {
+          enc = ref[j];
+          date = enc.date;
+          offset = (date - min) * factor;
+          text = parent.insert(&#x27;svg:text&#x27;);
+          text.attr(&#x27;x&#x27;, Math.floor(offset) - 6);
+          text.classed(&quot;qi-timeline-&quot; + (enc.title.toLowerCase()), true);
+          results.push(text.text(TREATMENT_SYMBOL));
+        }
+        return results;
+      };
+
+      /**
+       * Adds the treatment and encounter legend directly before the
+       * SVG element.
+       *
+       * @method addLegend
+       * @param svg the SVG D3 selection
+       */
+      addLegend = function() {
+        var addEncounterLegend, addTreatmentLegend, parent, svgNode;
+        addTreatmentLegend = function(parent) {
+          var j, label, label_lengths, labels, len, len1, p, results, sorted, span, trt, trts;
+          trts = subject.treatments;
+          if (!trts.length) {
+            return;
+          }
+          p = parent.insert(&#x27;p&#x27;, function() {
+            return svg.node();
+          });
+          p.text(&#x27;Treatments: &#x27;);
+          p.classed({
+            &#x27;col-md-offset-5&#x27;: true,
+            &#x27;font-size: small&#x27;: true
+          });
+          sorted = _.sortBy(trts, function(trt) {
+            return trt.start_date.valueOf();
+          });
+          labels = _.uniq((function() {
+            var j, len1, results;
+            results = [];
+            for (j = 0, len1 = sorted.length; j &lt; len1; j++) {
+              trt = sorted[j];
+              results.push(trt.treatment_type);
+            }
+            return results;
+          })());
+          label_lengths = (function() {
+            var j, len1, results;
+            results = [];
+            for (j = 0, len1 = labels.length; j &lt; len1; j++) {
+              label = labels[j];
+              results.push(label.length);
+            }
+            return results;
+          })();
+          len = _.max(label_lengths) + 2;
+          results = [];
+          for (j = 0, len1 = labels.length; j &lt; len1; j++) {
+            label = labels[j];
+            span = p.append(&#x27;span&#x27;);
+            span.classed(&quot;qi-timeline-&quot; + (label.toLowerCase()), true);
+            results.push(span.text(label));
+          }
+          return results;
+        };
+        addEncounterLegend = function(parent) {
+          var enc, encs, j, label, labels, len1, p, results, sorted, span;
+          encs = subject.clinicalEncounters;
+          if (!encs.length) {
+            return;
+          }
+          p = parent.insert(&#x27;p&#x27;, function() {
+            return svg.node();
+          });
+          p.text(&#x27;Encounters: &#x27;);
+          p.classed({
+            &#x27;col-md-offset-5&#x27;: true,
+            &#x27;font-size: small&#x27;: true
+          });
+          sorted = _.sortBy(encs, function(enc) {
+            return enc.date.valueOf();
+          });
+          labels = _.uniq((function() {
+            var j, len1, results;
+            results = [];
+            for (j = 0, len1 = sorted.length; j &lt; len1; j++) {
+              enc = sorted[j];
+              results.push(enc.title);
+            }
+            return results;
+          })());
+          results = [];
+          for (j = 0, len1 = labels.length; j &lt; len1; j++) {
+            label = labels[j];
+            span = p.append(&#x27;span&#x27;);
+            span.classed(&quot;qi-timeline-&quot; + (label.toLowerCase()), true);
+            results.push(span.text(TREATMENT_SYMBOL + label));
+          }
+          return results;
+        };
+        svgNode = svg.node();
+        parent = d3.select(svgNode.parentNode);
+        addTreatmentLegend(parent);
+        return addEncounterLegend(parent);
+      };
+      if (_.some(subject.treatments) || _.some(subject.clinicalEncounters)) {
+        dy = TREATMENT_BAR_HEIGHT;
+      } else {
+        dy = 0;
+      }
+      addTreatmentBars(xAxis);
+      addClinicalEncounters(xAxis);
+      addSessionDetailLinks(subject.sessions, xAxis, dy);
+      return addLegend();
+    }
+  });
+
+}).call(this);
+
+</pre>
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>

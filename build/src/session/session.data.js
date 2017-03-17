@@ -7,7 +7,7 @@
 
 (function() {
   import * as _ from "lodash";
-  import ObjectHelper from "../object/object-helper.coffee";
+  import ObjectHelper from "../common/object-helper.coffee";
   import Scan from "./scan.data.coffee";
   import Modeling from "./modeling.data.coffee";
 

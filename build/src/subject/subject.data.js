@@ -1,46 +1,44 @@
 (function() {
   import * as _ from "lodash";
   import * as _s from "underscore.string";
-  import DateHelper from "../date/date-helper.coffee";
+  import DateHelper from "../common/date-helper.coffee";
   import Session from "../session/session.data.coffee";
-  import Modeling from "../session/modeling.data.coffee";
+  import Treatment from "../clinical/treatment.data.coffee";
   import ClinicalEncounter from "../clinical/encounter.data.coffee";
   import Encounter from "./encounter.data.coffee";
   var ModelingResults, Subject, extendEncounters, fixDates;
 
   fixDates = function(subject) {
-    var date, dosage, enc, j, k, len, len1, ref1, ref2, results1, trt;
+    var date, dosage, enc, j, k, l, len, len1, len2, ref1, ref2, ref3, results1, trt;
     if (subject.birthDate != null) {
-      date = DateHelper.asMoment(subject.birthDate);
+      date = DateHelper.toMoment(subject.birthDate);
       subject.birthDate = DateHelper.anonymize(date);
     }
     if (subject.diagnosisDate != null) {
-      date = DateHelper.asMoment(subject.diagnosisDate);
+      date = DateHelper.toMoment(subject.diagnosisDate);
       subject.diagnosisDate = date;
     }
     ref1 = subject.encounters;
     for (j = 0, len = ref1.length; j < len; j++) {
       enc = ref1[j];
       if (enc.date != null) {
-        enc.date = DateHelper.asMoment(enc.date);
+        enc.date = DateHelper.toMoment(enc.date);
       }
     }
     ref2 = subject.treatments;
     results1 = [];
     for (k = 0, len1 = ref2.length; k < len1; k++) {
       trt = ref2[k];
-      trt.startDate = DateHelper.asMoment(trt.startDate);
-      trt.endDate = DateHelper.asMoment(trt.endDate);
-      results1.push((function() {
-        var l, len2, ref3, results2;
-        ref3 = trt.dosages;
-        results2 = [];
-        for (l = 0, len2 = ref3.length; l < len2; l++) {
-          dosage = ref3[l];
-          results2.push(dosage.startDate = DateHelper.asMoment(trt.startDate));
-        }
-        return results2;
-      })());
+      trt.startDate = DateHelper.toMoment(trt.startDate);
+      if (trt.endDate != null) {
+        trt.endDate = DateHelper.toMoment(trt.endDate);
+      }
+      ref3 = trt.dosages;
+      for (l = 0, len2 = ref3.length; l < len2; l++) {
+        dosage = ref3[l];
+        dosage.startDate = DateHelper.toMoment(trt.startDate);
+      }
+      results1.push(Treatment.extend(trt, subject));
     }
     return results1;
   };
@@ -79,11 +77,13 @@
 
     /**
      * Collects the modeling results into a [_modelings_] array,
-     * where _modelings_ is a {{source, protocol, results}},
-     * the ``source`` value is a {source type, source protocol}
-     * object, ``protocol`` is the modeling protocol, and
-     * ``results`` is an array of modeling results in session
-     * number order.
+     * where:
+     * * _modelings_ is a {{source, protocol, results}} object,
+     * * the`source` value is a {type, protocol} object,
+     * * the`protocol` value is the modeling protocol
+     * * the`results` value is an array of modeling results
+     *   in session number order.
+     *
      * @method collect
      * @param subject {Object} the parent subject
      * @return {Object} the
@@ -92,8 +92,8 @@
      *   where the results are an array in session number order
      */
     collect: function(subject) {
-      var grouped, i, intensityPath, item, j, k, len, len1, modeling, modelingProtocol, path, ref1, ref2, regrouped, rest, rest2, result, results, session, source, sourceProtocol, sourceType;
-      intensityPath = 'image.metadata.average_intensity';
+      var INTENSITY_PROP_PATH, grouped, i, item, j, k, len, len1, modeling, modelingProtocol, path, ref1, ref2, regrouped, rest, rest2, result, results, session, source, sourceProtocol, sourceType;
+      INTENSITY_PROP_PATH = 'image.metadata.average_intensity';
       grouped = {};
       ref1 = subject.sessions;
       for (i = j = 0, len = ref1.length; j < len; i = ++j) {
@@ -103,7 +103,7 @@
           modeling = ref2[k];
           source = _.toPairs(modeling.source)[0];
           path = _.flatten([source, modeling.protocol, i]);
-          result = _.mapValues(modeling.result, intensityPath);
+          result = _.mapValues(modeling.result, INTENSITY_PROP_PATH);
           _.set(grouped, path, result);
         }
       }
@@ -235,30 +235,57 @@
         },
 
         /**
+         * @property biopsies
+         * @return the biopsy encounters
+         */
+        biopsies: {
+          get: function() {
+            var enc, j, len, ref1, results1;
+            ref1 = this.clinicalEncounters;
+            results1 = [];
+            for (j = 0, len = ref1.length; j < len; j++) {
+              enc = ref1[j];
+              if (enc.isBiopsy()) {
+                results1.push(enc);
+              }
+            }
+            return results1;
+          }
+        },
+
+        /**
          * @property biopsy
          * @return the unique biopsy encounter, if there is exactly
          *   one, otherwise null
          */
         biopsy: {
           get: function() {
-            var biopsies, enc;
-            biopsies = (function() {
-              var j, len, ref1, results1;
-              ref1 = this.clinicalEncounters;
-              results1 = [];
-              for (j = 0, len = ref1.length; j < len; j++) {
-                enc = ref1[j];
-                if (enc.isBiopsy()) {
-                  results1.push(enc);
-                }
-              }
-              return results1;
-            }).call(this);
+            var biopsies;
+            biopsies = this.biopsies;
             if (biopsies.length === 1) {
               return biopsies[0];
             } else {
               return null;
             }
+          }
+        },
+
+        /**
+         * @property surgeries
+         * @return the surgery encounters
+         */
+        surgeries: {
+          get: function() {
+            var enc, j, len, ref1, results1;
+            ref1 = this.clinicalEncounters;
+            results1 = [];
+            for (j = 0, len = ref1.length; j < len; j++) {
+              enc = ref1[j];
+              if (enc.isSurgery()) {
+                results1.push(enc);
+              }
+            }
+            return results1;
           }
         },
 
@@ -269,19 +296,8 @@
          */
         surgery: {
           get: function() {
-            var enc, surgeries;
-            surgeries = (function() {
-              var j, len, ref1, results1;
-              ref1 = this.clinicalEncounters;
-              results1 = [];
-              for (j = 0, len = ref1.length; j < len; j++) {
-                enc = ref1[j];
-                if (enc.isSurgery()) {
-                  results1.push(enc);
-                }
-              }
-              return results1;
-            }).call(this);
+            var surgeries;
+            surgeries = this.surgeries;
             if (surgeries.length === 1) {
               return surgeries[0];
             } else {
@@ -311,8 +327,25 @@
       if (subject.treatments == null) {
         subject.treatments = [];
       }
+
+      /**
+       * @method isMultiSession
+       * @return whether this subject has more than one session
+       */
       subject.isMultiSession = function() {
         return this.sessions.length > 1;
+      };
+
+      /**
+       * @method hasPreviews
+       * @return whether this subject has at least one scan preview
+       */
+      subject.hasPreviews = function() {
+        var hasPreview;
+        hasPreview = function(session) {
+          return session.preview != null;
+        };
+        return _.some(this.sessions, hasPreview);
       };
       fixDates(subject);
       extendEncounters(subject);

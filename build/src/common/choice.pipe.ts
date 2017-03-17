@@ -4,12 +4,21 @@ import {
   ConfigurationService }
 from '../configuration/configuration.service.ts';
 
+@Pipe({name: 'choice'})
+
 /**
  * Transforms a database value to a display value.
+ *
+ * @module common
+ * @class ChoicePipe
  */
-@Pipe({name: 'choice'})
 export class ChoicePipe implements PipeTransform {
-
+  /**
+   * The
+   * {{#crossLink "ConfigurationService/valueChoices"}}{{/crossLink}}.
+   *
+   * @property
+   */
   private choices: Object;
 
   constructor(private configService: ConfigurationService) {

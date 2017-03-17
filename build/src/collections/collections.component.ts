@@ -2,10 +2,10 @@ import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { PageComponent } from '../page/page.component.ts';
 import { CollectionsService } from './collections.service.ts';
-import { HelpService } from '../help/help.service.ts';
 
 @Component({
   selector: 'qi-collections',
@@ -36,16 +36,12 @@ export class CollectionsComponent extends PageComponent {
    */
   isEmpty: boolean;
 
-  constructor(route: ActivatedRoute,
-              dataService: CollectionsService,
-              helpService: HelpService) {
-      // Omit the superclass constructor help argument, since this
-      // component overrides the standard help block with its own
-      // directive.
-      super();
+  constructor(
+    route: ActivatedRoute, modalService: NgbModal,
+    dataService: CollectionsService
+  ) {
+      super(modalService);
 
-      // Always show the help on this page.
-      helpService.showHelp = true;
       let params = route.params.value;
       this.project = params.project;
       // The unsorted collection objects.

@@ -6,7 +6,6 @@ import {
 
 import { ProjectsService } from './projects.service.ts';
 import { ProjectsComponent } from './projects.component.ts';
-import { HelpService } from '../help/help.service.ts';
 
 /**
  * The test mock for a {{#crossLink "ProjectsService"}}{{/crossLink}}.
@@ -31,21 +30,10 @@ class ProjectsServiceStub {
   }
 }
 
-/**
- * The stunt showHelp flag service.
- *
- * @module projects
- * @class ProjectsHelpServiceStub
- */
-class ProjectsHelpServiceStub {
-  showHelp: boolean = false;
-}
-
 beforeEachProviders(() => {
   return [
     ProjectsComponent,
-    provide(ProjectsService, {useClass: ProjectsServiceStub}),
-    provide(HelpService, {useClass: ProjectsHelpServiceStub})
+    provide(ProjectsService, {useClass: ProjectsServiceStub})
   ];
 });
 

@@ -51,8 +51,8 @@
       return expect(page.content, 'The page was not loaded').to.eventually.exist;
     });
     describe('Header', function() {
-      it('should display the billboard', function() {
-        return expect(page.billboard, 'The billboard is incorrect').to.eventually.equal('Breast Patient 1 Session 1 Scan 1 Volume 1');
+      it('should display the title', function() {
+        return expect(page.title, 'The title is incorrect').to.eventually.equal('Breast Patient 1 Session 1 Scan 1 Volume 1');
       });
       it('should have a home button', function() {
         return expect(page.home, 'The home URL is incorrect').to.eventually.match(Page.HOME_URL_PAT);
@@ -118,9 +118,9 @@
             expect(buttons.length, 'The player buttons count is incorrect').to.equal(3);
             previous = buttons[0], play = buttons[1], next = buttons[2];
             return next.click().then(function() {
-              expect(page.billboard, 'The next button did not change the billboard').to.eventually.equal('Breast Patient 1 Session 1 Scan 1 Volume 2');
+              expect(page.title, 'The next button did not change the title').to.eventually.equal('Breast Patient 1 Session 1 Scan 1 Volume 2');
               return previous.click().then(function() {
-                return expect(page.billboard, 'The previous button did not change the billboard').to.eventually.equal('Breast Patient 1 Session 1 Scan 1 Volume 1');
+                return expect(page.title, 'The previous button did not change the title').to.eventually.equal('Breast Patient 1 Session 1 Scan 1 Volume 1');
               });
             });
           });
@@ -164,9 +164,9 @@
             expect(buttons.length, 'The player buttons count is incorrect').to.equal(3);
             previous = buttons[0], play = buttons[1], next = buttons[2];
             return next.click().then(function() {
-              expect(page.billboard, 'The next button did not change the billboard').to.eventually.equal('Breast Patient 1 Session 2 Scan 1 Volume 1');
+              expect(page.title, 'The next button did not change the title').to.eventually.equal('Breast Patient 1 Session 2 Scan 1 Volume 1');
               return previous.click().then(function() {
-                return expect(page.billboard, 'The previous button did not change the billboard').to.eventually.equal('Breast Patient 1 Session 1 Scan 1 Volume 1');
+                return expect(page.title, 'The previous button did not change the title').to.eventually.equal('Breast Patient 1 Session 1 Scan 1 Volume 1');
               });
             });
           });

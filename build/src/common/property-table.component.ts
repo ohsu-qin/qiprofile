@@ -1,10 +1,11 @@
 import * as _ from 'lodash';
+import * as _s from 'underscore.string';
 import {
   Component, Input, OnInit, ChangeDetectionStrategy, ChangeDetectorRef
 } from '@angular/core';
 
 import StringHelper from '../string/string-helper.coffee';
-import ObjectHelper from '../object/object-helper.coffee';
+import ObjectHelper from '../common/object-helper.coffee';
 
 const MISSING_VALUE = 'Not Specified';
 
@@ -64,17 +65,11 @@ export class PropertyTableComponent implements OnInit {
   @Input() label: (key: string) => string;
 
   /**
-   * The display value formatting function. If there is a format
-   * function, then the property value is passed to this function
-   * to get the display value.
+   * The display value formatting function.
    *
-   * *Note*: {{#crossLink "PropertyTableComponent/format:property"}}{{/crossLink}}
-   * and {{#crossLink "PropertyTableComponent/valueChoices:property"}}{{/crossLink}}
-   * are mutually exclusive. If
-   * {{#crossLink "PropertyTableComponent/valueChoices:property"}}{{/crossLink}}
-   * is set, then this
-   * {{#crossLink "PropertyTableComponent/format:property"}}{{/crossLink}}
-   * property is ignored.
+   * See
+   * {{#crossLink "PropertyTableComponent/getDisplayValue"}}{{/crossLink}}
+   * for the `format` input property usage.
    *
    * @property format {function}
    */
@@ -83,6 +78,10 @@ export class PropertyTableComponent implements OnInit {
   /**
    * The optional value {path: {value: label}} associative object,
    * where *path* is the property select choice path.
+   *
+   * See
+   * {{#crossLink "PropertyTableComponent/getDisplayValue"}}{{/crossLink}}
+   * for the `valueChoices` input property usage.
    *
    * @property valueChoices {Object}
    */
@@ -216,6 +215,17 @@ export class PropertyTableComponent implements OnInit {
    * {{#crossLink "PropertyTableComponent/simpleKeys:property"}}{{/crossLink}}
    * key.
    *
+   * The display value is determined as follows:
+   * * If {{#crossLink "PropertyTableComponent/valueChoices:property"}}{{/crossLink}}
+   *   is set and the key/value combination is the choices lookup,
+   *   then that lookup target is the display value.
+   * * Otherwise, if the
+   *   {{#crossLink "PropertyTableComponent/format:property"}}{{/crossLink}}
+   *   function is set, then this method delegates to that function.
+   * * Otherwise, if the value is boolean, then the display value capitalizes
+   *   the boolean string value, e.g. `True`.
+   * * Otherwise, the string conversion of the value itself is displayed.
+   *
    * @method getDisplayValue
    * @param key {string} the simple key
    * @return {any} the display value
@@ -236,6 +246,7 @@ export class PropertyTableComponent implements OnInit {
    */
   children(key: string): Object[] {
     let value = this.object[key];
+
     return _.isArray(value) ? value : [value];
   }
 
@@ -267,10 +278,10 @@ export class PropertyTableComponent implements OnInit {
 
   /**
    * Returns the display value for the given
-   * {{#crossLink "PropertyTableComponent/getDisplayValue:property"}}{{/crossLink}}
+   * {{#crossLink "PropertyTableComponent/getDisplayValue"}}{{/crossLink}}
    * key and value.
    *
-   * @method getDisplayValue
+   * @method formatDisplayValue
    * @param value {any} the value to display
    * @param key {string} the simple key
    * @return {any} the display value
@@ -287,9 +298,15 @@ export class PropertyTableComponent implements OnInit {
       if (this.valueChoices) {
         let label = this.getLabel(key);
         let choices = this.valueChoices[label];
-        return _.get(choices, value) || value;
-      } else if (this.format) {
+        let choice = _.get(choices, value);
+        if (choice) {
+          return choice;
+        }
+      }
+      if (this.format) {
         return this.format(value);
+      } else if (_.isBoolean(value)) {
+        return _s.capitalize(value.toString());
       } else {
         return value;
       }

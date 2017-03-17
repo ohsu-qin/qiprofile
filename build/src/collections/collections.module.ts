@@ -7,15 +7,13 @@
  */
 
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule as NgCommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { PageModule } from '../page/page.module.ts';
 import { CollectionsComponent } from './collections.component.ts';
 import { CollectionItemComponent } from './collection-item.component.ts';
-import { CollectionItemComponent } from './collection-item.component.ts';
-import { CollectionsHelpComponent } from './help.component.ts';
-import { CollectionsHelpTextComponent } from './help-text.component.ts';
 
 const ROUTE_CONFIG: Routes = [
   {
@@ -26,11 +24,11 @@ const ROUTE_CONFIG: Routes = [
 
 @NgModule({
   imports: [
-    CommonModule, PageModule, RouterModule.forChild(ROUTE_CONFIG)
+    NgCommonModule, NgbModule, PageModule,
+    RouterModule.forChild(ROUTE_CONFIG)
   ],
   declarations: [
-    CollectionsComponent,
-    CollectionItemComponent, CollectionsHelpComponent, CollectionsHelpTextComponent
+    CollectionsComponent,  CollectionItemComponent
   ],
   exports: [CollectionsComponent]
 })

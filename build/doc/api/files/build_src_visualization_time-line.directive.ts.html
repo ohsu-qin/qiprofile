@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>build/src/visualization/time-line.directive.ts - qiprofile API</title>
+    <link rel="stylesheet" href="../assets/vendor/prettify/prettify-min.css">
+    <link rel="stylesheet" href="../assets/css/main.css" id="site_styles">
+    <script src="http://yui.yahooapis.com/combo?3.8.0pr2/build/yui/yui-min.js"></script>
+</head>
+<body class="yui3-skin-sam">
+
+<div id="doc">
+    <div class="yui3-g">
+        <div id="sidebar" class="yui3-u">
+            <div class="logo">
+              <a href="../index.html">
+                  qiprofile API
+              </a>
+            </div>
+            
+            <div id="modules" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Modules</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../modules/clinical.html">clinical</a>
+                            </li>
+                            <li><a href="../modules/collection.html">collection</a>
+                            </li>
+                            <li><a href="../modules/collections.html">collections</a>
+                            </li>
+                            <li><a href="../modules/common.html">common</a>
+                            </li>
+                            <li><a href="../modules/configuration.html">configuration</a>
+                            </li>
+                            <li><a href="../modules/controls.html">controls</a>
+                            </li>
+                            <li><a href="../modules/data.html">data</a>
+                            </li>
+                            <li><a href="../modules/date.html">date</a>
+                            </li>
+                            <li><a href="../modules/error.html">error</a>
+                            </li>
+                            <li><a href="../modules/file.html">file</a>
+                            </li>
+                            <li><a href="../modules/home.html">home</a>
+                            </li>
+                            <li><a href="../modules/image.html">image</a>
+                            </li>
+                            <li><a href="../modules/imageSequence.html">imageSequence</a>
+                            </li>
+                            <li><a href="../modules/main.html">main</a>
+                            </li>
+                            <li><a href="../modules/modeling.html">modeling</a>
+                            </li>
+                            <li><a href="../modules/object.html">object</a>
+                            </li>
+                            <li><a href="../modules/page.html">page</a>
+                            </li>
+                            <li><a href="../modules/project.html">project</a>
+                            </li>
+                            <li><a href="../modules/projects.html">projects</a>
+                            </li>
+                            <li><a href="../modules/protocol.html">protocol</a>
+                            </li>
+                            <li><a href="../modules/rest.html">rest</a>
+                            </li>
+                            <li><a href="../modules/roman.html">roman</a>
+                            </li>
+                            <li><a href="../modules/session.html">session</a>
+                            </li>
+                            <li><a href="../modules/string.html">string</a>
+                            </li>
+                            <li><a href="../modules/subject.html">subject</a>
+                            </li>
+                            <li><a href="../modules/testing.html">testing</a>
+                            </li>
+                            <li><a href="../modules/visualization.html">visualization</a>
+                            </li>
+                            <li><a href="../modules/volume.html">volume</a>
+                            </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div id="classes" class="sidebox">
+                <div class="hd">
+                    <h2 class="no-toc">Classes</h2>
+                </div>
+                <div class="bd">
+                    <ul>
+                            <li><a href="../classes/AppComponent.html">AppComponent</a></li>
+                            <li><a href="../classes/AppModule.html">AppModule</a></li>
+                            <li><a href="../classes/BooleanPipe.html">BooleanPipe</a></li>
+                            <li><a href="../classes/Breast.html">Breast</a></li>
+                            <li><a href="../classes/BreastNormalizedAssay.html">BreastNormalizedAssay</a></li>
+                            <li><a href="../classes/BreastPathology.html">BreastPathology</a></li>
+                            <li><a href="../classes/CapitalizePipe.html">CapitalizePipe</a></li>
+                            <li><a href="../classes/CascadeSelectComponent.html">CascadeSelectComponent</a></li>
+                            <li><a href="../classes/ChoicePipe.html">ChoicePipe</a></li>
+                            <li><a href="../classes/ClinicalEncounter.html">ClinicalEncounter</a></li>
+                            <li><a href="../classes/CollectionActivatedRouteStub.html">CollectionActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionComponent.html">CollectionComponent</a></li>
+                            <li><a href="../classes/CollectionComponentSpec.html">CollectionComponentSpec</a></li>
+                            <li><a href="../classes/CollectionItemComponent.html">CollectionItemComponent</a></li>
+                            <li><a href="../classes/CollectionListPage.html">CollectionListPage</a></li>
+                            <li><a href="../classes/CollectionListSpec.html">CollectionListSpec</a></li>
+                            <li><a href="../classes/CollectionModule.html">CollectionModule</a></li>
+                            <li><a href="../classes/CollectionRouterStub.html">CollectionRouterStub</a></li>
+                            <li><a href="../classes/CollectionsActivatedRouteStub.html">CollectionsActivatedRouteStub</a></li>
+                            <li><a href="../classes/CollectionsComponent.html">CollectionsComponent</a></li>
+                            <li><a href="../classes/CollectionsComponentSpec.html">CollectionsComponentSpec</a></li>
+                            <li><a href="../classes/CollectionsModule.html">CollectionsModule</a></li>
+                            <li><a href="../classes/CollectionsResource.html">CollectionsResource</a></li>
+                            <li><a href="../classes/CollectionsService.html">CollectionsService</a></li>
+                            <li><a href="../classes/CollectionsServiceStub.html">CollectionsServiceStub</a></li>
+                            <li><a href="../classes/CollectionSubectServiceStub.html">CollectionSubectServiceStub</a></li>
+                            <li><a href="../classes/Color.html">Color</a></li>
+                            <li><a href="../classes/ColorBarDirective.html">ColorBarDirective</a></li>
+                            <li><a href="../classes/CommonModule.html">CommonModule</a></li>
+                            <li><a href="../classes/ConfigurationService.html">ConfigurationService</a></li>
+                            <li><a href="../classes/ConfigurationServiceSpec.html">ConfigurationServiceSpec</a></li>
+                            <li><a href="../classes/ControlsModule.html">ControlsModule</a></li>
+                            <li><a href="../classes/CorrelationComponent.html">CorrelationComponent</a></li>
+                            <li><a href="../classes/DateHelper.html">DateHelper</a></li>
+                            <li><a href="../classes/DateHelperSpec.html">DateHelperSpec</a></li>
+                            <li><a href="../classes/Encounter.html">Encounter</a></li>
+                            <li><a href="../classes/ErrorComponent.html">ErrorComponent</a></li>
+                            <li><a href="../classes/ErrorHandler.html">ErrorHandler</a></li>
+                            <li><a href="../classes/FileService.html">FileService</a></li>
+                            <li><a href="../classes/FileServiceSpec.html">FileServiceSpec</a></li>
+                            <li><a href="../classes/Findable.html">Findable</a></li>
+                            <li><a href="../classes/FloorPipe.html">FloorPipe</a></li>
+                            <li><a href="../classes/HomeComponent.html">HomeComponent</a></li>
+                            <li><a href="../classes/IamgeSequenceService.html">IamgeSequenceService</a></li>
+                            <li><a href="../classes/Image.html">Image</a></li>
+                            <li><a href="../classes/ImageComponent.html">ImageComponent</a></li>
+                            <li><a href="../classes/ImageModule.html">ImageModule</a></li>
+                            <li><a href="../classes/ImageSequence.html">ImageSequence</a></li>
+                            <li><a href="../classes/ImageSequenceServiceSpec.html">ImageSequenceServiceSpec</a></li>
+                            <li><a href="../classes/ImageSequenceSessionServiceStub.html">ImageSequenceSessionServiceStub</a></li>
+                            <li><a href="../classes/ImageSequenceSpec.html">ImageSequenceSpec</a></li>
+                            <li><a href="../classes/ImageStore.html">ImageStore</a></li>
+                            <li><a href="../classes/LabelMap.html">LabelMap</a></li>
+                            <li><a href="../classes/Modeling.html">Modeling</a></li>
+                            <li><a href="../classes/ModelingComponent.html">ModelingComponent</a></li>
+                            <li><a href="../classes/ModelingModule.html">ModelingModule</a></li>
+                            <li><a href="../classes/ModelingProtocolComponent.html">ModelingProtocolComponent</a></li>
+                            <li><a href="../classes/ModelingResult.html">ModelingResult</a></li>
+                            <li><a href="../classes/ModelingResults.html">ModelingResults</a></li>
+                            <li><a href="../classes/ModelingSourceComponent.html">ModelingSourceComponent</a></li>
+                            <li><a href="../classes/MomentPipe.html">MomentPipe</a></li>
+                            <li><a href="../classes/ObjectHelper.html">ObjectHelper</a></li>
+                            <li><a href="../classes/Page.html">Page</a></li>
+                            <li><a href="../classes/PageComponent.html">PageComponent</a></li>
+                            <li><a href="../classes/PageModule.html">PageModule</a></li>
+                            <li><a href="../classes/PapayaService.html">PapayaService</a></li>
+                            <li><a href="../classes/ParameterResult.html">ParameterResult</a></li>
+                            <li><a href="../classes/Pathology.html">Pathology</a></li>
+                            <li><a href="../classes/PlayerComponent.html">PlayerComponent</a></li>
+                            <li><a href="../classes/ProjectItemComponent.html">ProjectItemComponent</a></li>
+                            <li><a href="../classes/ProjectListPage.html">ProjectListPage</a></li>
+                            <li><a href="../classes/ProjectListSpec.html">ProjectListSpec</a></li>
+                            <li><a href="../classes/ProjectsComponent.html">ProjectsComponent</a></li>
+                            <li><a href="../classes/ProjectsComponentSpec.html">ProjectsComponentSpec</a></li>
+                            <li><a href="../classes/ProjectsModule.html">ProjectsModule</a></li>
+                            <li><a href="../classes/ProjectsResource.html">ProjectsResource</a></li>
+                            <li><a href="../classes/ProjectsService.html">ProjectsService</a></li>
+                            <li><a href="../classes/ProjectsServiceStub.html">ProjectsServiceStub</a></li>
+                            <li><a href="../classes/PropertyTableComponent.html">PropertyTableComponent</a></li>
+                            <li><a href="../classes/ProtocolResource.html">ProtocolResource</a></li>
+                            <li><a href="../classes/ProtocolService.html">ProtocolService</a></li>
+                            <li><a href="../classes/RCB.html">RCB</a></li>
+                            <li><a href="../classes/Registration.html">Registration</a></li>
+                            <li><a href="../classes/RegistrationSpec.html">RegistrationSpec</a></li>
+                            <li><a href="../classes/REST.html">REST</a></li>
+                            <li><a href="../classes/RestResource.html">RestResource</a></li>
+                            <li><a href="../classes/RESTSpec.html">RESTSpec</a></li>
+                            <li><a href="../classes/Roman.html">Roman</a></li>
+                            <li><a href="../classes/RomanSpec.html">RomanSpec</a></li>
+                            <li><a href="../classes/Sarcoma.html">Sarcoma</a></li>
+                            <li><a href="../classes/Scan.html">Scan</a></li>
+                            <li><a href="../classes/ScanSpec.html">ScanSpec</a></li>
+                            <li><a href="../classes/ScatterPlotDirective.html">ScatterPlotDirective</a></li>
+                            <li><a href="../classes/Session.html">Session</a></li>
+                            <li><a href="../classes/SessionActivatedRouteStub.html">SessionActivatedRouteStub</a></li>
+                            <li><a href="../classes/SessionComponent.html">SessionComponent</a></li>
+                            <li><a href="../classes/SessionComponentSpec.html">SessionComponentSpec</a></li>
+                            <li><a href="../classes/SessionDetailResource.html">SessionDetailResource</a></li>
+                            <li><a href="../classes/SessionDetailResourceStub.html">SessionDetailResourceStub</a></li>
+                            <li><a href="../classes/SessiondRouterStub.html">SessiondRouterStub</a></li>
+                            <li><a href="../classes/SessionModule.html">SessionModule</a></li>
+                            <li><a href="../classes/SessionService.html">SessionService</a></li>
+                            <li><a href="../classes/SessionServiceSpec.html">SessionServiceSpec</a></li>
+                            <li><a href="../classes/SessionServiceStub.html">SessionServiceStub</a></li>
+                            <li><a href="../classes/SessionSpec.html">SessionSpec</a></li>
+                            <li><a href="../classes/SessionSubjectResourceStub.html">SessionSubjectResourceStub</a></li>
+                            <li><a href="../classes/SessionTumorExtent.html">SessionTumorExtent</a></li>
+                            <li><a href="../classes/SliderDirective.html">SliderDirective</a></li>
+                            <li><a href="../classes/SparkLineDirective.html">SparkLineDirective</a></li>
+                            <li><a href="../classes/StringHelper.html">StringHelper</a></li>
+                            <li><a href="../classes/StringHelperSpec.html">StringHelperSpec</a></li>
+                            <li><a href="../classes/Subject.html">Subject</a></li>
+                            <li><a href="../classes/SubjectActivatedRouteStub.html">SubjectActivatedRouteStub</a></li>
+                            <li><a href="../classes/SubjectChangeDetectorRefStub.html">SubjectChangeDetectorRefStub</a></li>
+                            <li><a href="../classes/SubjectComponent.html">SubjectComponent</a></li>
+                            <li><a href="../classes/SubjectComponentSpec.html">SubjectComponentSpec</a></li>
+                            <li><a href="../classes/SubjectdRouterStub.html">SubjectdRouterStub</a></li>
+                            <li><a href="../classes/SubjectModule.html">SubjectModule</a></li>
+                            <li><a href="../classes/SubjectResource.html">SubjectResource</a></li>
+                            <li><a href="../classes/SubjectResourceStub.html">SubjectResourceStub</a></li>
+                            <li><a href="../classes/SubjectService.html">SubjectService</a></li>
+                            <li><a href="../classes/SubjectServiceSpec.html">SubjectServiceSpec</a></li>
+                            <li><a href="../classes/SubjectServiceStub.html">SubjectServiceStub</a></li>
+                            <li><a href="../classes/SubjectSpec.html">SubjectSpec</a></li>
+                            <li><a href="../classes/Symbol.html">Symbol</a></li>
+                            <li><a href="../classes/Table.html">Table</a></li>
+                            <li><a href="../classes/TimeLineDirective.html">TimeLineDirective</a></li>
+                            <li><a href="../classes/TimeSeries.html">TimeSeries</a></li>
+                            <li><a href="../classes/TNM.html">TNM</a></li>
+                            <li><a href="../classes/Treatment.html">Treatment</a></li>
+                            <li><a href="../classes/UnderscorePipe.html">UnderscorePipe</a></li>
+                            <li><a href="../classes/UnspecifiedPipe.html">UnspecifiedPipe</a></li>
+                            <li><a href="../classes/VisualizationModule.html">VisualizationModule</a></li>
+                            <li><a href="../classes/Volume.html">Volume</a></li>
+                            <li><a href="../classes/VolumeComponent.html">VolumeComponent</a></li>
+                            <li><a href="../classes/VolumeDetailPage.html">VolumeDetailPage</a></li>
+                            <li><a href="../classes/VolumeImageSequenceServiceStub.html">VolumeImageSequenceServiceStub</a></li>
+                            <li><a href="../classes/VolumeModule.html">VolumeModule</a></li>
+                            <li><a href="../classes/VolumeService.html">VolumeService</a></li>
+                            <li><a href="../classes/VolumeServiceSpec.html">VolumeServiceSpec</a></li>
+                            <li><a href="../classes/VolumeSpec.html">VolumeSpec</a></li>
+                            <li><a href="../classes/XNAT.html">XNAT</a></li>
+                            <li><a href="../classes/XNATSpec.html">XNATSpec</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            
+            
+            
+            
+            <div class="version-info">
+              Version: 2.1.1
+            </div>
+            
+        </div>
+
+        <div id="main" class="yui3-u">
+            <div class="content"><div class="title">
+  <h1 class="file-name">build/src/visualization/time-line.directive.ts</h1>
+</div>
+
+<pre class="code prettyprint linenums">
+import * as _ from &#x27;lodash&#x27;;
+import * as _s from &#x27;underscore.string&#x27;;
+import * as d3 from &#x27;d3&#x27;;
+import { Directive, Input, ElementRef, OnInit, DoCheck } from &#x27;@angular/core&#x27;;
+
+import StringHelper from &#x27;../string/string-helper.coffee&#x27;;
+import DateHelper from &#x27;../common/date-helper.coffee&#x27;;
+import * as math from &#x27;../math/math.ts&#x27;;
+
+/**
+ * The default representation of a time line point is the HTML
+ * nabla special character (the wedge-like math del operator).
+ *
+ * @property WEDGE {string}
+ * @static
+ */
+const WEDGE = &#x27;\u2207&#x27;;
+
+/**
+ * Roughly the height and width of a capitalized character.
+ *
+ * @property CHAR_SIZE {number}
+ * @private
+ * @static
+ */
+private const CHAR_SIZE = 12;
+
+/**
+ *  A small spacing pad.
+ *
+ * @property PAD {number}
+ * @private
+ * @static
+ */
+private const PAD = 2;
+
+/**
+ * The plot horizontal offset is five characters in order
+ * to avoid truncating the leftmost and rightmost axis
+ * 10-character date labels centered on the minimum and
+ * maximum X coordinate, resp.
+ *
+ * The plot vertical offset is half a character.
+ *
+ * @property MARGIN {Object0}
+ * @private
+ * @static
+ */
+private const MARGIN = {top: 6, left: 30, bottom: 6, right: 30};
+
+@Directive({selector: &#x27;[qiTimeLine]&#x27;})
+
+/**
+ * Draws a horizontal D3 line which plots event data by time.
+ * The events are heterogenous date-valued data series. Each
+ * data series is plotted with a different symbol on the line.
+ *
+ * @example
+ *     &lt;qi-timeline [data]=&quot;{hurricane: hurricanes, tornado: tornadoes}&quot;
+ *     &lt;qi-timeline [value]=&quot;{hurricane: &#x27;start&#x27;, tornado: &#x27;date&#x27;}&quot;
+ *
+ * @class TimeLineDirective
+ */
+export class TimeLineDirective implements DoCheck, OnInit {
+  /**
+   * The required data specification.
+   *
+   * The specification for a homogeneous data time line is
+   * a data object array.
+   *
+   * The specification for a heterogeneous data time line is a
+   * {_key_: data object array} object with a property for
+   * each data type _key_.
+   *
+   * @property data {Object[]|Object}
+   */
+  @Input() data: Object[] | Object;
+
+  /**
+   * The optional value access specification.
+   *
+   * The specification for a homogeneous data time line is a date
+   * property name or path.
+   *
+   * The specification for a heterogeneous data time line is a
+   * {_key_: property} object with a property for each
+   * {{#crossLink &quot;TimeLineDirective/data:property&quot;}}{{/crossLink}}
+   * _key_.
+   *
+   * The default accessor is the identity function.
+   *
+   * @property value {string|Object}
+   */
+  @Input() value: string | Object;
+
+  /**
+   * The optional inner text specification.
+   *
+   * The specification for a homogeneous data time line is a string
+   * or a datum =&gt; string function.
+   *
+   * The specification for a heterogeneous data time line is a
+   * {_key_: string|function} object with a property for each
+   * {{#crossLink &quot;TimeLineDirective/data:property&quot;}}{{/crossLink}}
+   * _key_. The default text is a
+   * {{#crossLink &quot;TimeLineDirective/WEDGE:property&quot;}}{{/crossLink}}.
+   *
+   * @property text {any}
+   */
+  @Input() text: any;
+
+  /**
+   * The required data class specification.
+   *
+   * The data class specification for a homogeneous data time
+   * line is a string or a datum =&gt; string function.
+   *
+   * The data class specification for a heterogeneous data time
+   * line is a {_key_: string|function} object with property for each
+   * {{#crossLink &quot;TimeLineDirective/data:property&quot;}}{{/crossLink}}
+   * _key_.
+   *
+   * The CSS class is the lower-case dash-separated conversion
+   * of the data class, e.g. &#x60;turbo-prop&#x60; for data class
+   * &#x60;TurboProp&#x60;.
+   *
+   * @property class {any}
+   */
+  @Input() class: any;
+
+  /**
+   * The optional point data legend {_dataClass_: {label, name}}
+   * specification.
+   *
+   * If the legend is specified, then it is drawn with one line per
+   * {{#crossLink &quot;TimeLineDirective/class:property&quot;}}{{/crossLink}}
+   * data class. Each legend line consists of a data class
+   * label followed by a name. The legend line is styled by the
+   * corresponding CSS class.
+   *
+   * The input legend specifies information for both point and span
+   * data classes. There is one legend line per input legend point
+   * specification. The legend point *label* is required. The legend
+   * point *name* is optional, with default the labelized data class
+   * name as specified in
+   * {{#crossLink &quot;StringHelper/labelized&quot;}}{{/crossLink}},
+   * e.g. &#x60;Turbo Prop&#x60;* for data class &#x60;TurboProp&#x60;.
+   *
+   * The span legend &quot;label&quot; is always a small bar, distinguished by
+   * the span CSS class fill color. As with the input legend point,
+   * the input legend span name is optional, with default the labelized
+   * data class name.
+   *
+   * If the input legend property value is &#x60;false&#x60;, then no legend is
+   * drawn. Otherwise, the input legend must be a
+   * {_dataClass_: {label, name}} object as specified above. In that
+   * case, there is one legend line per point data class in the
+   * input legend and one legend line per span data class. Note that
+   * only the points in the legend input are drawn in a legend line,
+   * but every span legend line is drawn.
+   *
+   * @property legend {boolean|Object}
+   */
+  @Input() legend: boolean | Object;
+
+  /**
+   * The line width.
+   *
+   * @property width {number}
+   */
+  @Input() width: number;
+
+  /**
+   * The optional tick display flag (default true).
+   *
+   * If set to &#x60;false&#x60;, then the axis line is displayed without tick
+   * marks or values. Otherwise, the earliest and latest tick marks
+   * are displayed.
+   *
+   * @property ticks {boolean}
+   */
+  @Input() ticks = true;
+
+  /**
+   * The D3 SVG root group element.
+   *
+   * @property svg {d3.Selection&lt;any&gt;}
+   * @private
+   */
+  private svg: d3.Selection&lt;any&gt;;
+
+  /**
+   * The previous
+   * {{#crossLink &quot;TimeLineDirective/data:property&quot;}}{{/crossLink}}
+   * value.
+   *
+   * @property previousData {Object}
+   * @private
+   */
+  private previousData: Object;
+
+  /**
+   * The previous
+   * {{#crossLink &quot;TimeLineDirective/width:property&quot;}}{{/crossLink}}
+   * value.
+   *
+   * @property previousWidth {number}
+   * @private
+   */
+  private previousWidth: number;
+
+  constructor(private elementRef: ElementRef) {
+  }
+
+  /**
+   * Makes the D3 SVG root group element and draws the line.
+   */
+  ngOnInit() {
+    // The root SVG group element. The height is computed
+    // after the inputs are bound.
+    this.svg = d3.select(this.elementRef.nativeElement)
+      .append(&#x27;svg&#x27;)
+      .attr(&#x27;class&#x27;, &#x27;time-line&#x27;)
+      .attr(&#x27;width&#x27;, this.width);
+  }
+
+  /**
+   * If the
+   * {{#crossLink &quot;TimeLineDirective/data:property&quot;}}{{/crossLink}}
+   * or
+   * {{#crossLink &quot;TimeLineDirective/width:property&quot;}}{{/crossLink}}
+   * changed, then redraw the time line.
+   *
+   * _Note_: the other inputs are for initialization only, and changes
+   * to those properties are ignored.
+   */
+  ngDoCheck() {
+    // Convert the data to an object if necessary.
+    let currentData = _.isArray(this.data) ? {default: this.data} : this.data;
+    // If there is current data, then check whether either the
+    // data or the width has changed.
+    if (currentData &amp;&amp; !_.every(currentData, _.isEmpty)) {
+      // If the width or some data has changed, then redraw.
+      let isDatumChanged = (data, key) =&gt; data !== this.previousData[key];
+      let isDataChanged = !this.previousData || _.some(currentData, isDatumChanged);
+      let isWidthChanged = !this.previousWidth || this.width !== this.previousWidth;
+      if (isDataChanged || isWidthChanged) {
+        this.draw();
+      }
+      // Capture the current data.
+      this.previousData = _.clone(currentData);
+      // Capture the current width.
+      this.previousWidth = this.width;
+    }
+  }
+
+  /**
+   * Draws the time line.
+   */
+  private draw() {
+    // Remove the existing viewport, if any.
+    this.svg.select(&#x27;g&#x27;).remove();
+
+    //** Data prep **//
+
+    // Convert a simple data array to a {default: data} object.
+    let dataSpecs =
+      _.isArray(this.data) ? {default: this.data} : this.data;
+
+    // Data spec reference validator.
+    let isMissingData = key =&gt; !dataSpecs[key];
+    // Validate the value input property.
+    if (_.isPlainObject(this.value)) {
+      let missingData = _.find(_.keys(this.value), isMissingData);
+      if (missingData) {
+        throw new Error(&#x27;The time line data property is missing for&#x27; +
+                        &#x60; the value property ${ missingData }&#x60;);
+      }
+    }
+    // Validate the class input property.
+    if (_.isPlainObject(this.class)) {
+      let missingData = _.find(_.keys(this.class), isMissingData);
+      if (missingData) {
+        throw new Error(&#x27;The time line data property is missing for&#x27; +
+                        &#x60; the class property ${ missingData }&#x60;);
+      }
+      let isMissingClass = key =&gt; !this.class[key];
+      let missingClass = _.find(_.keys(this.data), isMissingClass);
+      if (missingClass) {
+        throw new Error(&#x27;The time line class property is missing for&#x27; +
+                        &#x60; the data property ${ missingClass }&#x60;);
+      }
+    } else if (_size(dataSpecs) &gt; 1) {
+      throw new Error(&#x27;The time line class property is missing for&#x27; +
+                      &#x27; the heterogenous data time line&#x27;);
+    }
+
+    // Correlate the data and value inputs.
+    // Delegate to the value property getter, if defined,
+    // otherwise default to the input data object itself.
+    // The value might be a moment, which will need to
+    // be converted to a JavaScript date.
+    // For a span, the default start and end date is today.
+    let spanDate = v =&gt; v || DateHelper.TODAY;
+    let convertSpanDate = _.flow(spanDate, DateHelper.toDate);
+    let convertSpan = span =&gt; span.map(convertSpanDate);
+    let convert = v =&gt; _.isArray(v) ? convertSpan(v) : DateHelper.toDate(v);
+    let valueFor = key =&gt; {
+      let base = _.isPlainObject(this.value) ? this.value[key] : this.value;
+      if (base) {
+        let getter = _.isFunction(base) ? base : d =&gt; _.get(d, base);
+        return _.flow(getter, convert);
+      } else {
+        return DateHelper.toDate;
+      }
+    };
+    let combine = (data, key) =&gt; {
+      return {data: data, value: valueFor(key)};
+    };
+    let allSpecs = _.mapValues(dataSpecs, combine);
+    // Partition into points and spans.
+    let firstValue = spec =&gt; {
+      for (let d of spec.data) {
+        let v = spec.value(d);
+        if (v) {
+          return v;
+        }
+      }
+    };
+    let isSpan = _.flow(firstValue, _.isArray);
+    let spanSpecs = _.pickBy(allSpecs, isSpan);
+    let pointSpecs = _.omit(allSpecs, _.keys(spanSpecs));
+
+    // Makes the data class function for the given
+    // data specification key.
+    let dataClassFor = key =&gt; {
+      if (this.class) {
+        let base;
+        if (_.isPlainObject(this.class)) {
+          base = this.class[key];
+        } else {
+          base = this.class;
+        }
+        return _.isFunction(base) ? base : d =&gt; _.get(d, base);
+      }
+    };
+    // The CSS classes include the type and the key CSS class.
+    let join = _.partial(_s.join, &#x27; &#x27;);
+    // Makes the data class =&gt; CSS classes function
+    // for the given point or span type.
+    let toCssClassesFunction = type =&gt; {
+      // Joins the type and data CSS classes.
+      let joiner = _.partial(join, type);
+      // Return the CSS class function.
+      return _.flow(StringHelper.dasherize, joiner);
+    };
+    let cssClassesFor = (type, dataClass) =&gt; {
+      return _.flow(dataClass, toCssClassesFunction(type));
+    };
+    // type is &#x27;point&#x27; or &#x27;bar&#x27;.
+    // spec is an allSpecs member.
+    // key is the this.data and allSpecs key.
+    let setClassesFor = (type, spec, key) =&gt; {
+      // The data class function.
+      let dataClass = dataClassFor(key);
+      if (dataClass) {
+        spec.dataClass = dataClassFor(key);
+        spec.cssClass = cssClassesFor(type, spec.dataClass);
+      }
+    };
+    let setPointClasses = _.partial(setClassesFor, &#x27;point&#x27;);
+    _.forEach(pointSpecs, setPointClasses);
+    let setSpanClasses = _.partial(setClassesFor, &#x27;bar&#x27;);
+    _.forEach(spanSpecs, setSpanClasses);
+
+    // Build the legend items.
+    let legendHeight;
+    let pointLegends;
+    let spanLegends;
+    if (this.legend === false) {
+      legendHeight = 0;
+    } else {
+      let flatten = _.flow(_.flatMap, _.sortBy, _.sortedUniq);
+      let classesFor = spec =&gt; _.map(spec.data, spec.dataClass);
+      let spanClasses = flatten(spanSpecs, classesFor);
+      let legendFor = dataClass =&gt;
+        _.merge({dataClass: dataClass}, this.legend[dataClass]);
+      spanLegends = spanClasses.map(legendFor);
+      let legendClasses = _.keys(this.legend);
+      let pointClasses = _.difference(legendClasses, spanClasses).sort();
+      pointLegends = pointClasses.map(legendFor);
+
+      // The legend lines count.
+      let legendCnt = pointLegends.length + spanLegends.length;
+      legendHeight = legendCnt * (CHAR_SIZE + PAD);
+    }
+
+    // The domain input includes the data and the spans.
+    let toValues = spec =&gt; spec.data.map(spec.value);
+    let allValues = _.flow(_.map, _.flattenDeep)(allSpecs, toValues);
+    // The common [min, max] domain.
+    let domain = math.bounds(allValues);
+
+    // The date scale is offset by margins to the left and right.
+    // Logically, the range should be shrunk by the same
+    // margin on both sides. However, that setting trunctates
+    // the right tick value. Doubling the right margin works,
+    // although it is unknown why that is necessary.
+    let scale = d3.scaleTime()
+      .domain(domain)
+      .range([MARGIN.left, this.width - (MARGIN.left + MARGIN.right)]);
+
+    // Add the point X coordinate functions.
+    let addXForPoint = spec =&gt; {
+      spec.x = _.flow(spec.value, scale);
+    };
+    _.forEach(pointSpecs, addXForPoint);
+
+    // Add the text functions.
+    let addTextForPoint = (spec, key) =&gt; {
+      if (_.isFunction(this.text)) {
+        spec.text = this.text;
+      } else {
+        spec.text = this.text[key] || WEDGE;
+      }
+    };
+    _.forEach(pointSpecs, addTextForPoint);
+
+    // Add the span bar X coordinate and width functions.
+    let extendSpanSpec = spec =&gt; {
+      spec.x = _.flow(spec.value, _.first, scale);
+      let scaleSpan = span =&gt; span.map(scale);
+      // If the span start and end are the same, then the
+      // span is made long enough to show up as a narrow
+      // bar.
+      let spanWidth = span =&gt; Math.max(8, span[1] - span[0]);
+      spec.width = _.flow(spec.value, scaleSpan, spanWidth);
+    };
+    _.forEach(spanSpecs, extendSpanSpec);
+
+    //** Plot **//
+
+    // The plot accomodates the legend, if necessary.
+    let plotOffset = legendHeight ? legendHeight + CHAR_SIZE : 0;
+    // The bottom of the plot.
+    let pointsHeight = _.isEmpty(pointSpecs) ? 0 : CHAR_SIZE;
+    let pointsBottom = plotOffset + pointsHeight;
+
+    // The axis tick marks extend past any span bar.
+    const axisTickSize = CHAR_SIZE + PAD;
+    // The axis bottom, including the axis tick marks.
+    let axisBottom = pointsBottom + CHAR_SIZE + PAD;
+    if (this.ticks) {
+      axisBottom += axisTickSize;
+    }
+
+    // Compute the viewport height.
+    let height = MARGIN.top + axisBottom + MARGIN.bottom;
+    this.svg.attr(&#x27;height&#x27;, height);
+
+    // Scooch the draw region viewport down for the margin.
+    let viewport = this.svg.append(&#x27;g&#x27;)
+      .attr(&#x27;transform&#x27;, &#x60;translate(0,${ MARGIN.top })&#x60;);
+
+    // The plot parent.
+    let plot = viewport.append(&#x27;g&#x27;)
+      .attr(&#x27;class&#x27;, &#x27;plot&#x27;);
+
+    //** Points **//
+
+    // &#x60;this&#x60; is bound to the series DOM element
+    // (cf. \https://github.com/d3/d3-selection/blob/master/README.md#control-flow).
+    let drawPointSeries = function (series) {
+      let spec = pointSpecs[series];
+      d3.select(this)
+        .selectAll(&#x27;.point&#x27;)
+        .data(spec.data)
+        .enter().append(&#x27;text&#x27;)
+          .attr(&#x27;class&#x27;, spec.cssClass)
+          .attr(&#x27;x&#x27;, spec.x)
+          .attr(&#x27;y&#x27;, 0)
+          .text(spec.text);
+    };
+
+    // Push the plot down for the legend, if necessary.
+    if (plotOffset) {
+      plot.attr(&#x27;transform&#x27;, &#x60;translate(0,${ plotOffset })&#x60;);
+    }
+
+    // Draw the time line points. The points are placed directly
+    // above the axis.
+    plot.append(&#x27;g&#x27;)
+      .attr(&#x27;class&#x27;, &#x27;points&#x27;)
+      .attr(&#x27;transform&#x27;, &#x60;translate(0,${ CHAR_SIZE })&#x60;)
+      .selectAll(&#x27;.series&#x27;)
+      .data(_.keys(pointSpecs))
+      .enter().append(&#x27;g&#x27;)
+        .attr(&#x27;class&#x27;, series =&gt; &#x60;points series ${ series }&#x60;)
+        .each(drawPointSeries);
+
+    // ** Spans **//
+
+    // Draws the span for the given data series.
+    let drawSpanSeries = function (series) {
+      let spec = spanSpecs[series];
+      d3.select(this)
+        .selectAll(&#x27;.bar&#x27;)
+        .data(spec.data)
+        .enter().append(&#x27;rect&#x27;)
+          .attr(&#x27;class&#x27;, spec.cssClass)
+          .attr(&#x27;width&#x27;, spec.width)
+          .attr(&#x27;height&#x27;, CHAR_SIZE)
+          .attr(&#x27;x&#x27;, spec.x)
+          .attr(&#x27;y&#x27;, 0);
+    };
+
+    // Draw the time line spans. The spans are placed directly
+    // under the axis.
+    plot.append(&#x27;g&#x27;)
+      .attr(&#x27;class&#x27;, &#x27;spans&#x27;)
+      .attr(&#x27;transform&#x27;, &#x60;translate(0,${ CHAR_SIZE })&#x60;)
+      .selectAll(&#x27;.series&#x27;)
+      .data(_.keys(spanSpecs))
+      .enter().append(&#x27;g&#x27;)
+        .attr(&#x27;class&#x27;, series =&gt; &#x60;spans series ${ series }&#x60;)
+        .each(drawSpanSeries);
+
+    //** Axis **//
+
+    // The axis.
+    let axis = d3.axisBottom(scale);
+    // There is always an axis, but ticks can be optionally
+    // suppressed.
+    if (this.ticks) {
+      axis.tickSize(axisTickSize)
+        // Date ticks are formatted as mm/dd/yyyy.
+        .tickFormat(d3.timeFormat(&#x27;%m/%d/%Y&#x27;))
+        // The bounds axis only adds tick marks at the
+        // start and end of the time line.
+        .tickValues(domain);
+    } else {
+      axis.tickValues([]);
+    }
+    // Draw the axis.
+    viewport.append(&#x27;g&#x27;)
+      .attr(&#x27;class&#x27;, &#x27;axis x&#x27;)
+      // Place the axis below the time line points.
+      .attr(&#x27;transform&#x27;, &#x60;translate(0,${ pointsBottom })&#x60;)
+      .call(axis);
+
+    // ** Legend **//
+
+    if (this.legend !== false) {
+      // The legend label function.
+      let label = legend =&gt; legend.label;
+
+      // The legend name function.
+      let name = legend =&gt;
+        legend.name || StringHelper.labelize(legend.dataClass);
+
+      // The legend name + label character length. Span legends
+      // don&#x27;t have a label property but have a one-character
+      // bar instead.
+      let legendLength = legend =&gt;
+        _.get(legend, &#x27;label.length&#x27;, 1) + name(legend).length;
+      // The span and point legends.
+      let allLegends = pointLegends.concat(spanLegends);
+      // The legend lengths.
+      let lengths = allLegends.map(legendLength);
+      // The maximum legend character length.
+      let maxLegendLength = _.max(lengths);
+
+      // The legend CSS class function.
+      let cssClass = legend =&gt;
+        StringHelper.dasherize(legend.dataClass);
+
+      // Draws the point legend label.
+      let drawLabel = function (legend) {
+        return d3.select(this)
+          .append(&#x27;text&#x27;)
+          .attr(&#x27;text-anchor&#x27;, &#x27;end&#x27;)
+          .attr(&#x27;x&#x27;, 0)
+          .attr(&#x27;y&#x27;, 0)
+          .text(label);
+      };
+
+      // Draws the small span legend bar.
+      let drawBar = function (legend) {
+        return d3.select(this)
+          .append(&#x27;rect&#x27;)
+          .attr(&#x27;height&#x27;, CHAR_SIZE)
+          .attr(&#x27;width&#x27;, CHAR_SIZE)
+          // Align the end of the bar to the start of the name.
+          .attr(&#x27;x&#x27;, -CHAR_SIZE)
+          // Since the text is drawn above the baseline,
+          // whereas the rectangle is drawn below the baseline,
+          // push the bar up to align with the text by setting
+          // the y value to a negative offset (ain&#x27;t SVG fun?!).
+          .attr(&#x27;y&#x27;, -CHAR_SIZE);
+      };
+
+      // Draws the legend name.
+      let drawName = function (legend) {
+        return d3.select(this)
+          .append(&#x27;text&#x27;)
+          .attr(&#x27;text-anchor&#x27;, &#x27;start&#x27;)
+          // Add a small separator from the label.
+          .attr(&#x27;x&#x27;, PAD)
+          .attr(&#x27;y&#x27;, 0)
+          .text(name);
+      };
+
+      // The legend is embedded in a local viewport placed in the
+      // right of the viewport, allowing for the legend label, name
+      // separator and a one-character right margin. This formula
+      // over-determines the width, since the non-fixed font is
+      // at most one fixed character wide but often less. However,
+      // it is o.k. if the legend aligns a little more to the
+      // center.
+      let legendWidth = ((maxLegendLength + 1) * CHAR_SIZE) + PAD;
+
+      // preserveAspectRatio below and many variations don&#x27;t work--
+      // the legend is always drawn in the upper left. Work-around
+      // is to fix a text axis to the right.
+      // let legend = viewport.append(&#x27;svg&#x27;)
+      //   .attr(&#x27;class&#x27;, &#x27;legend&#x27;)
+      //   .attr(&#x27;width&#x27;, legendWidth)
+      //   .attr(&#x27;height&#x27;, legendHeight)
+      //   .attr(&#x27;viewBox&#x27;, &#x60;0 0 ${ legendWidth } ${ legendHeight }&#x60;)
+      //   // Align the legend to the upper right corner of the
+      //   // time line viewport and add a one-character vertical
+      //   // margin.
+      //   .attr(&#x27;preserveAspectRatio&#x27;, &#x27;xMaxYMin meet&#x27;)
+      //   .append(&#x27;g&#x27;)
+      //     .attr(&#x27;transform&#x27;, &#x60;translate(0,${ CHAR_SIZE })&#x60;);
+
+      // Push the legend to the right.
+      let legendXOffset = Math.max(0, this.width - legendWidth);
+      // The legend container element.
+      let legend = viewport.append(&#x27;g&#x27;)
+        .attr(&#x27;class&#x27;, &#x27;legend&#x27;)
+        .attr(&#x27;transform&#x27;, &#x60;translate(${ legendXOffset },${ CHAR_SIZE })&#x60;);
+
+      // Each legend item is placed under the previous item, if any.
+      let transform = (d, i) =&gt; {
+        let offset = i * (CHAR_SIZE + PAD);
+        return &#x60;translate(0,${ offset })&#x60;;
+      };
+
+      // Draw the point legends.
+      legend.append(&#x27;g&#x27;)
+        .attr(&#x27;class&#x27;, &#x27;points&#x27;)
+        .selectAll(&#x27;.point&#x27;)
+        .data(pointLegends)
+        .enter().append(&#x27;g&#x27;)
+          .attr(&#x27;class&#x27;, d =&gt; &#x60;point ${ cssClass(d) }&#x60;)
+          .attr(&#x27;transform&#x27;, transform)
+          .each(drawLabel)
+          .each(drawName);
+
+      // The span legends follow the point legends.
+      let spansOffset = pointLegends.length * (CHAR_SIZE + PAD);
+      // Draw the span legends.
+      legend.append(&#x27;g&#x27;)
+        .attr(&#x27;class&#x27;, &#x27;bars&#x27;)
+        .attr(&#x27;transform&#x27;, &#x60;translate(0,${ spansOffset })&#x60;)
+        .selectAll(&#x27;.bar&#x27;)
+        .data(spanLegends)
+        .enter().append(&#x27;g&#x27;)
+          .attr(&#x27;class&#x27;, d =&gt; &#x60;bar ${ cssClass(d) }&#x60;)
+          .attr(&#x27;transform&#x27;, transform)
+          .each(drawBar)
+          .each(drawName);
+    }
+  }
+}
+
+</pre>
+
+</div>
+        </div>
+    </div>
+</div>
+<script src="../assets/vendor/prettify/prettify-min.js"></script>
+<script>prettyPrint();</script>
+<script src="../assets/js/yui-prettify.js"></script>
+</body>
+</html>

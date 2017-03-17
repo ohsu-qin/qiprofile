@@ -7,11 +7,14 @@
  */
 
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule as NgCommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { PageModule } from '../page/page.module.ts';
-import { VisualizationModule } from '../visualization/visualization.module.ts';
+import {
+  VisualizationModule
+} from '../visualization/visualization.module.ts';
 import { CollectionComponent } from './collection.component.ts';
 
 const ROUTE_CONFIG: Routes = [
@@ -23,8 +26,8 @@ const ROUTE_CONFIG: Routes = [
 
 @NgModule({
   imports: [
-    CommonModule, PageModule, RouterModule.forChild(ROUTE_CONFIG),
-    VisualizationModule
+    NgCommonModule, NgbModule, PageModule, VisualizationModule,
+    RouterModule.forChild(ROUTE_CONFIG)
   ],
   declarations: [CollectionComponent],
   exports: [CollectionComponent]

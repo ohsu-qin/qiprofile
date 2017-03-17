@@ -91,8 +91,8 @@
       return expect(page.content, 'The page was not loaded').to.eventually.exist;
     });
     describe('Header', function() {
-      it('should display the billboard', function() {
-        return expect(page.billboard, 'The billboard is incorrect').to.eventually.equal('QIN_Test Collections');
+      it('should display the title', function() {
+        return expect(page.title, 'The title is incorrect').to.eventually.equal('QIN_Test Collections');
       });
       it('should have a home button', function() {
         return expect(page.home, 'The home URL is incorrect').to.eventually.match(Page.HOME_URL_PAT);

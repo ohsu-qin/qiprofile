@@ -2,18 +2,16 @@ import * as _ from 'lodash';
 import * as d3 from 'd3';
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
-import ObjectHelper from '../object/object-helper.coffee';
+import ObjectHelper from '../common/object-helper.coffee';
 import {
   ConfigurationService
 } from '../configuration/configuration.service.ts';
 import { PageComponent } from '../page/page.component.ts';
 import { SubjectService } from '../subject/subject.service.ts';
-import help from './collection.help.md';
 
-// The D3 v4 symbols
-// (cf. https://github.com/d3/d3-shape/blob/master/README.md#symbols).
-// The symbols are sorted by inverse preference.
+// TODO - replace with symbolize.
 const SYMBOL_TYPES = [
   d3.symbolCircle, d3.symbolDiamond, d3.symbolStar, d3.symbolTriangle,
   d3.symbolSquare, d3.symbolCross, d3.symbolWye
@@ -100,7 +98,7 @@ export class CollectionComponent extends PageComponent {
     // Wrap the private function in this fat arrow function
     // to ensure that `this` binds correctly.
     this._onSessionsChartAxis(property, axis);
-  };
+  }
 
   /**
    * The correlation chart height apportions the remainder
@@ -183,12 +181,12 @@ export class CollectionComponent extends PageComponent {
 
   constructor(
     // private elementRef: ElementRef,
-    private router: Router,
-    private route: ActivatedRoute,
-    private subjectService: SubjectService,
+    private router: Router, private route: ActivatedRoute,
+    modalService: NgbModal, private subjectService: SubjectService,
     private configService: ConfigurationService
   ) {
-    super(help);
+    super(modalService);
+
     // The project and collection name are displayed in the banner.
     let params = route.params.value;
     this.project = params.project;

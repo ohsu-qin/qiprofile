@@ -7,14 +7,13 @@
  */
 
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule as NgCommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
 import { PageModule } from '../page/page.module.ts';
 import { ProjectsComponent } from './projects.component.ts';
 import { ProjectItemComponent } from './project-item.component.ts';
-import { ProjectsHelpComponent } from './help.component.ts';
-import { ProjectsHelpTextComponent } from './help-text.component.ts';
 
 const ROUTE_CONFIG: Routes = [
   {
@@ -24,10 +23,12 @@ const ROUTE_CONFIG: Routes = [
 ];
 
 @NgModule({
-  imports: [CommonModule, PageModule, RouterModule.forChild(ROUTE_CONFIG)],
+  imports: [
+    NgCommonModule, NgbModule, PageModule,
+    RouterModule.forChild(ROUTE_CONFIG)
+  ],
   declarations: [
-    ProjectsComponent, ProjectItemComponent,
-    ProjectsHelpComponent, ProjectsHelpTextComponent
+    ProjectsComponent, ProjectItemComponent
   ],
   exports: [ProjectsComponent]
 })

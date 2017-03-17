@@ -1,6 +1,6 @@
 (function() {
   import * as _ from "lodash";
-  import ObjectHelper from "../object/object-helper.coffee";
+  import ObjectHelper from "../common/object-helper.coffee";
   var Breast, RCB, STAGES, _rcbClass, _rcbIndex, _recurrenceScore;
 
   STAGES = [['1A', '2A', '3A', '3C'], ['1A', '2A', '3A', '3C'], ['2A', '2B', '3A', '3C'], ['2B', '3A', '3A', '3C'], ['3B', '3B', '3B', '3C']];

@@ -1,7 +1,7 @@
 (function() {
   import * as _ from "lodash";
   import * as _s from "underscore.string";
-  import ObjectHelper from "../object/object-helper.coffee";
+  import ObjectHelper from "../common/object-helper.coffee";
 
   /**
    * @method associate

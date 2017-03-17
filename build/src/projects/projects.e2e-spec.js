@@ -89,8 +89,8 @@
       return expect(page.content, 'The page was not loaded').to.eventually.exist;
     });
     describe('Header', function() {
-      it('should display the billboard', function() {
-        return expect(page.billboard, 'The billboard is incorrect').to.eventually.equal('Projects');
+      it('should display the title', function() {
+        return expect(page.title, 'The title is incorrect').to.eventually.equal('Projects');
       });
       it('should have a home button', function() {
         return expect(page.home, 'The home URL is incorrect').to.eventually.match(page.url_pattern());

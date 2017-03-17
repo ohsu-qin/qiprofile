@@ -7,11 +7,10 @@
 import * as _ from 'lodash';
 import { Observable } from 'rxjs';
 import { Component } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { PageComponent } from '../page/page.component.ts';
 import { ProjectsService } from './projects.service.ts';
-import { HelpService } from '../help/help.service.ts';
-import help from './projects.help.md';
 
 @Component({
   selector: 'qi-projects',
@@ -40,11 +39,10 @@ export class ProjectsComponent extends PageComponent {
    */
   isEmpty: boolean;
 
-  constructor(private dataService: ProjectsService,
-              private helpService: HelpService) {
-      super(help);
-      // Always show the help on this page.
-      this.helpService.showHelp = true;
+  constructor(
+    private dataService: ProjectsService, modalService: NgbModal
+  ) {
+      super(modalService);
       // The unsorted project objects.
       let unsorted: Observable = this.dataService.getProjects();
       // A function to sort the projects by name.

@@ -3,10 +3,13 @@ YUI.add("yuidoc-meta", function(Y) {
     "classes": [
         "AppComponent",
         "AppModule",
+        "BooleanPipe",
         "Breast",
         "BreastNormalizedAssay",
         "BreastPathology",
+        "CapitalizePipe",
         "CascadeSelectComponent",
+        "ChoicePipe",
         "ClinicalEncounter",
         "CollectionActivatedRouteStub",
         "CollectionComponent",
@@ -20,13 +23,11 @@ YUI.add("yuidoc-meta", function(Y) {
         "CollectionsActivatedRouteStub",
         "CollectionsComponent",
         "CollectionsComponentSpec",
-        "CollectionsHelpComponent",
-        "CollectionsHelpServiceStub",
-        "CollectionsHelpTextComponent",
         "CollectionsModule",
         "CollectionsResource",
         "CollectionsService",
         "CollectionsServiceStub",
+        "Color",
         "ColorBarDirective",
         "CommonModule",
         "ConfigurationService",
@@ -37,11 +38,11 @@ YUI.add("yuidoc-meta", function(Y) {
         "DateHelperSpec",
         "Encounter",
         "ErrorComponent",
+        "ErrorHandler",
         "FileService",
         "FileServiceSpec",
         "Findable",
-        "HelpComponent",
-        "HelpService",
+        "FloorPipe",
         "HomeComponent",
         "IamgeSequenceService",
         "Image",
@@ -54,8 +55,13 @@ YUI.add("yuidoc-meta", function(Y) {
         "ImageStore",
         "LabelMap",
         "Modeling",
+        "ModelingComponent",
+        "ModelingModule",
+        "ModelingProtocolComponent",
         "ModelingResult",
         "ModelingResults",
+        "ModelingSourceComponent",
+        "MomentPipe",
         "ObjectHelper",
         "Page",
         "PageComponent",
@@ -69,14 +75,13 @@ YUI.add("yuidoc-meta", function(Y) {
         "ProjectListSpec",
         "ProjectsComponent",
         "ProjectsComponentSpec",
-        "ProjectsHelpComponent",
-        "ProjectsHelpServiceStub",
-        "ProjectsHelpTextComponent",
         "ProjectsModule",
         "ProjectsResource",
         "ProjectsService",
         "ProjectsServiceStub",
         "PropertyTableComponent",
+        "ProtocolResource",
+        "ProtocolService",
         "RCB",
         "REST",
         "RESTSpec",
@@ -120,10 +125,14 @@ YUI.add("yuidoc-meta", function(Y) {
         "SubjectServiceStub",
         "SubjectSpec",
         "SubjectdRouterStub",
+        "Symbol",
         "TNM",
         "Table",
+        "TimeLineDirective",
         "TimeSeries",
-        "ToggleHelpComponent",
+        "Treatment",
+        "UnderscorePipe",
+        "UnspecifiedPipe",
         "VisualizationModule",
         "Volume",
         "VolumeComponent",
@@ -147,15 +156,16 @@ YUI.add("yuidoc-meta", function(Y) {
         "date",
         "error",
         "file",
-        "help",
         "home",
         "image",
         "imageSequence",
         "main",
+        "modeling",
         "object",
         "page",
         "project",
         "projects",
+        "protocol",
         "rest",
         "roman",
         "session",
@@ -217,11 +227,6 @@ YUI.add("yuidoc-meta", function(Y) {
             "description": "The {{#crossLink \"FileService\"}}{{/crossLink}} validator."
         },
         {
-            "displayName": "help",
-            "name": "help",
-            "description": "The help panel component."
-        },
-        {
             "displayName": "home",
             "name": "home",
             "description": "The home button component."
@@ -239,7 +244,12 @@ YUI.add("yuidoc-meta", function(Y) {
         {
             "displayName": "main",
             "name": "main",
-            "description": "This application entry module declares the top-level\nmain {{#crossLink \"AppComponent\"}}{{/crossLink}} and\nprovides the following shared services:\n* the REST resource providers\n* {{#crossLink \"HelpService\"}}{{/crossLink}}\n* {{#crossLink \"ConfigurationService\"}}{{/crossLink}}\n* {{#crossLink \"SubjectService\"}}{{/crossLink}}\n* {{#crossLink \"SessionService\"}}{{/crossLink}}\n* {{#crossLink \"PapayaService\"}}{{/crossLink}}\n\nThese shared services are singletons and should not be\nredundantly provided by the feature submodules.\n\nThe page-level application feature modules are lazy-loaded.\nThese include the following:\n* {{#crossLink \"ProjectsModule\"}}{{/crossLink}}\n* {{#crossLink \"CollectionsModule\"}}{{/crossLink}}\n* {{#crossLink \"CollectionModule\"}}{{/crossLink}}\n* {{#crossLink \"SubjectModule\"}}{{/crossLink}}\n* {{#crossLink \"SessionModule\"}}{{/crossLink}}\n* {{#crossLink \"VolumeModule\"}}{{/crossLink}}"
+            "description": "This application entry module declares the top-level\nmain {{#crossLink \"AppComponent\"}}{{/crossLink}} and\nprovides the following shared services:\n* the REST resource providers\n* {{#crossLink \"ConfigurationService\"}}{{/crossLink}}\n* {{#crossLink \"SubjectService\"}}{{/crossLink}}\n* {{#crossLink \"SessionService\"}}{{/crossLink}}\n* {{#crossLink \"PapayaService\"}}{{/crossLink}}\n\nThese shared services are singletons and should not be\nredundantly provided by the feature submodules.\n\nThe page-level application feature modules are lazy-loaded.\nThese include the following:\n* {{#crossLink \"ProjectsModule\"}}{{/crossLink}}\n* {{#crossLink \"CollectionsModule\"}}{{/crossLink}}\n* {{#crossLink \"CollectionModule\"}}{{/crossLink}}\n* {{#crossLink \"SubjectModule\"}}{{/crossLink}}\n* {{#crossLink \"SessionModule\"}}{{/crossLink}}\n* {{#crossLink \"VolumeModule\"}}{{/crossLink}}"
+        },
+        {
+            "displayName": "modeling",
+            "name": "modeling",
+            "description": "The modeling module exports the following directives:\n{{#crossLink \"ModelingComponent\"}}{{/crossLink}}"
         },
         {
             "displayName": "object",
@@ -249,7 +259,7 @@ YUI.add("yuidoc-meta", function(Y) {
         {
             "displayName": "page",
             "name": "page",
-            "description": "The page module imports the modal module and\nexports the following directives:\n{{#crossLink \"HomeComponent\"}}{{/crossLink}}\n{{#crossLink \"ToggleHelpComponent\"}}{{/crossLink}}\n{{#crossLink \"HelpComponent\"}}{{/crossLink}}\n{{#crossLink \"ErrorComponent\"}}{{/crossLink}}"
+            "description": "The page module exports the following directives:\n* {{#crossLink \"HomeComponent\"}}{{/crossLink}}\n* {{#crossLink \"ErrorComponent\"}}{{/crossLink}}"
         },
         {
             "displayName": "project",
@@ -260,6 +270,11 @@ YUI.add("yuidoc-meta", function(Y) {
             "displayName": "projects",
             "name": "projects",
             "description": "The Projects List module."
+        },
+        {
+            "displayName": "protocol",
+            "name": "protocol",
+            "description": "The protocol REST resource."
         },
         {
             "displayName": "rest",

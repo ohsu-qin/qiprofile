@@ -3,12 +3,12 @@ extends ../layout/partial
 block title
   | {{ subject.title }}
 
+block help
+  include include/page-help
+
 block content
   .row
     .col-md-8
       include include/imaging-profile
     .col-md-4(*ngIf="has(subject.clinicalEncounters)")
       include ../clinical/include/clinical-profile
-
-block help
-  include include/page-help

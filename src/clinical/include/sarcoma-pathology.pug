@@ -1,5 +1,5 @@
 // The tumor site and histology.
-table.table.qi-table.qi-spaced-table.qi-y-spacer
+table.table.qi-table
   tr(*ngIf="has(tumor.location)")
     th Site
     td {{ tumor.location | sarcomaTumorLocation }}
@@ -9,8 +9,11 @@ table.table.qi-table.qi-spaced-table.qi-y-spacer
     td {{ tumor.histology }}
 
 // The tumor extent partial.
-.qi-y-spacer(*ngIf="has(tumor.extent)")
-  include tumor-extent
+qi-property-table.mt-2.qi-y-spacer(
+  *ngIf="has(tumor.extent)",
+  [object]="tumor.extent",
+  [title]="'Tumor Extent (mm)'"
+)
 
 // The TNM partial.
 .qi-y-spacer(*ngIf="has(tumor.tnm)")

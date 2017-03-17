@@ -1,10 +1,10 @@
 extends ../layout/partial
 
-block billboard
+block title
   | {{ project }} Collections
 
 block help
-  qi-collections-help
+  include include/page-help
 
 block content
   p(*ngIf="isEmpty")

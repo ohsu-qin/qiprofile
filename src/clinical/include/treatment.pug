@@ -1,4 +1,4 @@
-table.table.qi-table.qi-y-spacer
+table.table.qi-table
   // Vertically align the date (label, value) pairs with separation.
   tr
     th Start Date
@@ -9,9 +9,9 @@ table.table.qi-table.qi-y-spacer
     td {{ treatment.endDate | moment }}
 
 // The chemotherapy partial.
-.qi-y-spacer(*ngIf="chemotherapy")
+.mt-2(*ngIf="chemotherapy")
   include chemotherapy
 
 // The radiotherapy partial.
-.qi-y-spacer(*ngIf="radiotherapy")
+.mt-2(*ngIf="radiotherapy")
   include radiotherapy

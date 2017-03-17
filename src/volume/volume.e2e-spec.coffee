@@ -38,8 +38,8 @@ describe 'E2E Testing Volume Display', ->
 
   # The page header test cases.
   describe 'Header', ->
-    it 'should display the billboard', ->
-      expect(page.billboard, 'The billboard is incorrect')
+    it 'should display the title', ->
+      expect(page.title, 'The title is incorrect')
         .to.eventually.equal('Breast Patient 1 Session 1 Scan 1 Volume 1')
 
     it 'should have a home button', ->
@@ -124,10 +124,10 @@ describe 'E2E Testing Volume Display', ->
               .to.equal(3)
             [previous, play, next] = buttons
             next.click().then ->
-              expect(page.billboard, 'The next button did not change the billboard')
+              expect(page.title, 'The next button did not change the title')
                 .to.eventually.equal('Breast Patient 1 Session 1 Scan 1 Volume 2')
               previous.click().then ->
-                expect(page.billboard, 'The previous button did not change the billboard')
+                expect(page.title, 'The previous button did not change the title')
                   .to.eventually.equal('Breast Patient 1 Session 1 Scan 1 Volume 1')
 
   describe 'Session Chooser', ->
@@ -173,8 +173,8 @@ describe 'E2E Testing Volume Display', ->
               .to.equal(3)
             [previous, play, next] = buttons
             next.click().then ->
-              expect(page.billboard, 'The next button did not change the billboard')
+              expect(page.title, 'The next button did not change the title')
                 .to.eventually.equal('Breast Patient 1 Session 2 Scan 1 Volume 1')
               previous.click().then ->
-                expect(page.billboard, 'The previous button did not change the billboard')
+                expect(page.title, 'The previous button did not change the title')
                   .to.eventually.equal('Breast Patient 1 Session 1 Scan 1 Volume 1')

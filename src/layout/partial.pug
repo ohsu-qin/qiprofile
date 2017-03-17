@@ -1,9 +1,9 @@
 // The header, including the nav home and help buttons.
 include header
 
-// The context billboard e.g. 'Breast Patient 4'.
-.qi-billboard.rounded-bottom
-  block billboard
+// The context title e.g. 'Breast Patient 4'.
+.qi-page-title.rounded-bottom
+  block title
 
 // The main partial content.
 .qi-main(role='main')
@@ -12,12 +12,9 @@ include header
   // unset via the PageComponent.clearError callback.
   qi-error(*ngIf="error", [error]="error", (dismissed)="clearError()")
   .qi-content
-    // Every page component is responsible for importing its
-    // help text into its help property.
-    block help
-      qi-help([help]="help")
+    // The guts.
     block content
   // The global modal container element required per the
   // https://ng-bootstrap.github.io/#/components/modal
-  // Heads up note.
+  // 'Heads up' note.
   <template ngbModalContainer></template>

@@ -58,6 +58,19 @@ ul.qi-clean-list
   overflow-y auto
   qi-transition(linear, med-transition)
 
+// Override the standard Bootstrap dialog close button
+// colors.
+.modal-dialog button.close
+  // Undo the Bootstrap opacity.
+  opacity 1
+  // Apply .qi-btn colors but with a slightly darker
+  // base.
+  color GoldenRod
+  &:hover
+    color Chocolate
+  &:focus, &:active
+    color GoldenRod
+
 // The close icon is on the top right of the pop-up panel.
 .qi-popup-close
   text-align right
@@ -97,9 +110,6 @@ ul.qi-clean-list
 
 .qi-pad-top
   padding-top 1em
-
-.qi-inline
-  display inline-block
 
 // Emulate the base <a> style.
 .qi-clickable

@@ -3,7 +3,6 @@
  * main {{#crossLink "AppComponent"}}{{/crossLink}} and
  * provides the following shared services:
  * * the REST resource providers
- * * {{#crossLink "HelpService"}}{{/crossLink}}
  * * {{#crossLink "ConfigurationService"}}{{/crossLink}}
  * * {{#crossLink "SubjectService"}}{{/crossLink}}
  * * {{#crossLink "SessionService"}}{{/crossLink}}
@@ -49,7 +48,6 @@ import {
 import {
   ConfigurationService
 } from '../configuration/configuration.service.ts';
-import { HelpService } from '../help/help.service.ts';
 import { PapayaService } from '../image/papaya.service.ts';
 import { ProjectsService } from '../projects/projects.service.ts';
 import { ProtocolService } from '../protocol/protocol.service.ts';
@@ -57,7 +55,7 @@ import { SessionService } from '../session/session.service.ts';
 import { SubjectService } from '../subject/subject.service.ts';
 
 const SHARED_SERVICES = [
-  CollectionsService, ConfigurationService, HelpService, ProjectsService,
+  CollectionsService, ConfigurationService, ProjectsService,
   PapayaService, ProtocolService, SessionService, SubjectService
 ];
 

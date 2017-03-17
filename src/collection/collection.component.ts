@@ -2,6 +2,7 @@ import * as _ from 'lodash';
 import * as d3 from 'd3';
 import { Component } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import ObjectHelper from '../common/object-helper.coffee';
 import {
@@ -9,7 +10,6 @@ import {
 } from '../configuration/configuration.service.ts';
 import { PageComponent } from '../page/page.component.ts';
 import { SubjectService } from '../subject/subject.service.ts';
-import help from './collection.help.md';
 
 // TODO - replace with symbolize.
 const SYMBOL_TYPES = [
@@ -181,12 +181,12 @@ export class CollectionComponent extends PageComponent {
 
   constructor(
     // private elementRef: ElementRef,
-    private router: Router,
-    private route: ActivatedRoute,
-    private subjectService: SubjectService,
+    private router: Router, private route: ActivatedRoute,
+    modalService: NgbModal, private subjectService: SubjectService,
     private configService: ConfigurationService
   ) {
-    super(help);
+    super(modalService);
+
     // The project and collection name are displayed in the banner.
     let params = route.params.value;
     this.project = params.project;

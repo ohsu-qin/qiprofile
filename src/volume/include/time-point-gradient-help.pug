@@ -1,14 +1,15 @@
 // The help button.
 button.btn.btn-secondary.qi-btn.qi-minihelp-btn(
   type='button',
-  [ngbPopover]="help",
-  popoverTitle='Time Point Gradient Help',
-  container='body',
-  placement='left'
+  (click)="openHelp(help)"
 )
   i.fa.fa-question-circle
 
 // The help content.
-<template #help>
-  include time-point-gradient-help-text
+<template #help let-d="dismiss">
+  .modal-body
+    button.close((click)="d('Click')")
+      i.fa.fa-close
+    // The help text.
+    include time-point-gradient-help-text
 </template>

@@ -1,18 +1,18 @@
 // Previous value.
-button.btn.btn-primary.btn-sm.qi-btn(
+button.btn.btn-secondary(
   type='button', (click)="onPrevious()"
 )
   i.fa.fa-step-backward
 
 // Cycle over the values.
-button.btn.btn-primary.btn-sm.qi-btn(
+button.btn.btn-secondary(
   type='button', (click)="togglePlay()"
 )
   i.fa.fa-play(*ngIf="!isPlaying")
   i.fa.fa-pause(*ngIf="isPlaying")
 
 // Next value.
-button.btn.btn-primary.btn-sm.qi-btn(
+button.btn.btn-secondary(
   type='button', (click)="onNext()"
 )
   i.fa.fa-step-forward

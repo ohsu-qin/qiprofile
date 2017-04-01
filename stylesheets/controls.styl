@@ -1,3 +1,25 @@
 // Nested selects are stacked vertically under the parent.
 qi-cascade-select > qi-cascade-select
   display block
+
+// Add space above and below the slider because the slider
+// handle bulges out of the space allotted to the slider.
+// Set the horizontal margins to auto to center the control
+// within its parent element.
+//
+// Note: horizontal sliders require an additional 2em bottom
+// margin to counteract the following noUISlider bug:
+// * noUISlider horizontal slider pips overflow the elements
+//   beneath the slider. The work-around is for elements
+//   below the slider to add a 2em top margin.
+[qiSlider]
+  margin 0.5em auto
+
+// The noUISlider library sets the pips horizontal height
+// to 80px, which is far more than necessary. This excess
+// does not have a visual impact, but does have the following
+// insidious behavioral side-effect:
+// * noUISlider horizontal slider disables mouse events
+//   within 80 pixels beneath the slider bar.
+.noUi-pips-horizontal
+	height 2.5em

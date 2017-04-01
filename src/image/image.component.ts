@@ -90,19 +90,6 @@ implements OnChanges, AfterViewChecked, OnDestroy {
       this.image.contents = contents;
       // Trigger the bound loaded output.
       this.loaded.emit(this.image);
-      // // Papaya triggers this loaded callback with a null volume
-      // // on viewer refresh, even though no file is loaded. In
-      // // that case, the Papaya callback contents argument has
-      // // a data field whose data property is empty.
-      // // Guard against this case.
-      // if (contents && contents.data && contents.data.data) {
-      //   // Set the image contents property when loaded.
-      //   this.image.contents = contents;
-      //   // Trigger the bound loaded output.
-      //   this.loaded.emit(this.image);
-      // } else {
-      //   this.papaya.replaceImage(this.image);
-      // }
     };
     this.papaya.finishedLoadingCallback = onFinishedLoading;
 
@@ -136,7 +123,7 @@ implements OnChanges, AfterViewChecked, OnDestroy {
   ngAfterViewChecked() {
     // If the input is not a place-holder without a file name
     // and this component instance has not already started
-    // Papaya, then start or refresh Papaya. See the isStarted
+    // Papaya, then start or restart Papaya. See the isStarted
     // property doc for more information.
     if (this.image.name && !this.isStarted) {
       if (this.papaya.isInitialized()) {

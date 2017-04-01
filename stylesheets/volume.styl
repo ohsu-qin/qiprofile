@@ -9,25 +9,28 @@
   color DarkCyan
   & .qi-title
     text-align center
+  // Make the buttons stand out.
+  & .qi-btn-group button
+    background-color RoyalBlue
+    &:focus
+      outline none
+  // The left side time point chooser.
   & .qi-left
     top 0
-    left 8%
+    left 5%
+    margin-top 0.5em
     & [qiSlider]
-      // The right margin centers the slider in the
-      // vertical chooser.
-      margin 1em 0 1em 12px
-    // Position the middle button of the player below
-    // the vertical slider handle.
-    // For some reason, positioning the player itself has
-    // no effect, but positioning the buttons does.
-    // The selector below is stolen from bootstrap.
-    // The margin value is a goldilocks value with no
-    // discernible rationale.
-    & .btn-group > .btn:first-child
-      margin-left -32px
-
+      // Center the slider in the vertical chooser.
+      margin 0.5em auto 1.2em auto
+      // Center the player under slider. margin auto
+      // has no effect, so push it a little to the
+      // left by a Goldilocks alignment factor.
+      & + qi-player
+        margin-left 0.4em
+  // The right side session chooser and gradient spark lines.
   & .qi-right
     top 0
+    margin-top 0.5em
     width 20%
     // Note: attempts to center the right chooser buttons were
     // unsuccessful, so the buttons left align, which happens
@@ -38,19 +41,27 @@
       min-width 65px
       position absolute
       left 30%
-      // Add space above and below because the slider handle
-      // bulges out of the space allotted to the slider. Also,
-      // the slider allows for pips but not for the pip text,
-      // so add extra room at the bottom.
+      // Add space above the player to accomodate the slider
+      // pips spill-over described in controls.styl. However,
+      // adding the margin to the qi-player as described in
+      // the controls.styl work-around encounters the
+      // following bug:
+      // * qi-player margins are not respected and have no
+      //   effect.
+      // The work-around to the work-around is to add the
+      // margin below the slider instead.
       & [qiSlider]
-        margin 0.5em 0 3em 0
+        margin-bottom 2.5em
 
     // The intensity gradients are placed near the bottom of
     // the right gutter.
     & .qi-volume-intensity-gradients
       position absolute
-      bottom 0
-      margin 2px
+      bottom 0.5em
+      margin 0.5em
+      // Separate adjacent gradient subpanels with a thin line.
+      & .qi-panel + .qi-panel
+        border-top 1px solid DarkSlateBlue
 
 // The physical gradient has a mid-point guide line and
 // a color for each orientation.
@@ -75,3 +86,8 @@
 
 .qi-time-point-gradient
   margin 0.5em
+
+.qi-pseudo-papaya-button
+  background-color LightGray
+  border 1
+  border-style ridge

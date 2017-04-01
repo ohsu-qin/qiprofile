@@ -4,39 +4,24 @@
 
 .qi-title
   color Indigo
-  font-weight bold
-  white-space nowrap
-
-.qi-panel-title
-  color Indigo
-  font-size 1.2em
-  margin-left 1em
 
 .qi-smaller
   font-size smaller
 
+// Note: mx-auto doesn't always center text, e.g. it has no
+// effect with the collection.pug dates chart title. A
+// general-purpose style for centering a div within a div
+// without prescribing a fixed width is surprisingly elusive.
+// The incantation below seems to do the trick.
+.qi-center
+  display table
+  margin 0 auto
+
 .qi-emphasis
   font-style italic
 
-.qi-text-right
-  text-align right
-
-// Dates and numbers should be center-aligned.
-.qi-date, .qi-number, .qi-center
-  text-align center
-
-.qi-center
-  margin 0 auto
-
-.qi-pct
-  padding-right 2em
-  text-align right
-
 .qi-align-top
   vertical-align top
-
-.qi-align-middle
-  vertical-align middle
 
 // See the clean-list helper for a description.
 ul.qi-clean-list
@@ -84,22 +69,6 @@ ul.qi-clean-list
 .qi-separator-faint
   border 1px solid Lavender
 
-// Make some room at the top.
-.qi-top-space
-  margin-top 0.5em
-
-// Make some room at the left.
-.qi-left-space
-  margin-left 0.5em
-
-// Make some room at the right.
-.qi-right-space
-  margin-right 0.5em
-
-// Make some room at the bottom.
-.qi-bottom-space
-  margin-bottom 0.5em
-
 // Add some vertical space between successive elements.
 .qi-y-spacer + .qi-y-spacer
   margin-top 0.5em
@@ -108,23 +77,16 @@ ul.qi-clean-list
 .qi-x-spacer + .qi-x-spacer
   margin-left 0.5em
 
-.qi-pad-top
-  padding-top 1em
-
 // Emulate the base <a> style.
 .qi-clickable
   hyperlink()
-
-.qi-btn-img
-  width 20px
-  height 20px
 
 // Override the bootstrap button as follows:
 // * remove the border and outline
 // * add color
 // * change the padding from the bulky 6px 12px
 //   to the compact 2px 4px.
-.qi-btn
+.qi-btn, .qi-btn-group button
   padding .2em
   border 0
   background-color Moccasin
@@ -133,7 +95,6 @@ ul.qi-clean-list
     cursor pointer
   &:focus, &:active
     outline none
-    background-color Moccasin
 
 // A mini-help button is placed to the right of the
 // reference element. This style augments .qi-btn
@@ -168,10 +129,6 @@ ul.qi-clean-list
   & .col + .col
     margin-left 2em
 
-.qi-inset
-  text-align left
-  padding-left 0.5em
-
 .qi-panel
   background-color AliceBlue
   padding 0.5em
@@ -200,11 +157,6 @@ ul.qi-clean-list
 .qi-cell
   display table-cell
   vertical-align middle
-
-// A row with evenly-spaced, centered cells.
-.qi-even-row
-  text-align center
-  table-layout fixed
 
 // The standard qiprofile data table style.
 // This style should be used in conjunction with the bootstrap
@@ -291,9 +243,11 @@ ul.qi-horizontal-list
     empty-line()
 
 .qi-horizontal
+  position relative
   width 100%
 
 .qi-vertical
+  position relative
   height 100%
 
 // Align at the top.
@@ -313,13 +267,6 @@ ul.qi-horizontal-list
 .qi-right
   position absolute
   right 0
-
-// A general-purpose style for centering a div within
-// a div without prescribing a fixed width is surprisingly
-// elusive. The incantation below seems to do the trick.
-.qi-center
-  display table
-  margin 0 auto
 
 qi-correlation > qi-cascade-select
   display inline-block

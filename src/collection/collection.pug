@@ -8,8 +8,12 @@ block help
 
 block content
   .row.qi-collection
+    // The session dates chart.
     .col-md-2.qi-align-top
-      h5.qi-title.qi-center Imaging Sessions
+      // Note: mx-auto doesn't take effect for the title.
+      // The work-around is the custom .qi-center style,
+      // as described in common.styl.
+      h6.qi-center.qi-title Imaging Sessions
       .qi-sessions-chart(
         qiScatterPlot, [height]="sessionsChart.height",
         [data]="sessions", [color]="'subject.number'",
@@ -22,18 +26,20 @@ block content
         [selection]="domainSelection",
         (select)="onBrushSelect($event)"
       )
+    // The correlation charts.
     .col-md-10
       // Double up the correlation charts horizontally in the
       // remaining space.
-      qi-correlation.col-md-6(
-        *ngFor="let correlation of correlations",
-        [data]="sessions", [color]="'subject.number'",
-        [symbolType]="symbolType",
-        [valueChoices]="valueChoices",
-        [xPropertyChoices]="propertyChoices",
-        [yPropertyChoices]="propertyChoices",
-        [xPropertyPath]="correlation.x",
-        [yPropertyPath]="correlation.y",
-        [domainSelection]="domainSelection",
-        (select)="onBrushSelect($event)"
-      )
+      .row
+        qi-correlation.col-md-6(
+          *ngFor="let correlation of correlations",
+          [data]="sessions", [color]="'subject.number'",
+          [symbolType]="symbolType",
+          [valueChoices]="valueChoices",
+          [xPropertyChoices]="propertyChoices",
+          [yPropertyChoices]="propertyChoices",
+          [xPropertyPath]="correlation.x",
+          [yPropertyPath]="correlation.y",
+          [domainSelection]="domainSelection",
+          (select)="onBrushSelect($event)"
+        )

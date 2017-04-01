@@ -29,15 +29,15 @@ class Findable
    *
    * For example,
    *
-   *     page.find('.qi-title', 'h3', '..')
+   *     page.find('h6.qi-title', 'h3', '..')
    *
-   * returns the parent of the h3 elt within the .qi-title
+   * returns the parent of the h3 elt within the h6.qi-title
    * elt on the page.
    *
    * The ElementFinder result is extended with a find function
    * for chaining, so the above example is equivalent to:
    *
-   *     page.element(By.css('.qi-title'))
+   *     page.element(By.css('h6.qi-title'))
    *       .then (bb) ->
    *         bb.element(By.tagName('h3'))
    *       .then (h3) ->

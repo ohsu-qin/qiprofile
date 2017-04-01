@@ -8,17 +8,19 @@ block help
 
 block content
   .qi-time-series
+    // The time point chooser is in the left gutter.
     .qi-vertical.qi-left
       // The time point number chooser slider-player combo.
       include ./include/time-point-chooser
 
-    // The volume image display view.
+    // The volume image display view is in the alley.
     qi-image(
       *ngIf="image", [image]="image", (loaded)="onLoaded($event)",
       (coordinateChanged)="onCoordinateChanged($event)",
       (error)="onLoadError($event)"
     )
 
+    // The session number chooser is in the right gutter.
     .qi-vertical.qi-right
       // The session number chooser slider-player combo.
       include ./include/session-chooser

@@ -202,8 +202,8 @@ export class VolumeComponent extends PageComponent {
     this.routeParams = route.params.value;
     // Make the physical intensity gradient factory.
     this.createPhysicalIntensities = this.createPhysicalIntensitiesFactory();
-    // Set the dynamic styles.
-    this.calibrateStyles();
+    // // Set the dynamic styles.
+    // this.calibrateStyles();
     // Fetch the volume.
     this.getVolume(this.routeParams);
   }
@@ -221,18 +221,22 @@ export class VolumeComponent extends PageComponent {
   /**
    * Sets the following style properties:
    * * {{#crossLink "VolumeComponent/timePointSliderHeight:property"}}{{/crossLink}}
-   * * {{#crossLink "VolumeComponent/intensityGradientsBottom:property"}}{{/crossLink}}
-   * * {{#crossLink "VolumeComponent/intensityGradientsWidth:property"}}{{/crossLink}}
+   * * {{#crossLink "VolumeComponent/gradientWidth:property"}}{{/crossLink}}
    *
    * @method calibrateStyles
    * @private
    */
   private calibrateStyles() {
-    let imageViewHeight = this.imageViewHeight();
-    this.timePointSliderHeight =
-      this.calculateTimePointSliderHeight(imageViewHeight);
-    this.gradientWidth =
-      this.calculateIntensityGradientWidth();
+    // The time point slider height depends on the image viewer height,
+    // which is not laid out until the next event loop.
+    let calibrateSlider = () => {
+      let imgViewHeight = this.imageViewHeight();
+      let sliderHeight = this.calculateTimePointSliderHeight(imgViewHeight);
+      this.timePointSliderHeight = sliderHeight;
+    };
+    setTimeout(calibrateSlider, 0);
+    // Calibrate the gradient.
+    this.gradientWidth = this.calculateIntensityGradientWidth();
   }
 
   /**
@@ -248,28 +252,16 @@ export class VolumeComponent extends PageComponent {
     if (!this.timePointSliderConfig) {
       this.timePointSliderConfig = this.createTimePointSliderConfig(volume);
       this.sessionSliderConfig = this.createSessionSliderConfig(volume);
+      // Set the dynamic styles.
+      this.calibrateStyles();
     }
 
-    // Update the volume-based variables.
+    // Update the instance variables.
+    // See PapayaService.load() source for a relevant comment.
     this.volume = volume;
-    // Set the intensities in the next cycle to avoid the infamous
-    // Angular "Expression has changed after it was checked" error
-    // (cf. https://github.com/angular/angular/issues/6005). Angular's
-    // obscure, fragile change detector can't deal with changes
-    // to a watched variable during change processing. The intensities
-    // change below induces this error, but only when the session player
-    // is advanced and then reset to the previous value. Perhaps this
-    // change confuses Angular because setting volume above triggers
-    // a redigest in the next cycle, so the intensities change must be
-    // deferred to a cycle after that. However, why this error does not
-    // occur on the initial advance is a mystery. Ah well, whatever
-    // appeases the Angular gods.
-    let setIntensities = () => {
-      let coord = this.papaya.currentCoordinate;
-      this.timePointIntensities = this.timePointVoxelValues(coord);
-      this.physicalIntensities = this.physicalVoxelValues(coord);
-    };
-    setTimeout(setIntensities, 0);
+    let coord = this.papaya.currentCoordinate;
+    this.timePointIntensities = this.timePointVoxelValues(coord);
+    this.physicalIntensities = this.physicalVoxelValues(coord);
   }
 
   /**
@@ -609,14 +601,14 @@ export class VolumeComponent extends PageComponent {
   }
 
   /**
-   * The body width exclusive of the 15px left and right paddding.
+   * The body width exclusive of the 16px left and right padding.
    *
    * @method bodyInnerWidth
    * @return the body inner width in pixels
    */
   private bodyInnerWidth(): number {
     let rect = document.body.getBoundingClientRect();
-    return rect.width - 30;
+    return rect.width - 32;
   }
 
   /**
@@ -628,7 +620,7 @@ export class VolumeComponent extends PageComponent {
    * @return the width of the gutter in pixels
    */
   private gutterWidth(): number {
-    return Math.floor(this.bodyInnerWidth() * 0.2);
+    return Math.floor(this.bodyInnerWidth() * 0.20);
   }
 
   /**
@@ -643,7 +635,7 @@ export class VolumeComponent extends PageComponent {
     imageViewHeight: number
   ): number {
     // The title is 20 pixels and the player is 28 pixels.
-    // Knock out off an inexplicable fudge factor.
+    // Knock off an inexplicable fudge factor.
     const margin = 24;
     return imageViewHeight - margin;
   }
@@ -654,7 +646,7 @@ export class VolumeComponent extends PageComponent {
    */
   private calculateIntensityGradientWidth(): number {
     // The margin is an inexplicable fudge factor.
-    const margin = 24;
+    const margin = 48;
     return this.gutterWidth() - margin;
   }
 
@@ -670,12 +662,14 @@ export class VolumeComponent extends PageComponent {
     if (_.isInteger(request)) {
       return request;
     } else if (request === 'previous') {
+      // Loop back up to the top, if necessary.
       return this.volume.number === 1 ?
         this.volume.imageSequence.volumes.images.length :
         this.volume.number - 1;
     } else if (request === 'next') {
-      let nextNdx = this.volume.number %
-            this.volume.imageSequence.volumes.images.length;
+      // Loop back down to the bottom, if necessary.
+      let volCnt = this.volume.imageSequence.volumes.images.length;
+      let nextNdx = this.volume.number % volCnt;
       return nextNdx + 1;
     } else  {
       throw new Error(`Time point request not supported: ${ request }`);

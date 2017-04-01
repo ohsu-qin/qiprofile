@@ -72,7 +72,8 @@ export class VolumeService {
     // The parent place-holder object.
     let imageSequence = this.sequenceService.placeHolder(routeParams);
     // The volume number is the volume route parameter.
-    let volumeNbr = +routeParams.volume;
+    let volParam = routeParams.volume;
+    let volumeNbr = volParam ? +volParam : null;
     // Extend an empty volume object with the image sequence
     // parent reference and the volume number.
     let volume = {};
@@ -104,10 +105,10 @@ export class VolumeService {
    *
    * @method findVolume
    * @param imageSequence {Object} the image sequence object holding the volume
-   * @param volume {number} the optional one-based volume number
-   * @return {any} the REST volume image object, or null if not found
+   * @param volume {number|string} the optional one-based volume number
+   * @return {Object} the REST volume image object, or null if not found
    */
-  findVolume(imageSequence: Object, volume?: number) {
+  findVolume(imageSequence: Object, volume?: number|string): Object {
     // The volumes object holds the volume images array.
     let volumes = imageSequence.volumes;
     if (!volumes || !volumes.images) {
@@ -126,8 +127,18 @@ export class VolumeService {
       let volNdx = volume - 1;
       return volumes.images[volNdx];
     } else {
-      let maxVol = imageSequence.maximalIntensityVolume();
-      return maxVol ? maxVol : volumes.images[0];
+      return this.defaultVolume(imageSequence);
     }
+  }
+
+  /**
+   * @method defaultVolume
+   * @param imageSequence {Object} the image sequence object holding the volume
+   * @return {Object} the maximal intensity volume, if it exists, Otherwise
+   *   the first volume
+   */
+  private defaultVolume(imageSequence: Object): number {
+    let maxVol = imageSequence.maximalIntensityVolume;
+    return maxVol ? maxVol : imageSequence.volumes.images[0];
   }
 }

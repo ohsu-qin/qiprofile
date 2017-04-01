@@ -57,41 +57,99 @@ function toValue(value: string[]): number|number[] {
  * @class SliderDirective
  */
 export class SliderDirective implements OnInit, OnChanges {
+  /**
+   * The slider HTML element.
+   *
+   * @property el {ElementRef}
+   */
   public el: ElementRef;
-  public slider: any;
 
+  /**
+   * The noUiSlider object.
+   *
+   * @property slider {Object}
+   */
+  public slider: Object;
+
+  /**
+   * The optional slider starting value.
+   *
+   * @property value {number}
+   */
+  @Input() value: number;
+
+  /**
+   * The optional noUiSlider name.
+   *
+   * @property name {string}
+   */
   @Input() name: string;
-  @Input() behaviour: string;
-  @Input() connect: boolean;
-  @Input() limit: number;
+
+  /**
+   * The required slider minimum value.
+   *
+   * @property min {number}
+   */
   @Input() min: number;
+
+  /**
+   * The required slider maximum value.
+   *
+   * @property max {number}
+   */
   @Input() max: number;
+
+  /**
+   * The optional slider jump step increment. The default is
+   * a fluent slider.
+   *
+   * @property step {number}
+   */
   @Input() step: number;
-  @Input() config: any = {};
-  @Input() value: number | number[];
-  @Output() changed: EventEmitter<any> = new EventEmitter(true);
 
-  public constructor(el: ElementRef) {
-    this.el = el;
-  }
+  /**
+   * The optional noUiSlider behaviour.
+   *
+   * @property behaviour {string}
+   */
+  @Input() behaviour: string;
 
-  @HostBinding('style.height.px') height;
+  /**
+   * The optional noUiSlider handle bar connect flag.
+   *
+   * @property connect {boolean}
+   */
+  @Input() connect: boolean;
+
+  /**
+   * The optional noUiSlider supplementary configuration.
+   * This configuration overrides any other input
+   * configuration properties.
+   *
+   * @property config {Object}
+   */
+  @Input() config = {};
 
   /**
    * The optional slider height in pixels.
    *
-   * @property height
+   * @property height {number}
    */
   @Input() height: number;
-
-  @HostBinding('style.width.px') width;
 
   /**
    * The optional slider width in pixels.
    *
-   * @property width
+   * @property width {number}
    */
   @Input() width: number;
+
+  /**
+   * The value change emitter.
+   *
+   * @property changed {function}
+   */
+  @Output() changed: EventEmitter<any> = new EventEmitter(true);
 
   /**
    * The slider value. This value is initially set to the
@@ -99,23 +157,44 @@ export class SliderDirective implements OnInit, OnChanges {
    * Subsequently, the value is changed when either the slider
    * value or the *value* property is changed.
    *
-   * @property _value
+   * @property _value {number}
    * @private
    */
   private _value: number;
 
+  public constructor(el: ElementRef) {
+    this.el = el;
+  }
+
+  @HostBinding('style.height.px') height;
+
+  @HostBinding('style.width.px') width;
+
   ngOnInit(): void {
+    if (_.isNil(this.min)) {
+      throw new Error("The slider is missing the min input variable");
+    }
+    if (_.isNil(this.max)) {
+      throw new Error("The slider is missing the max input variable");
+    }
+    // The default initial value is the minimum.
+    if (_.isNil(this._value)) {
+      this._value = this.min;
+    }
+
+    // The noUiSlider configuration.
     let config = JSON.parse(JSON.stringify({
       behaviour: this.behaviour,
       connect: this.connect,
-      limit: this.limit,
       start: this._value,
       step: this.step,
       range: {min: this.min, max: this.max}
     }));
     Object.assign(config, this.config);
 
+    // Make the slider.
     this.slider = noUiSlider.create(this.el.nativeElement, config);
+    // Handle the value set event.
     this.slider.on('set', (sliderValue: any) => {
       let value = toValue(sliderValue);
       if (!_.isEqual(this._value, value)) {
@@ -128,7 +207,9 @@ export class SliderDirective implements OnInit, OnChanges {
   /**
    * Handles a change to the slider value that arises externally
    * rather than by the slider user action. The change does not
-   * precipitate a `changed` event.
+   * precipitate a
+   * {{#crossLink "SliderDirective/changed:property"}}{{/crossLink}}
+   * event.
    *
    * @method ngOnChanges
    */

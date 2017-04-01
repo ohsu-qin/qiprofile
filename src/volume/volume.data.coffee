@@ -73,7 +73,9 @@ Volume =
        * @property title {string} the display title
       ###
       title:
-        get: -> "#{ @imageSequence.title } Volume #{ @number }"
+        get: ->
+          prefix = "#{ @imageSequence.title } Volume"
+          if @number? then "#{ prefix } #{ @number }" else prefix
 
       ###*
        * @property resource {string} the volume resource name

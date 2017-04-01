@@ -45,12 +45,30 @@ export abstract class PageComponent {
   }
 
   /**
+   * Delegates to
+   * {{#crossLink "PageComponent/openHelp"}}{{/crossLink}}
+   * with the CSS class `.qi-page-help`.
+   *
+   * @method openPageHelp
+   * @param content {TemplateRef} the help content
+   */
+  openPageHelp(content: TemplateRef) {
+    this.openHelp(content, 'qi-page-help');
+  }
+
+  /**
    * Displays the help in a modal dialog.
    *
-   * @property content {TemplateRef}
+   * @method openPageHelp
+   * @param content {TemplateRef} the required help HTML content
+   * @param windowClass {string} the optional help CSS class
    */
-  openHelp(content: TemplateRef) {
-    this.modalService.open(content, {windowClass: 'qi-help'});
+  openHelp(content: TemplateRef, windowClass?: string) {
+    if (windowClass) {
+      this.modalService.open(content, {windowClass: windowClass});
+    } else {
+      this.modalService.open(content);
+    }
   }
 
   /**

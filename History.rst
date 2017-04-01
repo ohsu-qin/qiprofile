@@ -1,8 +1,12 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+2.1.1 / 2017-03-31
+------------------
+* Beta release.
+
 1.1.1 / 2016-07-11
--------------------
+------------------
 * Alpha release.
 
 0.15.1 / 2016-03-22

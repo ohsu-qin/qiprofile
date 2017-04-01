@@ -377,6 +377,17 @@ export class TimeLineDirective implements DoCheck, OnInit {
     let legendHeight;
     let pointLegends;
     let spanLegends;
+    // The span and point legends.
+    let allLegends;
+    // Returns the height of the given character rows
+    // with a top and bottom pad between adjacent rows.
+    let spacedHeight = rows => {
+      let count = rows ? rows.length : 0;
+      let tailHeight =
+        count ? (count - 1) * (CHAR_SIZE + (2 * PAD)) : 0;
+      return count ? CHAR_SIZE + tailHeight : 0;
+    };
+
     if (this.legend === false) {
       legendHeight = 0;
     } else {
@@ -389,10 +400,8 @@ export class TimeLineDirective implements DoCheck, OnInit {
       let legendClasses = _.keys(this.legend);
       let pointClasses = _.difference(legendClasses, spanClasses).sort();
       pointLegends = pointClasses.map(legendFor);
-
-      // The legend lines count.
-      let legendCnt = pointLegends.length + spanLegends.length;
-      legendHeight = legendCnt * (CHAR_SIZE + PAD);
+      allLegends = pointLegends.concat(spanLegends);
+      legendHeight = spacedHeight(allLegends);
     }
 
     // The domain input includes the data and the spans.
@@ -563,8 +572,6 @@ export class TimeLineDirective implements DoCheck, OnInit {
       // bar instead.
       let legendLength = legend =>
         _.get(legend, 'label.length', 1) + name(legend).length;
-      // The span and point legends.
-      let allLegends = pointLegends.concat(spanLegends);
       // The legend lengths.
       let lengths = allLegends.map(legendLength);
       // The maximum legend character length.
@@ -643,7 +650,7 @@ export class TimeLineDirective implements DoCheck, OnInit {
 
       // Each legend item is placed under the previous item, if any.
       let transform = (d, i) => {
-        let offset = i * (CHAR_SIZE + PAD);
+        let offset = i * (CHAR_SIZE + (2 * PAD));
         return `translate(0,${ offset })`;
       };
 
@@ -659,7 +666,8 @@ export class TimeLineDirective implements DoCheck, OnInit {
           .each(drawName);
 
       // The span legends follow the point legends.
-      let spansOffset = pointLegends.length * (CHAR_SIZE + PAD);
+      let legPtsHeight = spacedHeight(pointLegends);
+      let spansOffset = legPtsHeight ? legPtsHeight + (2 * PAD) : 0;
       // Draw the span legends.
       legend.append('g')
         .attr('class', 'bars')

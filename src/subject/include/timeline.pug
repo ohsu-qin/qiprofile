@@ -5,11 +5,20 @@
 // [value] and [axis] resolve to a literal,
 // and [class] resolves to either a function or a literal.
 
-.qi-panel.qi-dusky(
-  qiTimeLine, [width]="timeLineWidth",
-  [data]="{encounter: encounters, treatment: treatments}",
-  [value]="{encounter: 'date', treatment: 'span'}",
-  [class]="{encounter: encounterDataClass, treatment: 'treatmentType'}",
-  [text]="timeLineText",
-  [legend]="legend"
-)
+.qi-panel.qi-dusky
+  // A help button just off the left-hand side. Unfortunately,
+  // attempts to place the button to the left of the timeline
+  // legend rather than on a separate row above the legend
+  // were unsuccessful.
+  // TODO - although this is a minor flaw, find a way around
+  // this limitation.
+  .pl-3
+    include timeline-help
+  div(
+    qiTimeLine, [width]="timeLineWidth",
+    [data]="{encounter: encounters, treatment: treatments}",
+    [value]="{encounter: 'date', treatment: 'span'}",
+    [class]="{encounter: encounterDataClass, treatment: 'treatmentType'}",
+    [text]="timeLineText",
+    [legend]="legend"
+  )

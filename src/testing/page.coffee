@@ -82,7 +82,7 @@ class Page extends Findable
 
   # @return the title text
   @property title: ->
-    @text('.qi-title', 'h3')
+    @text('h6.qi-title', 'h3')
 
   # Find the partial content. The page is loaded if and and only if
   # the return value is not null.

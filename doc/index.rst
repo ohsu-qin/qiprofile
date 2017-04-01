@@ -68,8 +68,8 @@ Usage
      ./bin/qiprofile
 
 4. Once you have a database, e.g. the `Developer Guide`_ demo seed
-   database, then the landing page is *host*\ ``:3000/qiprofile``,
-   where _host_ is the web application host URL.
+   database, then the landing page is *host*\``:3000/qiprofile``,
+   where *host* is the web application host URL.
 
 See the `Developer Guide`_ for starting a development server.
 

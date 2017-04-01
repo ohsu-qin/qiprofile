@@ -12,6 +12,9 @@ import ImageStore from '../image/image-store.coffee';
  * @class PapayaService
  */
 export class PapayaService {
+  private static const MISSING_VOLUME_ERROR =
+    'The viewer does not have a screen volume';
+
   /**
    * The function called when an image load error is encountered.
    *
@@ -139,14 +142,6 @@ export class PapayaService {
     this.isPapayaStarted = true;
   }
 
-  refresh() {
-    let params = papaya.papayaContainers[0].params;
-    let stashed = _.cloneDeep(params.images);
-    delete params.images;
-    papaya.Container.resetViewer(0);
-    params.images = stashed;
-  }
-
   /**
    * Restarts Papaya on the given image and overlays.
    *
@@ -156,13 +151,21 @@ export class PapayaService {
    * @param overlays {Image[]} the image overlays
    */
   restart(image: Object, overlays=[]) {
-    papaya.Container.resetViewer(papaya.papayaContainers.length - 1);
-    // TODO - is below necessary? Test restart.
-    // // Make the urls array as in the start method above.
-    // let images = [image].concat(overlays);
-    // let urls = images.map(ImageStore.location);
-    // // Restart the viewer.
-    // this.viewer.restart(urls, true, false);
+    // Note: although Papaya has several undocumented refresh, reset,
+    // restart and redraw methods, no magic combination that works
+    // after many attempts. Instead, we clobber Papaya and call
+    // start(). This brute force approach is in practice tolerable.
+    // The volume image is cached in the VolumeService, so a restart
+    // does not entail a refetch.
+    //
+    // Note: the restart must be done in the next event loop to
+    // avoid an arcane Angular dependency check error. See also
+    // the distantly related replaceImage method body comment.
+    let restart = () => {
+      this.viewer.initializeViewer();
+      this.start(image, overlays);
+    };
+    setTimeout(restart, 0);
   }
 
   /**
@@ -213,12 +216,58 @@ export class PapayaService {
         this.viewer.drawViewer(true, false);
       };
       // Simulate load finish.
+      //
       // Note: the Papaya undocumented viewer.finishedLoading function
       // differs from the undocumented volume.finishedLoad function.
       // We call finishedLoadingCallback as well to simulate a
       // complete Papaya image load async trigger chain.
+      //
+      // Note: finishedLoadingCallback **must be deferred** to a
+      // subsequent event loop. This deferral is necessary to avoid
+      // the infamous Angular development mode error
+      // "Expression has changed after it was checked"
+      // (cf. https://github.com/angular/angular/issues/6005).
+      //
+      // Without delaying the update, the change detection error is
+      // induced in the parent VolumeComponent if and only if the
+      // volume time point or session player is advanced and then
+      // reset to a previous value. The error would occur because
+      // setting the volume to a loaded volume number would happen
+      // in the current event loop whereas loading a volume happens
+      // asynchronously in a subsequent event loop.
+      //
+      // The full change propagation sequence for a loaded volume is
+      // as follows:
+      // * Setting a volume slider value invokes the on set callback.
+      // * This callback is bound by the SliderDirective to trigger
+      //   the SliderDirective changed output event.
+      // * The changed listener is bound to this VolumeComponent's
+      //   onTimePointRequest or onSessionRequest method.
+      // * The triggered request method calls getVolume().
+      // * getVolume() delegates to the VolumeService, which returns
+      //   the loaded volume.
+      // * getVolume() then sets the image variable.
+      // * the image variable is bound to the ImageComponent image
+      //   input which triggers ImageComponent change detection.
+      // * ImageComponent.ngOnChanges() calls PapayaService.replaceImage()
+      // * PapayaService.replaceImage() checks whether the image content
+      //   is already loaded. If not, then it asynchronously fetches the
+      //   image. If it is loaded, then the image content is immediately
+      //   swizzled into Papaya and the method returns
+      //   __in the same event loop__.
+      //
+      // Thus, the slider value change is detected by this VolumeComponent
+      // and indirectly results in modifying the watched volume variable
+      // __during ImageComponent change detection__. The dev mode detector
+      // before/after check then raises the error. Child change detection
+      // cannot modify a watched parent variable.
       volume.finishedLoad();
-      this.finishedLoadingCallback(image.contents);
+      if (this.finishedLoadingCallback) {
+        let finished = () => {
+          this.finishedLoadingCallback(image.contents);
+        };
+        setTimeout(finished, 0);
+      }
     } else {
       // Guard against mouse move cursor update while
       // the volume is being swapped in.
@@ -307,7 +356,21 @@ export class PapayaService {
     // Forestall the meaningless Papaya error message with a slightly
     // more useful message.
     if (!this.viewer.currentScreenVolume) {
-      throw new Error('The viewer does not have a screen volume');
+      // Papaya swallows the error stack and replaces it with the following
+      // confusing stack trace:
+      // tslint:disable:max-line-length
+      //   Error in /public/html/volume/volume.html:97:6 caused by: The viewer does not have a screen volume
+      // tslint:enable:max-line-length
+      //   ...
+      //   at PapayaService.onFinishedLoading [as finishedLoadingCallback]
+      //   at papaya.viewer.Viewer.papaya_js_1.default.viewer.Viewer.finishedLoading
+      //   at Function.papaya.Container.buildContainer
+      // Therefore, add a little context with the following message.
+      console.log('qiprofile Papaya service error in getVoxelValueAt:');
+      console.log(PapayaService.MISSING_VOLUME_ERROR);
+      console.log('The reported Papaya error stack trace is misleading.');
+      // Bail.
+      throw new Error(PapayaService.MISSING_VOLUME_ERROR);
     }
     return this.viewer.getCurrentValueAt(x, y, z);
   }

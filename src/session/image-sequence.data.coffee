@@ -26,10 +26,15 @@ ImageSequence =
     if imageSequence.timeSeries?
       TimeSeries.extend(imageSequence.timeSeries, imageSequence)
 
+    # The default volumes images is an empty array.
+    if not imageSequence.volumes?
+      imageSequence.volumes = {}
+    if not imageSequence.volumes.images?
+      imageSequence.volumes.images = []
+
     # Extend each volume.
-    if imageSequence.volumes?
-      for image, index in imageSequence.volumes.images
-        Volume.extend(image, imageSequence, index + 1)
+    for image, index in imageSequence.volumes.images
+      Volume.extend(image, imageSequence, index + 1)
 
     ###*
      * @method isMultiVolume
@@ -37,33 +42,31 @@ ImageSequence =
      *   volume
     ###
     imageSequence.isMultiVolume = ->
-      @volumes? and @volumes.images.length > 1
+      @volumes.images.length > 1
 
-    ###*
-     * Determines the volume with maximal intensity, determined as
-     * follows:
-     * * If there is only one volume, then return that volume.
-     * * Otherwise, if at least one volume has an `averageIntensity`
-     *   property value, then return the volume with the maximal
-     *   intensity value.
-     * * Otherwise, return null.
-     *
-     * @method maximalIntensityVolume
-     * @return the  volume with maximal intensity, or null if
-     *   such a volume could not be determined
-    ###
-    imageSequence.maximalIntensityVolume = ->
-      return unless @volumes
-      return @volumes.images[0] unless @isMultiVolume()
-      target = null
-      for volume in @volumes.images
-        intensity = volume.averageIntensity
-        if intensity?
-          if not target? or intensity > target.averageIntensity
-            target = volume
+    # Make the virtual properties.
+    Object.defineProperties imageSequence,
+      ###*
+       * The volume with maximal intensity, determined as follows:
+       * * If there is only one volume, then that volume.
+       * * Otherwise, if at least one volume has an `averageIntensity`
+       *   property value, then the volume with the maximal
+       *   intensity value.
+       * * Otherwise, undefined.
+       *
+       * @property maximalIntensityVolume
+      ###
+      maximalIntensityVolume:
+        get: ->
+          if not @_maximalIntensityVolume?
+            images = @volumes.images
+            if _.size(images) == 1
+              target = images[0]
+            else
+              target = _.maxBy(images, 'averageIntensity')
+            @_maximalIntensityVolume = target
 
-      # Return the target volume.
-      target
+          @_maximalIntensityVolume
 
     # Return the augmented image sequence.
     imageSequence

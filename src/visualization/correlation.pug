@@ -1,16 +1,17 @@
 // The Y axis property select.
-qi-cascade-select.col-md-5(
-  [choices]="yPropertyChoices",
-  [path] = "yPropertyPath",
-  (pathChange)="onYChange($event)"
-)
-// The X axis property select is roughly centered over
-// the plot.
-qi-cascade-select.col-md-7(
-  [choices]="xPropertyChoices",
-  [path] = "xPropertyPath",
-  (pathChange)="onXChange($event)"
-)
+.row
+  qi-cascade-select.col-md-5(
+    [choices]="yPropertyChoices",
+    [path] = "yPropertyPath",
+    (pathChange)="onYChange($event)"
+  )
+  // The X axis property select is roughly centered over
+  // the plot.
+  qi-cascade-select.col-md-7(
+    [choices]="xPropertyChoices",
+    [path] = "xPropertyPath",
+    (pathChange)="onXChange($event)"
+  )
 
 // The correlation chart.
 div(

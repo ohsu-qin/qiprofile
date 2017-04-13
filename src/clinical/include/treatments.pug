@@ -1,0 +1,15 @@
+ngb-panel(
+  *ngFor="let treatment of subject.treatments; let i = index",
+  [id]="'treatment-' + (i + 1)"
+)
+  template(ngbPanelTitle)
+    span {{ treatment.treatmentType | capitalize }} Treatment
+    i.fa.fa-caret-up.qi-smaller(
+      *ngIf="isPanelOpen('treatment-' + (i + 1))"
+    )
+    i.fa.fa-caret-down.qi-smaller(
+      *ngIf="!isPanelOpen('treatment-' + (i + 1))"
+    )
+
+  template(ngbPanelContent)
+    include treatment

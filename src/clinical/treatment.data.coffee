@@ -1,3 +1,5 @@
+`import * as _ from "lodash"`
+
 ###*
  * The Treatment REST data object extension utility.
  *
@@ -47,6 +49,24 @@ Treatment =
         get: ->
           if @startDate and @endDate
             @endDate.diff(@startDate, 'days')
+
+      ###*
+       * The treatment chemotherapy dosages.
+       *
+       * @property chemotherapy
+      ###
+      chemotherapy:
+        get: ->
+          _.filter(@dosages, {agent: {_cls: 'Drug'}})
+
+      ###*
+       * The treatment radiotherapy dosages.
+       *
+       * @property radiotherapy
+      ###
+      radiotherapy:
+        get: ->
+          _.filter(@dosages, {agent: {_cls: 'Radiation'}})
 
     # Return the augmented treatment object.
     treatment

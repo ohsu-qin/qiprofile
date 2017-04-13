@@ -1,7 +1,8 @@
 span.qi-table-title Chemotherapy
+include chemotherapy-help
 
 .qi-panel.qi-table-panel
-  .qi-y-spacer(*ngFor="let dosage in chemotherapy.dosages")
+  .qi-y-spacer(*ngFor="let dosage of treatment.chemotherapy")
     table.table.qi-table
       tr
         th Drug Name
@@ -11,12 +12,7 @@ span.qi-table-title Chemotherapy
         td {{ dosage.startDate | moment }}
       tr
         th Amount
-        td {{ dosage.amount | number:1 }} mg/kg
-        td.qi-transparent
-          button.btn.qi-btn.qi-minihelp-btn(ng-controller='DosageAmountHelpCtrl',
-            ng-click="open()"
-            )
-            i.fa.fa-question-circle
+        td {{ dosage.amount | number:'1.0-2' }} mg/kg
       tr
         th Duration
         td {{ dosage.duration }} days

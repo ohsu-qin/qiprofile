@@ -1,5 +1,16 @@
-.qi-panel.qi-table-panel
-  qi-property-table(
-    [object]="demographics", path="subject", [label]="label",
-    [valueChoices]="valueChoices"
-  )
+ngb-panel#demographics
+  template(ngbPanelTitle)
+    span Demographics
+    i.fa.fa-caret-up.qi-smaller(
+      *ngIf="isPanelOpen('demographics')"
+    )
+    i.fa.fa-caret-down.qi-smaller(
+      *ngIf="!isPanelOpen('demographics')"
+    )
+
+  template(ngbPanelContent)
+    .qi-panel.qi-table-panel
+      qi-property-table(
+        [object]="demographics", path="subject", [label]="label",
+        [valueChoices]="valueChoices"
+      )

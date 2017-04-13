@@ -13,7 +13,7 @@ block content
       // Note: mx-auto doesn't take effect for the title.
       // The work-around is the custom .qi-center style,
       // as described in common.styl.
-      h6.qi-center.qi-title Imaging Sessions
+      h6.qi-center.qi-title {{ sessionsTitle }}
       .qi-sessions-chart(
         qiScatterPlot, [height]="sessionsChart.height",
         [data]="sessions", [color]="'subject.number'",

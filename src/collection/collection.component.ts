@@ -59,6 +59,15 @@ export class CollectionComponent extends PageComponent {
   domainSelection: boolean[];
 
   /**
+   * The session chart title is initially set to `Loading...` and
+   * then reset to `Imaging Sessions` after the sessions scatter
+   * plot is built.
+   *
+   * @property sessionsTitle {string}
+   */
+  sessionsTitle = 'Building the charts...';
+
+  /**
    * The data => symbol type method.
    *
    * @property symbolType {(d: Object) => string}
@@ -288,6 +297,10 @@ export class CollectionComponent extends PageComponent {
           .append('xhtml:input')
             .attr('type', 'checkbox')
             .on('click', onCheckboxClick);
+
+    // Finally, set the chart title.
+    // See the sessionsTitle property apidoc.
+    this.sessionsTitle = 'Imaging Sessions';
   }
 
   /**

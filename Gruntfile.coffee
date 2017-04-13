@@ -177,11 +177,8 @@ module.exports = (grunt) ->
           # package.json preinstall script also installs and runs jspm,
           # npm install won't get as far as that, since npm first
           # attempts to resolve dependency references, which include
-          # jspm package locations. It is unknown why these file
-          # references are in package.json.
-          # TODO - remove the package.json file: references and try
-          #   install. If it succeeds, then clean up the process. If not,
-          #   then document why here.
+          # jspm angular package locations. The angular references are
+          # required per https://github.com/ng-bootstrap/ng-bootstrap.
           'npm install jspm && jspm install && npm install'
 
       qirest:

@@ -4,12 +4,14 @@ span.qi-table-title TNM
   table.table.qi-table
     tr
       th Stage
-      td {{ tumor.tnm | tnmStage | romanize }}
+      td
+        span {{ tumor.tnm | tnmStage | romanize }}
       td.qi-transparent
-        button.btn.qi-btn.qi-minihelp-btn(
-          (click)="openTNMStageHelp()"
-        )
-          i.fa.fa-question-circle
+        span([ngSwitch]="subject.collection")
+          span(*ngSwitchCase="'Breast'")
+            include breast-tnm-stage-help
+          span(*ngSwitchCase="'Sarcoma'")
+            include sarcoma-tnm-stage-help
 
   .mt-2(*ngIf="has(tumor.tnm.grade)")
     include grade

@@ -39,8 +39,25 @@ Installation
 
        npm install -g grunt-cli
 
-The web application can be rebuilt by running the following
-Grunt_ script::
+3. Add the environment variable ``QIN_DATA`` with your local image
+   data location to your shell startup script, e.g.::
+
+       QIN_DATA="$HOME/qin/data"
+
+   and source the startup script. The local image store emulates
+   the XNAT archive file structure, e.g. for XNAT project ``QIN``,
+   subject ``Breast003`` and session 3::
+
+       $QIN_DATA/
+         Breast003_Session03/
+           SCANS/1/NIFTI/
+             volume001.nii.gz
+             volume002.nii.gz
+             ...
+           preview/
+             volume015.png
+
+4. Build the web application by running the default Grunt_ script::
 
     grunt
 

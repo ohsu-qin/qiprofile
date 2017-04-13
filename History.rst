@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+2.1.2 / 2017-04-13
+------------------
+* Convert mini-help to pop-ups.
+
 2.1.1 / 2017-03-31
 ------------------
 * Beta release.

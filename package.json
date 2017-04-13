@@ -1,6 +1,6 @@
 {
   "name": "qiprofile",
-  "version": "2.1.1",
+  "version": "2.1.2",
   "description": "Quantitative Imaging Profile (QiPr) web application",
   "repository": {
     "type": "git",

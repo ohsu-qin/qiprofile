@@ -1,0 +1,15 @@
+// The chemotherapy help button.
+button.btn.btn-secondary.qi-btn.qi-minihelp-btn(
+  type='button',
+  [ngbPopover]="help",
+  popoverTitle='Chemotherapy Help',
+  container='body',
+  placement='left'
+)
+  i.fa.fa-question-circle
+<template #help>
+  p
+  | The <strong>Amount</strong> is the total dosage over all cycles
+  | within the duration. Chemotherapy drug amounts are in milligrams
+  | per kilogram patient weight.
+</template>

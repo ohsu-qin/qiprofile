@@ -154,7 +154,6 @@
     "dependencies": {
       "@angular/http": "npm:@angular/http@^2.0.2",
       "@angular/router": "npm:@angular/router@^3.0.2",
-      "angular2-modal": "npm:angular2-modal@^2.0.1",
       "base64-js": "npm:base64-js@^1.1.2",
       "bowser": "npm:bowser@^1.4.3",
       "coffee": "forresto/system-coffee@master",

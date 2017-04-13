@@ -82,8 +82,7 @@ SystemJS.config({
     'github:*/*.json'
   ],
   map: {
-    'angular2-modal': 'npm:angular2-modal@2.0.3',
-    '@angular/common': 'npm:@angular/common@2.4.8',
+    '@angulagr/common': 'npm:@angular/common@2.4.8',
     '@angular/compiler': 'npm:@angular/compiler@2.4.8',
     '@angular/core': 'npm:@angular/core@2.4.8',
     '@angular/forms': 'npm:@angular/forms@2.4.8',

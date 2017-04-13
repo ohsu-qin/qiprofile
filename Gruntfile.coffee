@@ -182,15 +182,7 @@ module.exports = (grunt) ->
           # TODO - remove the package.json file: references and try
           #   install. If it succeeds, then clean up the process. If not,
           #   then document why here.
-          #
-          # Note: the first npm install below fails to completely install
-          #   secondary lodash dependencies. The second install remedies
-          #   this npm bug.
-          # TODO - revisit this with a new npm release in 2017. Try deleting
-          #   the second install below, running npm run reinstall and then
-          #   grunt start. If grunt fails with a missing babel lodash error,
-          #   then raise this issue with the npm dev team.
-          'npm install jspm && jspm install && npm install && npm install lodash'
+          'npm install jspm && jspm install && npm install'
 
       qirest:
         command:

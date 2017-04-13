@@ -1,0 +1,21 @@
+ngb-panel(
+  *ngFor="let encounter of subject.clinicalEncounters; let i = index",
+  [id]="clinicalEncounterHtmlId(encounter, i)"
+)
+  template(ngbPanelTitle)
+    span {{ encounter.title }}
+    // We unfortunately cannot capture the current panel id
+    // in a #panel variable, since PUG disallows valueless
+    // variables (cf. https://github.com/pugjs/pug/issues/370).
+    // Therefore, we must reacquire the id via the
+    // clinicalEncounterHtmlId function call every time we
+    // need it.
+    i.fa.fa-caret-up.qi-smaller(
+      *ngIf="isPanelOpen(clinicalEncounterHtmlId(encounter, i))"
+    )
+    i.fa.fa-caret-down.qi-smaller(
+      *ngIf="!isPanelOpen(clinicalEncounterHtmlId(encounter, i))"
+    )
+
+  template(ngbPanelContent)
+    include clinical-encounter

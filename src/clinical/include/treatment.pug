@@ -3,15 +3,13 @@ table.table.qi-table
   tr
     th Start Date
     td {{ treatment.startDate | moment }}
-    // A spacer pseudo-column.
-    td.qi-transparent
     th End Date
     td {{ treatment.endDate | moment }}
 
 // The chemotherapy partial.
-.mt-2(*ngIf="chemotherapy")
+.mt-2(*ngIf="has(treatment.chemotherapy)")
   include chemotherapy
 
-// The radiotherapy partial.
-.mt-2(*ngIf="radiotherapy")
-  include radiotherapy
+//- // The radiotherapy partial.
+//- .mt-2(*ngIf="has(treatment.radiotherapy)")
+//-   include radiotherapy

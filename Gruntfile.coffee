@@ -172,14 +172,25 @@ module.exports = (grunt) ->
       # Install the npm packages.
       buildnpm:
         command:
-          # Note: the first install below fails to completely install
+          # First install jspm packages, since npm install references
+          # jspm package locations. Then install npm. Even though the
+          # package.json preinstall script also installs and runs jspm,
+          # npm install won't get as far as that, since npm first
+          # attempts to resolve dependency references, which include
+          # jspm package locations. It is unknown why these file
+          # references are in package.json.
+          # TODO - remove the package.json file: references and try
+          #   install. If it succeeds, then clean up the process. If not,
+          #   then document why here.
+          #
+          # Note: the first npm install below fails to completely install
           #   secondary lodash dependencies. The second install remedies
           #   this npm bug.
           # TODO - revisit this with a new npm release in 2017. Try deleting
           #   the second install below, running npm run reinstall and then
           #   grunt start. If grunt fails with a missing babel lodash error,
           #   then raise this issue with the npm dev team.
-          'npm install && npm install lodash'
+          'npm install jspm && jspm install && npm install && npm install lodash'
 
       qirest:
         command:
@@ -219,11 +230,11 @@ module.exports = (grunt) ->
 
       # Links the test data, if available.
       lndata:
-        command: 'if [ -n "$QI_DATA" ]; then ' +
+        command: 'if [ -n "$QIN_DATA" ]; then ' +
                  '  (cd ./public/; ' +
                  '   if [ -L data ]; then rm data; fi; ' +
                  '   if [ ! -e data ]; then ' +
-                 '     ln -s `cd $QI_DATA; pwd` data; ' +
+                 '     ln -s `cd $QIN_DATA; pwd` data; ' +
                  '   fi' +
                  '  ); ' +
                  'fi'

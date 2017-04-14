@@ -8,7 +8,7 @@ button.btn.btn-primary.qi-btn(
 // The help content.
 // let-d is the obscure Angular idiom for placing
 // the modal dismiss function in the lexical scope.
-<template #help let-d="dismiss">
+<ng-template #help let-d="dismiss">
   .modal-body
     button.close((click)="d('Click')")
       i.fa.fa-close
@@ -16,4 +16,4 @@ button.btn.btn-primary.qi-btn(
     block help
     // The boilerplate help sequel.
     include contact-info
-</template>
+</ng-template>

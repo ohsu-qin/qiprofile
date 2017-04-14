@@ -6,10 +6,10 @@ button.btn.btn-secondary.qi-btn.qi-minihelp-btn(
   i.fa.fa-question-circle
 
 // The help content.
-<template #help let-d="dismiss">
+<ng-template #help let-d="dismiss">
   .modal-body
     button.close((click)="d('Click')")
       i.fa.fa-close
     // The help text.
     include time-point-gradient-help-text
-</template>
+</ng-template>

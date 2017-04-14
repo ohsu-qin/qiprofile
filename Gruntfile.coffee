@@ -172,14 +172,7 @@ module.exports = (grunt) ->
       # Install the npm packages.
       buildnpm:
         command:
-          # First install jspm packages, since npm install references
-          # jspm package locations. Then install npm. Even though the
-          # package.json preinstall script also installs and runs jspm,
-          # npm install won't get as far as that, since npm first
-          # attempts to resolve dependency references, which include
-          # jspm angular package locations. The angular references are
-          # required per https://github.com/ng-bootstrap/ng-bootstrap.
-          'npm install jspm && jspm install && npm install'
+          'npm install'
 
       qirest:
         command:

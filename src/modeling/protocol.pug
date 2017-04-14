@@ -15,11 +15,11 @@ div(*ngIf="protocol")
       i.fa.fa-info-circle
 
   // The modeling protocol property sheet.
-  <template #properties let-d="dismiss">
+  <ng-template #properties let-d="dismiss">
     .modal-header
       span.modal-title Modeling Protocol
       button.close((click)="d('Click')")
         i.fa.fa-close
     .modal-body.qi-table-panel
       qi-property-table([object]="protocol", [label]="label")
-  </template>
+  </ng-template>

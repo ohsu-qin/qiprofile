@@ -1,5 +1,7 @@
-# _QiPr_: _Q_uantitative _I_maging _Pr_ofile
+# Quantitative Imaging Profile (QIPr)
 
-_QiPr_ displays medical imaging and clinical data.
+_QIPr_ displays medical imaging and clinical data.
+
+* [GitHub](https://github.com/ohsu-qin/qiprofile)
 
 * [API](./build/doc/api/index.html)

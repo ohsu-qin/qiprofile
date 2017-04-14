@@ -71,7 +71,8 @@ SystemJS.config({
     }
   },
   map: {
-    '@ng-bootstrap/ng-bootstrap': 'node_modules/@ng-bootstrap/ng-bootstrap/bundles/ng-bootstrap.js'
+    '@ng-bootstrap/ng-bootstrap': 'node_modules/@ng-bootstrap/ng-bootstrap/bundles/ng-bootstrap.js',
+    '@angulagr/common': 'npm:@angular/common@2.4.8'
   }
 });
 
@@ -82,7 +83,7 @@ SystemJS.config({
     'github:*/*.json'
   ],
   map: {
-    '@angulagr/common': 'npm:@angular/common@2.4.8',
+    '@angular/common': 'npm:@angular/common@2.4.8',
     '@angular/compiler': 'npm:@angular/compiler@2.4.8',
     '@angular/core': 'npm:@angular/core@2.4.8',
     '@angular/forms': 'npm:@angular/forms@2.4.8',

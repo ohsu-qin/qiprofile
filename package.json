@@ -45,14 +45,14 @@
     "    You need to include some adapter that implements __karma__.start method!"
   ],
   "dependencies": {
-    "@angular/common": "file:jspm_packages/npm/@angular/common@2.4.8",
-    "@angular/compiler": "file:jspm_packages/npm/@angular/compiler@2.4.8",
-    "@angular/core": "file:jspm_packages/npm/@angular/core@2.4.8",
-    "@angular/forms": "file:jspm_packages/npm/@angular/forms@2.4.8",
-    "@angular/http": "file:jspm_packages/npm/@angular/http@2.4.8",
-    "@angular/platform-browser": "file:jspm_packages/npm/@angular/platform-browser@2.4.8",
-    "@angular/platform-browser-dynamic": "file:jspm_packages/npm/@angular/platform-browser-dynamic@2.4.8",
-    "@angular/router": "file:jspm_packages/npm/@angular/router@3.4.8",
+    "@angular/common": "file:jspm_packages/npm/@angular/common@4.0.2",
+    "@angular/compiler": "file:jspm_packages/npm/@angular/compiler@4.0.2",
+    "@angular/core": "file:jspm_packages/npm/@angular/core@4.0.2",
+    "@angular/forms": "file:jspm_packages/npm/@angular/forms@4.0.2",
+    "@angular/http": "file:jspm_packages/npm/@angular/http@4.0.2",
+    "@angular/platform-browser": "file:jspm_packages/npm/@angular/platform-browser@4.0.2",
+    "@angular/platform-browser-dynamic": "file:jspm_packages/npm/@angular/platform-browser-dynamic@4.0.2",
+    "@angular/router": "file:jspm_packages/npm/@angular/router@4.0.2",
     "authenticate": "^0.1.5",
     "babel": "^5.8.38",
     "babel-polyfill": "^6.9.1",
@@ -83,8 +83,7 @@
     "lodash": "^4.13.1",
     "method-override": "^2.3.5",
     "mkdirp": "^0.5.0",
-    "@ng-bootstrap/ng-bootstrap": "file:jspm_packages/npm/@ng-bootstrap/ng-bootstrap@1.0.0-alpha.20",
-    "pug": "=2.0.0-alpha7",
+    "pug": "=2.0.0-beta11",
     "serve-favicon": "^2.3.0",
     "serve-static": "^1.10.2",
     "superagent": "^1.8.3",
@@ -152,8 +151,8 @@
       "jspm": "jspm.config.js"
     },
     "dependencies": {
-      "@angular/http": "npm:@angular/http@^2.0.2",
-      "@angular/router": "npm:@angular/router@^3.0.2",
+      "@angular/http": "npm:@angular/http@4.0.2",
+      "@angular/router": "npm:@angular/router@4.0.2",
       "base64-js": "npm:base64-js@^1.1.2",
       "bowser": "npm:bowser@^1.4.3",
       "coffee": "forresto/system-coffee@master",
@@ -167,7 +166,6 @@
       "lodash": "npm:lodash@^4.13.1",
       "md": "guybedford/system-md@^0.1.0",
       "moment": "npm:moment@^2.14.1",
-      "ng-bootstrap": "npm:@ng-bootstrap/ng-bootstrap@^1.0.0-alpha.20",
       "ng2-resource-rest": "npm:ng2-resource-rest@^0.5.6",
       "ohsu-qin/ng2-nouislider": "^0.3.0",
       "pako": "npm:pako@^0.2.9",
@@ -190,12 +188,12 @@
       "text-encoding": "npm:text-encoding@^0.6.0"
     },
     "peerDependencies": {
-      "@angular/common": "npm:@angular/common@2.4.8",
-      "@angular/compiler": "npm:@angular/compiler@2.4.8",
-      "@angular/core": "npm:@angular/core@2.4.8",
-      "@angular/forms": "npm:@angular/forms@^2.0.2",
-      "@angular/platform-browser": "npm:@angular/platform-browser@2.4.8",
-      "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@^2.4.8",
+      "@angular/common": "npm:@angular/common@4.0.2",
+      "@angular/compiler": "npm:@angular/compiler@4.0.2",
+      "@angular/core": "npm:@angular/core@4.0.2",
+      "@angular/forms": "npm:@angular/forms@4.0.2",
+      "@angular/platform-browser": "npm:@angular/platform-browser@4.0.2",
+      "@angular/platform-browser-dynamic": "npm:@angular/platform-browser-dynamic@4.0.2",
       "assert": "jspm/nodelibs-assert@^0.2.0-alpha",
       "buffer": "jspm/nodelibs-buffer@^0.2.0-alpha",
       "child_process": "jspm/nodelibs-child_process@^0.2.0-alpha",
@@ -224,13 +222,13 @@
       "util": "jspm/nodelibs-util@^0.2.0-alpha",
       "vm": "jspm/nodelibs-vm@^0.2.0-alpha",
       "zlib": "jspm/nodelibs-zlib@^0.2.0-alpha",
-      "zone.js": "npm:zone.js@^0.7.2"
+      "zone.js": "npm:zone.js@^0.8.4"
     },
     "overrides": {
       "github:socketio/socket.io-client@1.7.2": {
         "main": "dist/socket.io.js"
       },
-      "npm:@angular/common@2.4.8": {
+      "npm:@angular/common@4.0.2": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -240,7 +238,7 @@
           }
         }
       },
-      "npm:@angular/compiler@2.4.8": {
+      "npm:@angular/compiler@4.0.2": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -254,7 +252,7 @@
           "./testing": "./bundles/compiler-testing.umd.js"
         }
       },
-      "npm:@angular/core@2.4.8": {
+      "npm:@angular/core@4.0.2": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -264,7 +262,7 @@
           }
         }
       },
-      "npm:@angular/http@2.4.8": {
+      "npm:@angular/http@4.0.2": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -278,7 +276,7 @@
           "./testing": "./bundles/http-testing.umd.js"
         }
       },
-      "npm:@angular/platform-browser-dynamic@2.4.8": {
+      "npm:@angular/platform-browser-dynamic@4.0.2": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -292,7 +290,7 @@
           "./testing": "./bundles/platform-browser-dynamic-testing.umd.js"
         }
       },
-      "npm:@angular/platform-browser@2.4.8": {
+      "npm:@angular/platform-browser@4.0.2": {
         "meta": {
           "src/*.js": {
             "deps": [
@@ -306,7 +304,7 @@
           "./testing": "./bundles/platform-browser-testing.umd.js"
         }
       },
-      "npm:@angular/router@3.4.8": {
+      "npm:@angular/router@4.0.2": {
         "meta": {
           "src/*.js": {
             "deps": [

@@ -69,10 +69,6 @@ SystemJS.config({
         }
       }
     }
-  },
-  map: {
-    '@ng-bootstrap/ng-bootstrap': 'node_modules/@ng-bootstrap/ng-bootstrap/bundles/ng-bootstrap.js',
-    '@angulagr/common': 'npm:@angular/common@2.4.8'
   }
 });
 
@@ -83,14 +79,14 @@ SystemJS.config({
     'github:*/*.json'
   ],
   map: {
-    '@angular/common': 'npm:@angular/common@2.4.8',
-    '@angular/compiler': 'npm:@angular/compiler@2.4.8',
-    '@angular/core': 'npm:@angular/core@2.4.8',
-    '@angular/forms': 'npm:@angular/forms@2.4.8',
-    '@angular/http': 'npm:@angular/http@2.4.8',
-    '@angular/platform-browser': 'npm:@angular/platform-browser@2.4.8',
-    '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic@2.4.8',
-    '@angular/router': 'npm:@angular/router@3.4.8',
+    '@angular/common': 'npm:@angular/common@4.0.2',
+    '@angular/compiler': 'npm:@angular/compiler@4.0.2',
+    '@angular/core': 'npm:@angular/core@4.0.2',
+    '@angular/forms': 'npm:@angular/forms@4.0.2',
+    '@angular/http': 'npm:@angular/http@4.0.2',
+    '@angular/platform-browser': 'npm:@angular/platform-browser@4.0.2',
+    '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic@4.0.2',
+    '@angular/router': 'npm:@angular/router@4.0.2',
     'css': 'github:systemjs/plugin-css@0.1.27',
     'bowser': 'npm:bowser@1.4.5',
     'gifti-reader-js': 'npm:gifti-reader-js@0.4.3',
@@ -116,7 +112,6 @@ SystemJS.config({
     'module': 'github:jspm/nodelibs-module@0.2.0-alpha',
     'moment': 'npm:moment@2.14.1',
     'net': 'github:jspm/nodelibs-net@0.2.0-alpha',
-    'ng-bootstrap': 'npm:@ng-bootstrap/ng-bootstrap@1.0.0-alpha.20',
     'ng2-resource-rest': 'npm:ng2-resource-rest@0.5.6',
     'nouislider': 'npm:nouislider@8.5.1',
     'ohsu-qin/ng2-nouislider': 'github:ohsu-qin/ng2-nouislider@0.3.0',
@@ -146,7 +141,7 @@ SystemJS.config({
     'util': 'github:jspm/nodelibs-util@0.2.0-alpha',
     'vm': 'github:jspm/nodelibs-vm@0.2.0-alpha',
     'zlib': 'github:jspm/nodelibs-zlib@0.2.0-alpha',
-    'zone.js': 'npm:zone.js@0.7.7'
+    'zone.js': 'npm:zone.js@0.8.5'
   },
   packages: {
     'npm:debug@2.2.0': {

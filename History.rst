@@ -1,6 +1,10 @@
 This history lists major release themes. See the GitHub commits
 for change details.
 
+2.1.3 / 2017-04-14
+------------------
+* Upgrade to Angular 4.
+
 2.1.2 / 2017-04-13
 ------------------
 * Convert mini-help to pop-ups.

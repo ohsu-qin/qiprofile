@@ -71,8 +71,15 @@ SystemJS.config({
     }
   },
   map: {
-    '@ng-bootstrap/ng-bootstrap': 'node_modules/@ng-bootstrap/ng-bootstrap/bundles/ng-bootstrap.js',
-    '@angulagr/common': 'npm:@angular/common@2.4.8'
+    '@angular/compiler': 'node_modules/@angular/compiler/bundles/compiler.umd.js',
+    '@angular/common': 'node_modules/@angular/common/bundles/common.umd.js',
+    '@angular/core': 'node_modules/@angular/core/bundles/core.umd.js',
+    '@angular/forms': 'node_modules/@angular/forms/bundles/forms.umd.js',
+    '@angular/http': 'node_modules/@angular/http/bundles/http.umd.js',
+    '@angular/platform-browser': 'node_modules/@angular/platform-browser/bundles/platform-browser.umd.js',
+    '@angular/platform-browser-dynamic': 'node_modules/@angular/platform-browser-dynamic/bundles/platform-browser-dynamic.umd.js',
+    '@angular/router': 'node_modules/@angular/router/bundles/router.umd.js',
+    '@ng-bootstrap/ng-bootstrap': 'node_modules/@ng-bootstrap/ng-bootstrap/bundles/ng-bootstrap.js'
   }
 });
 
@@ -83,14 +90,6 @@ SystemJS.config({
     'github:*/*.json'
   ],
   map: {
-    '@angular/common': 'npm:@angular/common@2.4.8',
-    '@angular/compiler': 'npm:@angular/compiler@2.4.8',
-    '@angular/core': 'npm:@angular/core@2.4.8',
-    '@angular/forms': 'npm:@angular/forms@2.4.8',
-    '@angular/http': 'npm:@angular/http@2.4.8',
-    '@angular/platform-browser': 'npm:@angular/platform-browser@2.4.8',
-    '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic@2.4.8',
-    '@angular/router': 'npm:@angular/router@3.4.8',
     'css': 'github:systemjs/plugin-css@0.1.27',
     'bowser': 'npm:bowser@1.4.5',
     'gifti-reader-js': 'npm:gifti-reader-js@0.4.3',
@@ -105,7 +104,7 @@ SystemJS.config({
     'coffee': 'github:forresto/system-coffee@master',
     'constants': 'github:jspm/nodelibs-constants@0.2.0-alpha',
     'crypto': 'github:jspm/nodelibs-crypto@0.2.0-alpha',
-    'events': 'github:jspm/nodelibs-events@0.2.0-alpha',
+    'events': 'github:jspm/nodelibs-events@0.2.2',
     'https': 'github:jspm/nodelibs-https@0.2.0-alpha',
     'domain': 'npm:jspm-nodelibs-domain@0.2.0',
     'fs': 'github:jspm/nodelibs-fs@0.2.0-alpha',
@@ -116,13 +115,12 @@ SystemJS.config({
     'module': 'github:jspm/nodelibs-module@0.2.0-alpha',
     'moment': 'npm:moment@2.14.1',
     'net': 'github:jspm/nodelibs-net@0.2.0-alpha',
-    'ng-bootstrap': 'npm:@ng-bootstrap/ng-bootstrap@1.0.0-alpha.20',
     'ng2-resource-rest': 'npm:ng2-resource-rest@0.5.6',
     'nouislider': 'npm:nouislider@8.5.1',
     'ohsu-qin/ng2-nouislider': 'github:ohsu-qin/ng2-nouislider@0.3.0',
     'os': 'github:jspm/nodelibs-os@0.2.0-alpha',
     'pako': 'npm:pako@0.2.9',
-    'path': 'github:jspm/nodelibs-path@0.2.0-alpha',
+    'path': 'github:jspm/nodelibs-path@0.2.3',
     'plugin-babel': 'npm:systemjs-plugin-babel@0.0.21',
     'plugin-typescript': 'github:frankwallis/plugin-typescript@7.0.4',
     'requirejs': 'npm:requirejs@2.3.1',
@@ -146,7 +144,7 @@ SystemJS.config({
     'util': 'github:jspm/nodelibs-util@0.2.0-alpha',
     'vm': 'github:jspm/nodelibs-vm@0.2.0-alpha',
     'zlib': 'github:jspm/nodelibs-zlib@0.2.0-alpha',
-    'zone.js': 'npm:zone.js@0.7.7'
+    'zone.js': 'npm:zone.js@0.8.5'
   },
   packages: {
     'npm:debug@2.2.0': {
@@ -640,11 +638,6 @@ SystemJS.config({
         'domain-browserify': 'npm:domain-browser@1.1.7'
       }
     },
-    'github:jspm/nodelibs-http@0.2.0-alpha': {
-      'map': {
-        'http-browserify': 'npm:stream-http@2.3.1'
-      }
-    },
     'npm:typescript@2.2.1': {
       'map': {
         'source-map-support': 'npm:source-map-support@0.4.11'
@@ -653,21 +646,6 @@ SystemJS.config({
     'npm:source-map-support@0.4.11': {
       'map': {
         'source-map': 'npm:source-map@0.5.6'
-      }
-    },
-    'github:jspm/nodelibs-buffer@0.2.0-alpha': {
-      'map': {
-        'buffer-browserify': 'npm:buffer@4.9.1'
-      }
-    },
-    'github:jspm/nodelibs-os@0.2.0-alpha': {
-      'map': {
-        'os-browserify': 'npm:os-browserify@0.2.1'
-      }
-    },
-    'github:jspm/nodelibs-crypto@0.2.0-alpha': {
-      'map': {
-        'crypto-browserify': 'npm:crypto-browserify@3.11.0'
       }
     },
     'npm:elliptic@6.4.0': {
@@ -700,11 +678,6 @@ SystemJS.config({
         'minimalistic-assert': 'npm:minimalistic-assert@1.0.0'
       }
     },
-    'github:jspm/nodelibs-stream@0.2.0-alpha': {
-      'map': {
-        'stream-browserify': 'npm:stream-browserify@2.0.1'
-      }
-    },
     'npm:readable-stream@2.2.3': {
       'map': {
         'isarray': 'npm:isarray@1.0.0',
@@ -716,14 +689,24 @@ SystemJS.config({
         'process-nextick-args': 'npm:process-nextick-args@1.0.7'
       }
     },
-    'github:jspm/nodelibs-string_decoder@0.2.0-alpha': {
+    'npm:rxjs@5.2.0': {
       'map': {
-        'string_decoder-browserify': 'npm:string_decoder@0.10.31'
+        'symbol-observable': 'npm:symbol-observable@1.0.4'
       }
     },
-    'github:jspm/nodelibs-url@0.2.0-alpha': {
+    'github:jspm/nodelibs-buffer@0.2.0-alpha': {
       'map': {
-        'url-browserify': 'npm:url@0.11.0'
+        'buffer-browserify': 'npm:buffer@4.9.1'
+      }
+    },
+    'github:jspm/nodelibs-crypto@0.2.0-alpha': {
+      'map': {
+        'crypto-browserify': 'npm:crypto-browserify@3.11.0'
+      }
+    },
+    'github:jspm/nodelibs-os@0.2.0-alpha': {
+      'map': {
+        'os-browserify': 'npm:os-browserify@0.2.1'
       }
     },
     'github:jspm/nodelibs-timers@0.2.0-alpha': {
@@ -731,14 +714,29 @@ SystemJS.config({
         'timers-browserify': 'npm:timers-browserify@1.4.2'
       }
     },
+    'github:jspm/nodelibs-http@0.2.0-alpha': {
+      'map': {
+        'http-browserify': 'npm:stream-http@2.3.1'
+      }
+    },
+    'github:jspm/nodelibs-url@0.2.0-alpha': {
+      'map': {
+        'url-browserify': 'npm:url@0.11.0'
+      }
+    },
+    'github:jspm/nodelibs-stream@0.2.0-alpha': {
+      'map': {
+        'stream-browserify': 'npm:stream-browserify@2.0.1'
+      }
+    },
     'github:jspm/nodelibs-zlib@0.2.0-alpha': {
       'map': {
         'zlib-browserify': 'npm:browserify-zlib@0.1.4'
       }
     },
-    'npm:rxjs@5.2.0': {
+    'github:jspm/nodelibs-string_decoder@0.2.0-alpha': {
       'map': {
-        'symbol-observable': 'npm:symbol-observable@1.0.4'
+        'string_decoder-browserify': 'npm:string_decoder@0.10.31'
       }
     }
   }

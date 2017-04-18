@@ -24,7 +24,7 @@ const TEST_SESSION = {
 /**
  * The test mock for a `SessionService`.
  *
- * @module imageSequence
+ * @module session
  * @class ImageSequenceSessionServiceStub
  */
 class ImageSequenceSessionServiceStub {
@@ -57,7 +57,7 @@ describe('The ImageSequence service', function() {
       body(service);
     });
   }
-  
+
   beforeEach(() => {
     // Note - supplying only the mock SessionService fails with the error:
     //     Cannot resolve all parameters for 'ImageSequenceService'

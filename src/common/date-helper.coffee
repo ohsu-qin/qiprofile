@@ -1,9 +1,3 @@
-###*
- * The date utilities.
- *
- * @module date
-###
-
 `import * as _ from "lodash"`
 `import moment from "moment"`
 
@@ -23,6 +17,7 @@ _TODAY = moment.now()
  * The static DateHelper utility.
  *
  * @class DateHelper
+ * @module common
  * @static
 ###
 DateHelper =

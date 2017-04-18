@@ -149,13 +149,16 @@ Breast =
   ###
   extend: (encounter) ->
     if encounter.pathology
+      ###*
+       * The Breast pathology REST object augments the common
+       * {#crossLink "Pathology"}}{{/crossLink}} REST object with a
+       * {#crossLink "RCB"}}{{/crossLink}} and
+       * {#crossLink "BreastNormalizedAssay"}}{{/crossLink}}.
+       *
+       * @module clinical
+       * @class BreastPathology
+      ###
       for tumor in encounter.pathology.tumors
-        ###*
-         * The Breast pathology.
-         *
-         * @module clinical
-         * @class BreastPathology
-        ###
         if tumor.rcb
           RCB.extend(tumor.rcb, tumor)
 
@@ -189,12 +192,6 @@ Breast =
             recurrenceScore:
               get: ->
                 _recurrenceScore(this)
-        ###*
-         * The Breast pathology.
-         *
-         * @module clinical
-         * @class BreastPathology
-        ###
 
   ###*
    * @module clinical

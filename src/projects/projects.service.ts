@@ -1,7 +1,7 @@
 /**
  * Project data access module.
  *
- * @module project
+ * @module projects
  */
 
 import { Injectable } from '@angular/core';

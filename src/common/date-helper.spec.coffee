@@ -5,7 +5,7 @@
 ###*
  * The {{#crossLink "DateHelper"}}{{/crossLink}} validator.
  *
- * @module data
+ * @module common
  * @class DateHelperSpec
 ###
 describe 'DateHelper', ->

@@ -2,6 +2,7 @@
  * The test helper module.
  *
  * @module testing
+ * @main testing
 ###
 
 _ = require 'lodash'

@@ -11,6 +11,7 @@ import { Component } from '@angular/core';
  * This component initializes the application and defines
  * the main `<qi-app></qi-app>` HTML body context.
  *
+ * @module main
  * @class AppComponent
  */
 export class AppComponent {

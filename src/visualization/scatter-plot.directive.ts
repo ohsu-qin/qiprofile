@@ -8,7 +8,7 @@ import {
 import ObjectHelper from '../common/object-helper.coffee';
 import DateHelper from '../common/date-helper.coffee';
 import * as math from '../math/math.ts';
-import * as language from '../language/language.ts';
+import * as language from '../common/language.ts';
 
 @Directive({
   selector: '[qiScatterPlot]'

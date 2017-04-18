@@ -8,7 +8,7 @@
 Image =
   ###*
    * Makes the following changes to the given REST Image object:
-   * * adds the *identifier* virtual property
+   * * adds the _identifier_ virtual property
    *
    * @method extend
    * @param image the REST Image object to extend

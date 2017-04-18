@@ -1,7 +1,8 @@
 ###*
  * The Function test helper.
  *
- * @class ObjectHelper
+ * @module testing
+ * @class Function
  * @static
 ###
 
@@ -20,9 +21,9 @@
  * @example
  *     class Name
  *       constructor: (@first, @last) ->
- *   
+ *
  *       full: -> "#{first} #{last}"
- *   
+ *
  *       proper: ->
  *          get: -> "#{last}, #{first}"
  *          set: (name) -> [@last, @first] = name.split(', ')

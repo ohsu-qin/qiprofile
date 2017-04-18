@@ -14,6 +14,7 @@ import {
  * (Inferno)[https://github.com/d3/d3-scale/blob/master/README.md#interpolateInferno]
  * color spectrum.
  *
+ * @module visualization
  * @class ColorBarDirective
  */
 export class ColorBarDirective implements OnChanges, OnInit {

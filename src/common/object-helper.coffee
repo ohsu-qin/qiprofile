@@ -1,10 +1,3 @@
-###*
- * Object utilities.
- *
- * @module object
- * @main object
-###
-
 `import * as _ from "lodash"`
 `import * as _s from "underscore.string"`
 `import moment from "moment"`
@@ -50,6 +43,7 @@ _isSimpleArray = (value) ->
  * The static ObjectHelper utility.
  *
  * @class ObjectHelper
+ * @module common
  * @static
 ###
 ObjectHelper =

@@ -32,9 +32,9 @@ ClinicalEncounter =
     Object.defineProperties encounter,
       ###*
        * 'Surgery' for a surgery encounter,
-       *  otherwise the encounter class
+       * otherwise the encounter class
        *
-       * @property title
+       * @property title {string}
       ###
       title:
         get: ->

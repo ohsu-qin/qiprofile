@@ -52,7 +52,7 @@
     "@angular/platform-browser": "4.0.2",
     "@angular/platform-browser-dynamic": "4.0.2",
     "@angular/router": "4.0.2",
-    "@ng-bootstrap/ng-bootstrap": "^1.0.0-alpha.23",
+    "@ng-bootstrap/ng-bootstrap": "1.0.0-alpha.23",
     "authenticate": "^0.1.5",
     "babel": "^5.8.38",
     "babel-polyfill": "^6.9.1",
